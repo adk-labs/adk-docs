@@ -1,0 +1,1395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/community/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/community/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/community/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/community/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/contributing-guide/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/contributing-guide/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/contributing-guide/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/contributing-guide/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/custom-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/custom-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/custom-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/custom-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/llm-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/llm-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/llm-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/llm-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/models/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/models/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/models/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/models/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/multi-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/multi-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/multi-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/multi-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/workflow-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/workflow-agents/loop-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/loop-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/loop-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/loop-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/workflow-agents/parallel-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/parallel-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/parallel-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/parallel-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/agents/workflow-agents/sequential-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/sequential-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/sequential-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/sequential-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/api-reference/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/api-reference/java/legal/dejavufonts/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/dejavufonts/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/dejavufonts/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/dejavufonts/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/api-reference/java/legal/jquery/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/jquery/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/jquery/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/jquery/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/api-reference/java/legal/jqueryUI/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/jqueryUI/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/jqueryUI/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/jqueryUI/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/artifacts/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/artifacts/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/artifacts/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/artifacts/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/callbacks/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/callbacks/design-patterns-and-best-practices/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/design-patterns-and-best-practices/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/design-patterns-and-best-practices/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/design-patterns-and-best-practices/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/callbacks/types-of-callbacks/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/types-of-callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/types-of-callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/types-of-callbacks/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/context/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/context/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/context/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/context/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/deploy/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/deploy/agent-engine/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/agent-engine/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/agent-engine/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/agent-engine/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/deploy/cloud-run/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/cloud-run/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/cloud-run/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/cloud-run/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/deploy/gke/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/gke/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/gke/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/gke/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/evaluate/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/evaluate/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/evaluate/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/evaluate/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/events/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/events/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/events/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/events/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/get-started/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/get-started/about/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/about/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/about/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/about/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/get-started/installation/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/get-started/quickstart/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/get-started/testing/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/testing/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/testing/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/testing/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/get-started/streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/get-started/streaming/quickstart-streaming-java/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/quickstart-streaming-java/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/quickstart-streaming-java/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/quickstart-streaming-java/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/get-started/streaming/quickstart-streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/quickstart-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/quickstart-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/quickstart-streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/mcp/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/mcp/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/mcp/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/mcp/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/runtime/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/runtime/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/runtime/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/runtime/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/runtime/runconfig/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/runtime/runconfig/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/runtime/runconfig/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/runtime/runconfig/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/safety/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/safety/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/safety/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/safety/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/sessions/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/sessions/memory/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/memory/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/memory/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/memory/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/sessions/session/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/session/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/session/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/session/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/sessions/state/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/state/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/state/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/state/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/streaming/configuration/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/configuration/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/streaming/custom-streaming-ws/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/custom-streaming-ws/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/custom-streaming-ws/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/custom-streaming-ws/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/streaming/custom-streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/custom-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/custom-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/custom-streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/streaming/streaming-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/streaming-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/streaming-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/streaming-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tools/authentication/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/authentication/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/authentication/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/authentication/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tools/built-in-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/built-in-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/built-in-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/built-in-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tools/function-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/function-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/function-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/function-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tools/google-cloud-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/google-cloud-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/google-cloud-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/google-cloud-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tools/mcp-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/mcp-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/mcp-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/mcp-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tools/openapi-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/openapi-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/openapi-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/openapi-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tools/third-party-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/third-party-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/third-party-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/third-party-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tutorials/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tutorials/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tutorials/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tutorials/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/tutorials/agent-team/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tutorials/agent-team/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tutorials/agent-team/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tutorials/agent-team/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/community/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/community/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/community/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/community/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/contributing-guide/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/contributing-guide/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/contributing-guide/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/contributing-guide/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/custom-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/custom-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/custom-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/custom-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/llm-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/llm-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/llm-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/llm-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/models/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/models/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/models/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/models/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/multi-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/multi-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/multi-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/multi-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/loop-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/loop-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/loop-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/loop-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/parallel-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/parallel-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/parallel-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/parallel-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/sequential-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/sequential-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/sequential-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/sequential-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/api-reference/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/dejavufonts/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/dejavufonts/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/dejavufonts/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/dejavufonts/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/jquery/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/jquery/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/jquery/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/jquery/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/jqueryUI/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/jqueryUI/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/jqueryUI/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/jqueryUI/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/artifacts/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/artifacts/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/artifacts/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/artifacts/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/callbacks/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/callbacks/design-patterns-and-best-practices/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/design-patterns-and-best-practices/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/design-patterns-and-best-practices/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/design-patterns-and-best-practices/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/callbacks/types-of-callbacks/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/types-of-callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/types-of-callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/types-of-callbacks/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/context/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/context/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/context/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/context/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/deploy/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/deploy/agent-engine/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/agent-engine/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/agent-engine/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/agent-engine/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/deploy/cloud-run/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/cloud-run/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/cloud-run/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/cloud-run/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/deploy/gke/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/gke/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/gke/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/gke/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/evaluate/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/evaluate/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/evaluate/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/evaluate/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/events/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/events/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/events/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/events/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/get-started/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/get-started/about/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/about/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/about/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/about/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/get-started/installation/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/get-started/quickstart/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/get-started/testing/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/testing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/testing/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/testing/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/get-started/streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/get-started/streaming/quickstart-streaming-java/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/quickstart-streaming-java/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/quickstart-streaming-java/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/quickstart-streaming-java/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/get-started/streaming/quickstart-streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/quickstart-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/quickstart-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/quickstart-streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/mcp/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/mcp/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/mcp/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/mcp/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/runtime/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/runtime/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/runtime/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/runtime/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/runtime/runconfig/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/runtime/runconfig/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/runtime/runconfig/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/runtime/runconfig/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/safety/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/safety/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/safety/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/safety/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/sessions/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/sessions/memory/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/memory/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/memory/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/memory/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/sessions/session/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/session/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/session/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/session/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/sessions/state/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/state/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/state/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/state/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/streaming/configuration/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/configuration/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/streaming/custom-streaming-ws/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/custom-streaming-ws/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/custom-streaming-ws/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/custom-streaming-ws/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/streaming/custom-streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/custom-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/custom-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/custom-streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/streaming/streaming-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/streaming-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/streaming-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/streaming-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tools/authentication/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/authentication/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/authentication/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/authentication/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tools/built-in-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/built-in-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/built-in-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/built-in-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tools/function-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/function-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/function-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/function-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tools/google-cloud-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/google-cloud-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/google-cloud-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/google-cloud-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tools/mcp-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/mcp-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/mcp-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/mcp-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tools/openapi-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/openapi-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/openapi-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/openapi-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tools/third-party-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/third-party-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/third-party-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/third-party-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tutorials/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tutorials/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tutorials/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tutorials/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ko/tutorials/agent-team/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tutorials/agent-team/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tutorials/agent-team/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tutorials/agent-team/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/community/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/community/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/community/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/community/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/contributing-guide/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/contributing-guide/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/contributing-guide/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/contributing-guide/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/custom-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/custom-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/custom-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/custom-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/llm-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/llm-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/llm-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/llm-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/models/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/models/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/models/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/models/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/multi-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/multi-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/multi-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/multi-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/loop-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/loop-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/loop-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/loop-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/parallel-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/parallel-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/parallel-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/parallel-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/sequential-agents/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/agents/workflow-agents/sequential-agents/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/agents/workflow-agents/sequential-agents/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/agents/workflow-agents/sequential-agents/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/api-reference/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/dejavufonts/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/dejavufonts/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/dejavufonts/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/dejavufonts/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/jquery/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/jquery/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/jquery/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/jquery/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/jqueryUI/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/api-reference/java/legal/jqueryUI/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/api-reference/java/legal/jqueryUI/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/api-reference/java/legal/jqueryUI/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/artifacts/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/artifacts/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/artifacts/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/artifacts/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/callbacks/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/callbacks/design-patterns-and-best-practices/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/design-patterns-and-best-practices/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/design-patterns-and-best-practices/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/design-patterns-and-best-practices/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/callbacks/types-of-callbacks/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/callbacks/types-of-callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/callbacks/types-of-callbacks/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/callbacks/types-of-callbacks/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/context/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/context/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/context/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/context/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/deploy/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/deploy/agent-engine/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/agent-engine/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/agent-engine/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/agent-engine/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/deploy/cloud-run/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/cloud-run/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/cloud-run/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/cloud-run/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/deploy/gke/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/deploy/gke/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/deploy/gke/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/deploy/gke/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/evaluate/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/evaluate/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/evaluate/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/evaluate/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/events/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/events/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/events/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/events/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/get-started/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/get-started/about/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/about/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/about/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/about/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/get-started/installation/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/get-started/quickstart/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/get-started/testing/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/testing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/testing/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/testing/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/get-started/streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/get-started/streaming/quickstart-streaming-java/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/quickstart-streaming-java/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/quickstart-streaming-java/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/quickstart-streaming-java/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/get-started/streaming/quickstart-streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/get-started/streaming/quickstart-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/get-started/streaming/quickstart-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/get-started/streaming/quickstart-streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/mcp/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/mcp/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/mcp/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/mcp/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/runtime/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/runtime/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/runtime/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/runtime/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/runtime/runconfig/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/runtime/runconfig/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/runtime/runconfig/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/runtime/runconfig/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/safety/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/safety/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/safety/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/safety/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/sessions/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/sessions/memory/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/memory/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/memory/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/memory/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/sessions/session/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/session/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/session/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/session/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/sessions/state/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/sessions/state/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/sessions/state/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/sessions/state/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/streaming/configuration/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/configuration/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/streaming/custom-streaming-ws/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/custom-streaming-ws/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/custom-streaming-ws/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/custom-streaming-ws/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/streaming/custom-streaming/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/custom-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/custom-streaming/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/custom-streaming/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/streaming/streaming-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/streaming/streaming-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/streaming/streaming-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/streaming/streaming-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tools/authentication/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/authentication/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/authentication/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/authentication/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tools/built-in-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/built-in-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/built-in-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/built-in-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tools/function-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/function-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/function-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/function-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tools/google-cloud-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/google-cloud-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/google-cloud-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/google-cloud-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tools/mcp-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/mcp-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/mcp-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/mcp-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tools/openapi-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/openapi-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/openapi-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/openapi-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tools/third-party-tools/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tools/third-party-tools/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tools/third-party-tools/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tools/third-party-tools/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tutorials/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tutorials/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tutorials/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tutorials/"/>
+    </url>
+    <url>
+        <loc>https://adk-labs.github.io/adk-docs/ja/tutorials/agent-team/</loc>
+        <lastmod>2025-06-07</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="https://adk-labs.github.io/adk-docs/ja/tutorials/agent-team/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://adk-labs.github.io/adk-docs/tutorials/agent-team/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="https://adk-labs.github.io/adk-docs/ko/tutorials/agent-team/"/>
+    </url>
+</urlset>
