@@ -88,8 +88,7 @@ project_root_folder
     도구 세트가 API에서 사용 가능한 첫 번째 사양을 자동으로 가져오도록 하려면
     `` `projects/my-project-id/locations/us-west1/apis/my-api-id` ``를 사용하세요.
 
-4. 에이전트 파일 [Agent.py](http://Agent.py)를 만들고 생성된 도구를
-   에이전트 정의에 추가합니다:
+4. 에이전트 파일 Agent.py를 생성하고, 생성한 툴을 에이전트 정의에 추가하세요:
 
     ```py
     from google.adk.agents.llm_agent import LlmAgent
