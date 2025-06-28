@@ -312,10 +312,10 @@ plugins:
               - 콜백 패턴: callbacks/design-patterns-and-best-practices.md
             - 아티팩트: artifacts/index.md
             - 이벤트: events/index.md
+            - 컨텍스트: context/index.md
             - 관측성(Observability):
               - Arize AX: observability/arize-ax.md
               - Phoenix: observability/phoenix.md
-            - 컨텍스트: context/index.md
             - 평가: evaluate/index.md
             - MCP: mcp/index.md
             - 양방향 스트리밍 (실시간):
