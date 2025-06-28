@@ -3,14 +3,6 @@ hide:
   - toc
 ---
 
-!!! tip "Google I/O'25 - ADK 업데이트"
-
-    중요한 소식입니다!
-
-    - 에이전트 기능을 자바 생태계로 확장하는 **[Java ADK v0.1.0](https://github.com/google/adk-java/)**을 소개합니다.
-
-    - **[Python ADK](https://github.com/google/adk-python/)**가 공식 v1.0.0이 되어 프로덕션용 에이전트를 위한 안정성을 제공합니다.
-
 <div style="text-align: center;">
   <div class="centered-logo-text-group">
     <img src="assets/agent-development-kit.png" alt="Agent Development Kit 로고" width="100">
