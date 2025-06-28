@@ -1,24 +1,24 @@
 # クイックスタート (ストリーミング / Python) {#adk-streaming-quickstart}
 
-このクイックスタートでは、簡単なエージェントを作成し、ADKストリーミングを使用して、低遅延かつ双方向の音声・ビデオ通信を実現する方法を学びます。ADKのインストール、基本的な「Google Search」エージェントの設定、`adk web`ツールを使ったエージェントの実行を試した後、ADKストリーミングと[FastAPI](https://fastapi.tiangolo.com/)を使用して簡単な非同期ウェブアプリを自作する方法を説明します。
+このクイックスタートでは、シンプルなエージェントを作成し、ADKストリーミングを使用して低遅延かつ双方向の音声・映像コミュニケーションを有効にする方法を学びます。ADKをインストールし、基本的な「Google検索」エージェントをセットアップし、`adk web`ツールでストリーミングエージェントを実行してみます。その後、ADKストリーミングと[FastAPI](https://fastapi.tiangolo.com/)を使用して、自分で簡単な非同期Webアプリを構築する方法を説明します。
 
 **注:** このガイドは、Windows、Mac、Linux環境でのターミナル使用経験があることを前提としています。
 
-## 音声/ビデオストリーミングでサポートされているモデル {#supported-models}
+## 音声/映像ストリーミングでサポートされているモデル {#supported-models}
 
-ADKで音声/ビデオストリーミングを使用するには、Live APIをサポートするGeminiモデルを使用する必要があります。Gemini Live APIをサポートする**モデルID**は、以下のドキュメントで確認できます。
+ADKで音声/映像ストリーミングを使用するには、Live APIをサポートするGeminiモデルを使用する必要があります。Gemini Live APIをサポートする**モデルID**は、以下のドキュメントで確認できます。
 
 -   [Google AI Studio: Gemini Live API](https://ai.google.dev/gemini-api/docs/models#live-api)
 -   [Vertex AI: Gemini Live API](https://cloud.google.com/vertex-ai/generative-ai/docs/live-api)
 
-## 1. 環境設定とADKのインストール {#1.-setup-installation}
+## 1. 環境のセットアップとADKのインストール {#1.-setup-installation}
 
 仮想環境の作成と有効化（推奨）:
 
 ```bash
 # 作成
 python -m venv .venv
-# 有効化 (新しいターミナルごと)
+# 有効化（新しいターミナルごと）
 # macOS/Linux: source .venv/bin/activate
 # Windows CMD: .venv\Scripts\activate.bat
 # Windows PowerShell: .venv\Scripts\Activate.ps1
@@ -32,138 +32,139 @@ pip install google-adk
 
 ## 2. プロジェクト構造 {#2.-project-structure}
 
-以下のフォルダ構造で空のファイルを作成します。
+空のファイルで以下のフォルダ構造を作成します。
 
 ```console
 adk-streaming/  # プロジェクトフォルダ
-└── app/ # ウェブアプリフォルダ
+└── app/ # Webアプリのフォルダ
     ├── .env # Gemini APIキー
-    └── google_search_agent/ # エージェントフォルダ
+    └── google_search_agent/ # エージェントのフォルダ
         ├── __init__.py # Pythonパッケージ
         └── agent.py # エージェントの定義
 ```
 
 ### agent.py
 
-以下のコードブロックを [`agent.py`](http://agent.py) にコピー＆ペーストしてください。
+以下のコードブロックをコピーして、`agent.py`ファイルに貼り付けます。
 
-`model`については、前述の[モデルのセクション](#supported-models)で説明したように、モデルIDを再確認してください。
+`model`については、前述の[モデルセクション](#supported-models)で説明したように、モデルIDを再確認してください。
 
 ```py
 from google.adk.agents import Agent
 from google.adk.tools import google_search  # ツールをインポート
 
 root_agent = Agent(
-   # エージェントの一意な名前
+   # エージェントの一意な名前。
    name="basic_search_agent",
-   # エージェントが使用する大規模言語モデル (LLM)
-   model="gemini-2.0-flash-exp",
-   # model="gemini-2.0-flash-live-001",  # 2025年2月時点の新しいストリーミングモデルバージョン
-   # エージェントの目的の簡単な説明
-   description="Google Searchを使って質問に答えるエージェント",
-   # エージェントの振る舞いを設定するための指示
-   instruction="あなたは熟練の研究者です。常に事実に忠実に行動してください。",
-   # Google検索によるグラウンディングを行うためにgoogle_searchツールを追加
+   # エージェントが使用する大規模言語モデル（LLM）。
+   # 以下のリンクからliveをサポートする最新のモデルIDを入力してください。
+   # https://google.github.io/adk-docs/get-started/streaming/quickstart-streaming/#supported-models
+   model="...",  # 例: model="gemini-2.0-flash-live-001" または model="gemini-2.0-flash-live-preview-04-09"
+   # エージェントの目的の簡単な説明。
+   description="Google検索を使用して質問に答えるエージェント。",
+   # エージェントの振る舞いを設定するための指示。
+   instruction="あなたは熟練した研究者です。常に事実に忠実に行動します。",
+   # Google検索でグラウンディングを実行するためにgoogle_searchツールを追加します。
    tools=[google_search]
 )
 ```
 
-**注:** テキストと音声/ビデオの両方の入力を有効にするには、モデルがgenerateContent（テキスト用）とbidiGenerateContentメソッドをサポートしている必要があります。これらの機能については、[モデル一覧のドキュメント](https://ai.google.dev/api/models#method:-models.list)を参照して確認してください。このクイックスタートでは、デモンストレーション目的で`gemini-2.0-flash-exp`モデルを利用します。
+`agent.py`には、すべてのエージェントのロジックが保存され、`root_agent`が定義されている必要があります。
 
-`agent.py`には、すべてのエージェントのロジックが保存され、`root_agent`を定義する必要があります。
-
-[Google検索によるグラウンディング](https://ai.google.dev/gemini-api/docs/grounding?lang=python#configure-search)機能がいかに簡単に統合できるかにお気づきでしょうか。`Agent`クラスと`google_search`ツールがLLMとの複雑なやり取りや検索APIによるグラウンディングを処理してくれるため、あなたはエージェントの*目的*と*振る舞い*に集中できます。
+[Google検索によるグラウンディング](https://ai.google.dev/gemini-api/docs/grounding?lang=python#configure-search)機能がどれほど簡単に統合されたかに注目してください。`Agent`クラスと`google_search`ツールが、LLMや検索APIとの複雑な相互作用を処理するため、あなたはエージェントの*目的*と*振る舞い*に集中できます。
 
 ![intro_components.png](../../assets/quickstart-streaming-tool.png)
 
-以下のコードブロックを `__init__.py` ファイルにコピー＆ペーストしてください。
+以下のコードブロックを`__init__.py`ファイルにコピーして貼り付けます。
 
 ```py title="__init__.py"
 from . import agent
 ```
 
-## 3. プラットフォームの設定 {#3.-set-up-the-platform}
+## 3. プラットフォームのセットアップ {#3.-set-up-the-platform}
 
-エージェントを実行するために、Google AI StudioまたはGoogle Cloud Vertex AIのいずれかのプラットフォームを選択します。
+エージェントを実行するには、Google AI StudioまたはGoogle Cloud Vertex AIからプラットフォームを選択します。
 
 === "Gemini - Google AI Studio"
-    1. [Google AI Studio](https://aistudio.google.com/apikey)でAPIキーを取得します。
-    2. (`app/`内にある) **`.env`** ファイルを開き、以下のコードをコピー＆ペーストします。
+    1.  [Google AI Studio](https://aistudio.google.com/apikey)からAPIキーを取得します。
+    2.  `app/`内にある**`.env`**ファイルを開き、以下のコードをコピーして貼り付けます。
 
         ```env title=".env"
         GOOGLE_GENAI_USE_VERTEXAI=FALSE
-        GOOGLE_API_KEY=ここに実際のAPIキーを貼り付け
+        GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
-    3. `ここに実際のAPIキーを貼り付け` の部分を、実際の`APIキー`に置き換えてください。
+    3.  `PASTE_YOUR_ACTUAL_API_KEY_HERE`を実際の`API KEY`に置き換えてください。
 
 === "Gemini - Google Cloud Vertex AI"
-    1. 既存の[Google Cloud](https://cloud.google.com/?e=48754805&hl=en)アカウントとプロジェクトが必要です。
-        * [Google Cloudプロジェクトのセットアップ](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-gcp)
-        * [gcloud CLIのセットアップ](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-local)
-        * ターミナルから `gcloud auth login` を実行してGoogle Cloudに認証します。
-        * [Vertex AI APIの有効化](https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com)
-    2. (`app/`内にある) **`.env`** ファイルを開きます。以下のコードをコピー＆ペーストし、プロジェクトIDとロケーションを更新してください。
+    1.  既存の[Google Cloud](https://cloud.google.com/?e=48754805&hl=ja)アカウントとプロジェクトが必要です。
+        *   [Google Cloudプロジェクトをセットアップする](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-gcp)
+        *   [gcloud CLIをセットアップする](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-local)
+        *   ターミナルから`gcloud auth login`を実行してGoogle Cloudに認証します。
+        *   [Vertex AI APIを有効にする](https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com)。
+    2.  `app/`内にある**`.env`**ファイルを開きます。以下のコードをコピーして貼り付け、プロジェクトIDとロケーションを更新してください。
 
         ```env title=".env"
         GOOGLE_GENAI_USE_VERTEXAI=TRUE
-        GOOGLE_CLOUD_PROJECT=ここに実際のプロジェクトIDを貼り付け
+        GOOGLE_CLOUD_PROJECT=PASTE_YOUR_ACTUAL_PROJECT_ID
         GOOGLE_CLOUD_LOCATION=us-central1
         ```
 
 ## 4. `adk web`でエージェントを試す {#4.-try-it-adk-web}
 
-これでエージェントを試す準備ができました。次のコマンドを実行して**開発用UI**を起動します。まず、カレントディレクトリが`app`になっていることを確認してください。
+これでエージェントを試す準備ができました。次のコマンドを実行して**開発UI**を起動します。まず、現在のディレクトリを`app`に設定してください。
 
 ```shell
 cd app
 ```
 
-また、後の音声・ビデオテストで必要になるため、以下のコマンドで`SSL_CERT_FILE`変数を設定します。
+また、次のコマンドで`SSL_CERT_FILE`変数を設定します。これは後の音声および映像テストで必要になります。
 
 ```shell
 export SSL_CERT_FILE=$(python -m certifi)
 ```
 
-次に、開発用UIを実行します。
+次に、開発UIを実行します。
 
 ```shell
 adk web
 ```
 
-!!!info "Windowsユーザーへの注記"
+!!!info "Windowsユーザーへの注意"
 
-    `_make_subprocess_transport NotImplementedError` が発生した場合は、代わりに `adk web --no-reload` の使用を検討してください。
+    `_make_subprocess_transport NotImplementedError`が発生した場合は、代わりに`adk web --no-reload`の使用を検討してください。
 
-提供されたURL（通常は `http://localhost:8000` または `http://127.0.0.1:8000`）を**直接ブラウザで開きます**。この接続は完全にローカルマシン上で完結します。`google_search_agent`を選択してください。
+提供されたURL（通常は `http://localhost:8000` または `http://127.0.0.1:8000`）を**直接ブラウザで**開きます。この接続は、完全にローカルマシン上に留まります。`google_search_agent`を選択します。
 
 ### テキストで試す
 
 UIに以下のプロンプトを入力して試してみてください。
 
 *   ニューヨークの天気は？
-*   ニューヨークの時間は？
+*   ニューヨークの今の時間は？
 *   パリの天気は？
-*   パリの時間は？
+*   パリの今の時間は？
 
-エージェントは`google_search`ツールを使用して最新の情報を取得し、これらの質問に答えます。
+エージェントはgoogle_searchツールを使用して、これらの質問に答えるための最新情報を取得します。
 
-### 音声とビデオで試す
+### 音声と映像で試す
 
-音声で試すには、ウェブブラウザをリロードし、マイクボタンをクリックして音声入力を有効にし、同じ質問を音声で尋ねます。リアルタイムで答えが音声で返ってきます。
+音声で試すには、Webブラウザをリロードし、マイクボタンをクリックして音声入力を有効にし、同じ質問を音声で行います。リアルタイムで音声の回答が聞こえます。
 
-ビデオで試すには、ウェブブラウザをリロードし、カメラボタンをクリックしてビデオ入力を有効にし、「何が見える？」のような質問をします。エージェントはビデオ入力で見えるものを答えます。
+映像で試すには、Webブラウザをリロードし、カメラボタンをクリックして映像入力を有効にし、「何が見えますか？」のような質問をします。エージェントは映像入力で見えるものについて回答します。
+
+（マイクまたはカメラボタンを一度クリックするだけで十分です。音声や映像はモデルに継続的にストリーミングされ、モデルの応答も継続的にストリーミングで返されます。マイクまたはカメラボタンを複数回クリックすることはサポートされていません。）
 
 ### ツールを停止する
 
 コンソールで`Ctrl-C`を押して`adk web`を停止します。
 
-### ADKストリーミングに関する注記
+### ADKストリーミングに関する注意
 
-Callback、LongRunningTool、ExampleTool、およびシェルエージェント（例：SequentialAgent）の機能は、ADKストリーミングの将来のバージョンでサポートされる予定です。
+以下の機能は、ADKストリーミングの将来のバージョンでサポートされる予定です：Callback、LongRunningTool、ExampleTool、およびシェルエージェント（例：SequentialAgent）。
 
-おめでとうございます！ これでADKを使用して最初のストリーミングエージェントの作成と対話が正常に完了しました！
+おめでとうございます！ADKを使用して、最初のストリーミングエージェントの作成と対話に成功しました！
 
-## 次のステップ: カスタムストリーミングアプリの構築
+## 次のステップ：カスタムストリーミングアプリの構築
 
-[カスタム音声ストリーミングアプリ](../../streaming/custom-streaming.md)のチュートリアルでは、ADKストリーミングと[FastAPI](https://fastapi.tiangolo.com/)で構築されたカスタム非同期ウェブアプリのサーバーとクライアントのコードを概説し、リアルタイムで双方向の音声・テキスト通信を可能にする方法を説明します。
+[カスタム音声ストリーミングアプリ](../../streaming/custom-streaming.md)のチュートリアルでは、ADKストリーミングと[FastAPI](https://fastapi.tiangolo.com/)で構築されたカスタム非同期Webアプリのサーバーとクライアントのコードの概要を説明し、リアルタイムの双方向音声およびテキスト通信を可能にします。

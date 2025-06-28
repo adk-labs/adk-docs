@@ -3,14 +3,6 @@ hide:
   - toc
 ---
 
-!!! tip "Google I/O'25 - ADK アップデート"
-
-    ビッグニュース！
-
-    - **[Java ADK v0.1.0](https://github.com/google/adk-java/)** をご紹介します。これにより、エージェントの機能がJavaエコシステムに拡張されます。
-
-    - **[Python ADK](https://github.com/google/adk-python/)** が正式にv1.0.0となり、本番環境に対応したエージェントのための安定性を提供します。
-
 <div style="text-align: center;">
   <div class="centered-logo-text-group">
     <img src="assets/agent-development-kit.png" alt="Agent Development Kit ロゴ" width="100">

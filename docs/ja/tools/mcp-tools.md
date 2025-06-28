@@ -276,7 +276,7 @@ MCPサーバー用に新しいPythonファイルを作成します。例：`my_a
 # ./adk_agent_samples/mcp_client_agent/agent.py
 import os
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool import MCPToolset, StdioServerParameters
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
 
 # 重要：これをあなたのmy_adk_mcp_server.pyスクリプトへの絶対パスに置き換えてください
 PATH_TO_YOUR_MCP_SERVER_SCRIPT = "/path/to/your/my_adk_mcp_server.py" # <<< 置き換える

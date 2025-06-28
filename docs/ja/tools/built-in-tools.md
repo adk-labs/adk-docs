@@ -59,6 +59,22 @@
 --8<-- "examples/python/snippets/tools/built-in-tools/vertexai_search.py"
 ```
 
+### BigQuery
+
+以下は、BigQueryとの連携を提供するためのツール群です。
+
+*   **`list_dataset_ids`**: GCPプロジェクト内に存在するBigQueryデータセットIDのリストを取得します。
+*   **`get_dataset_info`**: BigQueryデータセットに関するメタデータを取得します。
+*   **`list_table_ids`**: BigQueryデータセット内に存在するテーブルIDのリストを取得します。
+*   **`get_table_info`**: BigQueryテーブルに関するメタデータを取得します。
+*   **`execute_sql`**: BigQueryでSQLクエリを実行し、その結果を取得します。
+
+これらのツールは、`BigQueryToolset`というツールセットにパッケージ化されています。
+
+```py
+--8<-- "examples/python/snippets/tools/built-in-tools/bigquery.py"
+```
+
 ## 組み込みツールを他のツールと使用する
 
 以下のコードサンプルは、複数の組み込みツールを使用する方法、または複数のエージェントを使用して組み込みツールを他のツールと組み合わせる方法を示しています。
