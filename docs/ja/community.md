@@ -1,36 +1,40 @@
 # コミュニティリソース
 
-ようこそ！このページでは、Agent Development Kit コミュニティによってメンテナンスされているリソースを紹介します。
+ようこそ！このページでは、Agent Development Kitコミュニティによって維持されているリソースを紹介します。
 
 !!! info
 
-    GoogleおよびADKチームは、これらの外部コミュニティリソースでリンクされているコンテンツのサポートを提供していません。
+    GoogleおよびADKチームは、これらの外部コミュニティリソースにリンクされているコンテンツに対するサポートを提供していません。
 
 ## 翻訳
 
 コミュニティによって提供されたADKドキュメントの翻訳です。
 
-*   **[adk.wiki - ADK Documentation (中国語)](https://adk.wiki/)**
+*   **[adk.wiki - ADKドキュメント (中国語)](https://adk.wiki/)**
 
-    > adk.wikiは、個人によってメンテナンスされているAgent Development Kitドキュメントの中国語版です。中国の開発者にローカライズされた読書体験を提供するために、ドキュメントは継続的に更新・翻訳されています。
+    > adk.wikiは、個人によって維持されているAgent Development Kitドキュメントの中国語版です。中国の開発者向けにローカライズされた読書体験を提供するため、ドキュメントは継続的に更新および翻訳されています。
 
-*   **[ADK Documentation (韓国語, 한국어)](https://adk-labs.github.io/adk-docs/ko/)**
+*   **[ADKドキュメント (韓国語, 한국어)](https://adk-labs.github.io/adk-docs/ko/)**
 
-    > 個人によってメンテナンスされているAgent Development Kitドキュメントの韓国語版です。韓国の開発者にローカライズされた読書体験を提供するために、ドキュメントは継続的に更新・翻訳されています。
+    > 個人によって維持されているAgent Development Kitドキュメントの韓国語版です。韓国の開発者向けにローカライズされた読書体験を提供するため、ドキュメントは継続的に更新および翻訳されています。
 
-*   **[ADK Documentation (日本語)](https://adk-labs.github.io/adk-docs/ja/)**
+*   **[ADKドキュメント (日本語)](https://adk-labs.github.io/adk-docs/ja/)**
 
-    > 個人によってメンテナンスされているAgent Development Kitドキュメントの日本語版です。日本の開発者にローカライズされた読書体験を提供するために、ドキュメントは継続的に更新・翻訳されています。
+    > 個人によって維持されているAgent Development Kitドキュメントの日本語版です。日本の開発者向けにローカライズされた読書体験を提供するため、ドキュメントは継続的に更新および翻訳されています。
 
 ## チュートリアル、ガイド、ブログ投稿
 
-*ADKの機能、ユースケース、インテグレーションをカバーする、コミュニティ作成のガイドはこちらです。*
+*コミュニティによって書かれた、ADKの機能、ユースケース、統合に関するガイドをここで見つけることができます。*
 
-*   **[ADK + ベクトル検索でEコマース推薦AIエージェントを構築する](https://github.com/google/adk-docs/blob/main/examples/python/notebooks/shop_agent.ipynb)**
+*   **[ADK + Vector Searchでeコマース推薦AIエージェントを構築する](https://github.com/google/adk-docs/blob/main/examples/python/notebooks/shop_agent.ipynb)**
 
-    > このチュートリアルでは、[Shopper's Conciergeデモ](https://www.youtube.com/watch?v=LwHPYyw7u6U)で見られる「生成型推薦（Generative Recommendations）」機能を提供するように設計された、Eコマースサイト向けのシンプルなマルチエージェントシステムを構築する方法を探ります。
+    > このチュートリアルでは、[ショッパーズ・コンシェルジュのデモ](https://www.youtube.com/watch?v=LwHPYyw7u6U)で見られるような「生成AIによる推薦」を提供するために設計された、eコマースサイト向けのシンプルなマルチエージェントシステムを構築する方法を探ります。
 
-## 動画 & スクリーンキャスト
+*   **[Google ADK + Vertex AI Live API](https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e)**
+
+    > Agent Development KitとVertex AI Live APIを使用してストリーミング体験を構築することで、ADK CLIの先へ進む。
+
+## ビデオ＆スクリーンキャスト
 
 ADKを紹介するビデオウォークスルー、トーク、デモをご覧ください。
 
@@ -69,14 +73,14 @@ ADKを紹介するビデオウォークスルー、トーク、デモをご覧�
 
 *   **[Agent Development Kit (ADK) マスタークラス: AIエージェントの構築とワークフローの自動化 (初心者からプロまで)](https://www.youtube.com/watch?v=P4VFL9nIaIA)**
 
-    > GoogleのAgent Development Kitを初心者からエキスパートまで導く、包括的な短期集中コースです。
-    > 単一エージェントの設定から高度なマルチエージェントワークフローへと進む、12のハンズオン形式のサンプルをカバーしています。
-    > すべてのサンプルについて、ステップバイステップのコード解説とダウンロード可能なソースコードが含まれています。
+    > GoogleのAgent Development Kitを初心者からエキスパートへと導く包括的な短期集中コース。
+    > シングルエージェントのセットアップから高度なマルチエージェントのワークフローまで、12のハンズオン事例をカバー。
+    > すべての事例について、ステップバイステップのコードウォークスルーとダウンロード可能なソースコードが含まれています。
 
-## リソースのコントリビューション
+## あなたのリソースを投稿する
 
-共有したいADKリソース（チュートリアル、翻訳、ツール、動画、サンプル）はありますか？
+共有したいADKのリソース（チュートリアル、翻訳、ツール、ビデオ、事例）はありますか？
 
 参加方法の詳細については、[コントリビューションガイド](contributing-guide.md)の手順を参照してください！
 
-Agent Development Kitへのご協力、誠にありがとうございます！ ❤️
+Agent Development Kitへのご貢献に感謝します！❤️

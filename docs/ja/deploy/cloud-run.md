@@ -160,7 +160,7 @@ export GOOGLE_GENAI_USE_VERTEXAI=True```
         # エージェントディレクトリ名（'capital_agent'）がエージェントフォルダと一致することを確認
         app = get_fast_api_app(
             agents_dir=AGENT_DIR,
-            session_db_url=SESSION_DB_URL,
+            session_service_uri=SESSION_DB_URL,
             allow_origins=ALLOWED_ORIGINS,
             web=SERVE_WEB_INTERFACE,
         )

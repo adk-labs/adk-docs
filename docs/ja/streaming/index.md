@@ -1,16 +1,16 @@
 # ADKにおける双方向ストリーミング(live)
 
-!!! info "情報"
+!!! info
 
     これは実験的な機能です。現在、Pythonで利用可能です。
 
-!!! info "情報"
+!!! info
 
-    これはサーバーサイドストリーミングやトークンレベルのストリーミングとは異なります。このセクションは、双方向ストリーミング(live)に関するものです。
+    これはサーバーサイドストリーミングやトークンレベルストリーミングとは異なります。このセクションは双方向ストリーミング(live)に関するものです。
     
-ADKの双方向ストリーミング(live)は、[Gemini Live API](https://ai.google.dev/gemini-api/docs/live)が持つ、低遅延な双方向の音声・映像対話機能をAIエージェントに追加します。
+ADKの双方向ストリーミング(live)は、[Gemini Live API](https://ai.google.dev/gemini-api/docs/live)の低遅延な双方向音声・映像対話機能をAIエージェントに追加します。
 
-双方向ストリーミング(live)モードを使用すると、エンドユーザーに対して、自然で人間のような音声会話体験を提供できます。これには、ユーザーが音声コマンドでエージェントの応答に割り込む機能も含まれます。ストリーミング機能を持つエージェントは、テキスト、オーディオ、ビデオの入力を処理し、テキストとオーディオの出力を提供できます。
+双方向ストリーミング(live)モードを使用すると、エンドユーザーに対して、エージェントの応答に音声コマンドで割り込む機能など、自然で人間らしい音声会話の体験を提供できます。ストリーミング機能を持つエージェントは、テキスト、音声、映像の入力を処理し、テキストと音声の出力を提供できます。
 
 <div class="video-grid">
   <div class="video-item">
@@ -28,52 +28,53 @@ ADKの双方向ストリーミング(live)は、[Gemini Live API](https://ai.goo
 
 <div class="grid cards" markdown>
 
--   :material-console-line: **クイックスタート（ストリーミング）**
+-   :material-console-line: **クイックスタート (双方向ストリーミング)**
 
     ---
 
-    このクイックスタートでは、シンプルなエージェントを構築し、ADKのストリーミング機能を用いて、低遅延かつ双方向の音声・映像通信を実装します。
+    このクイックスタートでは、シンプルなエージェントを構築し、ADKのストリーミングを使用して低遅延かつ双方向の音声・映像コミュニケーションを実装します。
 
-    [:octicons-arrow-right-24: 詳細はこちら](../get-started/streaming/quickstart-streaming.md)
+    - [クイックスタート (双方向ストリーミング)](../get-started/streaming/quickstart-streaming.md)
+
+-   :material-console-line: **カスタム音声ストリーミングアプリのサンプル**
+
+    ---
+
+    この記事では、ADKストリーミングとFastAPIで構築されたカスタム非同期Webアプリのサーバーとクライアントのコードの概要を説明します。Server Sent Events (SSE)とWebSocketsの両方を使用して、リアルタイムの双方向音声・テキスト通信を可能にします。
+
+    - [カスタム音声ストリーミングアプリのサンプル (SSE)](custom-streaming.md)
+    - [カスタム音声ストリーミングアプリのサンプル (WebSockets)](custom-streaming-ws.md)
+
+-   :material-console-line: **双方向ストリーミング開発ガイドシリーズ**
+
+    ---
+
+    ADKによる双方向ストリーミング開発をより深く掘り下げるための記事シリーズです。基本的な概念とユースケース、コアAPI、そしてエンドツーエンドのアプリケーション設計について学ぶことができます。
+
+    - [双方向ストリーミング開発ガイドシリーズ: パート1 - はじめに](dev-guide/part1.md)
 
 -   :material-console-line: **ストリーミングツール**
 
     ---
 
-    ストリーミングツールを使用すると、ツール（関数）が中間結果をエージェントにストリーミングで返し、エージェントはその中間結果に応答できます。例えば、ストリーミングツールで株価の変動を監視し、エージェントに反応させることが可能です。また、エージェントにビデオストリームを監視させ、変化があった場合にその内容を報告させることもできます。
+    ストリーミングツールを使用すると、ツール(関数)が中間結果をエージェントにストリーミングで返し、エージェントがその中間結果に応答できます。例えば、ストリーミングツールを使って株価の変動を監視し、エージェントに反応させることができます。別の例として、エージェントにビデオストリームを監視させ、ストリームに変化があった場合にその変化を報告させることも可能です。
 
-    [:octicons-arrow-right-24: 詳細はこちら](streaming-tools.md)
+    - [ストリーミングツール](streaming-tools.md)
 
--   :material-console-line: **カスタムオーディオストリーミングアプリのサンプル**
-
-    ---
-
-    この記事では、ADKストリーミングとFastAPIで構築されたカスタム非同期Webアプリのサーバーとクライアントのコードの概要を説明します。サーバー送信イベント（SSE）とWebSocketの両方を使用して、リアルタイムの双方向オーディオ・テキスト通信を可能にします。
-
-    [:octicons-arrow-right-24: 詳細はこちら (SSE)](custom-streaming.md) および
-    [:octicons-arrow-right-24: (WebSocket)](custom-streaming-ws.md)
-
--   :material-console-line: **ブログ記事: Google ADK + Vertex AI Live API**
+-   :material-console-line: **カスタム音声ストリーミングアプリのサンプル**
 
     ---
 
-    この記事では、ADKの双方向ストリーミング(live)をリアルタイムのオーディオ/ビデオストリーミングに使用する方法を解説します。カスタムの対話型AIエージェントを構築するために、`LiveRequestQueue`を使用したPythonサーバーの例を紹介します。
+    この記事では、ADKストリーミングとFastAPIで構築されたカスタム非同期Webアプリのサーバーとクライアントのコードの概要を説明します。Server Sent Events (SSE)とWebSocketsの両方を使用して、リアルタイムの双方向音声・テキスト通信を可能にします。
 
-    [:octicons-arrow-right-24: 詳細はこちら](https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e)
+    - [ストリーミング設定](configuration.md)
 
--   :material-console-line: **Shopper's Conciergeデモ**
-
-    ---
-
-    ADKのストリーミング機能を使って、個人のスタイルを理解し、パーソナライズされた推薦を行うショッピングコンシェルジュを構築する方法を学びます。
-
-    [:octicons-arrow-right-24: 詳細はこちら](https://youtu.be/LwHPYyw7u6U)
-
--   :material-console-line: **ストリーミング設定**
+-   :material-console-line: **ブログ投稿: Google ADK + Vertex AI Live API**
 
     ---
 
-    live(ストリーミング)エージェント向けに設定できる構成オプションがいくつかあります。
+    この記事では、ADKの双方向ストリーミング(live)を使用してリアルタイムの音声/映像ストリーミングを行う方法を紹介します。LiveRequestQueueを使用してカスタムの対話型AIエージェントを構築するためのPythonサーバーの例を提供します。
 
-    [:octicons-arrow-right-24: 詳細はこちら](configuration.md)
+    - [ブログ投稿: Google ADK + Vertex AI Live API](https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e)
+
 </div>

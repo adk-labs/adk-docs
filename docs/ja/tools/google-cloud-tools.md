@@ -87,7 +87,7 @@ project_root_folder
     ツールセットがAPIから利用可能な最初の仕様を自動的に取得するようにしたい場合は、
     `` `projects/my-project-id/locations/us-west1/apis/my-api-id` `` を使用します。
 
-4.  エージェントファイル[Agent.py](http://Agent.py)を作成し、作成したツールをエージェントの定義に追加します。
+4.  エージェントファイルAgent.pyを作成し、作成したツールをエージェントの定義に追加します。
 
     ```py
     from google.adk.agents.llm_agent import LlmAgent

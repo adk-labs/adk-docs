@@ -60,6 +60,22 @@
 --8<-- "examples/python/snippets/tools/built-in-tools/vertexai_search.py"
 ```
 
+### BigQuery
+
+다음은 BigQuery와의 통합을 제공하기 위한 툴들입니다.
+
+*   **`list_dataset_ids`**: GCP 프로젝트에 있는 BigQuery 데이터세트 ID 목록을 가져옵니다.
+*   **`get_dataset_info`**: BigQuery 데이터세트에 대한 메타데이터를 가져옵니다.
+*   **`list_table_ids`**: BigQuery 데이터세트에 있는 테이블 ID 목록을 가져옵니다.
+*   **`get_table_info`**: BigQuery 테이블에 대한 메타데이터를 가져옵니다.
+*   **`execute_sql`**: BigQuery에서 SQL 쿼리를 실행하고 그 결과를 가져옵니다.
+
+이 툴들은 `BigQueryToolset`이라는 툴셋으로 패키지화되어 있습니다.
+
+```py
+--8<-- "examples/python/snippets/tools/built-in-tools/bigquery.py"
+```
+
 ## 다른 도구와 함께 내장 도구 사용하기
 
 다음 코드 샘플은 여러 내장 도구를 사용하거나 여러 에이전트를 사용하여 다른 도구와 함께 내장 도구를 사용하는 방법을 보여줍니다:

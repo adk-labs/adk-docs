@@ -161,7 +161,7 @@ export GOOGLE_GENAI_USE_VERTEXAI=True
         # 에이전트 디렉토리 이름('capital_agent')이 에이전트 폴더와 일치하는지 확인
         app = get_fast_api_app(
             agents_dir=AGENT_DIR,
-            session_db_url=SESSION_DB_URL,
+            session_service_uri=SESSION_DB_URL,
             allow_origins=ALLOWED_ORIGINS,
             web=SERVE_WEB_INTERFACE,
         )
