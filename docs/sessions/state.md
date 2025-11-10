@@ -1,5 +1,9 @@
 # State: The Session's Scratchpad
 
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+</div>
+
 Within each `Session` (our conversation thread), the **`state`** attribute acts like the agent's dedicated scratchpad for that specific interaction. While `session.events` holds the full history, `session.state` is where the agent stores and updates dynamic details needed *during* the conversation.
 
 ## What is `session.state`?
@@ -17,7 +21,7 @@ Conceptually, `session.state` is a collection (dictionary or Map) holding key-va
 
     * Data is stored as `key: value`.
     * **Keys:** Always strings (`str`). Use clear names (e.g., `'departure_city'`, `'user:language_preference'`).
-    * **Values:** Must be **serializable**. This means they can be easily saved and loaded by the `SessionService`. Stick to basic types in the specific languages (Python/ Java) like strings, numbers, booleans, and simple lists or dictionaries containing *only* these basic types. (See API documentation for precise details).
+    * **Values:** Must be **serializable**. This means they can be easily saved and loaded by the `SessionService`. Stick to basic types in the specific languages (Python/Go/Java) like strings, numbers, booleans, and simple lists or dictionaries containing *only* these basic types. (See API documentation for precise details).
     * **⚠️ Avoid Complex Objects:** **Do not store non-serializable objects** (custom class instances, functions, connections, etc.) directly in the state. Store simple identifiers if needed, and retrieve the complex object elsewhere.
 
 2. **Mutability: It Changes**
@@ -27,11 +31,12 @@ Conceptually, `session.state` is a collection (dictionary or Map) holding key-va
 3. **Persistence: Depends on `SessionService`**
 
     * Whether state survives application restarts depends on your chosen service:
+
       * `InMemorySessionService`: **Not Persistent.** State is lost on restart.
       * `DatabaseSessionService` / `VertexAiSessionService`: **Persistent.** State is saved reliably.
 
 !!! Note
-    The specific parameters or method names for the primitives may vary slightly by SDK language (e.g., `session.state['current_intent'] = 'book_flight'` in Python, `session.state().put("current_intent", "book_flight)` in Java). Refer to the language-specific API documentation for details.
+    The specific parameters or method names for the primitives may vary slightly by SDK language (e.g., `session.state['current_intent'] = 'book_flight'` in Python,`context.State().Set("current_intent", "book_flight")` in Go, `session.state().put("current_intent", "book_flight)` in Java). Refer to the language-specific API documentation for details.
 
 ### Organizing State with Prefixes: Scope Matters
 
@@ -58,16 +63,133 @@ Prefixes on state keys define their scope and persistence behavior, especially w
     * **Use Cases:** Global settings (e.g., `'app:api_endpoint'`), shared templates.
     * **Example:** `session.state['app:global_discount_code'] = 'SAVE10'`
 
-* **`temp:` Prefix (Temporary Session State):**
+* **`temp:` Prefix (Temporary Invocation State):**
 
-    * **Scope:** Specific to the *current* session processing turn.
-    * **Persistence:** **Never Persistent.** Guaranteed to be discarded, even with persistent services.
-    * **Use Cases:** Intermediate results needed only immediately, data you explicitly don't want stored.
+    * **Scope:** Specific to the current **invocation** (the entire process from an agent receiving user input to generating the final output for that input).
+    * **Persistence:** **Not Persistent.** Discarded after the invocation completes and does not carry over to the next one.
+    * **Use Cases:** Storing intermediate calculations, flags, or data passed between tool calls within a single invocation.
+    * **When Not to Use:** For information that must persist across different invocations, such as user preferences, conversation history summaries, or accumulated data.
     * **Example:** `session.state['temp:raw_api_response'] = {...}`
+
+!!! note "Sub-Agents and Invocation Context"
+    When a parent agent calls a sub-agent (e.g., using `SequentialAgent` or `ParallelAgent`), it passes its `InvocationContext` to the sub-agent. This means the entire chain of agent calls shares the same invocation ID and, therefore, the same `temp:` state.
 
 **How the Agent Sees It:** Your agent code interacts with the *combined* state through the single `session.state` collection (dict/ Map). The `SessionService` handles fetching/merging state from the correct underlying storage based on prefixes.
 
+### Accessing Session State in Agent Instructions
+
+When working with `LlmAgent` instances, you can directly inject session state values into the agent's instruction string using a simple templating syntax. This allows you to create dynamic and context-aware instructions without relying solely on natural language directives.
+
+#### Using `{key}` Templating
+
+To inject a value from the session state, enclose the key of the desired state variable within curly braces: `{key}`. The framework will automatically replace this placeholder with the corresponding value from `session.state` before passing the instruction to the LLM.
+
+**Example:**
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import LlmAgent
+
+    story_generator = LlmAgent(
+        name="StoryGenerator",
+        model="gemini-2.0-flash",
+        instruction="""Write a short story about a cat, focusing on the theme: {topic}."""
+    )
+
+    # Assuming session.state['topic'] is set to "friendship", the LLM
+    # will receive the following instruction:
+    # "Write a short story about a cat, focusing on the theme: friendship."
+    ```
+
+=== "Go"
+
+    ```go
+    --8<-- "examples/go/snippets/sessions/instruction_template/instruction_template_example.go:key_template"
+    ```
+
+#### Important Considerations
+
+* Key Existence: Ensure that the key you reference in the instruction string exists in the session.state. If the key is missing, the agent will throw an error. To use a key that may or may not be present, you can include a question mark (?) after the key (e.g. {topic?}).
+* Data Types: The value associated with the key should be a string or a type that can be easily converted to a string.
+* Escaping: If you need to use literal curly braces in your instruction (e.g., for JSON formatting), you'll need to escape them.
+
+#### Bypassing State Injection with `InstructionProvider`
+
+In some cases, you might want to use `{{` and `}}` literally in your instructions without triggering the state injection mechanism. For example, you might be writing instructions for an agent that helps with a templating language that uses the same syntax.
+
+To achieve this, you can provide a function to the `instruction` parameter instead of a string. This function is called an `InstructionProvider`. When you use an `InstructionProvider`, the ADK will not attempt to inject state, and your instruction string will be passed to the model as-is.
+
+The `InstructionProvider` function receives a `ReadonlyContext` object, which you can use to access session state or other contextual information if you need to build the instruction dynamically.
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import LlmAgent
+    from google.adk.agents.readonly_context import ReadonlyContext
+
+    # This is an InstructionProvider
+    def my_instruction_provider(context: ReadonlyContext) -> str:
+        # You can optionally use the context to build the instruction
+        # For this example, we'll return a static string with literal braces.
+        return "This is an instruction with {{literal_braces}} that will not be replaced."
+
+    agent = LlmAgent(
+        model="gemini-2.0-flash",
+        name="template_helper_agent",
+        instruction=my_instruction_provider
+    )
+    ```
+
+=== "Go"
+
+    ```go
+    --8<-- "examples/go/snippets/sessions/instruction_provider/instruction_provider_example.go:bypass_state_injection"
+    ```
+
+If you want to both use an `InstructionProvider` *and* inject state into your instructions, you can use the `inject_session_state` utility function.
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import LlmAgent
+    from google.adk.agents.readonly_context import ReadonlyContext
+    from google.adk.utils import instructions_utils
+
+    async def my_dynamic_instruction_provider(context: ReadonlyContext) -> str:
+        template = "This is a {adjective} instruction with {{literal_braces}}."
+        # This will inject the 'adjective' state variable but leave the literal braces.
+        return await instructions_utils.inject_session_state(template, context)
+
+    agent = LlmAgent(
+        model="gemini-2.0-flash",
+        name="dynamic_template_helper_agent",
+        instruction=my_dynamic_instruction_provider
+    )
+    ```
+
+=== "Go"
+
+    ```go
+    --8<-- "examples/go/snippets/sessions/instruction_provider/instruction_provider_example.go:manual_state_injection"
+    ```
+
+**Benefits of Direct Injection**
+
+* Clarity: Makes it explicit which parts of the instruction are dynamic and based on session state.
+* Reliability: Avoids relying on the LLM to correctly interpret natural language instructions to access state.
+* Maintainability: Simplifies instruction strings and reduces the risk of errors when updating state variable names.
+
+**Relation to Other State Access Methods**
+
+This direct injection method is specific to LlmAgent instructions. Refer to the following section for more information on other state access methods.
+
 ### How State is Updated: Recommended Methods
+
+!!! note "The Right Way to Modify State"
+    When you need to change the session state, the correct and safest method is to **directly modify the `state` object on the `Context`** provided to your function (e.g., `callback_context.state['my_key'] = 'new_value'`). This is considered "direct state manipulation" in the right way, as the framework automatically tracks these changes.
+
+    This is critically different from directly modifying the `state` on a `Session` object you retrieve from the `SessionService` (e.g., `my_session.state['my_key'] = 'new_value'`). **You should avoid this**, as it bypasses the ADK's event tracking and can lead to lost data. The "Warning" section at the end of this page has more details on this important distinction.
 
 State should **always** be updated as part of adding an `Event` to the session history using `session_service.append_event()`. This ensures changes are tracked, persistence works correctly, and updates are thread-safe.
 
@@ -124,6 +246,12 @@ This is the simplest method for saving an agent's final text response directly i
 
     ```java
     --8<-- "examples/java/snippets/src/main/java/state/GreetingAgentExample.java:full_code"
+    ```
+
+=== "Go"
+
+    ```go
+    --8<-- "examples/go/snippets/sessions/state_example/state_example.go:greeting"
     ```
 
 Behind the scenes, the `Runner` uses the `output_key` to create the necessary `EventActions` with a `state_delta` and calls `append_event`.
@@ -184,6 +312,12 @@ For more complex scenarios (updating multiple keys, non-string values, specific 
     # Note: 'temp:validation_needed' is NOT present.
     ```
 
+=== "Go"
+
+    ```go
+    --8<-- "examples/go/snippets/sessions/state_example/state_example.go:manual"
+    ```
+
 === "Java"
 
     ```java
@@ -221,6 +355,12 @@ For more comprehensive details on context objects, refer to the [Context documen
 
         # State changes are automatically part of the event's state_delta
         # ... rest of callback/tool logic ...
+    ```
+
+=== "Go"
+
+    ```go
+    --8<-- "examples/go/snippets/sessions/state_example/state_example.go:context"
     ```
 
 === "Java"

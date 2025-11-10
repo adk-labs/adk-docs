@@ -1,6 +1,8 @@
 # Context
 
-## What are Context
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+</div>
 
 In the Agent Development Kit (ADK), "context" refers to the crucial bundle of information available to your agent and its tools during specific operations. Think of it as the necessary background knowledge and resources needed to handle a current task or conversation turn effectively.
 
@@ -46,6 +48,13 @@ The central piece holding all this information together for a single, complete u
     #   --- End Internal Logic ---
     #
     # As a developer, you work with the context objects provided in method arguments.
+    ```
+
+=== "Go"
+
+    ```go
+    /* Conceptual Pseudocode: How the framework provides context (Internal Logic) */
+    --8<-- "examples/go/snippets/context/main.go:conceptual_runner_example"
     ```
 
 === "Java"
@@ -102,6 +111,17 @@ While `InvocationContext` acts as the comprehensive internal container, ADK prov
                 yield # ... event ...
         ```
     
+    === "Go"
+
+        ```go
+        import (
+        	"google.golang.org/adk/agent"
+        	"google.golang.org/adk/session"
+        )
+        
+        --8<-- "examples/go/snippets/context/main.go:invocation_context_agent"
+        ```
+
     === "Java"
     
         ```java
@@ -170,7 +190,7 @@ While `InvocationContext` acts as the comprehensive internal container, ADK prov
     
         ```python
         # Pseudocode: Instruction provider receiving ReadonlyContext
-        from google.adk.agents import ReadonlyContext
+        from google.adk.agents.readonly_context import ReadonlyContext
     
         def my_instruction_provider(context: ReadonlyContext) -> str:
             # Read-only access example
@@ -178,7 +198,15 @@ While `InvocationContext` acts as the comprehensive internal container, ADK prov
             # context.state['new_key'] = 'value' # This would typically cause an error or be ineffective
             return f"Process the request for a {user_tier} user."
         ```
-    
+
+    === "Go"
+
+        ```go
+        import "google.golang.org/adk/agent"
+        
+        --8<-- "examples/go/snippets/context/main.go:readonly_context_instruction"
+        ```
+
     === "Java"
     
         ```java
@@ -221,6 +249,17 @@ While `InvocationContext` acts as the comprehensive internal container, ADK prov
             return None # Allow model call to proceed
         ```
     
+    === "Go"
+
+        ```go
+        import (
+        	"google.golang.org/adk/agent"
+        	"google.golang.org/adk/model"
+        )
+        
+        --8<-- "examples/go/snippets/context/main.go:callback_context_callback"
+        ```
+
     === "Java"
     
         ```java
@@ -280,6 +319,14 @@ While `InvocationContext` acts as the comprehensive internal container, ADK prov
             return {"result": f"Data for {query} fetched."}
         ```
     
+    === "Go"
+
+        ```go
+        import "google.golang.org/adk/tool"
+        
+        --8<-- "examples/go/snippets/context/main.go:tool_context_tool"
+        ```
+
     === "Java"
     
         ```java
@@ -348,6 +395,21 @@ You'll frequently need to read information stored within the context.
             # ... callback logic ...
         ```
     
+    === "Go"
+
+        ```go
+        import (
+        	"google.golang.org/adk/agent"
+        	"google.golang.org/adk/session"
+            "google.golang.org/adk/tool"
+        	"google.golang.org/genai"
+        )
+        
+        --8<-- "examples/go/snippets/context/main.go:accessing_state_tool"
+
+        --8<-- "examples/go/snippets/context/main.go:accessing_state_callback"
+        ```
+
     === "Java"
     
         ```java
@@ -394,6 +456,14 @@ You'll frequently need to read information stored within the context.
             print(f"Log: Invocation={inv_id}, Agent={agent_name}, FunctionCallID={func_call_id} - Tool Executed.")
         ```
     
+    === "Go"
+
+        ```go
+        import "google.golang.org/adk/tool"
+        
+        --8<-- "examples/go/snippets/context/main.go:accessing_ids"
+        ```
+
     === "Java"
     
         ```java
@@ -431,6 +501,17 @@ You'll frequently need to read information stored within the context.
         #     ...
         ```
     
+    === "Go"
+
+        ```go
+        import (
+        	"google.golang.org/adk/agent"
+        	"google.golang.org/genai"
+        )
+        
+        --8<-- "examples/go/snippets/context/main.go:accessing_initial_user_input"
+        ```
+
     === "Java"
     
         ```java
@@ -447,15 +528,16 @@ You'll frequently need to read information stored within the context.
         }
         ```
     
-### Managing Session State
+### Managing State
 
 State is crucial for memory and data flow. When you modify state using `CallbackContext` or `ToolContext`, the changes are automatically tracked and persisted by the framework.
 
 *   **How it Works:** Writing to `callback_context.state['my_key'] = my_value` or `tool_context.state['my_key'] = my_value` adds this change to the `EventActions.state_delta` associated with the current step's event. The `SessionService` then applies these deltas when persisting the event.
-*   **Passing Data Between Tools:**
+
+*  **Passing Data Between Tools**
 
     === "Python"
-    
+
         ```python
         # Pseudocode: Tool 1 - Fetches user ID
         from google.adk.tools import ToolContext
@@ -477,9 +559,19 @@ State is crucial for memory and data flow. When you modify state using `Callback
             # ... logic to fetch orders using user_id ...
             return {"orders": ["order123", "order456"]}
         ```
-    
+
+    === "Go"
+
+        ```go
+        import "google.golang.org/adk/tool"
+        
+        --8<-- "examples/go/snippets/context/main.go:passing_data_tool1"
+        
+        --8<-- "examples/go/snippets/context/main.go:passing_data_tool2"
+        ```
+
     === "Java"
-    
+
         ```java
         // Pseudocode: Tool 1 - Fetches user ID
         import com.google.adk.tools.ToolContext;
@@ -520,6 +612,14 @@ State is crucial for memory and data flow. When you modify state using `Callback
             return {"status": "Preference updated"}
         ```
     
+    === "Go"
+
+        ```go
+        import "google.golang.org/adk/tool"
+        
+        --8<-- "examples/go/snippets/context/main.go:updating_preferences"
+        ```
+
     === "Java"
     
         ```java
@@ -549,7 +649,7 @@ Use artifacts to handle files or large data blobs associated with the session. C
     
                ```python
                # Pseudocode: In a callback or initial tool
-               from google.adk.agents import CallbackContext # Or ToolContext
+               from google.adk.agents.callback_context import CallbackContext # Or ToolContext
                from google.genai import types
                 
                def save_document_reference(context: CallbackContext, file_path: str) -> None:
@@ -570,6 +670,17 @@ Use artifacts to handle files or large data blobs associated with the session. C
                # save_document_reference(callback_context, "gs://my-bucket/docs/report.pdf")
                ```
     
+        === "Go"
+
+            ```go
+            import (
+            	"google.golang.org/adk/tool"
+            	"google.golang.org/genai"
+            )
+            
+            --8<-- "examples/go/snippets/context/main.go:artifacts_save_ref"
+            ```
+
         === "Java"
     
                ```java
@@ -656,6 +767,14 @@ Use artifacts to handle files or large data blobs associated with the session. C
                 #      return {"error": f"Error reading document {file_path}: {e}"}
             ```
 
+        === "Go"
+
+            ```go
+            import "google.golang.org/adk/tool"
+            
+            --8<-- "examples/go/snippets/context/main.go:artifacts_summarize"
+            ```
+
         === "Java"
 
             ```java
@@ -707,7 +826,7 @@ Use artifacts to handle files or large data blobs associated with the session. C
                 }
             }
             ```
-    
+        
 *   **Listing Artifacts:** Discover what files are available.
     
     === "Python"
@@ -725,6 +844,14 @@ Use artifacts to handle files or large data blobs associated with the session. C
                 return {"error": f"Artifact service error: {e}"}
         ```
         
+    === "Go"
+
+        ```go
+        import "google.golang.org/adk/tool"
+        
+        --8<-- "examples/go/snippets/context/main.go:artifacts_list"
+        ```
+
     === "Java"
         
         ```java
@@ -744,7 +871,9 @@ Use artifacts to handle files or large data blobs associated with the session. C
 
 ### Handling Tool Authentication 
 
-![python_only](https://img.shields.io/badge/Currently_supported_in-Python-blue){ title="This feature is currently available for Python. Java support is planned/ coming soon."}
+<div class="language-support-tag">
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+</div>
 
 Securely manage API keys or other credentials needed by tools.
 
@@ -801,7 +930,9 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
 
 ### Leveraging Memory 
 
-![python_only](https://img.shields.io/badge/Currently_supported_in-Python-blue){ title="This feature is currently available for Python. Java support is planned/ coming soon."}
+<div class="language-support-tag">
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+</div>
 
 Access relevant information from the past or external sources.
 
@@ -827,7 +958,9 @@ def find_related_info(tool_context: ToolContext, topic: str) -> dict:
 
 ### Advanced: Direct `InvocationContext` Usage 
 
-![python_only](https://img.shields.io/badge/Currently_supported_in-Python-blue){ title="This feature is currently available for Python. Java support is planned/ coming soon."}
+<div class="language-support-tag">
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+</div>
 
 While most interactions happen via `CallbackContext` or `ToolContext`, sometimes the agent's core logic (`_run_async_impl`/`_run_live_impl`) needs direct access.
 

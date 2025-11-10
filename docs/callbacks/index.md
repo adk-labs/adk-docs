@@ -1,6 +1,8 @@
 # Callbacks: Observe, Customize, and Control Agent Behavior
 
-## Introduction: What are Callbacks and Why Use Them?
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+</div>
 
 Callbacks are a cornerstone feature of ADK, providing a powerful mechanism to hook into an agent's execution process. They allow you to observe, customize, and even control the agent's behavior at specific, predefined points without modifying the core ADK framework code.
 
@@ -24,6 +26,11 @@ Callbacks are a cornerstone feature of ADK, providing a powerful mechanism to ho
 * **Manage State:** Read or dynamically update the agent's session state during execution.  
 * **Integrate & Enhance:** Trigger external actions (API calls, notifications) or add features like caching.
 
+!!! tip
+    When implementing security guardrails and policies, use ADK Plugins for
+    better modularity and flexibility than Callbacks. For more details, see 
+    [Callbacks and Plugins for Security Guardrails](/adk-docs/safety/#callbacks-and-plugins-for-security-guardrails).
+
 **How are they added:** 
 
 ??? "Code"
@@ -33,6 +40,15 @@ Callbacks are a cornerstone feature of ADK, providing a powerful mechanism to ho
         --8<-- "examples/python/snippets/callbacks/callback_basic.py:callback_basic"
         ```
     
+    === "Go"
+
+        ```go
+        --8<-- "examples/go/snippets/callbacks/main.go:imports"
+
+
+        --8<-- "examples/go/snippets/callbacks/main.go:callback_basic"
+        ```
+
     === "Java"
     
         ```java
@@ -68,9 +84,6 @@ When the ADK framework encounters a point where a callback can run (e.g., just b
 
 This example demonstrates the common pattern for a guardrail using `before_model_callback`.
 
-<!-- ```py
---8<-- "examples/python/snippets/callbacks/before_model_callback.py"
-``` -->
 ??? "Code"
     === "Python"
     
@@ -78,9 +91,17 @@ This example demonstrates the common pattern for a guardrail using `before_model
         --8<-- "examples/python/snippets/callbacks/before_model_callback.py"
         ```
     
+    === "Go"
+        ```go
+        --8<-- "examples/go/snippets/callbacks/main.go:imports"
+
+        
+        --8<-- "examples/go/snippets/callbacks/main.go:guardrail_init"
+        ```
+
     === "Java"
         ```java
         --8<-- "examples/java/snippets/src/main/java/callbacks/BeforeModelGuardrailExample.java:init"
         ```
-
+        
 By understanding this mechanism of returning `None` versus returning specific objects, you can precisely control the agent's execution path, making callbacks an essential tool for building sophisticated and reliable agents with ADK.

@@ -8,20 +8,38 @@ exclude_docs:
   api-reference/java/legal/*
 
 # Repository
-repo_name: adk-python
-repo_url: https://github.com/google/adk-python
+repo_name: adk-docs
+repo_url: https://github.com/google/adk-docs
+edit_uri: edit/main/docs/
 
 # Copyright
-copyright: Copyright Google 2025
+copyright: Copyright Google 2025&nbsp;&nbsp;|&nbsp;&nbsp;<a href="//policies.google.com/terms">Terms</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="//policies.google.com/privacy">Privacy</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#__consent">Manage cookies</a>
 
 # Custom CSS
 extra_css:
   - stylesheets/custom.css
+  - stylesheets/language-tags.css
 
 extra:
-  second_repo_url: https://github.com/google/adk-java
-  second_repo_name: adk-java
+  first_repo_url: https://github.com/google/adk-python
+  first_repo_name: adk-python
+  first_repo_icon: fontawesome/brands/github
+  second_repo_url: https://github.com/google/adk-go
+  second_repo_name: adk-go
   second_repo_icon: fontawesome/brands/github
+  third_repo_url: https://github.com/google/adk-java
+  third_repo_name: adk-java
+  third_repo_icon: fontawesome/brands/github
+  analytics:
+    provider: google
+    property: G-DKHZS27PHP
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize repeated visits and preferences,
+      as well as to measure the effectiveness of our documentation and
+      whether users find the information they need. With your consent,
+      you're helping us to make our documentation better.
 
 # Configuration
 theme:
@@ -48,6 +66,8 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   features:
+    - content.action.edit
+    - content.action.view
     - content.code.annotate
     - content.code.copy
     - content.code.select
@@ -58,6 +78,7 @@ theme:
     - navigation.instant
     - navigation.instant.progress
     - navigation.path
+    - navigation.sections
     - navigation.top
     - navigation.tracking
     - toc.follow
@@ -91,332 +112,159 @@ markdown_extensions:
   - toc:
       permalink: true
 
-         
-# Navigation
-nav:
-  - Home: index.md
-  - Get Started:
-    - get-started/index.md
-    - Installation: get-started/installation.md
-    - Quickstart: get-started/quickstart.md
-    - Quickstart (Streaming):
-      - get-started/streaming/index.md
-      - Python: get-started/streaming/quickstart-streaming.md
-      - Java: get-started/streaming/quickstart-streaming-java.md
-    - Testing: get-started/testing.md
-    - Sample agents: https://github.com/google/adk-samples
-    - About ADK: get-started/about.md
-  - Tutorials:
-    - tutorials/index.md
-    - Agent Team: tutorials/agent-team.md
-  - Agents:
-    - agents/index.md
-    - LLM agents: agents/llm-agents.md
-    - Workflow agents:
-      - agents/workflow-agents/index.md
-      - Sequential agents: agents/workflow-agents/sequential-agents.md
-      - Loop agents: agents/workflow-agents/loop-agents.md
-      - Parallel agents: agents/workflow-agents/parallel-agents.md
-    - Custom agents: agents/custom-agents.md
-    - Multi-agent systems: agents/multi-agents.md
-    - Models: agents/models.md
-  - Tools:
-    - tools/index.md
-    - Function tools: tools/function-tools.md
-    - Built-in tools: tools/built-in-tools.md
-    - Third party tools: tools/third-party-tools.md
-    - Google Cloud tools: tools/google-cloud-tools.md
-    - MCP tools: tools/mcp-tools.md
-    - OpenAPI tools: tools/openapi-tools.md
-    - Authentication: tools/authentication.md
-  - Running Agents:
-    - Agent Runtime: runtime/index.md
-    - Runtime Config: runtime/runconfig.md
-  - Deploy:
-    - deploy/index.md
-    - Agent Engine: deploy/agent-engine.md
-    - Cloud Run: deploy/cloud-run.md
-    - GKE: deploy/gke.md
-  - Sessions & Memory:
-    - sessions/index.md
-    - Session: sessions/session.md
-    - State: sessions/state.md
-    - Memory: sessions/memory.md
-  - Callbacks:
-    - callbacks/index.md
-    - Types of callbacks: callbacks/types-of-callbacks.md
-    - Callback patterns: callbacks/design-patterns-and-best-practices.md
-  - Artifacts:
-    - artifacts/index.md
-  - Events:
-    - events/index.md
-  - Context:
-    - context/index.md
-  - Observability:
-    - Arize AX: observability/arize-ax.md
-    - Phoenix: observability/phoenix.md
-  - Evaluate:
-    - evaluate/index.md
-  - MCP:
-    - mcp/index.md
-  - Bidi-streaming (live):
-    - streaming/index.md
-    - Quickstart (Bidi-streaming/live): get-started/streaming/index.md
-    - Custom Audio Bidi-streaming app sample (SSE): streaming/custom-streaming.md
-    - Custom Audio Bidi-streaming app sample (WebSockets): streaming/custom-streaming-ws.md
-    - Bidi-streaming development guide series: streaming/dev-guide/part1.md
-    - Streaming Tools: streaming/streaming-tools.md
-    - Configuring Bidi-streaming behaviour: streaming/configuration.md
-  - Safety and Security: safety/index.md
-  - Agent2Agent (A2A) Protocol: https://github.com/google/A2A/
-  - Community Resources: community.md
-  - Contributing Guide: contributing-guide.md
-  - API Reference:
-    - api-reference/index.md
-    - Python ADK: api-reference/python/index.html
-    - Java ADK: api-reference/java/index.html
-
-
 # Plugins
 plugins:
   - search
   - redirects:
       redirect_maps:
-        'get-started/local-testing.md': 'get-started/testing.md'
+        'get-started/local-testing.md': 'runtime/api-server.md'
         'get-started/tutorial.md': 'tutorials/index.md'
         'guides/responsible-agents.md': 'safety/index.md'
-  - i18n:
-      docs_structure: folder
-      languages:
-        - locale: en
-          name: English
-          default: true
-          build: true
-        - locale: ko
-          name: 한국어
-          build: true
-          # nav_translations:
-          #   Home: 홈
-          #   Get Started: 시작하기
-          #   Installation: 설치
-          #   Quickstart: 빠르게 시작하기
-          #   Quickstart (Streaming): 빠르게 시작하기 (스트리밍)
-          #   Python: Python
-          #   Java: Java
-          #   Testing: 테스트하기
-          #   Sample agents: 샘플 에이전트
-          #   About ADK: ADK 소개
-          #   Tutorials: 튜토리얼
-          #   Agent Team: 에이전트 팀 구성
-          #   Agents: 에이전트
-          #   LLM agents: LLM 에이전트
-          #   Workflow agents: 워크플로우 에이전트
-          #   Sequential agents: 순차 실행 에이전트
-          #   Loop agents: 루프 에이전트
-          #   Parallel agents: 병렬 실행 에이전트
-          #   Custom agents: 사용자 정의 에이전트
-          #   Multi-agent systems: 멀티 에이전트 시스템
-          #   Models: 모델 정의
-          #   Tools: 도구
-          #   Function tools: 함수형 도구
-          #   Built-in tools: 내장 도구
-          #   Third party tools: 서드파티 도구
-          #   Google Cloud tools: Google Cloud 도구
-          #   MCP tools: MCP 도구
-          #   OpenAPI tools: OpenAPI 도구
-          #   Authentication: 인증
-          #   Running Agents: 에이전트 실행
-          #   Agent Runtime: 런타임
-          #   Runtime Config: 런타임 설정
-          #   Deploy: 배포
-          #   Agent Engine: 에이전트 엔진
-          #   Cloud Run: Cloud Run
-          #   GKE: GKE
-          #   Sessions & Memory: 세션 및 메모리
-          #   Session: 세션
-          #   State: 상태
-          #   Memory: 메모리
-          #   Callbacks: 콜백
-          #   Types of callbacks: 콜백의 종류
-          #   Callback patterns: 디자인 패턴 및 모범 사례
-          #   Artifacts: 아티팩트
-          #   Events: 이벤트
-          #   Context: 컨텍스트
-          #   Evaluate: 평가
-          #   MCP: MCP
-          #   Bidi-streaming (live): Bidi-streaming (실시간)
-          #   Quickstart (Bidi-streaming/live): 빠르게 시작하기 (Live)
-          #   Streaming Tools: 스트리밍 도구
-          #   Custom Audio Bidi-streaming app sample (SSE): 오디오 예제 (SSE)
-          #   Custom Audio Bidi-streaming app sample (WebSockets): 오디오 예제 (WebSocket)
-          #   Configurating Bidi-streaming behaviour: 스트리밍 설정
-          #   Safety and Security: 보안 및 안전성
-          #   Agent2Agent (A2A) Protocol: Agent 간 통신 (A2A 프로토콜)
-          #   Community Resources: 커뮤니티 자료
-          #   Contributing Guide: 기여 가이드
-          #   API Reference: API 레퍼런스
-          #   Python ADK: Python ADK
-          #   Java ADK: Java ADK
-          nav:
-            - 홈: index.md
-            - 시작하기:
-              - get-started/index.md
-              - 설치: get-started/installation.md
-              - 빠른 시작: get-started/quickstart.md
-              - 빠른 시작 (스트리밍):
-                  - 개요: get-started/streaming/index.md
-                  - Python: get-started/streaming/quickstart-streaming.md
-                  - Java: get-started/streaming/quickstart-streaming-java.md
-              - 테스트: get-started/testing.md
-              - 샘플 에이전트: https://github.com/google/adk-samples
-              - ADK 정보: get-started/about.md
-            - 튜토리얼:
-              - 개요: tutorials/index.md
-              - 에이전트 팀: tutorials/agent-team.md
-            - 에이전트:
-              - 개요: agents/index.md
-              - LLM 에이전트: agents/llm-agents.md
-              - 워크플로우 에이전트:
-                - agents/workflow-agents/index.md
-                - 순차 에이전트: agents/workflow-agents/sequential-agents.md
-                - 루프 에이전트: agents/workflow-agents/loop-agents.md
-                - 병렬 에이전트: agents/workflow-agents/parallel-agents.md
-              - 커스텀 에이전트: agents/custom-agents.md
-              - 다중 에이전트 시스템: agents/multi-agents.md
-              - 모델: agents/models.md
-            - 툴:
-              - 개요: tools/index.md
-              - 함수 툴: tools/function-tools.md
-              - 내장 툴: tools/built-in-tools.md
-              - 서드파티 툴: tools/third-party-tools.md
-              - Google Cloud 툴: tools/google-cloud-tools.md
-              - MCP 툴: tools/mcp-tools.md
-              - OpenAPI 툴: tools/openapi-tools.md
-              - 인증: tools/authentication.md
-            - 에이전트 실행:
-              - 에이전트 런타임: runtime/index.md
-              - 런타임 설정: runtime/runconfig.md
-            - 배포:
-              - 개요: deploy/index.md
-              - 에이전트 엔진: deploy/agent-engine.md
-              - Cloud Run: deploy/cloud-run.md
-              - GKE: deploy/gke.md
-            - 세션 및 메모리:
-              - 개요: sessions/index.md
-              - 세션: sessions/session.md
-              - 상태: sessions/state.md
-              - 메모리: sessions/memory.md
-            - 콜백:
-              - 개요: callbacks/index.md
-              - 콜백 종류: callbacks/types-of-callbacks.md
-              - 콜백 패턴: callbacks/design-patterns-and-best-practices.md
-            - 아티팩트: artifacts/index.md
-            - 이벤트: events/index.md
-            - 컨텍스트: context/index.md
-            - 관측성(Observability):
-              - Arize AX: observability/arize-ax.md
-              - Phoenix: observability/phoenix.md
-            - 평가: evaluate/index.md
-            - MCP: mcp/index.md
-            - 양방향 스트리밍 (실시간):
-              - 개요: streaming/index.md
-              - 빠른 시작 (양방향 스트리밍/live): get-started/streaming/index.md
-              - 커스텀 오디오 양방향 스트리밍 앱 샘플 (SSE): streaming/custom-streaming.md
-              - 커스텀 오디오 양방향 스트리밍 앱 샘플 (웹소켓): streaming/custom-streaming-ws.md
-              - 양방향 스트리밍 개발 가이드 시리즈: streaming/dev-guide/part1.md
-              - 스트리밍 툴: streaming/streaming-tools.md
-              - 양방향 스트리밍 동작 구성하기: streaming/configuration.md
-            - 안전 및 보안: safety/index.md
-            - Agent2Agent (A2A) 프로토콜: https://github.com/google/A2A/
-            - 커뮤니티 자료: community.md
-            - 기여 가이드: contributing-guide.md
-            - API 레퍼런스:
-              - 개요: api-reference/index.md
-              - Python ADK: https://google.github.io/adk-docs/api-reference/python/
-              - Java ADK: https://google.github.io/adk-docs/api-reference/java/
-            
-        - locale: ja
-          name: 日本語
-          build: true
-          nav:
-            - ホーム: index.md
-            - はじめに:
-              - get-started/index.md
-              - インストール: get-started/installation.md
-              - クイックスタート: get-started/quickstart.md
-              - クイックスタート(ストリーミング):
-                - ストリーミング: get-started/streaming/index.md
-                - Python: get-started/streaming/quickstart-streaming.md
-                - Java: get-started/streaming/quickstart-streaming-java.md
-              - テスト: get-started/testing.md
-              - サンプルエージェント: https://github.com/google/adk-samples
-              - ADKについて: get-started/about.md
-            - チュートリアル:
-              - チュートリアル: tutorials/index.md
-              - エージェントチーム: tutorials/agent-team.md
-            - エージェント:
-              - エージェント: agents/index.md
-              - LLMエージェント: agents/llm-agents.md
-              - ワークフローエージェント:
-                - ワークフローエージェント: agents/workflow-agents/index.md
-                - シーケンシャルエージェント: agents/workflow-agents/sequential-agents.md
-                - ループエージェント: agents/workflow-agents/loop-agents.md
-                - パラレルエージェント: agents/workflow-agents/parallel-agents.md
-              - カスタムエージェント: agents/custom-agents.md
-              - マルチエージェントシステム: agents/multi-agents.md
-              - モデル定義: agents/models.md
-            - ツール:
-              - ツール: tools/index.md
-              - 関数ツール: tools/function-tools.md
-              - 内蔵ツール: tools/built-in-tools.md
-              - サードパーティツール: tools/third-party-tools.md
-              - Google Cloudツール: tools/google-cloud-tools.md
-              - MCPツール: tools/mcp-tools.md
-              - OpenAPIツール: tools/openapi-tools.md
-              - 認証: tools/authentication.md
-            - エージェントの実行:
-              - エージェントランタイム: runtime/index.md
-              - ランタイム設定: runtime/runconfig.md
-            - デプロイ:
-              - デプロイ: deploy/index.md
-              - エージェントエンジン: deploy/agent-engine.md
-              - Cloud Run: deploy/cloud-run.md
-              - GKE: deploy/gke.md
-            - セッションとメモリ:
-              - セッションとメモリ: sessions/index.md
-              - セッション: sessions/session.md
-              - ステート: sessions/state.md
-              - メモリ: sessions/memory.md
-            - コールバック:
-              - コールバック: callbacks/index.md
-              - コールバックの種類: callbacks/types-of-callbacks.md
-              - デザインパターンとベストプラクティス: callbacks/design-patterns-and-best-practices.md
-            - アーティファクト:
-              - アーティファクト: artifacts/index.md
-            - イベント:
-              - イベント: events/index.md
-            - コンテキスト:
-              - コンテキスト: context/index.md
-            - オブザーバビリティ:
-              - Arize AX: observability/arize-ax.md
-              - Phoenix: observability/phoenix.md
-            - 評価:
-              - 評価: evaluate/index.md
-            - MCP:
-              - MCP: mcp/index.md
-            - 双方向ストリーミング(ライブ):
-              - ストリーミング: streaming/index.md
-              - クイックスタート (双方向ストリーミング/live): get-started/streaming/index.md
-              - カスタム音声双方向ストリーミングアプリのサンプル (SSE): streaming/custom-streaming.md
-              - カスタム音声双方向ストリーミングアプリのサンプル (WebSockets): streaming/custom-streaming-ws.md
-              - 双方向ストリーミング開発ガイドシリーズ: streaming/dev-guide/part1.md
-              - ストリーミングツール: streaming/streaming-tools.md
-              - 双方向ストリーミングの動作設定: streaming/configuration.md
-            - 安全性とセキュリティ: safety/index.md
-            - Agent2Agent (A2A) プロトコル: https://github.com/google/A2A/
-            - コミュニティリソース: community.md
-            - コントリビューションガイド: contributing-guide.md
-            - APIリファレンス:
-              - APIリファレンス: api-reference/index.md
-              - Python ADK: https://google.github.io/adk-docs/api-reference/python/
-              - Java ADK: https://google.github.io/adk-docs/api-reference/java/
+        'tools/third-party-tools.md': 'tools/third-party/index.md'
+        'tools/third-party/openapi-tools.md': 'tools-custom/openapi-tools.md'
+        'tools/openapi-tools.md': 'tools-custom/openapi-tools.md'
+        'tutorials/ag-ui.md': 'tools/third-party/ag-ui.md'
+        'tools/third-party/langchain.md': 'tools/index.md'
+        'tools/third-party/crewai.md': 'tools/index.md'
+        'get-started/testing.md': 'runtime/api-server.md'
+
+# Navigation
+nav:
+  - Home:
+    - index.md
+  - Build Agents:
+    - Get Started:
+      - get-started/index.md
+      - Python: get-started/python.md
+      - Go: get-started/go.md
+      - Java: get-started/java.md
+    - Build your Agent:
+      - tutorials/index.md
+      - Multi-tool agent: get-started/quickstart.md
+      - Agent team: tutorials/agent-team.md
+      - Streaming agent:
+        - get-started/streaming/index.md
+        - Python: get-started/streaming/quickstart-streaming.md
+        - Java: get-started/streaming/quickstart-streaming-java.md
+      - Advanced setup: get-started/installation.md
+    - Agents:
+      - agents/index.md
+      - LLM agents: agents/llm-agents.md
+      - Workflow agents:
+        - agents/workflow-agents/index.md
+        - Sequential agents: agents/workflow-agents/sequential-agents.md
+        - Loop agents: agents/workflow-agents/loop-agents.md
+        - Parallel agents: agents/workflow-agents/parallel-agents.md
+      - Custom agents: agents/custom-agents.md
+      - Multi-agent systems: agents/multi-agents.md
+      - Agent Config: agents/config.md
+      - Models & Authentication: agents/models.md
+    - Tools for Agents:
+      - tools/index.md
+      - Built-in tools: tools/built-in-tools.md
+      - Gemini API tools:
+        -  Computer use: tools/gemini-api/computer-use.md
+      - Google Cloud tools:
+        - Overview: tools/google-cloud-tools.md
+        - MCP Toolbox for Databases: tools/google-cloud/mcp-toolbox-for-databases.md
+        - Code Execution with Agent Engine: tools/google-cloud/code-exec-agent-engine.md
+      - Third-party tools:
+        - tools/third-party/index.md
+        - Browserbase: tools/third-party/browserbase.md
+        - Exa: tools/third-party/exa.md
+        - Firecrawl: tools/third-party/firecrawl.md
+        - GitHub: tools/third-party/github.md
+        - Hugging Face: tools/third-party/hugging-face.md
+        - Notion: tools/third-party/notion.md
+        - Tavily: tools/third-party/tavily.md
+        - Agentic UI (AG-UI): tools/third-party/ag-ui.md
+    - Custom Tools:
+      - tools-custom/index.md
+      - Function tools:
+        - Overview: tools/function-tools.md
+        - Tool performance: tools/performance.md
+        - Action confirmations: tools/confirmation.md
+      - MCP tools: tools/mcp-tools.md
+      - OpenAPI tools: tools-custom/openapi-tools.md
+      - Authentication: tools/authentication.md
+  - Run Agents:
+    - Agent Runtime:
+      - Agent Runtime: runtime/index.md
+      - Runtime Config: runtime/runconfig.md
+      - API Server: runtime/api-server.md
+      - Resume Agents: runtime/resume.md
+    - Deployment:
+      - deploy/index.md
+      - Agent Engine: deploy/agent-engine.md
+      - Cloud Run: deploy/cloud-run.md
+      - GKE: deploy/gke.md
+    - Observability:
+      - Logging: observability/logging.md
+      - Cloud Trace: observability/cloud-trace.md
+      - AgentOps: observability/agentops.md
+      - Arize AX: observability/arize-ax.md
+      - Freeplay: observability/freeplay.md
+      - Phoenix: observability/phoenix.md
+      - W&B Weave: observability/weave.md
+    - Evaluation:
+      - evaluate/index.md
+      - Criteria: evaluate/criteria.md
+      - User Simulation: evaluate/user-sim.md
+    - Safety and Security:
+      - safety/index.md
+  - Components:
+    - Technical Overview: get-started/about.md
+    - Context:
+      - context/index.md
+      - Context caching: context/caching.md
+      - Context compression: context/compaction.md
+    - Sessions & Memory:
+      - sessions/index.md
+      - Session: sessions/session.md
+      - State: sessions/state.md
+      - Memory: sessions/memory.md
+      - Vertex AI Express Mode: sessions/express-mode.md
+    - Callbacks:
+      - callbacks/index.md
+      - Types of callbacks: callbacks/types-of-callbacks.md
+      - Callback patterns: callbacks/design-patterns-and-best-practices.md
+    - Artifacts:
+      - artifacts/index.md
+    - Events:
+      - events/index.md
+    - Apps:
+      - apps/index.md
+    - Plugins:
+      - plugins/index.md
+      - Reflect and retry: plugins/reflect-and-retry.md
+    - MCP:
+      - mcp/index.md
+    - A2A Protocol:
+      - a2a/index.md
+      - Introduction to A2A: a2a/intro.md
+      - A2A Quickstart (Exposing):
+        - Python: a2a/quickstart-exposing.md
+        - Go: a2a/quickstart-exposing-go.md
+      - A2A Quickstart (Consuming):
+        - Python: a2a/quickstart-consuming.md
+        - Go: a2a/quickstart-consuming-go.md
+    - Bidi-streaming (live):
+      - streaming/index.md
+      - Custom Audio Bidi-streaming app sample (WebSockets): streaming/custom-streaming-ws.md
+      - Bidi-streaming development guide series: streaming/dev-guide/part1.md
+      - Streaming Tools: streaming/streaming-tools.md
+      - Configurating Bidi-streaming behaviour: streaming/configuration.md
+    - Grounding:
+      - Understanding Google Search Grounding: grounding/google_search_grounding.md
+      - Understanding Vertex AI Search Grounding: grounding/vertex_ai_search_grounding.md
+  - Reference:
+    - API Reference:
+      - api-reference/index.md
+      - Python ADK: api-reference/python/index.html
+      - Go ADK: https://pkg.go.dev/google.golang.org/adk" target="_blank
+      - Java ADK: api-reference/java/index.html
+      - CLI Reference: api-reference/cli/index.html
+      - Agent Config reference: api-reference/agentconfig/index.html
+      - REST API: api-reference/rest/index.md
+    - Community Resources: community.md
+    - Contributing Guide: contributing-guide.md

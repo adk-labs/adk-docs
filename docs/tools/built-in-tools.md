@@ -7,7 +7,7 @@ agent that needs to retrieve information from the web can directly use the
 
 ## How to Use
 
-1. **Import:** Import the desired tool from the tools module. This is `agents.tools` in Python or `com.google.adk.tools` in Java.
+1. **Import:** Import the desired tool from the tools module. This is `agents.tools` in Python, `google.golang.org/adk/tool/geminitool` in Go, or `com.google.adk.tools` in Java.
 2. **Configure:** Initialize the tool, providing required parameters if any.
 3. **Register:** Add the initialized tool to the **tools** list of your Agent.
 
@@ -17,12 +17,16 @@ tool when the agent calls it. Important: check the ***Limitations*** section of 
 
 ## Available Built-in tools
 
+Note: Go supports the Google Search tool and other built-in tools via the `geminitool` package.
 Note: Java only supports Google Search and Code Execution tools currently.
 
 ### Google Search
 
-The `google_search` tool allows the agent to perform web searches using Google
-Search. The `google_search` tool is only compatible with Gemini 2 models.
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+</div>
+
+The `google_search` tool allows the agent to perform web searches using Google Search. The `google_search` tool is only compatible with Gemini 2 models. For further details of the tool, see [Understanding Google Search grounding](../grounding/google_search_grounding.md).
 
 !!! warning "Additional requirements when using the `google_search` tool"
     When you use grounding with Google Search, and you receive Search suggestions in your response, you must display the Search suggestions in production and in your applications.
@@ -34,6 +38,12 @@ Search. The `google_search` tool is only compatible with Gemini 2 models.
     --8<-- "examples/python/snippets/tools/built-in-tools/google_search.py"
     ```
 
+=== "Go"
+
+    ```go
+    --8<-- "examples/go/snippets/tools/built-in-tools/google_search.go"
+    ```
+
 === "Java"
 
     ```java
@@ -41,6 +51,10 @@ Search. The `google_search` tool is only compatible with Gemini 2 models.
     ```
 
 ### Code Execution
+
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+</div>
 
 The `built_in_code_execution` tool enables the agent to execute code,
 specifically when using Gemini 2 models. This allows the model to perform tasks
@@ -58,14 +72,122 @@ like calculations, data manipulation, or running small scripts.
     --8<-- "examples/java/snippets/src/main/java/tools/CodeExecutionAgentApp.java:full_code"
     ```
 
+### GKE Code Executor
+
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.14.0</span>
+</div>
+
+The GKE Code Executor (`GkeCodeExecutor`) provides a secure and scalable method
+for running LLM-generated code by leveraging the GKE (Google Kubernetes Engine)
+Sandbox environment, which uses gVisor for workload isolation. For each code
+execution request, it dynamically creates an ephemeral, sandboxed Kubernetes Job
+with a hardened Pod configuration. You should use this executor for production
+environments on GKE where security and isolation are critical.
+
+#### How it Works
+
+When a request to execute code is made, the `GkeCodeExecutor` performs the following steps:
+
+1.  **Creates a ConfigMap:** A Kubernetes ConfigMap is created to store the Python code that needs to be executed.
+2.  **Creates a Sandboxed Pod:** A new Kubernetes Job is created, which in turn creates a Pod with a hardened security context and the gVisor runtime enabled. The code from the ConfigMap is mounted into this Pod.
+3.  **Executes the Code:** The code is executed within the sandboxed Pod, isolated from the underlying node and other workloads.
+4.  **Retrieves the Result:** The standard output and error streams from the execution are captured from the Pod's logs.
+5.  **Cleans Up Resources:** Once the execution is complete, the Job and the associated ConfigMap are automatically deleted, ensuring that no artifacts are left behind.
+
+#### Key Benefits
+
+*   **Enhanced Security:** Code is executed in a gVisor-sandboxed environment with kernel-level isolation.
+*   **Ephemeral Environments:** Each code execution runs in its own ephemeral Pod, to prevent state transfer between executions.
+*   **Resource Control:** You can configure CPU and memory limits for the execution Pods to prevent resource abuse.
+*   **Scalability:** Allows you to run a large number of code executions in parallel, with GKE handling the scheduling and scaling of the underlying nodes.
+
+#### System requirements
+
+The following requirements must be met to successfully deploy your ADK project
+with the GKE Code Executor tool:
+
+- GKE cluster with a **gVisor-enabled node pool**.
+- Agent's service account requires specific **RBAC permissions**, which allow it to:
+    - Create, watch, and delete **Jobs** for each execution request.
+    - Manage **ConfigMaps** to inject code into the Job's pod.
+    - List **Pods** and read their **logs** to retrieve the execution result
+- Install the client library with GKE extras: `pip install google-adk[gke]`
+
+For a complete, ready-to-use configuration, see the 
+[deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/gke_agent_sandbox/deployment_rbac.yaml)
+sample. For more information on deploying ADK workflows to GKE, see
+[Deploy to Google Kubernetes Engine (GKE)](/adk-docs/deploy/gke/).
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import LlmAgent
+    from google.adk.code_executors import GkeCodeExecutor
+
+    # Initialize the executor, targeting the namespace where its ServiceAccount
+    # has the required RBAC permissions.
+    # This example also sets a custom timeout and resource limits.
+    gke_executor = GkeCodeExecutor(
+        namespace="agent-sandbox",
+        timeout_seconds=600,
+        cpu_limit="1000m",  # 1 CPU core
+        mem_limit="1Gi",
+    )
+
+    # The agent now uses this executor for any code it generates.
+    gke_agent = LlmAgent(
+        name="gke_coding_agent",
+        model="gemini-2.0-flash",
+        instruction="You are a helpful AI agent that writes and executes Python code.",
+        code_executor=gke_executor,
+    )
+    ```
+
+#### Configuration parameters
+
+The `GkeCodeExecutor` can be configured with the following parameters:
+
+| Parameter            | Type   | Description                                                                             |
+| -------------------- | ------ | --------------------------------------------------------------------------------------- |
+| `namespace`          | `str`  | Kubernetes namespace where the execution Jobs will be created. Defaults to `"default"`. |
+| `image`              | `str`  | Container image to use for the execution Pod. Defaults to `"python:3.11-slim"`.         |
+| `timeout_seconds`    | `int`  | Timeout in seconds for the code execution. Defaults to `300`.                           |
+| `cpu_requested`      | `str`  | Amount of CPU to request for the execution Pod. Defaults to `"200m"`.                   |
+| `mem_requested`      | `str`  | Amount of memory to request for the execution Pod. Defaults to `"256Mi"`.               |
+| `cpu_limit`          | `str`  | Maximum amount of CPU the execution Pod can use. Defaults to `"500m"`.                  |
+| `mem_limit`          | `str`  | Maximum amount of memory the execution Pod can use. Defaults to `"512Mi"`.              |
+| `kubeconfig_path`    | `str`  | Path to a kubeconfig file to use for authentication. Falls back to in-cluster config or the default local kubeconfig. |
+| `kubeconfig_context` | `str`  | The `kubeconfig` context to use.  |
+
+### Vertex AI RAG Engine
+
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+</div>
+
+The `vertex_ai_rag_retrieval` tool allows the agent to perform private data retrieval using Vertex
+AI RAG Engine.
+
+When you use grounding with Vertex AI RAG Engine, you need to prepare a RAG corpus before hand.
+Please refer to the [RAG ADK agent sample](https://github.com/google/adk-samples/blob/main/python/agents/RAG/rag/shared_libraries/prepare_corpus_and_data.py) or [Vertex AI RAG Engine page](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-quickstart) for setting it up.
+
+=== "Python"
+
+    ```py
+    --8<-- "examples/python/snippets/tools/built-in-tools/vertexai_rag_engine.py"
+    ```
 
 ### Vertex AI Search
 
-The `vertex_ai_search_tool` uses Google Cloud's Vertex AI Search, enabling the
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+</div>
+
+The `vertex_ai_search_tool` uses Google Cloud Vertex AI Search, enabling the
 agent to search across your private, configured data stores (e.g., internal
 documents, company policies, knowledge bases). This built-in tool requires you
-to provide the specific data store ID during configuration.
-
+to provide the specific data store ID during configuration. For further details of the tool, see [Understanding Vertex AI Search grounding](../grounding/vertex_ai_search_grounding.md).
 
 
 ```py
@@ -75,6 +197,10 @@ to provide the specific data store ID during configuration.
 
 ### BigQuery
 
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.1.0</span>
+</div>
+
 These are a set of tools aimed to provide integration with BigQuery, namely:
 
 * **`list_dataset_ids`**: Fetches BigQuery dataset ids present in a GCP project.
@@ -82,6 +208,8 @@ These are a set of tools aimed to provide integration with BigQuery, namely:
 * **`list_table_ids`**: Fetches table ids present in a BigQuery dataset.
 * **`get_table_info`**: Fetches metadata about a BigQuery table.
 * **`execute_sql`**: Runs a SQL query in BigQuery and fetch the result.
+* **`forecast`**: Runs a BigQuery AI time series forecast using the `AI.FORECAST` function.
+* **`ask_data_insights`**: Answers questions about data in BigQuery tables using natural language.
 
 They are packaged in the toolset `BigQueryToolset`.
 
@@ -91,7 +219,59 @@ They are packaged in the toolset `BigQueryToolset`.
 --8<-- "examples/python/snippets/tools/built-in-tools/bigquery.py"
 ```
 
+
+### Spanner
+
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.11.0</span>
+</div>
+
+These are a set of tools aimed to provide integration with Spanner, namely:
+
+* **`list_table_names`**: Fetches table names present in a GCP Spanner database.
+* **`list_table_indexes`**: Fetches table indexes present in a GCP Spanner database.
+* **`list_table_index_columns`**: Fetches table index columns present in a GCP Spanner database.
+* **`list_named_schemas`**: Fetches named schema for a Spanner database.
+* **`get_table_schema`**: Fetches Spanner database table schema and metadata information.
+* **`execute_sql`**: Runs a SQL query in Spanner database and fetch the result.
+* **`similarity_search`**: Similarity search in Spanner using a text query.
+
+They are packaged in the toolset `SpannerToolset`.
+
+
+
+```py
+--8<-- "examples/python/snippets/tools/built-in-tools/spanner.py"
+```
+
+
+### Bigtable
+
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.12.0</span>
+</div>
+
+These are a set of tools aimed to provide integration with Bigtable, namely:
+
+* **`list_instances`**: Fetches Bigtable instances in a Google Cloud project.
+* **`get_instance_info`**: Fetches metadata instance information in a Google Cloud project.
+* **`list_tables`**: Fetches tables in a GCP Bigtable instance.
+* **`get_table_info`**: Fetches metadata table information in a GCP Bigtable.
+* **`execute_sql`**: Runs a SQL query in Bigtable table and fetch the result.
+
+They are packaged in the toolset `BigtableToolset`.
+
+
+
+```py
+--8<-- "examples/python/snippets/tools/built-in-tools/bigtable.py"
+```
+
 ## Use Built-in tools with other tools
+
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-java">Java</span>
+</div>
 
 The following code sample demonstrates how to use multiple built-in tools or how
 to use built-in tools with other tools by using multiple agents:
@@ -99,7 +279,7 @@ to use built-in tools with other tools by using multiple agents:
 === "Python"
 
     ```py
-    from google.adk.tools import agent_tool
+    from google.adk.tools.agent_tool import AgentTool
     from google.adk.agents import Agent
     from google.adk.tools import google_search
     from google.adk.code_executors import BuiltInCodeExecutor
@@ -119,13 +299,13 @@ to use built-in tools with other tools by using multiple agents:
         instruction="""
         You're a specialist in Code Execution
         """,
-        code_executor=[BuiltInCodeExecutor],
+        code_executor=BuiltInCodeExecutor(),
     )
     root_agent = Agent(
         name="RootAgent",
         model="gemini-2.0-flash",
         description="Root Agent",
-        tools=[agent_tool.AgentTool(agent=search_agent), agent_tool.AgentTool(agent=coding_agent)],
+        tools=[AgentTool(agent=search_agent), AgentTool(agent=coding_agent)],
     )
     ```
 
@@ -206,7 +386,7 @@ to use built-in tools with other tools by using multiple agents:
         model="gemini-2.0-flash",
         description="Root Agent",
         tools=[custom_function], 
-        executor=[BuiltInCodeExecutor] # <-- not supported when used with tools
+        code_executor=BuiltInCodeExecutor() # <-- not supported when used with tools
     )
     ```
 
@@ -222,9 +402,15 @@ to use built-in tools with other tools by using multiple agents:
                 .build();
     ```
 
+ADK Python has a built-in workaroud which bypasses this limitation for 
+`GoogleSearchTool` and `VertexAiSearchTool` (use `bypass_multi_tools_limit=True` to enable it), e.g.
+[sample agent](https://github.com/google/adk-python/tree/main/contributing/samples/built_in_multi_tools).
+
 !!! warning
 
-    Built-in tools cannot be used within a sub-agent.
+    Built-in tools cannot be used within a sub-agent, with the exception of
+    `GoogleSearchTool` and `VertexAiSearchTool` in ADK Python because of the
+    workaround mentioned above.
 
 For example, the following approach that uses built-in tools within sub-agents
 is **not** currently supported:
@@ -232,13 +418,13 @@ is **not** currently supported:
 === "Python"
 
     ```py
-    search_agent = Agent(
+    url_context_agent = Agent(
         model='gemini-2.0-flash',
-        name='SearchAgent',
+        name='UrlContextAgent',
         instruction="""
-        You're a specialist in Google Search
+        You're a specialist in URL Context
         """,
-        tools=[google_search],
+        tools=[url_context],
     )
     coding_agent = Agent(
         model='gemini-2.0-flash',
@@ -246,14 +432,14 @@ is **not** currently supported:
         instruction="""
         You're a specialist in Code Execution
         """,
-        executor=[BuiltInCodeExecutor],
+        code_executor=BuiltInCodeExecutor(),
     )
     root_agent = Agent(
         name="RootAgent",
         model="gemini-2.0-flash",
         description="Root Agent",
         sub_agents=[
-            search_agent,
+            url_context_agent,
             coding_agent
         ],
     )
