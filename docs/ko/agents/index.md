@@ -1,5 +1,9 @@
 # 에이전트
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+</div>
+
 에이전트 개발 키트(ADK)에서 **에이전트**는 특정 목표를 달성하기 위해 자율적으로 행동하도록 설계된 독립적인 실행 단위입니다. 에이전트는 작업을 수행하고, 사용자와 상호 작용하며, 외부 도구를 활용하고, 다른 에이전트와 협력할 수 있습니다.
 
 ADK의 모든 에이전트의 기반은 `BaseAgent` 클래스입니다. 이는 기본적인 청사진 역할을 합니다. 기능적인 에이전트를 만들기 위해, 일반적으로 세 가지 주요 방법 중 하나로 `BaseAgent`를 확장하여 지능적인 추론에서부터 구조화된 프로세스 제어에 이르기까지 다양한 요구 사항을 충족시킵니다.

@@ -1,5 +1,9 @@
 # エージェント
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+</div>
+
 Agent Development Kit (ADK)において、**エージェント**とは、特定の目標を達成するために自律的に行動するように設計された、自己完結型の実行ユニットです。エージェントはタスクの実行、ユーザーとの対話、外部ツールの利用、他のエージェントとの連携が可能です。
 
 ADKにおけるすべてのエージェントの基盤は`BaseAgent`クラスです。これは基本的な設計図として機能します。機能的なエージェントを作成するには、通常、`BaseAgent`を主に3つの方法のいずれかで拡張し、インテリジェントな推論から構造化されたプロセス制御まで、さまざまなニーズに応えます。
