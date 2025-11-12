@@ -51,22 +51,24 @@ extra:
 # Configuration
 theme:
   name: material
-  logo: assets/adk-logo-lockup.svg
-  favicon: assets/adk-logo.svg
+  font:
+    text: Google Sans
+    code: Roboto Mono
+  logo: assets/agent-development-kit.png
+  favicon: assets/agent-development-kit.png
+  icon:
+    repo: fontawesome/brands/github
+  custom_dir: overrides
   palette:
-    # Palette toggle for light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
+    - scheme: default
       primary: white
-      accent: indigo
+      accent: white
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
-    # Palette toggle for dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: black
-      accent: indigo
+    - scheme: slate
+      primary: white
+      accent: white
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -76,8 +78,8 @@ theme:
     - content.code.annotate
     - content.code.copy
     - content.code.select
-    - header.autohide
-    # - navigation.expand
+    - content.tabs.link
+    - content.tooltips
     - navigation.footer
     - navigation.indexes
     - navigation.instant
@@ -87,28 +89,33 @@ theme:
     - navigation.top
     - navigation.tracking
     - toc.follow
-    - toc.integrate
 
 # Extensions
 markdown_extensions:
   - admonition
   - attr_list
-  - def_list
-  - footnotes
   - md_in_html
-  - pymdownx.blocks.admonition
-  - pymdownx.blocks.details
-  - pymdownx.blocks.tab
   - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - pymdownx.superfences
+  - pymdownx.snippets:
+      dedent_subsections: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
   - toc:
       permalink: true
 
