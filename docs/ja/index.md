@@ -5,23 +5,27 @@ hide:
 
 <div style="text-align: center;">
   <div class="centered-logo-text-group">
-    <img src="assets/agent-development-kit.png" alt="Agent Development Kit ロゴ" width="100">
-    <h1>Agent Development Kit</h1>
+    <img src="assets/agent-development-kit.png" alt="エージェント開発キットのロゴ" width="100">
+    <h1>エージェント開発キット</h1>
   </div>
 </div>
 
-## Agent Development Kitとは？
-
-Agent Development Kit (ADK)は、**AIエージェントを開発・デプロイ**するための、柔軟でモジュール式のフレームワークです。ADKは、GeminiとGoogleエコシステムに最適化されていますが、**モデルに依存せず**、**デプロイ環境に依存せず**、**他のフレームワークとの互換性**を持つように構築されています。ADKは、エージェント開発をソフトウェア開発のようにより身近なものに感じられるように設計されており、開発者が単純なタスクから複雑なワークフローに至るまで、エージェントのアーキテクチャを容易に作成、デプロイ、オーケストレーションできるようにします。
+エージェント開発キット（ADK）は、**AIエージェントを開発・デプロイ**するための、柔軟でモジュール式のフレームワークです。ADKはGeminiとGoogleエコシステムに最適化されていますが、**特定のモデルやデプロイ環境に依存せず**、**他のフレームワークとの互換性**も考慮して構築されています。ADKは、エージェント開発をソフトウェア開発のように感じられるように設計されており、開発者が単純なタスクから複雑なワークフローまで、さまざまなエージェントアーキテクチャを容易に作成、デプロイ、オーケストレーションできるようにします。
 
 <div id="centered-install-tabs" class="install-command-container" markdown="1">
 
-<p class="get-started-text" style="text-align: center;">利用開始：</p>
+<p class="get-started-text" style="text-align: center;">はじめに:</p>
 
 === "Python"
     <br>
     <p style="text-align: center;">
     <code>pip install google-adk</code>
+    </p>
+
+=== "Go"
+    <br>
+    <p style="text-align: center;">
+    <code>go get google.golang.org/adk</code>
     </p>
 
 === "Java"
@@ -30,31 +34,29 @@ Agent Development Kit (ADK)は、**AIエージェントを開発・デプロイ*
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk</artifactId>
-        <version>0.1.0</version>
+        <version>0.3.0</version>
     </dependency>
     ```
 
     ```gradle title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:0.1.0'
+        implementation 'com.google.adk:google-adk:0.3.0'
     }
     ```
+
 </div>
 
-
 <p style="text-align:center;">
-  <a href="get-started/quickstart/" class="md-button" style="margin:3px">クイックスタート</a>
-  <a href="tutorials/" class="md-button" style="margin:3px">チュートリアル</a>
-  <a href="http://github.com/google/adk-samples" class="md-button" target="_blank" style="margin:3px">サンプルエージェント</a>
-  <a href="api-reference/" class="md-button" style="margin:3px">APIリファレンス</a>
-  <a href="contributing-guide/" class="md-button" style="margin:3px">貢献する ❤️</a>
+  <a href="/adk-docs/get-started/python/" class="md-button" style="margin:3px">Pythonではじめる</a>
+  <a href="/adk-docs/get-started/go/" class="md-button" style="margin:3px">Goではじめる</a>
+  <a href="/adk-docs/get-started/java/" class="md-button" style="margin:3px">Javaではじめる</a>
 </p>
 
 ---
 
 ## さらに詳しく
 
-[:fontawesome-brands-youtube:{.youtube-red-icon} "Agent Development Kitの紹介"を視聴する！](https://www.youtube.com/watch?v=zgrOwow_uTQ target="_blank" rel="noopener noreferrer")
+[:fontawesome-brands-youtube:{.youtube-red-icon} 「エージェント開発キットの紹介」動画を見る！](https://www.youtube.com/watch?v=zgrOwow_uTQ){:target="_blank" rel="noopener noreferrer"}
 
 <div class="grid cards" markdown>
 
@@ -62,7 +64,7 @@ Agent Development Kit (ADK)は、**AIエージェントを開発・デプロイ*
 
     ---
 
-    ワークフローエージェント（`Sequential`、`Parallel`、`Loop`）を使用して予測可能なパイプラインを定義するか、LLM駆動の動的ルーティング（`LlmAgent`転送）を活用して適応的な振る舞いを実現します。
+    ワークフローエージェント（`Sequential`、`Parallel`、`Loop`）を使用して予測可能なパイプラインを定義したり、LLM駆動の動的ルーティング（`LlmAgent`転送）を活用して適応的な動作を実現したりできます。
 
     [**エージェントについて学ぶ**](agents/index.md)
 
@@ -70,7 +72,7 @@ Agent Development Kit (ADK)は、**AIエージェントを開発・デプロイ*
 
     ---
 
-    複数の特化したエージェントを階層的に構成することで、モジュール式でスケーラブルなアプリケーションを構築します。複雑な協調と委任を可能にします。
+    複数の専門エージェントを階層的に構成することで、モジュール式でスケーラブルなアプリケーションを構築します。複雑な連携や委任を可能にします。
 
     [**マルチエージェントシステムを探る**](agents/multi-agents.md)
 
@@ -78,32 +80,32 @@ Agent Development Kit (ADK)は、**AIエージェントを開発・デプロイ*
 
     ---
 
-    エージェントに多様な機能を持たせます。事前構築済みツール（検索、コード実行）の使用、カスタム関数の作成、サードパーティライブラリ（LangChain, CrewAI）の統合、あるいは他のエージェントをツールとして使用することも可能です。
+    エージェントに多様な機能を持たせましょう。構築済みツール（検索、コード実行）の使用、カスタム関数の作成、サードパーティライブラリの統合、さらには他のエージェントをツールとして使用することも可能です。
 
-    [**ツールを見る**](tools/index.md)
+    [**ツール一覧を見る**](tools/index.md)
 
 -   :material-rocket-launch-outline: **デプロイ対応**
 
     ---
 
-    エージェントをコンテナ化し、どこにでもデプロイできます。ローカルで実行したり、Vertex AI Agent Engineでスケールさせたり、Cloud RunやDockerを使用してカスタムインフラに統合したりできます。
+    エージェントをコンテナ化してどこにでもデプロイできます。ローカルでの実行、Vertex AIエージェントエンジンによるスケーリング、Cloud RunやDockerを使用したカスタムインフラへの統合が可能です。
 
-    [**エージェントをデプロイする**](deploy/index.md)
+    [**エージェントのデプロイ**](deploy/index.md)
 
 -   :material-clipboard-check-outline: **組み込みの評価機能**
 
     ---
 
-    最終的なレスポンスの品質と、事前に定義されたテストケースに対するステップバイステップの実行軌跡の両方を評価することで、エージェントのパフォーマンスを体系的に評価します。
+    事前に定義されたテストケースに対して、最終的な応答品質とステップごとの実行軌跡の両方を評価し、エージェントのパフォーマンスを体系的に評価します。
 
-    [**エージェントを評価する**](evaluate/index.md)
+    [**エージェントの評価**](evaluate/index.md)
 
 -   :material-console-line: **安全でセキュアなエージェントの構築**
 
     ---
 
-    エージェントの設計にセキュリティと安全性のパターンやベストプラクティスを実装することで、強力で信頼性の高いエージェントを構築する方法を学びます。
+    エージェントの設計にセキュリティと安全性のパターンやベストプラクティスを実装し、強力で信頼性の高いエージェントを構築する方法を学びます。
 
     [**安全性とセキュリティ**](safety/index.md)
 
-</div> 
+</div>
