@@ -77,7 +77,7 @@ theme:
     - content.code.copy
     - content.code.select
     - header.autohide
-    - navigation.expand
+    # - navigation.expand
     - navigation.footer
     - navigation.indexes
     - navigation.instant
