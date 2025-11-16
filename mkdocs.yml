@@ -135,6 +135,12 @@ plugins:
         'tools/third-party/langchain.md': 'tools/index.md'
         'tools/third-party/crewai.md': 'tools/index.md'
         'get-started/testing.md': 'runtime/api-server.md'
+        'tools/authentication.md': 'tools-custom/authentication.md'
+        'tools/function-tools.md': 'tools-custom/function-tools.md'
+        'tools/confirmation.md': 'tools-custom/confirmation.md'
+        'tools/performance.md': 'tools-custom/performance.md'
+        'tools/mcp-tools.md': 'tools-custom/mcp-tools.md'
+
   - i18n:
       docs_structure: folder
       languages:
@@ -426,6 +432,7 @@ plugins:
                 - REST API: api-reference/rest/index.md
               - コミュニティリソース: community.md
               - コントリビューションガイド: contributing-guide.md
+        
 
 # Navigation
 nav:
@@ -466,9 +473,12 @@ nav:
       - Google Cloud tools:
         - Overview: tools/google-cloud-tools.md
         - MCP Toolbox for Databases: tools/google-cloud/mcp-toolbox-for-databases.md
+        - BigQuery Agent Analytics: tools/google-cloud/bigquery-agent-analytics.md
         - Code Execution with Agent Engine: tools/google-cloud/code-exec-agent-engine.md
       - Third-party tools:
         - tools/third-party/index.md
+        - AgentQL: tools/third-party/agentql.md
+        - Bright Data: tools/third-party/bright-data.md
         - Browserbase: tools/third-party/browserbase.md
         - Exa: tools/third-party/exa.md
         - Firecrawl: tools/third-party/firecrawl.md
@@ -480,12 +490,12 @@ nav:
     - Custom Tools:
       - tools-custom/index.md
       - Function tools:
-        - Overview: tools/function-tools.md
-        - Tool performance: tools/performance.md
-        - Action confirmations: tools/confirmation.md
-      - MCP tools: tools/mcp-tools.md
+        - Overview: tools-custom/function-tools.md
+        - Tool performance: tools-custom/performance.md
+        - Action confirmations: tools-custom/confirmation.md
+      - MCP tools: tools-custom/mcp-tools.md
       - OpenAPI tools: tools-custom/openapi-tools.md
-      - Authentication: tools/authentication.md
+      - Authentication: tools-custom/authentication.md
   - Run Agents:
     - Agent Runtime:
       - Agent Runtime: runtime/index.md
