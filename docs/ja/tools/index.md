@@ -5,13 +5,13 @@ hide:
 
 # エージェント用ツール
 
-ADKエージェントで使用できる、以下の事前に構築されたツールをご覧ください。
+ADKエージェントで使用できる、以下の事前に構築されたツールをご確認ください。
 
 ### Geminiツール
 
 <div class="tool-card-grid">
 
-  <a href="/adk-docs/tools/built-in-tools/#google-search" class="tool-card">
+  <a href="/adk-docs/ja/tools/built-in-tools/#google-search" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-google-search.png" alt="Google Search">
     </div>
@@ -21,7 +21,7 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/built-in-tools/#code-execution" class="tool-card">
+  <a href="/adk-docs/ja/tools/built-in-tools/#code-execution" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-gemini.png" alt="Gemini">
     </div>
@@ -37,27 +37,37 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
 
 <div class="tool-card-grid">
 
-  <a href="/adk-docs/tools/google-cloud-tools/#apigee-api-hub-tools" class="tool-card">
+  <a href="/adk-docs/ja/tools/google-cloud-tools/#apigee-api-hub-tools" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-apigee.png" alt="Apigee">
     </div>
     <div class="tool-card-content">
-      <h3>Apigee API Hub</h3>
-      <p>Apigee API Hubから文書化されたAPIをツールに変換します</p>
+      <h3>Apigee APIハブ</h3>
+      <p>Apigee APIハブから文書化されたAPIをツールに変換します</p>
     </div>
   </a>
 
-  <a href="/adk-docs/tools/google-cloud-tools/#application-integration-tools" class="tool-card">
+  <a href="/adk-docs/ja/tools/google-cloud-tools/#application-integration-tools" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-apigee-integration.png" alt="Apigee Integration">
     </div>
     <div class="tool-card-content">
-      <h3>Application Integration</h3>
-      <p>Integration Connectorsを使用してエージェントをエンタープライズアプリにリンクします</p>
+      <h3>アプリケーション統合</h3>
+      <p>インテグレーションコネクタを使用してエージェントをエンタープライズアプリにリンクします</p>
     </div>
   </a>
 
-  <a href="/adk-docs/tools/built-in-tools/#bigquery" class="tool-card">
+  <a href="/adk-docs/ja/tools/google-cloud/bigquery-agent-analytics/" class="tool-card">
+    <div class="tool-card-image-wrapper">
+      <img src="../assets/tools-bigquery.png" alt="BigQuery">
+    </div>
+    <div class="tool-card-content">
+      <h3>BigQueryエージェント分析</h3>
+      <p>大規模なエージェントの動作を分析およびデバッグします</p>
+    </div>
+  </a>
+
+  <a href="/adk-docs/ja/tools/built-in-tools/#bigquery" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-bigquery.png" alt="BigQuery">
     </div>
@@ -67,7 +77,7 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/built-in-tools/#bigtable" class="tool-card">
+  <a href="/adk-docs/ja/tools/built-in-tools/#bigtable" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-bigtable.png" alt="Bigtable">
     </div>
@@ -77,7 +87,7 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/built-in-tools/#gke-code-executor" class="tool-card">
+  <a href="/adk-docs/ja/tools/built-in-tools/#gke-code-executor" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-gke.png" alt="Google Kubernetes Engine">
     </div>
@@ -87,17 +97,17 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/built-in-tools/#spanner" class="tool-card">
+  <a href="/adk-docs/ja/tools/built-in-tools/#spanner" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-spanner.png" alt="Spanner">
     </div>
     <div class="tool-card-content">
       <h3>Spannerツール</h3>
-      <p>Spannerと対話してデータを取得、検索、SQLを実行します</p>
+      <p>Spannerと対話して、データの取得、検索、SQLの実行を行います</p>
     </div>
   </a>
 
-  <a href="/adk-docs/tools/google-cloud/mcp-toolbox-for-databases/" class="tool-card">
+  <a href="/adk-docs/ja/tools/google-cloud/mcp-toolbox-for-databases/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-mcp-toolbox-for-databases.png" alt="MCP Toolbox for Databases">
     </div>
@@ -107,7 +117,7 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/built-in-tools/#vertex-ai-rag-engine" class="tool-card">
+  <a href="/adk-docs/ja/tools/built-in-tools/#vertex-ai-rag-engine" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-vertex-ai.png" alt="Vertex AI">
     </div>
@@ -117,53 +127,73 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/built-in-tools/#vertex-ai-search" class="tool-card">
+  <a href="/adk-docs/ja/tools/built-in-tools/#vertex-ai-search" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-vertex-ai.png" alt="Vertex AI">
     </div>
     <div class="tool-card-content">
       <h3>Vertex AI Search</h3>
-      <p>Vertex AI Searchでプライベートに構成されたデータストアを検索します</p>
+      <p>Vertex AI Searchで構成されたプライベートデータストア全体を検索します</p>
     </div>
   </a>
 
 </div>
 
-### サードパーティツール
+### サードパーティ製ツール
 
 <div class="tool-card-grid">
 
-  <a href="/adk-docs/tools/third-party/browserbase/" class="tool-card">
+  <a href="/adk-docs/ja/tools/third-party/agentql/" class="tool-card">
+    <div class="tool-card-image-wrapper">
+      <img src="../assets/tools-agentql.png" alt="AgentQL">
+    </div>
+    <div class="tool-card-content">
+      <h3>AgentQL</h3>
+      <p>自然言語を使用して、回復力のある構造化されたWebデータを抽出します</p>
+    </div>
+  </a>
+
+  <a href="/adk-docs/ja/tools/third-party/bright-data/" class="tool-card">
+    <div class="tool-card-image-wrapper">
+      <img src="../assets/tools-bright-data.png" alt="Bright Data">
+    </div>
+    <div class="tool-card-content">
+      <h3>Bright Data</h3>
+      <p>Web用の1つのMCP - AIを実際のWebデータに接続します</p>
+    </div>
+  </a>
+
+  <a href="/adk-docs/ja/tools/third-party/browserbase/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-browserbase.png" alt="Browserbase">
     </div>
     <div class="tool-card-content">
       <h3>Browserbase</h3>
-      <p>AIエージェントのウェブブラウジング機能を強化します</p>
+      <p>AIエージェントのWebブラウジング機能を強化します</p>
     </div>
   </a>
 
-  <a href="/adk-docs/tools/third-party/exa/" class="tool-card">
+  <a href="/adk-docs/ja/tools/third-party/exa/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-exa.png" alt="Exa">
     </div>
     <div class="tool-card-content">
       <h3>Exa</h3>
-      <p>ウェブサイトやライブデータから構造化されたコンテンツを検索して抽出します</p>
+      <p>Webサイトやライブデータから構造化されたコンテンツを検索して抽出します</p>
     </div>
   </a>
 
-  <a href="/adk-docs/tools/third-party/firecrawl/" class="tool-card">
+  <a href="/adk-docs/ja/tools/third-party/firecrawl/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-firecrawl.png" alt="Firecrawl">
     </div>
     <div class="tool-card-content">
       <h3>Firecrawl</h3>
-      <p>あらゆるウェブサイトからのクリーンなデータでAIアプリを強化します</p>
+      <p>あらゆるWebサイトのクリーンなデータでAIアプリを強化します</p>
     </div>
   </a>
 
-  <a href="/adk-docs/tools/third-party/github/" class="tool-card">
+  <a href="/adk-docs/ja/tools/third-party/github/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-github.png" alt="GitHub">
     </div>
@@ -173,7 +203,7 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/third-party/hugging-face/" class="tool-card">
+  <a href="/adk-docs/ja/tools/third-party/hugging-face/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-hugging-face.png" alt="Hugging Face">
     </div>
@@ -183,7 +213,7 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/third-party/notion/" class="tool-card">
+  <a href="/adk-docs/ja/tools/third-party/notion/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-notion.png" alt="Notion">
     </div>
@@ -193,13 +223,13 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
     </div>
   </a>
 
-  <a href="/adk-docs/tools/third-party/tavily/" class="tool-card">
+  <a href="/adk-docs/ja/tools/third-party/tavily/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../assets/tools-tavily.png" alt="Tavily">
     </div>
     <div class="tool-card-content">
       <h3>Tavily</h3>
-      <p>リアルタイムのウェブ検索、抽出、クロールツールを提供します</p>
+      <p>リアルタイムのWeb検索、抽出、クロールツールを提供します</p>
     </div>
   </a>
 
@@ -207,12 +237,8 @@ ADKエージェントで使用できる、以下の事前に構築されたツ�
 
 ## 独自のツールを構築する
 
-上記のツールがニーズに合わない場合は、次のガイドを使用してADK
-ワークフロー用のツールを構築できます。
+上記のツールがニーズに合わない場合は、次のガイドを使用してADKワークフロー用のツールを構築できます。
 
-*   **[関数ツール](/adk-docs/tools/function-tools/)**:
-    特定のADKエージェントのニーズに合わせてカスタムツールを構築します。
-*   **[MCPツール](/adk-docs/tools/mcp-tools/)**: MCPサーバーを
-    ADKエージェントのツールとして接続します。
-*   **[OpenAPI統合](/adk-docs/tools-custom/openapi-tools/)**:
-    OpenAPI仕様から直接呼び出し可能なツールを生成します。
+*   **[関数ツール](/adk-docs/ja/tools-custom/function-tools/)**: 特定のADKエージェントのニーズに合わせてカスタムツールを構築します。
+*   **[MCPツール](/adk-docs/ja/tools/mcp-tools/)**: MCPサーバーをADKエージェントのツールとして接続します。
+*   **[OpenAPI統合](/adk-docs/ja/tools-custom/openapi-tools/)**: OpenAPI仕様から直接呼び出し可能なツールを生成します。

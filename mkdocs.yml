@@ -189,9 +189,12 @@ plugins:
                 - Google Cloud 도구:
                   - 개요: tools/google-cloud-tools.md
                   - 데이터베이스용 MCP 도구상자: tools/google-cloud/mcp-toolbox-for-databases.md
+                  - BigQuery 에이전트 분석: tools/google-cloud/bigquery-agent-analytics.md
                   - 에이전트 엔진으로 코드 실행: tools/google-cloud/code-exec-agent-engine.md
                 - 서드파티 도구:
                   - tools/third-party/index.md
+                  - AgentQL: tools/third-party/agentql.md
+                  - Bright Data: tools/third-party/bright-data.md
                   - Browserbase: tools/third-party/browserbase.md
                   - Exa: tools/third-party/exa.md
                   - Firecrawl: tools/third-party/firecrawl.md
@@ -331,9 +334,12 @@ plugins:
                 - Google Cloudツール:
                   - 概要: tools/google-cloud-tools.md
                   - データベース向けMCPツールボックス: tools/google-cloud/mcp-toolbox-for-databases.md
+                  - BigQuery エージェント分析: tools/google-cloud/bigquery-agent-analytics.md
                   - エージェントエンジンによるコード実行: tools/google-cloud/code-exec-agent-engine.md
                 - サードパーティツール:
                   - tools/third-party/index.md
+                  - AgentQL: tools/third-party/agentql.md
+                  - Bright Data: tools/third-party/bright-data.md
                   - Browserbase: tools/third-party/browserbase.md
                   - Exa: tools/third-party/exa.md
                   - Firecrawl: tools/third-party/firecrawl.md

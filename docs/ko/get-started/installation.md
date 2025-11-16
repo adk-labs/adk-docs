@@ -1,16 +1,16 @@
-# ADK 설치하기
+# ADK 설치
 
 === "Python"
 
     ## 가상 환경 생성 및 활성화
 
-    [venv](https://docs.python.org/3/library/venv.html)를 사용하여 Python 가상 환경을 만드는 것을 권장합니다:
+    [venv](https://docs.python.org/3/library/venv.html)를 사용하여 가상 Python 환경을 만드는 것이 좋습니다.
 
     ```shell
     python -m venv .venv
     ```
 
-    이제 운영체제와 환경에 맞는 명령어를 사용하여 가상 환경을 활성화할 수 있습니다:
+    이제 운영 체제 및 환경에 적합한 명령을 사용하여 가상 환경을 활성화할 수 있습니다.
 
     ```
     # Mac / Linux
@@ -37,9 +37,9 @@
 
 === "Go"
 
-    ## 새로운 Go 모듈 생성하기
+    ## 새 Go 모듈 만들기
 
-    새 프로젝트를 시작하는 경우, 다음과 같이 새로운 Go 모듈을 생성할 수 있습니다:
+    새 프로젝트를 시작하는 경우 새 Go 모듈을 만들 수 있습니다.
 
     ```shell
     go mod init example.com/my-agent
@@ -47,24 +47,23 @@
 
     ## ADK 설치
 
-    프로젝트에 ADK를 추가하려면 다음 명령어를 실행하세요:
+    프로젝트에 ADK를 추가하려면 다음 명령을 실행합니다.
 
     ```shell
     go get google.golang.org/adk
     ```
 
-    이 명령어는 `go.mod` 파일에 ADK를 의존성(dependency)으로 추가합니다.
+    이렇게 하면 ADK가 `go.mod` 파일에 종속성으로 추가됩니다.
 
-    (선택 사항) `go.mod` 파일에 `google.golang.org/adk` 항목이 있는지 확인하여 설치를 검증할 수 있습니다.
+    (선택 사항) `go.mod` 파일에서 `google.golang.org/adk` 항목을 확인하여 설치를 확인합니다.
 
 === "Java"
 
-    maven 또는 gradle을 사용하여 `google-adk`와 `google-adk-dev` 패키지를 추가할 수 있습니다.
+    maven 또는 gradle을 사용하여 `google-adk` 및 `google-adk-dev` 패키지를 추가할 수 있습니다.
 
-    `google-adk`는 핵심 Java ADK 라이브러리입니다. 또한 Java ADK는 에이전트를 원활하게 실행할 수 있도록 플러그인 방식(pluggable)의 예제 SpringBoot 서버와 함께 제공됩니다. 이 선택적
-    패키지는 `google-adk-dev`의 일부로 포함되어 있습니다.
+    `google-adk`는 핵심 Java ADK 라이브러리입니다. Java ADK에는 에이전트를 원활하게 실행할 수 있는 플러그형 예제 SpringBoot 서버도 함께 제공됩니다. 이 선택적 패키지는 `google-adk-dev`의 일부로 제공됩니다.
 
-    maven을 사용하는 경우, 다음 내용을 `pom.xml`에 추가하세요:
+    maven을 사용하는 경우 `pom.xml`에 다음을 추가합니다.
 
     ```xml title="pom.xml"
     <?xml version="1.0" encoding="UTF-8"?>
@@ -77,7 +76,7 @@
         <artifactId>adk-agents</artifactId>
         <version>1.0-SNAPSHOT</version>
 
-        <!-- 사용할 Java 버전을 명시합니다 -->
+        <!-- 사용할 Java 버전을 지정합니다. -->
         <properties>
             <maven.compiler.source>17</maven.compiler.source>
             <maven.compiler.target>17</maven.compiler.target>
@@ -85,13 +84,13 @@
         </properties>
 
         <dependencies>
-            <!-- ADK 핵심 의존성 -->
+            <!-- ADK 핵심 종속성 -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
                 <version>0.3.0</version>
             </dependency>
-            <!-- 에이전트 디버깅을 위한 ADK 개발용 웹 UI -->
+            <!-- 에이전트를 디버그하기 위한 ADK 개발 웹 UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
@@ -102,9 +101,9 @@
     </project>
     ```
 
-    참고용 [전체 pom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml) 파일은 여기 있습니다.
+    참조용 [전체 pom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml) 파일은 다음과 같습니다.
 
-    gradle을 사용하는 경우, build.gradle에 다음 의존성을 추가하세요:
+    gradle을 사용하는 경우 build.gradle에 종속성을 추가합니다.
 
     ```title="build.gradle"
     dependencies {
@@ -113,9 +112,9 @@
     }
     ```
 
-    또한 Gradle이 `javac`에 `-parameters`를 전달하도록 설정해야 합니다. (또는 `@Schema(name = "...")`를 사용하세요).
+    Gradle이 `-parameters`를 `javac`에 전달하도록 구성해야 합니다. (또는 `@Schema(name = "...")`를 사용하십시오.)
 
 
 ## 다음 단계
 
-* [**빠른 시작**](quickstart.md) 가이드를 따라 첫 에이전트를 만들어 보세요.
+* [**빠른 시작**](quickstart.md)으로 첫 번째 에이전트 만들기를 시도해 보십시오.

@@ -9,13 +9,33 @@ ADKエージェントで使用できる以下のサードパーティ製ツー�
 
 <div class="tool-card-grid">
 
+  <a href="/adk-docs/ja/tools/third-party/agentql/" class="tool-card">
+    <div class="tool-card-image-wrapper">
+      <img src="../../assets/tools-agentql.png" alt="AgentQL">
+    </div>
+    <div class="tool-card-content">
+      <h3>AgentQL</h3>
+      <p>自然言語を使用して、回復力のある構造化されたWebデータを抽出します</p>
+    </div>
+  </a>
+
+  <a href="/adk-docs/ja/tools/third-party/bright-data/" class="tool-card">
+    <div class="tool-card-image-wrapper">
+      <img src="../../assets/tools-bright-data.png" alt="Bright Data">
+    </div>
+    <div class="tool-card-content">
+      <h3>Bright Data</h3>
+      <p>Web用の1つのMCP - AIを実際のWebデータに接続します</p>
+    </div>
+  </a>
+
   <a href="/adk-docs/ja/tools/third-party/browserbase/" class="tool-card">
     <div class="tool-card-image-wrapper">
       <img src="../../assets/tools-browserbase.png" alt="Browserbase">
     </div>
     <div class="tool-card-content">
       <h3>Browserbase</h3>
-      <p>AIエージェント向けのWebブラウジング機能を提供</p>
+      <p>AIエージェントのWebブラウジング機能を強化します</p>
     </div>
   </a>
 
@@ -25,7 +45,7 @@ ADKエージェントで使用できる以下のサードパーティ製ツー�
     </div>
     <div class="tool-card-content">
       <h3>Exa</h3>
-      <p>Webサイトやライブデータから構造化されたコンテンツを検索・抽出</p>
+      <p>Webサイトやライブデータから構造化されたコンテンツを検索して抽出します</p>
     </div>
   </a>
 
@@ -35,7 +55,7 @@ ADKエージェントで使用できる以下のサードパーティ製ツー�
     </div>
     <div class="tool-card-content">
       <h3>Firecrawl</h3>
-      <p>あらゆるWebサイトのクリーンなデータでAIアプリを強化</p>
+      <p>あらゆるWebサイトのクリーンなデータでAIアプリを強化します</p>
     </div>
   </a>
 
@@ -45,7 +65,7 @@ ADKエージェントで使用できる以下のサードパーティ製ツー�
     </div>
     <div class="tool-card-content">
       <h3>GitHub</h3>
-      <p>コードの分析、IssueやPRの管理、ワークフローの自動化</p>
+      <p>コードの分析、問題とPRの管理、ワークフローの自動化</p>
     </div>
   </a>
 
@@ -55,7 +75,7 @@ ADKエージェントで使用できる以下のサードパーティ製ツー�
     </div>
     <div class="tool-card-content">
       <h3>Hugging Face</h3>
-      <p>モデル、データセット、研究論文、AIツールへのアクセス</p>
+      <p>モデル、データセット、研究論文、AIツールにアクセスします</p>
     </div>
   </a>
 
@@ -75,7 +95,7 @@ ADKエージェントで使用できる以下のサードパーティ製ツー�
     </div>
     <div class="tool-card-content">
       <h3>Tavily</h3>
-      <p>リアルタイムのWeb検索、抽出、クロールツールを提供</p>
+      <p>リアルタイムのWeb検索、抽出、クロールツールを提供します</p>
     </div>
   </a>
 

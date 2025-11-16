@@ -2,15 +2,15 @@
 
 === "Python"
 
-    ## 仮想環境の作成と有効化
+    ## 仮想環境の作成とアクティブ化
 
-    [venv](https://docs.python.org/3/library/venv.html)を使用してPythonの仮想環境を作成することをお勧めします:
+    [venv](https://docs.python.org/3/library/venv.html)を使用して仮想Python環境を作成することをお勧めします。
 
     ```shell
     python -m venv .venv
     ```
 
-    次に、お使いのオペレーティングシステムと環境に応じた適切なコマンドで仮想環境を有効化します:
+    次に、オペレーティングシステムと環境に適したコマンドを使用して仮想環境をアクティブ化できます。
 
     ```
     # Mac / Linux
@@ -29,7 +29,7 @@
     pip install google-adk
     ```
 
-    (任意) インストールを確認:
+    （オプション）インストールを確認します。
 
     ```bash
     pip show google-adk
@@ -37,9 +37,9 @@
 
 === "Go"
 
-    ## 新規Goモジュールの作成
+    ## 新しいGoモジュールの作成
 
-    新しいプロジェクトを開始する場合は、新しいGoモジュールを作成します:
+    新しいプロジェクトを開始する場合は、新しいGoモジュールを作成できます。
 
     ```shell
     go mod init example.com/my-agent
@@ -47,24 +47,23 @@
 
     ## ADKのインストール
 
-    プロジェクトにADKを追加するには、次のコマンドを実行します:
+    プロジェクトにADKを追加するには、次のコマンドを実行します。
 
     ```shell
     go get google.golang.org/adk
     ```
 
-    これにより、ADKが依存関係として`go.mod`ファイルに追加されます。
+    これにより、ADKが`go.mod`ファイルに依存関係として追加されます。
 
-    (任意) `go.mod`ファイルに`google.golang.org/adk`のエントリがあることを確認し、インストールを検証します。
+    （オプション）`go.mod`ファイルで`google.golang.org/adk`エントリを確認して、インストールを確認します。
 
 === "Java"
 
-    mavenまたはgradleのいずれかを使用して、`google-adk`および`google-adk-dev`パッケージを追加できます。
+    mavenまたはgradleを使用して、`google-adk`および`google-adk-dev`パッケージを追加できます。
 
-    `google-adk`は、Java ADKのコアライブラリです。Java ADKには、エージェントをシームレスに実行するための、プラグイン可能なサンプルSpringBootサーバーも付属しています。このオプションの
-    パッケージは、`google-adk-dev`の一部として含まれています。
+    `google-adk`は、コアのJava ADKライブラリです。Java ADKには、エージェントをシームレスに実行するためのプラグ可能なサンプルSpringBootサーバーも付属しています。このオプションのパッケージは、`google-adk-dev`の一部として存在します。
 
-    mavenを使用している場合は、以下を`pom.xml`に追加します:
+    mavenを使用している場合は、`pom.xml`に次を追加します。
 
     ```xml title="pom.xml"
     <?xml version="1.0" encoding="UTF-8"?>
@@ -85,13 +84,13 @@
         </properties>
 
         <dependencies>
-            <!-- ADKのコア依存関係 -->
+            <!-- ADKコアの依存関係 -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
                 <version>0.3.0</version>
             </dependency>
-            <!-- エージェントをデバッグするためのADK開発用Web UI -->
+            <!-- エージェントをデバッグするためのADK開発Web UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
@@ -102,9 +101,9 @@
     </project>
     ```
 
-    参考用の[完全なpom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml)ファイルはこちらです。
+    参照用の[完全なpom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml)ファイルは次のとおりです。
 
-    gradleを使用している場合は、依存関係をbuild.gradleに追加します:
+    gradleを使用している場合は、build.gradleに依存関係を追加します。
 
     ```title="build.gradle"
     dependencies {
@@ -113,9 +112,9 @@
     }
     ```
 
-    また、Gradleが`javac`に`-parameters`を渡すように設定する必要があります。（または、`@Schema(name = "...")`を使用します）。
+    また、Gradleが`-parameters`を`javac`に渡すように構成する必要があります。（または、`@Schema(name = "...")`を使用します）。
 
 
 ## 次のステップ
 
-* [**クイックスタート**](quickstart.md)で最初のエージェントを作成してみましょう。
+* [**クイックスタート**](quickstart.md)で最初のエージェントを作成してみてください

@@ -5,9 +5,29 @@ hide:
 
 # 타사 도구
 
-ADK 에이전트와 함께 사용할 수 있는 다음 타사 도구를 확인하세요.
+ADK 에이전트와 함께 사용할 수 있는 다음과 같은 타사 도구를 확인해 보세요.
 
 <div class="tool-card-grid">
+
+  <a href="/adk-docs/ko/tools/third-party/agentql/" class="tool-card">
+    <div class="tool-card-image-wrapper">
+      <img src="../../assets/tools-agentql.png" alt="AgentQL">
+    </div>
+    <div class="tool-card-content">
+      <h3>AgentQL</h3>
+      <p>자연어를 사용하여 복원력 있는 구조화된 웹 데이터 추출</p>
+    </div>
+  </a>
+
+  <a href="/adk-docs/ko/tools/third-party/bright-data/" class="tool-card">
+    <div class="tool-card-image-wrapper">
+      <img src="../../assets/tools-bright-data.png" alt="Bright Data">
+    </div>
+    <div class="tool-card-content">
+      <h3>Bright Data</h3>
+      <p>웹용 MCP 하나 - AI를 실제 웹 데이터에 연결</p>
+    </div>
+  </a>
 
   <a href="/adk-docs/ko/tools/third-party/browserbase/" class="tool-card">
     <div class="tool-card-image-wrapper">
