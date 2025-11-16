@@ -1,5 +1,9 @@
 # ストリーミング動作の設定
 
+<div class="language-support-tag">
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">Experimental</span>
+</div>
+
 ライブ（ストリーミング）エージェントには、設定可能な項目がいくつかあります。
 
 これは[RunConfig](https://github.com/google/adk-python/blob/main/src/google/adk/agents/run_config.py)によって設定されます。`RunConfig`は[Runner.run_live(...)](https://github.com/google/adk-python/blob/main/src/google/adk/runners.py)と一緒に使用する必要があります。

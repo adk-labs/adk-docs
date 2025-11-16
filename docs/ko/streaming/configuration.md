@@ -1,5 +1,9 @@
 # 스트리밍 동작 구성하기
 
+<div class="language-support-tag">
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">Experimental</span>
+</div>
+
 라이브(스트리밍) 에이전트에 대해 설정할 수 있는 몇 가지 구성이 있습니다.
 
 이 설정은 [RunConfig](https://github.com/google/adk-python/blob/main/src/google/adk/agents/run_config.py)를 통해 이루어지며, [Runner.run_live(...)](https://github.com/google/adk-python/blob/main/src/google/adk/runners.py) 메서드와 함께 사용해야 합니다.
