@@ -1,10 +1,13 @@
 # MkDocs Configuration
 
 # Project information
-site_name: ADK
-site_description: Build multi-agent systems with ADK.
-site_author: Google
-site_url: https://google.github.io/adk-docs/
+site_name: Agent Development Kit
+site_url: https://google.github.io/adk-docs
+site_description: >-
+  Build powerful multi-agent systems with Agent Development Kit
+site_dir: site
+exclude_docs:
+  api-reference/java/legal/*
 
 # Exclude docs from build
 exclude_docs:
