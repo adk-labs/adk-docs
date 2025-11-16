@@ -1,5 +1,9 @@
 # Model Context Protocol ツール
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+</div>
+
 このガイドでは、Agent Development Kit (ADK) と Model Context Protocol (MCP) を統合する2つの方法について説明します。
 
 ## Model Context Protocol (MCP) とは？
@@ -36,7 +40,7 @@ which npx
 
 `MCPToolset`クラスは、MCPサーバーからツールを統合するためのADKの主要なメカニズムです。エージェントの`tools`リストに`MCPToolset`インスタンスを含めると、指定されたMCPサーバーとの対話が自動的に処理されます。仕組みは次のとおりです：
 
-1.  **接続管理：** 初期化時に、`MCPToolset`はMCPサーバーへの接続を確立し、管理します。これは、ローカルのサーバープロセス（標準入出力を介した通信のための`StdioServerParameters`を使用）またはリモートサーバー（サーバー送信イベントのための`SseServerParams`を使用）の場合があります。ツールセットは、エージェントまたはアプリケーションが終了する際に、この接続を適切にシャットダウンする処理も行います。
+1.  **接続管理：** 初期化時に、`MCPToolset`はMCPサーバーへの接続を確立し、管理します。これは、ローカルのサーバープロセス（標準入出力を介した通信のための`StdioConnectionParams`を使用）またはリモートサーバー（サーバー送信イベントのための`SseConnectionParams`を使用）の場合があります。ツールセットは、エージェントまたはアプリケーションが終了する際に、この接続を適切にシャットダウンする処理も行います。
 2.  **ツールの発見と適応：** 接続されると、`MCPToolset`はMCPサーバーに利用可能なツールを問い合わせ（MCPの`list_tools`メソッド経由）、発見されたこれらのMCPツールのスキーマをADK互換の`BaseTool`インスタンスに変換します。
 3.  **エージェントへの公開：** これらの適応されたツールは、ネイティブのADKツールであるかのように`LlmAgent`で利用可能になります。
 4.  **ツール呼び出しのプロキシ：** `LlmAgent`がこれらのツールの1つを使用することを決定すると、`MCPToolset`は呼び出しを透過的にMCPサーバーにプロキシし（MCPの`call_tool`メソッドを使用）、必要な引数を送信し、サーバーの応答をエージェントに返します。
@@ -46,7 +50,7 @@ which npx
 
 ### 例1：ファイルシステムMCPサーバー
 
-この例では、ファイルシステム操作を提供するローカルのMCPサーバーに接続する方法を示します。
+このPythonの例では、ファイルシステムの操作を提供するローカルのMCPサーバーに接続する方法を示します。
 
 #### ステップ1：`MCPToolset`でエージェントを定義する
 
@@ -59,14 +63,16 @@ which npx
 # ./adk_agent_samples/mcp_agent/agent.py
 import os # パス操作に必要
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+from mcp import StdioServerParameters
 
 # 可能であればパスを動的に定義するか、
 # ユーザーが絶対パスの必要性を理解していることを確認するのが良い習慣です。
 # この例では、このファイルからの相対パスを構築します。
 # '/path/to/your/folder'がagent.pyと同じディレクトリにあると仮定します。
 # セットアップに合わせて、これを実際の絶対パスに置き換えてください。
-TARGET_FOLDER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "your_folder")
+TARGET_FOLDER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "/path/to/your/folder")
 # TARGET_FOLDER_PATHがMCPサーバーの絶対パスであることを確認してください。
 # ./adk_agent_samples/mcp_agent/your_folderを作成した場合、
 
@@ -76,18 +82,20 @@ root_agent = LlmAgent(
     instruction='ユーザーのファイル管理を手伝ってください。ファイルのリスト表示や読み取りなどができます。',
     tools=[
         MCPToolset(
-            connection_params=StdioServerParameters(
-                command='npx',
-                args=[
-                    "-y",  # npxがインストールを自動確認するための引数
-                    "@modelcontextprotocol/server-filesystem",
-                    # 重要：これはnpxプロセスがアクセスできるフォルダへの
-                    # 絶対パスでなければなりません。
-                    # システム上の有効な絶対パスに置き換えてください。
-                    # 例："/Users/youruser/accessible_mcp_files"
-                    # または動的に構築された絶対パスを使用：
-                    os.path.abspath(TARGET_FOLDER_PATH),
-                ],
+            connection_params=StdioConnectionParams(
+                server_params = StdioServerParameters(
+                    command='npx',
+                    args=[
+                        "-y",  # npxがインストールを自動確認するための引数
+                        "@modelcontextprotocol/server-filesystem",
+                        # 重要：これはnpxプロセスがアクセスできるフォルダへの
+                        # 絶対パスでなければなりません。
+                        # システム上の有効な絶対パスに置き換えてください。
+                        # 例："/Users/youruser/accessible_mcp_files"
+                        # または動的に構築された絶対パスを使用：
+                        os.path.abspath(TARGET_FOLDER_PATH),
+                    ],
+                ),
             ),
             # オプション：MCPサーバーから公開されるツールをフィルタリング
             # tool_filter=['list_directory', 'read_file']
@@ -132,6 +140,112 @@ ADK Web UIがブラウザで読み込まれたら：
 <img src="../../assets/adk-tool-mcp-filesystem-adk-web-demo.png" alt="ADK WebでのMCP - FileSystemの例">
 
 
+
+Javaの場合、`MCPToolset`を初期化するエージェントを定義するには、次のサンプルを参照してください。
+
+```java
+package agents;
+
+import com.google.adk.JsonBaseModel;
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.agents.RunConfig;
+import com.google.adk.runner.InMemoryRunner;
+import com.google.adk.tools.mcp.McpTool;
+import com.google.adk.tools.mcp.McpToolset;
+import com.google.adk.tools.mcp.McpToolset.McpToolsAndToolsetResult;
+import com.google.genai.types.Content;
+import com.google.genai.types.Part;
+import io.modelcontextprotocol.client.transport.ServerParameters;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+public class McpAgentCreator {
+
+    /**
+     * McpToolsetを初期化し、stdioを使用してMCPサーバーからツールを取得し、
+     * これらのツールでLlmAgentを作成し、エージェントにプロンプトを送信し、
+     * ツールセットが閉じられることを確認します。
+     * @param args コマンドライン引数（使用されません）。
+     */
+    public static void main(String[] args) {
+        //注意：フォルダがホームの外にある場合、権限の問題が発生する可能性があります
+        String yourFolderPath = "~/path/to/folder";
+
+        ServerParameters connectionParams = ServerParameters.builder("npx")
+                .args(List.of(
+                        "-y",
+                        "@modelcontextprotocol/server-filesystem",
+                        yourFolderPath
+                ))
+                .build();
+
+        try {
+            CompletableFuture<McpToolsAndToolsetResult> futureResult =
+                    McpToolset.fromServer(connectionParams, JsonBaseModel.getMapper());
+
+            McpToolsAndToolsetResult result = futureResult.join();
+
+            try (McpToolset toolset = result.getToolset()) {
+                List<McpTool> tools = result.getTools();
+
+                LlmAgent agent = LlmAgent.builder()
+                        .model("gemini-2.0-flash")
+                        .name("enterprise_assistant")
+                        .description("ユーザーがファイルシステムにアクセスするのを助けるエージェント")
+                        .instruction(
+                                "ユーザーがファイルシステムにアクセスするのを助けます。ディレクトリ内のファイルを一覧表示できます。"
+                        )
+                        .tools(tools)
+                        .build();
+
+                System.out.println("エージェントが作成されました: " + agent.name());
+
+                InMemoryRunner runner = new InMemoryRunner(agent);
+                String userId = "user123";
+                String sessionId = "1234";
+                String promptText = "このディレクトリにはどのファイルがありますか - " + yourFolderPath + "?";
+
+                // 最初にセッションを明示的に作成します
+                try {
+                    // InMemoryRunnerのappNameは、コンストラクタで指定されていない場合、デフォルトでagent.name()になります
+                    runner.sessionService().createSession(runner.appName(), userId, null, sessionId).blockingGet();
+                    System.out.println("セッションが作成されました: " + sessionId + " ユーザー: " + userId);
+                } catch (Exception sessionCreationException) {
+                    System.err.println("セッションの作成に失敗しました: " + sessionCreationException.getMessage());
+                    sessionCreationException.printStackTrace();
+                    return;
+                }
+
+                Content promptContent = Content.fromParts(Part.fromText(promptText));
+
+                System.out.println("\nプロンプトをエージェントに送信しています: \"" + promptText + "\"...\n");
+
+                runner.runAsync(userId, sessionId, promptContent, RunConfig.builder().build())
+                        .blockingForEach(event -> {
+                            System.out.println("イベントを受信しました: " + event.toJson());
+                        });
+            }
+        } catch (Exception e) {
+            System.err.println("エラーが発生しました: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+`first`、`second`、`third`という名前の3つのファイルを含むフォルダを想定すると、成功した応答は次のようになります。
+
+```shell
+イベントを受信しました: {"id":"163a449e-691a-48a2-9e38-8cadb6d1f136","invocationId":"e-c2458c56-e57a-45b2-97de-ae7292e505ef","author":"enterprise_assistant","content":{"parts":[{"functionCall":{"id":"adk-388b4ac2-d40e-4f6a-bda6-f051110c6498","args":{"path":"~/home-test"},"name":"list_directory"}}],"role":"model"},"actions":{"stateDelta":{},"artifactDelta":{},"requestedAuthConfigs":{}},"timestamp":1747377543788}
+
+イベントを受信しました: {"id":"8728380b-bfad-4d14-8421-fa98d09364f1","invocationId":"e-c2458c56-e57a-45b2-97de-ae7292e505ef","author":"enterprise_assistant","content":{"parts":[{"functionResponse":{"id":"adk-388b4ac2-d40e-4f6a-bda6-f051110c6498","name":"list_directory","response":{"text_output":[{"text":"[FILE] first\n[FILE] second\n[FILE] third"}]}}}],"role":"user"},"actions":{"stateDelta":{},"artifactDelta":{},"requestedAuthConfigs":{}},"timestamp":1747377544679}
+
+イベントを受信しました: {"id":"8fe7e594-3e47-4254-8b57-9106ad8463cb","invocationId":"e-c2458c56-e57a-45b2-97de-ae7292e505ef","author":"enterprise_assistant","content":{"parts":[{"text":"ディレクトリには3つのファイルがあります: first、second、third。"}],"role":"model"},"actions":{"stateDelta":{},"artifactDelta":{},"requestedAuthConfigs":{}},"timestamp":1747377544689}
+```
+
+
+
 ### 例2：Google Maps MCPサーバー
 
 この例では、Google Maps MCPサーバーへの接続を示します。
@@ -152,7 +266,9 @@ ADK Web UIがブラウザで読み込まれたら：
 # ./adk_agent_samples/mcp_agent/agent.py
 import os
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+from mcp import StdioServerParameters
 
 # 環境変数からAPIキーを取得するか、直接挿入します。
 # 環境変数を使用する方が一般的に安全です。
@@ -173,17 +289,19 @@ root_agent = LlmAgent(
     instruction='Google Mapsツールを使用して、マッピング、道案内、場所の検索でユーザーを支援します。',
     tools=[
         MCPToolset(
-            connection_params=StdioServerParameters(
-                command='npx',
-                args=[
-                    "-y",
-                    "@modelcontextprotocol/server-google-maps",
-                ],
-                # APIキーをnpxプロセスに環境変数として渡す
-                # これがGoogle Maps用MCPサーバーがキーを期待する方法です。
-                env={
-                    "GOOGLE_MAPS_API_KEY": google_maps_api_key
-                }
+            connection_params=StdioConnectionParams(
+                server_params = StdioServerParameters(
+                    command='npx',
+                    args=[
+                        "-y",
+                        "@modelcontextprotocol/server-google-maps",
+                    ],
+                    # APIキーをnpxプロセスに環境変数として渡す
+                    # これがGoogle Maps用MCPサーバーがキーを期待する方法です。
+                    env={
+                        "GOOGLE_MAPS_API_KEY": google_maps_api_key
+                    }
+                ),
             ),
             # 必要に応じて特定のMapsツールをフィルタリングできます：
             # tool_filter=['get_directions', 'find_place_by_id']
@@ -229,6 +347,110 @@ from . import agent
 <img src="../../assets/adk-tool-mcp-maps-adk-web-demo.png" alt="ADK WebでのMCP - Google Mapsの例">
 
 
+Javaの場合、`MCPToolset`を初期化するエージェントを定義するには、次のサンプルを参照してください。
+
+```java
+package agents;
+
+import com.google.adk.JsonBaseModel;
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.agents.RunConfig;
+import com.google.adk.runner.InMemoryRunner;
+import com.google.adk.tools.mcp.McpTool;
+import com.google.adk.tools.mcp.McpToolset;
+import com.google.adk.tools.mcp.McpToolset.McpToolsAndToolsetResult;
+
+
+import com.google.genai.types.Content;
+import com.google.genai.types.Part;
+
+import io.modelcontextprotocol.client.transport.ServerParameters;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.Arrays;
+
+public class MapsAgentCreator {
+
+    /**
+     * Google Maps用のMcpToolsetを初期化し、ツールを取得し、
+     * LlmAgentを作成し、地図関連のプロンプトを送信し、ツールセットを閉じます。
+     * @param args コマンドライン引数（使用されません）。
+     */
+    public static void main(String[] args) {
+        // TODO: Places APIが有効になっているプロジェクトで、実際のGoogle Maps APIキーに置き換えてください。
+        String googleMapsApiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+
+        Map<String, String> envVariables = new HashMap<>();
+        envVariables.put("GOOGLE_MAPS_API_KEY", googleMapsApiKey);
+
+        ServerParameters connectionParams = ServerParameters.builder("npx")
+                .args(List.of(
+                        "-y",
+                        "@modelcontextprotocol/server-google-maps"
+                ))
+                .env(Collections.unmodifiableMap(envVariables))
+                .build();
+
+        try {
+            CompletableFuture<McpToolsAndToolsetResult> futureResult =
+                    McpToolset.fromServer(connectionParams, JsonBaseModel.getMapper());
+
+            McpToolsAndToolsetResult result = futureResult.join();
+
+            try (McpToolset toolset = result.getToolset()) {
+                List<McpTool> tools = result.getTools();
+
+                LlmAgent agent = LlmAgent.builder()
+                        .model("gemini-2.0-flash")
+                        .name("maps_assistant")
+                        .description("地図アシスタント")
+                        .instruction("利用可能なツールを使用して、地図と道案内でユーザーを支援します。")
+                        .tools(tools)
+                        .build();
+
+                System.out.println("エージェントが作成されました: " + agent.name());
+
+                InMemoryRunner runner = new InMemoryRunner(agent);
+                String userId = "maps-user-" + System.currentTimeMillis();
+                String sessionId = "maps-session-" + System.currentTimeMillis();
+
+                String promptText = "マディソンスクエアガーデンに最も近い薬局への道順を教えてください。";
+
+                try {
+                    runner.sessionService().createSession(runner.appName(), userId, null, sessionId).blockingGet();
+                    System.out.println("セッションが作成されました: " + sessionId + " ユーザー: " + userId);
+                } catch (Exception sessionCreationException) {
+                    System.err.println("セッションの作成に失敗しました: " + sessionCreationException.getMessage());
+                    sessionCreationException.printStackTrace();
+                    return;
+                }
+
+                Content promptContent = Content.fromParts(Part.fromText(promptText))
+
+                System.out.println("\nプロンプトをエージェントに送信しています: \"" + promptText + "\"...\n");
+
+                runner.runAsync(userId, sessionId, promptContent, RunConfig.builder().build())
+                        .blockingForEach(event -> {
+                            System.out.println("イベントを受信しました: " + event.toJson());
+                        });
+            }
+        } catch (Exception e) {
+            System.err.println("エラーが発生しました: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+成功した応答は次のようになります。
+```shell
+イベントを受信しました: {"id":"1a4deb46-c496-4158-bd41-72702c773368","invocationId":"e-48994aa0-531c-47be-8c57-65215c3e0319","author":"maps_assistant","content":{"parts":[{"text":"はい。いくつかの選択肢があります。最も近いのは、5 Pennsylvania Plaza, New York, NY 10001, United StatesにあるCVS Pharmacyです。道順を案内しますか？\n"}],"role":"model"},"actions":{"stateDelta":{},"artifactDelta":{},"requestedAuthConfigs":{}},"timestamp":1747380026642}
+```
+
 ## 2. ADKツールを持つMCPサーバーの構築（ADKを公開するMCPサーバー）
 
 このパターンでは、既存のADKツールをラップし、標準的なMCPクライアントアプリケーションで利用できるようにします。このセクションの例では、カスタムビルドのMCPサーバーを介してADKの`load_web_page`ツールを公開します。
@@ -263,7 +485,121 @@ MCPサーバー用に新しいPythonファイルを作成します。例：`my_a
 
 ```python
 # my_adk_mcp_server.py
-# ...(Pythonコードは変更しないため省略)...
+import asyncio
+import json
+import os
+from dotenv import load_dotenv
+
+# MCP Server Imports
+from mcp import types as mcp_types # Use alias to avoid conflict
+from mcp.server.lowlevel import Server, NotificationOptions
+from mcp.server.models import InitializationOptions
+import mcp.server.stdio # For running as a stdio server
+
+# ADK Tool Imports
+from google.adk.tools.function_tool import FunctionTool
+from google.adk.tools.load_web_page import load_web_page # Example ADK tool
+# ADK <-> MCP Conversion Utility
+from google.adk.tools.mcp_tool.conversion_utils import adk_to_mcp_tool_type
+
+# --- Load Environment Variables (If ADK tools need them, e.g., API keys) ---
+load_dotenv() # Create a .env file in the same directory if needed
+
+# --- Prepare the ADK Tool ---
+# Instantiate the ADK tool you want to expose.
+# This tool will be wrapped and called by the MCP server.
+print("Initializing ADK load_web_page tool...")
+adk_tool_to_expose = FunctionTool(load_web_page)
+print(f"ADK tool '{adk_tool_to_expose.name}' initialized and ready to be exposed via MCP.")
+# --- End ADK Tool Prep ---
+
+# --- MCP Server Setup ---
+print("Creating MCP Server instance...")
+# Create a named MCP Server instance using the mcp.server library
+app = Server("adk-tool-exposing-mcp-server")
+
+# Implement the MCP server's handler to list available tools
+@app.list_tools()
+async def list_mcp_tools() -> list[mcp_types.Tool]:
+    """MCP handler to list tools this server exposes."""
+    print("MCP Server: Received list_tools request.")
+    # Convert the ADK tool's definition to the MCP Tool schema format
+    mcp_tool_schema = adk_to_mcp_tool_type(adk_tool_to_expose)
+    print(f"MCP Server: Advertising tool: {mcp_tool_schema.name}")
+    return [mcp_tool_schema]
+
+# Implement the MCP server's handler to execute a tool call
+@app.call_tool()
+async def call_mcp_tool(
+    name: str, arguments: dict
+) -> list[mcp_types.Content]: # MCP uses mcp_types.Content
+    """MCP handler to execute a tool call requested by an MCP client."""
+    print(f"MCP Server: Received call_tool request for '{name}' with args: {arguments}")
+
+    # Check if the requested tool name matches our wrapped ADK tool
+    if name == adk_tool_to_expose.name:
+        try:
+            # Execute the ADK tool's run_async method.
+            # Note: tool_context is None here because this MCP server is
+            # running the ADK tool outside of a full ADK Runner invocation.
+            # If the ADK tool requires ToolContext features (like state or auth),
+            # this direct invocation might need more sophisticated handling.
+            adk_tool_response = await adk_tool_to_expose.run_async(
+                args=arguments,
+                tool_context=None,
+            )
+            print(f"MCP Server: ADK tool '{name}' executed. Response: {adk_tool_response}")
+
+            # Format the ADK tool's response (often a dict) into an MCP-compliant format.
+            # Here, we serialize the response dictionary as a JSON string within TextContent.
+            # Adjust formatting based on the ADK tool's output and client needs.
+            response_text = json.dumps(adk_tool_response, indent=2)
+            # MCP expects a list of mcp_types.Content parts
+            return [mcp_types.TextContent(type="text", text=response_text)]
+
+        except Exception as e:
+            print(f"MCP Server: Error executing ADK tool '{name}': {e}")
+            # Return an error message in MCP format
+            error_text = json.dumps({"error": f"Failed to execute tool '{name}': {str(e)}"})
+            return [mcp_types.TextContent(type="text", text=error_text)]
+    else:
+        # Handle calls to unknown tools
+        print(f"MCP Server: Tool '{name}' not found/exposed by this server.")
+        error_text = json.dumps({"error": f"Tool '{name}' not implemented by this server."})
+        return [mcp_types.TextContent(type="text", text=error_text)]
+
+# --- MCP Server Runner ---
+async def run_mcp_stdio_server():
+    """Runs the MCP server, listening for connections over standard input/output."""
+    # Use the stdio_server context manager from the mcp.server.stdio library
+    async with mcp.server.stdio.stdio_server() as (read_stream, write_stream):
+        print("MCP Stdio Server: Starting handshake with client...")
+        await app.run(
+            read_stream,
+            write_stream,
+            InitializationOptions(
+                server_name=app.name, # Use the server name defined above
+                server_version="0.1.0",
+                capabilities=app.get_capabilities(
+                    # Define server capabilities - consult MCP docs for options
+                    notification_options=NotificationOptions(),
+                    experimental_capabilities={},
+                ),
+            ),
+        )
+        print("MCP Stdio Server: Run loop finished or client disconnected.")
+
+if __name__ == "__main__":
+    print("Launching MCP Server to expose ADK tools via stdio...")
+    try:
+        asyncio.run(run_mcp_stdio_server())
+    except KeyboardInterrupt:
+        print("\nMCP Server (stdio) stopped by user.")
+    except Exception as e:
+        print(f"MCP Server (stdio) encountered an error: {e}")
+    finally:
+        print("MCP Server (stdio) process exiting.")
+# --- End MCP Server ---
 ```
 
 ### ステップ3：カスタムMCPサーバーをADKエージェントでテストする
@@ -276,7 +612,9 @@ MCPサーバー用に新しいPythonファイルを作成します。例：`my_a
 # ./adk_agent_samples/mcp_client_agent/agent.py
 import os
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+from mcp import StdioServerParameters
 
 # 重要：これをあなたのmy_adk_mcp_server.pyスクリプトへの絶対パスに置き換えてください
 PATH_TO_YOUR_MCP_SERVER_SCRIPT = "/path/to/your/my_adk_mcp_server.py" # <<< 置き換える
@@ -291,14 +629,17 @@ root_agent = LlmAgent(
     instruction="ユーザーから提供されたURLのコンテンツを取得するために'load_web_page'ツールを使用してください。",
     tools=[
         MCPToolset(
-            connection_params=StdioServerParameters(
-                command='python3', # MCPサーバースクリプトを実行するコマンド
-                args=[PATH_TO_YOUR_MCP_SERVER_SCRIPT], # 引数はスクリプトへのパス
+            connection_params=StdioConnectionParams(
+                server_params = StdioServerParameters(
+                    command='python3', # MCPサーバースクリプトを実行するコマンド
+                    args=[PATH_TO_YOUR_MCP_SERVER_SCRIPT], # 引数はスクリプトへのパス
+                )
             )
             # tool_filter=['load_web_page'] # オプション：特定のツールのみがロードされるようにする
         )
     ],
-)```
+)
+```
 
 そして、同じディレクトリに`__init__.py`を作成します：
 ```python
@@ -350,8 +691,99 @@ MCPツールの仕様は、リモートまたは別のプロセスで実行さ�
 
 ```python
 # agent.py (必要に応じてget_tools_asyncや他の部分を修正)
-# ...(Pythonコードは変更しないため省略)...
+# ./adk_agent_samples/mcp_agent/agent.py
+import os
+import asyncio
+from dotenv import load_dotenv
+from google.genai import types
+from google.adk.agents.llm_agent import LlmAgent
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.adk.artifacts.in_memory_artifact_service import InMemoryArtifactService # Optional
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+from mcp import StdioServerParameters
+
+# Load environment variables from .env file in the parent directory
+# Place this near the top, before using env vars like API keys
+load_dotenv('../.env')
+
+# Ensure TARGET_FOLDER_PATH is an absolute path for the MCP server.
+TARGET_FOLDER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "/path/to/your/folder")
+
+# --- Step 1: Agent Definition ---
+async def get_agent_async():
+  """Creates an ADK Agent equipped with tools from the MCP Server."""
+  toolset = MCPToolset(
+      # Use StdioConnectionParams for local process communication
+      connection_params=StdioConnectionParams(
+          server_params = StdioServerParameters(
+            command='npx', # Command to run the server
+            args=["-y",    # Arguments for the command
+                "@modelcontextprotocol/server-filesystem",
+                TARGET_FOLDER_PATH],
+          ),
+      ),
+      tool_filter=['read_file', 'list_directory'] # Optional: filter specific tools
+      # For remote servers, you would use SseConnectionParams instead:
+      # connection_params=SseConnectionParams(url="http://remote-server:port/path", headers={...})
+  )
+
+  # Use in an agent
+  root_agent = LlmAgent(
+      model='gemini-2.0-flash', # Adjust model name if needed based on availability
+      name='enterprise_assistant',
+      instruction='Help user accessing their file systems',
+      tools=[toolset], # Provide the MCP tools to the ADK agent
+  )
+  return root_agent, toolset
+
+# --- Step 2: Main Execution Logic ---
+async def async_main():
+  session_service = InMemorySessionService()
+  # Artifact service might not be needed for this example
+  artifacts_service = InMemoryArtifactService()
+
+  session = await session_service.create_session(
+      state={}, app_name='mcp_filesystem_app', user_id='user_fs'
+  )
+
+  # TODO: Change the query to be relevant to YOUR specified folder.
+  # e.g., "list files in the 'documents' subfolder" or "read the file 'notes.txt'"
+  query = "list files in the tests folder"
+  print(f"User Query: '{query}'")
+  content = types.Content(role='user', parts=[types.Part(text=query)])
+
+  root_agent, toolset = await get_agent_async()
+
+  runner = Runner(
+      app_name='mcp_filesystem_app',
+      agent=root_agent,
+      artifact_service=artifacts_service, # Optional
+      session_service=session_service,
+  )
+
+  print("Running agent...")
+  events_async = runner.run_async(
+      session_id=session.id, user_id=session.user_id, new_message=content
+  )
+
+  async for event in events_async:
+    print(f"Event received: {event}")
+
+  # Cleanup is handled automatically by the agent framework
+  # But you can also manually close if needed:
+  print("Closing MCP server connection...")
+  await toolset.close()
+  print("Cleanup complete.")
+
+if __name__ == '__main__':
+  try:
+    asyncio.run(async_main())
+  except Exception as e:
+    print(f"An error occurred: {e}")
 ```
+
 
 ## 主な考慮事項
 
@@ -371,6 +803,390 @@ MCPとADKを扱う際には、以下の点に留意してください：
 
     *   **デプロイ：** このステートフル性は、特に多くのユーザーを処理するリモートサーバーのスケーリングとデプロイにおいて課題をもたらす可能性があります。元のMCP設計は、クライアントとサーバーが同じ場所に配置されていることをしばしば想定していました。これらの永続的な接続を管理するには、慎重なインフラストラクチャの考慮が必要です（例：ロードバランシング、セッションアフィニティ）。
     *   **ADK MCPToolset：** この接続ライフサイクルを管理します。例に示されているexit_stackパターンは、ADKエージェントが終了したときに接続（および場合によってはサーバープロセス）が適切に終了されることを保証するために重要です。
+
+## MCPツールを使用したエージェントのデプロイ
+
+MCPツールを使用するADKエージェントをCloud Run、GKE、またはVertex AI Agent Engineなどの本番環境にデプロイする場合、コンテナ化された分散環境でMCP接続がどのように機能するかを考慮する必要があります。
+
+### 重要なデプロイ要件：同期エージェント定義
+
+**⚠️ 重要：** MCPツールを使用してエージェントをデプロイする場合、エージェントとそのMCPToolsetは`agent.py`ファイルで**同期的に**定義する必要があります。`adk web`は非同期のエージェント作成を許可しますが、デプロイ環境では同期的なインスタンス化が必要です。
+
+```python
+# ✅ 正しい：デプロイ用の同期エージェント定義
+import os
+from google.adk.agents.llm_agent import LlmAgent
+from google.adk.tools.mcp_tool import StdioConnectionParams
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from mcp import StdioServerParameters
+
+_allowed_path = os.path.dirname(os.path.abspath(__file__))
+
+root_agent = LlmAgent(
+    model='gemini-2.0-flash',
+    name='enterprise_assistant',
+    instruction=f'ユーザーがファイルシステムにアクセスするのを助けます。許可されたディレクトリ：{_allowed_path}',
+    tools=[
+        MCPToolset(
+            connection_params=StdioConnectionParams(
+                server_params=StdioServerParameters(
+                    command='npx',
+                    args=['-y', '@modelcontextprotocol/server-filesystem', _allowed_path],
+                ),
+                timeout=5,  # 適切なタイムアウトを設定
+            ),
+            # 本番環境でのセキュリティのためにツールをフィルタリング
+            tool_filter=[
+                'read_file', 'read_multiple_files', 'list_directory',
+                'directory_tree', 'search_files', 'get_file_info',
+                'list_allowed_directories',
+            ],
+        )
+    ],
+)
+```
+
+```python
+# ❌ 間違い：非同期パターンはデプロイでは機能しません
+async def get_agent():  # これはデプロイでは機能しません
+    toolset = await create_mcp_toolset_async()
+    return LlmAgent(tools=[toolset])
+```
+
+### クイックデプロイコマンド
+
+#### Vertex AI Agent Engine
+```bash
+uv run adk deploy agent_engine \
+  --project=<your-gcp-project-id> \
+  --region=<your-gcp-region> \
+  --staging_bucket="gs://<your-gcs-bucket>" \
+  --display_name="My MCP Agent" \
+  ./path/to/your/agent_directory
+```
+
+#### Cloud Run
+```bash
+uv run adk deploy cloud_run \
+  --project=<your-gcp-project-id> \
+  --region=<your-gcp-region> \
+  --service_name=<your-service-name> \
+  ./path/to/your/agent_directory
+```
+
+### デプロイパターン
+
+#### パターン1：自己完結型Stdio MCPサーバー
+
+npmパッケージまたはPythonモジュールとしてパッケージ化できるMCPサーバー（`@modelcontextprotocol/server-filesystem`など）の場合、エージェントコンテナに直接含めることができます。
+
+**コンテナ要件：**
+```dockerfile
+# npmベースのMCPサーバーの例
+FROM python:3.13-slim
+
+# MCPサーバー用にNode.jsとnpmをインストール
+RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
+
+# Pythonの依存関係をインストール
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# エージェントコードをコピー
+COPY . .
+
+# これでエージェントは'npx'コマンドでStdioConnectionParamsを使用できます
+CMD ["python", "main.py"]
+```
+
+**エージェント設定：**
+```python
+# npxとMCPサーバーが同じ環境で実行されるため、これはコンテナで機能します
+MCPToolset(
+    connection_params=StdioConnectionParams(
+        server_params=StdioServerParameters(
+            command='npx',
+            args=["-y", "@modelcontextprotocol/server-filesystem", "/app/data"],
+        ),
+    ),
+)
+```
+
+#### パターン2：リモートMCPサーバー（ストリーミング可能HTTP）
+
+スケーラビリティが必要な本番環境のデプロイでは、MCPサーバーを別のサービスとしてデプロイし、ストリーミング可能HTTP経由で接続します。
+
+**MCPサーバーのデプロイ（Cloud Run）：**
+```python
+# deploy_mcp_server.py - ストリーミング可能HTTPを使用する別のCloud Runサービス
+import contextlib
+import logging
+from collections.abc import AsyncIterator
+from typing import Any
+
+import anyio
+import click
+import mcp.types as types
+from mcp.server.lowlevel import Server
+from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
+from starlette.applications import Starlette
+from starlette.routing import Mount
+from starlette.types import Receive, Scope, Send
+
+logger = logging.getLogger(__name__)
+
+def create_mcp_server():
+    """MCPサーバーを作成して設定します。"""
+    app = Server("adk-mcp-streamable-server")
+
+    @app.call_tool()
+    async def call_tool(name: str, arguments: dict[str, Any]) -> list[types.ContentBlock]:
+        """MCPクライアントからのツール呼び出しを処理します。"""
+        # 例のツール実装 - 実際のADKツールに置き換えてください
+        if name == "example_tool":
+            result = arguments.get("input", "No input provided")
+            return [
+                types.TextContent(
+                    type="text",
+                    text=f"Processed: {result}"
+                )
+            ]
+        else:
+            raise ValueError(f"Unknown tool: {name}")
+
+    @app.list_tools()
+    async def list_tools() -> list[types.Tool]:
+        """利用可能なツールを一覧表示します。"""
+        return [
+            types.Tool(
+                name="example_tool",
+                description="Example tool for demonstration",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "input": {
+                            "type": "string",
+                            "description": "Input text to process"
+                        }
+                    },
+                    "required": ["input"]
+                }
+            )
+        ]
+
+    return app
+
+def main(port: int = 8080, json_response: bool = False):
+    """メインサーバー関数。"""
+    logging.basicConfig(level=logging.INFO)
+
+    app = create_mcp_server()
+
+    # スケーラビリティのためにステートレスモードでセッションマネージャーを作成
+    session_manager = StreamableHTTPSessionManager(
+        app=app,
+        event_store=None,
+        json_response=json_response,
+        stateless=True,  # Cloud Runのスケーラビリティに重要
+    )
+
+    async def handle_streamable_http(scope: Scope, receive: Receive, send: Send) -> None:
+        await session_manager.handle_request(scope, receive, send)
+
+    @contextlib.asynccontextmanager
+    async def lifespan(app: Starlette) -> AsyncIterator[None]:
+        """セッションマネージャーのライフサイクルを管理します。"""
+        async with session_manager.run():
+            logger.info("MCP Streamable HTTP server started!")
+            try:
+                yield
+            finally:
+                logger.info("MCP server shutting down...")
+
+    # ASGIアプリケーションを作成
+    starlette_app = Starlette(
+        debug=False,  # 本番環境ではFalseに設定
+        routes=[
+            Mount("/mcp", app=handle_streamable_http),
+        ],
+        lifespan=lifespan,
+    )
+
+    import uvicorn
+    uvicorn.run(starlette_app, host="0.0.0.0", port=port)
+
+if __name__ == "__main__":
+    main()
+```
+
+**リモートMCPのエージェント設定：**
+```python
+# ADKエージェントはストリーミング可能HTTP経由でリモートMCPサービスに接続します
+MCPToolset(
+    connection_params=StreamableHTTPConnectionParams(
+        url="https://your-mcp-server-url.run.app/mcp",
+        headers={"Authorization": "Bearer your-auth-token"}
+    ),
+)
+```
+
+#### パターン3：サイドカーMCPサーバー（GKE）
+
+Kubernetes環境では、MCPサーバーをサイドカーコンテナとしてデプロイできます。
+
+```yaml
+# deployment.yaml - MCPサイドカー付きGKE
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adk-agent-with-mcp
+spec:
+  template:
+    spec:
+      containers:
+      # メインADKエージェントコンテナ
+      - name: adk-agent
+        image: your-adk-agent:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MCP_SERVER_URL
+          value: "http://localhost:8081"
+
+      # MCPサーバーサイドカー
+      - name: mcp-server
+        image: your-mcp-server:latest
+        ports:
+        - containerPort: 8081
+```
+
+### 接続管理の考慮事項
+
+#### Stdio接続
+- **長所：** 簡単なセットアップ、プロセス分離、コンテナでの動作が良好
+- **短所：** プロセスオーバーヘッド、大規模デプロイには不向き
+- **最適：** 開発、シングルテナントデプロイ、シンプルなMCPサーバー
+
+#### SSE/HTTP接続
+- **長所：** ネットワークベース、スケーラブル、複数のクライアントを処理可能
+- **短所：** ネットワークインフラが必要、認証の複雑さ
+- **最適：** 本番環境デプロイ、マルチテナントシステム、外部MCPサービス
+
+### 本番環境デプロイチェックリスト
+
+MCPツールを使用してエージェントを本番環境にデプロイする場合：
+
+**✅ 接続ライフサイクル**
+- exit_stackパターンを使用してMCP接続の適切なクリーンアップを保証
+- 接続確立とリクエストに適切なタイムアウトを設定
+- 一時的な接続障害に対する再試行ロジックを実装
+
+**✅ リソース管理**
+- stdio MCPサーバーのメモリ使用量を監視（それぞれがプロセスを生成）
+- MCPサーバープロセスに適切なCPU/メモリ制限を設定
+- リモートMCPサーバーの接続プーリングを検討
+
+**✅ セキュリティ**
+- リモートMCP接続に認証ヘッダーを使用
+- ADKエージェントとMCPサーバー間のネットワークアクセスを制限
+- **`tool_filter`を使用して公開される機能を制限**
+- インジェクション攻撃を防ぐためにMCPツールの入力を検証
+- ファイルシステムMCPサーバーに制限的なファイルパスを使用（例：`os.path.dirname(os.path.abspath(__file__))`）
+- 本番環境では読み取り専用のツールフィルターを検討
+
+**✅ モニタリングと可観測性**
+- MCP接続の確立と切断イベントをログに記録
+- MCPツールの実行時間と成功率を監視
+- MCP接続障害のアラートを設定
+
+**✅ スケーラビリティ**
+- 大量デプロイの場合は、stdioよりもリモートMCPサーバーを優先
+- ステートフルなMCPサーバーを使用する場合はセッションアフィニティを設定
+- MCPサーバーの接続制限を検討し、サーキットブレーカーを実装
+
+### 環境固有の設定
+
+#### Cloud Run
+```python
+# MCP設定用のCloud Run環境変数
+import os
+
+# Cloud Run環境を検出
+if os.getenv('K_SERVICE'):
+    # Cloud RunでリモートMCPサーバーを使用
+    mcp_connection = SseConnectionParams(
+        url=os.getenv('MCP_SERVER_URL'),
+        headers={'Authorization': f"Bearer {os.getenv('MCP_AUTH_TOKEN')}"}
+    )
+else:
+    # ローカル開発用にstdioを使用
+    mcp_connection = StdioConnectionParams(
+        server_params=StdioServerParameters(
+            command='npx',
+            args=["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
+        )
+    )
+
+MCPToolset(connection_params=mcp_connection)
+```
+
+#### GKE
+```python
+# GKE固有のMCP設定
+# クラスタ内のMCPサーバーにサービスディスカバリを使用
+MCPToolset(
+    connection_params=SseConnectionParams(
+        url="http://mcp-service.default.svc.cluster.local:8080/sse"
+    ),
+)
+```
+
+#### Vertex AI Agent Engine
+```python
+# Agent Engine管理のデプロ이
+# 軽量で自己完結型のMCPサーバーまたは外部サービスを優先
+MCPToolset(
+    connection_params=SseConnectionParams(
+        url="https://your-managed-mcp-service.googleapis.com/sse",
+        headers={'Authorization': 'Bearer $(gcloud auth print-access-token)'}
+    ),
+)
+```
+
+### デプロイの問題のトラブルシューティング
+
+**一般的なMCPデプロイの問題：**
+
+1. **Stdioプロセスの起動失敗**
+   ```python
+   # stdio接続の問題をデバッグ
+   MCPToolset(
+       connection_params=StdioConnectionParams(
+           server_params=StdioServerParameters(
+               command='npx',
+               args=["-y", "@modelcontextprotocol/server-filesystem", "/app/data"],
+               # 環境デバッグを追加
+               env={'DEBUG': '1'}
+           ),
+       ),
+   )
+   ```
+
+2. **ネットワーク接続の問題**
+   ```python
+   # リモートMCP接続をテスト
+   import aiohttp
+
+   async def test_mcp_connection():
+       async with aiohttp.ClientSession() as session:
+           async with session.get('https://your-mcp-server.com/health') as resp:
+               print(f"MCP Server Health: {resp.status}")
+   ```
+
+3. **リソースの枯渇**
+   - stdio MCPサーバーを使用する場合はコンテナのメモリ使用量を監視
+   - Kubernetesデプロイで適切な制限を設定
+   - リソースを大量に消費する操作にはリモートMCPサーバーを使用
 
 ## さらなるリソース
 

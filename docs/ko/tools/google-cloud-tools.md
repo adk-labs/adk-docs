@@ -1,8 +1,8 @@
 # Google Cloud 도구
 
-![python_only](https://img.shields.io/badge/현재_지원되는_언어-Python-blue){ title="이 기능은 현재 Python에서만 사용할 수 있습니다. Java 지원은 계획 중이거나 곧 제공될 예정입니다."}
 
-Google Cloud 도구를 사용하면 에이전트를 Google Cloud의 제품 및 서비스에 더 쉽게 연결할 수 있습니다. 단 몇 줄의 코드로 이러한 도구를 사용하여 에이전트를 다음과 연결할 수 있습니다:
+
+Google Cloud 도구를 사용하면 에이전트를 Google Cloud의 제품 및 서비스에 더 쉽게 연결할 수 있습니다. 단 몇 줄의 코드로 이러한 도구를 사용하여 에이전트를 다음과 연결할 수 있습니다.
 
 * 개발자가 Apigee에서 호스팅하는 **모든 사용자 정의 API**.
 * Salesforce, Workday, SAP와 같은 엔터프라이즈 시스템에 대한 **100개 이상**의 **사전 빌드된 커넥터**.
@@ -12,6 +12,10 @@ Google Cloud 도구를 사용하면 에이전트를 Google Cloud의 제품 및 �
 ![Google Cloud 도구](../assets/google_cloud_tools.svg)
 
 ## Apigee API Hub 도구
+
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
+</div>
 
 **ApiHubToolset**을 사용하면 Apigee API 허브의 모든 문서화된 API를 몇 줄의 코드로 도구로 전환할 수 있습니다. 이 섹션에서는 API에 대한 보안 연결을 위한 인증 설정을 포함하여 단계별 지침을 보여줍니다.
 
@@ -70,7 +74,7 @@ project_root_folder
         "apikey", "query", "apikey", apikey_credential_str
     )
 
-    sample_toolset_with_auth = APIHubToolset(
+    sample_toolset = APIHubToolset(
         name="apihub-sample-tool",
         description="샘플 도구",
         access_token="...",  # 1단계에서 생성된 액세스 토큰을 복사합니다
@@ -121,66 +125,131 @@ project_root_folder
 
 ## 애플리케이션 통합 도구
 
-**ApplicationIntegrationToolset**을 사용하면 Salesforce, ServiceNow, JIRA, SAP 등과 같은 시스템에 대한 Integration Connector의 100개 이상의 사전 빌드된 커넥터를 사용하여 에이전트에게 엔터프라이즈 애플리케이션에 대한 안전하고 관리되는 접근 권한을 원활하게 부여할 수 있습니다. 온프레미스 및 SaaS 애플리케이션 모두 지원됩니다. 또한 기존 애플리케이션 통합 프로세스 자동화를 ADK 에이전트에게 도구로 제공하여 에이전트 워크플로로 전환할 수 있습니다.
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.3.0</span>
+</div>
 
-**전제 조건**
+**ApplicationIntegrationToolset**을 사용하면 Salesforce, ServiceNow, JIRA, SAP 등과 같은 시스템에 대한 Integration Connector의 100개 이상의 사전 빌드된 커넥터를 사용하여 에이전트에게 엔터프라이즈 애플리케이션에 대한 안전하고 관리되는 접근 권한을 원활하게 부여할 수 있습니다.
 
-1. [ADK 설치](../get-started/installation.md)
-2. 에이전트와 함께 사용하려는 기존
-   [애플리케이션 통합](https://cloud.google.com/application-integration/docs/overview)
-   워크플로 또는
-   [통합 커넥터](https://cloud.google.com/integration-connectors/docs/overview)
-   연결
-3. 기본 자격 증명으로 도구를 사용하려면: Google Cloud CLI가 설치되어 있어야 합니다.
-   [설치 가이드](https://cloud.google.com/sdk/docs/install#installation_instructions) 참조*.*
+온프레미스 및 SaaS 애플리케이션 모두 지원됩니다. 또한 기존 애플리케이션 통합 프로세스 자동화를 ADK 에이전트에게 도구로 제공하여 에이전트 워크플로로 전환할 수 있습니다.
 
-   *실행:*
+애플리케이션 통합 내의 연합 검색을 사용하면 ADK 에이전트가 여러 엔터프라이즈 애플리케이션 및 데이터 소스를 동시에 쿼리할 수 있습니다.
 
-   ```shell
-   gcloud config set project <project-id>
-   gcloud auth application-default login
-   gcloud auth application-default set-quota-project <project-id>
-   ```
+[:fontawesome-brands-youtube:{.youtube-red-icon} 이 비디오 연습에서 애플리케이션 통합의 ADK 연합 검색이 어떻게 작동하는지 확인하세요](https://www.youtube.com/watch?v=JdlWOQe5RgU){: target="_blank" rel="noopener noreferrer"}
 
-5. 프로젝트 구조 설정 및 필요한 파일 생성
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JdlWOQe5RgU?si=bFY_-jJ6Oliy5UMG" title="YouTube 비디오 플레이어" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-    ```console
-    project_root_folder
-    |-- .env
-    `-- my_agent
-        |-- __init__.py
-        |-- agent.py
-        `__ tools.py
-    ```
+### 전제 조건
 
-에이전트를 실행할 때 project\_root\_folder에서 adk web을 실행해야 합니다.
+#### 1. ADK 설치
+
+[설치 가이드](../get-started/installation.md)의 단계에 따라 에이전트 개발 키트를 설치합니다.
+
+#### 2. CLI 설치
+
+[Google Cloud CLI](https://cloud.google.com/sdk/docs/install#installation_instructions)를 설치합니다.
+기본 자격 증명으로 도구를 사용하려면 다음 명령을 실행합니다.
+
+```shell
+gcloud config set project <project-id>
+gcloud auth application-default login
+gcloud auth application-default set-quota-project <project-id>
+```
+
+`<project-id>`를 Google Cloud 프로젝트의 고유 ID로 바꿉니다.
+
+#### 3. 애플리케이션 통합 워크플로 프로비저닝 및 연결 도구 게시
+
+에이전트와 함께 사용하려는 기존
+[애플리케이션 통합](https://cloud.google.com/application-integration/docs/overview)
+워크플로 또는
+[통합 커넥터](https://cloud.google.com/integration-connectors/docs/overview)
+연결을 사용합니다. 새
+[애플리케이션 통합 워크플로](https://cloud.google.com/application-integration/docs/setup-application-integration)
+또는
+[연결](https://cloud.google.com/integration-connectors/docs/connectors/neo4j/configure#configure-the-connector)을 만들 수도 있습니다.
+
+템플릿 라이브러리에서
+[연결 도구](https://console.cloud.google.com/integrations/templates/connection-tool/locations/global)를
+가져와 게시합니다.
+
+**참고**: 통합 커넥터에서 커넥터를 사용하려면 연결과 동일한 리전에서 애플리케이션 통합을 프로비저닝해야 합니다.
+
+#### 4. 프로젝트 구조 만들기
+
+=== "Python"
+
+    프로젝트 구조를 설정하고 필요한 파일을 만듭니다.
+
+      ```console
+      project_root_folder
+      ├── .env
+      └── my_agent
+          ├── __init__.py
+          ├── agent.py
+          └── tools.py
+      ```
+
+    에이전트를 실행할 때 `project_root_folder`에서 `adk web`을 실행해야 합니다.
+
+=== "Java"
+
+    프로젝트 구조를 설정하고 필요한 파일을 만듭니다.
+
+      ```console
+        project_root_folder
+        └── my_agent
+            ├── agent.java
+            └── pom.xml
+      ```
+
+     에이전트를 실행할 때 `project_root_folder`에서 명령을 실행해야 합니다.
+
+#### 5. 역할 및 권한 설정
+
+**ApplicationIntegrationToolset**을 설정하는 데 필요한 권한을 얻으려면
+프로젝트에 다음 IAM 역할이 있어야 합니다(통합 커넥터 및 애플리케이션 통합 워크플로 모두에 공통).
+
+    - roles/integrations.integrationEditor
+    - roles/connectors.invoker
+    - roles/secretmanager.secretAccessor
+
+**참고:** 배포에 에이전트 엔진(AE)을 사용하는 경우 `roles/integrations.integrationInvoker`를 사용하면 403 오류가 발생할 수 있으므로 사용하지 마세요. 대신 `roles/integrations.integrationEditor`를 사용하세요.
 
 ### 통합 커넥터 사용
 
 [통합 커넥터](https://cloud.google.com/integration-connectors/docs/overview)를 사용하여 에이전트를 엔터프라이즈 애플리케이션에 연결합니다.
 
-**전제 조건**
+#### 시작하기 전에
 
-1. 통합 커넥터에서 커넥터를 사용하려면, "QUICK SETUP" 버튼을 클릭하여 연결과 동일한 리전에서 애플리케이션 통합을 [프로비저닝](https://console.cloud.google.com/integrations)해야 합니다.
+**참고:** *ExecuteConnection* 통합은 일반적으로 지정된 리전에서 애플리케이션 통합을 프로비저닝할 때 자동으로 생성됩니다. *ExecuteConnection*이 [통합 목록](https://console.cloud.google.com/integrations/list)에 없으면 다음 단계에 따라 생성해야 합니다.
 
+1. 통합 커넥터에서 커넥터를 사용하려면 **QUICK SETUP**을 클릭하고 연결과 동일한 리전에서 애플리케이션 통합을 [프로비저닝](https://console.cloud.google.com/integrations)합니다.
 
    ![Google Cloud 도구](../assets/application-integration-overview.png)
-   
-2. 템플릿 라이브러리에서 [연결 도구](https://console.cloud.google.com/integrations/templates/connection-tool/locations/us-central1) 템플릿으로 이동하여 "USE TEMPLATE" 버튼을 클릭합니다.
+
+
+
+2. 템플릿 라이브러리의 [연결 도구](https://console.cloud.google.com/integrations/templates/connection-tool/locations/us-central1)
+   템플릿으로 이동하여 **USE TEMPLATE**을 클릭합니다.
 
 
     ![Google Cloud 도구](../assets/use-connection-tool-template.png)
-   
-3. 통합 이름을 **ExecuteConnection**(이 통합 이름만 사용하는 것이 필수입니다)으로 채우고 연결 리전과 동일한 리전을 선택합니다. "CREATE"를 클릭합니다.
 
-4. 애플리케이션 통합 편집기에서 "PUBLISH" 버튼을 사용하여 통합을 게시합니다.
+3. 통합 이름을 *ExecuteConnection*으로 입력합니다(이 정확한 통합 이름만 사용하는 것이 필수입니다).
+   그런 다음 연결 리전과 일치하도록 리전을 선택하고 **CREATE**를 클릭합니다.
+
+4. *애플리케이션 통합* 편집기에서 **PUBLISH**를 클릭하여 통합을 게시합니다.
 
 
-    ![Google Cloud 도구](../assets/publish-integration.png)  
+    ![Google Cloud 도구](../assets/publish-integration.png)
 
-**단계:**
 
-1.  `tools.py` 파일 내에 `ApplicationIntegrationToolset`으로 도구를 만듭니다.
+#### 애플리케이션 통합 도구 세트 만들기
+
+통합 커넥터용 애플리케이션 통합 도구 세트를 만들려면 다음 단계를 따르세요.
+
+1.  `tools.py` 파일에 `ApplicationIntegrationToolset`으로 도구를 만듭니다.
 
     ```py
     from google.adk.tools.application_integration_tool.application_integration_toolset import ApplicationIntegrationToolset
@@ -191,19 +260,19 @@ project_root_folder
         connection="test-connection", #TODO: 연결 이름으로 교체
         entity_operations={"Entity_One": ["LIST","CREATE"], "Entity_Two": []},#작업의 빈 목록은 엔터티에 대한 모든 작업이 지원됨을 의미합니다.
         actions=["action1"], #TODO: 작업으로 교체
-        service_account_credentials='{...}', # 선택 사항. 서비스 계정 키에 대한 문자열화된 json
+        service_account_json='{...}', # 선택 사항. 서비스 계정 키에 대한 문자열화된 json
         tool_name_prefix="tool_prefix2",
         tool_instructions="..."
     )
     ```
 
-    참고:
-    -   [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 애플리케이션 통합 및 통합 커넥터 IAM 역할을 제공하여 기본 자격 증명 대신 사용할 서비스 계정을 제공할 수 있습니다.
-    -   연결에 지원되는 엔터티 및 작업 목록을 찾으려면 커넥터 API를 사용하세요:
-        [listActions](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listActions) 또는 
-        [listEntityTypes](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listEntityTypes)
+    **참고:**
 
-    `ApplicationIntegrationToolset`은 이제 통합 커넥터에 대한 동적 OAuth2 인증을 위해 auth_scheme 및 auth_credential 제공도 지원합니다. 이를 사용하려면 `tools.py` 파일 내에 다음과 유사한 도구를 만드세요:
+    * [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 [애플리케이션 통합 및 통합 커넥터 IAM 역할](#prerequisites)을 제공하여 기본 자격 증명 대신 사용할 서비스 계정을 제공할 수 있습니다.
+    * 연결에 지원되는 엔터티 및 작업 목록을 찾으려면 커넥터 API를 사용하세요: [listActions](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listActions) 또는 [listEntityTypes](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listEntityTypes).
+
+
+    `ApplicationIntegrationToolset`은 통합 커넥터에 대한 **동적 OAuth2 인증**을 위해 `auth_scheme` 및 `auth_credential`을 지원합니다. 이를 사용하려면 `tools.py` 파일에 다음과 유사한 도구를 만듭니다.
 
     ```py
     from google.adk.tools.application_integration_tool.application_integration_toolset import ApplicationIntegrationToolset
@@ -229,7 +298,7 @@ project_root_folder
     }
 
     oauth_scheme = dict_to_auth_scheme(oauth2_data_google_cloud)
-    
+
     auth_credential = AuthCredential(
       auth_type=AuthCredentialTypes.OAUTH2,
       oauth2=OAuth2Auth(
@@ -244,7 +313,7 @@ project_root_folder
         connection="test-connection", #TODO: 연결 이름으로 교체
         entity_operations={"Entity_One": ["LIST","CREATE"], "Entity_Two": []},#작업의 빈 목록은 엔터티에 대한 모든 작업이 지원됨을 의미합니다.
         actions=["GET_calendars/%7BcalendarId%7D/events"], #TODO: 작업으로 교체. 이것은 이벤트 목록용입니다.
-        service_account_credentials='{...}', # 선택 사항. 서비스 계정 키에 대한 문자열화된 json
+        service_account_json='{...}', # 선택 사항. 서비스 계정 키에 대한 문자열화된 json
         tool_name_prefix="tool_prefix2",
         tool_instructions="...",
         auth_scheme=oauth_scheme,
@@ -253,7 +322,7 @@ project_root_folder
     ```
 
 
-2. 에이전트에 도구를 추가합니다. `agent.py` 파일을 업데이트하세요.
+2. `agent.py` 파일을 업데이트하고 에이전트에 도구를 추가합니다.
 
     ```py
     from google.adk.agents.llm_agent import LlmAgent
@@ -273,117 +342,173 @@ project_root_folder
     from . import agent
     ```
 
-4. Google ADK 웹 UI를 시작하고 에이전트를 사용해 보세요.
+4. Google ADK 웹 UI를 시작하고 에이전트를 사용합니다.
 
     ```shell
     # project_root_folder에서 `adk web`을 실행해야 합니다
     adk web
     ```
 
-   그런 다음 [http://localhost:8000](http://localhost:8000)으로 이동하여 my\_agent 에이전트(에이전트 폴더 이름과 동일)를 선택하세요.
+위 단계를 완료한 후 [http://localhost:8000](http://localhost:8000)으로 이동하여
+   `my\_agent` 에이전트(에이전트 폴더 이름과 동일)를 선택합니다.
+
 
 ### 앱 통합 워크플로 사용
 
 기존 [애플리케이션 통합](https://cloud.google.com/application-integration/docs/overview) 워크플로를 에이전트의 도구로 사용하거나 새 워크플로를 만드세요.
 
-**단계:**
 
-1. `tools.py` 파일 내에 `ApplicationIntegrationToolset`으로 도구를 만듭니다.
+#### 1. 도구 만들기
 
-    ```py
-    integration_tool = ApplicationIntegrationToolset(
-        project="test-project", # TODO: 연결의 GCP 프로젝트로 교체
-        location="us-central1", #TODO: 연결 위치로 교체
-        integration="test-integration", #TODO: 통합 이름으로 교체
-        triggers=["api_trigger/test_trigger"],#TODO: 트리거 ID로 교체. 빈 목록은 통합의 모든 API 트리거를 고려함을 의미합니다.
-        service_account_credentials='{...}', #선택 사항. 서비스 계정 키에 대한 문자열화된 json
-        tool_name_prefix="tool_prefix1",
-        tool_instructions="..."
-    )
-    ```
+=== "Python"
 
-    참고: [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 애플리케이션 통합 및 통합 커넥터 IAM 역할을 제공하여 기본 자격 증명 대신 사용할 서비스 계정을 제공할 수 있습니다.
+    `tools.py` 파일에 `ApplicationIntegrationToolset`으로 도구를 만들려면 다음 코드를 사용하세요.
 
-2. 에이전트에 도구를 추가합니다. `agent.py` 파일을 업데이트하세요.
+      ```py
+          integration_tool = ApplicationIntegrationToolset(
+              project="test-project", # TODO: 연결의 GCP 프로젝트로 교체
+              location="us-central1", #TODO: 연결 위치로 교체
+              integration="test-integration", #TODO: 통합 이름으로 교체
+              triggers=["api_trigger/test_trigger"],#TODO: 트리거 ID로 교체. 빈 목록은 통합의 모든 API 트리거를 고려함을 의미합니다.
+              service_account_json='{...}', #선택 사항. 서비스 계정 키에 대한 문자열화된 json
+              tool_name_prefix="tool_prefix1",
+              tool_instructions="..."
+          )
+      ```
 
-    ```py
-    from google.adk.agents.llm_agent import LlmAgent
-    from .tools import integration_tool, connector_tool
+      **참고:** 기본 자격 증명을 사용하는 대신 사용할 서비스 계정을 제공할 수 있습니다. 이렇게 하려면 [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 [애플리케이션 통합 및 통합 커넥터 IAM 역할](#prerequisites)을 제공하세요. IAM 역할에 대한 자세한 내용은 [전제 조건](#prerequisites) 섹션을 참조하세요.
 
-    root_agent = LlmAgent(
-        model='gemini-2.0-flash',
-        name='integration_agent',
-        instruction="사용자를 돕고, 접근할 수 있는 도구를 활용하세요",
-        tools=[integration_tool],
-    )
-    ```
+=== "Java"
 
-3. 에이전트를 노출하도록 \`\_\_init\_\_.py\`를 구성합니다.
+    `tools.java` 파일에 `ApplicationIntegrationToolset`으로 도구를 만들려면 다음 코드를 사용하세요.
 
-    ```py
-    from . import agent
-    ```
+      ```java
+          import com.google.adk.tools.applicationintegrationtoolset.ApplicationIntegrationToolset;
+          import com.google.common.collect.ImmutableList;
+          import com.google.common.collect.ImmutableMap;
 
-4. Google ADK 웹 UI를 시작하고 에이전트를 사용해 보세요.
+          public class Tools {
+              private static ApplicationIntegrationToolset integrationTool;
+              private static ApplicationIntegrationToolset connectionsTool;
 
-    ```shell
-    # project_root_folder에서 `adk web`을 실행해야 합니다
-    adk web
-    ```
+              static {
+                  integrationTool = new ApplicationIntegrationToolset(
+                          "test-project",
+                          "us-central1",
+                          "test-integration",
+                          ImmutableList.of("api_trigger/test-api"),
+                          null,
+                          null,
+                          null,
+                          "{...}",
+                          "tool_prefix1",
+                          "...");
 
-    그런 다음 [http://localhost:8000](http://localhost:8000)으로 이동하여 my\_agent 에이전트(에이전트 폴더 이름과 동일)를 선택하세요.
+                  connectionsTool = new ApplicationIntegrationToolset(
+                          "test-project",
+                          "us-central1",
+                          null,
+                          null,
+                          "test-connection",
+                          ImmutableMap.of("Issue", ImmutableList.of("GET")),
+                          ImmutableList.of("ExecuteCustomQuery"),
+                          "{...}",
+                          "tool_prefix",
+                          "...");
+              }
+          }
+      ```
 
----
+      **참고:** 기본 자격 증명을 사용하는 대신 사용할 서비스 계정을 제공할 수 있습니다. 이렇게 하려면 [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 [애플리케이션 통합 및 통합 커넥터 IAM 역할](#prerequisites)을 제공하세요. IAM 역할에 대한 자세한 내용은 [전제 조건](#prerequisites) 섹션을 참조하세요.
 
-## 데이터베이스용 도구 상자 도구
+#### 2. 에이전트에 도구 추가
 
-[데이터베이스용 MCP 도구 상자](https://github.com/googleapis/genai-toolbox)는 데이터베이스용 오픈 소스 MCP 서버입니다. 엔터프라이즈급 및 프로덕션 품질을 염두에 두고 설계되었습니다. 연결 풀링, 인증 등과 같은 복잡성을 처리하여 도구를 더 쉽고, 빠르고, 안전하게 개발할 수 있도록 합니다.
+=== "Python"
 
-Google의 Agent Development Kit(ADK)는 도구 상자를 기본적으로 지원합니다. 도구 상자 [시작하기](https://googleapis.github.io/genai-toolbox/getting-started) 또는 [구성하기](https://googleapis.github.io/genai-toolbox/getting-started/configure/)에 대한 자세한 내용은 [문서](https://googleapis.github.io/genai-toolbox/getting-started/introduction/)를 참조하세요.
+    `agent.py` 파일을 업데이트하고 에이전트에 도구를 추가하려면 다음 코드를 사용하세요.
 
-![GenAI 도구 상자](../assets/mcp_db_toolbox.png)
+      ```py
+          from google.adk.agents.llm_agent import LlmAgent
+          from .tools import integration_tool, connector_tool
 
-### 구성 및 배포
+          root_agent = LlmAgent(
+              model='gemini-2.0-flash',
+              name='integration_agent',
+              instruction="사용자를 돕고, 접근할 수 있는 도구를 활용하세요",
+              tools=[integration_tool],
+          )
+      ```
 
-도구 상자는 직접 배포하고 관리하는 오픈 소스 서버입니다. 배포 및 구성에 대한 자세한 내용은 공식 도구 상자 문서를 참조하세요:
+=== "Java"
 
-*   [서버 설치](https://googleapis.github.io/genai-toolbox/getting-started/introduction/#installing-the-server)
-*   [도구 상자 구성](https://googleapis.github.io/genai-toolbox/getting-started/configure/)
+    `agent.java` 파일을 업데이트하고 에이전트에 도구를 추가하려면 다음 코드를 사용하세요.
 
-### 클라이언트 SDK 설치
+      ```java
+          import com.google.adk.agent.LlmAgent;
+          import com.google.adk.tools.BaseTool;
+          import com.google.common.collect.ImmutableList;
 
-ADK는 도구 상자를 사용하기 위해 `toolbox-core` 파이썬 패키지에 의존합니다. 시작하기 전에 패키지를 설치하세요:
+            public class MyAgent {
+                public static void main(String[] args) {
+                    // 이전 단계에서 정의된 것으로 가정하는 Tools 클래스
+                    ImmutableList<BaseTool> tools = ImmutableList.<BaseTool>builder()
+                            .add(Tools.integrationTool)
+                            .add(Tools.connectionsTool)
+                            .build();
 
-```shell
-pip install toolbox-core
-```
+                    // 마지막으로 자동으로 생성된 도구로 에이전트를 만듭니다.
+                    LlmAgent rootAgent = LlmAgent.builder()
+                            .name("science-teacher")
+                            .description("과학 교사 에이전트")
+                            .model("gemini-2.0-flash")
+                            .instruction(
+                                    "사용자를 돕고, 접근할 수 있는 도구를 활용하세요."
+                            )
+                            .tools(tools)
+                            .build();
 
-### 도구 상자 도구 로드
+                    // 이제 rootAgent를 사용하여 LLM과 상호 작용할 수 있습니다.
+                    // 예를 들어 에이전트와 대화를 시작할 수 있습니다.
+                }
+            }
+        ```
 
-도구 상자 서버가 구성되고 실행되면 ADK를 사용하여 서버에서 도구를 로드할 수 있습니다:
+**참고:** 연결에 지원되는 엔터티 및 작업 목록을 찾으려면
+        이러한 커넥터 API를 사용하세요: `listActions`, `listEntityTypes`.
 
-```python
-from google.adk.agents import Agent
-from toolbox_core import ToolboxSyncClient
+#### 3. 에이전트 노출
 
-toolbox = ToolboxSyncClient("https://127.0.0.1:5000")
+=== "Python"
 
-# 특정 도구 세트 로드
-tools = toolbox.load_toolset('my-toolset-name'),
-# 단일 도구 로드
-tools = toolbox.load_tool('my-tool-name'),
+    에이전트를 노출하도록 `__init__.py`를 구성하려면 다음 코드를 사용하세요.
 
-root_agent = Agent(
-    ...,
-    tools=tools # 에이전트에 도구 목록 제공
+      ```py
+          from . import agent
+      ```
 
-)
-```
+#### 4. 에이전트 사용
 
-### 고급 도구 상자 기능
+=== "Python"
 
-도구 상자는 데이터베이스용 Gen AI 도구를 개발하기 위한 다양한 기능을 제공합니다. 자세한 내용은 다음 기능에 대해 자세히 알아보세요:
+    Google ADK 웹 UI를 시작하고 에이전트를 사용하려면 다음 명령을 사용하세요.
 
-*   [인증된 매개변수](https://googleapis.github.io/genai-toolbox/resources/tools/#authenticated-parameters): 도구 입력을 OIDC 토큰의 값에 자동으로 바인딩하여 잠재적인 데이터 유출 없이 민감한 쿼리를 쉽게 실행할 수 있습니다.
-*   [승인된 호출:](https://googleapis.github.io/genai-toolbox/resources/tools/#authorized-invocations) 사용자의 인증 토큰을 기반으로 도구 사용에 대한 접근을 제한합니다.
-*   [OpenTelemetry](https://googleapis.github.io/genai-toolbox/how-to/export_telemetry/): OpenTelemetry로 도구 상자에서 메트릭 및 추적을 가져옵니다.
+      ```shell
+          # project_root_folder에서 `adk web`을 실행해야 합니다
+          adk web
+      ```
+    위 단계를 완료한 후 [http://localhost:8000](http://localhost:8000)으로 이동하여 `my_agent` 에이전트(에이전트 폴더 이름과 동일)를 선택합니다.
+
+=== "Java"
+
+    Google ADK 웹 UI를 시작하고 에이전트를 사용하려면 다음 명령을 사용하세요.
+
+      ```bash
+          mvn install
+
+          mvn exec:java \
+              -Dexec.mainClass="com.google.adk.web.AdkWebServer" \
+              -Dexec.args="--adk.agents.source-dir=src/main/java" \
+              -Dexec.classpathScope="compile"
+      ```
+
+    위 단계를 완료한 후 [http://localhost:8000](http://localhost:8000)으로 이동하여 `my_agent` 에이전트(에이전트 폴더 이름과 동일)를 선택합니다.

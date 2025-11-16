@@ -1,12 +1,12 @@
-# 도구 인증하기
+# 도구 인증
 
-![python_only](https://img.shields.io/badge/현재_지원되는_언어-Python-blue){ title="이 기능은 현재 Python에서만 사용할 수 있습니다. Java 지원은 계획 중이거나 곧 제공될 예정입니다."}
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
+</div>
 
-## 핵심 개념
+많은 도구는 보호된 리소스(예: Google 캘린더의 사용자 데이터, Salesforce 레코드 등)에 액세스해야 하며 인증이 필요합니다. ADK는 다양한 인증 방법을 안전하게 처리하는 시스템을 제공합니다.
 
-많은 도구는 보호된 리소스(예: Google 캘린더의 사용자 데이터, Salesforce 레코드 등)에 접근해야 하며 인증이 필요합니다. ADK는 다양한 인증 방법을 안전하게 처리하는 시스템을 제공합니다.
-
-관련된 주요 구성 요소는 다음과 같습니다:
+관련된 주요 구성 요소는 다음과 같습니다.
 
 1. **`AuthScheme`**: API가 인증 자격 증명을 *어떻게* 예상하는지 정의합니다(예: 헤더의 API 키, OAuth 2.0 Bearer 토큰). ADK는 OpenAPI 3.0과 동일한 유형의 인증 스키마를 지원합니다. 각 자격 증명 유형에 대한 자세한 내용은 [OpenAPI 문서: 인증](https://swagger.io/docs/specification/v3_0/authentication/)을 참조하세요. ADK는 `APIKey`, `HTTPBearer`, `OAuth2`, `OpenIdConnectWithConfig`와 같은 특정 클래스를 사용합니다.
 2. **`AuthCredential`**: 인증 프로세스를 *시작*하는 데 필요한 *초기* 정보를 보유합니다(예: 애플리케이션의 OAuth 클라이언트 ID/비밀번호, API 키 값). 자격 증명 유형을 지정하는 `auth_type`(예: `API_KEY`, `OAUTH2`, `SERVICE_ACCOUNT`)을 포함합니다.
@@ -23,7 +23,7 @@
 
 ## 도구에 인증 구성하기
 
-도구를 정의할 때 인증을 설정합니다:
+도구를 정의할 때 인증을 설정합니다.
 
 * **RestApiTool / OpenAPIToolset**: 초기화 중에 `auth_scheme`과 `auth_credential`을 전달합니다.
 
@@ -58,16 +58,16 @@
 
       ```py
       from google.adk.tools.openapi_tool.auth.auth_helpers import token_to_scheme_credential
-      from google.adk.tools.apihub_tool.apihub_toolset import APIHubToolset 
+      from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import OpenAPIToolset
+
       auth_scheme, auth_credential = token_to_scheme_credential(
-         "apikey", "query", "apikey", YOUR_API_KEY_STRING
+          "apikey", "query", "apikey", "YOUR_API_KEY_STRING"
       )
-      sample_api_toolset = APIHubToolset(
-         name="sample-api-requiring-api-key",
-         description="API 키로 보호되는 API를 사용하는 도구",
-         apihub_resource_name="...",
-         auth_scheme=auth_scheme,
-         auth_credential=auth_credential,
+      sample_api_toolset = OpenAPIToolset(
+          spec_str="...",  # OpenAPI 사양 문자열로 채우세요
+          spec_str_type="yaml",
+          auth_scheme=auth_scheme,
+          auth_credential=auth_credential,
       )
       ```
 
@@ -98,7 +98,7 @@
       auth_credential = AuthCredential(
           auth_type=AuthCredentialTypes.OAUTH2,
           oauth2=OAuth2Auth(
-              client_id=YOUR_OAUTH_CLIENT_ID, 
+              client_id=YOUR_OAUTH_CLIENT_ID,
               client_secret=YOUR_OAUTH_CLIENT_SECRET
           ),
       )
@@ -185,7 +185,7 @@ calendar_tool_set.configure_auth(
 
 인증 요청 흐름(도구가 인증 자격 증명을 요청하는 경우)의 시퀀스 다이어그램은 다음과 같습니다:
 
-![인증](../assets/auth_part1.svg) 
+![인증](../assets/auth_part1.svg)
 
 
 ### 2. 대화형 OAuth/OIDC 흐름 처리 (클라이언트 측)
@@ -253,10 +253,10 @@ def get_auth_request_function_call(event: Event) -> types.FunctionCall:
         return
     for part in event.content.parts:
         if (
-            part 
-            and part.function_call 
+            part
+            and part.function_call
             and part.function_call.name == 'adk_request_credential'
-            and event.long_running_tool_ids 
+            and event.long_running_tool_ids
             and part.function_call.id in event.long_running_tool_ids
         ):
 
@@ -264,9 +264,11 @@ def get_auth_request_function_call(event: Event) -> types.FunctionCall:
 
 def get_auth_config(auth_request_function_call: types.FunctionCall) -> AuthConfig:
     # 인증 요청 함수 호출의 인수에서 AuthConfig 객체 추출
-    if not auth_request_function_call.args or not (auth_config := auth_request_function_call.args.get('auth_config')):
+    if not auth_request_function_call.args or not (auth_config := auth_request_function_call.args.get('authConfig')):
         raise ValueError(f'함수 호출에서 인증 구성을 가져올 수 없습니다: {auth_request_function_call}')
-    if not isinstance(auth_config, AuthConfig):
+    if isinstance(auth_config, dict):
+        auth_config = AuthConfig.model_validate(auth_config)
+    elif not isinstance(auth_config, AuthConfig):
         raise ValueError(f'인증 구성 {auth_config}이 AuthConfig의 인스턴스가 아닙니다.')
     return auth_config
 ```
@@ -362,6 +364,19 @@ if auth_request_function_call_id and auth_config:
         print(event) # 검사를 위해 전체 이벤트 출력
 
 ```
+
+!!! note "참고: 재개 기능이 있는 인증 응답"
+
+    ADK 에이전트 워크플로가
+    [재개](/adk-docs/runtime/resume/) 기능으로 구성된 경우, 인증
+    응답과 함께 호출 ID(`invocation_id`) 매개변수도 포함해야 합니다.
+    제공하는 호출 ID는 인증
+    요청을 생성한 것과 동일한 호출이어야 합니다. 그렇지 않으면 시스템이
+    인증 응답으로 새 호출을 시작합니다. 에이전트가
+    재개 기능을 사용하는 경우, 인증 요청과 함께 호출 ID를
+    매개변수로 포함하여 인증 응답에 포함될 수 있도록 하는 것을
+    고려하세요. 재개 기능 사용에 대한 자세한 내용은
+    [중지된 에이전트 재개](/adk-docs/runtime/resume/)를 참조하세요.
 
 **5단계: ADK가 토큰 교환 및 도구 재시도 처리하고 도구 결과 가져오기**
 
