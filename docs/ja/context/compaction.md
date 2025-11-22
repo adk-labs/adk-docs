@@ -4,11 +4,11 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.16.0</span>
 </div>
 
-ADKエージェントが実行されると、ユーザーの指示、取得されたデータ、ツールの応答、生成されたコンテンツなど、*コンテキスト*情報が収集されます。このコンテキストデータのサイズが大きくなるにつれて、エージェントの処理時間も通常増加します。エージェントが使用する生成AIモデルに送信されるデータが増え、処理時間が増加し、応答が遅くなります。ADKコンテキスト圧縮機能は、エージェントワークフローイベント履歴の古い部分を要約することで、エージェントの実行中にコンテキストのサイズを縮小するように設計されています。
+ADKエージェントは実行されると、ユーザーの指示、取得されたデータ、ツールの応答、生成されたコンテンツを含む*コンテキスト*情報を収集します。このコンテキストデータのサイズが大きくなるにつれて、エージェントの処理時間も通常増加します。ますます多くのデータがエージェントが使用する生成AIモデルに送信され、処理時間が増加し、応答が遅くなります。ADKコンテキスト圧縮機能は、エージェントワークフローイベント履歴の古い部分を要約することにより、エージェントの実行中にコンテキストのサイズを削減するように設計されています。
 
-コンテキスト圧縮機能は、[セッション](/adk-docs/sessions/session/)内でエージェントワークフローイベントデータを収集および要約するために、*スライディングウィンドウ*アプローチを使用します。エージェントでこの機能を構成すると、現在のセッションで特定の数のワークフローイベントまたは呼び出しのしきい値に達すると、古いイベントのデータが要約されます。
+コンテキスト圧縮機能は、[セッション](/adk-docs/sessions/session/)内でエージェントワークフローイベントデータを収集および要約するために、*スライディングウィンドウ*アプローチを使用します。この機能をエージェントで構成すると、現在のセッションで特定の数のワークフローイベント (または呼び出し) のしきい値に達すると、古いイベントからのデータを要約します。
 
-## コンテキスト圧縮の構成
+## コンテキスト圧縮の設定
 
 ワークフローのAppオブジェクトにイベント圧縮構成設定を追加して、エージェントワークフローにコンテキスト圧縮を追加します。構成の一部として、次のサンプルコードに示すように、圧縮間隔と重複サイズを指定する必要があります。
 
@@ -20,57 +20,59 @@ app = App(
     name='my-agent',
     root_agent=root_agent,
     events_compaction_config=EventsCompactionConfig(
-        compaction_interval=3,  # 3回の新しい呼び出しごとに圧縮をトリガーします。
-        overlap_size=1          # 前のウィンドウの最後の呼び出しを含めます。
+        compaction_interval=3,  # 3つの新しい呼び出しごとに圧縮をトリガーします。
+        overlap_size=1          # 前のウィンドウからの最後の呼び出しを含めます。
     ),
 )
 ```
 
-構成されると、ADK `Runner`は、セッションが間隔に達するたびにバックグラウンドで圧縮プロセスを処理します。
+構成されると、ADK `Runner`はセッションが間隔に達するたびにバックグラウンドで圧縮プロセスを処理します。
 
 ## コンテキスト圧縮の例
 
-`compaction_interval`を3に設定し、`overlap_size`を1に設定すると、イベント3、6、9などが完了するとイベントデータが圧縮されます。重複設定により、図1に示すように、2番目の要約圧縮とその後の各要約のサイズが大きくなります。
+`compaction_interval`を3に、`overlap_size`を1に設定すると、イベントデータはイベント3、6、9などが完了すると圧縮されます。重複設定は、図1に示すように、2番目の要約圧縮とそれ以降の各要約のサイズを増加させます。
 
-![コンテキスト圧縮の例の図](/adk-docs/assets/context-compaction.svg)
-**図1.** 間隔3と重複1のイベント圧縮構成の図。
+![コンテキスト圧縮の例のイラスト](/adk-docs/assets/context-compaction.svg)
+**図1.** 間隔3、重複1のイベント圧縮構成のイラスト。
 
-この構成例では、コンテキスト圧縮タスクは次のように実行されます。
+この例の構成では、コンテキスト圧縮タスクは次のように行われます。
 
-1.  **イベント3が完了**: 3つのイベントすべてが要約に圧縮されます。
-2.  **イベント6が完了**: 1つの前のイベントの重複を含め、イベント3から6が圧縮されます。
-3.  **イベント9が完了**: 1つの前のイベントの重複を含め、イベント6から9が圧縮されます。
+1.  **イベント3が完了**: 3つのイベントすべてが要約に圧縮されます
+1.  **イベント6が完了**: 前の1つのイベントの重複を含め、イベント3から6までが圧縮されます
+1.  **イベント9が完了**: 前の1つのイベントの重複を含め、イベント6から9までが圧縮されます
 
-## 構成設定
+## 設定
 
-この機能の構成設定は、イベントデータが圧縮される頻度と、エージェントワークフローの実行中に保持されるデータ量を制御します。オプションで、コンパクタオブジェクトを構成できます。
+この機能の設定は、イベントデータが圧縮される頻度と、エージェントワークフローの実行中に保持されるデータの量を制御します。オプションで、コンパクターオブジェクトを構成できます。
 
-*   **`compaction_interval`**: 前のイベントデータの圧縮をトリガーする完了したイベントの数を設定します。
-*   **`overlap_size`**: 新しく圧縮されたコンテキストセットに含まれる、以前に圧縮されたイベントの数を設定します。
-*   **`compactor`**: (オプション) 要約に使用する特定のAIモデルを含むコンパクタオブジェクトを定義します。詳細については、[コンパクタの定義](#define-compactor)を参照してください。
+*   **`compaction_interval`**: 以前のイベントデータの圧縮をトリガーする完了したイベント数を設定します。
+*   **`overlap_size`**: 新しく圧縮されたコンテキストセットに含める以前に圧縮されたイベントの数を設定します。
+*   **`compactor`**: (オプション) 要約に使用する特定のAIモデルを含むコンパクターオブジェクトを定義します。詳細については、[コンパクターの定義](#define-compactor)を参照してください。
 
-### コンパクタの定義 {#define-compactor}
-
-`SlidingWindowCompactor`クラスを使用してコンパクタオブジェクトを定義し、コンテキスト圧縮の操作をカスタマイズできます。次のコード例は、コンパクタを定義する方法を示しています。
+### サマライザーを定義する {#define-summarizer}
+サマライザーを定義することで、コンテキスト圧縮プロセスをカスタマイズできます。LlmEventSummarizerクラスを使用すると、要約に特定のモデルを指定できます。次のコード例は、カスタムサマライザーを定義して構成する方法を示しています。
 
 ```python
-from google.adk.apps.app import App
-from google.adk.apps.app import EventsCompactionConfig
+from google.adk.apps.app import App, EventsCompactionConfig
+from google.adk.apps.llm_event_summarizer import LlmEventSummarizer
 from google.adk.models import Gemini
-from google.adk.apps.sliding_window_compactor import SlidingWindowCompactor
 
-# 特定のAIモデルを使用してコンパクタを定義します。
+# 要約に使用するAIモデルを定義します。
 summarization_llm = Gemini(model="gemini-2.5-flash")
-my_compactor = SlidingWindowCompactor(llm=summarization_llm)
 
+# カスタムモデルでサマライザーを作成します。
+my_summarizer = LlmEventSummarizer(llm=summarization_llm)
+
+# カスタムサマライザーと圧縮設定でAppを構成します。
 app = App(
     name='my-agent',
     root_agent=root_agent,
     events_compaction_config=EventsCompactionConfig(
-        compactor=my_compactor,
-        compaction_interval=3, overlap_size=1
+        summarizer=my_summarizer,
+        compaction_interval=3,
+        overlap_size=1
     ),
-)    
+)
 ```
 
-そのクラスの`prompt_template`設定を変更するなど、サマライザクラス`LlmEventSummarizer`を変更することで、`SlidingWindowCompactor`の操作をさらに調整できます。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60)を参照してください。
+`SlidingWindowCompactor`のサマライザークラス`LlmEventSummarizer`の`prompt_template`設定を変更することを含め、その動作をさらに調整できます。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60)を参照してください。

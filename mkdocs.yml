@@ -171,6 +171,7 @@ plugins:
                   - get-started/streaming/index.md
                   - Python: get-started/streaming/quickstart-streaming.md
                   - Java: get-started/streaming/quickstart-streaming-java.md
+                - 비주얼 빌더: visual-builder/index.md
                 - 고급 설정: get-started/installation.md
               - 에이전트:
                 - agents/index.md
@@ -202,8 +203,10 @@ plugins:
                   - Exa: tools/third-party/exa.md
                   - Firecrawl: tools/third-party/firecrawl.md
                   - GitHub: tools/third-party/github.md
+                  - GitLab: tools/third-party/gitlab.md
                   - Hugging Face: tools/third-party/hugging-face.md
                   - Notion: tools/third-party/notion.md
+                  - ScrapeGraphAI: tools/third-party/scrapegraphai.md
                   - Tavily: tools/third-party/tavily.md
                   - Agentic UI (AG-UI): tools/third-party/ag-ui.md
               - 커스텀 도구:
@@ -232,6 +235,7 @@ plugins:
                 - AgentOps: observability/agentops.md
                 - Arize AX: observability/arize-ax.md
                 - Freeplay: observability/freeplay.md
+                - Monocle: observability/monocle.md
                 - Phoenix: observability/phoenix.md
                 - W&B Weave: observability/weave.md
               - 평가:
@@ -286,6 +290,7 @@ plugins:
                 - Google 검색 그라운딩 이해: grounding/google_search_grounding.md
                 - Vertex AI 검색 그라운딩 이해: grounding/vertex_ai_search_grounding.md
             - 레퍼런스:
+              - 릴리스 노트: release-notes.md
               - API 레퍼런스:
                 - api-reference/index.md
                 - Python ADK: api-reference/python/index.html
@@ -316,6 +321,7 @@ plugins:
                   - get-started/streaming/index.md
                   - Python: get-started/streaming/quickstart-streaming.md
                   - Java: get-started/streaming/quickstart-streaming-java.md
+                - ビジュアルビルダー: visual-builder/index.md
                 - 高度な設定: get-started/installation.md
               - エージェント:
                 - agents/index.md
@@ -347,8 +353,10 @@ plugins:
                   - Exa: tools/third-party/exa.md
                   - Firecrawl: tools/third-party/firecrawl.md
                   - GitHub: tools/third-party/github.md
+                  - GitLab: tools/third-party/gitlab.md
                   - Hugging Face: tools/third-party/hugging-face.md
                   - Notion: tools/third-party/notion.md
+                  - ScrapeGraphAI: tools/third-party/scrapegraphai.md
                   - Tavily: tools/third-party/tavily.md
                   - Agentic UI (AG-UI): tools/third-party/ag-ui.md
               - カスタムツール:
@@ -377,6 +385,7 @@ plugins:
                 - AgentOps: observability/agentops.md
                 - Arize AX: observability/arize-ax.md
                 - Freeplay: observability/freeplay.md
+                - Monocle: observability/monocle.md
                 - Phoenix: observability/phoenix.md
                 - W&B Weave: observability/weave.md
               - 評価:
@@ -431,6 +440,7 @@ plugins:
                 - Google検索グラウンディングについて: grounding/google_search_grounding.md
                 - Vertex AI Searchグラウンディングについて: grounding/vertex_ai_search_grounding.md
             - リファレンス:
+              - リリースノート: release-notes.md
               - APIリファレンス:
                 - api-reference/index.md
                 - Python ADK: api-reference/python/index.html

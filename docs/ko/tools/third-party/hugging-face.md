@@ -23,7 +23,7 @@ hide:
     ```python
     from google.adk.agents import Agent
     from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-    from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+    from google.adk.tools.mcp_tool import McpToolset
     from mcp import StdioServerParameters
 
     HUGGING_FACE_TOKEN = "YOUR_HUGGING_FACE_TOKEN"
@@ -33,7 +33,7 @@ hide:
         name="hugging_face_agent",
         instruction="사용자가 허깅 페이스에서 정보를 얻도록 돕습니다.",
         tools=[
-            MCPToolset(
+            McpToolset(
                 connection_params=StdioConnectionParams(
                     server_params = StdioServerParameters(
                         command="npx",
@@ -57,7 +57,7 @@ hide:
     ```python
     from google.adk.agents import Agent
     from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPServerParams
-    from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+    from google.adk.tools.mcp_tool import McpToolset
 
     HUGGING_FACE_TOKEN = "YOUR_HUGGING_FACE_TOKEN"
 
@@ -66,7 +66,7 @@ hide:
         name="hugging_face_agent",
         instruction="""사용자가 허깅 페이스에서 정보를 얻도록 돕습니다.""",
         tools=[
-            MCPToolset(
+            McpToolset(
                 connection_params=StreamableHTTPServerParams(
                     url="https://huggingface.co/mcp",
                     headers={

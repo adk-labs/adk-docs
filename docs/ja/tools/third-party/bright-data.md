@@ -27,7 +27,7 @@
     ```python
     from google.adk.agents import Agent
     from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-    from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+    from google.adk.tools.mcp_tool import McpToolset
     from mcp import StdioServerParameters
 
     BRIGHTDATA_API_TOKEN = "YOUR_BRIGHTDATA_API_TOKEN"
@@ -37,7 +37,7 @@
         name="brightdata_agent",
         instruction="Bright Dataを使用してユーザーがWebデータにアクセスできるように支援します",
         tools=[
-            MCPToolset(
+            McpToolset(
                 connection_params=StdioConnectionParams(
                     server_params = StdioServerParameters(
                         command="npx",
@@ -61,7 +61,7 @@
     ```python
     from google.adk.agents import Agent
     from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPServerParams
-    from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+    from google.adk.tools.mcp_tool import McpToolset
 
     BRIGHTDATA_API_TOKEN = "YOUR_BRIGHTDATA_API_TOKEN"
 
@@ -70,7 +70,7 @@
         name="brightdata_agent",
         instruction="""Bright Dataを使用してユーザーがWebデータにアクセスできるように支援します""",
         tools=[
-            MCPToolset(
+            McpToolset(
                 connection_params=StreamableHTTPServerParams(
                     url=f"https://mcp.brightdata.com/mcp?token={BRIGHTDATA_API_TOKEN}",
                 ),

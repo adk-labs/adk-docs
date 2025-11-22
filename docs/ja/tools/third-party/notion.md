@@ -28,7 +28,7 @@ hide:
     ```python
     from google.adk.agents import Agent
     from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-    from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+    from google.adk.tools.mcp_tool import McpToolset
     from mcp import StdioServerParameters
 
     NOTION_TOKEN = "YOUR_NOTION_TOKEN"
@@ -38,7 +38,7 @@ hide:
         name="notion_agent",
         instruction="ユーザーがNotionから情報を取得するのを支援します",
         tools=[
-            MCPToolset(
+            McpToolset(
                 connection_params=StdioConnectionParams(
                     server_params = StdioServerParameters(
                         command="npx",

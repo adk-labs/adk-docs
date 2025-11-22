@@ -19,7 +19,7 @@
 
 ### 1. Vertex AI 검색 준비 { #prepare-vertex-ai-search }
 
-Vertex AI 검색 데이터 저장소와 해당 데이터 저장소 ID가 이미 있는 경우 이 섹션을 건너뛸 수 있습니다. 그렇지 않은 경우 `비정형 데이터` 탭을 선택하여 [사용자 지정 검색 시작하기](https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search#unstructured-data)의 지침을 [데이터 저장소 만들기](https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search#create_a_data_store) 끝까지 따릅니다. 이 지침을 통해 [Alphabet 투자자 사이트](https://abc.xyz/)의 수익 보고서 PDF가 포함된 샘플 데이터 저장소를 빌드합니다.
+Vertex AI 검색 데이터 저장소와 해당 데이터 저장소 ID가 이미 있는 경우 이 섹션을 건너뛸 수 있습니다. 그렇지 않은 경우, [사용자 지정 검색 시작하기](https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search#unstructured-data)의 지침을 [데이터 저장소 만들기](https://cloud.google.com/generative-ai-app-builder/docs/try-enterprise-search#create_a_data_store) 끝까지 따르되, `비정형 데이터` 탭을 선택합니다. 이 지침을 통해 [Alphabet 투자자 사이트](https://abc.xyz/)의 수익 보고서 PDF가 포함된 샘플 데이터 저장소를 빌드합니다.
 
 데이터 저장소 만들기 섹션을 마친 후 [데이터 저장소](https://console.cloud.google.com/gen-app-builder/data-stores/)를 열고 만든 데이터 저장소를 선택한 다음 `데이터 저장소 ID`를 찾습니다.
 
@@ -78,7 +78,7 @@ pip install google-adk==1.5.0
 
 #### `agent.py` 편집
 
-다음 코드를 복사하여 `agent.py`에 붙여넣고 `구성` 부분의 `YOUR_PROJECT_ID` 및 `YOUR_DATASTORE_ID`를 프로젝트 ID 및 데이터 저장소 ID로 각각 바꿉니다.
+다음 코드를 복사하여 `agent.py`에 붙여넣고, `구성` 부분의 `YOUR_PROJECT_ID` 및 `YOUR_DATASTORE_ID`를 프로젝트 ID 및 데이터 저장소 ID로 각각 바꿉니다.
 
 ```python title="vertex_search_agent/agent.py"
 from google.adk.agents import Agent
@@ -112,7 +112,7 @@ my_project/
 
   * [gcloud CLI](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-local) 설정
   * 터미널에서 `gcloud auth login`을 실행하여 Google Cloud에 인증합니다.
-  * **`.env`** 파일을 열고 다음 코드를 복사하여 붙여넣고 프로젝트 ID와 위치를 업데이트합니다.
+  * **.env** 파일을 열고 다음 코드를 복사하여 붙여넣고 프로젝트 ID와 위치를 업데이트합니다.
 
     ```env title=".env"
     GOOGLE_GENAI_USE_VERTEXAI=TRUE
@@ -267,7 +267,7 @@ Vertex AI 검색 기반은 에이전트를 조직의 색인된 문서 및 데이
 
 - **segment**: 이 객체는 `startIndex`, `endIndex` 및 `text` 자체로 정의된 최종 텍스트 답변의 특정 부분을 식별합니다.
 
-- **groundingChunkIndices**: 이 배열에는 `groundingChunks`에 나열된 출처에 해당하는 인덱스 번호가 포함되어 있습니다. 예를 들어 "HIPAA 준수"에 대한 텍스트는 인덱스 1의 `groundingChunks`("규제 및 윤리적 장애물" 문서)의 정보로 지원됩니다.
+- **groundingChunkIndices**: 이 배열에는 `groundingChunks`에 나열된 출처에 해당하는 인덱스 번호가 포함되어 있습니다. 예를 들어, "HIPAA 준수"에 대한 텍스트는 인덱스 1의 `groundingChunks`("규제 및 윤리적 장애물" 문서)의 정보로 지원됩니다.
 
 - **retrievalQueries**: 이 배열은 관련 정보를 찾기 위해 데이터 저장소에 대해 실행된 특정 검색 쿼리를 보여줍니다.
 

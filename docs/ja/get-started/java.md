@@ -1,11 +1,11 @@
-# ADK向けJavaクイックスタート
+# ADK用Javaクイックスタート
 
-このガイドでは、Java向けAgent Development Kitのセットアップと実行方法について説明します。開始する前に、以下がインストールされていることを確認してください。
+このガイドでは、Agent Development Kit for Javaを使用して開始する方法について説明します。開始する前に、次のものがインストールされていることを確認してください。
 
 *   Java 17以降
 *   Maven 3.9以降
 
-## エージェントプロジェクトの作成
+## エージェントプロジェクトを作成する
 
 次のファイルとディレクトリ構造でエージェントプロジェクトを作成します。
 
@@ -13,7 +13,7 @@
 my_agent/
     src/main/java/com/example/agent/
                         HelloTimeAgent.java # メインエージェントコード
-                        AgentCliRunner.java # コマンドラインインターフェイス
+                        AgentCliRunner.java # コマンドラインインターフェース
     pom.xml                                 # プロジェクト構成
     .env                                    # APIキーまたはプロジェクトID
 ```
@@ -39,9 +39,9 @@ my_agent/
             touch my_agent/pom.xml my_agent/.env
         ```
 
-### エージェントコードの定義
+### エージェントコードを定義する
 
-`getCurrentTime()`というADK[関数ツール](/adk-docs/tools/function-tools/)の簡単な実装を含む、基本的なエージェントのコードを作成します。プロジェクトディレクトリの`HelloTimeAgent.java`ファイルに次のコードを追加します。
+ADK [関数ツール](/adk-docs/tools-custom/function-tools/)のシンプルな実装である`getCurrentTime()`を含む基本的なエージェントのコードを作成します。プロジェクトディレクトリの`HelloTimeAgent.java`ファイルに次のコードを追加します。
 
 ```java title="my_agent/src/main/java/com/example/agent/HelloTimeAgent.java"
 package com.example.agent;
@@ -61,16 +61,16 @@ public class HelloTimeAgent {
         return LlmAgent.builder()
             .name("hello-time-agent")
             .description("指定された都市の現在時刻を伝えます")
-            .instruction(""
-                あなたは都市の現在時刻を伝える役立つアシスタントです。
-                この目的のために「getCurrentTime」ツールを使用してください。
-                ")
+            .instruction("""
+                あなたは指定された都市の現在時刻を伝えるのに役立つアシスタントです。
+                この目的のために'getCurrentTime'ツールを使用してください。
+                """)
             .model("gemini-2.5-flash")
             .tools(FunctionTool.create(HelloTimeAgent.class, "getCurrentTime"))
             .build();
     }
 
-    /** モックツール実装 */
+    /** モックツールの実装 */
     @Schema(description = "指定された都市の現在時刻を取得します")
     public static Map<String, String> getCurrentTime(
         @Schema(name = "city", description = "時刻を取得する都市の名前") String city) {
@@ -82,11 +82,17 @@ public class HelloTimeAgent {
 }
 ```
 
-### プロジェクトと依存関係の構成
+!!! warning "注意: Gemini 3の互換性"
+
+    ADK Java v0.3.0以前は、関数呼び出しの思考署名変更により、
+    [Gemini 3 Pro Preview](https://ai.google.dev/gemini-api/docs/models#gemini-3-pro)と互換性がありません。
+    代わりにGemini 2.5以下のモデルを使用してください。
+
+### プロジェクトと依存関係を構成する
 
 ADKエージェントプロジェクトには、`pom.xml`プロジェクトファイルに次の依存関係が必要です。
 
-```xml title="my_agent/pom.xml (partial)"
+```xml title="my_agent/pom.xml (一部)"
 <dependencies>
     <dependency>
         <groupId>com.google.adk</groupId>
@@ -96,7 +102,7 @@ ADKエージェントプロジェクトには、`pom.xml`プロジェクトフ�
 </dependencies>
 ```
 
-次の構成コードを使用して、この依存関係と追加設定を含むように`pom.xml`プロジェクトファイルを更新します。
+`pom.xml`プロジェクトファイルを更新して、この依存関係と追加の設定を次の構成コードで含めます。
 
 ??? info "プロジェクトの完全な`pom.xml`構成"
     次のコードは、このプロジェクトの完全な`pom.xml`構成を示しています。
@@ -112,7 +118,7 @@ ADKエージェントプロジェクトには、`pom.xml`プロジェクトフ�
         <artifactId>adk-agents</artifactId>
         <version>1.0-SNAPSHOT</version>
 
-        <!-- 使用するJavaのバージョンを指定します -->
+        <!-- 使用するJavaのバージョンを指定 -->
         <properties>
             <maven.compiler.source>17</maven.compiler.source>
             <maven.compiler.target>17</maven.compiler.target>
@@ -137,30 +143,30 @@ ADKエージェントプロジェクトには、`pom.xml`プロジェクトフ�
     </project>
     ```
 
-### APIキーの設定
+### APIキーを設定する
 
-このプロジェクトでは、APIキーが必要なGemini APIを使用します。まだGemini APIキーをお持ちでない場合は、Google AI Studioの[APIキー](https://aistudio.google.com/app/apikey)ページでキーを作成してください。
+このプロジェクトはAPIキーを必要とするGemini APIを使用します。まだGemini APIキーをお持ちでない場合は、Google AI Studioの[APIキー](https://aistudio.google.com/app/apikey)ページでキーを作成してください。
 
 ターミナルウィンドウで、APIキーをプロジェクトの`.env`ファイルに書き込み、環境変数を設定します。
 
 === "MacOS / Linux"
 
-    ```bash title="Update: my_agent/.env"
+    ```bash title="更新: my_agent/.env"
     echo 'export GOOGLE_API_KEY="YOUR_API_KEY"' > .env
     ```
 
 === "Windows"
 
-    ```console title="Update: my_agent/env.bat"
+    ```console title="更新: my_agent/env.bat"
     echo 'set GOOGLE_API_KEY="YOUR_API_KEY"' > env.bat
     ```
 
 ??? tip "ADKで他のAIモデルを使用する"
-    ADKは、多くの生成AIモデルの使用をサポートしています。ADKエージェントで他のモデルを構成する方法の詳細については、[モデルと認証](/adk-docs/agents/models)を参照してください。
+    ADKは多くの生成AIモデルの使用をサポートしています。ADKエージェントで他のモデルを構成する方法の詳細については、[モデルと認証](/adk-docs/agents/models)を参照してください。
 
-### エージェントコマンドラインインターフェイスの作成
+### エージェントコマンドラインインターフェースを作成する
 
-コマンドラインから`HelloTimeAgent`を実行して対話できるように、`AgentCliRunner.java`クラスを作成します。このコードは、エージェントを実行するための`RunConfig`オブジェクトと、実行中のエージェントと対話するための`Session`オブジェクトを作成する方法を示しています。
+`AgentCliRunner.java`クラスを作成して、コマンドラインから`HelloTimeAgent`を実行し、対話できるようにします。このコードは、エージェントを実行するための`RunConfig`オブジェクトと、実行中のエージェントと対話するための`Session`オブジェクトを作成する方法を示しています。
 
 ```java title="my_agent/src/main/java/com/example/agent/AgentCliRunner.java"
 package com.example.agent;
@@ -210,40 +216,40 @@ public class AgentCliRunner {
 }
 ```
 
-## エージェントの実行
+## エージェントを実行する
 
-定義したインタラクティブなコマンドラインインターフェイス`AgentCliRunner`クラスまたはADKで`AdkWebServer`クラスを使用して提供されるADK Webユーザーインターフェイスを使用して、ADKエージェントを実行できます。これらのオプションの両方で、エージェントをテストして対話できます。
+定義した対話型コマンドラインインターフェース`AgentCliRunner`クラス、または`AdkWebServer`クラスを使用してADKが提供するADKウェブユーザーインターフェースを使用して、ADKエージェントを実行できます。これらのオプションの両方で、エージェントをテストして対話できます。
 
-### コマンドラインインターフェイスで実行
+### コマンドラインインターフェースで実行する
 
-次のMavenコマンドを使用して、コマンドラインインターフェイス`AgentCliRunner`クラスでエージェントを実行します。
+次のMavenコマンドを使用して、コマンドラインインターフェース`AgentCliRunner`クラスでエージェントを実行します。
 
 ```console
-# キーと設定を読み込むことを忘れないでください：source .envまたはenv.bat
+# キーと設定をロードする: source .env または env.bat
 mvn compile exec:java -Dexec.mainClass="com.example.agent.AgentCliRunner"
 ```
 
 ![adk-run.png](/adk-docs/assets/adk-run.png)
 
-### Webインターフェイスで実行
+### ウェブインターフェースで実行する
 
-次のMavenコマンドを使用して、ADK Webインターフェイスでエージェントを実行します。
+次のMavenコマンドを使用して、ADKウェブインターフェースでエージェントを実行します。
 
 ```console
-# キーと設定を読み込むことを忘れないでください：source .envまたはenv.bat
+# キーと設定をロードする: source .env または env.bat
 mvn compile exec:java \
     -Dexec.mainClass="com.google.adk.web.AdkWebServer" \
     -Dexec.args="--adk.agents.source-dir=target --server.port=8000"
 ```
 
-このコマンドは、エージェント用のチャットインターフェイスを備えたWebサーバーを起動します。（http://localhost:8000）でWebインターフェイスにアクセスできます。左上隅でエージェントを選択し、リクエストを入力します。
+このコマンドは、エージェント用のチャットインターフェースを備えたウェブサーバーを起動します。ウェブインターフェースは(http://localhost:8000)でアクセスできます。左上隅でエージェントを選択し、リクエストを入力します。
 
 ![adk-web-dev-ui-chat.png](/adk-docs/assets/adk-web-dev-ui-chat.png)
 
-## 次へ：エージェントの構築
+## 次へ: エージェントを構築する
 
-ADKをインストールして最初のエージェントを実行したので、ビルドガイドを使用して独自のエージェントを構築してみてください。
+ADKがインストールされ、最初のエージェントが実行中になったので、ビルドガイドを使用して独自のエージェントを構築してみてください。
 
-*  [エージェントの構築](/adk-docs/tutorials/)
+*  [エージェントを構築する](/adk-docs/tutorials/)
 
 ```

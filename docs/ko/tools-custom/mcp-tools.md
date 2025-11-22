@@ -63,7 +63,7 @@ which npx
 # ./adk_agent_samples/mcp_agent/agent.py
 import os # 경로 작업에 필요
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool import McpToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
 from mcp import StdioServerParameters
 
@@ -80,7 +80,7 @@ root_agent = LlmAgent(
     name='filesystem_assistant_agent',
     instruction='사용자가 파일을 관리하도록 돕습니다. 파일을 나열하고 읽는 등의 작업을 수행할 수 있습니다.',
     tools=[
-        MCPToolset(
+        McpToolset(
             connection_params=StdioConnectionParams(
                 server_params = StdioServerParameters(
                     command='npx',
@@ -264,7 +264,7 @@ public class McpAgentCreator {
 # ./adk_agent_samples/mcp_agent/agent.py
 import os
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool import McpToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
 from mcp import StdioServerParameters
 
@@ -286,7 +286,7 @@ root_agent = LlmAgent(
     name='maps_assistant_agent',
     instruction='Google 지도 도구를 사용하여 지도, 길 찾기 및 장소 찾기를 돕습니다.',
     tools=[
-        MCPToolset(
+        McpToolset(
             connection_params=StdioConnectionParams(
                 server_params = StdioServerParameters(
                     command='npx',
@@ -610,7 +610,7 @@ if __name__ == "__main__":
 # ./adk_agent_samples/mcp_client_agent/agent.py
 import os
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool import McpToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
 from mcp import StdioServerParameters
 
@@ -626,7 +626,7 @@ root_agent = LlmAgent(
     name='web_reader_mcp_client_agent',
     instruction="사용자가 제공한 URL에서 콘텐츠를 가져오려면 'load_web_page' 도구를 사용하십시오.",
     tools=[
-        MCPToolset(
+        McpToolset(
             connection_params=StdioConnectionParams(
                 server_params = StdioServerParameters(
                     command='python3', # MCP 서버 스크립트를 실행하는 명령
@@ -699,7 +699,7 @@ from google.adk.agents.llm_agent import LlmAgent
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.adk.artifacts.in_memory_artifact_service import InMemoryArtifactService # 선택 사항
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool import McpToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
 from mcp import StdioServerParameters
 
@@ -713,7 +713,7 @@ TARGET_FOLDER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "/
 # --- 1단계: 에이전트 정의 ---
 async def get_agent_async():
   """MCP 서버의 도구를 갖춘 ADK 에이전트를 만듭니다."""
-  toolset = MCPToolset(
+  toolset = McpToolset(
       # 로컬 프로세스 통신에 StdioConnectionParams 사용
       connection_params=StdioConnectionParams(
           server_params = StdioServerParameters(
@@ -815,7 +815,7 @@ MCP 도구를 사용하는 ADK 에이전트를 Cloud Run, GKE 또는 Vertex AI A
 import os
 from google.adk.agents.llm_agent import LlmAgent
 from google.adk.tools.mcp_tool import StdioConnectionParams
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+from google.adk.tools.mcp_tool import McpToolset
 from mcp import StdioServerParameters
 
 _allowed_path = os.path.dirname(os.path.abspath(__file__))
@@ -825,7 +825,7 @@ root_agent = LlmAgent(
     name='enterprise_assistant',
     instruction=f'사용자가 파일 시스템에 액세스하도록 돕습니다. 허용된 디렉터리: {_allowed_path}',
     tools=[
-        MCPToolset(
+        McpToolset(
             connection_params=StdioConnectionParams(
                 server_params=StdioServerParameters(
                     command='npx',
@@ -900,7 +900,7 @@ CMD ["python", "main.py"]
 **에이전트 구성:**
 ```python
 # npx와 MCP 서버가 동일한 환경에서 실행되므로 컨테이너에서 작동합니다.
-MCPToolset(
+McpToolset(
     connection_params=StdioConnectionParams(
         server_params=StdioServerParameters(
             command='npx',
@@ -1020,7 +1020,7 @@ if __name__ == "__main__":
 **원격 MCP에 대한 에이전트 구성:**
 ```python
 # ADK 에이전트가 스트리밍 가능 HTTP를 통해 원격 MCP 서비스에 연결
-MCPToolset(
+McpToolset(
     connection_params=StreamableHTTPConnectionParams(
         url="https://your-mcp-server-url.run.app/mcp",
         headers={"Authorization": "Bearer your-auth-token"}
@@ -1125,14 +1125,14 @@ else:
         )
     )
 
-MCPToolset(connection_params=mcp_connection)
+McpToolset(connection_params=mcp_connection)
 ```
 
 #### GKE
 ```python
 # GKE별 MCP 구성
 # 클러스터 내 MCP 서버에 서비스 검색 사용
-MCPToolset(
+McpToolset(
     connection_params=SseConnectionParams(
         url="http://mcp-service.default.svc.cluster.local:8080/sse"
     ),
@@ -1143,7 +1143,7 @@ MCPToolset(
 ```python
 # 에이전트 엔진 관리 배포
 # 경량, 자체 포함 MCP 서버 또는 외부 서비스 선호
-MCPToolset(
+McpToolset(
     connection_params=SseConnectionParams(
         url="https://your-managed-mcp-service.googleapis.com/sse",
         headers={'Authorization': 'Bearer $(gcloud auth print-access-token)'}
@@ -1158,7 +1158,7 @@ MCPToolset(
 1. **Stdio 프로세스 시작 실패**
    ```python
    # stdio 연결 문제 디버그
-   MCPToolset(
+   McpToolset(
        connection_params=StdioConnectionParams(
            server_params=StdioServerParameters(
                command='npx',

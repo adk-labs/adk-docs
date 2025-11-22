@@ -25,7 +25,7 @@ hide:
     ```python
     from google.adk.agents.llm_agent import Agent
     from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-    from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+    from google.adk.tools.mcp_tool import McpToolset
     from mcp import StdioServerParameters
 
     FIRECRAWL_API_KEY = "YOUR_FIRECRAWL_API_KEY"
@@ -36,7 +36,7 @@ hide:
         description="Firecrawl로 웹사이트를 스크랩하는 데 도움이 되는 도우미",
         instruction="사용자가 웹사이트 콘텐츠를 검색하도록 돕습니다.",
         tools=[
-            MCPToolset(
+            McpToolset(
                 connection_params=StdioConnectionParams(
                     server_params = StdioServerParameters(
                         command="npx",
@@ -60,7 +60,7 @@ hide:
     ```python
     from google.adk.agents.llm_agent import Agent
     from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPServerParams
-    from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
+    from google.adk.tools.mcp_tool import McpToolset
 
     FIRECRAWL_API_KEY = "YOUR_FIRECRAWL_API_KEY"
 
@@ -70,7 +70,7 @@ hide:
         description="Firecrawl로 웹사이트를 스크랩하는 데 도움이 되는 도우미",
         instruction="사용자가 웹사이트 콘텐츠를 검색하도록 돕습니다.",
         tools=[
-            MCPToolset(
+            McpToolset(
                 connection_params=StreamableHTTPServerParams(
                     url=f"https://mcp.firecrawl.dev/{FIRECRAWL_API_KEY}/v2/mcp",
                 ),
