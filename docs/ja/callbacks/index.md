@@ -28,7 +28,7 @@
 !!! tip
     セキュリティガードレールやポリシーを実装する際には、コールバックよりも
     モジュール性と柔軟性に優れたADKプラグインを使用してください。詳細は
-    [セキュリティガードレールのためのコールバックとプラグイン](/adk-docs/safety/#callbacks-and-plugins-for-security-guardrails)を参照してください。
+    [セキュリティガードレールのためのコールバックとプラグイン](/adk-docs/ja/safety/#callbacks-and-plugins-for-security-guardrails)を参照してください。
 
 **追加方法：**
 

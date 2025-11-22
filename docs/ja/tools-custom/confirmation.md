@@ -15,7 +15,7 @@
 
 リクエストがユーザーにどのように伝達されるかを設定でき、システムはADKサーバーのREST APIを介して送信された[リモート応答](#remote-response)を使用することもできます。ADK Webユーザーインターフェイスで確認機能を使用する場合、エージェントワークフローは図1に示すように、ユーザーに入力を要求するダイアログボックスを表示します。
 
-![ツール確認のためのデフォルトのユーザーインターフェイスのスクリーンショット](/adk-docs/assets/confirmation-ui.png)
+![ツール確認のためのデフォルトのユーザーインターフェイスのスクリーンショット](/adk-docs/ja/assets/confirmation-ui.png)
 
 **図1.** 高度なツール応答実装を使用した確認応答要求ダイアログボックスの例。
 
@@ -162,8 +162,8 @@ def request_time_off(days: int, tool_context: ToolContext):
 
 ツール確認機能には、次の制限があります。
 
--   [DatabaseSessionService](/adk-docs/api-reference/python/google-adk.html#google.adk.sessions.DatabaseSessionService)はこの機能ではサポートされていません。
--   [VertexAiSessionService](/adk-docs/api-reference/python/google-adk.html#google.adk.sessions.VertexAiSessionService)はこの機能ではサポートされていません。
+-   [DatabaseSessionService](/adk-docs/ja/api-reference/python/google-adk.html#google.adk.sessions.DatabaseSessionService)はこの機能ではサポートされていません。
+-   [VertexAiSessionService](/adk-docs/ja/api-reference/python/google-adk.html#google.adk.sessions.VertexAiSessionService)はこの機能ではサポートされていません。
 
 ## 次のステップ
 

@@ -13,7 +13,7 @@ Agent Development Kit (ADK) のプラグインは、コールバックフック�
 -   **リクエストまたは応答の変更**: AIモデルのプロンプトに情報を動的に追加したり、ツールの出力応答を標準化したりします。
 
 !!! tip
-    セキュリティガードレールとポリシーを実装する場合は、コールバックよりも優れたモジュール性と柔軟性のためにADKプラグインを使用してください。詳細については、[セキュリティガードレールのためのコールバックとプラグイン](/adk-docs/safety/#callbacks-and-plugins-for-security-guardrails)を参照してください。
+    セキュリティガードレールとポリシーを実装する場合は、コールバックよりも優れたモジュール性と柔軟性のためにADKプラグインを使用してください。詳細については、[セキュリティガードレールのためのコールバックとプラグイン](/adk-docs/ja/safety/#callbacks-and-plugins-for-security-guardrails)を参照してください。
 
 !!! warning "注意"
     プラグインは[ADKウェブインターフェース](../evaluate/#1-adk-web-run-evaluations-via-the-web-ui)ではサポートされていません。ADKワークフローでプラグインを使用する場合は、ウェブインターフェースなしでワークフローを実行する必要があります。
@@ -28,9 +28,9 @@ ADKプラグインは`BasePlugin`クラスを拡張し、プラグインがエ�
 
 ADKには、エージェントワークフローにすぐに追加できるいくつかのプラグインが含まれています。
 
-*   [**リフレクトとリトライツール**](/adk-docs/plugins/reflect-and-retry/):
+*   [**リフレクトとリトライツール**](/adk-docs/ja/plugins/reflect-and-retry/):
     ツールの失敗を追跡し、ツールリクエストをインテリジェントに再試行します。
-*   [**BigQueryアナリティクス**](/adk-docs/tools/google-cloud/bigquery-agent-analytics/):
+*   [**BigQueryアナリティクス**](/adk-docs/ja/tools/google-cloud/bigquery-agent-analytics/):
     BigQueryによるエージェントのロギングと分析を可能にします。
 *   [**コンテキストフィルター**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/context_filter_plugin.py):
     生成AIのコンテキストをフィルタリングしてサイズを削減します。
@@ -162,7 +162,7 @@ Hello world: query is [hello world]
 ```
 
 
-ADKエージェントの実行に関する詳細については、[クイックスタート](/adk-docs/get-started/quickstart/#run-your-agent)ガイドを参照してください。
+ADKエージェントの実行に関する詳細については、[クイックスタート](/adk-docs/ja/get-started/quickstart/#run-your-agent)ガイドを参照してください。
 
 ## プラグインでワークフローを構築する
 
@@ -380,4 +380,4 @@ async def after_run_callback(
 ADKプロジェクトにプラグインを開発して適用するためのこれらのリソースを確認してください。
 
 -   より多くのADKプラグインコードの例については、[ADK Pythonリポジトリ](https://github.com/google/adk-python/tree/main/src/google/adk/plugins)を参照してください。
--   セキュリティ目的でプラグインを適用する方法については、[セキュリティガードレールのためのコールバックとプラグイン](/adk-docs/safety/#callbacks-and-plugins-for-security-guardrails)を参照してください。
+-   セキュリティ目的でプラグインを適用する方法については、[セキュリティガードレールのためのコールバックとプラグイン](/adk-docs/ja/safety/#callbacks-and-plugins-for-security-guardrails)を参照してください。

@@ -13,7 +13,7 @@ ADK Visual Builderは、ADKエージェントを作成および管理するた�
 
 ## 始める (Get started)
 
-Visual Builderインターフェースは、ADK Webツールユーザーインターフェースの一部です。ADKライブラリが[インストール](/adk-docs/get-started/installation/#python)されていることを確認し、ADK Webユーザーインターフェースを実行してください。
+Visual Builderインターフェースは、ADK Webツールユーザーインターフェースの一部です。ADKライブラリが[インストール](/adk-docs/ja/get-started/installation/#python)されていることを確認し、ADK Webユーザーインターフェースを実行してください。
 
 ```console
 adk web --port 8000
@@ -50,21 +50,21 @@ Visual Builderツールは、エージェントを構築するためのドラッ
 
 *   **エージェント (Agents)**
     *   **ルートエージェント (Root Agent)**: ワークフローの主要な制御エージェントです。ADKエージェントワークフロー内の他のすべてのエージェントは、サブエージェントと見なされます。
-    *   [**LLMエージェント:**](/adk-docs/agents/llm-agents/) 生成AIモデルによって駆動されるエージェントです。
-    *   [**シーケンシャルエージェント (Sequential Agent):**](/adk-docs/agents/workflow-agents/sequential-agents/) 一連のサブエージェントを順番に実行するワークフローエージェントです。
-    *   [**ループエージェント (Loop Agent):**](/adk-docs/agents/workflow-agents/loop-agents/) 特定の条件が満たされるまでサブエージェントを繰り返し実行するワークフローエージェントです。
-    *   [**パラレルエージェント (Parallel Agent):**](/adk-docs/agents/workflow-agents/parallel-agents/) 複数のサブエージェントを並行して実行するワークフローエージェントです。
+    *   [**LLMエージェント:**](/adk-docs/ja/agents/llm-agents/) 生成AIモデルによって駆動されるエージェントです。
+    *   [**シーケンシャルエージェント (Sequential Agent):**](/adk-docs/ja/agents/workflow-agents/sequential-agents/) 一連のサブエージェントを順番に実行するワークフローエージェントです。
+    *   [**ループエージェント (Loop Agent):**](/adk-docs/ja/agents/workflow-agents/loop-agents/) 特定の条件が満たされるまでサブエージェントを繰り返し実行するワークフローエージェントです。
+    *   [**パラレルエージェント (Parallel Agent):**](/adk-docs/ja/agents/workflow-agents/parallel-agents/) 複数のサブエージェントを並行して実行するワークフローエージェントです。
 *   **ツール (Tools)**
-    *   [**事前構築済みツール (Prebuilt tools):**](/adk-docs/tools/built-in-tools/) ADKが提供する限られたツールセットをエージェントに追加できます。
-    *   [**カスタムツール (Custom tools):**](/adk-docs/tools-custom/) カスタムツールを独自に構築してワークフローに追加できます。
+    *   [**事前構築済みツール (Prebuilt tools):**](/adk-docs/ja/tools/built-in-tools/) ADKが提供する限られたツールセットをエージェントに追加できます。
+    *   [**カスタムツール (Custom tools):**](/adk-docs/ja/tools-custom/) カスタムツールを独自に構築してワークフローに追加できます。
 *   **コンポーネント (Components)**
-    *   [**コールバック (Callbacks)**](/adk-docs/callbacks/) エージェントワークフローイベントの開始時と終了時にエージェントの動作を変更できるフロー制御コンポーネントです。
+    *   [**コールバック (Callbacks)**](/adk-docs/ja/callbacks/) エージェントワークフローイベントの開始時と終了時にエージェントの動作を変更できるフロー制御コンポーネントです。
 
-一部の高度なADK機能は、Agent Config（エージェント設定）機能の制限により、Visual Builderではサポートされていません。詳細については、Agent Configの[既知の制限事項](/adk-docs/agents/config/#known-limitations)を参照してください。
+一部の高度なADK機能は、Agent Config（エージェント設定）機能の制限により、Visual Builderではサポートされていません。詳細については、Agent Configの[既知の制限事項](/adk-docs/ja/agents/config/#known-limitations)を参照してください。
 
 ## プロジェクトコードの出力 (Project code output)
 
-Visual Builderツールは、[Agent Config](/adk-docs/agents/config/)形式を使用してコードを生成します。エージェントには `.yaml` 設定ファイルを使用し、カスタムツールにはPythonコードを使用します。これらのファイルは、ADK Webインターフェースを実行したディレクトリのサブフォルダに生成されます。以下のリストは、`DiceAgent` プロジェクトのレイアウト例を示しています：
+Visual Builderツールは、[Agent Config](/adk-docs/ja/agents/config/)形式を使用してコードを生成します。エージェントには `.yaml` 設定ファイルを使用し、カスタムツールにはPythonコードを使用します。これらのファイルは、ADK Webインターフェースを実行したディレクトリのサブフォルダに生成されます。以下のリストは、`DiceAgent` プロジェクトのレイアウト例を示しています：
 
 ```none
 DiceAgent/
@@ -92,5 +92,5 @@ Use the default model if you need to configure that.
 
 Visual Builderで使用されるAgent Configコード形式と利用可能なオプションに関する詳細情報を確認してください：
 
-*   [Agent Config (エージェント設定)](/adk-docs/agents/config/)
-*   [Agent Config YAMLスキーマ](/adk-docs/api-reference/agentconfig/)
+*   [Agent Config (エージェント設定)](/adk-docs/ja/agents/config/)
+*   [Agent Config YAMLスキーマ](/adk-docs/ja/api-reference/agentconfig/)

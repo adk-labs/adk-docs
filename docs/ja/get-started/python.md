@@ -92,7 +92,7 @@ echo 'GOOGLE_API_KEY="YOUR_API_KEY"' > .env
 ```
 
 ??? tip "ADKで他のAIモデルを使用する"
-    ADKは多くの生成AIモデルの使用をサポートしています。ADKエージェントで他のモデルを構成する方法の詳細については、[モデルと認証](/adk-docs/agents/models)を参照してください。
+    ADKは多くの生成AIモデルの使用をサポートしています。ADKエージェントで他のモデルを構成する方法の詳細については、[モデルと認証](/adk-docs/ja/agents/models)を参照してください。
 
 ## エージェントを実行する
 
@@ -106,7 +106,7 @@ echo 'GOOGLE_API_KEY="YOUR_API_KEY"' > .env
 adk run my_agent
 ```
 
-![adk-run.png](/adk-docs/assets/adk-run.png)
+![adk-run.png](/adk-docs/ja/assets/adk-run.png)
 
 ### ウェブインターフェースで実行する
 
@@ -122,10 +122,10 @@ adk web --port 8000
 
 このコマンドは、エージェント用のチャットインターフェースを備えたウェブサーバーを起動します。ウェブインターフェースは(http://localhost:8000)でアクセスできます。左上隅でエージェントを選択し、リクエストを入力します。
 
-![adk-web-dev-ui-chat.png](/adk-docs/assets/adk-web-dev-ui-chat.png)
+![adk-web-dev-ui-chat.png](/adk-docs/ja/assets/adk-web-dev-ui-chat.png)
 
 ## 次へ: エージェントを構築する
 
 ADKがインストールされ、最初のエージェントが実行中になったので、ビルドガイドを使用して独自のエージェントを構築してみてください。
 
-*  [エージェントを構築する](/adk-docs/tutorials/)
+*  [エージェントを構築する](/adk-docs/ja/tutorials/)

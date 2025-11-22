@@ -259,7 +259,7 @@ ADKエージェントで使用できる次の事前構築済みツールをご�
 
 上記のツールではニーズを満たせない場合、次のガイドを使用してADKワークフロー用のツールを構築できます。
 
-*   **[関数ツール](/adk-docs/tools-custom/function-tools/)**: 特定のADKエージェントのニーズに合わせてカスタムツールを構築します。
-*   **[MCPツール](/adk-docs/tools/mcp-tools/)**: MCPサーバーをADKエージェント用のツールとして接続します。
-*   **[OpenAPI統合](/adk-docs/tools-custom/openapi-tools/)**:
+*   **[関数ツール](/adk-docs/ja/tools-custom/function-tools/)**: 特定のADKエージェントのニーズに合わせてカスタムツールを構築します。
+*   **[MCPツール](/adk-docs/ja/tools/mcp-tools/)**: MCPサーバーをADKエージェント用のツールとして接続します。
+*   **[OpenAPI統合](/adk-docs/ja/tools-custom/openapi-tools/)**:
     OpenAPI Specificationから直接呼び出し可能なツールを生成します。

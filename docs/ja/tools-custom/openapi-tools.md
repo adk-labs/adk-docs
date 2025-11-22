@@ -36,7 +36,7 @@ ADKは、[OpenAPI仕様（v3.x）](https://swagger.io/specification/)から呼�
     *   **実行**: LLMによって呼び出されると、LLMから提供された引数とOpenAPI仕様の詳細を使用して、正しいHTTPリクエスト（URL、ヘッダー、クエリパラメータ、ボディ）を構築します。認証が設定されていればそれを処理し、`requests` ライブラリを使用してAPI呼び出しを実行します。
     *   **レスポンス処理**: APIレスポンス（通常はJSON）をエージェントフローに返します。
 
-5.  **認証**: `OpenAPIToolset` を初期化する際に、グローバルな認証（APIキーやOAuthなど。詳細は[認証](/adk-docs/tools/authentication/)を参照）を設定できます。この認証設定は、生成されたすべての `RestApiTool` インスタンスに自動的に適用されます。
+5.  **認証**: `OpenAPIToolset` を初期化する際に、グローバルな認証（APIキーやOAuthなど。詳細は[認証](/adk-docs/ja/tools/authentication/)を参照）を設定できます。この認証設定は、生成されたすべての `RestApiTool` インスタンスに自動的に適用されます。
 
 ## 使用ワークフロー
 

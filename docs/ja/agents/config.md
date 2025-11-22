@@ -13,7 +13,7 @@ description: ユーザーの質問に回答できるヘルパーエージェン�
 instruction: ユーザーのさまざまな質問に回答するエージェントです。
 ```
 
-エージェント設定ファイルを使用して、関数、ツール、サブエージェントなどを組み込むことができる、より複雑なエージェントを構築できます。このページでは、エージェント設定機能を使用してADKワークフローを構築および実行する方法について説明します。エージェント設定形式でサポートされている構文と設定の詳細については、[エージェント設定構文リファレンス](/adk-docs/api-reference/agentconfig/)を参照してください。
+エージェント設定ファイルを使用して、関数、ツール、サブエージェントなどを組み込むことができる、より複雑なエージェントを構築できます。このページでは、エージェント設定機能を使用してADKワークフローを構築および実行する方法について説明します。エージェント設定形式でサポートされている構文と設定の詳細については、[エージェント設定構文リファレンス](/adk-docs/ja/api-reference/agentconfig/)を参照してください。
 
 !!! example "実験的"
     エージェント設定機能は実験的なものであり、いくつかの[既知の制限](#known-limitations)があります。[フィードバック](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=agent%20config)を歓迎します！
@@ -31,7 +31,7 @@ Google Agent Development Kitライブラリをインストールし、Gemini API
 
 エージェント設定で使用するためにADKをセットアップするには：
 
-1.  [インストール](/adk-docs/get-started/installation/#python)の手順に従ってADK Pythonライブラリをインストールします。 *現在Pythonが必要です。* 詳細については、[既知の制限](?tab=t.0#heading=h.xefmlyt7zh0i)を参照してください。
+1.  [インストール](/adk-docs/ja/get-started/installation/#python)の手順に従ってADK Pythonライブラリをインストールします。 *現在Pythonが必要です。* 詳細については、[既知の制限](?tab=t.0#heading=h.xefmlyt7zh0i)を参照してください。
 1.  ターミナルで次のコマンドを実行して、ADKがインストールされていることを確認します。
 
         adk --version
@@ -39,7 +39,7 @@ Google Agent Development Kitライブラリをインストールし、Gemini API
     このコマンドは、インストールされているADKのバージョンを表示します。
 
 !!! Tip
-    `adk`コマンドが実行されず、ステップ2でバージョンが一覧表示されない場合は、Python環境がアクティブであることを確認してください。MacおよびLinuxのターミナルで`source .venv/bin/activate`を実行します。他のプラットフォームコマンドについては、[インストール](/adk-docs/get-started/installation/#python)ページを参照してください。
+    `adk`コマンドが実行されず、ステップ2でバージョンが一覧表示されない場合は、Python環境がアクティブであることを確認してください。MacおよびLinuxのターミナルで`source .venv/bin/activate`を実行します。他のプラットフォームコマンドについては、[インストール](/adk-docs/ja/get-started/installation/#python)ページを参照してください。
 
 ### エージェントを構築する
 
@@ -80,7 +80,7 @@ description: ユーザーの質問に回答できるヘルパーエージェン�
 instruction: ユーザーのさまざまな質問に回答するエージェントです。
 ```
 
-ADKの[サンプルリポジトリ](https://github.com/search?q=repo%3Agoogle%2Fadk-python+path%3A%2F%5Econtributing%5C%2Fsamples%5C%2F%2F+.yaml&type=code)または[エージェント設定構文](/adk-docs/api-reference/agentconfig/)リファレンスを参照して、`root_agent.yaml`エージェント設定ファイルのより多くの設定オプションを見つけることができます。
+ADKの[サンプルリポジトリ](https://github.com/search?q=repo%3Agoogle%2Fadk-python+path%3A%2F%5Econtributing%5C%2Fsamples%5C%2F%2F+.yaml&type=code)または[エージェント設定構文](/adk-docs/ja/api-reference/agentconfig/)リファレンスを参照して、`root_agent.yaml`エージェント設定ファイルのより多くの設定オプションを見つけることができます。
 
 ### エージェントを実行する
 
@@ -94,7 +94,7 @@ ADKの[サンプルリポジトリ](https://github.com/search?q=repo%3Agoogle%2F
     -   `adk run` - ユーザーインターフェースなしでターミナルでエージェントを実行します。
     -   `adk api_server` - 他のアプリケーションで使用できるサービスとしてエージェントを実行します。
 
-エージェントの実行方法の詳細については、[クイックスタート](/adk-docs/get-started/quickstart/#run-your-agent)の*エージェントを実行する*トピックを参照してください。ADKコマンドラインオプションの詳細については、[ADK CLIリファレンス](/adk-docs/api-reference/cli/)を参照してください。
+エージェントの実行方法の詳細については、[クイックスタート](/adk-docs/ja/get-started/quickstart/#run-your-agent)の*エージェントを実行する*トピックを参照してください。ADKコマンドラインオプションの詳細については、[ADK CLIリファレンス](/adk-docs/ja/api-reference/cli/)を参照してください。
 
 ## サンプルの設定
 
@@ -165,7 +165,7 @@ sub_agents:
 
 ## エージェント設定のデプロイ
 
-コードベースのエージェントと同じ手順で、[Cloud Run](/adk-docs/deploy/cloud-run/)および[エージェントエンジン](/adk-docs/deploy/agent-engine/)を使用してエージェント設定エージェントをデプロイできます。エージェント設定ベースのエージェントを準備およびデプロイする方法の詳細については、[Cloud Run](/adk-docs/deploy/cloud-run/)および[エージェントエンジン](/adk-docs/deploy/agent-engine/)のデプロイガイドを参照してください。
+コードベースのエージェントと同じ手順で、[Cloud Run](/adk-docs/ja/deploy/cloud-run/)および[エージェントエンジン](/adk-docs/ja/deploy/agent-engine/)を使用してエージェント設定エージェントをデプロイできます。エージェント設定ベースのエージェントを準備およびデプロイする方法の詳細については、[Cloud Run](/adk-docs/ja/deploy/cloud-run/)および[エージェントエンジン](/adk-docs/ja/deploy/agent-engine/)のデプロイガイドを参照してください。
 
 ## 既知の制限 {#known-limitations}
 
@@ -191,4 +191,4 @@ sub_agents:
 
 ## 次のステップ
 
-ADKエージェント設定で何をどのように構築するかについてのアイデアは、ADKの[adk-samples](https://github.com/search?q=repo:google/adk-python+path:/%5Econtributing%5C/samples%5C//+root_agent.yaml&type=code)リポジトリのYAMLベースのエージェント定義を参照してください。エージェント設定形式でサポートされている構文と設定の詳細については、[エージェント設定構文リファレンス](/adk-docs/api-reference/agentconfig/)を参照してください。
+ADKエージェント設定で何をどのように構築するかについてのアイデアは、ADKの[adk-samples](https://github.com/search?q=repo:google/adk-python+path:/%5Econtributing%5C/samples%5C//+root_agent.yaml&type=code)リポジトリのYAMLベースのエージェント定義を参照してください。エージェント設定形式でサポートされている構文と設定の詳細については、[エージェント設定構文リファレンス](/adk-docs/ja/api-reference/agentconfig/)を参照してください。

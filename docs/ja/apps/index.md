@@ -8,10 +8,10 @@
 
 ADKワークフローで***App***オブジェクトを定義することはオプションであり、エージェントコードの整理方法とエージェントの実行方法を変更します。実用的な観点から、***App***クラスを使用して、エージェントワークフローの次の機能を構成します。
 
-*   [**コンテキストキャッシュ**](/adk-docs/context/caching/)
-*   [**コンテキスト圧縮**](/adk-docs/context/compaction/)
-*   [**エージェントの再開**](/adk-docs/runtime/resume/)
-*   [**プラグイン**](/adk-docs/plugins/)
+*   [**コンテキストキャッシュ**](/adk-docs/ja/context/caching/)
+*   [**コンテキスト圧縮**](/adk-docs/ja/context/compaction/)
+*   [**エージェントの再開**](/adk-docs/ja/runtime/resume/)
+*   [**プラグイン**](/adk-docs/ja/plugins/)
 
 このガイドでは、ADKエージェントワークフローの構成と管理にAppクラスを使用する方法について説明します。
 

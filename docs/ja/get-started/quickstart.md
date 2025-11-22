@@ -304,7 +304,7 @@
 
         ![adk-api-server.png](../assets/adk-api-server.png)
 
-        テストのために`adk api_server`を使用する方法については、[APIサーバーの使用に関するドキュメント](/adk-docs/runtime/api-server/)を参照してください。
+        テストのために`adk api_server`を使用する方法については、[APIサーバーの使用に関するドキュメント](/adk-docs/ja/runtime/api-server/)を参照してください。
 
 === "Java"
 

@@ -35,7 +35,7 @@
 
 ADKプロジェクトをAgent Engineにデプロイする際には、デプロイ操作をサポートするための追加ファイルが必要です。次のASPコマンドは、プロジェクトをバックアップし、デプロイ目的のファイルをプロジェクトに追加します。
 
-この手順は、デプロイのために変更する既存のADKプロジェクトがあることを前提としています。ADKプロジェクトがない場合やテストプロジェクトを使用したい場合は、Pythonの[クイックスタート](/adk-docs/get-started/quickstart/)ガイドを完了し、[multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)プロジェクトを作成してください。以下の手順では、`multi_tool_agent`プロジェクトを例として使用します。
+この手順は、デプロイのために変更する既存のADKプロジェクトがあることを前提としています。ADKプロジェクトがない場合やテストプロジェクトを使用したい場合は、Pythonの[クイックスタート](/adk-docs/ja/get-started/quickstart/)ガイドを完了し、[multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)プロジェクトを作成してください。以下の手順では、`multi_tool_agent`プロジェクトを例として使用します。
 
 ADKプロジェクトをAgent Engineへのデプロイ準備をするには：
 
@@ -199,7 +199,7 @@ multi-tool-agent/
 
 ### エージェントの定義 {#define-your-agent}
 
-この手順は、デプロイのために変更する既存のADKプロジェクトがあることを前提としています。ADKプロジェクトがない場合やテストプロジェクトを使用したい場合は、Pythonの[クイックスタート](/adk-docs/get-started/quickstart/)ガイドを完了し、[multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)プロジェクトを作成してください。以下の手順では、`multi_tool_agent`プロジェクトを例として使用します。
+この手順は、デプロイのために変更する既存のADKプロジェクトがあることを前提としています。ADKプロジェクトがない場合やテストプロジェクトを使用したい場合は、Pythonの[クイックスタート](/adk-docs/ja/get-started/quickstart/)ガイドを完了し、[multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)プロジェクトを作成してください。以下の手順では、`multi_tool_agent`プロジェクトを例として使用します。
 
 ### Vertex AIの初期化
 
@@ -344,7 +344,7 @@ if final_text_responses:
     利用可能なストレージバケット名は、Google Cloudコンソールのデプロイプロジェクトの
     [Cloud Storageバケット](https://pantheon.corp.google.com/storage/browser)
     セクションで確認できます。`adk deploy`コマンドの使用に関する詳細は、
-    [ADK CLIリファレンス](/adk-docs/api-reference/cli/cli.html#adk-deploy)をご覧ください。
+    [ADK CLIリファレンス](/adk-docs/ja/api-reference/cli/cli.html#adk-deploy)をご覧ください。
 
     !!! tip
         ADKプロジェクトをデプロイする際は、メインのADKエージェント定義(`root_agent`)が

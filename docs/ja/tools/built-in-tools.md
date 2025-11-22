@@ -104,7 +104,7 @@ GKEコードエグゼキュータツールを使用してADKプロジェクト�
 すぐに使える完全な構成については、
 [deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/gke_agent_sandbox/deployment_rbac.yaml)
 サンプルを参照してください。ADKワークフローをGKEにデプロイする方法の詳細については、
-[Google Kubernetes Engine（GKE）へのデプロイ](/adk-docs/deploy/gke/)を参照してください。
+[Google Kubernetes Engine（GKE）へのデプロイ](/adk-docs/ja/deploy/gke/)を参照してください。
 
 === "Python"
 
