@@ -13,7 +13,7 @@ ADK(Agent Development Kit)의 플러그인은 콜백 후크를 사용하여 에�
 -   **요청 또는 응답 수정**: AI 모델 프롬프트에 정보를 동적으로 추가하거나 도구 출력 응답을 표준화합니다.
 
 !!! tip
-    보안 가드레일 및 정책을 구현할 때 콜백보다 더 나은 모듈성과 유연성을 위해 ADK 플러그인을 사용하십시오. 자세한 내용은 [보안 가드레일을 위한 콜백 및 플러그인](/adk-docs/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하십시오.
+    보안 가드레일 및 정책을 구현할 때 콜백보다 더 나은 모듈성과 유연성을 위해 ADK 플러그인을 사용하십시오. 자세한 내용은 [보안 가드레일을 위한 콜백 및 플러그인](/adk-docs/ko/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하십시오.
 
 !!! warning "주의"
     플러그인은 [ADK 웹 인터페이스](../evaluate/#1-adk-web-run-evaluations-via-the-web-ui)에서 지원되지 않습니다. ADK 워크플로에서 플러그인을 사용하는 경우 웹 인터페이스 없이 워크플로를 실행해야 합니다.
@@ -28,9 +28,9 @@ ADK 플러그인은 `BasePlugin` 클래스를 확장하며 에이전트 수명 �
 
 ADK에는 에이전트 워크플로에 즉시 추가할 수 있는 여러 플러그인이 포함되어 있습니다.
 
-*   [**반영 및 재시도 도구**](/adk-docs/plugins/reflect-and-retry/):
+*   [**반영 및 재시도 도구**](/adk-docs/ko/plugins/reflect-and-retry/):
     도구 실패를 추적하고 도구 요청을 지능적으로 재시도합니다.
-*   [**BigQuery 분석**](/adk-docs/tools/google-cloud/bigquery-agent-analytics/):
+*   [**BigQuery 분석**](/adk-docs/ko/tools/google-cloud/bigquery-agent-analytics/):
     BigQuery를 사용하여 에이전트 로깅 및 분석을 활성화합니다.
 *   [**컨텍스트 필터**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/context_filter_plugin.py):
     생성형 AI 컨텍스트를 필터링하여 크기를 줄입니다.
@@ -161,7 +161,7 @@ Hello world: query is [hello world]
 ```
 
 
-ADK 에이전트 실행에 대한 자세한 내용은 [빠른 시작](/adk-docs/get-started/quickstart/#run-your-agent) 가이드를 참조하세요.
+ADK 에이전트 실행에 대한 자세한 내용은 [빠른 시작](/adk-docs/ko/get-started/quickstart/#run-your-agent) 가이드를 참조하세요.
 
 ## 플러그인으로 워크플로 빌드
 
@@ -379,4 +379,4 @@ async def after_run_callback(
 ADK 프로젝트에 플러그인을 개발하고 적용하기 위한 다음 리소스를 확인하십시오.
 
 -   더 많은 ADK 플러그인 코드 예시는 [ADK Python 저장소](https://github.com/google/adk-python/tree/main/src/google/adk/plugins)를 참조하십시오.
--   보안 목적으로 플러그인을 적용하는 방법에 대한 정보는 [보안 가드레일을 위한 콜백 및 플러그인](/adk-docs/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하십시오.
+-   보안 목적으로 플러그인을 적용하는 방법에 대한 정보는 [보안 가드레일을 위한 콜백 및 플러그인](/adk-docs/ko/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하십시오.

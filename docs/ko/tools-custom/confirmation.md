@@ -15,7 +15,7 @@
 
 요청이 사용자에게 전달되는 방식을 구성할 수 있으며 시스템은 ADK 서버의 REST API를 통해 전송된 [원격 응답](#remote-response)을 사용할 수도 있습니다. ADK 웹 사용자 인터페이스와 함께 확인 기능을 사용하는 경우 에이전트 워크플로는 그림 1과 같이 사용자에게 대화 상자를 표시하여 입력을 요청합니다.
 
-![도구 확인을 위한 기본 사용자 인터페이스 스크린샷](/adk-docs/assets/confirmation-ui.png)
+![도구 확인을 위한 기본 사용자 인터페이스 스크린샷](/adk-docs/ko/assets/confirmation-ui.png)
 
 **그림 1.** 고급 도구 응답 구현을 사용하는 예제 확인 응답 요청 대화 상자.
 
@@ -144,8 +144,8 @@ ADK API 서버의 `/run` 또는 `/run_sse` 엔드포인트 또는 ADK 실행기�
 
 도구 확인 기능에는 다음과 같은 제한 사항이 있습니다.
 
--   [DatabaseSessionService](/adk-docs/api-reference/python/google-adk.html#google.adk.sessions.DatabaseSessionService)는 이 기능에서 지원되지 않습니다.
--   [VertexAiSessionService](/adk-docs/api-reference/python/google-adk.html#google.adk.sessions.VertexAiSessionService)는 이 기능에서 지원되지 않습니다.
+-   [DatabaseSessionService](/adk-docs/ko/api-reference/python/google-adk.html#google.adk.sessions.DatabaseSessionService)는 이 기능에서 지원되지 않습니다.
+-   [VertexAiSessionService](/adk-docs/ko/api-reference/python/google-adk.html#google.adk.sessions.VertexAiSessionService)는 이 기능에서 지원되지 않습니다.
 
 ## 다음 단계
 

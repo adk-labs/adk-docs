@@ -105,7 +105,7 @@ GKE 코드 실행기 도구를 사용하여 ADK 프로젝트를 성공적으로 
 완전하고 즉시 사용 가능한 구성은
 [deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/gke_agent_sandbox/deployment_rbac.yaml)
 샘플을 참조하세요. ADK 워크플로를 GKE에 배포하는 방법에 대한 자세한 내용은
-[Google Kubernetes Engine(GKE)에 배포](/adk-docs/deploy/gke/)를 참조하세요.
+[Google Kubernetes Engine(GKE)에 배포](/adk-docs/ko/deploy/gke/)를 참조하세요.
 
 === "Python"
 

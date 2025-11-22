@@ -35,7 +35,7 @@
 
 ADK 프로젝트를 Agent Engine에 배포할 때는 배포 작업을 지원하기 위한 추가 파일이 필요합니다. 다음 ASP 명령어는 프로젝트를 백업한 후 배포 목적의 파일들을 프로젝트에 추가합니다.
 
-이 지침은 배포를 위해 수정할 기존 ADK 프로젝트가 있다고 가정합니다. ADK 프로젝트가 없거나 테스트 프로젝트를 사용하려면, Python [빠른 시작](/adk-docs/get-started/quickstart/) 가이드를 완료하여 [multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent) 프로젝트를 생성하세요. 다음 지침에서는 `multi_tool_agent` 프로젝트를 예시로 사용합니다.
+이 지침은 배포를 위해 수정할 기존 ADK 프로젝트가 있다고 가정합니다. ADK 프로젝트가 없거나 테스트 프로젝트를 사용하려면, Python [빠른 시작](/adk-docs/ko/get-started/quickstart/) 가이드를 완료하여 [multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent) 프로젝트를 생성하세요. 다음 지침에서는 `multi_tool_agent` 프로젝트를 예시로 사용합니다.
 
 ADK 프로젝트를 Agent Engine에 배포하기 위해 준비하려면:
 
@@ -199,7 +199,7 @@ multi-tool-agent/
 
 ### 에이전트 정의 {#define-your-agent}
 
-이 지침은 배포를 위해 수정할 기존 ADK 프로젝트가 있다고 가정합니다. ADK 프로젝트가 없거나 테스트 프로젝트를 사용하려면, Python [빠른 시작](/adk-docs/get-started/quickstart/) 가이드를 완료하여 [multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent) 프로젝트를 생성하세요. 다음 지침에서는 `multi_tool_agent` 프로젝트를 예시로 사용합니다.
+이 지침은 배포를 위해 수정할 기존 ADK 프로젝트가 있다고 가정합니다. ADK 프로젝트가 없거나 테스트 프로젝트를 사용하려면, Python [빠른 시작](/adk-docs/ko/get-started/quickstart/) 가이드를 완료하여 [multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent) 프로젝트를 생성하세요. 다음 지침에서는 `multi_tool_agent` 프로젝트를 예시로 사용합니다.
 
 ### Vertex AI 초기화
 
@@ -339,7 +339,7 @@ if final_text_responses:
         /multi_tool_agent
     ```
 
-    사용 가능한 스토리지 버킷의 이름은 Google Cloud 콘솔의 배포 프로젝트 내 [Cloud Storage 버킷](https://pantheon.corp.google.com/storage/browser) 섹션에서 찾을 수 있습니다. `adk deploy` 명령어 사용에 대한 자세한 내용은 [ADK CLI 참조](/adk-docs/api-reference/cli/cli.html#adk-deploy)를 참조하세요.
+    사용 가능한 스토리지 버킷의 이름은 Google Cloud 콘솔의 배포 프로젝트 내 [Cloud Storage 버킷](https://pantheon.corp.google.com/storage/browser) 섹션에서 찾을 수 있습니다. `adk deploy` 명령어 사용에 대한 자세한 내용은 [ADK CLI 참조](/adk-docs/ko/api-reference/cli/cli.html#adk-deploy)를 참조하세요.
 
     !!! tip
         ADK 프로젝트를 배포할 때 주 ADK 에이전트 정의(`root_agent`)를 찾을 수 있도록 하세요.

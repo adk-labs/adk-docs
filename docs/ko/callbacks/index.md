@@ -28,7 +28,7 @@
 !!! tip
     보안 가드레일과 정책을 구현할 때는 콜백보다 모듈성과 유연성이 더 좋은
     ADK 플러그인을 사용하세요. 자세한 내용은
-    [보안 가드레일을 위한 콜백 및 플러그인](/adk-docs/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하세요.
+    [보안 가드레일을 위한 콜백 및 플러그인](/adk-docs/ko/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하세요.
 
 **어떻게 추가하나요:**
 

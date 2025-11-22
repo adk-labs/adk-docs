@@ -259,7 +259,7 @@ ADK 에이전트와 함께 사용할 수 있는 다음 사전 빌드된 도구�
 
 위 도구가 필요를 충족하지 못하는 경우 다음 가이드를 사용하여 ADK 워크플로용 도구를 빌드할 수 있습니다.
 
-*   **[함수 도구](/adk-docs/tools-custom/function-tools/)**: 특정 ADK 에이전트 요구 사항에 맞는 사용자 지정 도구를 빌드합니다.
-*   **[MCP 도구](/adk-docs/tools/mcp-tools/)**: MCP 서버를 ADK 에이전트용 도구로 연결합니다.
-*   **[OpenAPI 통합](/adk-docs/tools-custom/openapi-tools/)**:
+*   **[함수 도구](/adk-docs/ko/tools-custom/function-tools/)**: 특정 ADK 에이전트 요구 사항에 맞는 사용자 지정 도구를 빌드합니다.
+*   **[MCP 도구](/adk-docs/ko/tools/mcp-tools/)**: MCP 서버를 ADK 에이전트용 도구로 연결합니다.
+*   **[OpenAPI 통합](/adk-docs/ko/tools-custom/openapi-tools/)**:
     OpenAPI 사양에서 직접 호출 가능한 도구를 생성합니다.

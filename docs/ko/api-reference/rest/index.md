@@ -2,7 +2,7 @@
 
 이 페이지는 ADK 웹 서버가 제공하는 REST API에 대한 레퍼런스를 제공합니다.
 ADK REST API의 실제 사용법에 대한 자세한 내용은
-[API 서버 사용하기](/adk-docs/runtime/api-server/)를 참조하세요.
+[API 서버 사용하기](/adk-docs/ko/runtime/api-server/)를 참조하세요.
 
 !!! tip
     실행 중인 ADK 웹 서버의 `/docs` 경로(예: `http://localhost:8000/docs`)로 접속하면 업데이트된 API 레퍼런스를 확인할 수 있습니다.

@@ -78,7 +78,7 @@ MCP Toolbox는 다음 데이터베이스 및 데이터 플랫폼을 위한 즉�
 
 ### 문서
 
-ADK와 데이터베이스용 MCP Toolbox를 함께 사용하는 방법은 [데이터베이스용 MCP Toolbox](/adk-docs/tools/google-cloud/mcp-toolbox-for-databases/) 문서를 참조하세요. 데이터베이스용 MCP Toolbox 시작을 위해 블로그 게시물 [튜토리얼: 데이터베이스용 MCP Toolbox - BigQuery 데이터 세트 노출하기](https://medium.com/google-cloud/tutorial-mcp-toolbox-for-databases-exposing-big-query-datasets-9321f0064f4e)와 Codelab [데이터베이스용 MCP Toolbox: MCP 클라이언트에서 BigQuery 데이터 세트 사용하기](https://codelabs.developers.google.com/mcp-toolbox-bigquery-dataset?hl=ko#0)도 제공됩니다.
+ADK와 데이터베이스용 MCP Toolbox를 함께 사용하는 방법은 [데이터베이스용 MCP Toolbox](/adk-docs/ko/tools/google-cloud/mcp-toolbox-for-databases/) 문서를 참조하세요. 데이터베이스용 MCP Toolbox 시작을 위해 블로그 게시물 [튜토리얼: 데이터베이스용 MCP Toolbox - BigQuery 데이터 세트 노출하기](https://medium.com/google-cloud/tutorial-mcp-toolbox-for-databases-exposing-big-query-datasets-9321f0064f4e)와 Codelab [데이터베이스용 MCP Toolbox: MCP 클라이언트에서 BigQuery 데이터 세트 사용하기](https://codelabs.developers.google.com/mcp-toolbox-bigquery-dataset?hl=ko#0)도 제공됩니다.
 
 ![GenAI Toolbox](../assets/mcp_db_toolbox.png)
 

@@ -8,10 +8,10 @@
 
 ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이며 에이전트 코드를 구성하고 에이전트를 실행하는 방법을 변경합니다. 실용적인 관점에서 ***앱*** 클래스를 사용하여 에이전트 워크플로에 대한 다음 기능을 구성합니다.
 
-*   [**컨텍스트 캐싱**](/adk-docs/context/caching/)
-*   [**컨텍스트 압축**](/adk-docs/context/compaction/)
-*   [**에이전트 재개**](/adk-docs/runtime/resume/)
-*   [**플러그인**](/adk-docs/plugins/)
+*   [**컨텍스트 캐싱**](/adk-docs/ko/context/caching/)
+*   [**컨텍스트 압축**](/adk-docs/ko/context/compaction/)
+*   [**에이전트 재개**](/adk-docs/ko/runtime/resume/)
+*   [**플러그인**](/adk-docs/ko/plugins/)
 
 이 가이드에서는 ADK 에이전트 워크플로를 구성하고 관리하기 위해 앱 클래스를 사용하는 방법을 설명합니다.
 

@@ -36,7 +36,7 @@ ADK는 [OpenAPI 사양(v3.x)](https://swagger.io/specification/)에서 직접 �
     *   **실행**: LLM에 의해 호출되면, LLM이 제공한 인수와 OpenAPI 사양의 세부 정보를 사용하여 올바른 HTTP 요청(URL, 헤더, 쿼리 파라미터, 본문)을 구성합니다. 인증이 설정된 경우 이를 처리하고 `requests` 라이브러리를 사용하여 API 호출을 실행합니다.
     *   **응답 처리**: API 응답(일반적으로 JSON)을 에이전트 플로우로 반환합니다.
 
-5.  **인증**: `OpenAPIToolset`을 초기화할 때 전역 인증(예: API 키 또는 OAuth - 자세한 내용은 [인증](/adk-docs/tools/authentication/) 참조)을 구성할 수 있습니다. 이 인증 구성은 생성된 모든 `RestApiTool` 인스턴스에 자동으로 적용됩니다.
+5.  **인증**: `OpenAPIToolset`을 초기화할 때 전역 인증(예: API 키 또는 OAuth - 자세한 내용은 [인증](/adk-docs/ko/tools/authentication/) 참조)을 구성할 수 있습니다. 이 인증 구성은 생성된 모든 `RestApiTool` 인스턴스에 자동으로 적용됩니다.
 
 ## 사용 워크플로
 

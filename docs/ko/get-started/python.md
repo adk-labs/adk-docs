@@ -92,7 +92,7 @@ echo 'GOOGLE_API_KEY="YOUR_API_KEY"' > .env
 ```
 
 ??? tip "ADK에서 다른 AI 모델 사용"
-    ADK는 다양한 생성형 AI 모델 사용을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법에 대한 자세한 내용은 [모델 및 인증](/adk-docs/agents/models)을 참조하세요.
+    ADK는 다양한 생성형 AI 모델 사용을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법에 대한 자세한 내용은 [모델 및 인증](/adk-docs/ko/agents/models)을 참조하세요.
 
 ## 에이전트 실행
 
@@ -106,7 +106,7 @@ echo 'GOOGLE_API_KEY="YOUR_API_KEY"' > .env
 adk run my_agent
 ```
 
-![adk-run.png](/adk-docs/assets/adk-run.png)
+![adk-run.png](/adk-docs/ko/assets/adk-run.png)
 
 ### 웹 인터페이스로 실행
 
@@ -122,10 +122,10 @@ adk web --port 8000
 
 이 명령은 에이전트용 채팅 인터페이스가 있는 웹 서버를 시작합니다. 웹 인터페이스는 (http://localhost:8000)에서 액세스할 수 있습니다. 왼쪽 상단 모서리에서 에이전트를 선택하고 요청을 입력합니다.
 
-![adk-web-dev-ui-chat.png](/adk-docs/assets/adk-web-dev-ui-chat.png)
+![adk-web-dev-ui-chat.png](/adk-docs/ko/assets/adk-web-dev-ui-chat.png)
 
 ## 다음: 에이전트 빌드
 
 이제 ADK가 설치되었고 첫 번째 에이전트가 실행 중이므로 이제 빌드 가이드를 사용하여 자신만의 에이전트를 빌드해 보세요.
 
-*  [에이전트 빌드](/adk-docs/tutorials/)
+*  [에이전트 빌드](/adk-docs/ko/tutorials/)
