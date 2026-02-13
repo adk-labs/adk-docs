@@ -18,20 +18,6 @@ development feel more like software development, to make it easier for
 developers to create, deploy, and orchestrate agentic architectures that range
 from simple tasks to complex workflows.
 
-??? warning "ALERT: ADK Python v1.19.0 requires Python 3.10 or higher"
-
-    ADK Python release v1.19.0 requires Python 3.10 or higher. This change
-    is breaking for anyone attempting to use the v1.19.0 release with Python
-    3.9. For more release details, check out the
-    [release notes](https://github.com/google/adk-python/releases/tag/v1.19.0).
-
-??? tip "News: ADK Go v0.2.0 released!"
-
-    ADK Go release v0.2.0 is live with a variety of improvements, including new
-    features, bug fixes, documentation updates, and significant code refactoring.
-    For release details, check out the
-    [release notes](https://github.com/google/adk-go/releases/tag/v0.2.0).
-
 <div id="centered-install-tabs" class="install-command-container" markdown="1">
 
 <p class="get-started-text" style="text-align: center;">Get started:</p>
@@ -40,6 +26,12 @@ from simple tasks to complex workflows.
     <br>
     <p style="text-align: center;">
     <code>pip install google-adk</code>
+    </p>
+
+=== "TypeScript"
+    <br>
+    <p style="text-align: center;">
+    <code>npm install @google/adk</code>
     </p>
 
 === "Go"
@@ -54,13 +46,13 @@ from simple tasks to complex workflows.
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk</artifactId>
-        <version>0.3.0</version>
+        <version>0.5.0</version>
     </dependency>
     ```
 
     ```gradle title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:0.3.0'
+        implementation 'com.google.adk:google-adk:0.5.0'
     }
     ```
 
@@ -68,6 +60,7 @@ from simple tasks to complex workflows.
 
 <p style="text-align:center;">
   <a href="/adk-docs/get-started/python/" class="md-button" style="margin:3px">Start with Python</a>
+  <a href="/adk-docs/get-started/typescript/" class="md-button" style="margin:3px">Start with TypeScript</a>
   <a href="/adk-docs/get-started/go/" class="md-button" style="margin:3px">Start with Go</a>
   <a href="/adk-docs/get-started/java/" class="md-button" style="margin:3px">Start with Java</a>
 </p>
@@ -107,7 +100,7 @@ from simple tasks to complex workflows.
     Exec), create custom functions, integrate 3rd-party libraries, or even use
     other agents as tools.
 
-    [**Browse tools**](tools/index.md)
+    [**Browse tools and integrations**](integrations/index.md)
 
 -   :material-rocket-launch-outline: **Deployment Ready**
 

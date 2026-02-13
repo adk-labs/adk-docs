@@ -102,14 +102,14 @@ An ADK agent project requires this dependency in your
 <dependencies>
     <dependency>
         <groupId>com.google.adk</groupId>
-        <artifactId>adk-core</artifactId>
-        <version>0.3.0</version>
+        <artifactId>google-adk</artifactId>
+        <version>0.5.0</version>
     </dependency>
 </dependencies>
 ```
 
 Update the `pom.xml` project file to include this dependency and
-addtional settings with the following configuration code:
+additional settings with the following configuration code:
 
 ??? info "Complete `pom.xml` configuration for project"
     The following code shows a complete `pom.xml` configuration for
@@ -267,6 +267,11 @@ access the web interface at (http://localhost:8000). Select your agent at the
 upper left corner and type a request.
 
 ![adk-web-dev-ui-chat.png](/adk-docs/assets/adk-web-dev-ui-chat.png)
+
+!!! warning "Caution: ADK Web for development only"
+
+    ADK Web is ***not meant for use in production deployments***. You should
+    use ADK Web for development and debugging purposes only.
 
 ## Next: Build your agent
 
