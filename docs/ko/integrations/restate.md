@@ -2,6 +2,7 @@
 catalog_title: Restate
 catalog_description: 내구성 세션과 사람 승인 기반의 복원력 있는 에이전트 실행/오케스트레이션
 catalog_icon: /adk-docs/integrations/assets/restate.svg
+catalog_tags: []
 ---
 
 # ADK용 Restate 플러그인

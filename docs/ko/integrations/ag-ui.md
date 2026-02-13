@@ -1,6 +1,8 @@
 ---
-hide:
-  - toc
+catalog_title: AG-UI
+catalog_description: Build interactive chat UIs with streaming, state sync, and agentic actions
+catalog_icon: /adk-docs/integrations/assets/ag-ui.png
+catalog_tags: []
 ---
 # AG-UI 및 CopilotKit으로 채팅 경험 구축
 

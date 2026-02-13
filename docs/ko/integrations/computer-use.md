@@ -1,6 +1,8 @@
 ---
-hide:
-  - toc
+catalog_title: Computer Use
+catalog_description: Operate computer user interfaces using Gemini models
+catalog_icon: /adk-docs/integrations/assets/gemini-spark.svg
+catalog_tags: ["google"]
 ---
 # Gemini와 함께하는 컴퓨터 사용 도구 세트
 

@@ -1,3 +1,9 @@
+---
+catalog_title: Arize AX
+catalog_description: Production-grade observability, debugging, and improvement of LLM applications
+catalog_icon: /adk-docs/integrations/assets/arize.png
+catalog_tags: ["observability"]
+---
 # Agent Observability with Arize AX
 
 [Arize AX](https://arize.com/docs/ax) is a production-grade observability platform for monitoring, debugging, and improving LLM applications and AI Agents at scale. It provides comprehensive tracing, evaluation, and monitoring capabilities for your Google ADK applications. To get started, sign up for a [free account](https://app.arize.com/auth/join). 

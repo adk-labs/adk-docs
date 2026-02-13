@@ -1,6 +1,8 @@
 ---
-hide:
-  - toc
+catalog_title: Code Execution Tool with Agent Engine
+catalog_description: Run AI-generated code in a secure and scalable GKE environment
+catalog_icon: /adk-docs/integrations/assets/vertex-ai.png
+catalog_tags: ["code", "google"]
 ---
 # 에이전트 엔진을 사용한 코드 실행 도구
 

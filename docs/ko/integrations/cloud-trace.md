@@ -1,3 +1,9 @@
+---
+catalog_title: Google Cloud Trace
+catalog_description: Monitor, debug, and trace ADK agent interactions
+catalog_icon: /adk-docs/integrations/assets/cloud-trace.svg
+catalog_tags: ["observability", "google"]
+---
 # Cloud Trace를 사용한 에이전트 관찰 가능성
 
 ADK를 사용하면 [여기](https://google.github.io/adk-docs/evaluate/#debugging-with-the-trace-view)에서 설명하는 강력한 웹 개발 UI를 활용하여 로컬에서 에이전트 상호 작용을 검사하고 관찰할 수 있습니다. 그러나 클라우드 배포를 목표로 하는 경우 실제 트래픽을 관찰하기 위한 중앙 집중식 대시보드가 필요합니다.
@@ -257,4 +263,3 @@ if __name__ == "__main__":
 ## 리소스
 
 - [Google Cloud Trace 문서](https://cloud.google.com/trace)
-

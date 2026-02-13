@@ -1,3 +1,9 @@
+---
+catalog_title: Monocle
+catalog_description: Open-source observability, tracing, and debugging of LLM applications
+catalog_icon: /adk-docs/integrations/assets/monocle.png
+catalog_tags: ["observability"]
+---
 # Monocle을 사용한 에이전트 관측성
 
 [Monocle](https://github.com/monocle2ai/monocle)은 LLM 애플리케이션 및 AI 에이전트 모니터링, 디버깅 및 개선을 위한 오픈 소스 관측성 플랫폼입니다. 자동 계측을 통해 Google ADK 애플리케이션에 대한 포괄적인 추적 기능을 제공합니다. Monocle은 로컬 파일 또는 콘솔 출력 등 다양한 대상으로 내보낼 수 있는 OpenTelemetry 호환 추적을 생성합니다.

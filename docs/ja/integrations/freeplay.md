@@ -1,3 +1,9 @@
+---
+catalog_title: Freeplay
+catalog_description: Use Freeplay to build, optimize, and evaluate AI agents with end-to-end observability
+catalog_icon: /adk-docs/integrations/assets/freeplay.png
+catalog_tags: ["observability"]
+---
 # Freeplay を使用したエージェントのオブザーバビリティと評価
 
 [Freeplay](https://freeplay.ai/) は、AI エージェントを構築および最適化するためのエンドツーエンドのワークフローを提供し、ADK と統合できます。Freeplay を使用すると、チーム全体が簡単に共同作業して、エージェントの指示 (プロンプト) を繰り返し、さまざまなモデルとエージェントの変更を試して比較し、オフラインとオンラインの両方で評価を実行して品質を測定し、本番環境を監視し、手動でデータを確認できます。

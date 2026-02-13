@@ -1,6 +1,8 @@
 ---
-hide:
-  - toc
+catalog_title: Notion
+catalog_description: Search workspaces, create pages, and manage tasks and databases
+catalog_icon: /adk-docs/integrations/assets/notion.png
+catalog_tags: ["mcp"]
 ---
 # Notion
 

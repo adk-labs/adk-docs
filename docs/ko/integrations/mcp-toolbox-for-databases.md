@@ -1,6 +1,8 @@
 ---
-hide:
-  - toc
+catalog_title: MCP Toolbox for Databases
+catalog_description: Connect over 30 different data sources to your agents
+catalog_icon: /adk-docs/integrations/assets/mcp-toolbox-for-databases.png
+catalog_tags: ["mcp","data","google"]
 ---
 # 데이터베이스용 MCP 도구 상자
 

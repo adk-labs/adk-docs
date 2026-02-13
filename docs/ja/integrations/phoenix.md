@@ -1,3 +1,9 @@
+---
+catalog_title: Phoenix
+catalog_description: Open-source, self-hosted observability, tracing, and evaluation of LLM applications
+catalog_icon: /adk-docs/integrations/assets/phoenix.png
+catalog_tags: ["observability"]
+---
 # Phoenixによるエージェントのオブザーバビリティ
 
 [Phoenix](https://arize.com/docs/phoenix)は、LLMアプリケーションとAIエージェントを大規模に監視、デバッグ、改善するためのオープンソース、セルフホスト型のオブザーバビリティプラットフォームです。Google ADKアプリケーションに包括的なトレーシングと評価機能を提供します。始めるには、[無料アカウント](https://phoenix.arize.com/)にサインアップしてください。

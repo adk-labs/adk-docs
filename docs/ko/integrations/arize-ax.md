@@ -1,3 +1,9 @@
+---
+catalog_title: Arize AX
+catalog_description: Production-grade observability, debugging, and improvement of LLM applications
+catalog_icon: /adk-docs/integrations/assets/arize.png
+catalog_tags: ["observability"]
+---
 # Arize AX를 사용한 에이전트 관측성(Observability)
 
 [Arize AX](https://arize.com/docs/ax)는 대규모 LLM 애플리케이션 및 AI 에이전트를 모니터링, 디버깅, 개선하기 위한 프로덕션 등급의 관측성 플랫폼입니다. Google ADK 애플리케이션을 위한 포괄적인 추적, 평가, 모니터링 기능을 제공합니다. 시작하려면 [무료 계정](https://app.arize.com/auth/join)에 가입하세요.

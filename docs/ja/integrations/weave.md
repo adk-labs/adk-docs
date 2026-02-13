@@ -1,3 +1,9 @@
+---
+catalog_title: W&B Weave
+catalog_description: Log, visualize, and analyze model calls and agent performance
+catalog_icon: /adk-docs/integrations/assets/weave.png
+catalog_tags: ["observability"]
+---
 # WandBのWeaveによるエージェントの可観測性
 
 [Weights & Biases (WandB) の Weave](https://weave-docs.wandb.ai/) は、モデル呼び出しのロギングと可視化のための強力なプラットフォームを提供します。Google ADKをWeaveと統合することで、OpenTelemetry（OTEL）トレースを使用して、エージェントのパフォーマンスと振る舞いを追跡・分析できます。

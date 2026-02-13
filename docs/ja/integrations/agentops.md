@@ -1,3 +1,9 @@
+---
+catalog_title: AgentOps
+catalog_description: Session replays, metrics, and monitoring for ADK agents
+catalog_icon: /adk-docs/integrations/assets/agentops.png
+catalog_tags: ["observability"]
+---
 # AgentOpsによるエージェントの可観測性
 
 **わずか2行のコード**で、[AgentOps](https://www.agentops.ai)はエージェントのセッションリプレイ、メトリクス、モニタリングを提供します。

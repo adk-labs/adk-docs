@@ -1,3 +1,9 @@
+---
+catalog_title: Vertex AI express mode
+catalog_description: Try development with Vertex AI services at no cost
+catalog_icon: /adk-docs/integrations/assets/vertex-ai.png
+catalog_tags: ["google"]
+---
 # Vertex AI Expressモード：Vertex AIセッションとメモリの使用
 
 <div class="language-support-tag">

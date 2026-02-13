@@ -1,3 +1,9 @@
+---
+catalog_title: AgentOps
+catalog_description: Session replays, metrics, and monitoring for ADK agents
+catalog_icon: /adk-docs/integrations/assets/agentops.png
+catalog_tags: ["observability"]
+---
 # AgentOps를 사용한 에이전트 관찰 가능성
 
 **단 두 줄의 코드**만으로 [AgentOps](https://www.agentops.ai)는 에이전트에 대한 세션 재생, 메트릭 및 모니터링을 제공합니다.

@@ -1,3 +1,9 @@
+---
+catalog_title: Google Cloud Trace
+catalog_description: Monitor, debug, and trace ADK agent interactions
+catalog_icon: /adk-docs/integrations/assets/cloud-trace.svg
+catalog_tags: ["observability", "google"]
+---
 # Cloud Traceによるエージェントの可観測性
 
 ADKを使用すると、[こちら](https://google.github.io/adk-docs/evaluate/#debugging-with-the-trace-view)で説明されている強力なWeb開発UIを利用して、エージェントのインタラクションをローカルで検査および監視できます。ただし、クラウドへのデプロイを目指す場合は、実際のトラフィックを監視するための一元化されたダッシュボードが必要になります。

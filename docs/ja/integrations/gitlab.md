@@ -1,3 +1,9 @@
+---
+catalog_title: GitLab
+catalog_description: Perform semantic code search, inspect pipelines, manage merge requests
+catalog_icon: /adk-docs/integrations/assets/gitlab.png
+catalog_tags: ["code", "mcp"]
+---
 # GitLab
 
 [GitLab MCP Server](https://docs.gitlab.com/user/gitlab_duo/model_context_protocol/mcp_server/)は、
