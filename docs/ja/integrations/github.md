@@ -1,6 +1,6 @@
 ---
 catalog_title: GitHub
-catalog_description: Analyze code, manage issues and PRs, and automate workflows
+catalog_description: コードを分析し、Issue と PR を管理し、ワークフローを自動化します
 catalog_icon: /adk-docs/integrations/assets/github.png
 catalog_tags: ["code", "mcp"]
 ---

@@ -2,7 +2,7 @@
 hide:
   - toc
 catalog_title: GitHub
-catalog_description: Analyze code, manage issues and PRs, and automate workflows
+catalog_description: 코드를 분석하고 이슈와 PR을 관리하며 워크플로를 자동화합니다
 catalog_icon: /adk-docs/integrations/assets/github.png
 catalog_tags: ["code", "mcp"]
 ---

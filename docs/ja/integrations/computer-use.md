@@ -1,6 +1,6 @@
 ---
 catalog_title: Computer Use
-catalog_description: Operate computer user interfaces using Gemini models
+catalog_description: Gemini モデルを使ってコンピュータのユーザーインターフェースを操作します
 catalog_icon: /adk-docs/integrations/assets/gemini-spark.svg
 catalog_tags: ["google"]
 ---

@@ -1,6 +1,6 @@
 ---
 catalog_title: AgentOps
-catalog_description: Session replays, metrics, and monitoring for ADK agents
+catalog_description: ADK 에이전트를 위한 세션 리플레이, 메트릭, 모니터링을 제공합니다
 catalog_icon: /adk-docs/integrations/assets/agentops.png
 catalog_tags: ["observability"]
 ---

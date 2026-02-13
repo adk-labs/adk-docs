@@ -1,6 +1,6 @@
 ---
 catalog_title: Arize AX
-catalog_description: Production-grade observability, debugging, and improvement of LLM applications
+catalog_description: LLM 애플리케이션을 위한 프로덕션급 관측성, 디버깅, 성능 개선을 지원합니다
 catalog_icon: /adk-docs/integrations/assets/arize.png
 catalog_tags: ["observability"]
 ---

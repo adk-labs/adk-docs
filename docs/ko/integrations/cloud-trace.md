@@ -1,6 +1,6 @@
 ---
 catalog_title: Google Cloud Trace
-catalog_description: Monitor, debug, and trace ADK agent interactions
+catalog_description: ADK 에이전트 상호작용을 모니터링하고 디버그하며 추적합니다
 catalog_icon: /adk-docs/integrations/assets/cloud-trace.svg
 catalog_tags: ["observability", "google"]
 ---

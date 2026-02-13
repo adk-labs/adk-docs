@@ -1,6 +1,6 @@
 ---
 catalog_title: Monocle
-catalog_description: Open-source observability, tracing, and debugging of LLM applications
+catalog_description: LLM アプリケーション向けのオープンソース可観測性、トレース、デバッグを提供します
 catalog_icon: /adk-docs/integrations/assets/monocle.png
 catalog_tags: ["observability"]
 ---

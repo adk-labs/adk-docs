@@ -1,6 +1,6 @@
 ---
 catalog_title: W&B Weave
-catalog_description: Log, visualize, and analyze model calls and agent performance
+catalog_description: 모델 호출과 에이전트 성능을 로깅하고 시각화하며 분석합니다
 catalog_icon: /adk-docs/integrations/assets/weave.png
 catalog_tags: ["observability"]
 ---

@@ -1,6 +1,6 @@
 ---
 catalog_title: GitLab
-catalog_description: Perform semantic code search, inspect pipelines, manage merge requests
+catalog_description: セマンティックコード検索を実行し、パイプラインを検査し、マージリクエストを管理します
 catalog_icon: /adk-docs/integrations/assets/gitlab.png
 catalog_tags: ["code", "mcp"]
 ---

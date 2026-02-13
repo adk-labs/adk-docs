@@ -1,6 +1,6 @@
 ---
 catalog_title: Hugging Face
-catalog_description: Access models, datasets, research papers, and AI tools
+catalog_description: モデル、データセット、研究論文、AI ツールにアクセスします
 catalog_icon: /adk-docs/integrations/assets/hugging-face.png
 catalog_tags: ["mcp"]
 ---

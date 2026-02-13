@@ -1,6 +1,6 @@
 ---
 catalog_title: Vertex AI express mode
-catalog_description: Try development with Vertex AI services at no cost
+catalog_description: Vertex AI サービスを無料で試しながら開発できます
 catalog_icon: /adk-docs/integrations/assets/vertex-ai.png
 catalog_tags: ["google"]
 ---

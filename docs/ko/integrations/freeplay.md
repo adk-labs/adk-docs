@@ -1,6 +1,6 @@
 ---
 catalog_title: Freeplay
-catalog_description: Use Freeplay to build, optimize, and evaluate AI agents with end-to-end observability
+catalog_description: Freeplay로 엔드투엔드 관측성과 함께 AI 에이전트를 구축·최적화·평가합니다
 catalog_icon: /adk-docs/integrations/assets/freeplay.png
 catalog_tags: ["observability"]
 ---

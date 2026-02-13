@@ -1,6 +1,6 @@
 ---
 catalog_title: AG-UI
-catalog_description: Build interactive chat UIs with streaming, state sync, and agentic actions
+catalog_description: 스트리밍, 상태 동기화, 에이전트형 액션을 지원하는 인터랙티브 채팅 UI를 구축합니다
 catalog_icon: /adk-docs/integrations/assets/ag-ui.png
 catalog_tags: []
 ---

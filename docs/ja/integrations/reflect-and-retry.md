@@ -1,6 +1,6 @@
 ---
 catalog_title: Reflect and Retry Plugin
-catalog_description: Automatically retry tool calls that fail
+catalog_description: 失敗したツール呼び出しを自動で再試行します
 catalog_icon: /adk-docs/integrations/assets/adk.png
 catalog_tags: ["google"]
 ---

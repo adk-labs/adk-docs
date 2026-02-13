@@ -1,6 +1,6 @@
 ---
 catalog_title: Phoenix
-catalog_description: Open-source, self-hosted observability, tracing, and evaluation of LLM applications
+catalog_description: LLM アプリケーション向けのオープンソース・セルフホスト可観測性、トレース、評価を提供します
 catalog_icon: /adk-docs/integrations/assets/phoenix.png
 catalog_tags: ["observability"]
 ---
