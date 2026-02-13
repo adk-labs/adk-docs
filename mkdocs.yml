@@ -284,13 +284,13 @@ plugins:
                 - tutorials/index.md
                 - 다중 도구 에이전트: get-started/quickstart.md
                 - 에이전트 팀: tutorials/agent-team.md
-              - 스트리밍 에이전트:
-                - get-started/streaming/index.md
-                - Python: get-started/streaming/quickstart-streaming.md
-                - Java: get-started/streaming/quickstart-streaming-java.md
-              - 비주얼 빌더: visual-builder/index.md
-              - 코딩 에이전트: tutorials/coding-with-ai.md
-              - 고급 설정: get-started/installation.md
+                - 스트리밍 에이전트:
+                  - get-started/streaming/index.md
+                  - Python: get-started/streaming/quickstart-streaming.md
+                  - Java: get-started/streaming/quickstart-streaming-java.md
+                - 비주얼 빌더: visual-builder/index.md
+                - AI로 코딩: tutorials/coding-with-ai.md
+                - 고급 설정: get-started/installation.md
               - 에이전트:
                 - agents/index.md
                 - LLM 에이전트: agents/llm-agents.md
@@ -302,51 +302,35 @@ plugins:
                 - 커스텀 에이전트: agents/custom-agents.md
                 - 다중 에이전트 시스템: agents/multi-agents.md
                 - 에이전트 설정: agents/config.md
-                - 모델 및 인증: agents/models.md
+              - 에이전트용 모델:
+                - agents/models/index.md
+                - Gemini: agents/models/google-gemini.md
+                - Claude: agents/models/anthropic.md
+                - Vertex AI 호스팅: agents/models/vertex.md
+                - Apigee AI Gateway: agents/models/apigee.md
+                - Ollama: agents/models/ollama.md
+                - vLLM: agents/models/vllm.md
+                - LiteLLM: agents/models/litellm.md
               - 도구 및 통합:
                 - integrations/index.md
-              - 에이전트용 도구:
-                - tools/index.md
-                - 내장 도구: tools/built-in-tools.md
-                - Gemini API 도구:
-                  - 컴퓨터 사용: tools/gemini-api/computer-use.md
-                - Google Cloud 도구:
-                  - 개요: tools/google-cloud-tools.md
-                  - 데이터베이스용 MCP 도구상자: tools/google-cloud/mcp-toolbox-for-databases.md
-                  - BigQuery 에이전트 분석: tools/google-cloud/bigquery-agent-analytics.md
-                  - 에이전트 엔진으로 코드 실행: tools/google-cloud/code-exec-agent-engine.md
-                - 서드파티 도구:
-                  - tools/third-party/index.md
-                  - AgentQL: tools/third-party/agentql.md
-                  - Bright Data: tools/third-party/bright-data.md
-                  - Browserbase: tools/third-party/browserbase.md
-                  - Exa: tools/third-party/exa.md
-                  - Firecrawl: tools/third-party/firecrawl.md
-                  - GitHub: tools/third-party/github.md
-                  - GitLab: tools/third-party/gitlab.md
-                  - Hugging Face: tools/third-party/hugging-face.md
-                  - Notion: tools/third-party/notion.md
-                  - ScrapeGraphAI: tools/third-party/scrapegraphai.md
-                  - Tavily: tools/third-party/tavily.md
-                  - Agentic UI (AG-UI): tools/third-party/ag-ui.md
               - 커스텀 도구:
                 - tools-custom/index.md
                 - 함수 도구:
-                  - 개요: tools/function-tools.md
-                  - 도구 성능: tools/performance.md
-                  - 작업 확인: tools/confirmation.md
-                - MCP 도구: tools/mcp-tools.md
+                  - 개요: tools-custom/function-tools.md
+                  - 도구 성능: tools-custom/performance.md
+                  - 작업 확인: tools-custom/confirmation.md
+                - MCP 도구: tools-custom/mcp-tools.md
                 - OpenAPI 도구: tools-custom/openapi-tools.md
-                - 인증: tools/authentication.md
+                - 인증: tools-custom/authentication.md
                 - 도구 제한 사항: tools/limitations.md
             - 에이전트 실행:
               - 에이전트 런타임:
                 - 에이전트 런타임: runtime/index.md
-                - 런타임 설정: runtime/runconfig.md
-                - API 서버: runtime/api-server.md
-                - 에이전트 재개: runtime/resume.md
                 - 웹 인터페이스: runtime/web-interface.md
                 - 명령줄: runtime/command-line.md
+                - API 서버: runtime/api-server.md
+                - 에이전트 재개: runtime/resume.md
+                - 런타임 설정: runtime/runconfig.md
                 - 이벤트 루프: runtime/event-loop.md
               - 배포:
                 - deploy/index.md
@@ -358,14 +342,8 @@ plugins:
                 - Cloud Run: deploy/cloud-run.md
                 - GKE: deploy/gke.md
               - 관측성(Observability):
+                - observability/index.md
                 - 로깅: observability/logging.md
-                - Cloud Trace: observability/cloud-trace.md
-                - AgentOps: observability/agentops.md
-                - Arize AX: observability/arize-ax.md
-                - Freeplay: observability/freeplay.md
-                - Monocle: observability/monocle.md
-                - Phoenix: observability/phoenix.md
-                - W&B Weave: observability/weave.md
               - 평가:
                 - evaluate/index.md
                 - 기준: evaluate/criteria.md
@@ -380,12 +358,12 @@ plugins:
                 - 컨텍스트 압축: context/compaction.md
               - 세션 및 메모리:
                 - sessions/index.md
-                - 세션: sessions/session.md
+                - 세션:
+                  - sessions/session/index.md
+                  - 세션 되돌리기: sessions/session/rewind.md
+                  - 세션 마이그레이션: sessions/session/migrate.md
                 - 상태: sessions/state.md
                 - 메모리: sessions/memory.md
-                - 세션 되돌리기: sessions/session/rewind.md
-                - 세션 이동: sessions/session/migrate.md
-                - Vertex AI Express 모드: sessions/express-mode.md
               - 콜백:
                 - callbacks/index.md
                 - 콜백 종류: callbacks/types-of-callbacks.md
@@ -398,7 +376,6 @@ plugins:
                 - apps/index.md
               - 플러그인:
                 - plugins/index.md
-                - 반영 및 재시도: plugins/reflect-and-retry.md
               - MCP:
                 - mcp/index.md
               - A2A 프로토콜:
@@ -412,15 +389,16 @@ plugins:
                   - Go: a2a/quickstart-consuming-go.md
               - 양방향 스트리밍 (실시간):
                 - streaming/index.md
-                - 커스텀 오디오 양방향 스트리밍 앱 샘플 (웹소켓): streaming/custom-streaming-ws.md
-                - 양방향 스트리밍 개발 가이드 시리즈: streaming/dev-guide/part1.md
-                - 양방향 스트리밍 개발 가이드: streaming/dev-guide/part2.md
-                - 양방향 스트리밍 개발 가이드: streaming/dev-guide/part3.md
-                - 양방향 스트리밍 개발 가이드: streaming/dev-guide/part4.md
-                - 양방향 스트리밍 개발 가이드: streaming/dev-guide/part5.md
+                - 양방향 스트리밍 개발 가이드 시리즈:
+                  - 파트 1. 스트리밍 소개: streaming/dev-guide/part1.md
+                  - 파트 2. 메시지 전송: streaming/dev-guide/part2.md
+                  - 파트 3. 이벤트 처리: streaming/dev-guide/part3.md
+                  - 파트 4. 런 구성: streaming/dev-guide/part4.md
+                  - 파트 5. 오디오, 이미지, 비디오: streaming/dev-guide/part5.md
                 - 스트리밍 도구: streaming/streaming-tools.md
-                - 양방향 스트리밍 동작 구성하기: streaming/configuration.md
+                - 양방향 스트리밍 동작 구성: streaming/configuration.md
               - 그라운딩:
+                - grounding/index.md
                 - Google 검색 그라운딩 이해: grounding/google_search_grounding.md
                 - Vertex AI 검색 그라운딩 이해: grounding/vertex_ai_search_grounding.md
             - 레퍼런스:
@@ -428,7 +406,8 @@ plugins:
               - API 레퍼런스:
                 - api-reference/index.md
                 - Python ADK: api-reference/python/index.html
-                - Go ADK: https://pkg.go.dev/google.golang.org/adk" target="_blank
+                - Typescript ADK: api-reference/typescript/index.html
+                - Go ADK: https://pkg.go.dev/google.golang.org/adk
                 - Java ADK: api-reference/java/index.html
                 - CLI 레퍼런스: api-reference/cli/index.html
                 - 에이전트 설정 레퍼런스: api-reference/agentconfig/index.html
@@ -448,16 +427,16 @@ plugins:
                 - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
                 - Java: get-started/java.md
-              - エージェントの作成:
+              - エージェントを作成:
                 - tutorials/index.md
                 - マルチツールエージェント: get-started/quickstart.md
                 - エージェントチーム: tutorials/agent-team.md
-              - ストリーミングエージェント:
-                - get-started/streaming/index.md
-                - Python: get-started/streaming/quickstart-streaming.md
-                - Java: get-started/streaming/quickstart-streaming-java.md
+                - ストリーミングエージェント:
+                  - get-started/streaming/index.md
+                  - Python: get-started/streaming/quickstart-streaming.md
+                  - Java: get-started/streaming/quickstart-streaming-java.md
                 - ビジュアルビルダー: visual-builder/index.md
-                - コーディング with AI: tutorials/coding-with-ai.md
+                - AIでコーディング: tutorials/coding-with-ai.md
                 - 高度な設定: get-started/installation.md
               - エージェント:
                 - agents/index.md
@@ -470,51 +449,35 @@ plugins:
                 - カスタムエージェント: agents/custom-agents.md
                 - マルチエージェントシステム: agents/multi-agents.md
                 - エージェント設定: agents/config.md
-                - モデルと認証: agents/models.md
+              - エージェント向けモデル:
+                - agents/models/index.md
+                - Gemini: agents/models/google-gemini.md
+                - Claude: agents/models/anthropic.md
+                - Vertex AI hosted: agents/models/vertex.md
+                - Apigee AI Gateway: agents/models/apigee.md
+                - Ollama: agents/models/ollama.md
+                - vLLM: agents/models/vllm.md
+                - LiteLLM: agents/models/litellm.md
               - ツールと統合:
                 - integrations/index.md
-              - エージェント用のツール:
-                - tools/index.md
-                - 内蔵ツール: tools/built-in-tools.md
-                - Gemini APIツール:
-                  - コンピュータの使用: tools/gemini-api/computer-use.md
-                - Google Cloudツール:
-                  - 概要: tools/google-cloud-tools.md
-                  - データベース向けMCPツールボックス: tools/google-cloud/mcp-toolbox-for-databases.md
-                  - BigQuery エージェント分析: tools/google-cloud/bigquery-agent-analytics.md
-                  - エージェントエンジンによるコード実行: tools/google-cloud/code-exec-agent-engine.md
-                - サードパーティツール:
-                  - tools/third-party/index.md
-                  - AgentQL: tools/third-party/agentql.md
-                  - Bright Data: tools/third-party/bright-data.md
-                  - Browserbase: tools/third-party/browserbase.md
-                  - Exa: tools/third-party/exa.md
-                  - Firecrawl: tools/third-party/firecrawl.md
-                  - GitHub: tools/third-party/github.md
-                  - GitLab: tools/third-party/gitlab.md
-                  - Hugging Face: tools/third-party/hugging-face.md
-                  - Notion: tools/third-party/notion.md
-                  - ScrapeGraphAI: tools/third-party/scrapegraphai.md
-                  - Tavily: tools/third-party/tavily.md
-                  - Agentic UI (AG-UI): tools/third-party/ag-ui.md
               - カスタムツール:
                 - tools-custom/index.md
                 - 関数ツール:
-                  - 概要: tools/function-tools.md
-                  - ツールのパフォーマンス: tools/performance.md
-                  - アクションの確認: tools/confirmation.md
-                - MCPツール: tools/mcp-tools.md
+                  - 概要: tools-custom/function-tools.md
+                  - ツールのパフォーマンス: tools-custom/performance.md
+                  - アクションの確認: tools-custom/confirmation.md
+                - MCPツール: tools-custom/mcp-tools.md
                 - OpenAPIツール: tools-custom/openapi-tools.md
-                - 認証: tools/authentication.md
+                - 認証: tools-custom/authentication.md
                 - ツールの制限: tools/limitations.md
             - エージェントの実行:
               - エージェントランタイム:
                 - エージェントランタイム: runtime/index.md
-                - ランタイム設定: runtime/runconfig.md
-                - APIサーバー: runtime/api-server.md
-                - エージェントの再開: runtime/resume.md
                 - Webインターフェース: runtime/web-interface.md
                 - コマンドライン: runtime/command-line.md
+                - APIサーバー: runtime/api-server.md
+                - エージェントの再開: runtime/resume.md
+                - ランタイム設定: runtime/runconfig.md
                 - イベントループ: runtime/event-loop.md
               - デプロイ:
                 - deploy/index.md
@@ -526,14 +489,8 @@ plugins:
                 - Cloud Run: deploy/cloud-run.md
                 - GKE: deploy/gke.md
               - オブザーバビリティ:
+                - observability/index.md
                 - ロギング: observability/logging.md
-                - Cloud Trace: observability/cloud-trace.md
-                - AgentOps: observability/agentops.md
-                - Arize AX: observability/arize-ax.md
-                - Freeplay: observability/freeplay.md
-                - Monocle: observability/monocle.md
-                - Phoenix: observability/phoenix.md
-                - W&B Weave: observability/weave.md
               - 評価:
                 - evaluate/index.md
                 - 基準: evaluate/criteria.md
@@ -548,12 +505,12 @@ plugins:
                 - コンテキストの圧縮: context/compaction.md
               - セッションとメモリ:
                 - sessions/index.md
-                - セッション: sessions/session.md
+                - セッション:
+                  - sessions/session/index.md
+                  - セッションの巻き戻し: sessions/session/rewind.md
+                  - セッションの移行: sessions/session/migrate.md
                 - ステート: sessions/state.md
                 - メモリ: sessions/memory.md
-                - セッションの巻き戻し: sessions/session/rewind.md
-                - セッションの移行: sessions/session/migrate.md
-                - Vertex AI Expressモード: sessions/express-mode.md
               - コールバック:
                 - callbacks/index.md
                 - コールバックの種類: callbacks/types-of-callbacks.md
@@ -566,7 +523,6 @@ plugins:
                 - apps/index.md
               - プラグイン:
                 - plugins/index.md
-                - 反映と再試行: plugins/reflect-and-retry.md
               - MCP:
                 - mcp/index.md
               - A2Aプロトコル:
@@ -578,17 +534,18 @@ plugins:
                 - A2Aクイックスタート(利用):
                   - Python: a2a/quickstart-consuming.md
                   - Go: a2a/quickstart-consuming-go.md
-              - 双方向ストリーミング(ライブ):
+              - 双方向ストリーミング（ライブ）:
                 - streaming/index.md
-                - カスタム音声双方向ストリーミングアプリのサンプル(WebSockets): streaming/custom-streaming-ws.md
-                - 双方向ストリーミング開発ガイドシリーズ: streaming/dev-guide/part1.md
-                - 双方向ストリーミング開発ガイド 第2部: streaming/dev-guide/part2.md
-                - 双方向ストリーミング開発ガイド 第3部: streaming/dev-guide/part3.md
-                - 双方向ストリーミング開発ガイド 第4部: streaming/dev-guide/part4.md
-                - 双方向ストリーミング開発ガイド 第5部: streaming/dev-guide/part5.md
+                - 双方向ストリーミング開発ガイドシリーズ:
+                  - パート1. ストリーミング入門: streaming/dev-guide/part1.md
+                  - パート2. メッセージ送信: streaming/dev-guide/part2.md
+                  - パート3. イベント処理: streaming/dev-guide/part3.md
+                  - パート4. RunConfig: streaming/dev-guide/part4.md
+                  - パート5. 音声・画像・動画: streaming/dev-guide/part5.md
                 - ストリーミングツール: streaming/streaming-tools.md
-                - 双方向ストリーミングの動作設定: streaming/configuration.md
+                - 双方向ストリーミング動作の設定: streaming/configuration.md
               - グラウンディング:
+                - grounding/index.md
                 - Google検索グラウンディングについて: grounding/google_search_grounding.md
                 - Vertex AI Searchグラウンディングについて: grounding/vertex_ai_search_grounding.md
             - リファレンス:
@@ -596,7 +553,8 @@ plugins:
               - APIリファレンス:
                 - api-reference/index.md
                 - Python ADK: api-reference/python/index.html
-                - Go ADK: https://pkg.go.dev/google.golang.org/adk" target="_blank
+                - Typescript ADK: api-reference/typescript/index.html
+                - Go ADK: https://pkg.go.dev/google.golang.org/adk
                 - Java ADK: api-reference/java/index.html
                 - CLIリファレンス: api-reference/cli/index.html
                 - エージェント設定リファレンス: api-reference/agentconfig/index.html
