@@ -1,7 +1,7 @@
 # 아티팩트(Artifacts)
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에 연결되거나, 여러 세션에 걸쳐 영구적으로 사용자와 연결된, 이름과 버전이 지정된 바이너리 데이터를 관리하기 위한 핵심적인 메커니즘을 나타냅니다. 아티팩트를 통해 에이전트와 도구는 단순한 텍스트 문자열을 넘어 파일, 이미지, 오디오 및 기타 바이너리 형식과 관련된 더 풍부한 상호작용을 처리할 수 있습니다.

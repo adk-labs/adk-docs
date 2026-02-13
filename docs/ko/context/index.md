@@ -1,7 +1,7 @@
 # 컨텍스트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 도구들이 특정 작업을 수행하는 동안 사용할 수 있는 중요한 정보의 묶음을 의미합니다. 현재 작업이나 대화 차례를 효과적으로 처리하는 데 필요한 배경지식 및 리소스라고 생각할 수 있습니다.

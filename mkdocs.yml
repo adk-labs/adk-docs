@@ -277,18 +277,20 @@ plugins:
               - 시작하기:
                 - get-started/index.md
                 - Python: get-started/python.md
+                - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
                 - Java: get-started/java.md
               - 에이전트 만들기:
                 - tutorials/index.md
                 - 다중 도구 에이전트: get-started/quickstart.md
                 - 에이전트 팀: tutorials/agent-team.md
-                - 스트리밍 에이전트:
-                  - get-started/streaming/index.md
-                  - Python: get-started/streaming/quickstart-streaming.md
-                  - Java: get-started/streaming/quickstart-streaming-java.md
-                - 비주얼 빌더: visual-builder/index.md
-                - 고급 설정: get-started/installation.md
+              - 스트리밍 에이전트:
+                - get-started/streaming/index.md
+                - Python: get-started/streaming/quickstart-streaming.md
+                - Java: get-started/streaming/quickstart-streaming-java.md
+              - 비주얼 빌더: visual-builder/index.md
+              - 코딩 에이전트: tutorials/coding-with-ai.md
+              - 고급 설정: get-started/installation.md
               - 에이전트:
                 - agents/index.md
                 - LLM 에이전트: agents/llm-agents.md
@@ -301,6 +303,8 @@ plugins:
                 - 다중 에이전트 시스템: agents/multi-agents.md
                 - 에이전트 설정: agents/config.md
                 - 모델 및 인증: agents/models.md
+              - 도구 및 통합:
+                - integrations/index.md
               - 에이전트용 도구:
                 - tools/index.md
                 - 내장 도구: tools/built-in-tools.md
@@ -334,15 +338,23 @@ plugins:
                 - MCP 도구: tools/mcp-tools.md
                 - OpenAPI 도구: tools-custom/openapi-tools.md
                 - 인증: tools/authentication.md
+                - 도구 제한 사항: tools/limitations.md
             - 에이전트 실행:
               - 에이전트 런타임:
                 - 에이전트 런타임: runtime/index.md
                 - 런타임 설정: runtime/runconfig.md
                 - API 서버: runtime/api-server.md
                 - 에이전트 재개: runtime/resume.md
+                - 웹 인터페이스: runtime/web-interface.md
+                - 명령줄: runtime/command-line.md
+                - 이벤트 루프: runtime/event-loop.md
               - 배포:
                 - deploy/index.md
-                - 에이전트 엔진: deploy/agent-engine.md
+                - 에이전트 엔진:
+                  - deploy/agent-engine/index.md
+                  - 표준 배포: deploy/agent-engine/deploy.md
+                  - Agent Starter Pack: deploy/agent-engine/asp.md
+                  - 배포된 에이전트 테스트: deploy/agent-engine/test.md
                 - Cloud Run: deploy/cloud-run.md
                 - GKE: deploy/gke.md
               - 관측성(Observability):
@@ -371,6 +383,8 @@ plugins:
                 - 세션: sessions/session.md
                 - 상태: sessions/state.md
                 - 메모리: sessions/memory.md
+                - 세션 되돌리기: sessions/session/rewind.md
+                - 세션 이동: sessions/session/migrate.md
                 - Vertex AI Express 모드: sessions/express-mode.md
               - 콜백:
                 - callbacks/index.md
@@ -400,6 +414,10 @@ plugins:
                 - streaming/index.md
                 - 커스텀 오디오 양방향 스트리밍 앱 샘플 (웹소켓): streaming/custom-streaming-ws.md
                 - 양방향 스트리밍 개발 가이드 시리즈: streaming/dev-guide/part1.md
+                - 양방향 스트리밍 개발 가이드: streaming/dev-guide/part2.md
+                - 양방향 스트리밍 개발 가이드: streaming/dev-guide/part3.md
+                - 양방향 스트리밍 개발 가이드: streaming/dev-guide/part4.md
+                - 양방향 스트리밍 개발 가이드: streaming/dev-guide/part5.md
                 - 스트리밍 도구: streaming/streaming-tools.md
                 - 양방향 스트리밍 동작 구성하기: streaming/configuration.md
               - 그라운딩:
@@ -427,17 +445,19 @@ plugins:
               - はじめに:
                 - get-started/index.md
                 - Python: get-started/python.md
+                - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
                 - Java: get-started/java.md
               - エージェントの作成:
                 - tutorials/index.md
                 - マルチツールエージェント: get-started/quickstart.md
                 - エージェントチーム: tutorials/agent-team.md
-                - ストリーミングエージェント:
-                  - get-started/streaming/index.md
-                  - Python: get-started/streaming/quickstart-streaming.md
-                  - Java: get-started/streaming/quickstart-streaming-java.md
+              - ストリーミングエージェント:
+                - get-started/streaming/index.md
+                - Python: get-started/streaming/quickstart-streaming.md
+                - Java: get-started/streaming/quickstart-streaming-java.md
                 - ビジュアルビルダー: visual-builder/index.md
+                - コーディング with AI: tutorials/coding-with-ai.md
                 - 高度な設定: get-started/installation.md
               - エージェント:
                 - agents/index.md
@@ -451,6 +471,8 @@ plugins:
                 - マルチエージェントシステム: agents/multi-agents.md
                 - エージェント設定: agents/config.md
                 - モデルと認証: agents/models.md
+              - ツールと統合:
+                - integrations/index.md
               - エージェント用のツール:
                 - tools/index.md
                 - 内蔵ツール: tools/built-in-tools.md
@@ -484,15 +506,23 @@ plugins:
                 - MCPツール: tools/mcp-tools.md
                 - OpenAPIツール: tools-custom/openapi-tools.md
                 - 認証: tools/authentication.md
+                - ツールの制限: tools/limitations.md
             - エージェントの実行:
               - エージェントランタイム:
                 - エージェントランタイム: runtime/index.md
                 - ランタイム設定: runtime/runconfig.md
                 - APIサーバー: runtime/api-server.md
                 - エージェントの再開: runtime/resume.md
+                - Webインターフェース: runtime/web-interface.md
+                - コマンドライン: runtime/command-line.md
+                - イベントループ: runtime/event-loop.md
               - デプロイ:
                 - deploy/index.md
-                - エージェントエンジン: deploy/agent-engine.md
+                - エージェントエンジン:
+                  - deploy/agent-engine/index.md
+                  - 標準デプロイ: deploy/agent-engine/deploy.md
+                  - Agent Starter Pack: deploy/agent-engine/asp.md
+                  - デプロイ済みエージェントのテスト: deploy/agent-engine/test.md
                 - Cloud Run: deploy/cloud-run.md
                 - GKE: deploy/gke.md
               - オブザーバビリティ:
@@ -521,6 +551,8 @@ plugins:
                 - セッション: sessions/session.md
                 - ステート: sessions/state.md
                 - メモリ: sessions/memory.md
+                - セッションの巻き戻し: sessions/session/rewind.md
+                - セッションの移行: sessions/session/migrate.md
                 - Vertex AI Expressモード: sessions/express-mode.md
               - コールバック:
                 - callbacks/index.md
@@ -550,6 +582,10 @@ plugins:
                 - streaming/index.md
                 - カスタム音声双方向ストリーミングアプリのサンプル(WebSockets): streaming/custom-streaming-ws.md
                 - 双方向ストリーミング開発ガイドシリーズ: streaming/dev-guide/part1.md
+                - 双方向ストリーミング開発ガイド 第2部: streaming/dev-guide/part2.md
+                - 双方向ストリーミング開発ガイド 第3部: streaming/dev-guide/part3.md
+                - 双方向ストリーミング開発ガイド 第4部: streaming/dev-guide/part4.md
+                - 双方向ストリーミング開発ガイド 第5部: streaming/dev-guide/part5.md
                 - ストリーミングツール: streaming/streaming-tools.md
                 - 双方向ストリーミングの動作設定: streaming/configuration.md
               - グラウンディング:

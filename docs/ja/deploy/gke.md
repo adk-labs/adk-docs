@@ -164,7 +164,7 @@ your-project-directory/
     # main.pyが配置されているディレクトリを取得
     AGENT_DIR = os.path.dirname(os.path.abspath(__file__))
     # セッションサービスURIの例（例：SQLite）
-    SESSION_SERVICE_URI = "sqlite:///./sessions.db"
+    SESSION_SERVICE_URI = "sqlite+aiosqlite:///./sessions.db"  # 例: クイックスタート用のローカルSQLite
     # CORSで許可されるオリジンの例
     ALLOWED_ORIGINS = ["http://localhost", "http://localhost:8080", "*"]
     # Webインターフェースを提供する場合はweb=True、そうでない場合はFalseに設定

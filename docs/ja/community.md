@@ -41,6 +41,47 @@
   </a>
 </div>
 
+## ADKコミュニティコール
+
+!!! tip "つながりを保つ"
+
+    更新情報、カレンダー招待、ADKコミュニティとの交流のために、[ADK Community Google Group](https://groups.google.com/g/adk-community) に参加してください。
+
+    以下の最近の録画を確認するか、[YouTubeプレイリスト](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3)で過去のすべてのコールをご覧ください。
+
+<div class="resource-grid">
+  <a href="https://www.youtube.com/watch?v=h9Lueiqo89E" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/h9Lueiqo89E/maxresdefault.jpg" alt="ADK Community Call Jan 2026">
+    </div>
+    <div class="card-content">
+      <div class="type">コミュニティコール</div>
+      <h3>📞 2026年1月 録画</h3>
+      <p>クロス言語サポート向け Session Service スキーマ、TypeScript マルチエージェントのデモ、MCP サーバー向け API Registry、サードパーティツール統合などを取り上げています。</p>
+    </div>
+  </a>
+  <a href="https://www.youtube.com/watch?v=cNVWhrbdn-E" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/cNVWhrbdn-E/maxresdefault.jpg" alt="ADK Community Call Dec 2025">
+    </div>
+    <div class="card-content">
+      <div class="type">コミュニティコール</div>
+      <h3>📞 2025年12月 録画</h3>
+      <p>ADK TypeScript のローンチ、Gemini 3 Flash サポート、音声エージェント向け双方向ストリーミング、Visual Builder UI などを取り上げています。</p>
+    </div>
+  </a>
+  <a href="https://www.youtube.com/watch?v=bftUz-WBqyw" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/bftUz-WBqyw/maxresdefault.jpg" alt="ADK Community Call Nov 2025">
+    </div>
+    <div class="card-content">
+      <div class="type">コミュニティコール</div>
+      <h3>📞 2025年11月 録画</h3>
+      <p>ADK Go のローンチ、エラー回復のための reflect & retry プラグイン、エージェントセッション巻き戻しのためのタイムトラベルデバッグなどを取り上げています。</p>
+    </div>
+  </a>
+</div>
+
 ## コースと詳細解説 (Courses & Deep Dives)
 
 <div class="resource-grid">
@@ -50,7 +91,7 @@
     </div>
     <div class="card-content">
       <div class="type">オンラインコース</div>
-      <h3>Google提携 5日間AIエージェント集中コース</h3>
+      <h3>🎓 Google提携 5日間AIエージェント集中コース</h3>
       <p>モデル、ツール、メモリ、評価、デプロイメントなど、ADKエージェントの中核となるコンポーネントを使用した構築を行います。</p>
     </div>
   </a>
@@ -102,6 +143,16 @@
       <div class="type">ブログシリーズ</div>
       <h3>🎓 Google ADKによるインテリジェントエージェントの構築</h3>
       <p>GoogleのコードファーストなPythonツールキットを使用してインテリジェントエージェントを構築するための開発者ガイドです。</p>
+    </div>
+  </a>
+  <a href="https://github.com/arjunprabhulal/google-adk-masterclass" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="../assets/community-adk-masterclass-hands-on.png" alt="Google ADK Masterclass Hands-on Series">
+    </div>
+    <div class="card-content">
+      <div class="type">オンラインコース</div>
+      <h3>🎓 Google ADK マスタークラス: ハンズオンシリーズ</h3>
+      <p>エージェント、ワークフロー、ツール、メモリ、MCP連携を扱う20モジュールで、本番対応のAIエージェントを構築します。</p>
     </div>
   </a>
   <a href="https://www.youtube.com/playlist?list=PL0Zc2RFDZsM_MkHOzWNJpaT4EH5fQxA8n" class="resource-card">
@@ -169,6 +220,16 @@
       <p>パーソナライズされたリアルタイムのレコメンデーションによって、AIエージェントがどのようにショッピングに革命をもたらすかをご覧ください。</p>
     </div>
   </a>
+  <a href="https://agentdirectory.folch.ai/" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="../assets/community-agent-directory.png" alt="ADK Agent Directory">
+    </div>
+    <div class="card-content">
+      <div class="type">ギャラリー</div>
+      <h3>📖 ADK Agent Directory</h3>
+      <p>Web検索、画像生成、リサーチなどに対応した本番対応のADKエージェントを見つけて試せます。</p>
+    </div>
+  </a>
 </div>
 
 ## Java向けADK (ADK for Java)
@@ -214,6 +275,7 @@
   <li><a href="https://adk.wiki/">🇨🇳 中国語 (中文) ドキュメント</a></li>
   <li><a href="https://adk-labs.github.io/adk-docs/ko/">🇰🇷 韓国語 (Korean) ドキュメント</a></li>
   <li><a href="https://adk-labs.github.io/adk-docs/ja/">🇯🇵 日本語 (日本語) ドキュメント</a></li>
+  <li><a href="https://adk-es.fabian-castro-c.dev/">🇪🇸 スペイン語 (Español) ドキュメント</a></li>
 </ul>
 
 ## リソースの提供 (Contributing Your Resource)

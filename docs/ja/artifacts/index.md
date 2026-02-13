@@ -1,7 +1,7 @@
 # アーティファクト (Artifacts)
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ADKにおいて、**アーティファクト(Artifacts)**は、特定のユーザーインタラクションセッションに関連付けられるか、複数のセッションにわたって永続的にユーザーに関連付けられる、名前付きでバージョン管理されたバイナリデータを管理するための重要なメカニズムです。これにより、エージェントやツールは単純なテキスト文字列を超えて、ファイル、画像、音声、その他のバイナリ形式を含む、よりリッチなインタラクションを処理できるようになります。

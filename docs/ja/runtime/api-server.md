@@ -1,7 +1,7 @@
 # APIサーバーの使用
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 エージェントをデプロイする前に、意図したとおりに動作するかどうかをテストする必要があります。開発環境でエージェントをテストする最も簡単な方法は、ADK APIサーバーを使用することです。
@@ -222,7 +222,7 @@ ADKは [コールバック](../callbacks/index.md) を使用して、サード�
 
 エージェントのローカルでの動作を確認したので、エージェントのデプロイに進む準備ができました！エージェントをデプロイする方法はいくつかあります。
 
-* [Agent Engine](../deploy/agent-engine.md) にデプロイする: ADKエージェントをGoogle Cloud上のVertex AIのマネージドサービスにデプロイする最も簡単な方法です。
+* [Agent Engine](../deploy/agent-engine/index.md) にデプロイする: ADKエージェントをGoogle Cloud上のVertex AIのマネージドサービスにデプロイする最も簡単な方法です。
 * [Cloud Run](../deploy/cloud-run.md) にデプロイする: Google Cloud上のサーバーレスアーキテクチャを使用して、エージェントのスケーリングと管理を完全に制御できます。
 
 

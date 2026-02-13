@@ -1,7 +1,7 @@
 # 会話コンテキスト入門：セッション、状態、メモリ
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 意味のある、複数ターンにわたる会話を実現するには、エージェントがコンテキストを理解する必要があります。人間と同様に、エージェントは継続性を保ち、繰り返しを避けるために、会話の履歴、つまりこれまで何を話し、何が行われたかを思い出す必要があります。エージェント開発キット（ADK）は、`Session`、`State`、`Memory`を通じてこのコンテキストを管理するための構造化された方法を提供します。

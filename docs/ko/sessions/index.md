@@ -1,7 +1,7 @@
 # 대화형 컨텍스트 소개: 세션, 상태, 그리고 메모리
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 의미 있는, 여러 턴에 걸친 대화는 에이전트가 컨텍스트를 이해해야 합니다. 인간과 마찬가지로, 에이전트는 연속성을 유지하고 반복을 피하기 위해 대화 기록, 즉 어떤 말이 오고 갔고 어떤 작업이 수행되었는지를 기억해야 합니다. 에이전트 개발 키트(ADK)는 `Session`, `State`, `Memory`를 통해 이 컨텍스트를 관리하는 구조화된 방법을 제공합니다.

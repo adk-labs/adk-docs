@@ -1,7 +1,7 @@
 # ADKにおけるマルチエージェントシステム
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 エージェント型アプリケーションが複雑になるにつれて、モノリシックな単一のエージェントとして構成することは、開発、保守、および推論が困難になる可能性があります。Agent Development Kit (ADK) は、複数の異なる`BaseAgent`インスタンスを**マルチエージェントシステム (MAS)** に組み込むことで、洗練されたアプリケーションの構築をサポートします。

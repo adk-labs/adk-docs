@@ -1,6 +1,10 @@
 # Vertex AI Searchグラウンディングを理解する
 
-[Vertex AI Searchグラウンディングツール](../tools/built-in-tools.md#vertex-ai-search)は、AIエージェントがプライベートな企業ドキュメントやデータリポジトリの情報にアクセスできるようにする、Agent Development Kit (ADK) の強力な機能です。エージェントをインデックス化された企業コンテンツに接続することで、組織の知識ベースに基づいた回答をユーザーに提供できます。
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
+</div>
+
+[Vertex AI Searchグラウンディングツール](/adk-docs/ja/tools/google-cloud/vertex-ai-search/)は、AIエージェントがプライベートな企業ドキュメントやデータリポジトリの情報にアクセスできるようにする、Agent Development Kit (ADK) の強力な機能です。エージェントをインデックス化された企業コンテンツに接続することで、組織の知識ベースに基づいた回答をユーザーに提供できます。
 
 この機能は、社内ドキュメント、ポリシー、研究論文、または[Vertex AI Search](https://cloud.google.com/enterprise-search)データストアにインデックス化された独自のコンテンツからの情報が必要な、企業固有のクエリに特に役立ちます。エージェントが知識ベースからの情報が必要であると判断すると、インデックス化されたドキュメントを自動的に検索し、適切な帰属表示とともに結果を応答に組み込みます。
 

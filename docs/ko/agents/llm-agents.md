@@ -1,7 +1,7 @@
 # LLM 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 `LlmAgent`(종종 `Agent`로 축약)는 ADK의 핵심 구성 요소로, 애플리케이션의 "사고" 부분을 담당합니다. `LlmAgent`는 대규모 언어 모델(LLM)의 강력한 성능을 활용하여 추론, 자연어 이해, 의사 결정, 응답 생성, 도구와 상호 작용을 수행합니다.
@@ -18,7 +18,7 @@
 
 *   **`description` (선택 사항, 다중 에이전트에 권장):** 에이전트의 기능에 대한 간결한 요약을 제공합니다. 이 설명은 주로 *다른* LLM 에이전트가 이 에이전트에게 작업을 라우팅해야 할지 결정하는 데 사용됩니다. 동료 에이전트와 구별될 수 있도록 구체적으로 작성하세요(예: "결제 에이전트"가 아닌 "현재 청구서에 대한 문의 처리").
 
-*   **`model` (필수):** 이 에이전트의 추론을 구동할 기본 LLM을 지정합니다. 이는 `"gemini-2.0-flash"`와 같은 문자열 식별자입니다. 모델 선택은 에이전트의 능력, 비용, 성능에 영향을 미칩니다. 사용 가능한 옵션과 고려 사항은 [모델](models.md) 페이지를 참조하세요.
+*   **`model` (필수):** 이 에이전트의 추론을 구동할 기본 LLM을 지정합니다. 이는 `"gemini-2.0-flash"`와 같은 문자열 식별자입니다. 모델 선택은 에이전트의 능력, 비용, 성능에 영향을 미칩니다. 사용 가능한 옵션과 고려 사항은 [모델](/adk-docs/ko/agents/models/) 페이지를 참조하세요.
 
 === "Python"
 

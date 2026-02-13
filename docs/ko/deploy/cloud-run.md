@@ -1,7 +1,7 @@
 # Cloud Run에 배포
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 [Cloud Run](https://cloud.google.com/run)은 Google의 확장 가능한 인프라 위에 코드를 직접 실행할 수 있는 완전 관리형 플랫폼입니다.

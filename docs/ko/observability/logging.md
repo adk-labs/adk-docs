@@ -1,7 +1,7 @@
 # 에이전트 개발 키트(ADK)의 로깅
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 에이전트 개발 키트(ADK)는 Python의 표준 `logging` 모듈을 사용하여 유연하고 강력한 로깅 기능을 제공합니다. 이 로그를 설정하고 해석하는 방법을 이해하는 것은 에이전트의 동작을 모니터링하고 문제를 효과적으로 디버깅하는 데 매우 중요합니다.

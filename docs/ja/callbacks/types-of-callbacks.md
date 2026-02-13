@@ -1,7 +1,7 @@
 # コールバックの種類
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 フレームワークは、エージェントの実行における様々な段階でトリガーされる、異なる種類のコールバックを提供します。各コールバックがいつ発火し、どのコンテキストを受け取るかを理解することが、効果的に使用するための鍵となります。

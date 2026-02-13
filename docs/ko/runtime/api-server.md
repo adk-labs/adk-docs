@@ -1,7 +1,7 @@
 # API 서버 사용하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 에이전트를 배포하기 전에 의도한 대로 작동하는지 테스트해야 합니다. 개발 환경에서 에이전트를 테스트하는 가장 쉬운 방법은 ADK API 서버를 사용하는 것입니다.
@@ -222,7 +222,7 @@ ADK는 [콜백](../callbacks/index.md)을 사용하여 서드파티 관찰 가�
 
 이제 에이전트의 로컬 작동을 확인했으므로, 에이전트 배포 단계로 넘어갈 준비가 되었습니다! 에이전트를 배포할 수 있는 몇 가지 방법은 다음과 같습니다.
 
-* [Agent Engine](../deploy/agent-engine.md)에 배포하기: ADK 에이전트를 Google Cloud의 Vertex AI 관리형 서비스에 배포하는 가장 쉬운 방법입니다.
+* [Agent Engine](../deploy/agent-engine/index.md)에 배포하기: ADK 에이전트를 Google Cloud의 Vertex AI 관리형 서비스에 배포하는 가장 쉬운 방법입니다.
 * [Cloud Run](../deploy/cloud-run.md)에 배포하기: Google Cloud의 서버리스 아키텍처를 사용하여 에이전트를 확장하고 관리하는 방법을 완전히 제어할 수 있습니다.
 
 

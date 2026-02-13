@@ -164,7 +164,7 @@ your-project-directory/
     # main.py가 위치한 디렉토리를 가져옵니다
     AGENT_DIR = os.path.dirname(os.path.abspath(__file__))
     # 세션 서비스 URI 예시 (예: SQLite)
-    SESSION_SERVICE_URI = "sqlite:///./sessions.db"
+    SESSION_SERVICE_URI = "sqlite+aiosqlite:///./sessions.db"  # 예: 빠른 시작용 로컬 SQLite
     # CORS를 위한 허용된 출처 예시
     ALLOWED_ORIGINS = ["http://localhost", "http://localhost:8080", "*"]
     # 웹 인터페이스를 제공하려는 경우 web=True로, 그렇지 않으면 False로 설정

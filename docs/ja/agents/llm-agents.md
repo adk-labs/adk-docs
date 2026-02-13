@@ -1,7 +1,7 @@
 # LLMエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 `LlmAgent`（しばしば`Agent`と略されます）はADKにおけるコアコンポーネントであり、アプリケーションの「思考」部分として機能します。大規模言語モデル（LLM）の能力を活用して、推論、自然言語の理解、意思決定、応答の生成、ツールとの対話を行います。
@@ -18,7 +18,7 @@
 
 *   **`description` (任意、マルチエージェントで推奨):** エージェントの能力に関する簡潔な要約を提供します。この説明は主に、*他の*LLMエージェントがこのエージェントにタスクをルーティングすべきかどうかを判断するために使用されます。同僚と区別できるように、具体的に記述してください（例: 「請求エージェント」ではなく、「現在の請求書に関する問い合わせを処理します」）。
 
-*   **`model` (必須):** このエージェントの推論を支える基盤となるLLMを指定します。これは`"gemini-2.0-flash"`のような文字列識別子です。モデルの選択は、エージェントの能力、コスト、パフォーマンスに影響します。利用可能なオプションと考慮事項については、[モデル](models.md)ページを参照してください。
+*   **`model` (必須):** このエージェントの推論を支える基盤となるLLMを指定します。これは`"gemini-2.0-flash"`のような文字列識別子です。モデルの選択は、エージェントの能力、コスト、パフォーマンスに影響します。利用可能なオプションと考慮事項については、[モデル](/adk-docs/ja/agents/models/)ページを参照してください。
 
 === "Python"
 

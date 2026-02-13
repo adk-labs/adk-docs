@@ -1,7 +1,7 @@
 # エージェント開発キット（ADK）におけるロギング
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 エージェント開発キット（ADK）は、Pythonの標準`logging`モジュールを使用して、柔軟かつ強力なロギング機能を提供します。これらのログの設定方法と解釈を理解することは、エージェントの振る舞いを監視し、問題を効果的にデバッグするために非常に重要です。

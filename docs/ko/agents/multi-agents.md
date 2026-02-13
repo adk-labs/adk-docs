@@ -1,7 +1,7 @@
 # ADK의 다중 에이전트 시스템
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 에이전트 기반 애플리케이션이 복잡해짐에 따라, 단일 모놀리식 에이전트로 구조화하는 것은 개발, 유지보수 및 추론이 어려워질 수 있습니다. 에이전트 개발 키트(ADK)는 여러 개의 고유한 `BaseAgent` 인스턴스를 **다중 에이전트 시스템(MAS)**으로 구성하여 정교한 애플리케이션을 구축하는 것을 지원합니다.

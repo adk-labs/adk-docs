@@ -120,3 +120,7 @@ adk eval \
 * `model`：ユーザーシミュレーターを支えるモデル。
 * `model_configuration`：モデルの動作を制御する[`GenerateContentConfig`](https://github.com/googleapis/python-genai/blob/6196b1b4251007e33661bb5d7dc27bafee3feefe/google/genai/types.py#L4295)。
 * `max_allowed_invocations`：会話が強制的に終了される前に許可される最大ユーザーエージェントインタラクション数。これは、`EvalSet`で最も長い妥当なユーザーエージェントインタラクションよりも大きく設定する必要があります。
+* `custom_instructions`：任意。ユーザーシミュレーターのデフォルト指示を上書きします。指示文字列には、以下のプレースホルダーを*事前に値へ置換せずにそのまま*含める必要があります。
+    * `{stop_signal}`：ユーザーシミュレーターが会話終了と判断したときに生成するテキスト
+    * `{conversation_plan}`：ユーザーシミュレーターが従うべき会話全体の計画
+    * `{conversation_history}`：ここまでのユーザーとエージェントの会話履歴

@@ -398,7 +398,7 @@ if auth_request_function_call_id and auth_config:
 
 ### 前提条件
 
-関数シグネチャには[`tool_context: ToolContext`](../tools/index.md#tool-context)が*必須*です。ADKはこのオブジェクトを自動的に挿入し、状態および認証メカニズムへのアクセスを提供します。
+関数シグネチャには[`tool_context: ToolContext`](../tools-custom/index.md#tool-context)が*必須*です。ADKはこのオブジェクトを自動的に挿入し、状態および認証メカニズムへのアクセスを提供します。
 
 ```py
 from google.adk.tools import FunctionTool, ToolContext

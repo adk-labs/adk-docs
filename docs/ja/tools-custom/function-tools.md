@@ -1,7 +1,7 @@
 # 関数ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 事前に構築されたADKツールが要件を満たさない場合は、カスタムの*関数ツール*を作成できます。関数ツールを構築すると、独自のデータベースへの接続や独自のアルゴリズムの実装など、カスタマイズされた機能を作成できます。

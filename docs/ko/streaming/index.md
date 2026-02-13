@@ -1,35 +1,25 @@
-# ADK의 양방향(Bidi) 스트리밍 (live)
+# ADK의 양방향(Bidi) 스트리밍(live)
 
 <div class="language-support-tag">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">실험적 기능</span>
 </div>
   
-ADK의 양방향(Bidi) 스트리밍(live)은 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live)의 저지연 양방향 음성 및 영상 상호작용 기능을 AI 에이전트에 추가합니다.
+ADK의 양방향(Bidi) 스트리밍(live)은 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live)의 저지연 양방향 음성/영상 상호작용 기능을 AI 에이전트에 추가합니다.
 
-!!! example "실험적 프리뷰 릴리스"
-
-    양방향(Bidi) 스트리밍 기능은 실험적 기능입니다.
-
-양방향 스트리밍 또는 라이브 모드를 사용하면, 최종 사용자에게 자연스럽고 사람과 유사한 음성 대화 경험을 제공할 수 있습니다. 여기에는 사용자가 음성 명령으로 에이전트의 응답을 중단시키는 기능도 포함됩니다. 스트리밍 기능을 갖춘 에이전트는 텍스트, 오디오, 비디오 입력을 처리할 수 있으며, 텍스트 및 오디오 출력을 제공할 수 있습니다.
+양방향 스트리밍(라이브) 모드에서는 사용자에게 자연스럽고 사람 같은 음성 대화 경험을 제공할 수 있으며, 사용자가 음성 명령으로 에이전트 응답을 중단하는 것도 가능합니다. 스트리밍 에이전트는 텍스트, 오디오, 비디오 입력을 처리하고 텍스트와 오디오 출력을 제공합니다.
 
 <div class="video-grid">
   <div class="video-item">
     <div class="video-container">
-      <iframe src="https://www.youtube-nocookie.com/embed/Tu7-voU7nnw?si=RKs7EWKjx0bL96i5" title="Shopper's Concierge" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <iframe src="https://www.youtube-nocookie.com/embed/vLUkAGeLR1k" title="ADK Bidi-streaming in 5 minutes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
   </div>
-
   <div class="video-item">
     <div class="video-container">
-      <iframe src="https://www.youtube-nocookie.com/embed/LwHPYyw7u6U?si=xxIEhnKBapzQA6VV" title="Shopper's Concierge" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <iframe src="https://www.youtube-nocookie.com/embed/Hwx94smxT_0" title="Shopper's Concierge 2 Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
   </div>
 </div>
-
-!!! info
-
-    이는 서버 측 스트리밍이나 토큰 수준 스트리밍과는 다릅니다.
-    토큰 수준 스트리밍은 언어 모델이 응답을 생성하여 토큰 단위로 사용자에게 다시 보내는 단방향 프로세스입니다. 이는 '타이핑' 효과를 만들어 즉각적인 응답이라는 인상을 주고 답변의 시작 부분을 보기까지 걸리는 시간을 줄여줍니다. 사용자가 전체 프롬프트를 보내면 모델이 이를 처리한 다음, 응답을 조금씩 생성하여 다시 보내기 시작합니다. 이 섹션은 양방향 스트리밍(live)에 대한 내용입니다.
 
 <div class="grid cards" markdown>
 
@@ -37,56 +27,60 @@ ADK의 양방향(Bidi) 스트리밍(live)은 [Gemini Live API](https://ai.google
 
     ---
 
-    이 빠른 시작에서는 간단한 에이전트를 구축하고 ADK의 스트리밍을 사용하여 저지연 양방향 음성 및 영상 통신을 구현합니다.
+    이 빠른 시작에서는 간단한 에이전트를 만들고 ADK 스트리밍을 사용해 저지연 양방향 음성/영상 통신을 구현합니다.
 
     - [빠른 시작 (양방향 스트리밍)](../get-started/streaming/quickstart-streaming.md)
 
--   :material-console-line: **사용자 정의 오디오 스트리밍 앱 샘플**
+-   :material-console-line: **양방향 스트리밍 데모 애플리케이션**
 
     ---
 
-    이 문서는 ADK Streaming과 FastAPI로 구축된 사용자 정의 비동기 웹 앱의 서버 및 클라이언트 코드 개요를 다룹니다. WebSockets를 통해 실시간 양방향 오디오 및 텍스트 통신을 가능하게 합니다.
+    텍스트/오디오/이미지 멀티모달을 지원하는 ADK 양방향 스트리밍의 프로덕션 수준 레퍼런스 구현입니다. FastAPI 기반으로 실시간 WebSocket 통신, 자동 전사, Google Search 도구 호출, 전체 스트리밍 라이프사이클 관리를 보여줍니다. 개발 가이드 시리즈 전반에서 이 데모를 참조합니다.
 
-    - [사용자 정의 오디오 스트리밍 앱 샘플 (WebSockets)](custom-streaming-ws.md)
+    - [ADK 양방향 스트리밍 데모](https://github.com/google/adk-samples/tree/main/python/agents/bidi-demo)
+
+-   :material-console-line: **블로그 게시물: ADK 양방향 스트리밍 비주얼 가이드**
+
+    ---
+
+    ADK 양방향 스트리밍 기반 실시간 멀티모달 AI 에이전트 개발을 시각적으로 설명한 가이드입니다. 직관적인 다이어그램과 일러스트를 통해 Bidi-streaming의 동작 방식과 인터랙티브 AI 에이전트 구축 방법을 이해할 수 있습니다.
+
+    - [블로그 게시물: ADK 양방향 스트리밍 비주얼 가이드](https://medium.com/google-cloud/adk-bidi-streaming-a-visual-guide-to-real-time-multimodal-ai-agent-development-62dd08c81399)
 
 -   :material-console-line: **양방향 스트리밍 개발 가이드 시리즈**
 
     ---
 
-    ADK를 사용한 양방향 스트리밍 개발에 대해 더 깊이 알아보기 위한 시리즈 문서입니다. 기본 개념과 사용 사례, 핵심 API, 그리고 엔드투엔드 애플리케이션 설계를 배울 수 있습니다.
+    ADK 기반 양방향 스트리밍 개발을 더 깊게 다루는 시리즈입니다. 기본 개념과 사용 사례, 핵심 API, 엔드투엔드 애플리케이션 설계를 배울 수 있습니다.
 
-    - [양방향 스트리밍 개발 가이드 시리즈: 1부 - 소개](dev-guide/part1.md)
+    - [1부: ADK 양방향 스트리밍 소개](dev-guide/part1.md) - Bidi-streaming 기초, Live API 기술, ADK 아키텍처 구성 요소, FastAPI 예제를 통한 전체 라이프사이클
+    - [2부: LiveRequestQueue로 메시지 전송](dev-guide/part2.md) - 업스트림 메시지 흐름, 텍스트/오디오/비디오 전송, 활동 신호, 동시성 패턴
+    - [3부: run_live() 이벤트 처리](dev-guide/part3.md) - 이벤트 처리, 텍스트/오디오/전사 처리, 자동 도구 실행, 멀티 에이전트 워크플로
+    - [4부: RunConfig 이해하기](dev-guide/part4.md) - 응답 모달리티, 스트리밍 모드, 세션 관리/재개, 컨텍스트 윈도우 압축, 쿼터 관리
+    - [5부: 오디오/이미지/비디오 사용 방법](dev-guide/part5.md) - 오디오 스펙, 모델 아키텍처, 오디오 전사, VAD(음성 활동 감지), 능동/감성 대화 기능
 
 -   :material-console-line: **스트리밍 도구**
 
     ---
 
-    스트리밍 도구를 사용하면 도구(함수)가 중간 결과를 에이전트에게 스트리밍으로 반환할 수 있으며, 에이전트는 이러한 중간 결과에 응답할 수 있습니다. 예를 들어, 스트리밍 도구를 사용하여 주가 변동을 모니터링하고 에이전트가 이에 반응하도록 할 수 있습니다. 또 다른 예로, 에이전트가 비디오 스트림을 모니터링하다가 비디오 스트림에 변화가 있을 때 이를 보고하도록 할 수 있습니다.
+    스트리밍 도구를 사용하면 도구(함수)가 중간 결과를 에이전트로 스트리밍할 수 있고, 에이전트는 그 중간 결과에 반응할 수 있습니다. 예를 들어 주가 변화를 모니터링해 에이전트가 반응하도록 하거나, 비디오 스트림 변화를 감지해 보고하도록 만들 수 있습니다.
 
     - [스트리밍 도구](streaming-tools.md)
-
--   :material-console-line: **사용자 정의 오디오 스트리밍 앱 샘플**
-
-    ---
-
-    이 문서는 ADK Streaming과 FastAPI로 구축된 사용자 정의 비동기 웹 앱의 서버 및 클라이언트 코드 개요를 다룹니다. SSE(Server Sent Events)와 WebSockets를 모두 사용하여 실시간 양방향 오디오 및 텍스트 통신을 가능하게 합니다.
-
-    - [스트리밍 구성](configuration.md)
 
 -   :material-console-line: **블로그 게시물: Google ADK + Vertex AI Live API**
 
     ---
 
-    이 문서는 실시간 오디오/비디오 스트리밍을 위해 ADK에서 양방향 스트리밍(live)을 사용하는 방법을 보여줍니다. `LiveRequestQueue`를 사용하여 사용자 정의 대화형 AI 에이전트를 구축하는 Python 서버 예제를 제공합니다.
+    이 글은 ADK의 양방향 스트리밍(live)을 사용해 실시간 오디오/비디오 스트리밍을 구현하는 방법을 보여줍니다. `LiveRequestQueue`를 사용해 사용자 정의 대화형 AI 에이전트를 구축하는 Python 서버 예제를 제공합니다.
 
     - [블로그 게시물: Google ADK + Vertex AI Live API](https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e)
 
--   :material-console-line: **블로그 게시물: Claude Code Skills로 ADK 개발 가속화하기**
+-   :material-console-line: **블로그 게시물: Claude Code Skills로 ADK 개발 가속화**
 
     ---
 
-    이 문서는 Claude Code Skills를 사용하여 ADK 개발을 가속화하는 방법을 보여주며, 양방향 스트리밍 채팅 앱을 구축하는 예제를 제공합니다. AI 기반 코딩 지원을 활용하여 더 나은 에이전트를 더 빠르게 구축하는 방법을 배우세요.
+    Claude Code Skills를 사용해 ADK 개발을 가속하는 방법을 설명하며, 양방향 스트리밍 채팅 앱 구축 예제를 제공합니다. AI 기반 코딩 보조를 활용해 더 좋은 에이전트를 더 빠르게 개발하는 방법을 다룹니다.
 
-    - [블로그 게시물: Claude Code Skills로 ADK 개발 가속화하기](https://medium.com/@kazunori279/supercharge-adk-development-with-claude-code-skills-d192481cbe72)
+    - [블로그 게시물: Claude Code Skills로 ADK 개발 가속화](https://medium.com/@kazunori279/supercharge-adk-development-with-claude-code-skills-d192481cbe72)
 
 </div>

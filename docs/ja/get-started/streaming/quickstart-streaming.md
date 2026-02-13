@@ -59,7 +59,7 @@ root_agent = Agent(
    # エージェントが使用する大規模言語モデル（LLM）。
    # https://google.github.io/adk-docs/get-started/streaming/quickstart-streaming/#supported-models から
    # Live をサポートする最新のモデル ID を入力してください。
-   model="...",  # 例: model="gemini-2.0-flash-live-001" または model="gemini-2.0-flash-live-preview-04-09"
+   model="...",
    # エージェントの目的についての短い説明。
    description="Agent to answer questions using Google Search.",
    # エージェントの振る舞いを設定する指示（Instruction）。
@@ -140,6 +140,10 @@ adk web
 
     `_make_subprocess_transport NotImplementedError` エラーが発生した場合は、代わりに `adk web --no-reload` を使用することを検討してください。
 
+!!! warning "注意: ADK Web は開発用途限定"
+
+    ADK Web は***本番デプロイでの利用を想定していません***。
+    ADK Web は開発とデバッグ用途でのみ使用してください。
 
 提供された URL（通常は `http://localhost:8000` または `http://127.0.0.1:8000`）を **ブラウザで直接** 開いてください。この接続は完全にローカルマシン内で維持されます。`google_search_agent` を選択してください。
 

@@ -1,7 +1,7 @@
 # 순차적 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `SequentialAgent`는 하위 에이전트를 목록에 명시된 순서대로 실행하는 [워크플로우 에이전트](index.md)입니다.

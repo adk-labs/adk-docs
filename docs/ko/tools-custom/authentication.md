@@ -398,7 +398,7 @@ if auth_request_function_call_id and auth_config:
 
 ### 전제 조건
 
-함수 서명에는 [`tool_context: ToolContext`](../tools/index.md#tool-context)가 *반드시* 포함되어야 합니다. ADK는 이 객체를 자동으로 주입하여 상태 및 인증 메커니즘에 대한 액세스를 제공합니다.
+함수 서명에는 [`tool_context: ToolContext`](../tools-custom/index.md#tool-context)가 *반드시* 포함되어야 합니다. ADK는 이 객체를 자동으로 주입하여 상태 및 인증 메커니즘에 대한 액세스를 제공합니다.
 
 ```py
 from google.adk.tools import FunctionTool, ToolContext

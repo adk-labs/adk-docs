@@ -1,7 +1,7 @@
 # ワークフローエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 このセクションでは、「ワークフローエージェント」を紹介します。これは、**サブエージェントの実行フローを制御する、特化したエージェント**です。

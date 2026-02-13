@@ -16,6 +16,15 @@
 
 <!-- This comment forces a block separation -->
 
+-   :fontawesome-brands-js:{ .lg .middle } **TypeScript API 레퍼런스**
+
+    ---
+    TypeScript Agent Development Kit의 전체 API 문서를 확인하세요. TypeScript로 강력하고 유연한 AI 에이전트를 구축할 수 있도록 모든 패키지, 클래스, 메서드에 대한 상세 정보를 제공합니다.
+
+    [:octicons-arrow-right-24: TypeScript API 문서 보기](typescript/index.html) <br>
+
+<!-- This comment forces a block separation -->
+
 -   :fontawesome-brands-golang:{ .lg .middle } **Go API 레퍼런스**
 
     ---

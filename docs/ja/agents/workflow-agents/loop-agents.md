@@ -1,7 +1,7 @@
 # ループエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `LoopAgent`は、サブエージェントをループ（つまり反復的）で実行するワークフローエージェントです。指定された反復回数、または終了条件が満たされるまで、**一連のエージェントを繰り返し実行します**。

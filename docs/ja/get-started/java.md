@@ -96,8 +96,8 @@ ADKエージェントプロジェクトには、`pom.xml`プロジェクトフ�
 <dependencies>
     <dependency>
         <groupId>com.google.adk</groupId>
-        <artifactId>adk-core</artifactId>
-        <version>0.3.0</version>
+        <artifactId>google-adk</artifactId>
+        <version>0.5.0</version>
     </dependency>
 </dependencies>
 ```
@@ -245,6 +245,11 @@ mvn compile exec:java \
 このコマンドは、エージェント用のチャットインターフェースを備えたウェブサーバーを起動します。ウェブインターフェースは(http://localhost:8000)でアクセスできます。左上隅でエージェントを選択し、リクエストを入力します。
 
 ![adk-web-dev-ui-chat.png](/adk-docs/ja/assets/adk-web-dev-ui-chat.png)
+
+!!! warning "注意: ADK Web は開発用途限定"
+
+    ADK Web は***本番デプロイでの利用を想定していません***。
+    ADK Web は開発とデバッグ用途でのみ使用してください。
 
 ## 次へ: エージェントを構築する
 

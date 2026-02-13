@@ -1,7 +1,7 @@
 # 콜백: 에이전트 행동 관찰, 사용자 정의 및 제어
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 콜백(Callbacks)은 ADK의 핵심 기능으로, 에이전트의 실행 프로세스에 연결하여 개입할 수 있는 강력한 메커니즘을 제공합니다. 콜백을 사용하면 핵심 ADK 프레임워크 코드를 수정하지 않고도 미리 정의된 특정 지점에서 에이전트의 행동을 관찰하고, 사용자 정의하며, 심지어 제어할 수 있습니다.

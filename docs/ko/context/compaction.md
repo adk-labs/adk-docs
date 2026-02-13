@@ -47,7 +47,7 @@ app = App(
 
 *   **`compaction_interval`**: 이전 이벤트 데이터의 압축을 트리거하는 완료된 이벤트 수를 설정합니다.
 *   **`overlap_size`**: 새로 압축된 컨텍스트 세트에 포함되는 이전에 압축된 이벤트 수를 설정합니다.
-*   **`compactor`**: (선택 사항) 요약에 사용할 특정 AI 모델을 포함하는 압축기 객체를 정의합니다. 자세한 내용은 [압축기 정의](#define-compactor)를 참조하세요.
+*   **`summarizer`**: (선택 사항) 요약에 사용할 특정 AI 모델을 포함하는 요약기 객체를 정의합니다. 자세한 내용은 [요약기 정의](#define-summarizer)를 참조하세요.
 
 ### 요약기 정의 {#define-summarizer}
 요약기를 정의하여 컨텍스트 압축 프로세스를 사용자 지정할 수 있습니다. LlmEventSummarizer 클래스를 사용하면 요약에 특정 모델을 지정할 수 있습니다. 다음 코드 예시는 사용자 지정 요약기를 정의하고 구성하는 방법을 보여줍니다.
@@ -68,9 +68,9 @@ app = App(
     name='my-agent',
     root_agent=root_agent,
     events_compaction_config=EventsCompactionConfig(
-        summarizer=my_summarizer,
         compaction_interval=3,
-        overlap_size=1
+        overlap_size=1,
+        summarizer=my_summarizer,
     ),
 )
 ```

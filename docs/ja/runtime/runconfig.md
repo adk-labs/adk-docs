@@ -1,7 +1,7 @@
 # ランタイム設定 (Runtime Configuration)
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 `RunConfig`は、ADKにおけるエージェントのランタイムの動作とオプションを定義します。これにより、音声およびストリーミングの設定、関数呼び出し、アーティファクトの保存、LLM呼び出しの制限などを制御します。
@@ -162,7 +162,7 @@ class PrebuiltVoiceConfig(_common.BaseModel):
 ### `save_input_blobs_as_artifacts`
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 有効にすると、入力blobはエージェントの実行中にアーティファクトとして保存されます。

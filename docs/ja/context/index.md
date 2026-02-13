@@ -1,7 +1,7 @@
 # コンテキスト
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 Agent Development Kit (ADK) において、「コンテキスト」とは、エージェントとそのツールが特定の操作中に利用できる重要な情報の集合体を指します。現在のタスクや会話のターンを効果的に処理するために必要な背景知識やリソースだと考えてください。

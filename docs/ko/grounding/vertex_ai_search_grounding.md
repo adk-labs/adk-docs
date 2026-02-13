@@ -1,6 +1,10 @@
 # Vertex AI 검색 기반 이해
 
-[Vertex AI 검색 기반 도구](../tools/built-in-tools.md#vertex-ai-search)는 에이전트 개발 키트(ADK)의 강력한 기능으로, AI 에이전트가 개인 엔터프라이즈 문서 및 데이터 리포지토리의 정보에 액세스할 수 있도록 합니다. 에이전트를 색인된 엔터프라이즈 콘텐츠에 연결하면 조직의 지식 기반에 기반한 답변을 사용자에게 제공할 수 있습니다.
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
+</div>
+
+[Vertex AI 검색 기반 도구](/adk-docs/ko/tools/google-cloud/vertex-ai-search/)는 에이전트 개발 키트(ADK)의 강력한 기능으로, AI 에이전트가 개인 엔터프라이즈 문서 및 데이터 리포지토리의 정보에 액세스할 수 있도록 합니다. 에이전트를 색인된 엔터프라이즈 콘텐츠에 연결하면 조직의 지식 기반에 기반한 답변을 사용자에게 제공할 수 있습니다.
 
 이 기능은 내부 문서, 정책, 연구 논문 또는 [Vertex AI 검색](https://cloud.google.com/enterprise-search) 데이터 저장소에 색인된 모든 독점 콘텐츠의 정보가 필요한 엔터프라이즈별 쿼리에 특히 유용합니다. 에이전트가 지식 기반의 정보가 필요하다고 판단하면 자동으로 색인된 문서를 검색하고 적절한 출처와 함께 결과를 응답에 통합합니다.
 

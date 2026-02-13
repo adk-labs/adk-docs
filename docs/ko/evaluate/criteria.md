@@ -11,10 +11,11 @@
 `tool_trajectory_avg_score` | 도구 호출 궤적의 정확한 일치 | 예 | 아니요 | 아니요 | 아니요
 `response_match_score` | 참조 응답에 대한 ROUGE-1 유사성 | 예 | 아니요 | 아니요 | 아니요
 `final_response_match_v2` | 참조 응답에 대한 LLM 판단 의미론적 일치 | 예 | 아니요 | 예 | 아니요
-`rubric_based_final_response_quality_v1` | 사용자 지정 루브릭을 기반으로 한 LLM 판단 최종 응답 품질 | 아니요 | 예 | 예 | 아니요
-`rubric_based_tool_use_quality_v1` | 사용자 지정 루브릭을 기반으로 한 LLM 판단 도구 사용 품질 | 아니요 | 예 | 예 | 아니요
+`rubric_based_final_response_quality_v1` | 사용자 지정 루브릭을 기반으로 한 LLM 판단 최종 응답 품질 | 아니요 | 예 | 예 | 예
+`rubric_based_tool_use_quality_v1` | 사용자 지정 루브릭을 기반으로 한 LLM 판단 도구 사용 품질 | 아니요 | 예 | 예 | 예
 `hallucinations_v1` | 컨텍스트에 대한 에이전트 응답의 LLM 판단 근거 | 아니요 | 아니요 | 예 | 예
 `safety_v1` | 에이전트 응답의 안전성/무해성 | 아니요 | 아니요 | 예 | 예
+`per_turn_user_simulator_quality_v1` | LLM이 판단하는 사용자 시뮬레이터 품질 | 아니요 | 아니요 | 예 | 예
 
 ## tool_trajectory_avg_score
 
@@ -352,3 +353,42 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
 ### 출력 및 해석 방법
 
 이 기준은 0.0에서 1.0 사이의 점수를 반환합니다. 1.0에 가까운 점수는 응답이 안전함을 나타내고 0.0에 가까운 점수는 잠재적인 안전 문제를 나타냅니다.
+
+## per_turn_user_simulator_quality_v1
+
+이 기준은 사용자 시뮬레이터가 대화 계획을 충실하게 따르는지 평가합니다.
+
+### 이 기준을 언제 사용해야 합니까?
+
+다중 턴 대화에서 사용자 시뮬레이터를 평가해야 할 때 이 기준을 사용하세요. 이 기준은 사용자 시뮬레이터가 `ConversationScenario`에 정의된 대화 계획을 따르는지 평가하도록 설계되었습니다.
+
+### 세부 정보
+
+이 기준은 다중 턴 대화에서 사용자 시뮬레이터가 정의된 `ConversationScenario`를 따르는지 판단합니다.
+
+첫 번째 턴에서는 사용자 시뮬레이터 응답이 `ConversationScenario`의 `starting_prompt`와 일치하는지 확인합니다. 이후 턴에서는 LLM-as-a-judge를 사용하여 사용자 응답이 `ConversationScenario`의 `conversation_plan`을 따르는지 평가합니다.
+
+### 이 기준을 사용하는 방법은 무엇입니까?
+
+이 기준에서는 평가 임계값, 심사 모델, 호출당 샘플 수를 구성할 수 있습니다. 또한 `stop_signal`을 지정할 수 있으며, 이는 대화가 완료되었음을 LLM 심사 모델에 알리는 신호입니다. 최상의 결과를 위해 `LlmBackedUserSimulator`에서 stop signal을 사용하세요.
+
+`EvalConfig` 항목 예:
+
+```json
+{
+  "criteria": {
+    "per_turn_user_simulator_quality_v1": {
+      "threshold": 1.0,
+      "judge_model_options": {
+        "judge_model": "gemini-2.5-flash",
+        "num_samples": 5
+      },
+      "stop_signal": "</finished>"
+    }
+  }
+}
+```
+
+### 출력 및 해석 방법
+
+이 기준은 0.0에서 1.0 사이의 점수를 반환하며, 대화 시나리오에 따라 사용자 시뮬레이터 응답이 유효하다고 판단된 턴의 비율을 나타냅니다. 1.0은 모든 턴에서 기대한 동작을 수행했음을 의미하고, 0.0에 가까울수록 많은 턴에서 시나리오를 벗어났음을 의미합니다. 값이 높을수록 좋습니다.

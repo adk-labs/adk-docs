@@ -1,7 +1,7 @@
 # ADK용 사용자 지정 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ADK 에이전트 워크플로에서 도구는 ADK 에이전트가 작업을 수행하기 위해 호출할 수 있는 구조화된 입력 및 출력이 있는 프로그래밍 함수입니다. ADK 도구는 Gemini 또는 기타 생성 AI 모델과 함께 [함수 호출](https://ai.google.dev/gemini-api/docs/function-calling)을 사용하는 방식과 유사하게 작동합니다. ADK 도구를 사용하여 다음과 같은 다양한 작업 및 프로그래밍 함수를 수행할 수 있습니다.

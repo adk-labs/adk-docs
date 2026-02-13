@@ -6,30 +6,20 @@
 
 ADKの双方向（Bidi）ストリーミング（ライブ）は、[Gemini Live API](https://ai.google.dev/gemini-api/docs/live)の低遅延な双方向音声・映像インタラクション機能をAIエージェントに追加します。
 
-!!! example "実験的プレビューリリース"
-
-    双方向（Bidi）ストリーミング機能は実験的なものです。
-
-双方向ストリーミング、またはライブモードを使用すると、エンドユーザーに自然で人間らしい音声会話体験を提供できます。これには、ユーザーがエージェントの応答を音声コマンドで割り込む機能も含まれます。ストリーミング機能を備えたエージェントは、テキスト、音声、映像の入力を処理でき、テキストと音声の出力を提供できます。
+双方向ストリーミング（ライブ）モードを使うことで、エンドユーザーに自然で人間らしい音声会話体験を提供できます。ユーザーが音声コマンドでエージェントの応答を割り込むことも可能です。ストリーミング対応エージェントは、テキスト・音声・映像入力を処理し、テキストおよび音声出力を返せます。
 
 <div class="video-grid">
   <div class="video-item">
     <div class="video-container">
-      <iframe src="https://www.youtube-nocookie.com/embed/Tu7-voU7nnw?si=RKs7EWKjx0bL96i5" title="Shopper's Concierge" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <iframe src="https://www.youtube-nocookie.com/embed/vLUkAGeLR1k" title="ADK Bidi-streaming in 5 minutes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
   </div>
-
   <div class="video-item">
     <div class="video-container">
-      <iframe src="https://www.youtube-nocookie.com/embed/LwHPYyw7u6U?si=xxIEhnKBapzQA6VV" title="Shopper's Concierge" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <iframe src="https://www.youtube-nocookie.com/embed/Hwx94smxT_0" title="Shopper's Concierge 2 Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
   </div>
 </div>
-
-!!! info
-
-    これは、サーバーサイドストリーミングやトークンレベルストリーミングとは異なります。
-    トークンレベルストリーミングは、言語モデルが応答を生成し、それを一度に1トークンずつユーザーに送り返す一方向のプロセスです。これにより「タイピング」のような効果が生まれ、即座に応答しているかのような印象を与え、回答の冒頭部分が表示されるまでの時間を短縮します。ユーザーが完全なプロンプトを送信し、モデルがそれを処理した後、モデルが応答を部分ごとに生成して送り返し始めます。このセクションは、双方向ストリーミング（ライブ）に関するものです。
 
 <div class="grid cards" markdown>
 
@@ -37,56 +27,60 @@ ADKの双方向（Bidi）ストリーミング（ライブ）は、[Gemini Live 
 
     ---
 
-    このクイックスタートでは、簡単なエージェントを構築し、ADKのストリーミングを使用して、低遅延で双方向の音声・映像通信を実装します。
+    このクイックスタートでは、シンプルなエージェントを構築し、ADKストリーミングを使って低遅延の双方向音声・映像通信を実装します。
 
     - [クイックスタート（双方向ストリーミング）](../get-started/streaming/quickstart-streaming.md)
 
--   :material-console-line: **カスタムオーディオストリーミングアプリのサンプル**
+-   :material-console-line: **双方向ストリーミング デモアプリケーション**
 
     ---
 
-    この記事では、ADK StreamingとFastAPIで構築されたカスタム非同期Webアプリのサーバーとクライアントのコードの概要を説明します。WebSocketsを介してリアルタイムで双方向の音声・テキスト通信を可能にします。
+    テキスト・音声・画像のマルチモーダル対応を含む、ADK双方向ストリーミングの本番向けリファレンス実装です。FastAPIベースで、リアルタイムWebSocket通信、自動文字起こし、Google Searchツール呼び出し、ストリーミングライフサイクル全体の管理を示します。開発ガイドシリーズ全体でこのデモを参照します。
 
-    - [カスタムオーディオストリーミングアプリのサンプル（WebSockets）](custom-streaming-ws.md)
+    - [ADK 双方向ストリーミング デモ](https://github.com/google/adk-samples/tree/main/python/agents/bidi-demo)
+
+-   :material-console-line: **ブログ記事: ADK Bidi-streaming ビジュアルガイド**
+
+    ---
+
+    ADK Bidi-streamingによるリアルタイム・マルチモーダルAIエージェント開発のビジュアルガイドです。直感的な図やイラストで、Bidi-streamingの仕組みとインタラクティブAIエージェントの作り方を理解できます。
+
+    - [ブログ記事: ADK Bidi-streaming ビジュアルガイド](https://medium.com/google-cloud/adk-bidi-streaming-a-visual-guide-to-real-time-multimodal-ai-agent-development-62dd08c81399)
 
 -   :material-console-line: **双方向ストリーミング開発ガイドシリーズ**
 
     ---
 
-    ADKを使用した双方向ストリーミング開発について、より深く掘り下げるための記事シリーズです。基本的な概念とユースケース、コアAPI、そしてエンドツーエンドのアプリケーション設計について学ぶことができます。
+    ADKを使った双方向ストリーミング開発を深掘りするシリーズです。基本概念、ユースケース、コアAPI、エンドツーエンドのアプリケーション設計を学べます。
 
-    - [双方向ストリーミング開発ガイドシリーズ：パート1 - 導入](dev-guide/part1.md)
+    - [Part 1: ADK Bidi-streaming 入門](dev-guide/part1.md) - Bidi-streamingの基礎、Live API技術、ADKアーキテクチャ構成要素、FastAPI例によるライフサイクル全体
+    - [Part 2: LiveRequestQueueでメッセージ送信](dev-guide/part2.md) - 上流メッセージフロー、テキスト/音声/映像送信、アクティビティ信号、並行実行パターン
+    - [Part 3: run_live() によるイベント処理](dev-guide/part3.md) - イベント処理、テキスト/音声/文字起こし処理、自動ツール実行、マルチエージェントワークフロー
+    - [Part 4: RunConfig を理解する](dev-guide/part4.md) - 応答モダリティ、ストリーミングモード、セッション管理/再開、コンテキスト圧縮、クォータ管理
+    - [Part 5: 音声・画像・映像の使い方](dev-guide/part5.md) - 音声仕様、モデルアーキテクチャ、音声文字起こし、VAD（音声活動検出）、プロアクティブ/感情対話機能
 
 -   :material-console-line: **ストリーミングツール**
 
     ---
 
-    ストリーミングツールを使用すると、ツール（関数）が中間結果をエージェントにストリーミングで返し、エージェントはそれらの中間結果に応答することができます。例えば、ストリーミングツールを使って株価の変動を監視し、エージェントにそれに反応させることができます。別の例として、エージェントにビデオストリームを監視させ、ストリームに変化があった場合にエージェントがその変化を報告するようにすることもできます。
+    ストリーミングツールを使うと、ツール（関数）が中間結果をエージェントにストリーミングし、エージェントがその中間結果に応答できます。例えば株価変動を監視して反応させたり、ビデオストリームの変化を検知して報告させたりできます。
 
     - [ストリーミングツール](streaming-tools.md)
 
--   :material-console-line: **カスタムオーディオストリーミングアプリのサンプル**
+-   :material-console-line: **ブログ記事: Google ADK + Vertex AI Live API**
 
     ---
 
-    この記事では、ADK StreamingとFastAPIで構築されたカスタム非同期Webアプリのサーバーとクライアントのコードの概要を説明します。Server Sent Events (SSE) と WebSocketsの両方を使用して、リアルタイムで双方向の音声・テキスト通信を可能にします。
+    この記事では、ADKの双方向ストリーミング（ライブ）を使ってリアルタイム音声/映像ストリーミングを実装する方法を紹介します。`LiveRequestQueue` を使ってカスタム対話型AIエージェントを構築するPythonサーバー例を提供します。
 
-    - [ストリーミング設定](configuration.md)
+    - [ブログ記事: Google ADK + Vertex AI Live API](https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e)
 
--   :material-console-line: **ブログ記事：Google ADK + Vertex AI Live API**
-
-    ---
-
-    この記事では、リアルタイムの音声・映像ストリーミングのためにADKで双方向ストリーミング（ライブ）を使用する方法を紹介します。`LiveRequestQueue`を使用してカスタムの対話型AIエージェントを構築するためのPythonサーバーの例を提供します。
-
-    - [ブログ記事：Google ADK + Vertex AI Live API](https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e)
-
--   :material-console-line: **ブログ記事：Claude Code SkillsでADK開発を飛躍的に加速**
+-   :material-console-line: **ブログ記事: Claude Code SkillsでADK開発を加速**
 
     ---
 
-    この記事では、Claude Code Skillsを使用してADK開発を加速する方法を、双方向ストリーミングチャットアプリの構築例とともに示します。AIを活用したコーディング支援を利用して、より良いエージェントをより速く構築する方法を学びましょう。
+    Claude Code Skillsを使ってADK開発を加速する方法を、双方向ストリーミングチャットアプリの構築例とともに解説します。AI支援コーディングを活用して、より良いエージェントをより速く作る方法を学べます。
 
-    - [ブログ記事：Claude Code SkillsでADK開発を飛躍的に加速](https://medium.com/@kazunori279/supercharge-adk-development-with-claude-code-skills-d192481cbe72)
+    - [ブログ記事: Claude Code SkillsでADK開発を加速](https://medium.com/@kazunori279/supercharge-adk-development-with-claude-code-skills-d192481cbe72)
 
 </div>

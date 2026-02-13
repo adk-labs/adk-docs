@@ -35,6 +35,14 @@
     pip show google-adk
     ```
 
+=== "TypeScript"
+
+    ### ADK 및 ADK DevTools 설치
+
+    ```bash
+    npm install @google/adk @google/adk-devtools
+    ```
+
 === "Go"
 
     ## 새 Go 모듈 만들기
@@ -88,13 +96,13 @@
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
-                <version>0.3.0</version>
+                <version>0.5.0</version>
             </dependency>
             <!-- 에이전트를 디버그하기 위한 ADK 개발 웹 UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
-                <version>0.3.0</version>
+                <version>0.5.0</version>
             </dependency>
         </dependencies>
 
@@ -107,8 +115,8 @@
 
     ```title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:0.2.0'
-        implementation 'com.google.adk:google-adk-dev:0.2.0'
+        implementation 'com.google.adk:google-adk:0.5.0'
+        implementation 'com.google.adk:google-adk-dev:0.5.0'
     }
     ```
 

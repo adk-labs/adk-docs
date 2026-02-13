@@ -1,4 +1,4 @@
-# ADK 양방향 스트리밍 개발 가이드: 파트 1 - 소개
+# 파트 1: ADK 양방향 스트리밍 소개
 
 <div class="language-support-tag">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">실험적 기능</span>

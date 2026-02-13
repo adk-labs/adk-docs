@@ -1,7 +1,7 @@
 # AIエージェントの安全性とセキュリティ
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 AIエージェントの能力が向上するにつれて、それらが安全かつセキュアに動作し、ブランド価値と一致することを保証することが最も重要です。制御されていないエージェントは、データ漏洩のような意図と異なる、または有害なアクションの実行や、ブランドの評判に影響を与えかねない不適切なコンテンツの生成など、リスクをもたらす可能性があります。**リスクの原因には、曖昧な指示、モデルのハルシネーション、敵対的なユーザーによるジェイルブレイクやプロンプトインジェクション、ツールの使用を介した間接的なプロンプトインジェクションなどがあります。**

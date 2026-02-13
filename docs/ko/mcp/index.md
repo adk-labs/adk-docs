@@ -1,7 +1,7 @@
 # 모델 컨텍스트 프로토콜(MCP)
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 [모델 컨텍스트 프로토콜(MCP)](https://modelcontextprotocol.io/introduction)은 Gemini나 Claude와 같은 대규모 언어 모델(LLM)이 외부 애플리케이션, 데이터 소스, 도구와 통신하는 방식을 표준화하기 위해 설계된 개방형 표준입니다. LLM이 컨텍스트를 얻고, 작업을 실행하며, 다양한 시스템과 상호작용하는 방식을 단순화하는 보편적인 연결 메커니즘이라고 생각하면 됩니다.

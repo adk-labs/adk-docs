@@ -12,17 +12,17 @@ ADK(Agent Development Kit)의 플러그인은 콜백 후크를 사용하여 에�
 -   **응답 캐싱**: 요청이 이전에 이루어졌는지 확인하여 비용이 많이 들거나 시간이 오래 걸리는 AI 모델 또는 도구 호출을 건너뛰고 캐시된 응답을 반환할 수 있습니다.
 -   **요청 또는 응답 수정**: AI 모델 프롬프트에 정보를 동적으로 추가하거나 도구 출력 응답을 표준화합니다.
 
-!!! tip
-    보안 가드레일 및 정책을 구현할 때 콜백보다 더 나은 모듈성과 유연성을 위해 ADK 플러그인을 사용하십시오. 자세한 내용은 [보안 가드레일을 위한 콜백 및 플러그인](/adk-docs/ko/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하십시오.
+!!! tip "팁: 안전 기능에는 플러그인 사용"
+    보안 가드레일과 정책을 구현할 때는 콜백보다 모듈성과 유연성이 높은 ADK 플러그인을 사용하는 것이 좋습니다. 자세한 내용은 [보안 가드레일을 위한 콜백 및 플러그인](/adk-docs/ko/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하세요.
 
-!!! warning "주의"
-    플러그인은 [ADK 웹 인터페이스](../evaluate/#1-adk-web-run-evaluations-via-the-web-ui)에서 지원되지 않습니다. ADK 워크플로에서 플러그인을 사용하는 경우 웹 인터페이스 없이 워크플로를 실행해야 합니다.
+!!! tip "팁: ADK 통합"
+    ADK용 사전 구축 플러그인 및 기타 통합 목록은 [도구 및 통합](/adk-docs/ko/integrations/)을 참조하세요.
 
 ## 플러그인은 어떻게 작동합니까?
 
 ADK 플러그인은 `BasePlugin` 클래스를 확장하며 에이전트 수명 주기에서 플러그인이 실행되어야 하는 위치를 나타내는 하나 이상의 `callback` 메서드를 포함합니다. 에이전트의 `Runner` 클래스에 플러그인을 등록하여 에이전트에 통합합니다. 에이전트 애플리케이션에서 플러그인을 트리거할 수 있는 방법과 위치에 대한 자세한 내용은 [플러그인 콜백 후크](#plugin-callback-hooks)를 참조하십시오.
 
-플러그인 기능은 ADK의 확장 가능한 아키텍처의 핵심 설계 요소인 [콜백](../callbacks/)을 기반으로 합니다. 일반적인 에이전트 콜백은 *특정 작업*을 위해 *단일 에이전트, 단일 도구*에 구성되는 반면, 플러그인은 `Runner`에 *한 번* 등록되며 해당 콜백은 해당 러너가 관리하는 모든 에이전트, 도구 및 LLM 호출에 *전역적으로* 적용됩니다. 플러그인을 사용하면 관련 콜백 함수를 함께 묶어 워크플로 전체에서 사용할 수 있습니다. 따라서 플러그인은 전체 에이전트 애플리케이션에 걸쳐 있는 기능을 구현하는 데 이상적인 솔루션입니다.
+플러그인 기능은 ADK의 확장 가능한 아키텍처의 핵심 설계 요소인 [콜백](../callbacks/index.md)을 기반으로 합니다. 일반적인 에이전트 콜백은 *특정 작업*을 위해 *단일 에이전트, 단일 도구*에 구성되는 반면, 플러그인은 `Runner`에 *한 번* 등록되며 해당 콜백은 해당 러너가 관리하는 모든 에이전트, 도구 및 LLM 호출에 *전역적으로* 적용됩니다. 플러그인을 사용하면 관련 콜백 함수를 함께 묶어 워크플로 전체에서 사용할 수 있습니다. 따라서 플러그인은 전체 에이전트 애플리케이션에 걸쳐 있는 기능을 구현하는 데 이상적인 솔루션입니다.
 
 ## 사전 빌드된 플러그인
 
@@ -30,7 +30,7 @@ ADK에는 에이전트 워크플로에 즉시 추가할 수 있는 여러 플러
 
 *   [**반영 및 재시도 도구**](/adk-docs/ko/plugins/reflect-and-retry/):
     도구 실패를 추적하고 도구 요청을 지능적으로 재시도합니다.
-*   [**BigQuery 분석**](/adk-docs/ko/tools/google-cloud/bigquery-agent-analytics/):
+*   [**BigQuery 분석**](/adk-docs/ko/observability/bigquery-agent-analytics/):
     BigQuery를 사용하여 에이전트 로깅 및 분석을 활성화합니다.
 *   [**컨텍스트 필터**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/context_filter_plugin.py):
     생성형 AI 컨텍스트를 필터링하여 크기를 줄입니다.
@@ -273,7 +273,7 @@ async def before_run_callback(
 
 **주의:** 이러한 콜백을 구현하는 플러그인은 에이전트 수준 콜백이 실행되기 *전에* 실행됩니다. 또한 플러그인 수준 에이전트 콜백이 `None` 또는 null 응답 이외의 다른 값을 반환하면 에이전트 수준 콜백은 *실행되지 않습니다* (건너뜀).
 
-에이전트 객체의 일부로 정의된 에이전트 콜백에 대한 자세한 내용은 [콜백 유형](../callbacks/types-of-callbacks/#agent-lifecycle-callbacks)을 참조하십시오.
+에이전트 객체의 일부로 정의된 에이전트 콜백에 대한 자세한 내용은 [콜백 유형](../callbacks/types-of-callbacks.md#agent-lifecycle-callbacks)을 참조하십시오.
 
 ### 모델 콜백
 

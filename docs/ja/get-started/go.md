@@ -148,6 +148,11 @@ go run agent.go web api webui
 
 ![adk-web-dev-ui-chat.png](/adk-docs/ja/assets/adk-web-dev-ui-chat.png)
 
+!!! warning "注意: ADK Web は開発用途限定"
+
+    ADK Web は***本番デプロイでの利用を想定していません***。
+    ADK Web は開発とデバッグ用途でのみ使用してください。
+
 ## 次へ: エージェントを構築する
 
 ADKがインストールされ、最初のエージェントが実行中になったので、ビルドガイドを使用して独自のエージェントを構築してみてください。

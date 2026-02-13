@@ -1,7 +1,7 @@
 # 콜백의 종류
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 프레임워크는 에이전트 실행의 다양한 단계에서 트리거되는 여러 종류의 콜백을 제공합니다. 각 콜백이 언제 실행되고 어떤 컨텍스트를 받는지 이해하는 것이 효과적인 사용의 핵심입니다.

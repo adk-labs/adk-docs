@@ -1,7 +1,7 @@
 # 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 에이전트 개발 키트(ADK)에서 **에이전트(Agent)**는 특정 목표를 달성하기 위해 자율적으로 행동하도록 설계된 독립적인 실행 단위입니다. 에이전트는 작업을 수행하고, 사용자와 상호작용하며, 외부 도구를 활용하고, 다른 에이전트와 협력할 수 있습니다.
@@ -51,4 +51,4 @@ ADK에서 사용 가능한 다양한 에이전트 유형에 대한 개요를 파
 * [**워크플로 에이전트:**](workflow-agents/index.md) `SequentialAgent`, `ParallelAgent`, `LoopAgent`를 사용하여 구조화되고 예측 가능한 프로세스를 위한 작업을 오케스트레이션하는 방법을 배웁니다.
 * [**커스텀 에이전트:**](custom-agents.md) 특정 요구에 맞는 고유한 로직과 통합을 갖춘 에이전트를 구축하기 위해 `BaseAgent`를 확장하는 원리를 알아봅니다.
 * [**다중 에이전트:**](multi-agents.md) 복잡한 문제를 해결할 수 있는 정교하고 협력적인 시스템을 만들기 위해 다양한 에이전트 유형을 결합하는 방법을 이해합니다.
-* [**모델:**](models.md) 사용 가능한 다양한 LLM 통합에 대해 배우고 에이전트에 적합한 모델을 선택하는 방법을 알아봅니다.
+* [**모델:**](/adk-docs/ko/agents/models/) 사용 가능한 다양한 LLM 통합에 대해 배우고 에이전트에 적합한 모델을 선택하는 방법을 알아봅니다.

@@ -96,8 +96,8 @@ ADK 에이전트 프로젝트는 `pom.xml` 프로젝트 파일에 다음 종속�
 <dependencies>
     <dependency>
         <groupId>com.google.adk</groupId>
-        <artifactId>adk-core</artifactId>
-        <version>0.3.0</version>
+        <artifactId>google-adk</artifactId>
+        <version>0.5.0</version>
     </dependency>
 </dependencies>
 ```
@@ -245,6 +245,11 @@ mvn compile exec:java \
 이 명령은 에이전트용 채팅 인터페이스가 있는 웹 서버를 시작합니다. 웹 인터페이스는 (http://localhost:8000)에서 액세스할 수 있습니다. 왼쪽 상단 모서리에서 에이전트를 선택하고 요청을 입력합니다.
 
 ![adk-web-dev-ui-chat.png](/adk-docs/ko/assets/adk-web-dev-ui-chat.png)
+
+!!! warning "주의: ADK Web은 개발용으로만 사용하세요"
+
+    ADK Web은 ***프로덕션 배포에서 사용하도록 설계되지 않았습니다***.
+    ADK Web은 개발 및 디버깅 용도로만 사용하세요.
 
 ## 다음: 에이전트 빌드
 

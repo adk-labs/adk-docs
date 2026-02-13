@@ -1,7 +1,7 @@
 # Cloud Runへのデプロイ
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 [Cloud Run](https://cloud.google.com/run)は、Googleのスケーラブルなインフラストラクチャ上でコードを直接実行できる、フルマネージドプラットフォームです。

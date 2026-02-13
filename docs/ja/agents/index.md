@@ -1,7 +1,7 @@
 # エージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 エージェント開発キット（ADK）において、**エージェント（Agent）**とは、特定の目標を達成するために自律的に動作するように設計された、自己完結型の実行単位です。エージェントはタスクを実行し、ユーザーと対話し、外部ツールを利用し、他のエージェントと連携することができます。
@@ -51,4 +51,4 @@ ADKで利用可能なさまざまなエージェントタイプの概要を理�
 * [**ワークフローエージェント:**](workflow-agents/index.md) `SequentialAgent`、`ParallelAgent`、`LoopAgent`を使用して、構造化され予測可能なプロセスのためにタスクをオーケストレーションする方法を学びます。
 * [**カスタムエージェント:**](custom-agents.md) 特定のニーズに合わせて独自のロジックと統合を備えたエージェントを構築するために`BaseAgent`を拡張する原則を発見します。
 * [**マルチエージェント:**](multi-agents.md) 複雑な問題に取り組むことができる洗練された協調システムを作成するために、さまざまなエージェントタイプを組み合わせる方法を理解します。
-* [**モデル:**](models.md) 利用可能なさまざまなLLM統合について学び、エージェントに適したモデルを選択する方法を学びます。
+* [**モデル:**](/adk-docs/ja/agents/models/) 利用可能なさまざまなLLM統合について学び、エージェントに適したモデルを選択する方法を学びます。

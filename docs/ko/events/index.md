@@ -1,7 +1,7 @@
 # 이벤트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 이벤트는 에이전트 개발 키트(ADK) 내 정보 흐름의 기본 단위입니다. 이벤트는 초기 사용자 입력부터 최종 응답 및 그 사이의 모든 단계에 이르기까지, 에이전트의 상호작용 라이프사이클 동안 발생하는 모든 중요한 발생을 나타냅니다. 이벤트를 이해하는 것은 구성 요소가 통신하고, 상태를 관리하며, 제어 흐름을 지시하는 주요 방법이기 때문에 매우 중요합니다.

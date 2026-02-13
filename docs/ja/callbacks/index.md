@@ -1,7 +1,7 @@
 # コールバック：エージェントの振る舞いを監視、カスタマイズ、制御する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 コールバックはADKの中核となる機能であり、エージェントの実行プロセスにフックするための強力なメカニズムを提供します。これにより、コアのADKフレームワークコードを変更することなく、事前に定義された特定のポイントでエージェントの振る舞いを監視、カスタマイズ、さらには制御することが可能になります。

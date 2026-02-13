@@ -120,3 +120,7 @@ adk eval \
 * `model`: 사용자 시뮬레이터를 지원하는 모델입니다.
 * `model_configuration`: 모델 동작을 제어하는 [`GenerateContentConfig`](https://github.com/googleapis/python-genai/blob/6196b1b4251007e33661bb5d7dc27bafee3feefe/google/genai/types.py#L4295)입니다.
 * `max_allowed_invocations`: 대화가 강제로 종료되기 전에 허용되는 최대 사용자-에이전트 상호 작용 횟수입니다. `EvalSet`에서 가장 긴 합리적인 사용자-에이전트 상호 작용보다 크게 설정해야 합니다.
+* `custom_instructions`: 선택 사항. 사용자 시뮬레이터의 기본 지침을 재정의합니다. 지침 문자열에는 아래 형식 플레이스홀더를 *값 치환 없이 그대로* 포함해야 합니다.
+    * `{stop_signal}`: 사용자 시뮬레이터가 대화가 끝났다고 판단했을 때 생성할 텍스트
+    * `{conversation_plan}`: 사용자 시뮬레이터가 따라야 하는 전체 대화 계획
+    * `{conversation_history}`: 지금까지 사용자와 에이전트 간의 대화 기록

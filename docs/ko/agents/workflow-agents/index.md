@@ -1,7 +1,7 @@
 # 워크플로우 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 이 섹션에서는 **하위 에이전트의 실행 흐름을 제어하는 특화된 에이전트**인 "워크플로우 에이전트"를 소개합니다.

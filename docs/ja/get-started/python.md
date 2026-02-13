@@ -73,7 +73,7 @@ def get_current_time(city: str) -> dict:
     return {"status": "success", "city": city, "time": "午前10時30分"}
 
 root_agent = Agent(
-    model='gemini-3-pro-preview',
+    model='gemini-3-flash-preview',
     name='root_agent',
     description="指定された都市の現在時刻を伝えます。",
     instruction="あなたは都市の現在時刻を伝えるのに役立つアシスタントです。この目的のために'get_current_time'ツールを使用してください。",
@@ -123,6 +123,11 @@ adk web --port 8000
 このコマンドは、エージェント用のチャットインターフェースを備えたウェブサーバーを起動します。ウェブインターフェースは(http://localhost:8000)でアクセスできます。左上隅でエージェントを選択し、リクエストを入力します。
 
 ![adk-web-dev-ui-chat.png](/adk-docs/ja/assets/adk-web-dev-ui-chat.png)
+
+!!! warning "注意: ADK Web は開発用途限定"
+
+    ADK Web は***本番デプロイでの利用を想定していません***。
+    ADK Web は開発とデバッグ用途でのみ使用してください。
 
 ## 次へ: エージェントを構築する
 

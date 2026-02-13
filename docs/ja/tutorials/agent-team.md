@@ -157,7 +157,7 @@ os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
 # --- 簡単に使用するためのモデル定数の定義 ---
 
 # サポートされているその他のモデルはこちらを参照: https://ai.google.dev/gemini-api/docs/models#model-variations
-MODEL_GEMINI_2_0_FLASH = "gemini-2.0-flash"
+MODEL_GEMINI_2_5_FLASH = "gemini-2.5-flash"
 
 # サポートされているその他のモデルはこちらを参照: https://docs.litellm.ai/docs/providers/openai#openai-chat-completion-models
 MODEL_GPT_4O = "openai/gpt-4.1" # 他の試行例: gpt-4.1-mini, gpt-4o など
@@ -237,7 +237,7 @@ print(get_weather("Paris"))
 いくつかの主要なパラメータを設定します。
 
 *   `name`: このエージェントの一意の識別子（例："weather\_agent\_v1"）。
-*   `model`: 使用するLLMを指定します（例：`MODEL_GEMINI_2_0_FLASH`）。まずは特定のGeminiモデルから始めます。
+*   `model`: 使用するLLMを指定します（例：`MODEL_GEMINI_2_5_FLASH`）。まずは特定のGeminiモデルから始めます。
 *   `description`: エージェントの全体的な目的の簡潔な要約です。これは後で、他のエージェントがタスクを*この*エージェントに委譲するかどうかを決定する際に重要になります。
 *   `instruction`: 振る舞い方、ペルソナ、目標、そして具体的に割り当てられた `tools` を*どのように、いつ*利用するかについて、LLMへの詳細なガイダンスです。
 *   `tools`: エージェントが使用を許可されている実際のPythonツール関数のリスト（例：`[get_weather]`）。
@@ -249,7 +249,7 @@ print(get_weather("Paris"))
 ```python
 # @title 天気エージェントの定義
 # 前に定義したモデル定数の1つを使用
-AGENT_MODEL = MODEL_GEMINI_2_0_FLASH # Geminiで開始
+AGENT_MODEL = MODEL_GEMINI_2_5_FLASH # Geminiで開始
 
 weather_agent = Agent(
     name="weather_agent_v1",
@@ -717,14 +717,14 @@ print(say_hello(name=None)) # 名前を明示的にNoneとしてテスト（デ�
 # Gemini以外のモデルを使用する場合は、LiteLlmがインポートされ、APIキーが設定されていることを確認してください（ステップ0/2から）
 # from google.adk.models.lite_llm import LiteLlm
 # MODEL_GPT_4O, MODEL_CLAUDE_SONNET などが定義されている必要があります
-# そうでない場合は、引き続き以下を使用してください: model = MODEL_GEMINI_2_0_FLASH
+# そうでない場合は、引き続き以下を使用してください: model = MODEL_GEMINI_2_5_FLASH
 
 # --- 挨拶エージェント ---
 greeting_agent = None
 try:
     greeting_agent = Agent(
         # 単純なタスクには、異なる（またはより安価な）モデルを使用可能
-        model = MODEL_GEMINI_2_0_FLASH,
+        model = MODEL_GEMINI_2_5_FLASH,
         # model=LiteLlm(model=MODEL_GPT_4O), # 他のモデルを実験したい場合
         name="greeting_agent",
         instruction="You are the Greeting Agent. Your ONLY task is to provide a friendly greeting to the user. "
@@ -743,7 +743,7 @@ farewell_agent = None
 try:
     farewell_agent = Agent(
         # 同じまたは異なるモデルを使用可能
-        model = MODEL_GEMINI_2_0_FLASH,
+        model = MODEL_GEMINI_2_5_FLASH,
         # model=LiteLlm(model=MODEL_GPT_4O), # 他のモデルを実験したい場合
         name="farewell_agent",
         instruction="You are the Farewell Agent. Your ONLY task is to provide a polite goodbye message. "
@@ -781,7 +781,7 @@ runner_root = None # runnerの初期化
 
 if greeting_agent and farewell_agent and 'get_weather' in globals():
     # オーケストレーションを処理するためにルートエージェントには有能なGeminiモデルを使用しましょう
-    root_agent_model = MODEL_GEMINI_2_0_FLASH
+    root_agent_model = MODEL_GEMINI_2_5_FLASH
 
     weather_agent_team = Agent(
         name="weather_agent_v2", # 新しいバージョン名を付ける
@@ -1078,13 +1078,13 @@ from google.adk.agents import Agent
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.runners import Runner
 # ツール 'say_hello', 'say_goodbye' が定義されていることを確認 (ステップ3から)
-# モデル定数 MODEL_GPT_4O, MODEL_GEMINI_2_0_FLASH などが定義されていることを確認
+# モデル定数 MODEL_GPT_4O, MODEL_GEMINI_2_5_FLASH などが定義されていることを確認
 
 # --- 挨拶エージェントの再定義 (ステップ3から) ---
 greeting_agent = None
 try:
     greeting_agent = Agent(
-        model=MODEL_GEMINI_2_0_FLASH,
+        model=MODEL_GEMINI_2_5_FLASH,
         name="greeting_agent",
         instruction="You are the Greeting Agent. Your ONLY task is to provide a friendly greeting using the 'say_hello' tool. Do nothing else.",
         description="Handles simple greetings and hellos using the 'say_hello' tool.",
@@ -1098,7 +1098,7 @@ except Exception as e:
 farewell_agent = None
 try:
     farewell_agent = Agent(
-        model=MODEL_GEMINI_2_0_FLASH,
+        model=MODEL_GEMINI_2_5_FLASH,
         name="farewell_agent",
         instruction="You are the Farewell Agent. Your ONLY task is to provide a polite goodbye message using the 'say_goodbye' tool. Do not perform any other actions.",
         description="Handles simple farewells and goodbyes using the 'say_goodbye' tool.",
@@ -1115,7 +1115,7 @@ runner_root_stateful = None # runnerの初期化
 # ルートエージェントを作成する前に前提条件を確認
 if greeting_agent and farewell_agent and 'get_weather_stateful' in globals():
 
-    root_agent_model = MODEL_GEMINI_2_0_FLASH # オーケストレーションモデルの選択
+    root_agent_model = MODEL_GEMINI_2_5_FLASH # オーケストレーションモデルの選択
 
     root_agent_stateful = Agent(
         name="weather_agent_v4_stateful", # 新しいバージョン名
@@ -1402,7 +1402,7 @@ greeting_agent = None
 try:
     # 定義済みのモデル定数を使用
     greeting_agent = Agent(
-        model=MODEL_GEMINI_2_0_FLASH,
+        model=MODEL_GEMINI_2_5_FLASH,
         name="greeting_agent", # 一貫性のために元の名前を保持
         instruction="You are the Greeting Agent. Your ONLY task is to provide a friendly greeting using the 'say_hello' tool. Do nothing else.",
         description="Handles simple greetings and hellos using the 'say_hello' tool.",
@@ -1416,7 +1416,7 @@ farewell_agent = None
 try:
     # 定義済みのモデル定数を使用
     farewell_agent = Agent(
-        model=MODEL_GEMINI_2_0_FLASH,
+        model=MODEL_GEMINI_2_5_FLASH,
         name="farewell_agent", # 元の名前を保持
         instruction="You are the Farewell Agent. Your ONLY task is to provide a polite goodbye message using the 'say_goodbye' tool. Do not perform any other actions.",
         description="Handles simple farewells and goodbyes using the 'say_goodbye' tool.",
@@ -1435,7 +1435,7 @@ runner_root_model_guardrail = None
 if greeting_agent and farewell_agent and 'get_weather_stateful' in globals() and 'block_keyword_guardrail' in globals():
 
     # 定義済みのモデル定数を使用
-    root_agent_model = MODEL_GEMINI_2_0_FLASH
+    root_agent_model = MODEL_GEMINI_2_5_FLASH
 
     root_agent_model_guardrail = Agent(
         name="weather_agent_v5_model_guardrail", # 明確化のための新しいバージョン名
@@ -1691,7 +1691,7 @@ greeting_agent = None
 try:
     # 定義済みのモデル定数を使用
     greeting_agent = Agent(
-        model=MODEL_GEMINI_2_0_FLASH,
+        model=MODEL_GEMINI_2_5_FLASH,
         name="greeting_agent", # 一貫性のために元の名前を保持
         instruction="You are the Greeting Agent. Your ONLY task is to provide a friendly greeting using the 'say_hello' tool. Do nothing else.",
         description="Handles simple greetings and hellos using the 'say_hello' tool.",
@@ -1705,7 +1705,7 @@ farewell_agent = None
 try:
     # 定義済みのモデル定数を使用
     farewell_agent = Agent(
-        model=MODEL_GEMINI_2_0_FLASH,
+        model=MODEL_GEMINI_2_5_FLASH,
         name="farewell_agent", # 元の名前を保持
         instruction="You are the Farewell Agent. Your ONLY task is to provide a polite goodbye message using the 'say_goodbye' tool. Do not perform any other actions.",
         description="Handles simple farewells and goodbyes using the 'say_goodbye' tool.",
@@ -1725,7 +1725,7 @@ if ('greeting_agent' in globals() and greeting_agent and
     'block_keyword_guardrail' in globals() and
     'block_paris_tool_guardrail' in globals()):
 
-    root_agent_model = MODEL_GEMINI_2_0_FLASH
+    root_agent_model = MODEL_GEMINI_2_5_FLASH
 
     root_agent_tool_guardrail = Agent(
         name="weather_agent_v6_tool_guardrail", # 新しいバージョン名

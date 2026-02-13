@@ -1,7 +1,7 @@
 # 메모리: `MemoryService`를 사용한 장기 지식
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 `Session`이 *단일, 진행 중인 대화*에 대한 기록(`events`) 및 임시 데이터(`state`)를 추적하는 방법을 살펴보았습니다. 하지만 에이전트가 *과거* 대화의 정보를 기억해야 하는 경우는 어떻게 해야 할까요? 이것이 바로 **장기 지식**과 **`MemoryService`**의 개념이 필요한 부분입니다.

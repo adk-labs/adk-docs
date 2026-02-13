@@ -41,6 +41,47 @@
   </a>
 </div>
 
+## ADK 커뮤니티 콜
+
+!!! tip "계속 연결하기"
+
+    업데이트, 캘린더 초대, ADK 커뮤니티와의 교류를 위해 [ADK Community Google Group](https://groups.google.com/g/adk-community)에 참여하세요.
+
+    아래의 최근 녹화본을 확인하거나, [YouTube 재생 목록](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3)에서 지난 모든 콜을 둘러보세요.
+
+<div class="resource-grid">
+  <a href="https://www.youtube.com/watch?v=h9Lueiqo89E" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/h9Lueiqo89E/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 1월">
+    </div>
+    <div class="card-content">
+      <div class="type">커뮤니티 콜</div>
+      <h3>📞 2026년 1월 녹화본</h3>
+      <p>크로스 언어 지원을 위한 Session Service 스키마, TypeScript 멀티 에이전트 데모, MCP 서버용 API Registry, 서드파티 도구 통합 등을 다룹니다.</p>
+    </div>
+  </a>
+  <a href="https://www.youtube.com/watch?v=cNVWhrbdn-E" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/cNVWhrbdn-E/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2025년 12월">
+    </div>
+    <div class="card-content">
+      <div class="type">커뮤니티 콜</div>
+      <h3>📞 2025년 12월 녹화본</h3>
+      <p>ADK TypeScript 출시, Gemini 3 Flash 지원, 음성 에이전트를 위한 양방향 스트리밍, Visual Builder UI 등을 다룹니다.</p>
+    </div>
+  </a>
+  <a href="https://www.youtube.com/watch?v=bftUz-WBqyw" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/bftUz-WBqyw/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2025년 11월">
+    </div>
+    <div class="card-content">
+      <div class="type">커뮤니티 콜</div>
+      <h3>📞 2025년 11월 녹화본</h3>
+      <p>ADK Go 출시, 오류 복구를 위한 reflect & retry 플러그인, 에이전트 세션 되감기를 위한 타임 트래블 디버깅 등을 다룹니다.</p>
+    </div>
+  </a>
+</div>
+
 ## 강좌 및 심층 분석 (Courses & Deep Dives)
 
 <div class="resource-grid">
@@ -50,7 +91,7 @@
     </div>
     <div class="card-content">
       <div class="type">온라인 코스</div>
-      <h3>Google과 함께하는 5일 AI 에이전트 집중 코스</h3>
+      <h3>🎓 Google과 함께하는 5일 AI 에이전트 집중 코스</h3>
       <p>모델, 도구, 메모리, 평가 및 배포를 포함한 핵심 ADK 에이전트 구성 요소를 활용해 구축합니다.</p>
     </div>
   </a>
@@ -102,6 +143,16 @@
       <div class="type">블로그 시리즈</div>
       <h3>🎓 Google ADK로 지능형 에이전트 구축하기</h3>
       <p>Google의 코드 중심 Python 툴킷으로 지능형 에이전트를 구축하기 위한 개발자 가이드입니다.</p>
+    </div>
+  </a>
+  <a href="https://github.com/arjunprabhulal/google-adk-masterclass" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="../assets/community-adk-masterclass-hands-on.png" alt="Google ADK 마스터클래스 실습 시리즈">
+    </div>
+    <div class="card-content">
+      <div class="type">온라인 코스</div>
+      <h3>🎓 Google ADK 마스터클래스: 실습 시리즈</h3>
+      <p>에이전트, 워크플로, 도구, 메모리, MCP 통합을 다루는 20개 모듈로 프로덕션 준비형 AI 에이전트를 구축합니다.</p>
     </div>
   </a>
   <a href="https://www.youtube.com/playlist?list=PL0Zc2RFDZsM_MkHOzWNJpaT4EH5fQxA8n" class="resource-card">
@@ -169,6 +220,16 @@
       <p>AI 에이전트가 개인화된 실시간 추천으로 쇼핑을 어떻게 혁신할 수 있는지 확인하세요.</p>
     </div>
   </a>
+  <a href="https://agentdirectory.folch.ai/" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="../assets/community-agent-directory.png" alt="ADK Agent Directory">
+    </div>
+    <div class="card-content">
+      <div class="type">갤러리</div>
+      <h3>📖 ADK Agent Directory</h3>
+      <p>웹 검색, 이미지 생성, 리서치 등 다양한 용도의 프로덕션 준비형 ADK 에이전트를 찾아보고 테스트해 보세요.</p>
+    </div>
+  </a>
 </div>
 
 ## Java용 ADK (ADK for Java)
@@ -214,6 +275,7 @@
   <li><a href="https://adk.wiki/">🇨🇳 중국어 (中文) 문서</a></li>
   <li><a href="https://adk-labs.github.io/adk-docs/ko/">🇰🇷 한국어 (Korean) 문서</a></li>
   <li><a href="https://adk-labs.github.io/adk-docs/ja/">🇯🇵 일본어 (日本語) 문서</a></li>
+  <li><a href="https://adk-es.fabian-castro-c.dev/">🇪🇸 스페인어 (Español) 문서</a></li>
 </ul>
 
 ## 리소스 기여하기 (Contributing Your Resource)

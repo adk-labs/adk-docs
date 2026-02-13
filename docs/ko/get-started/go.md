@@ -148,6 +148,11 @@ go run agent.go web api webui
 
 ![adk-web-dev-ui-chat.png](/adk-docs/ko/assets/adk-web-dev-ui-chat.png)
 
+!!! warning "주의: ADK Web은 개발용으로만 사용하세요"
+
+    ADK Web은 ***프로덕션 배포에서 사용하도록 설계되지 않았습니다***.
+    ADK Web은 개발 및 디버깅 용도로만 사용하세요.
+
 ## 다음: 에이전트 빌드
 
 ADK가 설치되었고 첫 번째 에이전트가 실행 중이므로 이제 빌드 가이드를 사용하여 자신만의 에이전트를 빌드해 보세요.

@@ -1,7 +1,7 @@
 # 상태(State): 세션의 스크래치패드
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 각 `Session`(대화 스레드) 내에서 **`state`** 속성은 해당 특정 상호작용을 위한 에이전트의 전용 스크래치패드(임시 작업 공간)처럼 작동합니다. `session.events`가 전체 기록을 담고 있는 반면, `session.state`는 에이전트가 대화 *중에* 필요한 동적 세부 정보를 저장하고 업데이트하는 곳입니다.

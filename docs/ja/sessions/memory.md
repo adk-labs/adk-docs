@@ -1,7 +1,7 @@
 # メモリ：`MemoryService`による長期的な知識
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 `Session`が*単一の進行中の会話*の履歴（`events`）と一時データ（`state`）を追跡する方法を見てきました。しかし、エージェントが*過去*の会話から情報を思い出す必要がある場合はどうでしょうか？ここで、**長期的な知識**と**`MemoryService`**の概念が登場します。

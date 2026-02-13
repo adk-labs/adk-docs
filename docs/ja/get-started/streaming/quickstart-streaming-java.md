@@ -76,11 +76,13 @@ public class ScienceTeacherAgent {
   // (エージェントは宣言時に初期化される必要があります)
   public static final BaseAgent ROOT_AGENT = initAgent();
 
+  // Live API をサポートする最新のモデル ID を次のドキュメントで確認してください。
+  // https://google.github.io/adk-docs/get-started/streaming/quickstart-streaming/#supported-models
   public static BaseAgent initAgent() {
     return LlmAgent.builder()
         .name("science-app")
         .description("Science teacher agent")
-        .model("gemini-2.0-flash-exp")
+        .model("...") // Live API 用の最新モデル ID を入力してください。
         .instruction("""
             You are a helpful science teacher that explains
             science concepts to kids and teenagers.
@@ -89,10 +91,6 @@ public class ScienceTeacherAgent {
   }
 }
 ```
-
-!!!note "トラブルシューティング (Troubleshooting)"
-
-    モデル `gemini-2.0-flash-exp` は将来的に廃止される予定です。使用中に問題が発生した場合は、代わりに `gemini-2.0-flash-live-001` を使用してみてください。
 
 後ほど `Dev UI` を使用してこのエージェントを実行します。ツールがエージェントを自動的に認識するためには、その Java クラスが以下の 2 つのルールに準拠している必要があります。
 
@@ -134,7 +132,12 @@ mvn exec:java \
 
     ドロップダウンメニューに「science-app」が表示されない場合は、`mvn` コマンドを maven プロジェクトのルートから実行しているか確認してください。
 
-## テキストで Dev UI を試す
+!!! warning "注意: ADK Web は開発用途限定"
+
+    ADK Web は***本番デプロイでの利用を想定していません***。
+    ADK Web は開発とデバッグ用途でのみ使用してください。
+
+## 音声とビデオで Dev UI を試す
 
 お好みのブラウザで、以下にアクセスしてください: [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 
@@ -142,15 +145,13 @@ mvn exec:java \
 
 ![Dev UI](../../assets/quickstart-streaming-devui.png)
 
-右上の `Token Streaming` スイッチをクリックし、理科の先生に `What's the electron?`（電子って何？）などの質問をしてみてください。すると、UI 上にストリーミング形式で出力テキストが表示されるのがわかります。
+マイクボタンをクリックして音声入力を有効にし、`What's the electron?`（電子って何？）のような質問を音声でしてみてください。リアルタイムで音声回答が返ってきます。
 
-ご覧の通り、テキストストリーミング機能のためにエージェント自体に特別なコードを書く必要はありません。これは ADK Agent の機能としてデフォルトで提供されています。
+ビデオを試すには、Web ブラウザをリロードしてカメラボタンをクリックし、ビデオ入力を有効にして「何が見えますか？」と質問してください。エージェントはビデオ入力で見えている内容を回答します。
 
-### 音声とビデオで試す
+### 注意事項
 
-音声を試すには、Web ブラウザをリロードし、マイクボタンをクリックして音声入力を有効にしてから、同じ質問を声で尋ねてください。リアルタイムで音声による回答が聞こえてきます。
-
-ビデオを試すには、Web ブラウザをリロードし、カメラボタンをクリックしてビデオ入力を有効にし、「何が見えますか？」といった質問をしてください。エージェントはビデオ入力で見えているものについて答えてくれます。
+- native-audio モデルではテキストチャットを使用できません。`adk web` でテキストメッセージを入力するとエラーになる場合があります。
 
 ### ツールの停止
 

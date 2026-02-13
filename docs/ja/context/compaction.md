@@ -47,7 +47,7 @@ app = App(
 
 *   **`compaction_interval`**: 以前のイベントデータの圧縮をトリガーする完了したイベント数を設定します。
 *   **`overlap_size`**: 新しく圧縮されたコンテキストセットに含める以前に圧縮されたイベントの数を設定します。
-*   **`compactor`**: (オプション) 要約に使用する特定のAIモデルを含むコンパクターオブジェクトを定義します。詳細については、[コンパクターの定義](#define-compactor)を参照してください。
+*   **`summarizer`**: (オプション) 要約に使用する特定のAIモデルを含むサマライザーオブジェクトを定義します。詳細については、[サマライザーの定義](#define-summarizer)を参照してください。
 
 ### サマライザーを定義する {#define-summarizer}
 サマライザーを定義することで、コンテキスト圧縮プロセスをカスタマイズできます。LlmEventSummarizerクラスを使用すると、要約に特定のモデルを指定できます。次のコード例は、カスタムサマライザーを定義して構成する方法を示しています。
@@ -68,9 +68,9 @@ app = App(
     name='my-agent',
     root_agent=root_agent,
     events_compaction_config=EventsCompactionConfig(
-        summarizer=my_summarizer,
         compaction_interval=3,
-        overlap_size=1
+        overlap_size=1,
+        summarizer=my_summarizer,
     ),
 )
 ```

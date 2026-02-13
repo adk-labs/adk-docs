@@ -1,7 +1,7 @@
 # 루프 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `LoopAgent`는 하위 에이전트를 루프(즉, 반복적으로)로 실행하는 워크플로우 에이전트입니다. 이 에이전트는 명시된 반복 횟수만큼 또는 종료 조건이 충족될 때까지 **에이전트 시퀀스를 반복적으로 실행합니다**.

@@ -1,7 +1,7 @@
 # 모델 컨텍스트 프로토콜 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 이 가이드에서는 모델 컨텍스트 프로토콜(MCP)을 ADK와 통합하는 두 가지 방법을 안내합니다.

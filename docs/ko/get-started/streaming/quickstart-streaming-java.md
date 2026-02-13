@@ -76,11 +76,13 @@ public class ScienceTeacherAgent {
   // (에이전트는 선언 시점에 초기화되어야 합니다)
   public static final BaseAgent ROOT_AGENT = initAgent();
 
+  // Live API를 지원하는 최신 모델 ID를 아래 문서에서 확인해 입력하세요.
+  // https://google.github.io/adk-docs/get-started/streaming/quickstart-streaming/#supported-models
   public static BaseAgent initAgent() {
     return LlmAgent.builder()
         .name("science-app")
         .description("Science teacher agent")
-        .model("gemini-2.0-flash-exp")
+        .model("...") // Live API용 최신 모델 ID를 입력하세요.
         .instruction("""
             You are a helpful science teacher that explains
             science concepts to kids and teenagers.
@@ -89,10 +91,6 @@ public class ScienceTeacherAgent {
   }
 }
 ```
-
-!!!note "문제 해결(Troubleshooting)"
-
-    `gemini-2.0-flash-exp` 모델은 향후 지원 중단(deprecated)될 예정입니다. 사용 중 문제가 발생하면 대신 `gemini-2.0-flash-live-001`을 사용해 보세요.
 
 나중에 이 에이전트를 실행하기 위해 `Dev UI`를 사용할 것입니다. 도구가 에이전트를 자동으로 인식하려면 해당 Java 클래스가 다음 두 가지 규칙을 준수해야 합니다.
 
@@ -134,7 +132,12 @@ mvn exec:java \
 
     드롭다운 메뉴에 "science-app"이 보이지 않는다면, `mvn` 명령어를 maven 프로젝트의 루트 디렉토리에서 실행하고 있는지 확인하세요.
 
-## 텍스트로 Dev UI 체험하기
+!!! warning "주의: ADK Web은 개발용으로만 사용하세요"
+
+    ADK Web은 ***프로덕션 배포에서 사용하도록 설계되지 않았습니다***.
+    ADK Web은 개발 및 디버깅 용도로만 사용하세요.
+
+## 음성 및 비디오로 Dev UI 체험하기
 
 브라우저를 사용하여 다음 주소로 이동합니다: [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 
@@ -142,15 +145,13 @@ mvn exec:java \
 
 ![Dev UI](../../assets/quickstart-streaming-devui.png)
 
-오른쪽 상단의 `Token Streaming` 스위치를 클릭하고, 과학 선생님에게 `전자(electron)가 뭐야?`와 같은 질문을 해보세요. 그러면 UI에 스트리밍 방식으로 출력 텍스트가 표시되는 것을 볼 수 있습니다.
+마이크 버튼을 클릭해 음성 입력을 활성화하고 `전자(electron)가 뭐야?` 같은 질문을 음성으로 해보세요. 실시간으로 음성 답변을 들을 수 있습니다.
 
-보셨다시피, 텍스트 스트리밍 기능을 위해 에이전트 자체에 별도의 코드를 작성할 필요가 없습니다. 이는 ADK Agent의 기본 기능으로 제공됩니다.
+비디오를 사용하려면 브라우저를 새로고침하고 카메라 버튼을 클릭해 비디오 입력을 활성화한 뒤, "무엇이 보이나요?"와 같은 질문을 해보세요. 에이전트는 비디오 입력에서 보이는 내용을 답변합니다.
 
-### 음성 및 비디오로 체험하기
+### 유의 사항
 
-음성을 시도하려면 웹 브라우저를 새로고침하고, 마이크 버튼을 클릭하여 음성 입력을 활성화한 뒤, 동일한 질문을 음성으로 물어보세요. 실시간으로 음성 답변을 들을 수 있습니다.
-
-비디오를 시도하려면 웹 브라우저를 새로고침하고, 카메라 버튼을 클릭하여 비디오 입력을 활성화한 뒤, "무엇이 보이나요?"와 같은 질문을 해보세요. 에이전트는 비디오 입력에 보이는 내용에 대해 답변할 것입니다.
+- native-audio 모델에서는 텍스트 채팅을 사용할 수 없습니다. `adk web`에서 텍스트 메시지를 입력하면 오류가 발생할 수 있습니다.
 
 ### 도구 중지
 

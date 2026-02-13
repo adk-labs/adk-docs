@@ -31,7 +31,7 @@ Google Agent Development Kitライブラリをインストールし、Gemini API
 
 エージェント設定で使用するためにADKをセットアップするには：
 
-1.  [インストール](/adk-docs/ja/get-started/installation/#python)の手順に従ってADK Pythonライブラリをインストールします。 *現在Pythonが必要です。* 詳細については、[既知の制限](?tab=t.0#heading=h.xefmlyt7zh0i)を参照してください。
+1.  [インストール](/adk-docs/ja/get-started/installation/#python)の手順に従ってADK Pythonライブラリをインストールします。 *現在Pythonが必要です。* 詳細については、[既知の制限](#known-limitations)を参照してください。
 1.  ターミナルで次のコマンドを実行して、ADKがインストールされていることを確認します。
 
         adk --version

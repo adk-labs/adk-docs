@@ -1,7 +1,7 @@
 # モデルコンテキストプロトコル（MCP）
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 [モデルコンテキストプロトコル（MCP）](https://modelcontextprotocol.io/introduction)は、GeminiやClaudeのような大規模言語モデル（LLM）が、外部のアプリケーション、データソース、ツールとどのように通信するかを標準化するために設計されたオープンスタンダードです。LLMがコンテキストを取得し、アクションを実行し、様々なシステムと対話する方法を簡素化する、普遍的な接続メカニズムだとお考えください。

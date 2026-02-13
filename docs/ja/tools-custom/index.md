@@ -1,7 +1,7 @@
 # ADK用カスタムツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ADKエージェントワークフローでは、ツールはADKエージェントがアクションを実行するために呼び出すことができる、構造化された入力と出力を持つプログラミング関数です。ADKツールは、Geminiやその他の生成AIモデルで[関数呼び出し](https://ai.google.dev/gemini-api/docs/function-calling)を使用する方法と同様に機能します。ADKツールを使用して、次のようなさまざまなアクションやプログラミング関数を実行できます。

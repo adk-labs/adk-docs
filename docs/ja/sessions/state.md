@@ -1,7 +1,7 @@
 # 状態（State）：セッションのスクラッチパッド
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 各`Session`（私たちの会話スレッド）内で、**`state`**属性は、その特定のインタラクションのためのエージェント専用のスクラッチパッド（一時的な作業スペース）のように機能します。`session.events`が完全な履歴を保持するのに対し、`session.state`はエージェントが会話の*最中に*必要な動的な詳細を保存し、更新する場所です。

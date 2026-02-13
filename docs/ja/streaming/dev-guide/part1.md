@@ -1,4 +1,4 @@
-# ADK 双方向ストリーミング開発ガイド: パート1 - はじめに
+# パート1: ADK双方向ストリーミング入門
 
 <div class="language-support-tag">
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">実験的機能</span>

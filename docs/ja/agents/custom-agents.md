@@ -1,7 +1,7 @@
 # カスタムエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 カスタムエージェントは、`BaseAgent`を直接継承し、独自の制御フローを実装することで**任意のオーケストレーションロジック**を定義でき、ADKにおいて究極の柔軟性を提供します。これは、`SequentialAgent`、`LoopAgent`、`ParallelAgent`といった事前定義されたパターンを超え、非常に特殊で複雑なエージェントワークフローを構築することを可能にします。

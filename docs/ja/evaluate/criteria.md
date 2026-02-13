@@ -11,10 +11,11 @@
 `tool_trajectory_avg_score` | ツール呼び出しの軌跡の完全一致 | はい | いいえ | いいえ | いいえ
 `response_match_score` | 参照応答とのROUGE-1類似度 | はい | いいえ | いいえ | いいえ
 `final_response_match_v2` | 参照応答とのLLM判定による意味的一致 | はい | いいえ | はい | いいえ
-`rubric_based_final_response_quality_v1` | カスタムルーブリックに基づくLLM判定による最終応答品質 | いいえ | はい | はい | いいえ
-`rubric_based_tool_use_quality_v1` | カスタムルーブリックに基づくLLM判定によるツール使用品質 | いいえ | はい | はい | いいえ
+`rubric_based_final_response_quality_v1` | カスタムルーブリックに基づくLLM判定による最終応答品質 | いいえ | はい | はい | はい
+`rubric_based_tool_use_quality_v1` | カスタムルーブリックに基づくLLM判定によるツール使用品質 | いいえ | はい | はい | はい
 `hallucinations_v1` | コンテキストに対するエージェント応答のLLM判定によるグラウンディング | いいえ | いいえ | はい | はい
 `safety_v1` | エージェント応答の安全性/無害性 | いいえ | いいえ | はい | はい
+`per_turn_user_simulator_quality_v1` | LLM判定によるユーザーシミュレーター品質 | いいえ | いいえ | はい | はい
 
 ## tool_trajectory_avg_score
 
@@ -352,3 +353,42 @@ ROUGE-1は、システム生成テキスト（候補要約）と参照テキス�
 ### 出力と解釈方法
 
 この基準は0.0から1.0の間のスコアを返します。1.0に近いスコアは応答が安全であることを示し、0.0に近いスコアは潜在的な安全性の問題を示します。
+
+## per_turn_user_simulator_quality_v1
+
+この基準は、ユーザーシミュレーターが会話計画に忠実であるかを評価します。
+
+### この基準を使用するタイミング
+
+マルチターン会話におけるユーザーシミュレーターを評価する必要がある場合にこの基準を使用します。`ConversationScenario` で定義された会話計画にシミュレーターが従っているかを評価するために設計されています。
+
+### 詳細
+
+この基準は、マルチターン会話においてユーザーシミュレーターが定義済みの `ConversationScenario` に従っているかを判定します。
+
+最初のターンでは、ユーザーシミュレーターの応答が `ConversationScenario` の `starting_prompt` と一致するかを確認します。2ターン目以降は LLM-as-a-judge を使用して、ユーザー応答が `ConversationScenario` の `conversation_plan` に従っているかを評価します。
+
+### この基準の使用方法
+
+この基準では、評価しきい値、審査モデル、呼び出しごとのサンプル数を設定できます。また、会話が完了したことを審査LLMに伝える `stop_signal` を指定できます。最良の結果を得るには、`LlmBackedUserSimulator` で stop signal を使用してください。
+
+`EvalConfig`エントリの例：
+
+```json
+{
+  "criteria": {
+    "per_turn_user_simulator_quality_v1": {
+      "threshold": 1.0,
+      "judge_model_options": {
+        "judge_model": "gemini-2.5-flash",
+        "num_samples": 5
+      },
+      "stop_signal": "</finished>"
+    }
+  }
+}
+```
+
+### 出力と解釈方法
+
+この基準は0.0から1.0のスコアを返し、会話シナリオに照らしてユーザーシミュレーターの応答が有効と判定されたターンの割合を表します。1.0はすべてのターンで期待どおりに動作したことを示し、0.0に近いほど多くのターンで逸脱があったことを示します。値が高いほど良好です。

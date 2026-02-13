@@ -1,7 +1,7 @@
 # 런타임
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ADK 런타임은 사용자 상호 작용 중에 에이전트 애플리케이션을 구동하는 기본 엔진입니다. 정의된 에이전트, 도구 및 콜백을 가져와 사용자 입력에 대한 응답으로 실행을 오케스트레이션하고 정보 흐름, 상태 변경 및 LLM 또는 스토리지와 같은 외부 서비스와의 상호 작용을 관리하는 시스템입니다.

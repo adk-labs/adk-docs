@@ -1,7 +1,7 @@
 # AI 에이전트의 안전 및 보안
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 AI 에이전트의 기능이 발전함에 따라, 안전하고 보안이 유지되며 브랜드 가치에 부합하도록 운영하는 것이 무엇보다 중요합니다. 제어되지 않는 에이전트는 데이터 유출과 같이 의도와 다르거나 유해한 작업을 실행하거나, 브랜드 평판에 영향을 미칠 수 있는 부적절한 콘텐츠를 생성하는 등 여러 위험을 초래할 수 있습니다. **위험의 원인으로는 모호한 지침, 모델 환각, 적대적인 사용자의 탈옥 및 프롬프트 인젝션, 도구 사용을 통한 간접적인 프롬프트 인젝션 등이 있습니다.**

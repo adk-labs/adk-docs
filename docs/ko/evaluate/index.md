@@ -102,16 +102,16 @@ ADK는 미리 정의된 데이터 세트 및 평가 기준에 대해 에이전�
               }
             ],
             "intermediate_responses": [] # 모든 중간 하위 에이전트 응답입니다.
-          },
+          }
         }
       ],
       "session_input": { # 초기 세션 입력입니다.
         "app_name": "home_automation_agent",
         "user_id": "test_user",
         "state": {}
-      },
+      }
     }
-  ],
+  ]
 }
 ```
 
@@ -170,14 +170,14 @@ evalset을 수동으로 만드는 것은 복잡할 수 있으므로 관련 세�
           "intermediate_data": {
             "tool_uses": [],
             "intermediate_responses": []
-          },
+          }
         },
       ],
       "session_input": {
         "app_name": "hello_world",
         "user_id": "user",
         "state": {}
-      },
+      }
     },
     {
       "eval_id": "session_02",
@@ -203,7 +203,7 @@ evalset을 수동으로 만드는 것은 복잡할 수 있으므로 관련 세�
           "intermediate_data": {
             "tool_uses": [],
             "intermediate_responses": []
-          },
+          }
         },
         {
           "invocation_id": "e-bf8549a1-2a61-4ecc-a4ee-4efbbf25a8ea",
@@ -266,9 +266,9 @@ evalset을 수동으로 만드는 것은 복잡할 수 있으므로 관련 세�
         "app_name": "hello_world",
         "user_id": "user",
         "state": {}
-      },
+      }
     }
-  ],
+  ]
 }
 ```
 

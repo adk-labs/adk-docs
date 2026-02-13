@@ -12,14 +12,6 @@ hide:
 
 Agent Development Kit (ADK)는 **AI 에이전트 개발 및 배포**를 위한 유연한 모듈식 프레임워크입니다. Gemini 및 Google 생태계에 최적화되어 있지만, ADK는 **모델에 구애받지 않고(model-agnostic)**, **배포 환경에 제약이 없으며(deployment-agnostic)**, **다른 프레임워크와의 호환성**을 위해 구축되었습니다. ADK는 에이전트 개발이 일반적인 소프트웨어 개발처럼 느껴지도록 설계되었으며, 개발자가 간단한 작업부터 복잡한 워크플로에 이르는 에이전트 아키텍처를 쉽게 생성, 배포 및 오케스트레이션할 수 있도록 지원합니다.
 
-??? warning "경고: ADK Python v1.19.0은 Python 3.10 이상을 필요로 합니다"
-
-    ADK Python 릴리스 v1.19.0은 Python 3.10 이상 버전이 필요합니다. 이 변경 사항은 Python 3.9에서 v1.19.0 릴리스를 사용하려는 경우 호환성이 깨지는(breaking) 변경입니다. 자세한 릴리스 내용은 [릴리스 노트](https://github.com/google/adk-python/releases/tag/v1.19.0)를 확인하세요.
-
-??? tip "뉴스: ADK Go v0.2.0 출시!"
-
-    ADK Go v0.2.0 릴리스가 배포되었습니다! 새로운 기능, 버그 수정, 문서 업데이트 및 중요한 코드 리팩토링을 포함한 다양한 개선 사항이 적용되었습니다. 릴리스 세부 정보는 [릴리스 노트](https://github.com/google/adk-go/releases/tag/v0.2.0)를 확인하세요.
-
 <div id="centered-install-tabs" class="install-command-container" markdown="1">
 
 <p class="get-started-text" style="text-align: center;">시작하기:</p>
@@ -36,19 +28,25 @@ Agent Development Kit (ADK)는 **AI 에이전트 개발 및 배포**를 위한 �
     <code>go get google.golang.org/adk</code>
     </p>
 
+=== "TypeScript"
+    <br>
+    <p style="text-align: center;">
+    <code>npm install @google/adk</code>
+    </p>
+
 === "Java"
 
     ```xml title="pom.xml"
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk</artifactId>
-        <version>0.3.0</version>
+        <version>0.5.0</version>
     </dependency>
     ```
 
     ```gradle title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:0.3.0'
+        implementation 'com.google.adk:google-adk:0.5.0'
     }
     ```
 
@@ -56,6 +54,7 @@ Agent Development Kit (ADK)는 **AI 에이전트 개발 및 배포**를 위한 �
 
 <p style="text-align:center;">
   <a href="/adk-docs/get-started/python/" class="md-button" style="margin:3px">Python으로 시작하기</a>
+  <a href="/adk-docs/get-started/typescript/" class="md-button" style="margin:3px">TypeScript로 시작하기</a>
   <a href="/adk-docs/get-started/go/" class="md-button" style="margin:3px">Go로 시작하기</a>
   <a href="/adk-docs/get-started/java/" class="md-button" style="margin:3px">Java로 시작하기</a>
 </p>
@@ -90,7 +89,7 @@ Agent Development Kit (ADK)는 **AI 에이전트 개발 및 배포**를 위한 �
 
     에이전트에 다양한 기능을 장착하세요. 사전 구축된 도구(검색, 코드 실행)를 사용하거나, 커스텀 함수를 생성하고, 타사 라이브러리를 통합하거나, 심지어 다른 에이전트를 도구로 사용할 수도 있습니다.
 
-    [**도구 둘러보기**](tools/index.md)
+    [**도구 및 통합 둘러보기**](integrations/index.md)
 
 -   :material-rocket-launch-outline: **배포 준비 완료**
 

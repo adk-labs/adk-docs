@@ -1,7 +1,7 @@
 # ランタイム
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ADKランタイムは、ユーザーとの対話中にエージェントアプリケーションを動かす基盤となるエンジンです。定義されたエージェント、ツール、コールバックを受け取り、ユーザーの入力に応じてそれらの実行を調整し、情報の流れ、状態の変化、LLMやストレージなどの外部サービスとの対話を管理するシステムです。

@@ -12,8 +12,10 @@ ADKプロジェクトは、いくつかのリポジトリに分かれていま�
 --- | --- | ---
 [`google/adk-python`](https://github.com/google/adk-python) | コアPythonライブラリのソースコードが含まれています。 | [`CONTRIBUTING.md`](https://github.com/google/adk-python/blob/main/CONTRIBUTING.md)
 [`google/adk-python-community`](https://github.com/google/adk-python-community) | コミュニティから提供されたツール、インテグレーション、スクリプトが含まれています。 | [`CONTRIBUTING.md`](https://github.com/google/adk-python-community/blob/main/CONTRIBUTING.md)
-[`google/adk-go`](https://github.com/google/adk-go) | コアGoライブラリのソースコードが含まれています。 | 
+[`google/adk-js`](https://github.com/google/adk-js) | コアJavaScriptライブラリのソースコードが含まれています。 | [`CONTRIBUTING.md`](https://github.com/google/adk-js/blob/main/CONTRIBUTING.md)
+[`google/adk-go`](https://github.com/google/adk-go) | コアGoライブラリのソースコードが含まれています。 | [`CONTRIBUTING.md`](https://github.com/google/adk-go/blob/main/CONTRIBUTING.md)
 [`google/adk-java`](https://github.com/google/adk-java) | コアJavaライブラリのソースコードが含まれています。 | [`CONTRIBUTING.md`](https://github.com/google/adk-java/blob/main/CONTRIBUTING.md)
+[`google/adk-samples`](https://github.com/google/adk-samples) | ADKのサンプルエージェントが含まれています。 | [`CONTRIBUTING.md`](https://github.com/google/adk-samples/blob/main/CONTRIBUTING.md)
 [`google/adk-docs`](https://github.com/google/adk-docs) | 現在ご覧になっているドキュメントサイトのソースが含まれています。 | [`CONTRIBUTING.md`](https://github.com/google/adk-docs/blob/main/CONTRIBUTING.md)
 [`google/adk-web`](https://github.com/google/adk-web) | `adk web` 開発UIのソースが含まれています。 |
 
@@ -33,7 +35,7 @@ ADKプロジェクトは、いくつかのリポジトリに分かれていま�
 
 ## ディスカッションへの参加
 
-質問がありますか？アイデアを共有したいですか？あるいはADKをどのように使っているかについて話したいですか？ぜひ**[Python](https://github.com/google/adk-python/discussions)**または**[Java](https://github.com/google/adk-java/discussions)**のDiscussionsにお越しください！
+質問がありますか？アイデアを共有したいですか？あるいはADKをどのように使っているかについて話したいですか？ぜひ**[Python](https://github.com/google/adk-python/discussions)**、**[TypeScript](https://github.com/google/adk-js/discussions)**、**[Go](https://github.com/google/adk-go/discussions)**、または**[Java](https://github.com/google/adk-java/discussions)**のDiscussionsにお越しください！
 
 ここは、主に以下のための場所です：
 
@@ -50,14 +52,14 @@ ADKに貢献するには、いくつかの方法があります：
 
 フレームワークのバグやドキュメントのエラーを見つけた場合：
 
-* **フレームワークのバグ：** [`google/adk-python`](https://github.com/google/adk-python/issues/new)または[`google/adk-java`](https://github.com/google/adk-java/issues/new)でIssueを作成してください。
+* **フレームワークのバグ：** [`google/adk-python`](https://github.com/google/adk-python/issues/new)、[`google/adk-js`](https://github.com/google/adk-js/issues/new)、[`google/adk-go`](https://github.com/google/adk-go/issues/new)、または[`google/adk-java`](https://github.com/google/adk-java/issues/new)でIssueを作成してください。
 * **ドキュメントのエラー：** [`google/adk-docs`でIssueを作成（バグテンプレートを使用）](https://github.com/google/adk-docs/issues/new?template=bug_report.md)
 
 ### 機能強化の提案 { #suggesting-enhancements }
 
 新機能や既存機能の改善に関するアイデアがありますか？
 
-* **フレームワークの機能強化：** [`google/adk-python`](https://github.com/google/adk-python/issues/new)または[`google/adk-java`](https://github.com/google/adk-java/issues/new)でIssueを作成してください。
+* **フレームワークの機能強化：** [`google/adk-python`](https://github.com/google/adk-python/issues/new)、[`google/adk-js`](https://github.com/google/adk-js/issues/new)、[`google/adk-go`](https://github.com/google/adk-go/issues/new)、または[`google/adk-java`](https://github.com/google/adk-java/issues/new)でIssueを作成してください。
 * **ドキュメントの機能強化：** [`google/adk-docs`でIssueを作成](https://github.com/google/adk-docs/issues/new)
 
 ### ドキュメントの改善 { #improving-documentation }
@@ -74,6 +76,8 @@ ADKに貢献するには、いくつかの方法があります：
 **方法：** コードの変更を含むプルリクエスト（PR）を送信してください。
 
 * **Pythonフレームワーク：** [`google/adk-python`でプルリクエストを作成](https://github.com/google/adk-python/pulls)
+* **TypeScriptフレームワーク：** [`google/adk-js`でプルリクエストを作成](https://github.com/google/adk-js/pulls)
+* **Goフレームワーク：** [`google/adk-go`でプルリクエストを作成](https://github.com/google/adk-go/pulls)
 * **Javaフレームワーク：** [`google/adk-java`でプルリクエストを作成](https://github.com/google/adk-java/pulls)
 * **ドキュメント：** [`google/adk-docs`でプルリクエストを作成](https://github.com/google/adk-docs/pulls)
 

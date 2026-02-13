@@ -1,7 +1,7 @@
 # 함수 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 사전 빌드된 ADK 도구가 요구 사항을 충족하지 않는 경우 사용자 지정 *함수 도구*를 만들 수 있습니다. 함수 도구를 빌드하면 독점 데이터베이스에 연결하거나 고유한 알고리즘을 구현하는 등 맞춤형 기능을 만들 수 있습니다.

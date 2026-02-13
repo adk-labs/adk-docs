@@ -12,8 +12,10 @@ ADK 프로젝트는 여러 리포지토리로 나뉘어 있습니다. 기여하�
 --- | --- | ---
 [`google/adk-python`](https://github.com/google/adk-python) | 핵심 Python 라이브러리 소스 코드를 포함합니다. | [`CONTRIBUTING.md`](https://github.com/google/adk-python/blob/main/CONTRIBUTING.md)
 [`google/adk-python-community`](https://github.com/google/adk-python-community) | 커뮤니티에서 기여한 도구, 통합 및 스크립트를 포함합니다. | [`CONTRIBUTING.md`](https://github.com/google/adk-python-community/blob/main/CONTRIBUTING.md)
-[`google/adk-go`](https://github.com/google/adk-go) | 핵심 Go 라이브러리 소스 코드를 포함합니다. | 
+[`google/adk-js`](https://github.com/google/adk-js) | 핵심 JavaScript 라이브러리 소스 코드를 포함합니다. | [`CONTRIBUTING.md`](https://github.com/google/adk-js/blob/main/CONTRIBUTING.md)
+[`google/adk-go`](https://github.com/google/adk-go) | 핵심 Go 라이브러리 소스 코드를 포함합니다. | [`CONTRIBUTING.md`](https://github.com/google/adk-go/blob/main/CONTRIBUTING.md)
 [`google/adk-java`](https://github.com/google/adk-java) | 핵심 Java 라이브러리 소스 코드를 포함합니다. | [`CONTRIBUTING.md`](https://github.com/google/adk-java/blob/main/CONTRIBUTING.md)
+[`google/adk-samples`](https://github.com/google/adk-samples) | ADK 샘플 에이전트를 포함합니다. | [`CONTRIBUTING.md`](https://github.com/google/adk-samples/blob/main/CONTRIBUTING.md)
 [`google/adk-docs`](https://github.com/google/adk-docs) | 현재 읽고 계신 문서 사이트의 소스를 포함합니다. | [`CONTRIBUTING.md`](https://github.com/google/adk-docs/blob/main/CONTRIBUTING.md)
 [`google/adk-web`](https://github.com/google/adk-web) | `adk web` 개발 UI의 소스를 포함합니다. |
 
@@ -33,7 +35,7 @@ ADK 프로젝트는 여러 리포지토리로 나뉘어 있습니다. 기여하�
 
 ## 논의에 참여하기
 
-질문이 있거나, 아이디어를 공유하고 싶거나, ADK를 어떻게 사용하고 있는지 논의하고 싶으신가요? **[Python](https://github.com/google/adk-python/discussions)** 또는 **[Java](https://github.com/google/adk-java/discussions)** Discussions를 방문해 주세요!
+질문이 있거나, 아이디어를 공유하고 싶거나, ADK를 어떻게 사용하고 있는지 논의하고 싶으신가요? **[Python](https://github.com/google/adk-python/discussions)**, **[TypeScript](https://github.com/google/adk-js/discussions)**, **[Go](https://github.com/google/adk-go/discussions)** 또는 **[Java](https://github.com/google/adk-java/discussions)** Discussions를 방문해 주세요!
 
 이곳은 다음과 같은 활동을 위한 주요 공간입니다:
 
@@ -50,14 +52,14 @@ ADK에 기여할 수 있는 몇 가지 방법이 있습니다:
 
 프레임워크에서 버그를 발견하거나 문서에서 오류를 찾았다면:
 
-* **프레임워크 버그:** [`google/adk-python`](https://github.com/google/adk-python/issues/new) 또는 [`google/adk-java`](https://github.com/google/adk-java/issues/new)에 이슈를 생성하세요.
+* **프레임워크 버그:** [`google/adk-python`](https://github.com/google/adk-python/issues/new), [`google/adk-js`](https://github.com/google/adk-js/issues/new), [`google/adk-go`](https://github.com/google/adk-go/issues/new) 또는 [`google/adk-java`](https://github.com/google/adk-java/issues/new)에 이슈를 생성하세요.
 * **문서 오류:** [`google/adk-docs`에 이슈 생성하기 (버그 템플릿 사용)](https://github.com/google/adk-docs/issues/new?template=bug_report.md)
 
 ### 개선 사항 제안하기 { #suggesting-enhancements }
 
 새로운 기능이나 기존 기능 개선에 대한 아이디어가 있으신가요?
 
-* **프레임워크 개선:** [`google/adk-python`](https://github.com/google/adk-python/issues/new) 또는 [`google/adk-java`](https://github.com/google/adk-java/issues/new)에 이슈를 생성하세요.
+* **프레임워크 개선:** [`google/adk-python`](https://github.com/google/adk-python/issues/new), [`google/adk-js`](https://github.com/google/adk-js/issues/new), [`google/adk-go`](https://github.com/google/adk-go/issues/new) 또는 [`google/adk-java`](https://github.com/google/adk-java/issues/new)에 이슈를 생성하세요.
 * **문서 개선:** [`google/adk-docs`에 이슈 생성하기](https://github.com/google/adk-docs/issues/new)
 
 ### 문서 개선하기 { #improving-documentation }
@@ -74,6 +76,8 @@ ADK에 기여할 수 있는 몇 가지 방법이 있습니다:
 **방법:** 코드 변경 사항을 담아 풀 리퀘스트(PR)를 제출하세요.
 
 * **Python 프레임워크:** [`google/adk-python`에서 풀 리퀘스트 생성하기](https://github.com/google/adk-python/pulls)
+* **TypeScript 프레임워크:** [`google/adk-js`에서 풀 리퀘스트 생성하기](https://github.com/google/adk-js/pulls)
+* **Go 프레임워크:** [`google/adk-go`에서 풀 리퀘스트 생성하기](https://github.com/google/adk-go/pulls)
 * **Java 프레임워크:** [`google/adk-java`에서 풀 리퀘스트 생성하기](https://github.com/google/adk-java/pulls)
 * **문서:** [`google/adk-docs`에서 풀 리퀘스트 생성하기](https://github.com/google/adk-docs/pulls)
 

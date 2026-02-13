@@ -10,9 +10,9 @@ ADK 에이전트는 프로덕션 준비 또는 사용자 지정 유연성에 대
 
 ### Vertex AI의 에이전트 엔진
 
-[에이전트 엔진](agent-engine.md)은 ADK와 같은 프레임워크로 빌드된 AI 에이전트를 배포, 관리 및 확장하기 위해 특별히 설계된 Google Cloud의 완전 관리형 자동 확장 서비스입니다.
+[에이전트 엔진](agent-engine/index.md)은 ADK와 같은 프레임워크로 빌드된 AI 에이전트를 배포, 관리 및 확장하기 위해 특별히 설계된 Google Cloud의 완전 관리형 자동 확장 서비스입니다.
 
-[Vertex AI 에이전트 엔진에 에이전트 배포](agent-engine.md)에 대해 자세히 알아보십시오.
+[Vertex AI 에이전트 엔진에 에이전트 배포](agent-engine/index.md)에 대해 자세히 알아보십시오.
 
 ### Cloud Run
 

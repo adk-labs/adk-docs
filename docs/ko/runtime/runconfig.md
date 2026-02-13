@@ -1,7 +1,7 @@
 # 런타임 구성(Runtime Configuration)
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 `RunConfig`는 ADK의 에이전트에 대한 런타임 동작과 옵션을 정의합니다. 이는 음성 및 스트리밍 설정, 함수 호출, 아티팩트(artifact) 저장, LLM 호출 제한 등을 제어합니다.
@@ -162,7 +162,7 @@ class PrebuiltVoiceConfig(_common.BaseModel):
 ### `save_input_blobs_as_artifacts`
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 활성화되면, 입력 blob이 에이전트 실행 중에 아티팩트로 저장됩니다.

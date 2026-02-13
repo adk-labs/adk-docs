@@ -1,7 +1,7 @@
 # イベント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 イベントは、エージェント開発キット（ADK）内における情報フローの基本単位です。これらは、初期のユーザー入力から最終的な応答、そしてその間のすべてのステップに至るまで、エージェントのインタラクションライフサイクル中に発生するすべての重要な出来事を表します。イベントを理解することは、コンポーネントが通信し、状態が管理され、制御フローが指示される主要な方法であるため、非常に重要です。
