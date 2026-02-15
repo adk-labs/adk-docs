@@ -1,0 +1,7734 @@
+<!--
+ Copyright 2025 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Build powerful multi-agent systems with Agent Development Kit">
+      
+      
+      
+        <link rel="canonical" href="https://google.github.io/adk-docs/ko/streaming/dev-guide/part4/">
+      
+      
+        <link rel="prev" href="../part3/">
+      
+      
+        <link rel="next" href="../part5/">
+      
+      
+        
+          <link rel="alternate" href="../../../../streaming/dev-guide/part4/" hreflang="en">
+        
+          <link rel="alternate" href="./" hreflang="ko">
+        
+          <link rel="alternate" href="../../../../ja/streaming/dev-guide/part4/" hreflang="ja">
+        
+      
+      
+      <link rel="icon" href="../../../../assets/agent-development-kit.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>파트 4. 런 구성 - Agent Development Kit</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Google Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/custom.css">
+    
+      <link rel="stylesheet" href="../../../../stylesheets/language-tags.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-DKHZS27PHP"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-DKHZS27PHP",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-DKHZS27PHP",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>if("undefined"!=typeof __md_analytics){var consent=__md_get("__consent");consent&&consent.analytics&&__md_analytics()}</script>
+  
+
+    
+    
+  <!-- HTML Meta Tags -->
+  <title>Agent Development Kit</title>
+  <meta name="description" content="Build powerful multi-agent systems with Agent Development Kit">
+
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content="https://google.github.io/adk-docs">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Agent Development Kit">
+  <meta property="og:description" content="Build powerful multi-agent systems with Agent Development Kit">
+  <meta property="og:image" content="https://google.github.io/adk-docs/assets/adk-social-card.png">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="google.github.io">
+  <meta property="twitter:url" content="https://google.github.io/adk-docs">
+  <meta name="twitter:title" content="Agent Development Kit">
+  <meta name="twitter:description" content="Build powerful multi-agent systems with Agent Development Kit">
+  <meta name="twitter:image" content="https://google.github.io/adk-docs/assets/adk-social-card.png">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="white">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#part-4-runconfig" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      <!--
+ Copyright 2025 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<!-- Determine classes -->
+
+
+  
+
+
+<!-- Header -->
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav
+    class="md-header__inner md-grid"
+    aria-label="상단/헤더"
+  >
+
+    <!-- Link to home -->
+    <a
+      href="../../../"
+      title="Agent Development Kit"
+      class="md-header__button md-logo"
+      aria-label="Agent Development Kit"
+      data-md-component="logo"
+    >
+      
+  <img src="../../../../assets/agent-development-kit.png" alt="logo">
+
+    </a>
+
+    <!-- Button to open drawer -->
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+
+    <!-- Header title -->
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            <a
+      href="../../../"
+      title="Agent Development Kit"
+      aria-label="Agent Development Kit"
+      data-md-component="logo"
+    >
+            Agent Development Kit
+            </a>
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              파트 4. 런 구성
+            
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Color palette toggle -->
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="white"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="white" data-md-color-accent="white"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+
+    <!-- User preference: color palette -->
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+
+    <!-- Site language selector -->
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="언어설정">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../../streaming/dev-guide/part4/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../../ja/streaming/dev-guide/part4/" hreflang="ja" class="md-select__link">
+              日本語
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+
+    <!-- Button to open search modal -->
+    
+      
+
+      <!-- Check if search is actually enabled - see https://t.ly/DT_0V -->
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+
+        <!-- Search interface -->
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+
+    <!-- Repository information -->
+    
+      <div class="md-header__source">
+        <!-- First repository information -->
+<a href="https://github.com/google/adk-python" title="adk-python"
+  class="md-source" data-md-component="source" style="margin-right: 10px;">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    adk-python
+  </div>
+</a>
+
+<!-- Second repository information -->
+<a href="https://github.com/google/adk-js" title="adk-js"
+  class="md-source" data-md-component="source" style="margin-right: 10px;">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    adk-js
+  </div>
+</a>
+
+<!-- Third repository information -->
+<a href="https://github.com/google/adk-go" title="adk-go"
+  class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    adk-go
+  </div>
+</a>
+
+<!-- Fourth repository information -->
+<a href="https://github.com/google/adk-java" title="adk-java"
+  class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    adk-java
+  </div>
+</a>
+      </div>
+    
+  </nav>
+
+  <!-- Navigation tabs (sticky) -->
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+
+
+<!-- Determine classes -->
+
+
+
+
+<!-- Navigation -->
+<nav
+  class="md-nav md-nav--primary"
+  aria-label="네비게이션"
+  data-md-level="0"
+>
+
+  <!-- Repository information -->
+  
+    <div class="md-nav__source">
+      <!-- First repository information -->
+<a href="https://github.com/google/adk-python" title="adk-python"
+  class="md-source" data-md-component="source" style="margin-right: 10px;">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    adk-python
+  </div>
+</a>
+
+<!-- Second repository information -->
+<a href="https://github.com/google/adk-js" title="adk-js"
+  class="md-source" data-md-component="source" style="margin-right: 10px;">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    adk-js
+  </div>
+</a>
+
+<!-- Third repository information -->
+<a href="https://github.com/google/adk-go" title="adk-go"
+  class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    adk-go
+  </div>
+</a>
+
+<!-- Fourth repository information -->
+<a href="https://github.com/google/adk-java" title="adk-java"
+  class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    adk-java
+  </div>
+</a>
+    </div>
+  
+
+  <!-- Navigation list -->
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    홈
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    홈
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 빌드
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    에이전트 빌드
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../get-started/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    시작하기
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    시작하기
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/go/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Go
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/java/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tutorials/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 만들기
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    에이전트 만들기
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    다중 도구 에이전트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/agent-team/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 팀
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../get-started/streaming/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스트리밍 에이전트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2_4" id="__nav_2_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    스트리밍 에이전트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/streaming/quickstart-streaming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/streaming/quickstart-streaming-java/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../visual-builder/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    비주얼 빌더
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/coding-with-ai/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI로 코딩
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    고급 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../agents/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    에이전트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/llm-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM 에이전트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../agents/workflow-agents/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    워크플로우 에이전트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    워크플로우 에이전트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/workflow-agents/sequential-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    순차 에이전트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/workflow-agents/loop-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    루프 에이전트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/workflow-agents/parallel-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    병렬 에이전트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/custom-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    커스텀 에이전트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/multi-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    다중 에이전트 시스템
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../agents/models/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트용 모델
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    에이전트용 모델
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/models/google-gemini/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gemini
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/models/anthropic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/models/vertex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vertex AI 호스팅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/models/apigee/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Apigee AI Gateway
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/models/ollama/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ollama
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/models/vllm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vLLM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../agents/models/litellm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LiteLLM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../integrations/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    도구 및 통합
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    도구 및 통합
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../tools-custom/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    커스텀 도구
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    커스텀 도구
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_6_2" id="__nav_2_6_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    함수 도구
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    함수 도구
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-custom/function-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    개요
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-custom/performance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    도구 성능
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-custom/confirmation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    작업 확인
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-custom/mcp-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP 도구
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-custom/openapi-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenAPI 도구
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools-custom/authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    인증
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tools/limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    도구 제한 사항
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 실행
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    에이전트 실행
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../runtime/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 런타임
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    에이전트 런타임
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runtime/web-interface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    웹 인터페이스
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runtime/command-line/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    명령줄
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runtime/api-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 서버
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runtime/resume/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 재개
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runtime/runconfig/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    런타임 설정
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../runtime/event-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    이벤트 루프
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../deploy/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    배포
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    배포
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../deploy/agent-engine/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 엔진
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_2_2" id="__nav_3_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    에이전트 엔진
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../deploy/agent-engine/deploy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    표준 배포
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../deploy/agent-engine/asp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent Starter Pack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../deploy/agent-engine/test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    배포된 에이전트 테스트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../deploy/cloud-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloud Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../deploy/gke/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GKE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../observability/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    관측성(Observability)
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    관측성(Observability)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../observability/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    로깅
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../evaluate/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    평가
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    평가
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../evaluate/criteria/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    기준
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../evaluate/user-sim/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    사용자 시뮬레이션
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../safety/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    안전 및 보안
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    안전 및 보안
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    구성 요소
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    구성 요소
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../get-started/about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    기술 개요
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../context/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    컨텍스트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    컨텍스트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../context/caching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    컨텍스트 캐싱
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../context/compaction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    컨텍스트 압축
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../sessions/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션 및 메모리
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    세션 및 메모리
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../sessions/session/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_3_2" id="__nav_4_3_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    세션
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sessions/session/rewind/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션 되돌리기
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sessions/session/migrate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    세션 마이그레이션
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sessions/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    상태
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sessions/memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    메모리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../callbacks/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    콜백
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    콜백
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../callbacks/types-of-callbacks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    콜백 종류
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../callbacks/design-patterns-and-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    콜백 패턴
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../artifacts/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    아티팩트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    아티팩트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../events/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    이벤트
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    이벤트
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../apps/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    앱
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    앱
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../plugins/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    플러그인
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    플러그인
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../mcp/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MCP
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../a2a/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2A 프로토콜
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_10" id="__nav_4_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    A2A 프로토콜
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../a2a/intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2A 소개
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_10_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_10_3" id="__nav_4_10_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2A 빠른 시작 (노출)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_10_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_10_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    A2A 빠른 시작 (노출)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../a2a/quickstart-exposing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../a2a/quickstart-exposing-go/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Go
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_10_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_10_4" id="__nav_4_10_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A2A 빠른 시작 (사용)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_10_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_10_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    A2A 빠른 시작 (사용)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../a2a/quickstart-consuming/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../a2a/quickstart-consuming-go/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Go
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_11" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    양방향 스트리밍 (실시간)
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_11" id="__nav_4_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    양방향 스트리밍 (실시간)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_11_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_11_2" id="__nav_4_11_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    양방향 스트리밍 개발 가이드 시리즈
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_11_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_11_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    양방향 스트리밍 개발 가이드 시리즈
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    파트 1. 스트리밍 소개
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    파트 2. 메시지 전송
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    파트 3. 이벤트 처리
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    파트 4. 런 구성
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    파트 4. 런 구성
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#runconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunConfig 파라미터 빠른 참조
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response-modalities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response Modalities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streamingmode-bidi-sse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamingMode: BIDI 또는 SSE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StreamingMode: BIDI 또는 SSE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        프로토콜/구현 차이
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#progressive-sse-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Progressive SSE Streaming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        어떤 모드를 언제 써야 하나
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sse-gemini-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSE로 접근하는 표준 Gemini 모델(1.5 시리즈)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API 연결과 세션 이해하기
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API 연결과 세션 이해하기">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adk-session-vs-live-api-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADK Session vs Live API Session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-api-connections-and-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API Connections and Sessions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API Connections and Sessions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        플랫폼별 연결/세션 제한
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-api-session-resumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API Session Resumption
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API Session Resumption">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADK 재연결 관리 범위
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adk-session-resumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADK가 session resumption을 관리하는 방법
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        자동 재연결 시퀀스 다이어그램
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-api-context-window-compression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API Context Window Compression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API Context Window Compression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        플랫폼 동작 및 공식 제한
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        압축을 쓰지 말아야 하는 경우
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-api_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API 연결/세션 관리 모범 사례
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API 연결/세션 관리 모범 사례">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-resumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        필수: Session Resumption 활성화
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-window-compression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        권장: 장시간 세션이면 Context Window Compression 활성화
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        선택: 세션 시간 모니터링
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrent-live-api-sessions-and-quota-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrent Live API Sessions and Quota Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Concurrent Live API Sessions and Quota Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        동시 세션 쿼터 이해
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        쿼터 관리 아키텍처 패턴
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="쿼터 관리 아키텍처 패턴">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-1-direct-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 1: Direct Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-2-session-pooling-queueing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 2: Session Pooling + Queueing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#miscellaneous-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Miscellaneous Controls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Miscellaneous Controls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#max_llm_calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        max_llm_calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save_live_blob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        save_live_blob
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom_metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        custom_metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support_cfc-experimental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        support_cfc (Experimental)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    파트 5. 오디오, 이미지, 비디오
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../streaming-tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    스트리밍 도구
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    양방향 스트리밍 동작 구성
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_12" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../grounding/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    그라운딩
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_12" id="__nav_4_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    그라운딩
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../grounding/google_search_grounding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Google 검색 그라운딩 이해
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../grounding/vertex_ai_search_grounding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vertex AI 검색 그라운딩 이해
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../release-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    릴리스 노트
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../api-reference/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API 레퍼런스
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../api-reference/python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python ADK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../api-reference/typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Typescript ADK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://pkg.go.dev/google.golang.org/adk" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Go ADK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../api-reference/java/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Java ADK
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../api-reference/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../api-reference/agentconfig/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    에이전트 설정 레퍼런스
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../api-reference/rest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    REST API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    커뮤니티 자료
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    기여 가이드
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#runconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RunConfig 파라미터 빠른 참조
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#response-modalities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Response Modalities
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streamingmode-bidi-sse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StreamingMode: BIDI 또는 SSE
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StreamingMode: BIDI 또는 SSE">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        프로토콜/구현 차이
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#progressive-sse-streaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Progressive SSE Streaming
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        어떤 모드를 언제 써야 하나
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sse-gemini-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSE로 접근하는 표준 Gemini 모델(1.5 시리즈)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API 연결과 세션 이해하기
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API 연결과 세션 이해하기">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adk-session-vs-live-api-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADK Session vs Live API Session
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-api-connections-and-sessions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API Connections and Sessions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API Connections and Sessions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        플랫폼별 연결/세션 제한
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-api-session-resumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API Session Resumption
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API Session Resumption">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADK 재연결 관리 범위
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adk-session-resumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ADK가 session resumption을 관리하는 방법
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        자동 재연결 시퀀스 다이어그램
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-api-context-window-compression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API Context Window Compression
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API Context Window Compression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        플랫폼 동작 및 공식 제한
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        압축을 쓰지 말아야 하는 경우
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#live-api_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live API 연결/세션 관리 모범 사례
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Live API 연결/세션 관리 모범 사례">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session-resumption" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        필수: Session Resumption 활성화
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-window-compression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        권장: 장시간 세션이면 Context Window Compression 활성화
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        선택: 세션 시간 모니터링
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrent-live-api-sessions-and-quota-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concurrent Live API Sessions and Quota Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Concurrent Live API Sessions and Quota Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        동시 세션 쿼터 이해
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        쿼터 관리 아키텍처 패턴
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="쿼터 관리 아키텍처 패턴">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-1-direct-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 1: Direct Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-2-session-pooling-queueing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pattern 2: Session Pooling + Queueing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#miscellaneous-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Miscellaneous Controls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Miscellaneous Controls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#max_llm_calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        max_llm_calls
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save_live_blob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        save_live_blob
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom_metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        custom_metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support_cfc-experimental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        support_cfc (Experimental)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        요약
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="네비게이션" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../../" class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Index
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../../../get-started/about/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    구성 요소
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../../" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    양방향 스트리밍 (실시간)
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../part1/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    양방향 스트리밍 개발 가이드 시리즈
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/google/adk-docs/edit/main/docs/ko/streaming/dev-guide/part4.md" title="Edit this page on GitHub" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/google/adk-docs/raw/main/docs/ko/streaming/dev-guide/part4.md" title="View Markdown source" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+  
+  <button id="copy-page-btn" class="md-content__button md-icon" title="Copy page as Markdown" data-url="./index.md">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg>
+  </button>
+
+
+<h1 id="part-4-runconfig">Part 4: RunConfig 이해하기<a class="headerlink" href="#part-4-runconfig" title="Permanent link">&para;</a></h1>
+<p>Part 3에서는 <code>run_live()</code>에서 전달되는 이벤트를 처리해 모델 응답, 도구 호출,
+스트리밍 업데이트를 다루는 방법을 배웠습니다.
+이번 파트에서는 <code>RunConfig</code>를 통해 스트리밍 세션을 설정하는 방법을 설명합니다.
+응답 형식 제어, 세션 수명 주기 관리, 운영 제약 적용이 핵심입니다.</p>
+<p><strong>이번 파트에서 배우는 내용</strong>:
+응답 모달리티와 제약, BIDI/SSE 스트리밍 모드 차이,
+ADK Session과 Live API 세션의 관계,
+세션 재개 및 컨텍스트 윈도우 압축을 통한 세션 시간 관리,
+동시 세션 쿼터 대응 아키텍처,
+<code>max_llm_calls</code>와 오디오 저장 옵션 기반 비용 제어를 다룹니다.</p>
+<div class="admonition note">
+<p class="admonition-title">더 알아보기</p>
+<p>오디오/비디오 관련 <code>RunConfig</code> 상세는
+<a href="../part5/">Part 5: Audio, Image and Video in Live API</a>를 참고하세요.</p>
+</div>
+<h2 id="runconfig">RunConfig 파라미터 빠른 참조<a class="headerlink" href="#runconfig" title="Permanent link">&para;</a></h2>
+<p>아래 표는 이번 파트에서 다루는 RunConfig 파라미터를 빠르게 확인하기 위한 요약입니다.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Purpose</th>
+<th>Platform Support</th>
+<th>Reference</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>response_modalities</strong></td>
+<td>list[str]</td>
+<td>출력 형식 제어(TEXT 또는 AUDIO)</td>
+<td>Both</td>
+<td><a href="#response-modalities">Details</a></td>
+</tr>
+<tr>
+<td><strong>streaming_mode</strong></td>
+<td>StreamingMode</td>
+<td>BIDI 또는 SSE 모드 선택</td>
+<td>Both</td>
+<td><a href="#streamingmode-bidi-or-sse">Details</a></td>
+</tr>
+<tr>
+<td><strong>session_resumption</strong></td>
+<td>SessionResumptionConfig</td>
+<td>자동 재연결 활성화</td>
+<td>Both</td>
+<td><a href="#live-api-session-resumption">Details</a></td>
+</tr>
+<tr>
+<td><strong>context_window_compression</strong></td>
+<td>ContextWindowCompressionConfig</td>
+<td>세션 시간 무제한화</td>
+<td>Both</td>
+<td><a href="#live-api-context-window-compression">Details</a></td>
+</tr>
+<tr>
+<td><strong>max_llm_calls</strong></td>
+<td>int</td>
+<td>세션당 LLM 호출 수 제한</td>
+<td>Both</td>
+<td><a href="#max_llm_calls">Details</a></td>
+</tr>
+<tr>
+<td><strong>save_live_blob</strong></td>
+<td>bool</td>
+<td>오디오/비디오 스트림 영속화</td>
+<td>Both</td>
+<td><a href="#save_live_blob">Details</a></td>
+</tr>
+<tr>
+<td><strong>custom_metadata</strong></td>
+<td>dict[str, Any]</td>
+<td>invocation 이벤트에 메타데이터 부착</td>
+<td>Both</td>
+<td><a href="#custom_metadata">Details</a></td>
+</tr>
+<tr>
+<td><strong>support_cfc</strong></td>
+<td>bool</td>
+<td>조합형 함수 호출 활성화</td>
+<td>Gemini (2.x models only)</td>
+<td><a href="#support_cfc-experimental">Details</a></td>
+</tr>
+<tr>
+<td><strong>speech_config</strong></td>
+<td>SpeechConfig</td>
+<td>음성/언어 설정</td>
+<td>Both</td>
+<td><a href="../part5/#voice-configuration-speech-config">Part 5: Voice Configuration</a></td>
+</tr>
+<tr>
+<td><strong>input_audio_transcription</strong></td>
+<td>AudioTranscriptionConfig</td>
+<td>사용자 음성 전사</td>
+<td>Both</td>
+<td><a href="../part5/#audio-transcription">Part 5: Audio Transcription</a></td>
+</tr>
+<tr>
+<td><strong>output_audio_transcription</strong></td>
+<td>AudioTranscriptionConfig</td>
+<td>모델 음성 전사</td>
+<td>Both</td>
+<td><a href="../part5/#audio-transcription">Part 5: Audio Transcription</a></td>
+</tr>
+<tr>
+<td><strong>realtime_input_config</strong></td>
+<td>RealtimeInputConfig</td>
+<td>VAD 설정</td>
+<td>Both</td>
+<td><a href="../part5/#voice-activity-detection-vad">Part 5: Voice Activity Detection</a></td>
+</tr>
+<tr>
+<td><strong>proactivity</strong></td>
+<td>ProactivityConfig</td>
+<td>능동 오디오 활성화</td>
+<td>Gemini (native audio only)</td>
+<td><a href="../part5/#proactivity-and-affective-dialog">Part 5: Proactivity and Affective Dialog</a></td>
+</tr>
+<tr>
+<td><strong>enable_affective_dialog</strong></td>
+<td>bool</td>
+<td>감정 적응</td>
+<td>Gemini (native audio only)</td>
+<td><a href="../part5/#proactivity-and-affective-dialog">Part 5: Proactivity and Affective Dialog</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Source Reference</p>
+<p><a href="https://github.com/google/adk-python/blob/29c1115959b0084ac1169748863b35323da3cf50/src/google/adk/agents/run_config.py"><code>run_config.py</code></a></p>
+</div>
+<p><strong>플랫폼 지원 범례:</strong></p>
+<ul>
+<li><strong>Both</strong>: Gemini Live API와 Vertex AI Live API 모두 지원</li>
+<li><strong>Gemini</strong>: Gemini Live API에서만 지원</li>
+<li><strong>Model-specific</strong>: 특정 모델 아키텍처 필요(예: native audio)</li>
+</ul>
+<p><strong>Import 경로:</strong></p>
+<p>위 표에 나온 구성 타입 클래스는 모두 <code>google.genai.types</code>에서 import합니다.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.genai</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.adk.agents.run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span><span class="p">,</span> <span class="n">StreamingMode</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># 구성 타입은 types 모듈을 통해 접근</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">session_resumption</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">SessionResumptionConfig</span><span class="p">(),</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">context_window_compression</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">ContextWindowCompressionConfig</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">speech_config</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">SpeechConfig</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="c1"># etc.</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><code>RunConfig</code> 클래스와 <code>StreamingMode</code> enum은 <code>google.adk.agents.run_config</code>에서 import합니다.</p>
+<h2 id="response-modalities">Response Modalities<a class="headerlink" href="#response-modalities" title="Permanent link">&para;</a></h2>
+<p>응답 모달리티는 모델 출력 형식(텍스트/오디오)을 제어합니다.
+Gemini Live API와 Vertex AI Live API 모두 세션당 <strong>하나의 모달리티만</strong> 허용합니다.</p>
+<p><strong>설정 예시:</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Phase 2: Session initialization - RunConfig determines streaming behavior</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># 기본 동작: response_modalities 미지정 시 ADK가 [&quot;AUDIO&quot;]로 자동 설정</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># (native audio 모델에서 명시적 모달리티가 필요)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">streaming_mode</span><span class="o">=</span><span class="n">StreamingMode</span><span class="o">.</span><span class="n">BIDI</span>  <span class="c1"># Bidirectional WebSocket communication</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># 위 설정은 다음과 동일</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">response_modalities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;AUDIO&quot;</span><span class="p">],</span>  <span class="c1"># Automatically set by ADK in run_live()</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">streaming_mode</span><span class="o">=</span><span class="n">StreamingMode</span><span class="o">.</span><span class="n">BIDI</span>  <span class="c1"># Bidirectional WebSocket communication</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">)</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="c1"># ✅ 올바른 예: 텍스트 전용 응답</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="n">response_modalities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TEXT&quot;</span><span class="p">],</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    <span class="n">streaming_mode</span><span class="o">=</span><span class="n">StreamingMode</span><span class="o">.</span><span class="n">BIDI</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">)</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="c1"># ✅ 올바른 예: 오디오 전용 응답</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    <span class="n">response_modalities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;AUDIO&quot;</span><span class="p">],</span>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>    <span class="n">streaming_mode</span><span class="o">=</span><span class="n">StreamingMode</span><span class="o">.</span><span class="n">BIDI</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>양 플랫폼 모두 세션당 단일 응답 모달리티만 허용합니다.
+둘 다 지정하면 API 오류가 발생합니다.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># ❌ 잘못된 예: 두 모달리티 동시 사용 불가</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">response_modalities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TEXT&quot;</span><span class="p">,</span> <span class="s2">&quot;AUDIO&quot;</span><span class="p">],</span>  <span class="c1"># ERROR</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">streaming_mode</span><span class="o">=</span><span class="n">StreamingMode</span><span class="o">.</span><span class="n">BIDI</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Error from Live API: &quot;Only one response modality is supported per session&quot;</span>
+</span></code></pre></div>
+<p><strong>기본 동작:</strong>
+<code>response_modalities</code>를 지정하지 않으면 <code>run_live()</code>에서 자동으로 <code>["AUDIO"]</code>가 적용됩니다.
+필요하면 <code>response_modalities=["TEXT"]</code>로 명시적으로 덮어쓸 수 있습니다.</p>
+<p><strong>핵심 제약:</strong></p>
+<ul>
+<li>세션 시작 시 <code>TEXT</code> 또는 <code>AUDIO</code> 중 하나를 선택해야 하며,
+  <strong>세션 중간 전환은 불가</strong></li>
+<li><a href="../part5/#understanding-audio-model-architectures">Native Audio 모델</a>에는 <code>AUDIO</code> 선택 필요
+  (오디오+텍스트가 모두 필요하면 Audio Transcript 기능 사용)</li>
+<li>응답 모달리티는 출력에만 영향
+  (입력은 모델이 지원하는 한 텍스트/음성/비디오 모두 가능)</li>
+</ul>
+<h2 id="streamingmode-bidi-sse">StreamingMode: BIDI 또는 SSE<a class="headerlink" href="#streamingmode-bidi-sse" title="Permanent link">&para;</a></h2>
+<p>ADK는 서로 다른 API 엔드포인트/프로토콜을 사용하는 2개 스트리밍 모드를 지원합니다.</p>
+<ul>
+<li><code>StreamingMode.BIDI</code>: ADK가 WebSocket으로 <strong>Live API</strong>(<code>live.connect()</code>)에 연결</li>
+<li><code>StreamingMode.SSE</code>: ADK가 HTTP 스트리밍으로 <strong>표준 Gemini API</strong>(<code>generate_content_async()</code>)에 연결</li>
+</ul>
+<p>여기서 Live API는 양방향 WebSocket 엔드포인트를,
+표준 Gemini API는 전통적인 HTTP 기반 엔드포인트를 의미합니다.
+둘 다 Gemini API 플랫폼의 일부지만 프로토콜과 기능이 다릅니다.</p>
+<p><strong>참고:</strong> 이 모드는 <strong>ADK↔Gemini API 통신 프로토콜</strong>을 의미하며,
+클라이언트-facing 아키텍처(WebSocket 서버/REST/SSE 등)와는 별개입니다.</p>
+<p>이 가이드는 실시간 오디오/비디오에 필요한 <code>StreamingMode.BIDI</code> 중심으로 설명하지만,
+용도에 맞게 BIDI/SSE 차이를 이해하는 것이 중요합니다.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.adk.agents.run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span><span class="p">,</span> <span class="n">StreamingMode</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># 실시간 오디오/비디오용 BIDI</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">streaming_mode</span><span class="o">=</span><span class="n">StreamingMode</span><span class="o">.</span><span class="n">BIDI</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">response_modalities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;AUDIO&quot;</span><span class="p">]</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">)</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># 텍스트 기반 상호작용용 SSE</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">streaming_mode</span><span class="o">=</span><span class="n">StreamingMode</span><span class="o">.</span><span class="n">SSE</span><span class="p">,</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">response_modalities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;TEXT&quot;</span><span class="p">]</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="_1">프로토콜/구현 차이<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>BIDI는 송수신 동시 처리(받으면서 보내기)가 가능해
+중단(interruption), 라이브 오디오 스트리밍, 즉시 턴 전환 같은 실시간 기능에 적합합니다.
+SSE는 요청을 먼저 완성해 보내고 응답 스트림을 받는 전통적 패턴입니다.</p>
+<p><strong>StreamingMode.BIDI - 양방향 WebSocket 통신:</strong></p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant App as Your Application
+    participant ADK as ADK
+    participant Queue as LiveRequestQueue
+    participant Gemini as Gemini Live API
+
+    Note over ADK,Gemini: Protocol: WebSocket
+
+    App-&gt;&gt;ADK: runner.run_live(run_config)
+    ADK-&gt;&gt;Gemini: live.connect() - WebSocket
+    activate Gemini
+
+    Note over ADK,Queue: Can send while receiving
+
+    App-&gt;&gt;Queue: send_content(text)
+    Queue-&gt;&gt;Gemini: → Content (via WebSocket)
+    App-&gt;&gt;Queue: send_realtime(audio)
+    Queue-&gt;&gt;Gemini: → Audio blob (via WebSocket)
+
+    Gemini--&gt;&gt;ADK: ← Partial response (partial=True)
+    ADK--&gt;&gt;App: ← Event: partial text/audio
+    Gemini--&gt;&gt;ADK: ← Partial response (partial=True)
+    ADK--&gt;&gt;App: ← Event: partial text/audio
+
+    App-&gt;&gt;Queue: send_content(interrupt)
+    Queue-&gt;&gt;Gemini: → New content
+
+    Gemini--&gt;&gt;ADK: ← turn_complete=True
+    ADK--&gt;&gt;App: ← Event: turn complete
+
+    deactivate Gemini
+
+    Note over ADK,Gemini: Turn Detection: turn_complete flag</code></pre>
+<p><strong>StreamingMode.SSE - 단방향 HTTP 스트리밍:</strong></p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant App as Your Application
+    participant ADK as ADK
+    participant Gemini as Gemini API
+
+    Note over ADK,Gemini: Protocol: HTTP
+
+    App-&gt;&gt;ADK: runner.run(run_config)
+    ADK-&gt;&gt;Gemini: generate_content_stream() - HTTP
+    activate Gemini
+
+    Note over ADK,Gemini: Request sent completely, then stream response
+
+    Gemini--&gt;&gt;ADK: ← Partial chunk (partial=True)
+    ADK--&gt;&gt;App: ← Event: partial text
+    Gemini--&gt;&gt;ADK: ← Partial chunk (partial=True)
+    ADK--&gt;&gt;App: ← Event: partial text
+    Gemini--&gt;&gt;ADK: ← Partial chunk (partial=True)
+    ADK--&gt;&gt;App: ← Event: partial text
+
+    Gemini--&gt;&gt;ADK: ← Final chunk (finish_reason=STOP)
+    ADK--&gt;&gt;App: ← Event: complete response
+
+    deactivate Gemini
+
+    Note over ADK,Gemini: Turn Detection: finish_reason</code></pre>
+<h3 id="progressive-sse-streaming">Progressive SSE Streaming<a class="headerlink" href="#progressive-sse-streaming" title="Permanent link">&para;</a></h3>
+<p><strong>Progressive SSE streaming</strong>은 SSE 모드 응답 전달을 개선하는 기능입니다.</p>
+<ul>
+<li><strong>콘텐츠 순서 보존</strong>: 텍스트/함수 호출/inline data 혼합 시 원래 순서 유지</li>
+<li><strong>지능형 텍스트 병합</strong>: 같은 유형(일반 텍스트/사고 텍스트)의 연속 텍스트만 병합</li>
+<li><strong>점진적 전달</strong>: 중간 청크는 <code>partial=True</code>, 마지막에 단일 최종 집계 응답</li>
+<li><strong>함수 실행 지연</strong>: partial 이벤트에서는 함수 실행을 건너뛰고 최종 이벤트에서 실행</li>
+<li><strong>함수 인자 스트리밍</strong>: <code>partial_args</code>로 함수 호출 인자 구성 과정을 실시간 표시</li>
+</ul>
+<p><strong>기본 동작:</strong>
+<code>StreamingMode.SSE</code> 사용 시 기본으로 활성화됩니다.</p>
+<p><strong>비활성화(필요한 경우):</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ADK_DISABLE_PROGRESSIVE_SSE_STREAMING</span><span class="o">=</span><span class="m">1</span>
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">레거시 동작 트레이드오프</p>
+<p>비활성화하면 단순 텍스트 누적 방식으로 돌아가며,
+- 텍스트/함수 호출 혼합 시 원래 순서를 잃을 수 있고
+- <code>partial_args</code> 기반 함수 인자 스트리밍을 지원하지 않으며
+- 하위 호환 목적이므로 신규 앱에는 기본 progressive 모드 권장</p>
+</div>
+<p><strong>도움이 되는 경우:</strong></p>
+<ul>
+<li>SSE 모드에서 텍스트+함수 호출 같은 혼합 콘텐츠 사용</li>
+<li>사고 텍스트와 일반 텍스트가 섞이는 응답</li>
+<li>함수 호출을 완전 집계 후 1회 실행하고 싶을 때</li>
+<li>함수 인자 구성 과정을 실시간 표시하고 싶을 때</li>
+</ul>
+<p><strong>참고:</strong> 이 기능은 <code>StreamingMode.SSE</code>에만 적용되며,
+<code>StreamingMode.BIDI</code>에는 적용되지 않습니다.</p>
+<h3 id="_2">어떤 모드를 언제 써야 하나<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p><strong>BIDI 권장 상황:</strong></p>
+<ul>
+<li>실시간 음성/영상 상호작용 앱</li>
+<li>받으면서 보내는 양방향 통신 필요</li>
+<li>Live API 기능(전사, VAD, proactivity, affective dialog) 필요</li>
+<li>interruption/자연스러운 턴 교대 필요</li>
+<li>라이브 스트리밍 툴/실시간 피드 구현</li>
+<li>동시 세션 쿼터(50~1,000) 계획 가능</li>
+</ul>
+<p><strong>SSE 권장 상황:</strong></p>
+<ul>
+<li>텍스트 기반 채팅 앱</li>
+<li>전통적 요청/응답 패턴</li>
+<li>Live API 미지원 모델 사용(예: Gemini 1.5 Pro/Flash)</li>
+<li>WebSocket 없이 단순 배포</li>
+<li>큰 컨텍스트 윈도우 필요(1.5 Pro 최대 2M)</li>
+<li>동시 세션 쿼터보다 RPM/TPM 기반 운영 선호</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">스트리밍 모드와 모델 호환성</p>
+<p>SSE는 표준 Gemini API(<code>generate_content_async</code>)를 HTTP로,
+BIDI는 Live API(<code>live.connect()</code>)를 WebSocket으로 사용합니다.
+Gemini 1.5 계열은 Live API 프로토콜을 지원하지 않아 SSE 전용입니다.
+Gemini 2.0/2.5 Live 모델은 두 프로토콜 모두 지원하지만,
+실시간 오디오/비디오 기능 때문에 일반적으로 BIDI로 사용합니다.</p>
+</div>
+<h3 id="sse-gemini-15">SSE로 접근하는 표준 Gemini 모델(1.5 시리즈)<a class="headerlink" href="#sse-gemini-15" title="Permanent link">&para;</a></h3>
+<p>이 가이드는 Gemini 2.0 Live 기반 Bidi-streaming 중심이지만,
+ADK는 SSE를 통해 Gemini 1.5 모델도 지원합니다.
+1.5는 큰 컨텍스트와 안정성이 장점이지만 실시간 오디오/비디오 기능은 없습니다.</p>
+<p><strong>모델:</strong></p>
+<ul>
+<li><code>gemini-1.5-pro</code></li>
+<li><code>gemini-1.5-flash</code></li>
+</ul>
+<p><strong>지원:</strong></p>
+<ul>
+<li>✅ 텍스트 입출력(<code>response_modalities=["TEXT"]</code>)</li>
+<li>✅ SSE 스트리밍(<code>StreamingMode.SSE</code>)</li>
+<li>✅ 자동 함수 호출 실행</li>
+<li>✅ 대형 컨텍스트(1.5-pro 최대 2M)</li>
+</ul>
+<p><strong>미지원:</strong></p>
+<ul>
+<li>❌ 라이브 오디오 기능(오디오 I/O, 전사, VAD)</li>
+<li>❌ <code>run_live()</code> 기반 Bidi-streaming</li>
+<li>❌ proactivity/affective dialog</li>
+<li>❌ 비디오 입력</li>
+</ul>
+<h2 id="live-api">Live API 연결과 세션 이해하기<a class="headerlink" href="#live-api" title="Permanent link">&para;</a></h2>
+<p>ADK Bidi-streaming 앱에서 ADK와 Live API 백엔드 사이 통신 계층을 이해하는 것은 중요합니다.
+핵심은 <strong>연결(connection)</strong> 과 <strong>세션(session)</strong> 의 구분입니다.
+Bidi 아키텍처에서는 연결 타임아웃, 모달리티별 세션 제한,
+유한 컨텍스트 윈도우, 플랫폼별 동시 세션 쿼터 같은 제약이 존재합니다.</p>
+<h3 id="adk-session-vs-live-api-session">ADK <code>Session</code> vs Live API Session<a class="headerlink" href="#adk-session-vs-live-api-session" title="Permanent link">&para;</a></h3>
+<p><strong>ADK <code>Session</code></strong> (<code>SessionService</code> 관리):
+- <code>SessionService.create_session()</code>으로 생성되는 영구 저장 단위
+- 대화 이력/events/state 저장
+- 저장소: in-memory, DB(PostgreSQL/MySQL/SQLite), Vertex AI
+- 여러 <code>run_live()</code> 호출/앱 재시작을 넘어 유지</p>
+<p><strong>Live API session</strong> (Live API 백엔드 관리):
+- <code>run_live()</code>가 실행되는 동안 유지되는 논리 대화 컨텍스트
+- <code>LiveRequestQueue.close()</code> 시 종료
+- 플랫폼 제한의 영향을 받으며, resumption handle로 연결 간 재개 가능</p>
+<p><strong>함께 동작하는 방식:</strong></p>
+<ol>
+<li><strong><code>run_live()</code> 호출 시</strong></li>
+<li><code>SessionService</code>에서 ADK Session 조회</li>
+<li><code>session.events</code> 이력으로 Live API session 초기화</li>
+<li>양방향 스트리밍 진행</li>
+<li>새 이벤트를 ADK Session에 갱신</li>
+<li><strong><code>run_live()</code> 종료 시</strong></li>
+<li>Live API session 종료</li>
+<li>ADK Session은 유지</li>
+<li><strong>다음 <code>run_live()</code> 호출/앱 재시작 시</strong></li>
+<li>ADK Session 이력 로드</li>
+<li>해당 이력으로 새 Live API session 생성</li>
+</ol>
+<p>즉, ADK Session은 장기 영속 저장,
+Live API session은 일시적 스트리밍 컨텍스트입니다.</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant App as Your Application
+    participant SS as SessionService
+    participant ADK_Session as ADK Session&lt;br/&gt;(Persistent Storage)
+    participant ADK as ADK (run_live)
+    participant LiveSession as Live API Session&lt;br/&gt;(Ephemeral)
+
+    Note over App,LiveSession: First run_live() call
+
+    App-&gt;&gt;SS: get_session(user_id, session_id)
+    SS-&gt;&gt;ADK_Session: Load session data
+    ADK_Session--&gt;&gt;SS: Session with events history
+    SS--&gt;&gt;App: Session object
+
+    App-&gt;&gt;ADK: runner.run_live(...)
+    ADK-&gt;&gt;LiveSession: Initialize with history from ADK Session
+    activate LiveSession
+
+    Note over ADK,LiveSession: Bidirectional streaming...
+
+    ADK-&gt;&gt;ADK_Session: Update with new events
+
+    App-&gt;&gt;ADK: queue.close()
+    ADK-&gt;&gt;LiveSession: Terminate
+    deactivate LiveSession
+    Note over LiveSession: Live API session destroyed
+    Note over ADK_Session: ADK Session persists
+
+    Note over App,LiveSession: Second run_live() call (or after restart)
+
+    App-&gt;&gt;SS: get_session(user_id, session_id)
+    SS-&gt;&gt;ADK_Session: Load session data
+    ADK_Session--&gt;&gt;SS: Session with events history
+    SS--&gt;&gt;App: Session object (with previous history)
+
+    App-&gt;&gt;ADK: runner.run_live(...)
+    ADK-&gt;&gt;LiveSession: Initialize new session with full history
+    activate LiveSession
+
+    Note over ADK,LiveSession: Bidirectional streaming continues...</code></pre>
+<p><strong>핵심 포인트:</strong>
+- ADK Session은 여러 <code>run_live()</code>/재시작 간 유지
+- Live API session은 스트리밍 세션마다 생성/소멸
+- 연속성은 ADK Session 영속 저장으로 확보
+- SessionService가 영속 레이어를 관리</p>
+<h3 id="live-api-connections-and-sessions">Live API Connections and Sessions<a class="headerlink" href="#live-api-connections-and-sessions" title="Permanent link">&para;</a></h3>
+<p><strong>Connection</strong>: ADK와 Live API 서버 간 물리적 WebSocket 링크(전송 계층)</p>
+<p><strong>Session</strong>: Live API가 유지하는 논리 대화 컨텍스트(애플리케이션 계층)</p>
+<table>
+<thead>
+<tr>
+<th><strong>Aspect</strong></th>
+<th><strong>Connection</strong></th>
+<th><strong>Session</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>What is it?</strong></td>
+<td>WebSocket network connection</td>
+<td>Logical conversation context</td>
+</tr>
+<tr>
+<td><strong>Scope</strong></td>
+<td>Transport layer</td>
+<td>Application layer</td>
+</tr>
+<tr>
+<td><strong>Can span?</strong></td>
+<td>Single network link</td>
+<td>Multiple connections via resumption</td>
+</tr>
+<tr>
+<td><strong>Failure impact</strong></td>
+<td>Network error or timeout</td>
+<td>Lost conversation history</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_3">플랫폼별 연결/세션 제한<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Constraint Type</th>
+<th>Gemini Live API<br>(Google AI Studio)</th>
+<th>Vertex AI Live API<br>(Google Cloud)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Connection duration</strong></td>
+<td>~10 minutes</td>
+<td>Not documented separately</td>
+<td>Gemini WebSocket은 자동 종료, ADK가 재개로 재연결</td>
+</tr>
+<tr>
+<td><strong>Session Duration (Audio-only)</strong></td>
+<td>15 minutes</td>
+<td>10 minutes</td>
+<td>압축 미사용 기준. 압축 사용 시 양쪽 모두 무제한</td>
+</tr>
+<tr>
+<td><strong>Session Duration (Audio + video)</strong></td>
+<td>2 minutes</td>
+<td>10 minutes</td>
+<td>Gemini는 비디오 세션 더 짧음. 압축 시 양쪽 모두 무제한</td>
+</tr>
+<tr>
+<td><strong>Concurrent sessions</strong></td>
+<td>50 (Tier 1)<br>1,000 (Tier 2+)</td>
+<td>Up to 1,000</td>
+<td>Gemini는 티어 기반, Vertex는 프로젝트 기준</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Source References</p>
+<ul>
+<li><a href="https://ai.google.dev/gemini-api/docs/live-guide">Gemini Live API Capabilities Guide</a></li>
+<li><a href="https://ai.google.dev/gemini-api/docs/quota">Gemini API Quotas</a></li>
+<li><a href="https://cloud.google.com/vertex-ai/generative-ai/docs/live-api">Vertex AI Live API</a></li>
+</ul>
+</div>
+<h2 id="live-api-session-resumption">Live API Session Resumption<a class="headerlink" href="#live-api-session-resumption" title="Permanent link">&para;</a></h2>
+<p>기본적으로 Live API 연결은 약 10분 후 자동 종료됩니다.
+이를 넘어 긴 대화를 이어가려면
+<strong><a href="https://ai.google.dev/gemini-api/docs/live#session-resumption">Session Resumption</a></strong> 을 사용해야 합니다.
+재개 핸들을 통해 같은 세션 컨텍스트를 여러 연결로 이어갈 수 있습니다.</p>
+<p><strong>ADK는 이를 자동화합니다.</strong>
+RunConfig에서 session resumption을 켜면,
+연결 종료 감지, 핸들 캐싱, 재연결을 내부에서 투명하게 처리합니다.
+앱 코드는 별도 재연결 로직이 필요 없습니다.</p>
+<h3 id="adk">ADK 재연결 관리 범위<a class="headerlink" href="#adk" title="Permanent link">&para;</a></h3>
+<p>ADK는 <strong>ADK↔Live API 연결</strong>(백엔드 WebSocket)을 관리합니다.</p>
+<p>애플리케이션이 직접 관리해야 하는 것:</p>
+<ul>
+<li>사용자↔애플리케이션 연결(예: 브라우저↔FastAPI WebSocket)</li>
+<li>필요 시 클라이언트 측 재연결</li>
+<li>클라이언트↔애플리케이션 사이 네트워크 오류 처리</li>
+</ul>
+<p>ADK가 Live API 재연결을 수행해도 <code>run_live()</code> 이벤트 루프는 계속 동작합니다.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.genai</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">session_resumption</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">SessionResumptionConfig</span><span class="p">()</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>session resumption을 켜지 않아도 되는 경우:</strong></p>
+<ul>
+<li>세션이 항상 10분 미만으로 끝나는 경우</li>
+<li>턴 간 상태 공유가 불필요한 stateless 상호작용</li>
+<li>개발/테스트 단계에서 매번 fresh session이 필요한 경우</li>
+<li>비용/리소스 사용 최소화가 우선인 경우</li>
+</ul>
+<p>실무 권장: 프로덕션 기본값은 활성화, 명확한 이유가 있을 때만 비활성화.</p>
+<h3 id="adk-session-resumption">ADK가 session resumption을 관리하는 방법<a class="headerlink" href="#adk-session-resumption" title="Permanent link">&para;</a></h3>
+<ol>
+<li>초기 WebSocket 연결 생성</li>
+<li>Live API가 보내는 <code>session_resumption_update</code>에서 최신 handle 캐싱</li>
+<li>약 10분 제한 도달 시 WebSocket 정상 종료</li>
+<li>ADK가 cached handle로 자동 재연결</li>
+<li>동일 세션 컨텍스트로 스트리밍 계속</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Implementation Detail</p>
+<p>재연결 시 ADK는 <code>InvocationContext.live_session_resumption_handle</code>에서
+핸들을 꺼내 새 <code>LiveConnectConfig</code>에 포함해 <code>live.connect()</code>를 호출합니다.</p>
+</div>
+<h3 id="_4">자동 재연결 시퀀스 다이어그램<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant App as Your Application
+    participant ADK as ADK (run_live)
+    participant WS as WebSocket Connection
+    participant API as Live API (Gemini/Vertex AI)
+    participant LiveSession as Live Session Context
+
+    Note over App,LiveSession: Initial Connection (with session resumption enabled)
+
+    App-&gt;&gt;ADK: runner.run_live(run_config=RunConfig(session_resumption=...))
+    ADK-&gt;&gt;API: WebSocket connect()
+    activate WS
+    API-&gt;&gt;LiveSession: Create new session
+    activate LiveSession
+
+    Note over ADK,API: Bidirectional Streaming (0-10 minutes)
+
+    App-&gt;&gt;ADK: send_content(text) / send_realtime(audio)
+    ADK-&gt;&gt;API: → Content via WebSocket
+    API-&gt;&gt;LiveSession: Update conversation history
+    API--&gt;&gt;ADK: ← Streaming response
+    ADK--&gt;&gt;App: ← yield event
+
+    Note over API,LiveSession: Live API sends resumption handle updates
+    API--&gt;&gt;ADK: session_resumption_update { new_handle: "abc123" }
+    ADK-&gt;&gt;ADK: Cache handle in InvocationContext
+
+    Note over WS,API: ~10 minutes elapsed - Connection timeout
+
+    API-&gt;&gt;WS: Close WebSocket (graceful close)
+    deactivate WS
+    Note over LiveSession: Session context preserved
+
+    Note over ADK: Graceful close detected - No exception raised
+    ADK-&gt;&gt;ADK: while True loop continues
+
+    Note over ADK,API: Automatic Reconnection
+
+    ADK-&gt;&gt;API: WebSocket connect(session_resumption.handle="abc123")
+    activate WS
+    API-&gt;&gt;LiveSession: Attach to existing session
+    API--&gt;&gt;ADK: Session resumed with full context
+
+    Note over ADK,API: Bidirectional Streaming Continues
+
+    App-&gt;&gt;ADK: send_content(text) / send_realtime(audio)
+    ADK-&gt;&gt;API: → Content via WebSocket
+    API-&gt;&gt;LiveSession: Update conversation history
+    API--&gt;&gt;ADK: ← Streaming response
+    ADK--&gt;&gt;App: ← yield event
+
+    Note over App,LiveSession: Session continues until duration limit or explicit close
+
+    deactivate WS
+    deactivate LiveSession</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Events and Session Persistence</p>
+<p>어떤 이벤트가 ADK <code>Session</code>에 저장되는지는
+<a href="../part3/#events-saved-to-adk-session">Part 3: Events Saved to ADK Session</a>를 참고하세요.</p>
+</div>
+<h2 id="live-api-context-window-compression">Live API Context Window Compression<a class="headerlink" href="#live-api-context-window-compression" title="Permanent link">&para;</a></h2>
+<p><strong>문제:</strong> Live API 세션에는 두 가지 제약이 있습니다.
+첫째, <strong>세션 시간 제한</strong>(Gemini: audio-only 15분 / audio+video 2분, Vertex: 10분).
+둘째, <strong>컨텍스트 토큰 제한</strong>(예: <code>gemini-2.5-flash-native-audio-preview-12-2025</code>는 128k).
+긴 대화는 시간 또는 토큰 제한에 도달합니다.</p>
+<p><strong>해결:</strong>
+<a href="https://ai.google.dev/gemini-api/docs/live-session#context-window-compression">Context window compression</a>은
+슬라이딩 윈도우 기반으로 오래된 대화를 압축/요약해 두 제약을 동시에 완화합니다.
+최근 컨텍스트는 자세히 유지하고, 과거는 요약됩니다.
+<strong>압축 활성화 시 세션 시간 제한이 사실상 제거</strong>되며 토큰 고갈도 방지됩니다.
+단, 과거 발화의 세부 정보는 점차 줄어듭니다.</p>
+<h3 id="_5">플랫폼 동작 및 공식 제한<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>세션 시간 관리와 압축은 Live API 플랫폼 기능입니다.
+ADK는 RunConfig로 설정을 전달할 뿐, 실제 집행은 백엔드가 담당합니다.
+현재 제한은 변경될 수 있으므로 공식 문서를 반드시 확인하세요.</p>
+<ul>
+<li><a href="https://ai.google.dev/gemini-api/docs/live">Gemini Live API Documentation</a></li>
+<li><a href="https://cloud.google.com/vertex-ai/generative-ai/docs/live-api">Vertex AI Live API Documentation</a></li>
+</ul>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.genai</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.adk.agents.run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># gemini-2.5-flash-native-audio-preview-12-2025 (128k context)</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="n">context_window_compression</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">ContextWindowCompressionConfig</span><span class="p">(</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>        <span class="n">trigger_tokens</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span>  <span class="c1"># 약 78%에서 압축 시작</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>        <span class="n">sliding_window</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">SlidingWindow</span><span class="p">(</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>            <span class="n">target_tokens</span><span class="o">=</span><span class="mi">80000</span>  <span class="c1"># 약 62%로 압축</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>        <span class="p">)</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="p">)</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>동작 방식:</strong></p>
+<ol>
+<li>전체 컨텍스트 토큰 수 모니터링</li>
+<li><code>trigger_tokens</code> 도달 시 압축 시작</li>
+<li>오래된 이력을 슬라이딩 윈도우 방식으로 압축/요약</li>
+<li>최근 <code>target_tokens</code> 분량은 상세 유지</li>
+<li>동시에 발생하는 효과</li>
+<li>시간 제한 제거(무제한 세션)</li>
+<li>토큰 제한 관리(긴 대화 지속 가능)</li>
+</ol>
+<p><strong>권장 임계값:</strong></p>
+<ul>
+<li><code>trigger_tokens</code>: 컨텍스트의 70~80%</li>
+<li><code>target_tokens</code>: 컨텍스트의 60~70%</li>
+<li>실제 대화 패턴 기반으로 튜닝</li>
+</ul>
+<p><strong>예시(78%/62%) 선택 이유:</strong></p>
+<ol>
+<li>78% 트리거: 하드 리밋 전 여유 확보</li>
+<li>62% 타깃: 압축 후 충분한 여유 공간 확보</li>
+<li>사용 사례별 조정</li>
+<li>긴 턴: 70% / 50%</li>
+<li>짧은 Q&amp;A: 85% / 70%</li>
+<li>과거 컨텍스트 중요: 80% / 70%</li>
+<li>압축 오버헤드 최소화: 70% / 50%</li>
+</ol>
+<h3 id="_6">압축을 쓰지 말아야 하는 경우<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>압축은 세션 시간을 늘리지만 트레이드오프가 있습니다.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>With Compression</th>
+<th>Without Compression</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Session Duration</strong></td>
+<td>Unlimited</td>
+<td>15 min (audio)<br>2 min (video) Gemini<br>10 min Vertex</td>
+<td>Compression: Long sessions<br>No compression: Short sessions</td>
+</tr>
+<tr>
+<td><strong>Context Quality</strong></td>
+<td>Older context summarized</td>
+<td>Full verbatim history</td>
+<td>Compression: General conversation<br>No compression: Precision-critical</td>
+</tr>
+<tr>
+<td><strong>Latency</strong></td>
+<td>Compression overhead</td>
+<td>No overhead</td>
+<td>Compression: Async scenarios<br>No compression: Real-time</td>
+</tr>
+<tr>
+<td><strong>Memory Usage</strong></td>
+<td>Bounded</td>
+<td>Grows with session</td>
+<td>Compression: Long sessions<br>No compression: Short sessions</td>
+</tr>
+<tr>
+<td><strong>Implementation</strong></td>
+<td>Configure thresholds</td>
+<td>No configuration</td>
+<td>Compression: Production<br>No compression: Prototypes</td>
+</tr>
+</tbody>
+</table>
+<p>✅ <strong>활성화 권장:</strong>
+- 플랫폼 세션 시간 제한을 넘길 필요가 있을 때
+- 토큰 제한 도달 가능성이 높을 때</p>
+<p>❌ <strong>비활성화 권장:</strong>
+- 세션이 항상 제한 이내에 끝날 때
+- 과거 대화의 정밀한 원문 재현이 중요할 때
+- 개발/디버깅에서 전체 이력 보존이 필요할 때</p>
+<h2 id="live-api_1">Live API 연결/세션 관리 모범 사례<a class="headerlink" href="#live-api_1" title="Permanent link">&para;</a></h2>
+<h3 id="session-resumption">필수: Session Resumption 활성화<a class="headerlink" href="#session-resumption" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ 프로덕션에서 기본 활성화</li>
+<li>✅ Gemini의 ~10분 연결 제한을 ADK가 투명 처리</li>
+<li>✅ 사용자 중단 없이 연결 간 세션 지속</li>
+</ul>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.genai</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">response_modalities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;AUDIO&quot;</span><span class="p">],</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">session_resumption</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">SessionResumptionConfig</span><span class="p">()</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="context-window-compression">권장: 장시간 세션이면 Context Window Compression 활성화<a class="headerlink" href="#context-window-compression" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ 15분(audio) 또는 2분(audio+video) 초과 세션에 유용</li>
+<li>✅ 활성화 후 시간 기반 제한 모니터링 부담 감소</li>
+<li>⚠️ 요약 과정에서 지연/뉘앙스 손실 가능 → 필요할 때만 사용</li>
+</ul>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.genai</span><span class="w"> </span><span class="kn">import</span> <span class="n">types</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.adk.agents.run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="n">response_modalities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;AUDIO&quot;</span><span class="p">],</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">session_resumption</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">SessionResumptionConfig</span><span class="p">(),</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="n">context_window_compression</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">ContextWindowCompressionConfig</span><span class="p">(</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>        <span class="n">trigger_tokens</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>        <span class="n">sliding_window</span><span class="o">=</span><span class="n">types</span><span class="o">.</span><span class="n">SlidingWindow</span><span class="p">(</span><span class="n">target_tokens</span><span class="o">=</span><span class="mi">80000</span><span class="p">)</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="p">)</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="_7">선택: 세션 시간 모니터링<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p><strong>압축 미사용 시에만 적용:</strong></p>
+<ul>
+<li>✅ 연결 타임아웃보다 세션 시간 제한을 모니터링</li>
+<li>✅ Gemini: 15분(audio) / 2분(audio+video)</li>
+<li>✅ Vertex: 10분</li>
+<li>✅ 제한 1~2분 전에 사용자 알림</li>
+<li>✅ 긴 대화의 graceful transition 구현</li>
+</ul>
+<h2 id="concurrent-live-api-sessions-and-quota-management">Concurrent Live API Sessions and Quota Management<a class="headerlink" href="#concurrent-live-api-sessions-and-quota-management" title="Permanent link">&para;</a></h2>
+<p><strong>문제:</strong> 음성 앱은 동시 사용자마다 별도 Live API 세션이 필요합니다.
+하지만 플랫폼/티어별 동시 세션 쿼터가 있어,
+관리하지 않으면 피크 시간에 신규 연결 실패나 품질 저하가 발생합니다.</p>
+<p><strong>해결:</strong>
+플랫폼별 쿼터를 이해하고,
+쿼터 내 동작하도록 아키텍처를 설계하며,
+필요 시 세션 풀링/대기열을 도입하고,
+쿼터 사용량을 선제 모니터링합니다.</p>
+<h3 id="_8">동시 세션 쿼터 이해<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p><strong>Gemini Live API (Google AI Studio) - 티어 기반:</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>Tier</strong></th>
+<th style="text-align: right;"><strong>Concurrent Sessions</strong></th>
+<th style="text-align: right;"><strong>TPM (Tokens Per Minute)</strong></th>
+<th><strong>Access</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Free Tier</strong></td>
+<td style="text-align: right;">Limited*</td>
+<td style="text-align: right;">1,000,000</td>
+<td>Free API key</td>
+</tr>
+<tr>
+<td><strong>Tier 1</strong></td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">4,000,000</td>
+<td>Pay-as-you-go</td>
+</tr>
+<tr>
+<td><strong>Tier 2</strong></td>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">10,000,000</td>
+<td>Higher usage tier</td>
+</tr>
+<tr>
+<td><strong>Tier 3</strong></td>
+<td style="text-align: right;">1,000</td>
+<td style="text-align: right;">10,000,000</td>
+<td>Higher usage tier</td>
+</tr>
+</tbody>
+</table>
+<p>*Free tier 동시 세션 제한은 명시되어 있지 않지만 유료보다 훨씬 낮습니다.</p>
+<div class="admonition note">
+<p class="admonition-title">Source</p>
+<p><a href="https://ai.google.dev/gemini-api/docs/quota">Gemini API Quotas</a></p>
+</div>
+<p><strong>Vertex AI Live API (Google Cloud) - 프로젝트 기반:</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>Resource Type</strong></th>
+<th style="text-align: right;"><strong>Limit</strong></th>
+<th><strong>Scope</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Concurrent live bidirectional connections</strong></td>
+<td style="text-align: right;">10 per minute</td>
+<td>Per project, per region</td>
+</tr>
+<tr>
+<td><strong>Maximum concurrent sessions</strong></td>
+<td style="text-align: right;">Up to 1,000</td>
+<td>Per project</td>
+</tr>
+<tr>
+<td><strong>Session creation/deletion/update</strong></td>
+<td style="text-align: right;">100 per minute</td>
+<td>Per project, per region</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Source</p>
+<p><a href="https://cloud.google.com/vertex-ai/generative-ai/docs/live-api">Vertex AI Live API</a> | <a href="https://cloud.google.com/vertex-ai/generative-ai/docs/quotas">Vertex AI Quotas</a></p>
+</div>
+<p><strong>쿼터 증가 요청:</strong>
+Google Cloud Console <a href="https://console.cloud.google.com/iam-admin/quotas">Quotas page</a>에서
+<strong>"Bidi generate content concurrent requests"</strong> 항목으로 필터링해
+프로젝트/리전/모델별 값을 확인하고 증가 요청할 수 있습니다.
+<code>roles/servicemanagement.quotaAdmin</code> 권한이 필요합니다.</p>
+<p><img alt="Quota value on Cloud Console" src="../../../../streaming/dev-guide/assets/adk-streaming-guide-quota-console.png" /></p>
+<p><strong>핵심 차이:</strong></p>
+<ol>
+<li><strong>Gemini Live API</strong>: 티어 상승 시 동시 세션이 크게 증가(50 → 1,000)</li>
+<li><strong>Vertex AI Live API</strong>: 연결 생성 속도(10/min) 제약이 있으나 총 동시 세션은 최대 1,000</li>
+</ol>
+<h3 id="_9">쿼터 관리 아키텍처 패턴<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<p>대상 사용자 동시성, 확장 요구, 대기 허용도에 따라 패턴을 선택합니다.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>                Start: Designing Quota Management
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>                              |
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>                              v
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>                   Expected Concurrent Users?
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>                     /                    \
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>            &lt; Quota Limit           &gt; Quota Limit or Unpredictable
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>                   |                              |
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>                   v                              v
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>          Pattern 1: Direct Mapping    Pattern 2: Session Pooling
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>          - Simple 1:1 mapping         - Queue waiting users
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>          - No quota logic             - Graceful degradation
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>          - Fast development           - Peak handling
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>                   |                              |
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>                   v                              v
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>              Good for:                      Good for:
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>              - Prototypes                   - Production at scale
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>              - Small teams                  - Unpredictable load
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>              - Controlled users             - Public applications
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Direct Mapping</th>
+<th>Session Pooling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Expected users</strong></td>
+<td>Always &lt; quota</td>
+<td>May exceed quota</td>
+</tr>
+<tr>
+<td><strong>User experience</strong></td>
+<td>Always instant</td>
+<td>May wait during peaks</td>
+</tr>
+<tr>
+<td><strong>Implementation complexity</strong></td>
+<td>Low</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td><strong>Operational overhead</strong></td>
+<td>None</td>
+<td>Monitor queue depth</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Prototypes, internal tools</td>
+<td>Production, public apps</td>
+</tr>
+</tbody>
+</table>
+<h4 id="pattern-1-direct-mapping">Pattern 1: Direct Mapping<a class="headerlink" href="#pattern-1-direct-mapping" title="Permanent link">&para;</a></h4>
+<ul>
+<li>사용자 연결 시 즉시 <code>run_live()</code> 세션 시작</li>
+<li>연결 해제 시 세션 종료</li>
+<li>쿼터 관리 로직 없이 1:1 매핑</li>
+</ul>
+<h4 id="pattern-2-session-pooling-queueing">Pattern 2: Session Pooling + Queueing<a class="headerlink" href="#pattern-2-session-pooling-queueing" title="Permanent link">&para;</a></h4>
+<ul>
+<li>신규 연결 시 남은 세션 슬롯 확인</li>
+<li>슬롯 있으면 즉시 시작</li>
+<li>쿼터 초과 시 대기열에 넣고 사용자에게 안내</li>
+<li>세션 종료 시 대기열 사용자를 순차 시작</li>
+</ul>
+<h2 id="miscellaneous-controls">Miscellaneous Controls<a class="headerlink" href="#miscellaneous-controls" title="Permanent link">&para;</a></h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="c1"># invocation당 LLM 호출 수 제한</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="n">max_llm_calls</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>  <span class="c1"># 기본값 500</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>                        <span class="c1"># 0 또는 음수 = 무제한(주의)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="c1"># 오디오/비디오 아티팩트 저장</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="n">save_live_blob</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># 기본값 False</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="c1"># 이벤트에 사용자 메타데이터 부착</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    <span class="n">custom_metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;user_tier&quot;</span><span class="p">:</span> <span class="s2">&quot;premium&quot;</span><span class="p">,</span> <span class="s2">&quot;session_type&quot;</span><span class="p">:</span> <span class="s2">&quot;support&quot;</span><span class="p">},</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>    <span class="c1"># 조합형 함수 호출(CFC) 활성화 (실험적)</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    <span class="n">support_cfc</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># 기본값 False</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="max_llm_calls">max_llm_calls<a class="headerlink" href="#max_llm_calls" title="Permanent link">&para;</a></h3>
+<p>이 파라미터는 invocation 컨텍스트 내 LLM 호출 총량을 제한해,
+폭주 비용/무한 루프를 방지합니다.</p>
+<p><strong>BIDI 제한:</strong>
+<code>max_llm_calls</code>는 <code>run_live()</code> + <code>StreamingMode.BIDI</code>에는 <strong>적용되지 않습니다</strong>.
+즉, 본 가이드의 양방향 스트리밍에는 자동 비용 보호가 되지 않습니다.</p>
+<p>BIDI에서는 다음 보호를 별도 구현하세요.</p>
+<ul>
+<li>세션 시간 제한</li>
+<li>턴 수 추적</li>
+<li>토큰 사용량 기반 비용 모니터링</li>
+<li>애플리케이션 레벨 circuit breaker</li>
+</ul>
+<h3 id="save_live_blob">save_live_blob<a class="headerlink" href="#save_live_blob" title="Permanent link">&para;</a></h3>
+<p>오디오/비디오 스트림을 Session/Artifact 서비스에 저장할지 제어합니다.
+디버깅/컴플라이언스/품질관리 용도로 사용합니다.</p>
+<div class="admonition warning">
+<p class="admonition-title">마이그레이션: save_live_audio deprecated</p>
+<p><code>save_live_audio</code>는 deprecated이며 <code>save_live_blob</code>로 대체되었습니다.
+현재는 호환 마이그레이션이 동작하지만 추후 제거 예정이므로 코드 업데이트가 필요합니다.</p>
+</div>
+<p>현재 ADK 구현에서 실제로 저장되는 것은 <strong>오디오</strong>입니다.</p>
+<ul>
+<li><strong><a href="https://google.github.io/adk-docs/sessions/">Session service</a></strong>: 대화 이력에 오디오 참조 저장</li>
+<li><strong><a href="https://google.github.io/adk-docs/artifacts/">Artifact service</a></strong>: 오디오 파일 저장</li>
+</ul>
+<p><strong>활용 사례:</strong></p>
+<ul>
+<li>디버깅(음성 상호작용 분석)</li>
+<li>컴플라이언스(감사 추적)</li>
+<li>QA(대화 품질 모니터링)</li>
+<li>학습 데이터 수집</li>
+<li>개발/테스트 환경</li>
+</ul>
+<p><strong>저장 고려사항:</strong></p>
+<ul>
+<li>16kHz PCM 기준 입력 오디오 약 1.92 MB/분</li>
+<li>Session/Artifact 양쪽 저장</li>
+<li>보존 정책 확인 필요</li>
+<li>고볼륨 음성 서비스에서 저장 비용 급증 가능</li>
+</ul>
+<p><strong>모범 사례:</strong></p>
+<ul>
+<li>필요한 환경에서만 활성화</li>
+<li>보존 정책으로 자동 삭제</li>
+<li>샘플링 저장(예: 10%)</li>
+<li>아티팩트 서비스 압축 기능 활용</li>
+</ul>
+<h3 id="custom_metadata">custom_metadata<a class="headerlink" href="#custom_metadata" title="Permanent link">&para;</a></h3>
+<p><code>custom_metadata</code>는 현재 invocation 중 생성되는 이벤트에
+임의 key-value 메타데이터를 부착합니다.
+이 값은 <code>Event.custom_metadata</code>에 저장되고 Session에도 영속화됩니다.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">google.adk.agents.run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunConfig</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">custom_metadata</span><span class="o">=</span><span class="p">{</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>        <span class="s2">&quot;user_tier&quot;</span><span class="p">:</span> <span class="s2">&quot;premium&quot;</span><span class="p">,</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>        <span class="s2">&quot;session_type&quot;</span><span class="p">:</span> <span class="s2">&quot;customer_support&quot;</span><span class="p">,</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>        <span class="s2">&quot;campaign_id&quot;</span><span class="p">:</span> <span class="s2">&quot;promo_2025&quot;</span><span class="p">,</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>        <span class="s2">&quot;ab_test_variant&quot;</span><span class="p">:</span> <span class="s2">&quot;variant_b&quot;</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="p">}</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>동작 방식:</strong></p>
+<ol>
+<li>invocation 내 모든 Event에 메타데이터 부착</li>
+<li>Session 서비스(DB/Vertex/in-memory)에 저장</li>
+<li><code>event.custom_metadata</code>로 조회 가능</li>
+<li>A2A에서는 요청 메타데이터가 자동 전파됨</li>
+</ol>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">custom_metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+</span></code></pre></div>
+<p><strong>활용 사례:</strong></p>
+<ul>
+<li>사용자 세그먼트 태깅</li>
+<li>세션 유형 분류</li>
+<li>캠페인/실험 추적</li>
+<li>컴플라이언스 플래그 부착</li>
+<li>trace ID/feature flag 기록</li>
+<li>분석 파이프라인 차원값 저장</li>
+</ul>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">async</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_live</span><span class="p">(</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">live_request_queue</span><span class="o">=</span><span class="n">queue</span><span class="p">,</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">run_config</span><span class="o">=</span><span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>        <span class="n">custom_metadata</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;user_123&quot;</span><span class="p">,</span> <span class="s2">&quot;experiment&quot;</span><span class="p">:</span> <span class="s2">&quot;new_ui&quot;</span><span class="p">}</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="p">)</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">):</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">custom_metadata</span><span class="p">:</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user_id&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Experiment: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">custom_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;experiment&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>A2A 통합 시 <code>RemoteA2AAgent</code>는 요청 메타데이터를 자동 추출해 넣습니다.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">custom_metadata</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="s2">&quot;a2a_metadata&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>        <span class="c1"># Original A2A request metadata appears here</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="p">}</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="support_cfc-experimental">support_cfc (Experimental)<a class="headerlink" href="#support_cfc-experimental" title="Permanent link">&para;</a></h3>
+<p><code>support_cfc</code>는 Compositional Function Calling(CFC)을 켜서,
+모델이 도구를 병렬 호출하거나,
+한 도구 출력을 다른 도구 입력으로 체인하거나,
+중간 결과 기반 조건 실행을 하도록 합니다.</p>
+<p><strong>⚠️ 실험 기능:</strong> 추후 변경될 수 있습니다.</p>
+<p><strong>중요 동작:</strong> <code>support_cfc=True</code>이면 <code>streaming_mode</code> 설정과 무관하게
+ADK는 내부적으로 항상 Live API(WebSocket)를 사용합니다.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">run_config</span> <span class="o">=</span> <span class="n">RunConfig</span><span class="p">(</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>    <span class="n">support_cfc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="n">streaming_mode</span><span class="o">=</span><span class="n">StreamingMode</span><span class="o">.</span><span class="n">SSE</span>  <span class="c1"># 내부적으로는 Live API 사용</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>모델 요구 사항:</strong></p>
+<ul>
+<li>✅ 지원: <code>gemini-2.x</code></li>
+<li>❌ 미지원: <code>gemini-1.5-x</code></li>
+<li>ADK는 세션 초기화 시 모델명을 검사해 미지원이면 오류</li>
+<li>CFC 활성화 시 안전한 병렬 실행을 위해 <code>BuiltInCodeExecutor</code> 자동 주입</li>
+</ul>
+<p><strong>CFC 기능:</strong></p>
+<ul>
+<li>병렬 실행(독립 도구 동시 호출)</li>
+<li>함수 체이닝(도구 출력→다음 도구 입력)</li>
+<li>조건부 실행(중간 결과 기반)</li>
+</ul>
+<p><strong>적합한 사용 사례:</strong></p>
+<ul>
+<li>다중 API 동시 집계</li>
+<li>다단계 분석 파이프라인</li>
+<li>조건 분기형 리서치 작업</li>
+<li>순차 실행을 넘는 복잡 도구 오케스트레이션</li>
+</ul>
+<p><strong>양방향 스트리밍 앱 관점:</strong>
+CFC는 BIDI에서도 동작하지만,
+실시간 오디오/비디오 중심에서는 일반 함수 호출이 더 단순하고 성능이 좋은 경우가 많습니다.</p>
+<p><strong>더 알아보기:</strong></p>
+<ul>
+<li><a href="https://ai.google.dev/gemini-api/docs/function-calling">Gemini Function Calling Guide</a></li>
+<li><a href="https://github.com/google/adk-python/blob/29c1115959b0084ac1169748863b35323da3cf50/contributing/samples/parallel_functions/agent.py">ADK Parallel Functions Example</a></li>
+<li><a href="https://google.github.io/adk-docs/tools/performance/">ADK Performance Guide</a></li>
+</ul>
+<h2 id="_10">요약<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<p>이번 파트에서는 RunConfig를 통해 ADK Bidi-streaming 세션을 선언적으로 제어하는 방법을 학습했습니다.
+응답 모달리티 제약, BIDI/SSE 차이,
+ADK Session과 Live API session 관계,
+session resumption/context window compression 기반 세션 시간 관리,
+동시 세션 쿼터 대응 아키텍처,
+<code>max_llm_calls</code>/오디오 저장을 통한 비용 제어를 다뤘습니다.
+이제 기능 풍부함과 운영 제약의 균형을 잡아,
+장시간 대화, 플랫폼 제한 관리, 비용 제어, 리소스 모니터링이 가능한
+프로덕션급 스트리밍 애플리케이션을 설계할 수 있습니다.</p>
+<hr />
+<p>← <a href="../part3/">Previous: Part 3: Event Handling with run_live()</a> | <a href="../part5/">Next: Part 5: How to Use Audio, Image and Video</a> →</p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  맨위로
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../part3/" class="md-footer__link md-footer__link--prev" aria-label="이전: 파트 3. 이벤트 처리">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                파트 3. 이벤트 처리
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../part5/" class="md-footer__link md-footer__link--next" aria-label="다음: 파트 5. 오디오, 이미지, 비디오">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                파트 5. 오디오, 이미지, 비디오
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright Google 2026&nbsp;&nbsp;|&nbsp;&nbsp;<a href="//policies.google.com/terms">Terms</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="//policies.google.com/privacy">Privacy</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#__consent">Manage cookies</a>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find the information they need. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="analytics" checked>
+      <span class="task-list-indicator"></span>
+      Google Analytics
+    </label>
+  </li>
+
+      
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="github" checked>
+      <span class="task-list-indicator"></span>
+      GitHub
+    </label>
+  </li>
+
+      
+    
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">동의 허락</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">동의 허락 관리</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout((function(){document.querySelector("[data-md-component=consent]").hidden=!1}),250);var form=document.forms.consent;for(var action of["submit","reset"])form.addEventListener(action,(function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map((function(e){return[e,!0]})))),location.hash="",location.reload()}))</script>
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.tabs.link", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.progress", "navigation.path", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../../javascript/copy-page.js"></script>
+      
+    
+  </body>
+</html>
