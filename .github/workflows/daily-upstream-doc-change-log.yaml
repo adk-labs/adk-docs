@@ -1,0 +1,58 @@
+name: Daily Upstream Doc Change Log
+
+on:
+  schedule:
+    - cron: "5 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect-upstream-doc-changes:
+    runs-on: ubuntu-latest
+
+    env:
+      # Override with repository variables if needed.
+      UPSTREAM_URL: ${{ vars.UPSTREAM_URL || 'https://github.com/google/adk-docs.git' }}
+      UPSTREAM_BRANCH: ${{ vars.UPSTREAM_BRANCH || 'main' }}
+      STATE_FILE: .github/upstream-doc-change-log/state.json
+      LOG_DIR: upstream-doc-change-log
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Collect upstream markdown document changes
+        run: |
+          python scripts/collect_upstream_doc_changes.py \
+            --upstream-url "${UPSTREAM_URL}" \
+            --upstream-branch "${UPSTREAM_BRANCH}" \
+            --state-file "${STATE_FILE}" \
+            --log-dir "${LOG_DIR}"
+
+      - name: Commit and push report
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "${STATE_FILE}" "${LOG_DIR}"
+          if git diff --cached --quiet; then
+            echo "No tracked files changed."
+            exit 0
+          fi
+
+          git commit -m "chore: record daily upstream doc changes ($(date -u +%F))"
+          git push
