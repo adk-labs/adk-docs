@@ -1,10 +1,10 @@
 # MkDocs Configuration
 
 # Project information
-site_name: Agent Development Kit
+site_name: Agent Development Kit (ADK)
 site_url: https://google.github.io/adk-docs
 site_description: >-
-  Build powerful multi-agent systems with Agent Development Kit
+  Build powerful multi-agent systems with Agent Development Kit (ADK)
 site_dir: site
 exclude_docs:
   api-reference/java/legal/*
@@ -235,6 +235,7 @@ plugins:
         - integrations/*.md
         - tools/*.md
         - tools-custom/*.md
+        - skills/*.md
         Run Agents:
         - runtime/*.md
         - deploy/*.md
@@ -617,6 +618,8 @@ nav:
       - OpenAPI tools: tools-custom/openapi-tools.md
       - Authentication: tools-custom/authentication.md
       - Tool limitations: tools/limitations.md
+    - Skills for Agents:
+      - skills/index.md
   - Run Agents:
     - Agent Runtime:
       - Agent Runtime: runtime/index.md
@@ -681,16 +684,16 @@ nav:
       - A2A Quickstart (Consuming):
         - Python: a2a/quickstart-consuming.md
         - Go: a2a/quickstart-consuming-go.md
-    - Bidi-streaming (live):
+    - Gemini Live API Toolkit:
       - streaming/index.md
-      - Bidi-streaming development guide series:
+      - Gemini Live API Toolkit development guide series:
         - Part 1. Intro to streaming: streaming/dev-guide/part1.md
         - Part 2. Sending messages: streaming/dev-guide/part2.md
         - Part 3. Event handling: streaming/dev-guide/part3.md
         - Part 4. Run configuration: streaming/dev-guide/part4.md
         - Part 5. Audio, Images, and Video: streaming/dev-guide/part5.md
       - Streaming Tools: streaming/streaming-tools.md
-      - Configuring Bidi-streaming behavior: streaming/configuration.md
+      - Configuring streaming behavior: streaming/configuration.md
     - Grounding:
       - grounding/index.md
       - Google Search Grounding: grounding/google_search_grounding.md

@@ -13,11 +13,11 @@ catalog_tags: ["observability", "google"]
 
 !!! important "Version Requirement"
 
-    Use ADK Python version 1.21.0 or higher to make full use of the features described in this document.
+    Use ADK Python version 1.26.0 or higher to make full use of the features described in this document, including auto-schema-upgrade, tool provenance tracking, and HITL event tracing.
 
 The BigQuery Agent Analytics Plugin significantly enhances the Agent Development Kit (ADK) by providing a robust solution for in-depth agent behavior analysis. Using the ADK Plugin architecture and the **BigQuery Storage Write API**, it captures and logs critical operational events directly into a Google BigQuery table, empowering you with advanced capabilities for debugging, real-time monitoring, and comprehensive offline performance evaluation.
 
-Version 1.21.0 introduces **Hybrid Multimodal Logging**, allowing you to log large payloads (images, audio, blobs) by offloading them to Google Cloud Storage (GCS) while keeping a structured reference (`ObjectRef`) in BigQuery.
+Version 1.26.0 adds **Auto Schema Upgrade** (safely add new columns to existing tables), **Tool Provenance** tracking (LOCAL, MCP, SUB_AGENT, A2A, TRANSFER_AGENT), and **HITL Event Tracing** for human-in-the-loop interactions.
 
 !!! example "Preview release"
 
@@ -40,6 +40,8 @@ Version 1.21.0 introduces **Hybrid Multimodal Logging**, allowing you to log lar
     asynchronously using the Storage Write API to allow high throughput and low latency.
 -   **Multimodal Analysis**: Log and analyze text, images, and other modalities. Large files are offloaded to GCS, making them accessible to BigQuery ML via Object Tables.
 -   **Distributed Tracing**: Built-in support for OpenTelemetry-style tracing (`trace_id`, `span_id`) to visualize agent execution flows.
+-   **Tool Provenance**: Track the origin of each tool call (local function, MCP server, sub-agent, A2A remote agent, or transfer agent).
+-   **Human-in-the-Loop (HITL) Tracing**: Dedicated event types for credential requests, confirmation prompts, and user input requests.
 
 The agent event data recorded varies based on the ADK event type. For more
 information, see [Event types and payloads](#event-types).
@@ -78,15 +80,15 @@ from google.adk.models.google_llm import Gemini
 from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 
-# --- OpenTelemetry Initialization (Optional) ---
-# Recommended for enabling distributed tracing (populates trace_id, span_id).
-# If not configured, the plugin uses internal UUIDs for span correlation.
-try:
-    from opentelemetry import trace
-    from opentelemetry.sdk.trace import TracerProvider
-    trace.set_tracer_provider(TracerProvider())
-except ImportError:
-    pass # OpenTelemetry is optional
+# --- OpenTelemetry TracerProvider Setup (Optional) ---
+# ADK includes OpenTelemetry as a core dependency.
+# Configuring a TracerProvider enables full distributed tracing
+# (populates trace_id, span_id with standard OTel identifiers).
+# If no TracerProvider is configured, the plugin falls back to internal
+# UUIDs for span correlation while still preserving the parent-child hierarchy.
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+trace.set_tracer_provider(TracerProvider())
 
 # --- Configuration ---
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id")
@@ -115,7 +117,7 @@ bq_config = BigQueryLoggerConfig(
 bq_logging_plugin = BigQueryAgentAnalyticsPlugin(
     project_id=PROJECT_ID,
     dataset_id=DATASET_ID,
-    table_id="agent_events_v2", # default table name is agent_events_v2
+    table_id="agent_events", # default table name is agent_events
     config=bq_config,
     location=LOCATION
 )
@@ -146,30 +148,31 @@ app = App(
 ### Run and test agent
 
 Test the plugin by running the agent and making a few requests through the chat
-interface, such as ”tell me what you can do” or  "List datasets in my cloud project <your-gcp-project-id> “. These actions create events which are
+interface, such as "tell me what you can do" or  "List datasets in my cloud project <your-gcp-project-id> ". These actions create events which are
 recorded in your Google Cloud project BigQuery instance. Once these events have
 been processed, you can view the data for them in the [BigQuery Console](https://console.cloud.google.com/bigquery), using this query
 
 ```sql
-SELECT timestamp, event_type, content 
-FROM `your-gcp-project-id.your-big-query-dataset-id.agent_events_v2`
+SELECT timestamp, event_type, content
+FROM `your-gcp-project-id.your-big-query-dataset-id.agent_events`
 ORDER BY timestamp DESC
 LIMIT 20;
 ```
 
 ## Tracing and Observability
 
-The plugin supports **OpenTelemetry** for distributed tracing.
+The plugin supports **OpenTelemetry** for distributed tracing. OpenTelemetry is included as a core dependency of ADK and is always available.
 
 - **Automatic Span Management**: The plugin automatically generates spans for Agent execution, LLM calls, and Tool executions.
-- **OpenTelemetry Integration**: If an OpenTelemetry `TracerProvider` is configured (as shown in the example above), the plugin will use valid OTel spans, populating `trace_id`, `span_id`, and `parent_span_id` with standard OTel identifiers. This allows you to correlate agent logs with other services in your distributed system.
-- **Fallback Mechanism**: If OpenTelemetry is not installed or configured, the plugin automatically falls back to generating internal UUIDs for spans and uses the `invocation_id` as the trace ID. This ensures that the parent-child hierarchy (Agent -> Span -> Tool/LLM) is *always* preserved in the BigQuery logs, even without a full OTel setup.
+- **OpenTelemetry Integration**: If a `TracerProvider` is configured (as shown in the example above), the plugin will use valid OTel spans, populating `trace_id`, `span_id`, and `parent_span_id` with standard OTel identifiers. This allows you to correlate agent logs with other services in your distributed system.
+- **Fallback Mechanism**: If no `TracerProvider` is configured (i.e., only the default no-op provider is active), the plugin automatically falls back to generating internal UUIDs for spans and uses the `invocation_id` as the trace ID. This ensures that the parent-child hierarchy (Agent -> Span -> Tool/LLM) is *always* preserved in the BigQuery logs, even without a configured `TracerProvider`.
 
 ## Configuration options
 
 You can customize the plugin using `BigQueryLoggerConfig`.
 
 -   **`enabled`** (`bool`, default: `True`): To disable the plugin from logging agent data to the BigQuery table, set this parameter to False.
+-   **`table_id`** (`str`, default: `"agent_events"`): The BigQuery table ID within the dataset. Can also be overridden by the `table_id` parameter on the `BigQueryAgentAnalyticsPlugin` constructor, which takes precedence.
 -   **`clustering_fields`** (`List[str]`, default: `["event_type", "agent", "user_id"]`): The fields used to cluster the BigQuery table when it is automatically created.
 -   **`gcs_bucket_name`** (`Optional[str]`, default: `None`): The name of the GCS bucket to offload large content (images, blobs, large text) to. If not provided, large content may be truncated or replaced with placeholders.
 -   **`connection_id`** (`Optional[str]`, default: `None`): The BigQuery connection ID (e.g., `us.my-connection`) to use as the authorizer for `ObjectRef` columns. Required for using `ObjectRef` with BigQuery ML.
@@ -184,12 +187,13 @@ You can customize the plugin using `BigQueryLoggerConfig`.
 -   **`event_denylist`** (`Optional[List[str]]`, default: `None`): A list of
     event types to skip logging. For a comprehensive list of supported event
     types, refer to the [Event types and payloads](#event-types) section.
--   **`content_formatter`** (`Optional[Callable[[Any, str], Any]]`, default: `None`): An optional function to format event content before logging.
+-   **`content_formatter`** (`Optional[Callable[[Any, str], Any]]`, default: `None`): An optional function to format event content before logging. The function receives two arguments: the raw content and the event type string (e.g., `"LLM_REQUEST"`).
 -   **`log_multi_modal_content`** (`bool`, default: `True`): Whether to log detailed content parts (including GCS references).
 -   **`queue_max_size`** (`int`, default: `10000`): The maximum number of events to hold in the in-memory queue before dropping new events.
 -   **`retry_config`** (`RetryConfig`, default: `RetryConfig()`): Configuration for retrying failed BigQuery writes (attributes: `max_retries`, `initial_delay`, `multiplier`, `max_delay`).
--   **`log_session_metadata`** (`bool`, default: `True`): If True, logs metadata from the `session` object (e.g., `session.metadata`) into the `attributes` column.
+-   **`log_session_metadata`** (`bool`, default: `True`): If True, logs session information into the `attributes` column, including `session_id`, `app_name`, `user_id`, and the session `state` dictionary (e.g., custom state like gchat thread-id, customer_id).
 -   **`custom_tags`** (`Dict[str, Any]`, default: `{}`): A dictionary of static tags (e.g., `{"env": "prod", "version": "1.0"}`) to be included in the `attributes` column for every event.
+-   **`auto_schema_upgrade`** (`bool`, default: `True`): When enabled, the plugin automatically adds new columns to an existing table when the plugin schema evolves. Only additive changes are made (columns are never dropped or altered). A version label (`adk_schema_version`) on the table ensures the diff runs at most once per schema version. Safe to leave enabled.
 
 
 The following code sample shows how to define a configuration for the
@@ -201,10 +205,14 @@ import re
 
 from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryLoggerConfig
 
-def redact_dollar_amounts(event_content: Any) -> str:
+def redact_dollar_amounts(event_content: Any, event_type: str) -> str:
     """
     Custom formatter to redact dollar amounts (e.g., $600, $12.50)
     and ensure JSON output if the input is a dict.
+
+    Args:
+        event_content: The raw content of the event.
+        event_type: The event type string (e.g., "LLM_REQUEST", "LLM_RESPONSE").
     """
     text_content = ""
     if isinstance(event_content, dict):
@@ -223,10 +231,10 @@ config = BigQueryLoggerConfig(
     event_allowlist=["LLM_REQUEST", "LLM_RESPONSE"], # Only log these events
     # event_denylist=["TOOL_STARTING"], # Skip these events
     shutdown_timeout=10.0, # Wait up to 10s for logs to flush on exit
-    client_close_timeout=2.0, # Wait up to 2s for BQ client to close
     max_content_length=500, # Truncate content to 500 chars
     content_formatter=redact_dollar_amounts, # Redact the dollar amounts in the logging content
     queue_max_size=10000, # Max events to hold in memory
+    auto_schema_upgrade=True, # Automatically add new columns to existing tables
     # retry_config=RetryConfig(max_retries=3), # Optional: Configure retries
 )
 
@@ -238,12 +246,12 @@ plugin = BigQueryAgentAnalyticsPlugin(..., config=config)
 
 ### Schema Reference
 
-The events table (`agent_events_v2`) uses a flexible schema. The following table provides a comprehensive reference with example values.
+The events table (`agent_events`) uses a flexible schema. The following table provides a comprehensive reference with example values.
 
 | Field Name | Type | Mode | Description | Example Value |
 |:---|:---|:---|:---|:---|
-| **timestamp** | `TIMESTAMP` | `REQUIRED` | UTC timestamp of event creation. Acts as the primary ordering key and often the daily partitioning key. Precision is microsecond. | `2026-02-03 20:52:17 UTC` |
-| **event_type** | `STRING` | `NULLABLE` | The canonical event category. Standard values include `LLM_REQUEST`, `LLM_RESPONSE`, `TOOL_STARTING`, `TOOL_COMPLETED`, `AGENT_STARTING`, `AGENT_COMPLETED`, `STATE_DELTA`. Used for high-level filtering. | `LLM_REQUEST` |
+| **timestamp** | `TIMESTAMP` | `REQUIRED` | UTC timestamp of event creation. Acts as the primary ordering key and the daily partitioning key. Precision is microsecond. | `2026-02-03 20:52:17 UTC` |
+| **event_type** | `STRING` | `NULLABLE` | The canonical event category. Standard values include `LLM_REQUEST`, `LLM_RESPONSE`, `LLM_ERROR`, `TOOL_STARTING`, `TOOL_COMPLETED`, `TOOL_ERROR`, `AGENT_STARTING`, `AGENT_COMPLETED`, `STATE_DELTA`, `INVOCATION_STARTING`, `INVOCATION_COMPLETED`, `USER_MESSAGE_RECEIVED`, and HITL events (see [HITL events](#hitl-events)). Used for high-level filtering. | `LLM_REQUEST` |
 | **agent** | `STRING` | `NULLABLE` | The name of the agent responsible for this event. Defined during agent initialization or via the `root_agent_name` context. | `my_bq_agent` |
 | **session_id** | `STRING` | `NULLABLE` | A persistent identifier for the entire conversation thread. Stays constant across multiple turns and sub-agent calls. | `04275a01-1649-4a30-b6a7-5b443c69a7bc` |
 | **invocation_id** | `STRING` | `NULLABLE` | The unique identifier for a single execution turn or request cycle. Corresponds to `trace_id` in many contexts. | `e-b55b2000-68c6-4e8b-b3b3-ffb454a92e40` |
@@ -252,7 +260,7 @@ The events table (`agent_events_v2`) uses a flexible schema. The following table
 | **span_id** | `STRING` | `NULLABLE` | The **OpenTelemetry** Span ID (16-char hex). Uniquely identifies this specific atomic operation. | `69867a836cd94798be2759d8e0d70215` |
 | **parent_span_id** | `STRING` | `NULLABLE` | The Span ID of the immediate caller. Used to reconstruct the parent-child execution tree (DAG). | `ef5843fe40764b4b8afec44e78044205` |
 | **content** | `JSON` | `NULLABLE` | The primary event payload. Structure is polymorphic based on `event_type`. | `{"system_prompt": "You are...", "prompt": [{"role": "user", "content": "hello"}], "response": "Hi", "usage": {"total": 15}}` |
-| **attributes** | `JSON` | `NULLABLE` | Metadata/Enrichment (usage stats, model info, custom tags). | `{"model": "gemini-2.5-flash", "usage_metadata": {"total_token_count": 15}, "state_delta": {"key": "val"}, "session_metadata": {"key": "val"}}` |
+| **attributes** | `JSON` | `NULLABLE` | Metadata/Enrichment (usage stats, model info, tool provenance, custom tags). | `{"model": "gemini-2.5-flash", "usage_metadata": {"total_token_count": 15}, "session_metadata": {"session_id": "...", "app_name": "...", "user_id": "...", "state": {}}, "custom_tags": {"env": "prod"}}` |
 | **latency_ms** | `JSON` | `NULLABLE` | Performance metrics. Standard keys are `total_ms` (wall-clock duration) and `time_to_first_token_ms` (streaming latency). | `{"total_ms": 1250, "time_to_first_token_ms": 450}` |
 | **status** | `STRING` | `NULLABLE` | High-level outcome. Values: `OK` (success) or `ERROR` (failure). | `OK` |
 | **error_message** | `STRING` | `NULLABLE` | Human-readable exception message or stack trace fragment. Populated only when `status` is `ERROR`. | `Error 404: Dataset not found` |
@@ -265,7 +273,7 @@ production, we recommend creating the table manually using the following DDL, wh
 **Recommended DDL:**
 
 ```sql
-CREATE TABLE `your-gcp-project-id.adk_agent_logs.agent_events_v2`
+CREATE TABLE `your-gcp-project-id.adk_agent_logs.agent_events`
 (
   timestamp TIMESTAMP NOT NULL OPTIONS(description="The UTC time at which the event was logged."),
   event_type STRING OPTIONS(description="Indicates the type of event being logged (e.g., 'LLM_REQUEST', 'TOOL_COMPLETED')."),
@@ -332,7 +340,9 @@ Captures the prompt sent to the model, including conversation history and system
     ]
   },
   "attributes": {
+    "root_agent_name": "my_bq_agent",
     "model": "gemini-2.5-flash",
+    "tools": ["list_dataset_ids", "execute_sql"],
     "llm_config": {
       "temperature": 0.5,
       "top_p": 0.9
@@ -357,6 +367,8 @@ Captures the model's output and token usage statistics.
     }
   },
   "attributes": {
+    "root_agent_name": "my_bq_agent",
+    "model_version": "gemini-2.5-flash-001",
     "usage_metadata": {
       "prompt_token_count": 10129,
       "candidates_token_count": 19,
@@ -370,11 +382,38 @@ Captures the model's output and token usage statistics.
 }
 ```
 
+**3. LLM_ERROR**
+
+Logged when an LLM call fails with an exception. The error message is captured and the span is closed.
+
+```json
+{
+  "event_type": "LLM_ERROR",
+  "content": null,
+  "attributes": {
+    "root_agent_name": "my_bq_agent"
+  },
+  "error_message": "Error 429: Resource exhausted",
+  "latency_ms": {
+    "total_ms": 350
+  }
+}
+```
+
 #### Tool usage (plugin lifecycle)
 
-These events track the execution of tools by the agent.
+These events track the execution of tools by the agent. Each tool event includes a `tool_origin` field that classifies the tool's provenance:
 
-**3. TOOL_STARTING**
+| Tool Origin | Description |
+|:---|:---|
+| `LOCAL` | `FunctionTool` instances (local Python functions) |
+| `MCP` | Model Context Protocol tools (`McpTool` instances) |
+| `SUB_AGENT` | `AgentTool` instances (sub-agents) |
+| `A2A` | Remote Agent-to-Agent instances (`RemoteA2aAgent`) |
+| `TRANSFER_AGENT` | `TransferToAgentTool` instances |
+| `UNKNOWN` | Unclassified tools |
+
+**4. TOOL_STARTING**
 
 Logged when an agent begins executing a tool.
 
@@ -385,12 +424,13 @@ Logged when an agent begins executing a tool.
     "tool": "list_dataset_ids",
     "args": {
       "project_id": "bigquery-public-data"
-    }
+    },
+    "tool_origin": "LOCAL"
   }
 }
 ```
 
-**4. TOOL_COMPLETED**
+**5. TOOL_COMPLETED**
 
 Logged when a tool execution finishes.
 
@@ -402,10 +442,32 @@ Logged when a tool execution finishes.
     "result": [
       "austin_311",
       "austin_bikeshare"
-    ]
+    ],
+    "tool_origin": "LOCAL"
   },
   "latency_ms": {
     "total_ms": 467
+  }
+}
+```
+
+**6. TOOL_ERROR**
+
+Logged when a tool execution fails with an exception. Captures the tool name, arguments, tool origin, and error message.
+
+```json
+{
+  "event_type": "TOOL_ERROR",
+  "content": {
+    "tool": "list_dataset_ids",
+    "args": {
+      "project_id": "nonexistent-project"
+    },
+    "tool_origin": "LOCAL"
+  },
+  "error_message": "Error 404: Dataset not found",
+  "latency_ms": {
+    "total_ms": 150
   }
 }
 ```
@@ -414,7 +476,7 @@ Logged when a tool execution finishes.
 
 These events track changes to the agent's state, typically triggered by tools.
 
-**5. STATE_DELTA**
+**7. STATE_DELTA**
 
 Tracks changes to the agent's internal state (e.g., token cache updates).
 
@@ -462,6 +524,60 @@ Tracks changes to the agent's internal state (e.g., token cache updates).
 
   </tbody>
 </table>
+
+#### Human-in-the-Loop (HITL) Events {#hitl-events}
+
+The plugin automatically detects calls to ADK's synthetic HITL tools and emits dedicated event types for them. These events are logged **in addition to** the normal `TOOL_STARTING` / `TOOL_COMPLETED` events.
+
+The following HITL tool names are recognized:
+
+- `adk_request_credential` — Request for user credentials (e.g., OAuth tokens)
+- `adk_request_confirmation` — Request for user confirmation before proceeding
+- `adk_request_input` — Request for free-form user input
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Event Type</strong></th>
+      <th><strong>Trigger</strong></th>
+      <th><strong>Content (JSON) Structure</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p><pre>HITL_CREDENTIAL_REQUEST</pre></p></td>
+      <td>Agent calls <code>adk_request_credential</code></td>
+      <td><p><pre>{"tool": "adk_request_credential", "args": {...}}</pre></p></td>
+    </tr>
+    <tr>
+      <td><p><pre>HITL_CREDENTIAL_REQUEST_COMPLETED</pre></p></td>
+      <td>User provides credential response</td>
+      <td><p><pre>{"tool": "adk_request_credential", "result": {...}}</pre></p></td>
+    </tr>
+    <tr>
+      <td><p><pre>HITL_CONFIRMATION_REQUEST</pre></p></td>
+      <td>Agent calls <code>adk_request_confirmation</code></td>
+      <td><p><pre>{"tool": "adk_request_confirmation", "args": {...}}</pre></p></td>
+    </tr>
+    <tr>
+      <td><p><pre>HITL_CONFIRMATION_REQUEST_COMPLETED</pre></p></td>
+      <td>User provides confirmation response</td>
+      <td><p><pre>{"tool": "adk_request_confirmation", "result": {...}}</pre></p></td>
+    </tr>
+    <tr>
+      <td><p><pre>HITL_INPUT_REQUEST</pre></p></td>
+      <td>Agent calls <code>adk_request_input</code></td>
+      <td><p><pre>{"tool": "adk_request_input", "args": {...}}</pre></p></td>
+    </tr>
+    <tr>
+      <td><p><pre>HITL_INPUT_REQUEST_COMPLETED</pre></p></td>
+      <td>User provides input response</td>
+      <td><p><pre>{"tool": "adk_request_input", "result": {...}}</pre></p></td>
+    </tr>
+  </tbody>
+</table>
+
+HITL request events are detected from `function_call` parts in `on_event_callback`. HITL completion events are detected from `function_response` parts in both `on_event_callback` and `on_user_message_callback`.
 
 #### GCS Offloading Examples (Multimodal & Large Text)
 
@@ -520,7 +636,7 @@ SELECT
   part.object_ref.uri AS gcs_uri,
   -- Generate a signed URL to read the content directly (requires connection_id configuration)
   STRING(OBJ.GET_ACCESS_URL(part.object_ref, 'r').access_urls.read_url) AS signed_url
-FROM `your-gcp-project-id.your-dataset-id.agent_events_v2`,
+FROM `your-gcp-project-id.your-dataset-id.agent_events`,
 UNNEST(content_parts) AS part
 WHERE part.storage_mode = 'GCS_REFERENCE'
 ORDER BY timestamp DESC
@@ -533,7 +649,7 @@ LIMIT 10;
 
 ```sql
 SELECT timestamp, event_type, agent, JSON_VALUE(content, '$.response') as summary
-FROM `your-gcp-project-id.your-dataset-id.agent_events_v2`
+FROM `your-gcp-project-id.your-dataset-id.agent_events`
 WHERE trace_id = 'your-trace-id'
 ORDER BY timestamp ASC;
 ```
@@ -543,7 +659,7 @@ ORDER BY timestamp ASC;
 ```sql
 SELECT
   AVG(CAST(JSON_VALUE(content, '$.usage.total') AS INT64)) as avg_tokens
-FROM `your-gcp-project-id.your-dataset-id.agent_events_v2`
+FROM `your-gcp-project-id.your-dataset-id.agent_events`
 WHERE event_type = 'LLM_RESPONSE';
 ```
 
@@ -554,7 +670,7 @@ SELECT
   timestamp,
   part.mime_type,
   part.object_ref.uri as gcs_uri
-FROM `your-gcp-project-id.your-dataset-id.agent_events_v2`,
+FROM `your-gcp-project-id.your-dataset-id.agent_events`,
 UNNEST(content_parts) as part
 WHERE part.mime_type LIKE 'image/%'
 ORDER BY timestamp DESC;
@@ -572,7 +688,7 @@ SELECT
     ('Describe this image briefly. What company logo?', parts.object_ref)
   ) AS generated_result
 FROM
-  `your-gcp-project-id.your-dataset-id.agent_events_v2` logs,
+  `your-gcp-project-id.your-dataset-id.agent_events` logs,
   UNNEST(logs.content_parts) AS parts
 WHERE
   parts.mime_type LIKE 'image/%'
@@ -586,7 +702,7 @@ LIMIT 1;
 SELECT
   event_type,
   AVG(CAST(JSON_VALUE(latency_ms, '$.total_ms') AS INT64)) as avg_latency_ms
-FROM `your-gcp-project-id.your-dataset-id.agent_events_v2`
+FROM `your-gcp-project-id.your-dataset-id.agent_events`
 WHERE event_type IN ('LLM_RESPONSE', 'TOOL_COMPLETED')
 GROUP BY event_type;
 ```
@@ -603,13 +719,58 @@ SELECT
   CAST(JSON_VALUE(latency_ms, '$.total_ms') AS INT64) as duration_ms,
   -- Identify the specific tool or operation
   COALESCE(
-    JSON_VALUE(content, '$.tool'), 
+    JSON_VALUE(content, '$.tool'),
     'LLM_CALL'
   ) as operation
-FROM `your-gcp-project-id.your-dataset-id.agent_events_v2`
+FROM `your-gcp-project-id.your-dataset-id.agent_events`
 WHERE trace_id = 'your-trace-id'
   AND event_type IN ('LLM_RESPONSE', 'TOOL_COMPLETED')
 ORDER BY timestamp ASC;
+```
+
+**Error Analysis (LLM & Tool Errors)**
+
+```sql
+SELECT
+  timestamp,
+  event_type,
+  agent,
+  error_message,
+  JSON_VALUE(content, '$.tool') as tool_name,
+  CAST(JSON_VALUE(latency_ms, '$.total_ms') AS INT64) as latency_ms
+FROM `your-gcp-project-id.your-dataset-id.agent_events`
+WHERE event_type IN ('LLM_ERROR', 'TOOL_ERROR')
+ORDER BY timestamp DESC
+LIMIT 20;
+```
+
+**Tool Provenance Analysis**
+
+```sql
+SELECT
+  JSON_VALUE(content, '$.tool_origin') as tool_origin,
+  JSON_VALUE(content, '$.tool') as tool_name,
+  COUNT(*) as call_count,
+  AVG(CAST(JSON_VALUE(latency_ms, '$.total_ms') AS INT64)) as avg_latency_ms
+FROM `your-gcp-project-id.your-dataset-id.agent_events`
+WHERE event_type = 'TOOL_COMPLETED'
+GROUP BY tool_origin, tool_name
+ORDER BY call_count DESC;
+```
+
+**HITL Interaction Analysis**
+
+```sql
+SELECT
+  timestamp,
+  event_type,
+  session_id,
+  JSON_VALUE(content, '$.tool') as hitl_tool,
+  content
+FROM `your-gcp-project-id.your-dataset-id.agent_events`
+WHERE event_type LIKE 'HITL_%'
+ORDER BY timestamp DESC
+LIMIT 20;
 ```
 
 
@@ -622,7 +783,7 @@ DECLARE failed_session_id STRING;
 -- Find a recent failed session
 SET failed_session_id = (
     SELECT session_id
-    FROM `your-gcp-project-id.your-dataset-id.agent_events_v2`
+    FROM `your-gcp-project-id.your-dataset-id.agent_events`
     WHERE error_message IS NOT NULL
     ORDER BY timestamp DESC
     LIMIT 1
@@ -633,7 +794,7 @@ WITH SessionContext AS (
     SELECT
         session_id,
         STRING_AGG(CONCAT(event_type, ': ', COALESCE(TO_JSON_STRING(content), '')), '\n' ORDER BY timestamp) as full_history
-    FROM `your-gcp-project-id.your-dataset-id.agent_events_v2`
+    FROM `your-gcp-project-id.your-dataset-id.agent_events`
     WHERE session_id = failed_session_id
     GROUP BY session_id
 )
@@ -651,7 +812,7 @@ FROM SessionContext;
 
 ## Conversational Analytics in BigQuery
 
-You can also use 
+You can also use
 [BigQuery Conversational Analytics](https://cloud.google.com/bigquery/docs/conversational-analytics)
 to analyze your agent logs using natural language. Use this tool to answer questions like:
 
@@ -669,8 +830,11 @@ To connect this dashboard to your own BigQuery table, use the following link for
 https://lookerstudio.google.com/reporting/create?c.reportId=f1c5b513-3095-44f8-90a2-54953d41b125&ds.ds3.connector=bigQuery&ds.ds3.type=TABLE&ds.ds3.projectId=<your-project-id>&ds.ds3.datasetId=<your-dataset-id>&ds.ds3.tableId=<your-table-id>
 ```
 
+## Feedback
+We welcome your feedback on BigQuery Agent Analytics. If you have questions, suggestions, or encounter any issues, please reach out to the team at bqaa-feedback@google.com.
+
 ## Additional resources
 
 -   [BigQuery Storage Write API](https://cloud.google.com/bigquery/docs/write-api)
--   [Introduction to Object Tables](https://cloud.google.com/bigquery/docs/object-tables-intro)
+-   [Introduction to Object Tables](https://docs.cloud.google.com/bigquery/docs/object-table-introduction)
 -   [Interactive Demo Notebook](https://github.com/haiyuan-eng-google/demo_BQ_agent_analytics_plugin_notebook)

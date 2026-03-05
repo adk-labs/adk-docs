@@ -50,7 +50,7 @@ increases size of the second summary compression, and each summary afterwards,
 as shown in Figure 1.
 
 ![Context compaction example illustration](/adk-docs/assets/context-compaction.svg)
-**Figure 1.** Ilustration of event compaction configuration with a interval of 3
+**Figure 1.** Illustration of event compaction configuration with an interval of 3
 and overlap of 1.
 
 With this example configuration, the context compression tasks happen as follows:
@@ -103,7 +103,7 @@ app = App(
 )
 ```
 
-You can further refine the operation of the `SlidingWindowCompactor` by
+You can further refine the operation of the `SlidingWindowCompactor`
 by modifying its summarizer class `LlmEventSummarizer` including changing
 the `prompt_template` setting of that class. For more details, see the
 [`LlmEventSummarizer` code](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60).

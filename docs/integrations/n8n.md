@@ -2,7 +2,7 @@
 catalog_title: n8n
 catalog_description: Trigger automated workflows, connect apps, and process data
 catalog_icon: /adk-docs/integrations/assets/n8n.png
-catalog_tags: ["mcp"]
+catalog_tags: ["mcp", "connectors"]
 ---
 
 # n8n MCP tool for ADK
@@ -170,8 +170,12 @@ for detailed setup instructions.
                 new MCPToolset({
                     type: "StreamableHTTPConnectionParams",
                     url: `${N8N_INSTANCE_URL}/mcp-server/http`,
-                    header: {
-                        Authorization: `Bearer ${N8N_MCP_TOKEN}`,
+                    transportOptions: {
+                        requestInit: {
+                            headers: {
+                                Authorization: `Bearer ${N8N_MCP_TOKEN}`,
+                            },
+                        },
                     },
                 }),
             ],
