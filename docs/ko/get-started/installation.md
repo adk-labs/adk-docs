@@ -96,13 +96,13 @@
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
-                <version>0.5.0</version>
+                <version>0.6.0</version>
             </dependency>
             <!-- 에이전트를 디버그하기 위한 ADK 개발 웹 UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
-                <version>0.5.0</version>
+                <version>0.6.0</version>
             </dependency>
         </dependencies>
 
@@ -115,8 +115,8 @@
 
     ```title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:0.5.0'
-        implementation 'com.google.adk:google-adk-dev:0.5.0'
+        implementation 'com.google.adk:google-adk:0.6.0'
+        implementation 'com.google.adk:google-adk-dev:0.6.0'
     }
     ```
 

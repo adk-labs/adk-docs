@@ -435,12 +435,12 @@ google-adk
           <dependency>
              <groupId>com.google.adk</groupId>
              <artifactId>google-adk</artifactId>
-             <version>0.1.0</version>
+             <version>0.6.0</version>
           </dependency>
           <dependency>
              <groupId>com.google.adk</groupId>
              <artifactId>google-adk-dev</artifactId>
-             <version>0.1.0</version>
+             <version>0.6.0</version>
           </dependency>
         </dependencies>
 
@@ -496,7 +496,7 @@ google-adk
 
     UI가 활성화된 상태로 에이전트를 배포한 경우:
 
-    *   **adk CLI:** 배포 중에 `--webui` 플래그를 포함했습니다.
+    *   **adk CLI:** 배포 중에 해당 플래그(`--webui`는 Go, `--with_ui`는 Python 또는 Typescript)를 포함했습니다.
     *   **gcloud CLI:** `main.py`에서 `SERVE_WEB_INTERFACE = True`로 설정했습니다.
 
     배포 후 웹 브라우저에서 제공된 Cloud Run 서비스 URL로 이동하여 에이전트를 테스트할 수 있습니다.

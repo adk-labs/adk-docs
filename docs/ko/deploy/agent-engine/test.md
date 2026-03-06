@@ -149,7 +149,7 @@ REST를 통해 배포된 에이전트 상호작용을 테스트하려면:
         curl \
         -H "Authorization: Bearer $(gcloud auth print-access-token)" \
         -H "Content-Type: application/json" \
-        https://$(LOCATION_ID)-aiplatform.googleapis.com/v1/projects/$(PROJECT_ID)/locations/$(LOCATION_ID)/reasoningEngines/$(RESOURCE_ID):query?alt=sse -d '{
+        https://$(LOCATION_ID)-aiplatform.googleapis.com/v1/projects/$(PROJECT_ID)/locations/$(LOCATION_ID)/reasoningEngines/$(RESOURCE_ID):streamQuery?alt=sse -d '{
         "class_method": "async_stream_query",
         "input": {
             "user_id": "u_123",
@@ -165,7 +165,7 @@ REST를 통해 배포된 에이전트 상호작용을 테스트하려면:
         curl \
         -H "x-goog-api-key:YOUR-EXPRESS-MODE-API-KEY" \
         -H "Content-Type: application/json" \
-        https://aiplatform.googleapis.com/v1/reasoningEngines/$(RESOURCE_ID):query?alt=sse -d '{
+        https://aiplatform.googleapis.com/v1/reasoningEngines/$(RESOURCE_ID):streamQuery?alt=sse -d '{
         "class_method": "async_stream_query",
         "input": {
             "user_id": "u_123",

@@ -435,12 +435,12 @@ google-adk
           <dependency>
              <groupId>com.google.adk</groupId>
              <artifactId>google-adk</artifactId>
-             <version>0.1.0</version>
+             <version>0.6.0</version>
           </dependency>
           <dependency>
              <groupId>com.google.adk</groupId>
              <artifactId>google-adk-dev</artifactId>
-             <version>0.1.0</version>
+             <version>0.6.0</version>
           </dependency>
         </dependencies>
 
@@ -496,7 +496,7 @@ google-adk
 
     UIが有効な状態でエージェントをデプロイした場合:
 
-    *   **adk CLI:** デプロイ時に`--webui`フラグを含めました。
+    *   **adk CLI:** デプロイ時に該当するフラグ（Go では `--webui`、Python または Typescript では `--with_ui`）を含めました。
     *   **gcloud CLI:** `main.py`で`SERVE_WEB_INTERFACE = True`を設定しました。
 
     デプロイ後に提供されたCloud RunサービスURLをウェブブラウザで開くだけで、エージェントをテストできます。

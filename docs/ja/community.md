@@ -50,6 +50,16 @@
     以下の最近の録画を確認するか、[YouTubeプレイリスト](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3)で過去のすべてのコールをご覧ください。
 
 <div class="resource-grid">
+  <a href="https://www.youtube.com/watch?v=cXDr4RYJxK0" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/cXDr4RYJxK0/maxresdefault.jpg" alt="ADK Community Call Feb 2026">
+    </div>
+    <div class="card-content">
+      <div class="type">コミュニティコール</div>
+      <h3>📞 2026年2月 録画</h3>
+      <p>組み込みメトリクスを使った ADK 評価、トークンベースのコンテキスト圧縮、BigQuery observability plugin、そして Redis 統合のコミュニティスポットライトを取り上げています。</p>
+    </div>
+  </a>
   <a href="https://www.youtube.com/watch?v=h9Lueiqo89E" class="resource-card">
     <div class="card-image-wrapper">
       <img src="https://img.youtube.com/vi/h9Lueiqo89E/maxresdefault.jpg" alt="ADK Community Call Jan 2026">
@@ -68,16 +78,6 @@
       <div class="type">コミュニティコール</div>
       <h3>📞 2025年12月 録画</h3>
       <p>ADK TypeScript のローンチ、Gemini 3 Flash サポート、音声エージェント向け双方向ストリーミング、Visual Builder UI などを取り上げています。</p>
-    </div>
-  </a>
-  <a href="https://www.youtube.com/watch?v=bftUz-WBqyw" class="resource-card">
-    <div class="card-image-wrapper">
-      <img src="https://img.youtube.com/vi/bftUz-WBqyw/maxresdefault.jpg" alt="ADK Community Call Nov 2025">
-    </div>
-    <div class="card-content">
-      <div class="type">コミュニティコール</div>
-      <h3>📞 2025年11月 録画</h3>
-      <p>ADK Go のローンチ、エラー回復のための reflect & retry プラグイン、エージェントセッション巻き戻しのためのタイムトラベルデバッグなどを取り上げています。</p>
     </div>
   </a>
 </div>

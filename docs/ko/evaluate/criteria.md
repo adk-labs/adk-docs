@@ -356,17 +356,17 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
 
 ## per_turn_user_simulator_quality_v1
 
-이 기준은 사용자 시뮬레이터가 대화 계획을 충실하게 따르는지 평가합니다.
+이 기준은 사용자 시뮬레이터가 대화 계획과 페르소나를 충실하게 따르는지 평가합니다.
 
 ### 이 기준을 언제 사용해야 합니까?
 
-다중 턴 대화에서 사용자 시뮬레이터를 평가해야 할 때 이 기준을 사용하세요. 이 기준은 사용자 시뮬레이터가 `ConversationScenario`에 정의된 대화 계획을 따르는지 평가하도록 설계되었습니다.
+다중 턴 대화에서 사용자 시뮬레이터를 평가해야 할 때 이 기준을 사용하세요. 이 기준은 사용자 시뮬레이터가 `ConversationScenario`에 정의된 대화 계획과 페르소나를 따르는지 평가하도록 설계되었습니다.
 
 ### 세부 정보
 
 이 기준은 다중 턴 대화에서 사용자 시뮬레이터가 정의된 `ConversationScenario`를 따르는지 판단합니다.
 
-첫 번째 턴에서는 사용자 시뮬레이터 응답이 `ConversationScenario`의 `starting_prompt`와 일치하는지 확인합니다. 이후 턴에서는 LLM-as-a-judge를 사용하여 사용자 응답이 `ConversationScenario`의 `conversation_plan`을 따르는지 평가합니다.
+첫 번째 턴에서는 사용자 시뮬레이터 응답이 `ConversationScenario`의 `starting_prompt`와 일치하는지 확인합니다. 이후 턴에서는 LLM-as-a-judge를 사용하여 사용자 응답이 `ConversationScenario`의 `conversation_plan`과 `user_persona`를 따르는지 평가합니다. 페르소나 준수 여부를 확인하기 위해 `UserPersona`에 지정된 `violation_rubrics`를 사용합니다.
 
 ### 이 기준을 사용하는 방법은 무엇입니까?
 

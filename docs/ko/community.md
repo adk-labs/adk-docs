@@ -50,6 +50,16 @@
     아래의 최근 녹화본을 확인하거나, [YouTube 재생 목록](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3)에서 지난 모든 콜을 둘러보세요.
 
 <div class="resource-grid">
+  <a href="https://www.youtube.com/watch?v=cXDr4RYJxK0" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/cXDr4RYJxK0/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 2월">
+    </div>
+    <div class="card-content">
+      <div class="type">커뮤니티 콜</div>
+      <h3>📞 2026년 2월 녹화본</h3>
+      <p>내장 메트릭을 활용한 ADK 평가, 토큰 기반 컨텍스트 압축, BigQuery observability plugin, 그리고 Redis 통합을 다룬 커뮤니티 스포트라이트를 포함합니다.</p>
+    </div>
+  </a>
   <a href="https://www.youtube.com/watch?v=h9Lueiqo89E" class="resource-card">
     <div class="card-image-wrapper">
       <img src="https://img.youtube.com/vi/h9Lueiqo89E/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 1월">
@@ -68,16 +78,6 @@
       <div class="type">커뮤니티 콜</div>
       <h3>📞 2025년 12월 녹화본</h3>
       <p>ADK TypeScript 출시, Gemini 3 Flash 지원, 음성 에이전트를 위한 양방향 스트리밍, Visual Builder UI 등을 다룹니다.</p>
-    </div>
-  </a>
-  <a href="https://www.youtube.com/watch?v=bftUz-WBqyw" class="resource-card">
-    <div class="card-image-wrapper">
-      <img src="https://img.youtube.com/vi/bftUz-WBqyw/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2025년 11월">
-    </div>
-    <div class="card-content">
-      <div class="type">커뮤니티 콜</div>
-      <h3>📞 2025년 11월 녹화본</h3>
-      <p>ADK Go 출시, 오류 복구를 위한 reflect & retry 플러그인, 에이전트 세션 되감기를 위한 타임 트래블 디버깅 등을 다룹니다.</p>
     </div>
   </a>
 </div>
