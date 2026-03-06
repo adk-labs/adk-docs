@@ -158,8 +158,12 @@ ADK 에이전트를 [Postman](https://www.postman.com/) 생태계와 연결합�
                     // (Optional) Use "/minimal" for essential tools only
                     // (Optional) Use "/code" for code generation tools
                     // (Optional) Use "https://mcp.eu.postman.com" for EU region
-                    header: {
-                        Authorization: `Bearer ${POSTMAN_API_KEY}`,
+                    transportOptions: {
+                        requestInit: {
+                            headers: {
+                                Authorization: `Bearer ${POSTMAN_API_KEY}`,
+                            },
+                        },
                     },
                 }),
             ],

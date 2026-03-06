@@ -7,7 +7,7 @@ catalog_tags: ["code", "google"]
 # 에이전트 엔진을 사용한 코드 실행 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.17.0</span><span class="lst-preview">미리보기</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.17.0</span>
 </div>
 
 에이전트 엔진 코드 실행 ADK 도구는 [Google Cloud 에이전트 엔진](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview) 서비스를 사용하여 AI 생성 코드를 실행하기 위한 저지연, 고효율 방법을 제공합니다. 이 도구는 에이전트 워크플로에 맞게 빠른 실행을 위해 설계되었으며 보안 향상을 위해 샌드박스 환경을 사용합니다. 코드 실행 도구를 사용하면 여러 요청에 걸쳐 코드와 데이터가 유지되므로 다음을 포함한 복잡한 다단계 코딩 작업을 수행할 수 있습니다.
@@ -16,9 +16,6 @@ catalog_tags: ["code", "google"]
 -   **데이터 분석을 통한 코드:** 최대 100MB의 데이터 파일을 업로드하고 각 코드 실행에 대해 데이터를 다시 로드할 필요 없이 여러 코드 기반 분석을 실행합니다.
 
 이 코드 실행 도구는 에이전트 엔진 제품군의 일부이지만 에이전트를 에이전트 엔진에 배포하여 사용할 필요는 없습니다. 에이전트를 로컬 또는 다른 서비스에서 실행하고 이 도구를 사용할 수 있습니다. 에이전트 엔진의 코드 실행 기능에 대한 자세한 내용은 [에이전트 엔진 코드 실행](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/overview) 설명서를 참조하세요.
-
-!!! example "미리보기 출시"
-    에이전트 엔진 코드 실행 기능은 미리보기 출시입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참조하세요.
 
 ## 도구 사용
 

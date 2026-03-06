@@ -153,8 +153,12 @@ catalog_tags: ["mcp"]
                 new MCPToolset({
                     type: "StreamableHTTPConnectionParams",
                     url: "https://mcp.linear.app/mcp",
-                    header: {
-                        Authorization: `Bearer ${LINEAR_API_KEY}`,
+                    transportOptions: {
+                        requestInit: {
+                            headers: {
+                                Authorization: `Bearer ${LINEAR_API_KEY}`,
+                            },
+                        },
                     },
                 }),
             ],
@@ -166,7 +170,7 @@ catalog_tags: ["mcp"]
         !!! note
 
             このコード例は API キー認証を使います。ブラウザベースの OAuth 認証フローを
-            使う場合は `header` プロパティを削除して実行してください。
+            使う場合は `transportOptions` プロパティを削除して実行してください。
 
 ## 利用可能なツール
 

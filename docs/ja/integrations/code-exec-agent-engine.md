@@ -7,7 +7,7 @@ catalog_tags: ["code", "google"]
 # Agent Engineを使用したコード実行ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span><span class="lst-preview">プレビュー</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span>
 </div>
 
 Agent Engineコード実行ADKツールは、[Google Cloud Agent Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)サービスを使用してAI生成コードを実行するための低レイテンシで高効率な方法を提供します。このツールは、エージェントワークフローに合わせて高速実行できるように設計されており、セキュリティを向上させるためにサンドボックス環境を使用します。コード実行ツールを使用すると、複数のリクエストにわたってコードとデータを永続化できるため、次のような複雑なマルチステップのコーディングタスクが可能になります。
@@ -16,9 +16,6 @@ Agent Engineコード実行ADKツールは、[Google Cloud Agent Engine](https:/
 -   **データ分析によるコード:** 最大100MBのデータファイルをアップロードし、各コード実行でデータを再ロードすることなく、複数のコードベースの分析を実行します。
 
 このコード実行ツールはAgent Engineスイートの一部ですが、エージェントをAgent Engineにデプロイして使用する必要はありません。エージェントをローカルまたは他のサービスで実行し、このツールを使用できます。Agent Engineのコード実行機能の詳細については、[Agent Engineコード実行](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/overview)のドキュメントを参照してください。
-
-!!! example "プレビューリリース"
-    Agent Engineコード実行機能はプレビューリリースです。詳細については、[リリース段階の説明](https://cloud.google.com/products#product-launch-stages)を参照してください。
 
 ## ツールの使用
 
