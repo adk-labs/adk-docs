@@ -259,6 +259,12 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 
 *   **`output_schema` (任意):** 望ましい出力構造を表すスキーマを定義します。設定されている場合、エージェントの最終応答は、このスキーマに準拠したJSON文字列でなければなりません。
 
+!!! warning "警告: `output_schema` と `tools` の併用"
+
+    同じ LLM リクエストで `output_schema` と `tools` を併用できるのは、[Gemini 3.0](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#structured-output) を含む一部のモデルに限られます。
+    それ以外のモデルでは、ADK の [function tools](https://github.com/google/adk-python/blob/main/src/google/adk/flows/llm_flows/_output_schema_processor.py)) を使った回避策は安定して動作しない可能性があります。
+    そのような場合は、出力フォーマットを別途処理する sub-agent の利用を検討してください。
+
 *   **`output_key` (任意):** 文字列キーを提供します。設定されている場合、エージェントの*最終*応答のテキスト内容は、このキーの下でセッションの状態辞書に自動的に保存されます。これは、エージェント間やワークフローのステップ間で結果を渡すのに便利です。
     *   Pythonでは、`session.state[output_key] = agent_response_text`のようになります。
     *   Javaでは、`session.state().put(outputKey, agentResponseText)`です。

@@ -23,7 +23,7 @@ public static LlmAgent createAgent() {
       .build();
 
   Claude claudeModel = new Claude(
-      "claude-3-7-sonnet-latest", anthropicClient
+      "claude-sonnet-4-6", anthropicClient
   );
 
   return LlmAgent.builder()
@@ -59,7 +59,7 @@ import com.anthropic.client.okhttp.AnthropicOkHttpClient; // From Anthropic's SD
 
 public class DirectAnthropicAgent {
 
-  private static final String CLAUDE_MODEL_ID = "claude-3-7-sonnet-latest"; // お好みの Claude モデル名
+  private static final String CLAUDE_MODEL_ID = "claude-sonnet-4-6"; // お好みの Claude モデル名
 
   public static LlmAgent createAgent() {
 

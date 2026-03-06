@@ -34,36 +34,63 @@ Vertex AI 환경이 구성되어 있는지 확인하세요.
 ## Model Garden 배포
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.2.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.2.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 [Vertex AI Model Garden](https://console.cloud.google.com/vertex-ai/model-garden)에서
-다양한 오픈 소스 및 독점 모델을 엔드포인트로 배포할 수 있습니다.
+다양한 오픈 소스 및 독점 모델을 엔드포인트에 배포할 수 있습니다.
 
 **예시:**
 
-```python
-from google.adk.agents import LlmAgent
-from google.genai import types # For config objects
+=== "Python"
 
-# --- Example Agent using a Llama 3 model deployed from Model Garden ---
+    ```python
+    from google.adk.agents import LlmAgent
+    from google.genai import types # For config objects
 
-# 실제 Vertex AI 엔드포인트 리소스 이름으로 바꿔주세요.
-llama3_endpoint = "projects/YOUR_PROJECT_ID/locations/us-central1/endpoints/YOUR_LLAMA3_ENDPOINT_ID"
+    # --- Example Agent using a Llama 3 model deployed from Model Garden ---
 
-agent_llama3_vertex = LlmAgent(
-    model=llama3_endpoint,
-    name="llama3_vertex_agent",
-    instruction="You are a helpful assistant based on Llama 3, hosted on Vertex AI.",
-    generate_content_config=types.GenerateContentConfig(max_output_tokens=2048),
-    # ... other agent parameters
-)
-```
+    # Replace with your actual Vertex AI Endpoint resource name
+    llama3_endpoint = "projects/YOUR_PROJECT_ID/locations/us-central1/endpoints/YOUR_LLAMA3_ENDPOINT_ID"
+
+    agent_llama3_vertex = LlmAgent(
+        model=llama3_endpoint,
+        name="llama3_vertex_agent",
+        instruction="You are a helpful assistant based on Llama 3, hosted on Vertex AI.",
+        generate_content_config=types.GenerateContentConfig(max_output_tokens=2048),
+        # ... other agent parameters
+    )
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.models.Gemini;
+    import com.google.genai.types.GenerateContentConfig;
+
+    // ...
+
+    // Replace with your actual Vertex AI Endpoint resource name
+    String llama3Endpoint = "projects/YOUR_PROJECT_ID/locations/us-central1/endpoints/YOUR_LLAMA3_ENDPOINT_ID";
+
+    LlmAgent agentLlama3Vertex = LlmAgent.builder()
+        .model(Gemini.builder()
+            .modelName(llama3Endpoint)
+            .build())
+        .name("llama3_vertex_agent")
+        .instruction("You are a helpful assistant based on Llama 3, hosted on Vertex AI.")
+        .generateContentConfig(GenerateContentConfig.builder()
+            .maxOutputTokens(2048)
+            .build())
+        // ... other agent parameters
+        .build();
+    ```
 
 ## 파인 튜닝 모델 엔드포인트
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.2.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.2.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 Gemini 또는 Vertex AI가 지원하는 다른 아키텍처의 파인 튜닝 모델을 배포하면
@@ -71,21 +98,44 @@ Gemini 또는 Vertex AI가 지원하는 다른 아키텍처의 파인 튜닝 모
 
 **예시:**
 
-```python
-from google.adk.agents import LlmAgent
+=== "Python"
 
-# --- Example Agent using a fine-tuned Gemini model endpoint ---
+    ```python
+    from google.adk.agents import LlmAgent
 
-# 실제 파인 튜닝 모델의 엔드포인트 리소스 이름으로 바꿔주세요.
-finetuned_gemini_endpoint = "projects/YOUR_PROJECT_ID/locations/us-central1/endpoints/YOUR_FINETUNED_ENDPOINT_ID"
+    # --- Example Agent using a fine-tuned Gemini model endpoint ---
 
-agent_finetuned_gemini = LlmAgent(
-    model=finetuned_gemini_endpoint,
-    name="finetuned_gemini_agent",
-    instruction="You are a specialized assistant trained on specific data.",
-    # ... other agent parameters
-)
-```
+    # Replace with your fine-tuned model's endpoint resource name
+    finetuned_gemini_endpoint = "projects/YOUR_PROJECT_ID/locations/us-central1/endpoints/YOUR_FINETUNED_ENDPOINT_ID"
+
+    agent_finetuned_gemini = LlmAgent(
+        model=finetuned_gemini_endpoint,
+        name="finetuned_gemini_agent",
+        instruction="You are a specialized assistant trained on specific data.",
+        # ... other agent parameters
+    )
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.models.Gemini;
+
+    // ...
+
+    // Replace with your fine-tuned model's endpoint resource name
+    String finetunedGeminiEndpoint = "projects/YOUR_PROJECT_ID/locations/us-central1/endpoints/YOUR_FINETUNED_ENDPOINT_ID";
+
+    LlmAgent agentFinetunedGemini = LlmAgent.builder()
+        .model(Gemini.builder()
+            .modelName(finetunedGeminiEndpoint)
+            .build())
+        .name("finetuned_gemini_agent")
+        .instruction("You are a specialized assistant trained on specific data.")
+        // ... other agent parameters
+        .build();
+    ```
 
 ## Vertex AI의 Anthropic Claude {#third-party-models-on-vertex-ai-eg-anthropic-claude}
 
@@ -94,6 +144,8 @@ agent_finetuned_gemini = LlmAgent(
 </div>
 
 Anthropic 같은 일부 제공업체는 모델을 Vertex AI를 통해 직접 제공합니다.
+
+**예시:**
 
 === "Python"
 
@@ -126,8 +178,6 @@ Anthropic 같은 일부 제공업체는 모델을 Vertex AI를 통해 직접 제
 
         LLMRegistry.register(Claude)
         ```
-
-       **예시:**
 
        ```python
        from google.adk.agents import LlmAgent
@@ -180,8 +230,6 @@ Anthropic 같은 일부 제공업체는 모델을 Vertex AI를 통해 직접 제
     3.  **모델 인스턴스화 및 구성:**
         `LlmAgent`를 만들 때 `Claude` 클래스(또는 다른 제공업체의 해당 클래스)를 인스턴스화하고
         `VertexBackend`를 구성합니다.
-
-    **예시:**
 
     ```java
     import com.anthropic.client.AnthropicClient;
@@ -238,7 +286,7 @@ Anthropic 같은 일부 제공업체는 모델을 Vertex AI를 통해 직접 제
 ## Vertex AI의 오픈 모델 {#open-models}
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 Vertex AI는 Meta Llama 같은 오픈 소스 모델을 Model-as-a-Service(MaaS)로 선별 제공합니다.

@@ -163,7 +163,7 @@ MODEL_GEMINI_2_5_FLASH = "gemini-2.5-flash"
 MODEL_GPT_4O = "openai/gpt-4.1" # 他の試行例: gpt-4.1-mini, gpt-4o など
 
 # サポートされているその他のモデルはこちらを参照: https://docs.litellm.ai/docs/providers/anthropic
-MODEL_CLAUDE_SONNET = "anthropic/claude-sonnet-4-20250514" # 他の試行例: claude-opus-4-20250514 , claude-3-7-sonnet-20250219 など
+MODEL_CLAUDE_SONNET = "claude-sonnet-4-6" # 他の試行例: claude-opus-4-6 など
 
 print("\nEnvironment configured.")
 ```
