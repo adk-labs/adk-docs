@@ -178,4 +178,4 @@ UI に以下のプロンプトを入力して試してみてください。
 
 ## 次のステップ: カスタムストリーミングアプリの構築
 
-[カスタムオーディオストリーミングアプリ](../../streaming/custom-streaming.md)のチュートリアルでは、ADK ストリーミングと [FastAPI](https://fastapi.tiangolo.com/) で構築されたカスタム非同期 Web アプリのサーバーおよびクライアントコードの概要を説明し、リアルタイムの双方向オーディオおよびテキスト通信を実現する方法を案内しています。
+[Gemini Live API Toolkit 開発ガイドシリーズ](../../streaming/dev-guide/part1.md)では、ADK Streaming と [FastAPI](https://fastapi.tiangolo.com/) で構築したカスタム非同期 Web アプリのサーバーコードとクライアントコードの概要を示し、リアルタイムの双方向オーディオおよびテキスト通信を実装する方法を案内します。

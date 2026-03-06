@@ -112,13 +112,16 @@
 
 * 키 존재 여부: 지침 문자열에서 참조하는 키가 session.state에 존재하는지 확인하세요. 키가 없으면 에이전트가 오류를 발생시킵니다. 존재할 수도 있고 아닐 수도 있는 키를 사용하려면 키 뒤에 물음표(?)를 포함할 수 있습니다 (예: {topic?}).
 * 데이터 타입: 키와 연관된 값은 문자열이거나 쉽게 문자열로 변환할 수 있는 타입이어야 합니다.
-* 이스케이프: 지침에 리터럴 중괄호를 사용해야 하는 경우(예: JSON 형식 지정), 이스케이프 처리해야 합니다.
+* 리터럴 중괄호: `{key}` 구문은 단일 중괄호 안의 유효한 Python 식별자를 상태 변수 자리표시자로 인식합니다. JSON 예시나 템플릿 구문처럼 리터럴 중괄호가 필요한 경우에는 문자열 대신 `InstructionProvider` 함수를 사용하세요.
 
-#### `InstructionProvider`로 상태 주입 우회하기
+!!! note "f-string과 이중 중괄호"
+    일부 ADK 예제는 `f"Topic: {{initial_topic}}"`처럼 Python f-string을 사용합니다. 여기서 `{{` 와 `}}` 는 **Python f-string 이스케이프**이지 ADK 문법이 아닙니다. 런타임에 Python은 `{{initial_topic}}`를 `{initial_topic}`로 변환하고, 그 다음 ADK가 이를 일반 상태 변수 자리표시자로 처리합니다. f-string을 사용하지 않는다면 단일 중괄호 `{key}`를 직접 사용하세요.
 
-경우에 따라, 상태 주입 메커니즘을 트리거하지 않고 지침에서 `{{`와 `}}`를 문자 그대로 사용하고 싶을 수 있습니다. 예를 들어, 동일한 구문을 사용하는 템플릿 언어를 지원하는 에이전트에 대한 지침을 작성하는 경우입니다.
+#### 완전한 제어가 필요할 때 `InstructionProvider` 사용하기
 
-이를 위해, `instruction` 매개변수에 문자열 대신 함수를 제공할 수 있습니다. 이 함수를 `InstructionProvider`라고 합니다. `InstructionProvider`를 사용하면 ADK는 상태를 주입하려고 시도하지 않으며, 지침 문자열은 그대로 모델에 전달됩니다.
+경우에 따라 상태 변수 자리표시자로 해석되면 안 되는 리터럴 중괄호를 포함한 지침 문자열을 직접 제어해야 할 수 있습니다. 예를 들어 JSON 예시나 템플릿 구문을 지침에 포함하려는 경우가 그렇습니다.
+
+이를 위해 `instruction` 매개변수에 문자열 대신 함수를 제공합니다. 이 함수를 `InstructionProvider`라고 합니다. `InstructionProvider`를 사용하면 ADK는 상태 변수를 주입하지 않으며, 함수가 반환한 문자열을 그대로 모델에 전달합니다.
 
 `InstructionProvider` 함수는 `ReadonlyContext` 객체를 받으며, 이를 사용하여 지침을 동적으로 빌드해야 하는 경우 세션 상태나 다른 컨텍셔널 정보에 접근할 수 있습니다.
 
@@ -130,9 +133,8 @@
 
     # 이것은 InstructionProvider입니다
     def my_instruction_provider(context: ReadonlyContext) -> str:
-        # 선택적으로 컨텍스트를 사용하여 지침을 빌드할 수 있습니다
-        # 이 예제에서는 리터럴 중괄호가 있는 정적 문자열을 반환합니다.
-        return "이것은 대체되지 않을 {{리터럴_중괄호}}가 있는 지침입니다."
+        # 상태 주입은 일어나지 않으며, 중괄호는 리터럴 텍스트로 처리됩니다.
+        return '출력을 JSON 형식으로 작성하세요: {"city": "<name>", "population": <number>}'
 
     agent = LlmAgent(
         model="gemini-2.0-flash",
@@ -141,13 +143,31 @@
     )
     ```
 
+=== "TypeScript"
+
+    ```typescript
+    import { LlmAgent, ReadonlyContext } from "@google/adk";
+
+    // 이것은 InstructionProvider입니다
+    function myInstructionProvider(context: ReadonlyContext): string {
+        // 상태 주입은 일어나지 않으며, 중괄호는 리터럴 텍스트로 처리됩니다.
+        return '출력을 JSON 형식으로 작성하세요: {"city": "<name>", "population": <number>}';
+    }
+
+    const agent = new LlmAgent({
+        model: "gemini-2.5-flash",
+        name: "template_helper_agent",
+        instruction: myInstructionProvider
+    });
+    ```
+
 === "Go"
 
     ```go
     --8<-- "examples/go/snippets/sessions/instruction_provider/instruction_provider_example.go:bypass_state_injection"
     ```
 
-`InstructionProvider`를 사용하면서 지침에 상태를 주입하고 싶다면 `inject_session_state` 유틸리티 함수를 사용할 수 있습니다.
+`InstructionProvider`를 사용하면서도 지침에 상태를 주입하고 싶다면 `inject_session_state` 유틸리티 함수를 사용할 수 있습니다. 유효한 상태 변수 이름에 해당하는 `{key}` 자리표시자만 치환되며, 그 외의 텍스트(유효한 식별자가 아닌 내용을 담은 중괄호 포함)는 그대로 유지됩니다.
 
 === "Python"
 
@@ -157,8 +177,9 @@
     from google.adk.utils import instructions_utils
 
     async def my_dynamic_instruction_provider(context: ReadonlyContext) -> str:
-        template = "이것은 {adjective} 지침이며 {{리터럴_중괄호}}를 포함합니다."
-        # 이것은 'adjective' 상태 변수를 주입하지만 리터럴 중괄호는 그대로 둡니다.
+        template = "이것은 {adjective} 지침입니다. JSON 예시는 다음과 같습니다: {\"key\": \"value\"}."
+        # 'adjective' 상태 변수는 주입됩니다.
+        # JSON 중괄호 안의 내용은 유효한 식별자가 아니므로 그대로 유지됩니다.
         return await instructions_utils.inject_session_state(template, context)
 
     agent = LlmAgent(

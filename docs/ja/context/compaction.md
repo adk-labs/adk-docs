@@ -75,4 +75,4 @@ app = App(
 )
 ```
 
-`SlidingWindowCompactor`のサマライザークラス`LlmEventSummarizer`の`prompt_template`設定を変更することを含め、その動作をさらに調整できます。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60)を参照してください。
+サマライザークラスである`LlmEventSummarizer`の`prompt_template`設定を変更するなど、`SlidingWindowCompactor`の動作をさらに細かく調整できます。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60)を参照してください。

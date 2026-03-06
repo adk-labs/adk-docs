@@ -210,6 +210,7 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 
 === "Python"
   ```py
+  from google import adk
   from google.adk.memory import VertexAiMemoryBankService
 
   agent_engine_id = agent_engine.api_resource.name.split("/")[-1]
@@ -252,6 +253,7 @@ agent = Agent(
 
 === "Python"
 ```python
+from google.adk.agents import Agent
 from google import adk
 
 async def auto_save_session_to_memory_callback(callback_context):

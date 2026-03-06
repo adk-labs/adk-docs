@@ -1,4 +1,4 @@
-# 파트 1: ADK 양방향 스트리밍 소개
+# 파트 1: ADK Gemini Live API Toolkit 소개
 
 <div class="language-support-tag">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">실험적 기능</span>
@@ -91,11 +91,11 @@ sequenceDiagram
     - **멀티모달 (화면 공유)**: 에이전트는 차트, 그래프 및 포트폴리오 성과 데이터를 표시하기 위해 화면을 공유할 수 있습니다. 고객 또한 특정 뉴스 기사를 가리키며 "이 사건이 제 기술주에 미칠 잠재적 영향은 무엇인가요?"라고 묻기 위해 자신의 화면을 공유할 수 있습니다.
     - **실시간 상호작용**: 고객의 계정 데이터에 접근하여 현재 포트폴리오 배분을 분석하고, 잠재적 거래가 포트폴리오의 위험 프로필에 미치는 영향을 시뮬레이션할 수 있습니다.
 
-## 1.2 ADK 양방향 스트리밍 아키텍처 개요 { #adk-bidi-streaming-architecture-overview }
+## 1.2 ADK Gemini Live API Toolkit 아키텍처 개요 { #adk-bidi-streaming-architecture-overview }
 
-ADK 양방향 스트리밍 아키텍처는 양방향 AI 대화를 인간의 대화처럼 자연스럽게 만들어줍니다. 이 아키텍처는 낮은 지연 시간과 높은 처리량의 통신을 위해 설계된 정교한 파이프라인을 통해 Google의 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live)와 원활하게 통합됩니다.
+ADK Gemini Live API Toolkit 아키텍처는 양방향 AI 대화를 인간의 대화처럼 자연스럽게 만들어줍니다. 이 아키텍처는 낮은 지연 시간과 높은 처리량의 통신을 위해 설계된 정교한 파이프라인을 통해 Google의 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live)와 원활하게 통합됩니다.
 
-이 시스템은 실시간 스트리밍에 필요한 복잡한 조율 작업을 처리합니다. 즉, 여러 동시 데이터 흐름 관리, 중단 기능의 원활한 처리, 멀티모달 입력 동시 처리, 동적 상호작용 전반에 걸친 대화 상태 유지를 담당합니다. ADK 양방향 스트리밍은 이러한 복잡성을 개발자가 스트리밍 프로토콜이나 AI 모델 통신 패턴의 복잡한 세부 사항을 이해할 필요 없이 사용할 수 있는 간단하고 직관적인 API로 추상화합니다.
+이 시스템은 실시간 스트리밍에 필요한 복잡한 조율 작업을 처리합니다. 즉, 여러 동시 데이터 흐름 관리, 중단 기능의 원활한 처리, 멀티모달 입력 동시 처리, 동적 상호작용 전반에 걸친 대화 상태 유지를 담당합니다. ADK Gemini Live API Toolkit은 이러한 복잡성을 개발자가 스트리밍 프로토콜이나 AI 모델 통신 패턴의 복잡한 세부 사항을 이해할 필요 없이 사용할 수 있는 간단하고 직관적인 API로 추상화합니다.
 
 ### 상위 레벨 아키텍처
 
@@ -112,7 +112,7 @@ graph TB
     end
 
     subgraph "ADK"
-        subgraph "ADK 양방향 스트리밍"
+        subgraph "ADK Gemini Live API Toolkit"
             L1[LiveRequestQueue]
             L2[Runner]
             L3[Agent]
@@ -150,7 +150,7 @@ graph TB
 
 ## 1.3 개발 환경 설정하기 { #setting-up-your-development-environment }
 
-이제 ADK 양방향 스트리밍 아키텍처의 핵심과 그 가치를 이해했으니, 직접 경험해 볼 시간입니다. 이 섹션에서는 이전 섹션에서 설명한 스트리밍 에이전트와 애플리케이션을 빌드할 수 있도록 개발 환경을 준비합니다.
+이제 ADK Gemini Live API Toolkit 아키텍처의 핵심과 그 가치를 이해했으니, 직접 경험해 볼 시간입니다. 이 섹션에서는 이전 섹션에서 설명한 스트리밍 에이전트와 애플리케이션을 빌드할 수 있도록 개발 환경을 준비합니다.
 
 이 설정을 마치면, 우리가 논의했던 지능형 음성 비서, 능동적인 고객 지원 에이전트, 다중 에이전트 협업 플랫폼을 만드는 데 필요한 모든 것을 갖추게 됩니다. 설정 과정은 간단합니다. ADK가 복잡한 스트리밍 인프라를 처리하므로, 여러분은 낮은 수준의 스트리밍 프로토콜과 씨름하는 대신 에이전트의 고유한 기능을 구축하는 데 집중할 수 있습니다.
 

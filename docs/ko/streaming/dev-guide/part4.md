@@ -40,7 +40,7 @@ ADK Session과 Live API 세션의 관계,
 
 !!! note "Source Reference"
 
-    [`run_config.py`](https://github.com/google/adk-python/blob/29c1115959b0084ac1169748863b35323da3cf50/src/google/adk/agents/run_config.py)
+    [`run_config.py`](https://github.com/google/adk-python/blob/427a983b18088bdc22272d02714393b0a779ecdf/src/google/adk/agents/run_config.py)
 
 **플랫폼 지원 범례:**
 
@@ -237,39 +237,28 @@ sequenceDiagram
 
 ### Progressive SSE Streaming
 
-**Progressive SSE streaming**은 SSE 모드 응답 전달을 개선하는 기능입니다.
+**Progressive SSE streaming**은 SSE 모드 응답 전달 방식을 개선하는 실험적 기능입니다. 이 기능을 켜면 다음과 같은 이점을 얻을 수 있습니다.
 
-- **콘텐츠 순서 보존**: 텍스트/함수 호출/inline data 혼합 시 원래 순서 유지
+- **콘텐츠 순서 보존**: 텍스트, 함수 호출, inline data가 섞여 있어도 원래 순서를 유지
 - **지능형 텍스트 병합**: 같은 유형(일반 텍스트/사고 텍스트)의 연속 텍스트만 병합
-- **점진적 전달**: 중간 청크는 `partial=True`, 마지막에 단일 최종 집계 응답
-- **함수 실행 지연**: partial 이벤트에서는 함수 실행을 건너뛰고 최종 이벤트에서 실행
-- **함수 인자 스트리밍**: `partial_args`로 함수 호출 인자 구성 과정을 실시간 표시
+- **점진적 전달**: 중간 청크는 `partial=True`, 마지막에 단일 최종 집계 응답을 생성
+- **함수 실행 지연**: partial 이벤트에서는 함수 실행을 건너뛰고 최종 집계 이벤트에서만 실행하여 중복 실행을 방지
 
-**기본 동작:**
-`StreamingMode.SSE` 사용 시 기본으로 활성화됩니다.
+**활성화 방법:**
 
-**비활성화(필요한 경우):**
+이 기능은 아직 실험 단계(WIP)이며 기본값은 비활성화입니다. 환경 변수로 활성화합니다.
 
 ```bash
-export ADK_DISABLE_PROGRESSIVE_SSE_STREAMING=1
+export ADK_ENABLE_PROGRESSIVE_SSE_STREAMING=1
 ```
 
-!!! warning "레거시 동작 트레이드오프"
+**이 기능이 유용한 경우:**
 
-    비활성화하면 단순 텍스트 누적 방식으로 돌아가며,
-    - 텍스트/함수 호출 혼합 시 원래 순서를 잃을 수 있고
-    - `partial_args` 기반 함수 인자 스트리밍을 지원하지 않으며
-    - 하위 호환 목적이므로 신규 앱에는 기본 progressive 모드 권장
+- `StreamingMode.SSE`에서 텍스트와 함수 호출이 섞인 응답을 다룰 때
+- 사고 텍스트(thought text)와 일반 텍스트가 함께 섞여 나올 때
+- 응답 집계가 끝난 뒤 함수 호출을 한 번만 실행하고 싶을 때
 
-**도움이 되는 경우:**
-
-- SSE 모드에서 텍스트+함수 호출 같은 혼합 콘텐츠 사용
-- 사고 텍스트와 일반 텍스트가 섞이는 응답
-- 함수 호출을 완전 집계 후 1회 실행하고 싶을 때
-- 함수 인자 구성 과정을 실시간 표시하고 싶을 때
-
-**참고:** 이 기능은 `StreamingMode.SSE`에만 적용되며,
-`StreamingMode.BIDI`에는 적용되지 않습니다.
+**참고:** 이 기능은 `StreamingMode.SSE`에만 적용되며, 이 가이드의 중심인 `StreamingMode.BIDI`에는 적용되지 않습니다.
 
 ### 어떤 모드를 언제 써야 하나
 
@@ -325,7 +314,7 @@ ADK는 SSE를 통해 Gemini 1.5 모델도 지원합니다.
 
 ## Live API 연결과 세션 이해하기
 
-ADK Bidi-streaming 앱에서 ADK와 Live API 백엔드 사이 통신 계층을 이해하는 것은 중요합니다.
+ADK Gemini Live API Toolkit 앱에서 ADK와 Live API 백엔드 사이 통신 계층을 이해하는 것은 중요합니다.
 핵심은 **연결(connection)** 과 **세션(session)** 의 구분입니다.
 Bidi 아키텍처에서는 연결 타임아웃, 모달리티별 세션 제한,
 유한 컨텍스트 윈도우, 플랫폼별 동시 세션 쿼터 같은 제약이 존재합니다.
@@ -968,12 +957,12 @@ CFC는 BIDI에서도 동작하지만,
 **더 알아보기:**
 
 - [Gemini Function Calling Guide](https://ai.google.dev/gemini-api/docs/function-calling)
-- [ADK Parallel Functions Example](https://github.com/google/adk-python/blob/29c1115959b0084ac1169748863b35323da3cf50/contributing/samples/parallel_functions/agent.py)
+- [ADK Parallel Functions Example](https://github.com/google/adk-python/blob/427a983b18088bdc22272d02714393b0a779ecdf/contributing/samples/parallel_functions/agent.py)
 - [ADK Performance Guide](https://google.github.io/adk-docs/tools/performance/)
 
 ## 요약
 
-이번 파트에서는 RunConfig를 통해 ADK Bidi-streaming 세션을 선언적으로 제어하는 방법을 학습했습니다.
+이번 파트에서는 RunConfig를 통해 ADK Gemini Live API Toolkit 세션을 선언적으로 제어하는 방법을 학습했습니다.
 응답 모달리티 제약, BIDI/SSE 차이,
 ADK Session과 Live API session 관계,
 session resumption/context window compression 기반 세션 시간 관리,

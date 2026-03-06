@@ -37,7 +37,7 @@ session resumption と context window compression による長時間運用、
 
 !!! note "Source Reference"
 
-    [`run_config.py`](https://github.com/google/adk-python/blob/29c1115959b0084ac1169748863b35323da3cf50/src/google/adk/agents/run_config.py)
+    [`run_config.py`](https://github.com/google/adk-python/blob/427a983b18088bdc22272d02714393b0a779ecdf/src/google/adk/agents/run_config.py)
 
 **サポート凡例:**
 
@@ -184,19 +184,28 @@ sequenceDiagram
 
 ### Progressive SSE Streaming
 
-Progressive SSE streaming は SSE 応答集約を改善します。
+Progressive SSE streaming は、SSE モードでの応答集約を改善する実験的機能です。有効化すると次の利点があります。
 
-- 混在コンテンツで順序を保持
-- 同種テキストのみ賢くマージ
-- 中間は `partial=True`、最後に集約済み応答
-- 関数実行は最終イベントまで遅延
-- `partial_args` で関数引数構築を段階表示
+- 混在コンテンツでも元の順序を保持
+- 同種テキストのみを賢くマージ
+- 中間チャンクは `partial=True`、最後に集約済み応答を 1 回だけ返す
+- 関数実行は最終イベントまで遅延させ、重複実行を防ぐ
 
-デフォルトで有効。必要なら環境変数で無効化できます。
+**有効化方法:**
+
+この機能は実験段階（WIP）のため、デフォルトでは無効です。環境変数で有効化します。
 
 ```bash
-export ADK_DISABLE_PROGRESSIVE_SSE_STREAMING=1
+export ADK_ENABLE_PROGRESSIVE_SSE_STREAMING=1
 ```
+
+**有効にするとよいケース:**
+
+- `StreamingMode.SSE` でテキストと関数呼び出しが混在する応答を扱う場合
+- thought text と通常テキストが混ざる場合
+- 応答全体の集約後に関数呼び出しを 1 回だけ実行したい場合
+
+**注意:** この機能は `StreamingMode.SSE` のみが対象であり、このガイドの中心である `StreamingMode.BIDI` には適用されません。
 
 ### 使い分け
 
@@ -450,7 +459,7 @@ run_config = RunConfig(
 
 ## まとめ
 
-このパートでは、RunConfig によって ADK Bidi-streaming セッションを
+このパートでは、RunConfig によって ADK Gemini Live API Toolkit セッションを
 宣言的に制御する方法を学びました。
 レスポンスモダリティ、BIDI/SSE 差、Session 関係、
 session resumption/context compression、

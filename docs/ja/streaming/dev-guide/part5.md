@@ -107,7 +107,7 @@ async for event in runner.run_live(
 
 ## 画像・動画の使い方
 
-ADK Bidi-streaming では画像/動画を JPEG フレームとして扱います。
+ADK Gemini Live API Toolkit では画像/動画を JPEG フレームとして扱います。
 一般的な HLS/mp4/H.264 ではなく、フレーム単位 JPEG 送信です。
 
 **仕様:**
@@ -315,12 +315,12 @@ run_config = RunConfig(
 
 ## まとめ
 
-このパートでは、ADK Bidi-streaming におけるマルチモーダル実装を学びました。
+このパートでは、ADK Gemini Live API Toolkit におけるマルチモーダル実装を学びました。
 音声仕様、native/half-cascade の違い、入出力ストリーミング、
 transcription、VAD、proactivity/affective dialog、voice 設定と互換性を理解することで、
 テキスト/音声/画像/動画を統合した本番向けリアルタイム AI アプリを設計できます。
 
 **Congratulations!**
-ADK Bidi-streaming Developer Guide の学習を完了しました。
+ADK Gemini Live API Toolkit Developer Guide の学習を完了しました。
 
 ← [Previous: Part 4: Understanding RunConfig](part4.md)

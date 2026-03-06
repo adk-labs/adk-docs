@@ -17,7 +17,7 @@
 
 ### 메서드 시그니처
 
-```python title='Source reference: <a href="https://github.com/google/adk-python/blob/29c1115959b0084ac1169748863b35323da3cf50/src/google/adk/runners.py" target="_blank">runners.py</a>'
+```python title='Source reference: <a href="https://github.com/google/adk-python/blob/427a983b18088bdc22272d02714393b0a779ecdf/src/google/adk/runners.py" target="_blank">runners.py</a>'
 async def run_live(
     self,
     *,
@@ -305,7 +305,7 @@ def my_tool(context: InvocationContext, query: str):
 
 ## 멀티 에이전트 워크플로 모범 사례
 
-ADK Bidi-streaming은 다음 패턴을 지원합니다.
+ADK Gemini Live API Toolkit은 다음 패턴을 지원합니다.
 
 - 단일 에이전트
 - coordinator + sub-agent (`transfer_to_agent`)
@@ -326,7 +326,7 @@ ADK가 다음 에이전트로 자동 전환합니다.
 
 ## 요약
 
-이번 파트에서는 ADK Bidi-streaming의 이벤트 처리 전반을 학습했습니다.
+이번 파트에서는 ADK Gemini Live API Toolkit의 이벤트 처리 전반을 학습했습니다.
 텍스트/오디오/전사/도구 호출/에러 이벤트 처리,
 `partial`/`interrupted`/`turn_complete` 기반 UI 상태 제어,
 JSON 직렬화와 네트워크 전송,

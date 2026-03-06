@@ -112,13 +112,16 @@
 
 * キーの存在：指示文字列で参照するキーがsession.stateに存在することを確認してください。キーが見つからない場合、エージェントはエラーをスローします。存在するかもしれないし、しないかもしれないキーを使用するには、キーの後に疑問符(?)を含めることができます(例: {topic?})。
 * データ型：キーに関連付けられた値は、文字列または簡単に文字列に変換できる型である必要があります。
-* エスケープ：指示にリテラルの波括弧を使用する必要がある場合（例：JSONのフォーマット）、それらをエスケープする必要があります。
+* リテラル波括弧：`{key}` 構文は、単一の波括弧の中にある有効な Python 識別子を状態変数プレースホルダーとして解釈します。JSON の例やテンプレート構文のようにリテラルの波括弧が必要な場合は、文字列ではなく `InstructionProvider` 関数を使用してください。
 
-#### `InstructionProvider`による状態の挿入のバイパス
+!!! note "f-string と二重波括弧"
+    一部の ADK 例では、`f"Topic: {{initial_topic}}"` のような Python f-string を使っています。ここでの `{{` と `}}` は **Python f-string のエスケープ**であり、ADK の構文ではありません。実行時に Python が `{{initial_topic}}` を `{initial_topic}` に変換し、その後で ADK が通常の状態変数プレースホルダーとして処理します。f-string を使わない場合は、単一波括弧 `{key}` を直接使ってください。
 
-場合によっては、状態挿入メカニズムをトリガーせずに、指示で`{{`と`}}`を文字通り使用したいことがあります。たとえば、同じ構文を使用するテンプレート言語を扱うエージェントの指示を書いている場合などです。
+#### 完全な制御が必要な場合に `InstructionProvider` を使う
 
-これを実現するには、`instruction`パラメータに文字列の代わりに関数を提供します。この関数は`InstructionProvider`と呼ばれます。`InstructionProvider`を使用すると、ADKは状態の挿入を試みず、指示文字列はそのままモデルに渡されます。
+場合によっては、状態変数プレースホルダーとして解釈されては困るリテラルの波括弧を含む指示文字列を完全に制御したいことがあります。たとえば、JSON の例やテンプレート構文を指示に含める場合です。
+
+これを実現するには、`instruction` パラメータに文字列の代わりに関数を渡します。この関数を `InstructionProvider` と呼びます。`InstructionProvider` を使うと、ADK は状態変数を挿入せず、返された文字列をそのままモデルに渡します。
 
 `InstructionProvider`関数は`ReadonlyContext`オブジェクトを受け取ります。これを使用して、指示を動的に構築する必要がある場合にセッション状態やその他のコンテキスト情報にアクセスできます。
 
@@ -130,9 +133,8 @@
 
     # これはInstructionProviderです
     def my_instruction_provider(context: ReadonlyContext) -> str:
-        # オプションでコンテキストを使用して指示を構築できます
-        # この例では、リテラルの波括弧を持つ静的な文字列を返します。
-        return "これは置換されない{{リテラルの波括弧}}を持つ指示です。"
+        # 状態挿入は発生せず、波括弧はリテラル文字として扱われます。
+        return '出力を JSON 形式で返してください: {"city": "<name>", "population": <number>}'
 
     agent = LlmAgent(
         model="gemini-2.0-flash",
@@ -141,13 +143,31 @@
     )
     ```
 
+=== "TypeScript"
+
+    ```typescript
+    import { LlmAgent, ReadonlyContext } from "@google/adk";
+
+    // これは InstructionProvider です
+    function myInstructionProvider(context: ReadonlyContext): string {
+        // 状態挿入は発生せず、波括弧はリテラル文字として扱われます。
+        return '出力を JSON 形式で返してください: {"city": "<name>", "population": <number>}';
+    }
+
+    const agent = new LlmAgent({
+        model: "gemini-2.5-flash",
+        name: "template_helper_agent",
+        instruction: myInstructionProvider
+    });
+    ```
+
 === "Go"
 
     ```go
     --8<-- "examples/go/snippets/sessions/instruction_provider/instruction_provider_example.go:bypass_state_injection"
     ```
 
-`InstructionProvider`を使用し、*かつ*指示に状態を挿入したい場合は、`inject_session_state`ユーティリティ関数を使用できます。
+`InstructionProvider` を使いながら指示に状態を挿入したい場合は、`inject_session_state` ユーティリティ関数を使用できます。有効な状態変数名に一致する `{key}` プレースホルダーだけが置換され、それ以外のテキスト（有効な識別子に一致しない内容を含む波括弧も含む）はそのまま残ります。
 
 === "Python"
 
@@ -157,8 +177,9 @@
     from google.adk.utils import instructions_utils
 
     async def my_dynamic_instruction_provider(context: ReadonlyContext) -> str:
-        template = "これは{adjective}な指示で、{{リテラルの波括弧}}を含みます。"
-        # これは'adjective'状態変数を挿入しますが、リテラルの波括弧はそのままにします。
+        template = "これは {adjective} な指示です。JSON の例は次のとおりです: {\"key\": \"value\"}."
+        # 'adjective' 状態変数は挿入されます。
+        # JSON の波括弧内は有効な識別子ではないため、そのまま残ります。
         return await instructions_utils.inject_session_state(template, context)
 
     agent = LlmAgent(

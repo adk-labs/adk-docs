@@ -178,4 +178,4 @@ UI에 다음 프롬프트를 입력하여 테스트해 보세요.
 
 ## 다음 단계: 커스텀 스트리밍 앱 구축
 
-[커스텀 오디오 스트리밍 앱](../../streaming/custom-streaming.md) 튜토리얼에서는 ADK Streaming과 [FastAPI](https://fastapi.tiangolo.com/)로 구축된 커스텀 비동기 웹 앱의 서버 및 클라이언트 코드를 개괄적으로 설명하며, 이를 통해 실시간 양방향 오디오 및 텍스트 통신을 구현하는 방법을 안내합니다.
+[Gemini Live API Toolkit 개발 가이드 시리즈](../../streaming/dev-guide/part1.md)는 ADK Streaming과 [FastAPI](https://fastapi.tiangolo.com/)로 구축한 커스텀 비동기 웹 앱의 서버와 클라이언트 코드를 개괄적으로 설명하며, 실시간 양방향 오디오 및 텍스트 통신을 구현하는 방법을 안내합니다.
