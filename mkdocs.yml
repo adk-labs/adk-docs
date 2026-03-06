@@ -324,6 +324,8 @@ plugins:
                 - OpenAPI 도구: tools-custom/openapi-tools.md
                 - 인증: tools-custom/authentication.md
                 - 도구 제한 사항: tools/limitations.md
+              - 에이전트용 스킬:
+                - skills/index.md
             - 에이전트 실행:
               - 에이전트 런타임:
                 - 에이전트 런타임: runtime/index.md
@@ -471,6 +473,8 @@ plugins:
                 - OpenAPIツール: tools-custom/openapi-tools.md
                 - 認証: tools-custom/authentication.md
                 - ツールの制限: tools/limitations.md
+              - エージェント向けスキル:
+                - skills/index.md
             - エージェントの実行:
               - エージェントランタイム:
                 - エージェントランタイム: runtime/index.md
