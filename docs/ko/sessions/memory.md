@@ -55,6 +55,13 @@ ADK는 각각 다른 사용 사례에 맞게 조정된 두 가지 고유한 `Mem
     memoryService := memory.InMemoryService()
     ```
 
+=== "Java"
+    ```java
+    import com.google.adk.memory.InMemoryMemoryService;
+
+    InMemoryMemoryService memoryService = new InMemoryMemoryService();
+    ```
+
 
 **예: 메모리 추가 및 검색**
 
@@ -160,6 +167,99 @@ ADK는 각각 다른 사용 사례에 맞게 조정된 두 가지 고유한 `Mem
     --8<-- "examples/go/snippets/sessions/memory_example/memory_example.go:full_example"
     ```
 
+=== "Java"
+
+    ```java
+    package com.google.adk.examples.sessions;
+
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.memory.InMemoryMemoryService;
+    import com.google.adk.runner.Runner;
+    import com.google.adk.sessions.InMemorySessionService;
+    import com.google.adk.sessions.Session;
+    import com.google.adk.tools.LoadMemoryTool;
+    import com.google.genai.types.Content;
+    import com.google.genai.types.Part;
+    import java.util.Optional;
+
+    public class MemoryExample {
+
+      private static final String APP_NAME = "memory_example_app";
+      private static final String USER_ID = "mem_user";
+      private static final String MODEL = "gemini-2.0-flash";
+
+      public static void main(String[] args) {
+        // 서비스
+        InMemorySessionService sessionService = new InMemorySessionService();
+        InMemoryMemoryService memoryService = new InMemoryMemoryService();
+
+        // 에이전트 1: 정보 캡처
+        LlmAgent infoCaptureAgent = new LlmAgent.Builder()
+            .model(MODEL)
+            .name("InfoCaptureAgent")
+            .instruction("사용자의 진술을 인정합니다.")
+            .build();
+
+        // 에이전트 2: 정보 회상
+        LlmAgent memoryRecallAgent = new LlmAgent.Builder()
+            .model(MODEL)
+            .name("MemoryRecallAgent")
+            .instruction("사용자의 질문에 답합니다. 답이 과거 대화에 있을 수 있다면 'load_memory' 도구를 사용하세요.")
+            .tools(new LoadMemoryTool())
+            .build();
+
+        // 1단계
+        System.out.println("--- 1단계: 정보 캡처 ---");
+        Runner runner1 = new Runner.Builder()
+            .agent(infoCaptureAgent)
+            .appName(APP_NAME)
+            .sessionService(sessionService)
+            .memoryService(memoryService)
+            .build();
+
+        String session1Id = "session_info";
+        sessionService.createSession(APP_NAME, USER_ID, null, session1Id).blockingGet();
+
+        Content userInput1 = Content.fromParts(Part.fromText("제가 가장 좋아하는 프로젝트는 Project Alpha입니다."));
+
+        runner1.runAsync(USER_ID, session1Id, userInput1)
+            .blockingForEach(event -> {
+              if (event.finalResponse() && event.content().isPresent()) {
+                System.out.println("에이전트 1 응답: " + event.content().get().parts().get(0).text().get());
+              }
+            });
+
+        // 메모리에 추가
+        System.out.println("\n--- 세션 1을 메모리에 추가 ---");
+        Session completedSession1 =
+            sessionService.getSession(APP_NAME, USER_ID, session1Id, Optional.empty()).blockingGet();
+        memoryService.addSessionToMemory(completedSession1).blockingAwait();
+        System.out.println("세션이 메모리에 추가되었습니다.");
+
+        // 2단계
+        System.out.println("\n--- 2단계: 정보 회상 ---");
+        Runner runner2 = new Runner.Builder()
+            .agent(memoryRecallAgent)
+            .appName(APP_NAME)
+            .sessionService(sessionService)
+            .memoryService(memoryService)
+            .build();
+
+        String session2Id = "session_recall";
+        sessionService.createSession(APP_NAME, USER_ID, null, session2Id).blockingGet();
+
+        Content userInput2 = Content.fromParts(Part.fromText("제가 가장 좋아하는 프로젝트는 무엇인가요?"));
+
+        runner2.runAsync(USER_ID, session2Id, userInput2)
+            .blockingForEach(event -> {
+              if (event.finalResponse() && event.content().isPresent()) {
+                System.out.println("에이전트 2 응답: " + event.content().get().parts().get(0).text().get());
+              }
+            });
+      }
+    }
+    ```
+
 
 ### 도구 내에서 메모리 검색
 
@@ -169,6 +269,20 @@ ADK는 각각 다른 사용 사례에 맞게 조정된 두 가지 고유한 `Mem
 
     ```go
     --8<-- "examples/go/snippets/sessions/memory_example/memory_example.go:tool_search"
+    ```
+
+=== "Java"
+
+    ```java
+    // 도구 구현 내부
+    public Single<ToolOutput> execute(ToolContext context) {
+      String query = ...; // 인수에서 쿼리 추출
+      return context.searchMemory(query)
+          .map(response -> {
+            // 응답 처리
+            return new ToolOutput(response.memories().toString());
+          });
+    }
     ```
 
 ## Vertex AI 메모리 뱅크
@@ -249,6 +363,19 @@ agent = Agent(
 )
 ```
 
+=== "Java"
+```java
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.tools.LoadMemoryTool;
+
+LlmAgent agent = new LlmAgent.Builder()
+    .model(MODEL_ID)
+    .name("weather_sentiment_agent")
+    .instruction("...")
+    .tools(new LoadMemoryTool())
+    .build();
+```
+
 세션에서 메모리를 추출하려면 `add_session_to_memory`를 호출해야 합니다. 예를 들어 콜백을 통해 이를 자동화할 수 있습니다.
 
 === "Python"
@@ -267,6 +394,25 @@ agent = Agent(
     tools=[adk.tools.preload_memory_tool.PreloadMemoryTool()],
     after_agent_callback=auto_save_session_to_memory_callback,
 )
+```
+
+=== "Java"
+```java
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.tools.LoadMemoryTool;
+import io.reactivex.rxjava3.core.Maybe;
+
+LlmAgent agent = new LlmAgent.Builder()
+    .model(MODEL)
+    .name("Generic_QA_Agent")
+    .instruction("사용자의 질문에 답합니다.")
+    .tools(new LoadMemoryTool())
+    .afterAgentCallback((context) -> {
+      return context.invocationContext().memoryService()
+          .addSessionToMemory(context.invocationContext().session())
+          .andThen(Maybe.empty());
+    })
+    .build();
 ```
 
 ## 고급 개념

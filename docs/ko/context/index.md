@@ -228,6 +228,9 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
         *   **아티팩트 메서드:** 설정된 `artifact_service`와 상호작용하기 위한 `load_artifact(filename)` 및 `save_artifact(filename, part)` 메서드.
         *   직접적인 `user_content` 접근.
 
+    *(참고: TypeScript에서는 `CallbackContext`와 `ToolContext`가 단일 `Context`
+    타입으로 통합됩니다.)*
+
     === "Python"
     
         ```python
@@ -246,6 +249,23 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
             # config_part = callback_context.load_artifact("model_config.json")
             print(f"호출 {callback_context.invocation_id}에 대해 모델 호출 #{call_count + 1} 준비 중")
             return None # 모델 호출 진행 허용
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: Context를 받는 콜백
+        import { Context, LlmRequest } from '@google/adk';
+        import { Content } from '@google/genai';
+
+        function myBeforeModelCb(context: Context, request: LlmRequest): Content | undefined {
+          const callCount = (context.state.get('model_calls') as number) || 0;
+          context.state.set('model_calls', callCount + 1); // 상태 수정
+
+          // const configPart = await context.loadArtifact('model_config.json');
+          console.log(`호출 ${context.invocationId}에 대해 모델 호출 #${callCount + 1} 준비 중`);
+          return undefined;
+        }
         ```
     
     === "Go"
@@ -314,8 +334,29 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
             # 선택적으로 메모리 검색 또는 아티팩트 목록 조회
             # relevant_docs = tool_context.search_memory(f"{query}와 관련된 정보")
             # available_files = tool_context.list_artifacts()
-    
+
             return {"result": f"{query}에 대한 데이터 가져옴."}
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: Context를 받는 도구 함수
+        import { Context } from '@google/adk';
+
+        function searchExternalApi(query: string, context: Context): { [key: string]: string } {
+          const apiKey = context.state.get('api_key') as string;
+          if (!apiKey) {
+            // const authConfig = new AuthConfig(...);
+            // context.requestCredential(authConfig);
+            return { status: '인증 필요' };
+          }
+
+          console.log(`API 키를 사용하여 쿼리 '${query}'에 대한 도구 실행 중. 호출: ${context.invocationId}`);
+          // context.searchMemory(`info related to ${query}`).then(...)
+          // context.listArtifacts().then(...)
+          return { result: `Data for ${query} fetched.` };
+        }
         ```
     
     === "Go"
@@ -392,6 +433,33 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
                 print(f"마지막 도구에서 임시 결과 발견: {last_tool_result}")
             # ... 콜백 로직 ...
         ```
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: 도구 함수 내부
+        import { Context } from '@google/adk';
+
+        async function myTool(context: Context) {
+          const userPref = context.state.get('user_display_preference', 'default_mode');
+          const apiEndpoint = context.state.get('app:api_endpoint');
+
+          if (userPref === 'dark_mode') {
+            // ... 다크 모드 로직 적용 ...
+          }
+          console.log(`사용 중인 API 엔드포인트: ${apiEndpoint}`);
+        }
+
+        // 의사 코드: 콜백 함수 내부
+        import { Context } from '@google/adk';
+
+        function myCallback(context: Context) {
+          const lastToolResult = context.state.get('temp:last_api_result');
+          if (lastToolResult) {
+            console.log(`마지막 도구의 임시 결과를 찾았습니다: ${lastToolResult}`);
+          }
+        }
+        ```
     
     === "Go"
 
@@ -450,8 +518,23 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
             agent_name = tool_context.agent_name
             inv_id = tool_context.invocation_id
             func_call_id = getattr(tool_context, 'function_call_id', 'N/A') # ToolContext에만 해당
-    
+
             print(f"로그: 호출={inv_id}, 에이전트={agent_name}, 함수호출ID={func_call_id} - 도구 실행됨.")
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: 어떤 컨텍스트에서든
+        import { Context } from '@google/adk';
+
+        function logToolUsage(context: Context) {
+          const agentName = context.agentName;
+          const invId = context.invocationId;
+          const functionCallId = context.functionCallId ?? 'N/A';
+
+          console.log(`로그: 호출=${invId}, 에이전트=${agentName}, 함수호출ID=${functionCallId} - 도구 실행됨.`);
+        }
         ```
     
     === "Go"
@@ -497,6 +580,23 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
         #         initial_text = ctx.user_content.parts[0].text
         #         print(f"초기 쿼리를 기억하는 에이전트 로직: {initial_text}")
         #     ...
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: 콜백 내부
+        import { Context } from '@google/adk';
+
+        function checkInitialIntent(context: Context) {
+          let initialText = 'N/A';
+          const userContent = context.userContent;
+          if (userContent?.parts?.length) {
+            initialText = userContent.parts[0].text ?? '텍스트가 아닌 입력';
+          }
+
+          console.log(`이 호출은 다음 사용자 입력으로 시작되었습니다: '${initialText}'`);
+        }
         ```
     
     === "Go"
@@ -558,6 +658,31 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
             return {"orders": ["order123", "order456"]}
         ```
 
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: 도구 1 - 사용자 ID 가져오기
+        import { Context } from '@google/adk';
+        import { v4 as uuidv4 } from 'uuid';
+
+        function getUserProfile(context: Context): Record<string, string> {
+          const userId = uuidv4();
+          context.state.set('temp:current_user_id', userId);
+          return { profile_status: 'ID generated' };
+        }
+
+        // 의사 코드: 도구 2 - 상태에 있는 사용자 ID 사용
+        function getUserOrders(context: Context): Record<string, string | string[]> {
+          const userId = context.state.get('temp:current_user_id');
+          if (!userId) {
+            return { error: 'User ID not found in state' };
+          }
+
+          console.log(`사용자 ID에 대한 주문 가져오기: ${userId}`);
+          return { orders: ['order123', 'order456'] };
+        }
+        ```
+
     === "Go"
 
         ```go
@@ -608,6 +733,20 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
             tool_context.state[state_key] = value
             print(f"사용자 선호도 '{preference}'을(를) '{value}'(으)로 설정")
             return {"status": "선호도 업데이트됨"}
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: 도구나 콜백이 선호도를 식별
+        import { Context } from '@google/adk';
+
+        function setUserPreference(context: Context, preference: string, value: string): Record<string, string> {
+          const stateKey = `user:${preference}`;
+          context.state.set(stateKey, value);
+          console.log(`사용자 선호도 '${preference}'을(를) '${value}'(으)로 설정`);
+          return { status: 'Preference updated' };
+        }
         ```
     
     === "Go"
@@ -666,6 +805,28 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
                 
                # 사용 예:
                # save_document_reference(callback_context, "gs://my-bucket/docs/report.pdf")
+               ```
+
+        === "TypeScript"
+
+               ```typescript
+               // 의사 코드: 콜백이나 초기 도구 내부
+               import { Context } from '@google/adk';
+               import type { Part } from '@google/genai';
+
+               async function saveDocumentReference(context: Context, filePath: string) {
+                 try {
+                   const artifactPart: Part = { text: filePath };
+                   const version = await context.saveArtifact('document_to_summarize.txt', artifactPart);
+                   console.log(`문서 참조 '${filePath}'를 아티팩트 버전 ${version}으로 저장했습니다`);
+                   context.state.set('temp:doc_artifact_name', 'document_to_summarize.txt');
+                 } catch (e) {
+                   console.error(`아티팩트 참조 저장 중 예기치 않은 오류: ${e}`);
+                 }
+               }
+
+               // 사용 예:
+               // saveDocumentReference(context, "gs://my-bucket/docs/report.pdf");
                ```
     
         === "Go"
@@ -765,6 +926,33 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
                 #      return {"error": f"문서 읽기 오류 {file_path}: {e}"}
             ```
 
+        === "TypeScript"
+
+            ```typescript
+            // 의사 코드: 요약기 도구 함수 내부
+            import { Context } from '@google/adk';
+
+            async function summarizeDocumentTool(context: Context): Promise<Record<string, string>> {
+              const artifactName = context.state.get('temp:doc_artifact_name') as string;
+              if (!artifactName) {
+                return { error: 'Document artifact name not found in state.' };
+              }
+
+              try {
+                const artifactPart = await context.loadArtifact(artifactName);
+                if (!artifactPart?.text) {
+                  return { error: `Could not load artifact or artifact has no text path: ${artifactName}` };
+                }
+
+                const filePath = artifactPart.text;
+                console.log(`로드된 문서 참조: ${filePath}`);
+                return { summary: `${filePath} contents summary` };
+              } catch (e) {
+                return { error: `Artifact or document read error: ${e}` };
+              }
+            }
+            ```
+
         === "Go"
 
             ```go
@@ -841,6 +1029,23 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
             except ValueError as e:
                 return {"error": f"아티팩트 서비스 오류: {e}"}
         ```
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: 도구 함수 내부
+        import { Context } from '@google/adk';
+
+        async function checkAvailableDocs(context: Context): Promise<Record<string, string[] | string>> {
+          try {
+            const artifactKeys = await context.listArtifacts();
+            console.log(`사용 가능한 아티팩트: ${artifactKeys}`);
+            return { available_docs: artifactKeys };
+          } catch (e) {
+            return { error: `Artifact service error: ${e}` };
+          }
+        }
+        ```
         
     === "Go"
 
@@ -870,12 +1075,14 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
 ### 도구 인증 처리 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
 </div>
 
 도구에 필요한 API 키나 다른 자격 증명을 안전하게 관리합니다.
 
-```python
+=== "Python"
+
+    ```python
 # 의사 코드: 인증이 필요한 도구
 from google.adk.tools import ToolContext
 from google.adk.auth import AuthConfig # 적절한 AuthConfig가 정의되었다고 가정
@@ -922,19 +1129,64 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
         # 자격 증명이 유효하지 않으면 상태 키를 지울 수도 있음
         # tool_context.state[AUTH_STATE_KEY] = None
         return {"error": "자격 증명 사용 실패"}
+    ```
 
-```
+=== "TypeScript"
+
+    ```typescript
+    // 의사 코드: 인증이 필요한 도구
+    import { Context } from '@google/adk';
+
+    interface AuthConfig {
+      credentialKey: string;
+      authScheme: { type: string };
+    }
+
+    const MY_API_AUTH_CONFIG: AuthConfig = {
+      credentialKey: 'my-api-key',
+      authScheme: { type: 'api-key' },
+    };
+    const AUTH_STATE_KEY = 'user:my_api_credential';
+
+    async function callSecureApi(context: Context, requestData: string): Promise<Record<string, string>> {
+      const credential = context.state.get(AUTH_STATE_KEY);
+
+      if (!credential) {
+        console.log('자격 증명을 찾을 수 없어 요청합니다...');
+        try {
+          context.requestCredential(MY_API_AUTH_CONFIG);
+          return { status: 'Authentication required. Please provide credentials.' };
+        } catch (e) {
+          return { error: `Auth or credential request error: ${e}` };
+        }
+      }
+
+      try {
+        const authCredentialObj = context.getAuthResponse(MY_API_AUTH_CONFIG);
+        context.state.set(AUTH_STATE_KEY, JSON.stringify(authCredentialObj));
+
+        console.log(`검색된 자격 증명을 사용하여 데이터로 API를 호출합니다: ${requestData}`);
+        const apiResult = `API result for ${requestData}`;
+        return { result: apiResult };
+      } catch (e) {
+        console.error(`자격 증명 사용 오류: ${e}`);
+        return { error: 'Failed to use credential' };
+      }
+    }
+    ```
 *기억하세요: `request_credential`은 도구를 일시 중지시키고 인증 필요성을 알립니다. 사용자/시스템이 자격 증명을 제공하면, 후속 호출에서 `get_auth_response`(또는 상태를 다시 확인)를 통해 도구가 계속 진행할 수 있습니다.* `tool_context.function_call_id`는 프레임워크에 의해 요청과 응답을 연결하는 데 암묵적으로 사용됩니다.
 
 ### 메모리 활용 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
 </div>
 
 과거 또는 외부 소스에서 관련 정보에 접근합니다.
 
-```python
+=== "Python"
+
+    ```python
 # 의사 코드: 메모리 검색을 사용하는 도구
 from google.adk.tools import ToolContext
 
@@ -952,17 +1204,41 @@ def find_related_info(tool_context: ToolContext, topic: str) -> dict:
         return {"error": f"메모리 서비스 오류: {e}"} # 예: 서비스가 구성되지 않음
     except Exception as e:
         return {"error": f"메모리 검색 중 예기치 않은 오류 발생: {e}"}
-```
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 의사 코드: 메모리 검색을 사용하는 도구
+    import { Context } from '@google/adk';
+
+    async function findRelatedInfo(context: Context, topic: string): Promise<Record<string, string>> {
+      try {
+        const searchResults = await context.searchMemory(`Information about ${topic}`);
+        if (searchResults.results?.length) {
+          console.log(`'${topic}'에 대해 ${searchResults.results.length}개의 메모리 결과를 찾았습니다`);
+          const topResultText = searchResults.results[0].text;
+          return { memory_snippet: topResultText };
+        } else {
+          return { message: '관련 메모리를 찾지 못했습니다.' };
+        }
+      } catch (e) {
+        return { error: `Memory service error: ${e}` };
+      }
+    }
+    ```
 
 ### 고급: 직접적인 `InvocationContext` 사용 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
 </div>
 
 대부분의 상호작용은 `CallbackContext`나 `ToolContext`를 통해 이루어지지만, 때로는 에이전트의 핵심 로직(`_run_async_impl`/`_run_live_impl`)이 직접 접근해야 할 때가 있습니다.
 
-```python
+=== "Python"
+
+    ```python
 # 의사 코드: 에이전트의 _run_async_impl 내부
 from google.adk.agents import BaseAgent
 from google.adk.agents.invocation_context import InvocationContext
@@ -985,7 +1261,7 @@ class MyControllingAgent(BaseAgent):
 
         # ... 일반적인 에이전트 처리 ...
         yield # ... 이벤트 ...
-```
+    ```
 
 `ctx.end_invocation = True`를 설정하는 것은 에이전트나 그 콜백/도구 내에서(각각의 컨텍스트 객체를 통해 기본 `InvocationContext`의 플래그에 접근하여 수정 가능) 전체 요청-응답 주기를 정상적으로 중지시키는 방법입니다.
 

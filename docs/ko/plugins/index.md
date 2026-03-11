@@ -77,7 +77,80 @@ class CountInvocationPlugin(BasePlugin):
   ) -> None:
     """LLM 요청 횟수를 계산합니다."""
     self.llm_request_count += 1
-    print(f"[Plugin] LLM request count: {self.llm_request_count}")
+print(f"[Plugin] LLM request count: {self.llm_request_count}")
+```
+
+**TypeScript**
+
+```typescript title="count_plugin.ts"
+import { BaseAgent, BasePlugin, Context } from "@google/adk";
+import type { LlmRequest, LlmResponse } from "@google/adk";
+import type { Content } from "@google/genai";
+
+export class CountInvocationPlugin extends BasePlugin {
+    public agentCount = 0;
+    public toolCount = 0;
+    public llmRequestCount = 0;
+
+    constructor() {
+        super("count_invocation");
+    }
+
+    async beforeAgentCallback(
+        agent: BaseAgent,
+        context: Context
+    ): Promise<Content | undefined> {
+        this.agentCount++;
+        console.log(`[Plugin] Agent run count: ${this.agentCount}`);
+        return undefined;
+    }
+
+    async beforeModelCallback(
+        context: Context,
+        llmRequest: LlmRequest
+    ): Promise<LlmResponse | undefined> {
+        this.llmRequestCount++;
+        console.log(`[Plugin] LLM request count: ${this.llmRequestCount}`);
+        return undefined;
+    }
+}
+```
+
+**Java**
+
+```java title="CountInvocationPlugin.java"
+import com.google.adk.agents.BaseAgent;
+import com.google.adk.agents.CallbackContext;
+import com.google.adk.models.LlmRequest;
+import com.google.adk.models.LlmResponse;
+import com.google.adk.plugins.BasePlugin;
+import com.google.genai.types.Content;
+import io.reactivex.rxjava3.core.Maybe;
+
+public class CountInvocationPlugin extends BasePlugin {
+  public int agentCount = 0;
+  public int toolCount = 0;
+  public int llmRequestCount = 0;
+
+  public CountInvocationPlugin() {
+    super("count_invocation");
+  }
+
+  @Override
+  public Maybe<Content> beforeAgentCallback(BaseAgent agent, CallbackContext callbackContext) {
+    agentCount++;
+    System.out.println("[Plugin] Agent run count: " + agentCount);
+    return Maybe.empty();
+  }
+
+  @Override
+  public Maybe<LlmResponse> beforeModelCallback(
+      CallbackContext callbackContext, LlmRequest.Builder llmRequest) {
+    llmRequestCount++;
+    System.out.println("[Plugin] LLM request count: " + llmRequestCount);
+    return Maybe.empty();
+  }
+}
 ```
 
 이 예시 코드는 에이전트 수명 주기 동안 이러한 작업의 실행 횟수를 계산하기 위해 `before_agent_callback` 및 `before_model_callback`에 대한 콜백을 구현합니다.
@@ -138,12 +211,134 @@ if __name__ == "__main__":
   asyncio.run(main())
 ```
 
+**TypeScript**
+
+```typescript
+import { InMemoryRunner, LlmAgent, FunctionTool } from "@google/adk";
+import { z } from "zod";
+import { CountInvocationPlugin } from "./count_plugin.ts";
+
+const HelloWorldInput = z.object({
+    query: z.string().describe("The query string to print."),
+});
+
+async function helloWorld({ query }: z.infer<typeof HelloWorldInput>): Promise<{ result: string }> {
+    const output = `Hello world: query is [${query}]`;
+    console.log(output);
+    return { result: output };
+}
+
+const helloWorldTool = new FunctionTool({
+    name: "hello_world",
+    description: "Prints hello world with user query.",
+    parameters: HelloWorldInput,
+    execute: helloWorld,
+});
+
+const rootAgent = new LlmAgent({
+    model: "gemini-2.5-flash",
+    name: "hello_world",
+    description: "Prints hello world with user query.",
+    instruction: `Use hello_world tool to print hello world and user query.`,
+    tools: [helloWorldTool],
+});
+
+async function main(): Promise<void> {
+    const prompt = "hello world";
+    const runner = new InMemoryRunner({
+        agent: rootAgent,
+        appName: "test_app_with_plugin",
+        plugins: [new CountInvocationPlugin()],
+    });
+
+    const session = await runner.sessionService.createSession({
+        appName: "test_app_with_plugin",
+        userId: "user",
+    });
+
+    for await (const event of runner.runAsync({
+        userId: "user",
+        sessionId: session.id,
+        newMessage: { role: "user", parts: [{ text: prompt }] },
+    })) {
+        console.log(`** Got event from ${event.author}`);
+    }
+}
+
+main();
+```
+
+**Java**
+
+```java
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.runner.InMemoryRunner;
+import com.google.adk.sessions.Session;
+import com.google.adk.tools.Annotations.Schema;
+import com.google.adk.tools.FunctionTool;
+import com.google.genai.types.Content;
+import com.google.genai.types.Part;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+public class Main {
+  public static class HelloTool {
+    @Schema(name = "hello_world", description = "Prints hello world with user query.")
+    public static Map<String, Object> helloWorld(
+        @Schema(name = "query", description = "The query string to print.") String query) {
+      String output = "Hello world: query is [" + query + "]";
+      System.out.println(output);
+      return Map.of("result", output);
+    }
+  }
+
+  public static void main(String[] args) {
+    LlmAgent rootAgent = LlmAgent.builder()
+        .model("gemini-2.0-flash")
+        .name("hello_world")
+        .description("Prints hello world with user query.")
+        .instruction("Use hello_world tool to print hello world and user query.")
+        .tools(FunctionTool.create(HelloTool.class, "helloWorld"))
+        .build();
+
+    InMemoryRunner runner = new InMemoryRunner(
+        rootAgent,
+        "test_app_with_plugin",
+        Collections.singletonList(new CountInvocationPlugin())
+    );
+
+    Session session = runner.sessionService().createSession(
+        "test_app_with_plugin",
+        "user"
+    ).blockingGet();
+
+    Content newContent = Content.builder()
+        .role("user")
+        .parts(List.of(Part.builder().text("hello world").build()))
+        .build();
+
+    runner.runAsync("user", session.id(), newContent).blockingForEach(event -> {
+      if (event.author() != null) {
+        System.out.println("** Got event from " + event.author());
+      }
+    });
+  }
+}
+```
+
 ### 플러그인으로 에이전트 실행
 
 평소처럼 플러그인을 실행합니다. 다음은 명령줄을 실행하는 방법을 보여줍니다.
 
 ```sh
 python3 -m path.to.main
+```
+
+**Java**
+
+```sh
+./mvnw -q clean compile exec:java -Dexec.mainClass="com.example.Main"
 ```
 
 플러그인은 [ADK 웹 인터페이스](../evaluate/#1-adk-web-run-evaluations-via-the-web-ui)에서 지원되지 않습니다. ADK 워크플로에서 플러그인을 사용하는 경우 웹 인터페이스 없이 워크플로를 실행해야 합니다.
@@ -251,6 +446,14 @@ async def on_user_message_callback(
 ) -> Optional[types.Content]:
 ```
 
+```java
+@Override
+public Maybe<Content> onUserMessageCallback(
+  InvocationContext invocationContext, Content userMessage) {
+  return Maybe.empty();
+}
+```
+
 ### 러너 시작 콜백
 
 *러너 시작* 콜백(`before_run_callback`)은 `Runner` 객체가 잠재적으로 수정된 사용자 메시지를 받아 실행을 준비할 때 발생합니다. `before_run_callback`은 여기서 실행되어 에이전트 로직이 시작되기 전에 전역 설정을 허용합니다.
@@ -265,6 +468,13 @@ async def on_user_message_callback(
 async def before_run_callback(
     self, *, invocation_context: InvocationContext
 ) -> Optional[types.Content]:
+```
+
+```java
+@Override
+public Maybe<Content> beforeRunCallback(InvocationContext invocationContext) {
+  return Maybe.empty();
+}
 ```
 
 ### 에이전트 실행 콜백
@@ -309,6 +519,14 @@ async def on_model_error_callback(
 ) -> Optional[LlmResponse]:
 ```
 
+```java
+@Override
+public Maybe<LlmResponse> onModelErrorCallback(
+  CallbackContext callbackContext, LlmRequest.Builder llmRequest, Throwable error) {
+  return Maybe.empty();
+}
+```
+
 ### 도구 콜백
 
 플러그인에 대한 도구 콜백 **(`before_tool`, `after_tool`, `on_tool_error`)**은 도구 실행 전후 또는 오류 발생 시 발생합니다. 플러그인 기능은 아래에 자세히 설명된 대로 오류 발생 시 콜백도 지원합니다.
@@ -342,6 +560,14 @@ async def on_tool_error_callback(
 ) -> Optional[dict]:
 ```
 
+```java
+@Override
+public Maybe<Map<String, Object>> onToolErrorCallback(
+  BaseTool tool, Map<String, Object> toolArgs, ToolContext toolContext, Throwable error) {
+  return Maybe.empty();
+}
+```
+
 ### 이벤트 콜백
 
 *이벤트 콜백*(`on_event_callback`)은 에이전트가 텍스트 응답 또는 도구 호출 결과와 같은 출력을 생성할 때 `Event` 객체로 출력할 때 발생합니다. `on_event_callback`은 각 이벤트에 대해 실행되어 클라이언트에 스트리밍되기 전에 이벤트를 수정할 수 있도록 합니다.
@@ -358,6 +584,13 @@ async def on_event_callback(
 ) -> Optional[Event]:
 ```
 
+```java
+@Override
+public Maybe<Event> onEventCallback(InvocationContext invocationContext, Event event) {
+  return Maybe.empty();
+}
+```
+
 ### 러너 종료 콜백
 
 *러너 종료* 콜백 **(`after_run_callback`)**은 에이전트가 전체 프로세스를 완료하고 모든 이벤트가 처리되면 `Runner`가 실행을 완료할 때 발생합니다. `after_run_callback`은 정리 및 최종 보고에 완벽한 최종 후크입니다.
@@ -372,6 +605,13 @@ async def on_event_callback(
 async def after_run_callback(
     self, *, invocation_context: InvocationContext
 ) -> Optional[None]:
+```
+
+```java
+@Override
+public Completable afterRunCallback(InvocationContext invocationContext) {
+  return Completable.complete();
+}
 ```
 
 ## 다음 단계

@@ -1,76 +1,70 @@
 # AI と一緒にコーディングする
 
-Agent Development Kit（ADK）ドキュメントは
-[`/llms.txt` 標準](https://llmstxt.org/) をサポートしており、
-大規模言語モデル（LLM）向けに最適化された機械可読インデックスを提供します。
-これにより、AI を活用する開発環境で ADK ドキュメントをコンテキストとして
-簡単に利用できます。
+AI コーディングアシスタントを使って Agent Development Kit（ADK）で
+エージェントを構築できます。プロジェクトに開発スキルをインストールするか、
+MCP サーバー経由で ADK ドキュメントを接続することで、コーディング
+エージェントに ADK の専門知識を与えられます。
 
-## llms.txt とは？
+- [**ADK Skills**](#adk-skills): ADK 開発スキルをプロジェクトへ直接
+  インストールします。
+- [**ADK Docs MCP Server**](#adk-docs-mcp-server): MCP サーバー経由で
+  コーディングツールを ADK ドキュメントへ接続します。
+- [**ADK Docs Index**](#adk-docs-index): `llms.txt` 標準に従う機械可読な
+  ドキュメントファイルです。
 
-`llms.txt` は、LLM 向けの地図として機能する標準テキストファイルで、
-重要なドキュメントページとその説明を一覧化します。
-これにより AI ツールは ADK ドキュメント構造を理解し、
-質問に答えるための関連情報を取得しやすくなります。
+## ADK Skills
 
-ADK ドキュメントでは、更新のたびに自動生成される
-次のファイルを提供しています。
+ADK は、API、コーディングパターン、デプロイ、評価をカバーする開発用
+[skills](https://agentskills.io/) セットを提供します。これらのスキルは
+Gemini CLI、Antigravity、Claude Code、Cursor を含む互換ツールで
+利用できます。
 
-File | Best For... | URL
----- | ----------- | ---
-**`llms.txt`** | 動的にリンクを取得できるツール | [`https://google.github.io/adk-docs/llms.txt`](https://google.github.io/adk-docs/llms.txt)
-**`llms-full.txt`** | サイト全体の静的テキストダンプを 1 ファイルで必要とするツール | [`https://google.github.io/adk-docs/llms-full.txt`](https://google.github.io/adk-docs/llms-full.txt)
+ADK 開発スキルをインストールするには、プロジェクトディレクトリで次を
+実行します。
 
-## 開発ツールでの利用
+```bash
+npx skills add google/adk-docs/skills -y
+```
 
-これらのファイルを使うことで、AI コーディングアシスタントに ADK 知識を
-与えることができます。これにより、エージェントはタスク計画やコード生成時に
-ADK ドキュメントを自律的に検索・参照できます。
+次を含む [GitHub 上の ADK
+skills](https://github.com/google/adk-docs/tree/main/skills) を参照して
+ください。
+
+| Skill | 説明 |
+|-------|------|
+| `adk-cheatsheet` | Python API クイックリファレンスとドキュメントインデックス |
+| `adk-deploy-guide` | Agent Engine と Cloud Run のデプロイ |
+| `adk-dev-guide` | 開発ライフサイクルとコーディングガイドライン |
+| `adk-eval-guide` | 評価手法とスコアリング |
+| `adk-observability-guide` | トレーシング、ロギング、統合 |
+| `adk-scaffold` | プロジェクトスキャフォールディング |
+
+## ADK Docs MCP Server
+
+MCP サーバーを使うようにコーディングツールを設定すれば、ADK ドキュメントを
+検索して読み込めます。以下は一般的なツール向けの設定手順です。
 
 ### Gemini CLI
 
-[Gemini CLI](https://geminicli.com/) は
-[ADK Docs Extension](https://github.com/derailed-dash/adk-docs-ext) を使うよう
-設定できます。
-
-**インストール:**
-
-拡張をインストールするには、次のコマンドを実行します。
+[Gemini CLI](https://geminicli.com/) に ADK ドキュメント MCP サーバーを
+追加するには、[ADK Docs
+Extension](https://github.com/derailed-dash/adk-docs-ext) をインストール
+します。
 
 ```bash
 gemini extensions install https://github.com/derailed-dash/adk-docs-ext
 ```
 
-**使い方:**
-
-インストール後、拡張は自動で有効になります。
-Gemini CLI で ADK について質問すると、`llms.txt` と ADK ドキュメントを使って
-正確な回答やコード生成を行います。
-
-たとえば Gemini CLI で次のように質問できます。
-
-> Agent Development Kit を使って function tool を作るには？
-
----
-
 ### Antigravity
 
-[Antigravity](https://antigravity.google/) IDE は、
-ADK の `llms.txt` を参照するカスタム MCP サーバーを実行することで
-ADK ドキュメントにアクセスできます。
+[Antigravity](https://antigravity.google/) に ADK ドキュメント MCP サーバーを
+追加するには（[`uv`](https://docs.astral.sh/uv/) が必要です）:
 
-**前提条件:**
-
-この構成では、手動インストールなしでドキュメントサーバーを実行するため
-`uvx` を使用します。[`uv`](https://docs.astral.sh/uv/) をインストールしてください。
-
-**設定:**
-
-1. エディタ上部のエージェントパネルにある **...**（more）メニューから MCP ストアを開きます。
-2. **Manage MCP Servers** をクリックします。
-3. **View raw config** をクリックします。
-4. `mcp_config.json` に次のエントリを追加します。
-   これが最初の MCP サーバーなら、コードブロック全体を貼り付けて構いません。
+1. エディタ上部のエージェントパネルにある **...**（more）メニューから
+   MCP ストアを開きます。
+2. **Manage MCP Servers** をクリックし、**View raw config** を
+   選択します。
+3. `mcp_config.json` に次を追加します。
 
     ```json
     {
@@ -91,62 +85,23 @@ ADK ドキュメントにアクセスできます。
     }
     ```
 
-MCP サーバー管理の詳細は
-[Antigravity MCP ドキュメント](https://antigravity.google/docs/mcp) を参照してください。
-
-**使い方:**
-
-設定後、コーディングエージェントに次のような指示を与えられます。
-
-> ADK ドキュメントを使って、Gemini 2.5 Pro を使うマルチツールエージェントを作って。
-> モックの天気検索ツールとカスタム計算ツールを含めて、
-> `adk run` で検証して。
-
----
-
 ### Claude Code
 
-[Claude Code](https://code.claude.com/docs/en/overview) は
-[MCP サーバー](https://code.claude.com/docs/en/mcp) を追加することで、
-ADK ドキュメントを参照できるようになります。
-
-**インストール:**
-
-Claude Code に ADK ドキュメント用 MCP サーバーを追加するには、次のコマンドを実行します。
+[Claude Code](https://code.claude.com/docs/en/overview) に ADK ドキュメント
+MCP サーバーを追加するには、次を実行します。
 
 ```bash
 claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls AgentDevelopmentKit:https://google.github.io/adk-docs/llms.txt --transport stdio
 ```
 
-**使い方:**
-
-インストール後、MCP サーバーは自動で有効になります。
-Claude Code で ADK について質問すると、`llms.txt` と ADK ドキュメントを使って
-正確な回答やコード生成を行います。
-
-たとえば Claude Code で次のように質問できます。
-
-> Agent Development Kit を使って function tool を作るには？
-
----
-
 ### Cursor
 
-[Cursor](https://cursor.com/) IDE は、
-ADK の `llms.txt` を参照するカスタム MCP サーバーを実行することで
-ADK ドキュメントにアクセスできます。
+[Cursor](https://cursor.com/) に ADK ドキュメント MCP サーバーを追加するには
+（[`uv`](https://docs.astral.sh/uv/) が必要です）:
 
-**前提条件:**
-
-この構成では、手動インストールなしでドキュメントサーバーを実行するため
-`uvx` を使用します。[`uv`](https://docs.astral.sh/uv/) をインストールしてください。
-
-**設定:**
-
-1. **Cursor Settings** を開き、**Tools & MCP** タブへ移動します。
-2. **New MCP Server** をクリックすると、`mcp.json` 編集画面が開きます。
-3. `mcp.json` に次のエントリを追加します。
-   これが最初の MCP サーバーなら、コードブロック全体を貼り付けて構いません。
+1. **Cursor Settings** を開き、**Tools & MCP** タブに移動します。
+2. **New MCP Server** をクリックして `mcp.json` を開きます。
+3. `mcp.json` に次を追加します。
 
     ```json
     {
@@ -167,23 +122,19 @@ ADK ドキュメントにアクセスできます。
     }
     ```
 
-MCP サーバー管理の詳細は
-[Cursor MCP ドキュメント](https://cursor.com/docs/context/mcp) を参照してください。
+### Other Tools
 
-**使い方:**
+MCP サーバーをサポートする任意のコーディングツールでも、上記と同じ
+サーバー設定を使えます。利用するツールの MCP 設定に合わせて、
+Antigravity または Cursor セクションの JSON 例を調整してください。
 
-設定後、コーディングエージェントに次のような指示を与えられます。
+## ADK Docs Index
 
-> ADK ドキュメントを使って、Gemini 2.5 Pro を使うマルチツールエージェントを作って。
-> モックの天気検索ツールとカスタム計算ツールを含めて、
-> `adk run` で検証して。
+ADK ドキュメントは [`llms.txt` 標準](https://llmstxt.org/) に従う
+機械可読ファイルとして提供されます。これらのファイルはドキュメント更新の
+たびに生成され、常に最新状態に保たれます。
 
----
-
-### その他のツール
-
-`llms.txt` 標準をサポートしている、または URL からドキュメントを取り込める
-任意のツールで、これらのファイルを活用できます。
-ツールのナレッジベース設定または MCP サーバー設定に
-`https://google.github.io/adk-docs/llms.txt`（または `llms-full.txt`）を
-指定してください。
+| File | Description | URL |
+|------|-------------|-----|
+| `llms.txt` | リンク付きのドキュメントインデックス | [`google.github.io/adk-docs/llms.txt`](https://google.github.io/adk-docs/llms.txt) |
+| `llms-full.txt` | ドキュメント全体を 1 ファイルで提供 | [`google.github.io/adk-docs/llms-full.txt`](https://google.github.io/adk-docs/llms-full.txt) |
