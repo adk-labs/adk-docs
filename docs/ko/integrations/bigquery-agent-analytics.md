@@ -17,7 +17,7 @@ catalog_tags: ["observability", "google"]
 
 BigQuery Agent Analytics 플러그인은 심층적인 에이전트 동작 분석을 위한 견고한 솔루션을 제공하여 Agent Development Kit(ADK)를 크게 확장합니다. ADK 플러그인 아키텍처와 **BigQuery Storage Write API**를 사용해 중요한 운영 이벤트를 Google BigQuery 테이블에 직접 캡처하고 기록하므로, 디버깅, 실시간 모니터링, 포괄적인 오프라인 성능 평가를 위한 고급 기능을 활용할 수 있습니다.
 
-버전 1.26.0에서는 **Auto Schema Upgrade**(기존 테이블에 새 컬럼을 안전하게 추가), **Tool Provenance** 추적(`LOCAL`, `MCP`, `SUB_AGENT`, `A2A`, `TRANSFER_AGENT`), 그리고 사람-개입형 상호작용을 위한 **HITL Event Tracing**이 추가되었습니다.
+버전 1.26.0에서는 **Auto Schema Upgrade**(기존 테이블에 새 컬럼을 안전하게 추가), **Tool Provenance** 추적(`LOCAL`, `MCP`, `SUB_AGENT`, `A2A`, `TRANSFER_AGENT`), 그리고 사람-개입형 상호작용을 위한 **HITL Event Tracing**이 추가되었습니다. 버전 1.27.0에서는 **Automatic View Creation**(평탄화된 쿼리 친화적 이벤트 뷰 생성)이 추가되었습니다.
 
 !!! example "미리보기 릴리스"
 
@@ -35,6 +35,7 @@ BigQuery Agent Analytics 플러그인은 심층적인 에이전트 동작 분석
 -   **분산 추적:** `trace_id`, `span_id` 기반의 OpenTelemetry 스타일 추적을 기본 지원하여 에이전트 실행 흐름을 시각화할 수 있습니다.
 -   **Tool Provenance:** 각 도구 호출이 어디서 왔는지(로컬 함수, MCP 서버, 하위 에이전트, A2A 원격 에이전트, transfer agent)를 추적합니다.
 -   **Human-in-the-Loop(HITL) 추적:** 자격 증명 요청, 확인 프롬프트, 사용자 입력 요청을 위한 전용 이벤트 유형을 제공합니다.
+-   **쿼리 가능한 이벤트 뷰(Queryable Event Views):** 이벤트 유형별 평탄화 BigQuery 뷰(예: `v_llm_request`, `v_tool_completed`)를 자동 생성하여 JSON 페이로드를 펼친 다운스트림 분석을 단순화합니다.
 
 기록되는 에이전트 이벤트 데이터는 ADK 이벤트 유형에 따라 달라집니다. 자세한 내용은 [이벤트 유형 및 페이로드](#event-types)를 참고하세요.
 
@@ -176,6 +177,7 @@ LIMIT 20;
 -   **`log_session_metadata`** (`bool`, 기본값: `True`): `True`이면 `session_id`, `app_name`, `user_id`, 그리고 세션 `state` 딕셔너리(예: gchat thread-id, customer_id 같은 커스텀 상태)를 포함한 세션 정보를 `attributes` 컬럼에 기록합니다.
 -   **`custom_tags`** (`Dict[str, Any]`, 기본값: `{}`): 모든 이벤트의 `attributes` 컬럼에 포함할 정적 태그 딕셔너리입니다(예: `{"env": "prod", "version": "1.0"}`).
 -   **`auto_schema_upgrade`** (`bool`, 기본값: `True`): 활성화하면 플러그인 스키마가 진화할 때 기존 테이블에 새 컬럼을 자동으로 추가합니다. 컬럼 삭제나 변경 없이 additive change만 수행합니다. 테이블의 버전 레이블(`adk_schema_version`) 덕분에 스키마 버전당 한 번만 diff가 수행됩니다. 기본적으로 켜 둬도 안전합니다.
+-   **`create_views`** (`bool`, 기본값: `True`): 1.27.0에서 추가되었습니다. 활성화하면 `content`나 `attributes` 같은 구조화된 JSON 데이터를 평탄한 타입 컬럼으로 펼치는 이벤트 유형별 BigQuery 뷰를 자동 생성하여 SQL 쿼리를 크게 단순화합니다.
 
 다음 코드는 BigQuery Agent Analytics 플러그인용 구성을 정의하는 예시입니다.
 
@@ -215,6 +217,7 @@ config = BigQueryLoggerConfig(
     content_formatter=redact_dollar_amounts, # Redact the dollar amounts in the logging content
     queue_max_size=10000, # Max events to hold in memory
     auto_schema_upgrade=True, # Automatically add new columns to existing tables
+    create_views=True, # Automatically create per-event-type views
     # retry_config=RetryConfig(max_retries=3), # Optional: Configure retries
 )
 
@@ -287,6 +290,23 @@ CREATE TABLE `your-gcp-project-id.adk_agent_logs.agent_events`
 PARTITION BY DATE(timestamp)
 CLUSTER BY event_type, agent, user_id;
 ```
+
+### 자동 생성 뷰 (1.27.0+)
+
+`create_views=True`(1.27.0 이상에서 기본값)이면 플러그인이 각 이벤트 유형에 대해,
+공통 JSON 구조를 평탄한 타입 컬럼으로 펼친 뷰를 자동 생성합니다. 따라서 복잡한
+`JSON_VALUE` 또는 `JSON_QUERY` 함수를 직접 작성하지 않고도 SQL을 훨씬 단순하게
+작성할 수 있습니다.
+
+예를 들어 `v_llm_request` 뷰는 다음 스키마를 포함합니다.
+
+| 필드명 | 유형 | 설명 |
+|:---|:---|:---|
+| **(공통 컬럼)** | `VARIES` | `timestamp`, `event_type`, `agent`, `session_id`, `invocation_id`, `user_id`, `trace_id`, `span_id`, `parent_span_id`, `status`, `error_message`, `is_truncated` 같은 표준 메타데이터를 포함합니다. |
+| **model** | `STRING` | 요청에 사용된 LLM 모델 이름입니다. |
+| **request_content** | `JSON` | 원시 LLM 요청 페이로드입니다. |
+| **llm_config** | `JSON` | LLM에 전달된 구성 매개변수(temperature, top_p 등)입니다. |
+| **tools** | `JSON` | 요청 시 사용 가능했던 도구 배열입니다. |
 
 ### 이벤트 유형 및 페이로드 {#event-types}
 

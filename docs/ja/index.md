@@ -12,6 +12,14 @@ hide:
 
 Agent Development Kit (ADK) は、**AIエージェントの開発とデプロイ**のための、柔軟でモジュール化されたフレームワークです。GeminiやGoogleエコシステム向けに最適化されていますが、ADKは**モデル非依存**かつ**デプロイ環境非依存**であり、**他のフレームワークとの互換性**も考慮して構築されています。ADKは、エージェント開発をよりソフトウェア開発に近い感覚で行えるように設計されており、開発者が単純なタスクから複雑なワークフローに及ぶエージェントアーキテクチャを容易に作成、デプロイ、オーケストレーションできるようにします。
 
+??? tip "お知らせ: ADK Python Skills がリリースされました！"
+
+    ADK Python 開発向けの [Agent Skills](https://agentskills.io/) を使うと、
+    AI 支援型の開発環境で ADK エージェントをすばやく、より効果的に
+    コーディングできます。詳しくは、
+    [AI を使ったコーディング](/adk-docs/ja/tutorials/coding-with-ai/#adk-skills)
+    の ADK Skills ドキュメントを参照してください。
+
 <div id="centered-install-tabs" class="install-command-container" markdown="1">
 
 <p class="get-started-text" style="text-align: center;">使用を開始:</p>

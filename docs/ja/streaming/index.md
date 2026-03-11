@@ -1,12 +1,12 @@
-# ADK における Gemini Live API Toolkit
+# ADK Gemini Live API Toolkit
 
 <div class="language-support-tag">
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">実験的機能</span>
 </div>
 
-ADKの双方向（Bidi）ストリーミング（ライブ）は、[Gemini Live API](https://ai.google.dev/gemini-api/docs/live)の低遅延な双方向音声・映像インタラクション機能をAIエージェントに追加します。
+ADK の Gemini Live API Toolkit は、[Gemini Live API](https://ai.google.dev/gemini-api/docs/live) の低遅延な双方向音声・映像インタラクション機能を AI エージェントに追加します。
 
-双方向ストリーミング（ライブ）モードを使うことで、エンドユーザーに自然で人間らしい音声会話体験を提供できます。ユーザーが音声コマンドでエージェントの応答を割り込むことも可能です。ストリーミング対応エージェントは、テキスト・音声・映像入力を処理し、テキストおよび音声出力を返せます。
+ADK Gemini Live API Toolkit を使うと、エンドユーザーに自然で人間らしい音声会話体験を提供できます。ユーザーは音声コマンドでエージェントの応答に割り込むこともできます。ストリーミング対応エージェントは、テキスト・音声・映像入力を処理し、テキストおよび音声出力を返せます。
 
 <div class="video-grid">
   <div class="video-item">

@@ -27,3 +27,4 @@ ADK はモデル統合のために主に2種類の仕組みを使用します。
       *  [LiteLLM モデル](/adk-docs/agents/models/litellm/)
       *  [Ollama モデルホスティング](/adk-docs/agents/models/ollama/)
       *  [vLLM モデルホスティング](/adk-docs/agents/models/vllm/)
+      *  [LiteRT-LM モデルホスティング](/adk-docs/ja/agents/models/litert-lm/)

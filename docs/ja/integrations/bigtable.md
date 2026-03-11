@@ -15,6 +15,8 @@ Bigtable 連携を提供するツールセットは次のとおりです:
 
 * **`list_instances`**: Google Cloud プロジェクト内の Bigtable インスタンスを取得します。
 * **`get_instance_info`**: Google Cloud プロジェクト内のインスタンスメタデータ情報を取得します。
+* **`list_clusters`**: Google Cloud プロジェクト内の Bigtable インスタンスにある Bigtable クラスターを取得します。
+* **`get_cluster_info`**: Google Cloud プロジェクト内の Bigtable インスタンスにあるクラスターのメタデータ情報を取得します。
 * **`list_tables`**: GCP Bigtable インスタンス内のテーブルを取得します。
 * **`get_table_info`**: GCP Bigtable のテーブルメタデータ情報を取得します。
 * **`execute_sql`**: Bigtable テーブルで SQL クエリを実行し、結果を取得します。

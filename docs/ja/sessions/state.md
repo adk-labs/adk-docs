@@ -347,6 +347,8 @@
 
 **3. `CallbackContext`または`ToolContext`経由（コールバックとツールに推奨）**
 
+*(注: TypeScript では、これは統合された `Context` 型で行います。)*
+
 エージェントのコールバック（例：`on_before_agent_call`、`on_after_agent_call`）やツール関数内で状態を変更する場合、関数に提供される`CallbackContext`または`ToolContext`の`state`属性を使用するのが最善です。
 
 *   `callback_context.state['my_key'] = my_value`
@@ -376,6 +378,28 @@
 
         # 状態の変更はイベントのstate_deltaに自動的に含まれます
         # ... コールバック/ツールの残りのロジック ...
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // エージェントのコールバックまたはツール関数内
+    import { Context } from "@google/adk";
+
+    function myCallbackOrToolFunction(
+        context: Context,
+        // ... その他のパラメータ ...
+    ) {
+        // 既存の状態を更新
+        const count = context.state.get("user_action_count", 0);
+        context.state.set("user_action_count", count + 1);
+
+        // 新しい状態を追加
+        context.state.set("temp:last_operation_status", "success");
+
+        // 状態の変更はイベントの stateDelta に自動的に含まれます
+        // ... コールバック/ツールの残りのロジック ...
+    }
     ```
 
 === "Go"
@@ -427,7 +451,7 @@
 3. **スレッドセーフではない：** 競合状態や更新の損失につながる可能性があります。
 4. **タイムスタンプ/ロジックを無視する：** `last_update_time`を更新したり、関連するイベントロジックをトリガーしたりしません。
 
-**推奨事項：** `output_key`、`EventActions.state_delta`（イベントを手動で作成する場合）、またはそれぞれのスコープ内にあるときに`CallbackContext`や`ToolContext`オブジェクトの`state`プロパティを変更することで状態を更新する方法に固執してください。これらの方法は、信頼性が高く、追跡可能で、永続的な状態管理を保証します。`session.state`への直接アクセス（`SessionService`から取得したセッションから）は、状態を*読み取る*場合にのみ使用してください。
+**推奨事項：** `output_key`、`EventActions.state_delta`（イベントを手動で作成する場合）、またはそれぞれのスコープ内にあるときに`CallbackContext`や`ToolContext`オブジェクト、あるいは TypeScript の統合 `Context` オブジェクトの`state`プロパティを変更することで状態を更新する方法に固執してください。これらの方法は、信頼性が高く、追跡可能で、永続的な状態管理を保証します。`session.state`への直接アクセス（`SessionService`から取得したセッションから）は、状態を*読み取る*場合にのみ使用してください。
 
 ### 状態設計のベストプラクティス再確認
 

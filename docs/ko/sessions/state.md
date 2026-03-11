@@ -347,6 +347,8 @@
 
 **3. `CallbackContext` 또는 `ToolContext`를 통해 (콜백 및 도구에 권장)**
 
+*(참고: TypeScript에서는 이것이 통합된 `Context` 타입을 통해 수행됩니다.)*
+
 에이전트 콜백(예: `on_before_agent_call`, `on_after_agent_call`)이나 도구 함수 내에서 상태를 수정하는 것은 함수에 제공된 `CallbackContext` 또는 `ToolContext`의 `state` 속성을 사용하는 것이 가장 좋습니다.
 
 *   `callback_context.state['my_key'] = my_value`
@@ -376,6 +378,28 @@
 
         # 상태 변경은 이벤트의 state_delta에 자동으로 포함됩니다
         # ... 나머지 콜백/도구 로직 ...
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 에이전트 콜백 또는 도구 함수 내에서
+    import { Context } from "@google/adk";
+
+    function myCallbackOrToolFunction(
+        context: Context,
+        // ... 다른 매개변수들 ...
+    ) {
+        // 기존 상태 업데이트
+        const count = context.state.get("user_action_count", 0);
+        context.state.set("user_action_count", count + 1);
+
+        // 새 상태 추가
+        context.state.set("temp:last_operation_status", "success");
+
+        // 상태 변경은 이벤트의 stateDelta에 자동으로 포함됩니다
+        // ... 나머지 콜백/도구 로직 ...
+    }
     ```
 
 === "Go"

@@ -322,6 +322,8 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 
 에이전트 로직(특히 콜백 또는 도구 내)에서 아티팩트와 상호작용하는 주요 방법은 `CallbackContext` 및 `ToolContext` 객체에서 제공하는 메서드를 통하는 것입니다. 이 메서드들은 `ArtifactService`가 관리하는 기본 스토리지 세부 정보를 추상화합니다.
 
+*(참고: TypeScript에서는 `CallbackContext`와 `ToolContext`가 단일 `Context` 타입으로 통합됩니다.)*
+
 ### 전제 조건: `ArtifactService` 설정
 
 컨텍스트 객체를 통해 아티팩트 메서드를 사용하기 전에, `Runner`를 초기화할 때 **반드시** [`BaseArtifactService` 구현체](#available-implementations)의 인스턴스(예: [`InMemoryArtifactService`](#inmemoryartifactservice) 또는 [`GcsArtifactService`](#gcsartifactservice))를 제공해야 합니다.
@@ -351,6 +353,27 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     )
     ```
     만약 `InvocationContext`에 `artifact_service`가 설정되어 있지 않으면(`Runner`에 전달되지 않은 경우), 컨텍스트 객체에서 `save_artifact`, `load_artifact` 또는 `list_artifacts`를 호출하면 `ValueError`가 발생합니다.
+
+=== "TypeScript"
+
+    ```typescript
+    import { LlmAgent, InMemoryRunner, InMemoryArtifactService, InMemorySessionService } from '@google/adk';
+
+    // 에이전트 정의
+    const agent = new LlmAgent({name: "my_agent", model: "gemini-2.5-flash"});
+
+    // 원하는 아티팩트 서비스 인스턴스화
+    const artifactService = new InMemoryArtifactService();
+
+    // Runner에 제공
+    const runner = new InMemoryRunner({
+        agent: agent,
+        appName: "artifact_app",
+        sessionService: new InMemorySessionService(),
+        artifactService: artifactService, // 서비스는 여기에 제공되어야 합니다
+    });
+    // artifactService가 구성되지 않으면 context 객체에서 artifact 메서드를 호출할 때 오류가 발생합니다.
+    ```
 
 === "Go"
 
@@ -406,7 +429,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 
 ### 메서드 접근
 
-아티팩트 상호작용 메서드는 `CallbackContext`(에이전트 및 모델 콜백에 전달) 및 `ToolContext`(도구 콜백에 전달)의 인스턴스에서 직접 사용할 수 있습니다. `ToolContext`는 `CallbackContext`를 상속한다는 점을 기억하세요.
+아티팩트 상호작용 메서드는 Python, Go, Java에서는 `CallbackContext`(에이전트 및 모델 콜백에 전달) 및 `ToolContext`(도구 콜백에 전달)의 인스턴스에서 직접 사용할 수 있고, TypeScript에서는 통합된 `Context`에서 사용할 수 있습니다.
 
 #### 아티팩트 저장하기
 
@@ -442,6 +465,28 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
         #   callback_context: CallbackContext = ... # 컨텍스트 획득
         #   report_data = b'...' # PDF 바이트를 담고 있다고 가정
         #   await save_generated_report_py(callback_context, report_data)
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        import type { Part } from '@google/genai';
+        import { createPartFromBase64 } from '@google/genai';
+        import { Context } from '@google/adk';
+
+        async function saveGeneratedReport(context: Context, reportBytes: Uint8Array): Promise<void> {
+            /** 생성된 PDF 보고서 바이트를 아티팩트로 저장합니다. */
+            const reportArtifact: Part = createPartFromBase64(reportBytes.toString('base64'), "application/pdf");
+
+            const filename = "generated_report.pdf";
+
+            try {
+                const version = await context.saveArtifact(filename, reportArtifact);
+                console.log(`TypeScript 아티팩트 '${filename}'을(를) 버전 ${version}(으)로 성공적으로 저장했습니다.`);
+            } catch (e: any) {
+                console.error(`TypeScript 아티팩트 저장 오류: ${e.message}. Runner에 ArtifactService가 설정되었나요?`);
+            }
+        }
         ```
 
     === "Go"
@@ -534,6 +579,35 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
         # async def main_py():
         #   callback_context: CallbackContext = ... # 컨텍스트 획득
         #   await process_latest_report_py(callback_context)
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        import { Context } from '@google/adk';
+
+        async function processLatestReport(context: Context): Promise<void> {
+            /** 최신 보고서 아티팩트를 로드하고 데이터를 처리합니다. */
+            const filename = "generated_report.pdf";
+            try {
+                // 최신 버전 로드
+                const reportArtifact = await context.loadArtifact(filename);
+
+                if (reportArtifact?.inlineData) {
+                    console.log(`최신 TypeScript 아티팩트 '${filename}'을(를) 성공적으로 로드했습니다.`);
+                    console.log(`MIME 타입: ${reportArtifact.inlineData.mimeType}`);
+                    // reportArtifact.inlineData.data(base64 문자열) 처리
+                    const pdfData = Buffer.from(reportArtifact.inlineData.data, 'base64');
+                    console.log(`보고서 크기: ${pdfData.length} 바이트.`);
+                    // ... 추가 처리 ...
+                } else {
+                    console.log(`TypeScript 아티팩트 '${filename}'을(를) 찾을 수 없습니다.`);
+                }
+
+            } catch (e: any) {
+                console.error(`TypeScript 아티팩트 로드 오류: ${e.message}. ArtifactService가 설정되었나요?`);
+            }
+        }
         ```
 
     === "Go"
@@ -666,6 +740,28 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
         # list_files_tool = FunctionTool(func=list_user_files_py)
         ```
 
+    === "TypeScript"
+
+        ```typescript
+        import { Context } from '@google/adk';
+
+        async function listUserFiles(context: Context): Promise<string> {
+            /** 사용 가능한 아티팩트 목록을 조회하는 도구입니다. */
+            try {
+                const availableFiles = await context.listArtifacts();
+                if (!availableFiles?.length) {
+                    return "저장된 아티팩트가 없습니다.";
+                } else {
+                    const fileListStr = availableFiles.map((fname) => `- ${fname}`).join("\n");
+                    return `사용 가능한 TypeScript 아티팩트는 다음과 같습니다:\n${fileListStr}`;
+                }
+            } catch (e: any) {
+                console.error(`TypeScript 아티팩트 목록 조회 오류: ${e.message}. ArtifactService가 설정되었나요?`);
+                return "오류: TypeScript 아티팩트 목록을 조회할 수 없습니다.";
+            }
+        }
+        ```
+
     === "Go"
 
         ```go
@@ -761,7 +857,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
         }
         ```
 
-이러한 저장, 로드, 목록 조회 메서드들은 선택한 백엔드 스토리지 구현체와 상관없이 Python의 컨텍스트 객체를 사용하든, Java에서 `BaseArtifactService`와 직접 상호작용하든 ADK 내에서 바이너리 데이터 영속성을 관리하는 편리하고 일관된 방법을 제공합니다.
+이러한 저장, 로드, 목록 조회 메서드들은 선택한 백엔드 스토리지 구현체와 상관없이 Python/TypeScript의 컨텍스트 객체를 사용하든, Java에서 `BaseArtifactService`와 직접 상호작용하든 ADK 내에서 바이너리 데이터 영속성을 관리하는 편리하고 일관된 방법을 제공합니다.
 
 ## 사용 가능한 구현체
 

@@ -1,12 +1,12 @@
-# ADK의 Gemini Live API Toolkit
+# ADK Gemini Live API Toolkit
 
 <div class="language-support-tag">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">실험적 기능</span>
 </div>
   
-ADK의 양방향(Bidi) 스트리밍(live)은 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live)의 저지연 양방향 음성/영상 상호작용 기능을 AI 에이전트에 추가합니다.
+ADK의 Gemini Live API Toolkit은 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live)의 저지연 양방향 음성 및 영상 상호작용 기능을 AI 에이전트에 추가합니다.
 
-양방향 스트리밍(라이브) 모드에서는 사용자에게 자연스럽고 사람 같은 음성 대화 경험을 제공할 수 있으며, 사용자가 음성 명령으로 에이전트 응답을 중단하는 것도 가능합니다. 스트리밍 에이전트는 텍스트, 오디오, 비디오 입력을 처리하고 텍스트와 오디오 출력을 제공합니다.
+양방향 스트리밍(라이브) 모드에서는 사용자에게 자연스럽고 사람 같은 음성 대화 경험을 제공할 수 있으며, 사용자가 음성 명령으로 에이전트 응답을 중단하는 것도 가능합니다. 스트리밍 에이전트는 텍스트, 오디오, 비디오 입력을 처리하고 텍스트 및 오디오 출력을 제공합니다.
 
 <div class="video-grid">
   <div class="video-item">

@@ -15,6 +15,8 @@ catalog_tags: ["data", "google"]
 
 * **`list_instances`**: Google Cloud 프로젝트의 Bigtable 인스턴스를 조회합니다.
 * **`get_instance_info`**: Google Cloud 프로젝트의 인스턴스 메타데이터 정보를 조회합니다.
+* **`list_clusters`**: Google Cloud 프로젝트의 Bigtable 인스턴스 안에 있는 Bigtable 클러스터를 조회합니다.
+* **`get_cluster_info`**: Google Cloud 프로젝트의 Bigtable 인스턴스 안에 있는 클러스터 메타데이터 정보를 조회합니다.
 * **`list_tables`**: GCP Bigtable 인스턴스의 테이블을 조회합니다.
 * **`get_table_info`**: GCP Bigtable의 테이블 메타데이터 정보를 조회합니다.
 * **`execute_sql`**: Bigtable 테이블에서 SQL 쿼리를 실행하고 결과를 조회합니다.
