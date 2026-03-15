@@ -1,12 +1,12 @@
 # エージェント設定でエージェントを構築する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-preview">実験的</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-preview">実験的</span>
 </div>
 
 ADKエージェント設定機能を使用すると、コードを記述することなくADKワークフローを構築できます。エージェント設定は、エージェントの簡単な説明を含むYAML形式のテキストファイルを使用するため、誰でもADKエージェントを組み立てて実行できます。以下は、基本的なエージェント設定定義の簡単な例です。
 
-```
+```yaml
 name: assistant_agent
 model: gemini-2.5-flash
 description: ユーザーの質問に回答できるヘルパーエージェント。
@@ -72,7 +72,7 @@ Google Agent Development Kitライブラリをインストールし、Gemini API
 
 1.  テキストエディタを使用して、以下に示すようにエージェント設定ファイル`my_agent/root_agent.yaml`を編集します。
 
-```
+```yaml
 # yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
 name: assistant_agent
 model: gemini-2.5-flash
@@ -95,6 +95,41 @@ ADKの[サンプルリポジトリ](https://github.com/search?q=repo%3Agoogle%2F
     -   `adk api_server` - 他のアプリケーションで使用できるサービスとしてエージェントを実行します。
 
 エージェントの実行方法の詳細については、[クイックスタート](/adk-docs/ja/get-started/quickstart/#run-your-agent)の*エージェントを実行する*トピックを参照してください。ADKコマンドラインオプションの詳細については、[ADK CLIリファレンス](/adk-docs/ja/api-reference/cli/)を参照してください。
+
+### プログラムから実行する
+
+CLI を経由せず、コード内で設定ベースのエージェントを直接動的に読み込み、実行することもできます。このユーティリティは設定を読み込み、適切なエージェントクラス（`LlmAgent` など）を `BaseAgent` サブクラスとして透過的にインスタンス化します。
+
+=== "Python"
+
+    ```python
+    import asyncio
+    from google.adk.agents import config_agent_utils
+    from google.adk.agents import Runner
+
+    async def main():
+        # YAML 設定ファイルからエージェントを直接読み込む
+        agent = config_agent_utils.from_config("my_agent/root_agent.yaml")
+        # ...
+
+    if __name__ == "__main__":
+        asyncio.run(main())
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.BaseAgent;
+    import com.google.adk.agents.ConfigAgentUtils;
+
+    public class AgentApp {
+        public static void main(String[] args) throws Exception {
+            // YAML 設定ファイルからエージェントを直接読み込む
+            BaseAgent agent = ConfigAgentUtils.fromConfig("my_agent/root_agent.yaml");
+            // ...
+        }
+    }
+    ```
 
 ## サンプルの設定
 
@@ -172,7 +207,7 @@ sub_agents:
 エージェント設定機能は実験的なものであり、次の制限が含まれています。
 
 -   **モデルのサポート:** 現在、Geminiモデルのみがサポートされています。サードパーティモデルとの統合は進行中です。
--   **プログラミング言語:** エージェント設定機能は現在、ツールやプログラミングコードを必要とするその他の機能に対してPythonコードのみをサポートしています。
+-   **プログラミング言語:** エージェント設定機能は現在、ツールやプログラミングコードを必要とするその他の機能に対してPython と Java コードをサポートしています。
 -   **ADKツールのサポート:** 次のADKツールはエージェント設定機能でサポートされていますが、*すべてのツールが完全にサポートされているわけではありません*。
     -   `google_search`
     -   `load_artifacts`

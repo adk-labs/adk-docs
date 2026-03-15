@@ -206,36 +206,88 @@ Vertex AI 上の Gemini はエンタープライズ向け機能、セキュリ�
 
     この方法はこのモデルアダプターを直接インスタンス化する場合に適しています。
 
-    ```python
-    root_agent = Agent(
-        model='gemini-2.5-flash',
-        ...
-        generate_content_config=types.GenerateContentConfig(
-            ...
-            http_options=types.HttpOptions(
-                ...
-                retry_options=types.HttpRetryOptions(initial_delay=1, attempts=2),
-                ...
-            ),
-            ...
-        )
-    ```
+    === "Python"
+
+        ```python
+        root_agent = Agent(
+            model='gemini-2.5-flash',
+            # ...
+            generate_content_config=types.GenerateContentConfig(
+                # ...
+                http_options=types.HttpOptions(
+                    # ...
+                    retry_options=types.HttpRetryOptions(initial_delay=1, attempts=2),
+                    # ...
+                ),
+                # ...
+            )
+        ```
+
+    === "Java"
+
+        ```java
+        import com.google.adk.agents.LlmAgent;
+        import com.google.genai.types.GenerateContentConfig;
+        import com.google.genai.types.HttpOptions;
+        import com.google.genai.types.HttpRetryOptions;
+
+        // ...
+
+        LlmAgent rootAgent = LlmAgent.builder()
+            .model("gemini-2.5-flash")
+            // ...
+            .generateContentConfig(GenerateContentConfig.builder()
+                // ...
+                .httpOptions(HttpOptions.builder()
+                    // ...
+                    .retryOptions(HttpRetryOptions.builder().initialDelay(1.0).attempts(2).build())
+                    // ...
+                    .build())
+                // ...
+                .build())
+            .build();
+        ```
 
     **オプション 2:** このモデルアダプター自体のリトライオプションを設定します。
 
-    この方法はアダプターインスタンスを別途取得しない場合に適しています。
+    この方法はこのモデルアダプターのインスタンスを自分で生成する場合に適しています。
 
-    ```python
-    from google.genai import types
+    === "Python"
 
-    # ...
+        ```python
+        from google.genai import types
 
-    agent = Agent(
-        model=Gemini(
-        retry_options=types.HttpRetryOptions(initial_delay=1, attempts=2),
+        # ...
+
+        agent = Agent(
+            model=Gemini(
+            retry_options=types.HttpRetryOptions(initial_delay=1, attempts=2),
+            )
         )
-    )
-    ```
+        ```
+
+    === "Java"
+
+        ```java
+        import com.google.adk.agents.LlmAgent;
+        import com.google.adk.models.Gemini;
+        import com.google.genai.Client;
+        import com.google.genai.types.HttpOptions;
+        import com.google.genai.types.HttpRetryOptions;
+
+        // ...
+
+        LlmAgent agent = LlmAgent.builder()
+            .model(Gemini.builder()
+                .modelName("gemini-2.5-flash")
+                .apiClient(Client.builder()
+                    .httpOptions(HttpOptions.builder()
+                        .retryOptions(HttpRetryOptions.builder().initialDelay(1.0).attempts(2).build())
+                        .build())
+                    .build())
+                .build())
+            .build();
+        ```
 
 ## Gemini Interactions API {#interactions-api}
 
@@ -251,23 +303,45 @@ Gemini の [Interactions API](https://ai.google.dev/gemini-api/docs/interactions
 次のコード断片のように、Gemini モデル設定で
 `use_interactions_api=True` を設定すると Interactions API を有効化できます。
 
-```python
-from google.adk.agents.llm_agent import Agent
-from google.adk.models.google_llm import Gemini
-from google.adk.tools.google_search_tool import GoogleSearchTool
+=== "Python"
 
-root_agent = Agent(
-    model=Gemini(
-        model="gemini-2.5-flash",
-        use_interactions_api=True,  # Enable Interactions API
-    ),
-    name="interactions_test_agent",
-    tools=[
-        GoogleSearchTool(bypass_multi_tools_limit=True),  # Converted to function tool
-        get_current_weather,  # Custom function tool
-    ],
-)
-```
+    ```python
+    from google.adk.agents.llm_agent import Agent
+    from google.adk.models.google_llm import Gemini
+    from google.adk.tools.google_search_tool import GoogleSearchTool
+
+    root_agent = Agent(
+        model=Gemini(
+            model="gemini-2.5-flash",
+            use_interactions_api=True,  # Interactions API を有効化
+        ),
+        name="interactions_test_agent",
+        tools=[
+            GoogleSearchTool(bypass_multi_tools_limit=True),  # 関数ツールに変換
+            get_current_weather,  # カスタム関数ツール
+        ],
+    )
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.models.Gemini;
+    import com.google.adk.tools.GoogleSearchTool;
+
+    // 注: Java ADK の Interactions API サポートは現在開発中です。
+    LlmAgent rootAgent = LlmAgent.builder()
+        .model(Gemini.builder()
+            .modelName("gemini-2.5-flash")
+            .build())
+        .name("interactions_test_agent")
+        .tools(
+            GoogleSearchTool.INSTANCE, // 検索ツール
+            getCurrentWeather // カスタム関数ツール
+        )
+        .build();
+    ```
 
 完全なサンプルは
 [Interactions API サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/interactions_api)を参照してください。
@@ -279,10 +353,20 @@ Interactions API は、[Google Search](/adk-docs/tools/built-in-tools/#google-se
 `bypass_multi_tools_limit` パラメータで組み込みツールをカスタムツールとして動作させることで
 回避できます。
 
-```python
-# Use bypass_multi_tools_limit=True to convert google_search to a function tool
-GoogleSearchTool(bypass_multi_tools_limit=True)
-```
+=== "Python"
+
+    ```python
+    # Use bypass_multi_tools_limit=True to convert google_search to a function tool
+    GoogleSearchTool(bypass_multi_tools_limit=True)
+    ```
+
+=== "Java"
+
+    ```java
+    // 注: bypassMultiToolsLimit は Python 専用です。
+    // Java ではツールインスタンスをそのまま使用します。
+    GoogleSearchTool.INSTANCE;
+    ```
 
 この例では、組み込み google_search を関数呼び出しツール（GoogleSearchAgentTool）
 へ変換し、カスタム関数ツールと共存できるようにします。
