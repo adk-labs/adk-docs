@@ -258,20 +258,20 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
     
         ```python
-        # 의사 코드: CallbackContext를 받는 콜백
-        from google.adk.agents.callback_context import CallbackContext
+        # 예제: Context를 받는 콜백 (TypeScript에서는 CallbackContext가 Context로 통합됨)
+        from google.adk.agents.context import Context
         from google.adk.models import LlmRequest
         from google.genai import types
         from typing import Optional
     
-        def my_before_model_cb(callback_context: CallbackContext, request: LlmRequest) -> Optional[types.Content]:
+        def my_before_model_cb(context: Context, request: LlmRequest) -> Optional[types.Content]:
             # 상태 읽기/쓰기 예제
-            call_count = callback_context.state.get("model_calls", 0)
-            callback_context.state["model_calls"] = call_count + 1 # 상태 수정
+            call_count = context.state.get("model_calls", 0)
+            context.state["model_calls"] = call_count + 1 # 상태 수정 (delta 추적)
     
             # 선택적으로 아티팩트 로드
-            # config_part = callback_context.load_artifact("model_config.json")
-            print(f"호출 {callback_context.invocation_id}에 대해 모델 호출 #{call_count + 1} 준비 중")
+            # config_part = context.load_artifact("model_config.json")
+            print(f"호출 {context.invocation_id}에 대해 모델 호출 #{call_count + 1} 준비 중")
             return None # 모델 호출 진행 허용
         ```
 
@@ -283,12 +283,14 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
         import { Content } from '@google/genai';
 
         function myBeforeModelCb(context: Context, request: LlmRequest): Content | undefined {
+          // 상태 읽기/쓰기 예제
           const callCount = (context.state.get('model_calls') as number) || 0;
           context.state.set('model_calls', callCount + 1); // 상태 수정
 
+          // 선택적으로 아티팩트 로드
           // const configPart = await context.loadArtifact('model_config.json');
           console.log(`호출 ${context.invocationId}에 대해 모델 호출 #${callCount + 1} 준비 중`);
-          return undefined;
+          return undefined; // 모델 호출 진행 허용
         }
         ```
     
@@ -306,20 +308,20 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
     
         ```java
-        // 의사 코드: CallbackContext를 받는 콜백
+        // 예제: CallbackContext를 받는 콜백
         import com.google.adk.agents.CallbackContext;
         import com.google.adk.models.LlmRequest;
-        import com.google.genai.types.Content;
-        import java.util.Optional;
+        import com.google.adk.models.LlmResponse;
+        import io.reactivex.rxjava3.core.Maybe;
     
-        public Maybe<LlmResponse> myBeforeModelCb(CallbackContext callbackContext, LlmRequest request){
+        public Maybe<LlmResponse> myBeforeModelCb(CallbackContext callbackContext, LlmRequest request) {
             // 상태 읽기/쓰기 예제
-            callCount = callbackContext.state().get("model_calls", 0)
-            callbackContext.state().put("model_calls") = callCount + 1 # 상태 수정
+            int callCount = (int) callbackContext.state().getOrDefault("model_calls", 0);
+            callbackContext.state().put("model_calls", callCount + 1); // 상태 수정 (delta 추적)
     
             // 선택적으로 아티팩트 로드
             // Maybe<Part> configPart = callbackContext.loadArtifact("model_config.json");
-            System.out.println("모델 호출 " + callCount + 1 + " 준비 중");
+            System.out.println("호출 " + callbackContext.invocationId() + "에 대해 모델 호출 " + (callCount + 1) + " 준비 중");
             return Maybe.empty(); // 모델 호출 진행 허용
         }
         ```
@@ -337,7 +339,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
     
         ```python
-        # 의사 코드: ToolContext를 받는 도구 함수
+        # 예제: ToolContext를 받는 도구 함수
         from google.adk.tools import ToolContext
         from typing import Dict, Any
     
@@ -368,18 +370,23 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
         // 의사 코드: Context를 받는 도구 함수
         import { Context } from '@google/adk';
 
+        // 이 함수가 FunctionTool에 의해 래핑되었다고 가정
         function searchExternalApi(query: string, context: Context): { [key: string]: string } {
           const apiKey = context.state.get('api_key') as string;
           if (!apiKey) {
+            // 필요한 인증 설정 정의
             // const authConfig = new AuthConfig(...);
-            // context.requestCredential(authConfig);
+            // context.requestCredential(authConfig); // 자격 증명 요청
+            // requestCredential이 actions 속성을 자동으로 갱신함
             return { status: '인증 필요' };
           }
 
           console.log(`API 키를 사용하여 쿼리 '${query}'에 대한 도구 실행 중. 호출: ${context.invocationId}`);
+          // 서비스 접근은 TypeScript에서 보통 비동기이므로,
+          // 실제로 재사용하려면 이 함수를 async로 선언해야 합니다.
           // context.searchMemory(`info related to ${query}`).then(...)
           // context.listArtifacts().then(...)
-          return { result: `Data for ${query} fetched.` };
+          return { result: `${query}에 대한 데이터 가져옴.` };
         }
         ```
     
@@ -394,21 +401,20 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
     
         ```java
-        // 의사 코드: ToolContext를 받는 도구 함수
+        // 예제: ToolContext를 받는 도구 함수
         import com.google.adk.tools.ToolContext;
-        import java.util.HashMap;
         import java.util.Map;
     
         // 이 함수가 FunctionTool에 의해 래핑되었다고 가정
-        public Map<String, Object> searchExternalApi(String query, ToolContext toolContext){
-            String apiKey = toolContext.state.get("api_key");
-            if(apiKey.isEmpty()){
+        public Map<String, Object> searchExternalApi(String query, ToolContext toolContext) {
+            String apiKey = (String) toolContext.state().getOrDefault("api_key", "");
+            if (apiKey.isEmpty()) {
                 // 필요한 인증 설정 정의
                 // authConfig = AuthConfig(...);
-                // toolContext.requestCredential(authConfig); # 자격 증명 요청
+                // toolContext.requestCredential(authConfig); // 자격 증명 요청
                 // 'actions' 속성을 사용하여 인증 요청이 이루어졌음을 신호
-                ...
                 return Map.of("status", "인증 필요");
+            }
     
             // API 키 사용...
             System.out.println("API 키를 사용하여 쿼리 " + query + "에 대해 도구 실행 중.");
@@ -435,7 +441,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
     
         ```python
-        # 의사 코드: 도구 함수 내에서
+        # 예제: 도구 함수에서
         from google.adk.tools import ToolContext
     
         def my_tool(tool_context: ToolContext, **kwargs):
@@ -448,11 +454,11 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
             print(f"사용 중인 API 엔드포인트: {api_endpoint}")
             # ... 나머지 도구 로직 ...
     
-        # 의사 코드: 콜백 함수 내에서
-        from google.adk.agents.callback_context import CallbackContext
+        # 예제: 콜백 함수에서
+        from google.adk.agents.context import Context
     
-        def my_callback(callback_context: CallbackContext, **kwargs):
-            last_tool_result = callback_context.state.get("temp:last_api_result") # 임시 상태 읽기
+        def my_callback(context: Context, **kwargs):
+            last_tool_result = context.state.get("temp:last_api_result") # 임시 상태 읽기
             if last_tool_result:
                 print(f"마지막 도구에서 임시 결과 발견: {last_tool_result}")
             # ... 콜백 로직 ...
@@ -461,7 +467,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "TypeScript"
 
         ```typescript
-        // 의사 코드: 도구 함수 내부
+        // 의사 코드: 도구 함수에서
         import { Context } from '@google/adk';
 
         async function myTool(context: Context) {
@@ -472,9 +478,10 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
             // ... 다크 모드 로직 적용 ...
           }
           console.log(`사용 중인 API 엔드포인트: ${apiEndpoint}`);
+          // ... 나머지 도구 로직 ...
         }
 
-        // 의사 코드: 콜백 함수 내부
+        // 의사 코드: 콜백 함수에서
         import { Context } from '@google/adk';
 
         function myCallback(context: Context) {
@@ -482,6 +489,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
           if (lastToolResult) {
             console.log(`마지막 도구의 임시 결과를 찾았습니다: ${lastToolResult}`);
           }
+          // ... 콜백 로직 ...
         }
         ```
     
@@ -503,31 +511,30 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
     
         ```java
-        // 의사 코드: 도구 함수 내에서
+        // 예제: 도구 함수에서
         import com.google.adk.tools.ToolContext;
     
-        public void myTool(ToolContext toolContext){
-           String userPref = toolContext.state().get("user_display_preference");
-           String apiEndpoint = toolContext.state().get("app:api_endpoint"); // 앱 수준 상태 읽기
-           if(userPref.equals("dark_mode")){
+        public void myTool(ToolContext toolContext) {
+           String userPref = (String) toolContext.state().getOrDefault("user_display_preference", "default_mode");
+           String apiEndpoint = (String) toolContext.state().get("app:api_endpoint"); // 앱 수준 상태 읽기
+           if ("dark_mode".equals(userPref)) {
                 // ... 다크 모드 로직 적용 ...
-                pass
             }
-           System.out.println("사용 중인 API 엔드포인트: " + api_endpoint);
+           System.out.println("사용 중인 API 엔드포인트: " + apiEndpoint);
            // ... 나머지 도구 로직 ...
         }
     
     
-        // 의사 코드: 콜백 함수 내에서
+        // 예제: 콜백 함수에서
         import com.google.adk.agents.CallbackContext;
     
-            public void myCallback(CallbackContext callbackContext){
-                String lastToolResult = (String) callbackContext.state().get("temp:last_api_result"); // 임시 상태 읽기
-            }
-            if(!(lastToolResult.isEmpty())){
+        public void myCallback(CallbackContext callbackContext) {
+            String lastToolResult = (String) callbackContext.state().get("temp:last_api_result"); // 임시 상태 읽기
+            if (lastToolResult != null && !lastToolResult.isEmpty()) {
                 System.out.println("마지막 도구에서 임시 결과 발견: " + lastToolResult);
             }
             // ... 콜백 로직 ...
+        }
         ```
 
 *   **현재 식별자 가져오기:** 로깅이나 현재 작업을 기반으로 한 사용자 정의 로직에 유용합니다.
@@ -535,7 +542,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
     
         ```python
-        # 의사 코드: 모든 컨텍스트에서 (ToolContext 예시)
+        # 예제: 모든 컨텍스트에서 (ToolContext 예시)
         from google.adk.tools import ToolContext
     
         def log_tool_usage(tool_context: ToolContext, **kwargs):
@@ -549,7 +556,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "TypeScript"
 
         ```typescript
-        // 의사 코드: 어떤 컨텍스트에서든
+        // 의사 코드: 모든 컨텍스트에서
         import { Context } from '@google/adk';
 
         function logToolUsage(context: Context) {
@@ -572,15 +579,15 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
     
         ```java
-        // 의사 코드: 모든 컨텍스트에서 (ToolContext 예시)
-         import com.google.adk.tools.ToolContext;
+        // 예제: 모든 컨텍스트에서 (ToolContext 예시)
+        import com.google.adk.tools.ToolContext;
     
-         public void logToolUsage(ToolContext toolContext){
-                    String agentName = toolContext.agentName;
-                    String invId = toolContext.invocationId;
-                    String functionCallId = toolContext.functionCallId().get(); // ToolContext에만 해당
-                    System.out.println("로그: 호출= " + invId + " 에이전트= " + agentName);
-                }
+        public void logToolUsage(ToolContext toolContext) {
+            String agentName = toolContext.agentName();
+            String invId = toolContext.invocationId();
+            String functionCallId = toolContext.functionCallId().orElse("N/A"); // ToolContext에만 해당
+            System.out.println("로그: 호출=" + invId + ", 에이전트=" + agentName + ", 함수호출ID=" + functionCallId + " - 도구 실행됨.");
+        }
         ```
 
 *   **초기 사용자 입력 접근:** 현재 호출을 시작한 메시지를 다시 참조합니다.
@@ -588,17 +595,17 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
     
         ```python
-        # 의사 코드: 콜백에서
-        from google.adk.agents.callback_context import CallbackContext
+        # 예제: 콜백에서
+        from google.adk.agents.context import Context
     
-        def check_initial_intent(callback_context: CallbackContext, **kwargs):
+        def check_initial_intent(context: Context, **kwargs):
             initial_text = "N/A"
-            if callback_context.user_content and callback_context.user_content.parts:
-                initial_text = callback_context.user_content.parts[0].text or "텍스트 아닌 입력"
+            if context.user_content and context.user_content.parts:
+                initial_text = context.user_content.parts[0].text or "텍스트가 아닌 입력"
     
             print(f"이 호출은 사용자 입력으로 시작되었습니다: '{initial_text}'")
     
-        # 의사 코드: 에이전트의 _run_async_impl에서
+        # 예제: 에이전트의 _run_async_impl에서
         # async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
         #     if ctx.user_content and ctx.user_content.parts:
         #         initial_text = ctx.user_content.parts[0].text
@@ -609,7 +616,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "TypeScript"
 
         ```typescript
-        // 의사 코드: 콜백 내부
+        // 의사 코드: 콜백에서
         import { Context } from '@google/adk';
 
         function checkInitialIntent(context: Context) {
@@ -637,15 +644,16 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
     
         ```java
-        // 의사 코드: 콜백에서
+        // 예제: 콜백에서
         import com.google.adk.agents.CallbackContext;
+        import com.google.genai.types.Content;
     
-        public void checkInitialIntent(CallbackContext callbackContext){
+        public void checkInitialIntent(CallbackContext callbackContext) {
             String initialText = "N/A";
-            if((!(callbackContext.userContent().isEmpty())) && (!(callbackContext.userContent().parts.isEmpty()))){
-                initialText = cbx.userContent().get().parts().get().get(0).text().get();
+            if (callbackContext.userContent().isPresent() && callbackContext.userContent().get().parts() != null && !callbackContext.userContent().get().parts().get().isEmpty()) {
+                initialText = callbackContext.userContent().get().parts().get().get(0).text().orElse("텍스트가 아닌 입력");
                 ...
-                System.out.println("이 호출은 사용자 입력으로 시작되었습니다: " + initialText)
+                System.out.println("이 호출은 사용자 입력으로 시작되었습니다: " + initialText);
             }
         }
         ```
@@ -661,7 +669,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
 
         ```python
-        # 의사 코드: 도구 1 - 사용자 ID 가져오기
+        # 예제: 도구 1 - 사용자 ID 가져오기
         from google.adk.tools import ToolContext
         import uuid
     
@@ -671,7 +679,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
             tool_context.state["temp:current_user_id"] = user_id
             return {"profile_status": "ID 생성됨"}
     
-        # 의사 코드: 도구 2 - 상태에서 사용자 ID 사용
+        # 예제: 도구 2 - 상태에서 사용자 ID 사용
         def get_user_orders(tool_context: ToolContext) -> dict:
             user_id = tool_context.state.get("temp:current_user_id")
             if not user_id:
@@ -720,25 +728,26 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
 
         ```java
-        // 의사 코드: 도구 1 - 사용자 ID 가져오기
+        // 예제: 도구 1 - 사용자 ID 가져오기
         import com.google.adk.tools.ToolContext;
+        import java.util.Map;
         import java.util.UUID;
     
-        public Map<String, String> getUserProfile(ToolContext toolContext){
+        public Map<String, String> getUserProfile(ToolContext toolContext) {
             String userId = UUID.randomUUID().toString();
             // 다음 도구를 위해 ID를 상태에 저장
-            tool_context.state().put("temp:current_user_id", user_id);
+            toolContext.state().put("temp:current_user_id", userId);
             return Map.of("profile_status", "ID 생성됨");
         }
     
-        // 의사 코드: 도구 2 - 상태에서 사용자 ID 사용
-        public  Map<String, String> getUserOrders(ToolContext toolContext){
-            String userId = toolContext.state().get("temp:current_user_id");
-            if(userId.isEmpty()){
+        // 예제: 도구 2 - 상태에서 사용자 ID 사용
+        public Map<String, String> getUserOrders(ToolContext toolContext) {
+            String userId = (String) toolContext.state().get("temp:current_user_id");
+            if (userId == null || userId.isEmpty()) {
                 return Map.of("error", "상태에서 사용자 ID를 찾을 수 없음");
             }
             System.out.println("사용자 ID에 대한 주문 가져오기: " + userId);
-             // ... user_id를 사용하여 주문을 가져오는 로직 ...
+            // ... userId를 사용하여 주문을 가져오는 로직 ...
             return Map.of("orders", "order123");
         }
         ```
@@ -748,8 +757,8 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
     
         ```python
-        # 의사 코드: 도구나 콜백이 선호도를 식별
-        from google.adk.tools import ToolContext # 또는 CallbackContext
+        # 예제: 도구나 콜백이 선호도를 식별
+        from google.adk.tools import ToolContext # 또는 Context
     
         def set_user_preference(tool_context: ToolContext, preference: str, value: str) -> dict:
             # 영구 SessionService를 사용하는 경우 사용자 수준 상태에 'user:' 접두사 사용
@@ -769,7 +778,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
           const stateKey = `user:${preference}`;
           context.state.set(stateKey, value);
           console.log(`사용자 선호도 '${preference}'을(를) '${value}'(으)로 설정`);
-          return { status: 'Preference updated' };
+          return { status: '선호도 업데이트됨' };
         }
         ```
     
@@ -784,10 +793,10 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
     
         ```java
-        // 의사 코드: 도구나 콜백이 선호도를 식별
+        // 예제: 도구나 콜백이 선호도를 식별
         import com.google.adk.tools.ToolContext; // 또는 CallbackContext
     
-        public Map<String, String> setUserPreference(ToolContext toolContext, String preference, String value){
+        public Map<String, String> setUserPreference(ToolContext toolContext, String preference, String value) {
             // 영구 SessionService를 사용하는 경우 사용자 수준 상태에 'user:' 접두사 사용
             String stateKey = "user:" + preference;
             toolContext.state().put(stateKey, value);
@@ -809,15 +818,15 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
         === "Python"
     
                ```python
-               # 의사 코드: 콜백이나 초기 도구에서
-               from google.adk.agents.callback_context import CallbackContext # 또는 ToolContext
+               # 예제: 콜백이나 초기 도구에서
+               from google.adk.agents.context import Context # 또는 ToolContext
                from google.genai import types
                 
-               def save_document_reference(context: CallbackContext, file_path: str) -> None:
+               def save_document_reference(context: Context, file_path: str) -> None:
                    # file_path가 "gs://my-bucket/docs/report.pdf" 또는 "/local/path/to/report.pdf"와 같다고 가정
                    try:
                        # 경로/URI 텍스트를 포함하는 Part 생성
-                       artifact_part = types.Part(text=file_path)
+                       artifact_part = types.Part.from_text(file_path)
                        version = context.save_artifact("document_to_summarize.txt", artifact_part)
                        print(f"문서 참조 '{file_path}'를 아티팩트 버전 {version}(으)로 저장함")
                        # 다른 도구에서 필요하면 파일 이름을 상태에 저장
@@ -828,18 +837,20 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
                        print(f"아티팩트 참조 저장 중 예기치 않은 오류 발생: {e}")
                 
                # 사용 예:
-               # save_document_reference(callback_context, "gs://my-bucket/docs/report.pdf")
+               # save_document_reference(context, "gs://my-bucket/docs/report.pdf")
                ```
 
         === "TypeScript"
 
                ```typescript
-               // 의사 코드: 콜백이나 초기 도구 내부
+               // 의사 코드: 콜백이나 초기 도구에서
                import { Context } from '@google/adk';
                import type { Part } from '@google/genai';
 
                async function saveDocumentReference(context: Context, filePath: string) {
+                 // filePath가 "gs://my-bucket/docs/report.pdf" 또는 "/local/path/to/report.pdf"와 같다고 가정
                  try {
+                   // 경로/URI 텍스트를 포함하는 Part 생성
                    const artifactPart: Part = { text: filePath };
                    const version = await context.saveArtifact('document_to_summarize.txt', artifactPart);
                    console.log(`문서 참조 '${filePath}'를 아티팩트 버전 ${version}으로 저장했습니다`);
@@ -867,22 +878,23 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
         === "Java"
     
                ```java
-               // 의사 코드: 콜백이나 초기 도구에서
+               // 예제: 콜백이나 초기 도구에서
                import com.google.adk.agents.CallbackContext;
                import com.google.genai.types.Content;
                import com.google.genai.types.Part;
+               import java.util.Optional;
                 
                 
-               pubic void saveDocumentReference(CallbackContext context, String filePath){
+               public void saveDocumentReference(CallbackContext context, String filePath) {
                    // file_path가 "gs://my-bucket/docs/report.pdf" 또는 "/local/path/to/report.pdf"와 같다고 가정
-                   try{
+                   try {
                        // 경로/URI 텍스트를 포함하는 Part 생성
-                       Part artifactPart = types.Part(filePath)
-                       Optional<Integer> version = context.saveArtifact("document_to_summarize.txt", artifactPart)
-                       System.out.println("문서 참조 " + filePath + "를 아티팩트 버전 " + version + "(으)로 저장함");
+                       Part artifactPart = Part.fromText(filePath);
+                       Optional<Integer> version = context.saveArtifact("document_to_summarize.txt", artifactPart);
+                       System.out.println("문서 참조 " + filePath + "를 아티팩트 버전 " + version.orElse(-1) + "(으)로 저장함");
                        // 다른 도구에서 필요하면 파일 이름을 상태에 저장
                        context.state().put("temp:doc_artifact_name", "document_to_summarize.txt");
-                   } catch(Exception e){
+                   } catch (Exception e) {
                        System.out.println("아티팩트 참조 저장 중 예기치 않은 오류 발생: " + e);
                    }
                }
@@ -896,7 +908,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
         === "Python"
 
             ```python
-            # 의사 코드: 요약기 도구 함수에서
+            # 예제: 요약기 도구 함수에서
             from google.adk.tools import ToolContext
             from google.genai import types
             # google.cloud.storage나 내장 open 같은 라이브러리가 사용 가능하다고 가정
@@ -921,10 +933,6 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
                     document_content = ""
                     if file_path.startswith("gs://"):
                         # 예: GCS 클라이언트 라이브러리를 사용하여 다운로드/읽기
-                        # from google.cloud import storage
-                        # client = storage.Client()
-                        # blob = storage.Blob.from_string(file_path, client=client)
-                        # document_content = blob.download_as_text() # 또는 형식에 따라 바이트
                         pass # 실제 GCS 읽기 로직으로 대체
                     elif file_path.startswith("/"):
                          # 예: 로컬 파일 시스템 사용
@@ -946,33 +954,56 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
                      return {"error": f"아티팩트 서비스 오류: {e}"}
                 except FileNotFoundError:
                      return {"error": f"로컬 파일을 찾을 수 없음: {file_path}"}
-                # except Exception as e: # GCS 등에 대한 특정 예외 처리
-                #      return {"error": f"문서 읽기 오류 {file_path}: {e}"}
             ```
 
         === "TypeScript"
 
             ```typescript
-            // 의사 코드: 요약기 도구 함수 내부
+            // 의사 코드: 요약기 도구 함수에서
             import { Context } from '@google/adk';
 
             async function summarizeDocumentTool(context: Context): Promise<Record<string, string>> {
               const artifactName = context.state.get('temp:doc_artifact_name') as string;
               if (!artifactName) {
-                return { error: 'Document artifact name not found in state.' };
+                return { error: '상태에서 문서 아티팩트 이름을 찾을 수 없습니다.' };
               }
 
               try {
+                // 1. 경로/URI를 포함하는 아티팩트 파트를 로드
                 const artifactPart = await context.loadArtifact(artifactName);
                 if (!artifactPart?.text) {
-                  return { error: `Could not load artifact or artifact has no text path: ${artifactName}` };
+                  return { error: `아티팩트를 로드할 수 없거나 아티팩트에 텍스트 경로가 없습니다: ${artifactName}` };
                 }
 
                 const filePath = artifactPart.text;
                 console.log(`로드된 문서 참조: ${filePath}`);
-                return { summary: `${filePath} contents summary` };
+
+                // 2. 실제 문서 내용을 읽습니다 (ADK 컨텍스트 외부)
+                let documentContent = '';
+                if (filePath.startsWith('gs://')) {
+                  // 예: GCS 클라이언트 라이브러리를 사용하여 다운로드/읽기
+                  // const storage = new Storage();
+                  // const bucket = storage.bucket('my-bucket');
+                  // const file = bucket.file(filePath.replace('gs://my-bucket/', ''));
+                  // const [contents] = await file.download();
+                  // documentContent = contents.toString();
+                } else if (filePath.startsWith('/')) {
+                  // 예: 로컬 파일 시스템 사용
+                  // import { readFile } from 'fs/promises';
+                  // documentContent = await readFile(filePath, 'utf8');
+                } else {
+                  return { error: `지원되지 않는 파일 경로 스킴: ${filePath}` };
+                }
+
+                // 3. 내용을 요약합니다
+                if (!documentContent) {
+                  return { error: '문서 내용을 읽지 못했습니다.' };
+                }
+
+                const summary = `${filePath}의 내용 요약`; // 플레이스홀더
+                return { summary };
               } catch (e) {
-                return { error: `Artifact or document read error: ${e}` };
+                return { error: `아티팩트 처리 오류: ${e}` };
               }
             }
             ```
@@ -988,51 +1019,52 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
         === "Java"
 
             ```java
-            // 의사 코드: 요약기 도구 함수에서
+            // 예제: 요약기 도구 함수에서
             import com.google.adk.tools.ToolContext;
             import com.google.genai.types.Content;
             import com.google.genai.types.Part;
+            import java.util.Map;
+            import java.util.Optional;
+            import java.io.FileNotFoundException;
 
-            public Map<String, String> summarizeDocumentTool(ToolContext toolContext){
-                String artifactName = toolContext.state().get("temp:doc_artifact_name");
-                if(artifactName.isEmpty()){
+            public Map<String, String> summarizeDocumentTool(ToolContext toolContext) {
+                String artifactName = (String) toolContext.state().get("temp:doc_artifact_name");
+                if (artifactName == null || artifactName.isEmpty()) {
                     return Map.of("error", "상태에서 문서 아티팩트 이름을 찾을 수 없습니다.");
                 }
-                try{
+                try {
                     // 1. 경로/URI를 포함하는 아티팩트 파트를 로드합니다
-                    Maybe<Part> artifactPart = toolContext.loadArtifact(artifactName);
-                    if((artifactPart == null) || (artifactPart.text().isEmpty())){
+                    Optional<Part> artifactPart = toolContext.loadArtifact(artifactName);
+                    if (!artifactPart.isPresent() || !artifactPart.get().text().isPresent() || artifactPart.get().text().get().isEmpty()) {
                         return Map.of("error", "아티팩트를 로드할 수 없거나 아티팩트에 텍스트 경로가 없습니다: " + artifactName);
                     }
-                    filePath = artifactPart.text();
+                    String filePath = artifactPart.get().text().get();
                     System.out.println("로드된 문서 참조: " + filePath);
 
                     // 2. 실제 문서 내용을 읽습니다 (ADK 컨텍스트 외부)
                     String documentContent = "";
-                    if(filePath.startsWith("gs://")){
+                    if (filePath.startsWith("gs://")) {
                         // 예: GCS 클라이언트 라이브러리를 사용하여 documentContent로 다운로드/읽기
-                        pass; // 실제 GCS 읽기 로직으로 대체
-                    } else if(){
+                        // 실제 GCS 읽기 로직으로 대체
+                    } else if (filePath.startsWith("/")) {
                         // 예: 로컬 파일 시스템을 사용하여 documentContent로 다운로드/읽기
-                    } else{
+                    } else {
                         return Map.of("error", "지원되지 않는 파일 경로 스킴: " + filePath); 
                     }
 
                     // 3. 내용을 요약합니다
-                    if(documentContent.isEmpty()){
+                    if (documentContent.isEmpty()) {
                         return Map.of("error", "문서 내용을 읽지 못했습니다."); 
                     }
 
                     // summary = summarizeText(documentContent) // 요약 로직 호출
-                    summary = filePath + "의 내용 요약"; // 플레이스홀더
+                    String summary = filePath + "의 내용 요약"; // 플레이스홀더
 
                     return Map.of("summary", summary);
-                } catch(IllegalArgumentException e){
-                    return Map.of("error", "아티팩트 서비스 오류 " + filePath + e);
-                } catch(FileNotFoundException e){
-                    return Map.of("error", "로컬 파일을 찾을 수 없음 " + filePath + e);
-                } catch(Exception e){
-                    return Map.of("error", "문서 읽기 오류 " + filePath + e);
+                } catch (IllegalArgumentException e) {
+                    return Map.of("error", "아티팩트 서비스 오류 " + e);
+                } catch (Exception e) {
+                    return Map.of("error", "문서 읽기 오류 " + e);
                 }
             }
             ```
@@ -1042,7 +1074,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
         
         ```python
-        # 의사 코드: 도구 함수에서
+        # 예제: 도구 함수에서
         from google.adk.tools import ToolContext
         
         def check_available_docs(tool_context: ToolContext) -> dict:
@@ -1066,7 +1098,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
             console.log(`사용 가능한 아티팩트: ${artifactKeys}`);
             return { available_docs: artifactKeys };
           } catch (e) {
-            return { error: `Artifact service error: ${e}` };
+            return { error: `아티팩트 서비스 오류: ${e}` };
           }
         }
         ```
@@ -1082,15 +1114,18 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
         
         ```java
-        // 의사 코드: 도구 함수에서
+        // 예제: 도구 함수에서
         import com.google.adk.tools.ToolContext;
+        import io.reactivex.rxjava3.core.Single;
+        import java.util.List;
+        import java.util.Map;
         
-        public Map<String, String> checkAvailableDocs(ToolContext toolContext){
-            try{
+        public Map<String, Object> checkAvailableDocs(ToolContext toolContext) {
+            try {
                 Single<List<String>> artifactKeys = toolContext.listArtifacts();
-                System.out.println("사용 가능한 아티팩트: " + artifactKeys.tostring());
-                return Map.of("availableDocs", "artifactKeys");
-            } catch(IllegalArgumentException e){
+                System.out.println("사용 가능한 아티팩트: " + artifactKeys.blockingGet().toString());
+                return Map.of("availableDocs", artifactKeys.blockingGet());
+            } catch (IllegalArgumentException e) {
                 return Map.of("error", "아티팩트 서비스 오류: " + e);
             }
         }
