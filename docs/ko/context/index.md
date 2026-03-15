@@ -47,6 +47,34 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     # 개발자는 메서드 인자로 제공되는 컨텍스트 객체를 다루게 됩니다.
     ```
 
+=== "TypeScript"
+
+    ```typescript
+    /* 개념적 의사 코드: 프레임워크가 컨텍스트를 제공하는 방식 (내부 로직) */
+
+    const runner = new InMemoryRunner({ agent: myRootAgent });
+    const session = await runner.sessionService.createSession({ ... });
+    const userMessage = createUserContent(...);
+
+    // --- runner.runAsync(...) 내부 ---
+    // 1. 프레임워크가 이 특정 실행을 위한 주 컨텍스트를 생성합니다
+    const invocationContext = new InvocationContext({
+      invocationId: "this-run-에-대한-고유-id",
+      session: session,
+      userContent: userMessage,
+      agent: myRootAgent, // 시작 에이전트
+      sessionService: runner.sessionService,
+      pluginManager: runner.pluginManager,
+      // ... 기타 필요한 필드 ...
+    });
+    //
+    // 2. 프레임워크가 에이전트의 run 메서드를 호출하며 컨텍스트를 암묵적으로 전달합니다
+    await myRootAgent.runAsync(invocationContext);
+    //   --- 내부 로직 끝 ---
+
+    // 개발자는 메서드 인자로 제공되는 컨텍스트 객체를 다루게 됩니다.
+    ```
+
 === "Go"
 
     ```go
@@ -178,6 +206,21 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
             return f"{user_tier} 사용자에 대한 요청을 처리하세요."
         ```
 
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: ReadonlyContext를 받는 Instruction provider
+        import { ReadonlyContext } from '@google/adk';
+
+        function myInstructionProvider(context: ReadonlyContext): string {
+          // 읽기 전용 접근 예제
+          // state 객체는 읽기 전용입니다
+          const userTier = context.state.get('user_tier') ?? 'standard';
+          // context.state.set('new_key', 'value'); // 실패하거나 오류를 던집니다
+          return `${userTier} 사용자에 대한 요청을 처리하세요.`;
+        }
+        ```
+
     === "Go"
 
         ```go
@@ -189,14 +232,15 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Java"
     
         ```java
-        // 의사 코드: ReadonlyContext를 받는 Instruction provider
+        // 예제: ReadonlyContext를 받는 Instruction provider
         import com.google.adk.agents.ReadonlyContext;
     
-        public String myInstructionProvider(ReadonlyContext context){
+        public String myInstructionProvider(ReadonlyContext context) {
             // 읽기 전용 접근 예제
-            String userTier = context.state().get("user_tier", "standard");
-            context.state().put('new_key', 'value'); //이것은 일반적으로 오류를 발생시킴
-            return userTier + " 사용자에 대한 요청을 처리하세요.";
+            // state()는 세션 상태의 수정 불가 뷰를 반환합니다
+            String userTier = (String) context.state().getOrDefault("user_tier", "standard");
+            // context.state().put("new_key", "value"); // UnsupportedOperationException
+            return "Process the request for a " + userTier + " user.";
         }
         ```
     
