@@ -120,7 +120,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
 
         ```python
-        # 의사 코드: InvocationContext를 받는 에이전트 구현
+        # 예제: InvocationContext를 받는 에이전트 구현
         from google.adk.agents import BaseAgent
         from google.adk.agents.invocation_context import InvocationContext
         from google.adk.events import Event
@@ -196,13 +196,14 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     === "Python"
     
         ```python
-        # 의사 코드: ReadonlyContext를 받는 Instruction provider
+        # 예제: ReadonlyContext를 받는 Instruction provider
         from google.adk.agents.readonly_context import ReadonlyContext
     
         def my_instruction_provider(context: ReadonlyContext) -> str:
             # 읽기 전용 접근 예제
-            user_tier = context.state().get("user_tier", "standard") # 상태를 읽을 수 있음
-            # context.state['new_key'] = 'value' # 이것은 일반적으로 오류를 발생시키거나 효과가 없음
+            # state 속성은 상태의 읽기 전용 MappingProxyType 뷰를 제공합니다
+            user_tier = context.state.get("user_tier", "standard")
+            # context.state['new_key'] = 'value' # TypeError: 'mappingproxy' object does not support item assignment
             return f"{user_tier} 사용자에 대한 요청을 처리하세요."
         ```
 
@@ -240,7 +241,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
             // state()는 세션 상태의 수정 불가 뷰를 반환합니다
             String userTier = (String) context.state().getOrDefault("user_tier", "standard");
             // context.state().put("new_key", "value"); // UnsupportedOperationException
-            return "Process the request for a " + userTier + " user.";
+            return userTier + " 사용자에 대한 요청을 처리하세요.";
         }
         ```
     
@@ -1142,7 +1143,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
 === "Python"
 
     ```python
-# 의사 코드: 인증이 필요한 도구
+# 예제: 인증이 필요한 도구
 from google.adk.tools import ToolContext
 from google.adk.auth import AuthConfig # 적절한 AuthConfig가 정의되었다고 가정
 
@@ -1214,9 +1215,9 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
         console.log('자격 증명을 찾을 수 없어 요청합니다...');
         try {
           context.requestCredential(MY_API_AUTH_CONFIG);
-          return { status: 'Authentication required. Please provide credentials.' };
+          return { status: '인증이 필요합니다. 자격 증명을 제공해 주세요.' };
         } catch (e) {
-          return { error: `Auth or credential request error: ${e}` };
+          return { error: `인증 또는 자격 증명 요청 오류: ${e}` };
         }
       }
 
@@ -1225,11 +1226,11 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
         context.state.set(AUTH_STATE_KEY, JSON.stringify(authCredentialObj));
 
         console.log(`검색된 자격 증명을 사용하여 데이터로 API를 호출합니다: ${requestData}`);
-        const apiResult = `API result for ${requestData}`;
+        const apiResult = `${requestData}에 대한 API 결과`;
         return { result: apiResult };
       } catch (e) {
         console.error(`자격 증명 사용 오류: ${e}`);
-        return { error: 'Failed to use credential' };
+        return { error: '자격 증명을 사용할 수 없습니다.' };
       }
 	    }
 	    ```
@@ -1257,9 +1258,9 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
           System.out.println("자격 증명을 찾을 수 없어 요청합니다...");
           try {
             // context.requestCredential(MY_API_AUTH_CONFIG); // Java ADK에서는 아직 미구현
-            return Map.of("status", "Authentication required. Please provide credentials.");
+            return Map.of("status", "인증이 필요합니다. 자격 증명을 제공해 주세요.");
           } catch (Exception e) {
-            return Map.of("error", "Auth or credential request error: " + e.getMessage());
+            return Map.of("error", "인증 또는 자격 증명 요청 오류: " + e.getMessage());
           }
         }
 
@@ -1273,12 +1274,12 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
           context.state().put(AUTH_STATE_KEY, apiKey);
 
           System.out.println("검색된 자격 증명을 사용하여 데이터로 API를 호출합니다: " + requestData);
-          String apiResult = "API result for " + requestData;
+          String apiResult = requestData + "에 대한 API 결과";
 
           return Map.of("result", apiResult);
         } catch (Exception e) {
           System.err.println("자격 증명 사용 오류: " + e.getMessage());
-          return Map.of("error", "Failed to use credential");
+          return Map.of("error", "자격 증명을 사용할 수 없습니다.");
         }
       }
     }
@@ -1296,7 +1297,7 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
 === "Python"
 
     ```python
-# 의사 코드: 메모리 검색을 사용하는 도구
+# 예제: 메모리 검색을 사용하는 도구
 from google.adk.tools import ToolContext
 
 def find_related_info(tool_context: ToolContext, topic: str) -> dict:
@@ -1323,7 +1324,7 @@ def find_related_info(tool_context: ToolContext, topic: str) -> dict:
 
     async function findRelatedInfo(context: Context, topic: string): Promise<Record<string, string>> {
       try {
-        const searchResults = await context.searchMemory(`Information about ${topic}`);
+        const searchResults = await context.searchMemory(`${topic}에 대한 정보`);
         if (searchResults.results?.length) {
           console.log(`'${topic}'에 대해 ${searchResults.results.length}개의 메모리 결과를 찾았습니다`);
           const topResultText = searchResults.results[0].text;
@@ -1332,7 +1333,7 @@ def find_related_info(tool_context: ToolContext, topic: str) -> dict:
           return { message: '관련 메모리를 찾지 못했습니다.' };
         }
       } catch (e) {
-        return { error: `Memory service error: ${e}` };
+        return { error: `메모리 서비스 오류: ${e}` };
       }
 	    }
 	    ```
@@ -1355,10 +1356,10 @@ def find_related_info(tool_context: ToolContext, topic: str) -> dict:
                 String topResultText = searchResults.results().get(0).text();
                 return Map.of("memory_snippet", topResultText);
               } else {
-                return Map.of("message", "관련된 메모리를 찾지 못했습니다.");
+                return Map.of("message", "관련 메모리를 찾지 못했습니다.");
               }
             })
-            .onErrorReturnItem(Map.of("error", "Memory service error"));
+            .onErrorReturnItem(Map.of("error", "메모리 서비스 오류"));
       }
     }
     ```
@@ -1374,7 +1375,7 @@ def find_related_info(tool_context: ToolContext, topic: str) -> dict:
 === "Python"
 
     ```python
-# 의사 코드: 에이전트의 _run_async_impl 내부
+# 예제: 에이전트의 _run_async_impl 내부
 from google.adk.agents import BaseAgent
 from google.adk.agents.invocation_context import InvocationContext
 from google.adk.events import Event
