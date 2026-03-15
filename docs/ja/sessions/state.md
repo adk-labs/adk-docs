@@ -108,6 +108,22 @@
     --8<-- "examples/go/snippets/sessions/instruction_template/instruction_template_example.go:key_template"
     ```
 
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.LlmAgent;
+
+    LlmAgent storyGenerator = LlmAgent.builder()
+        .name("StoryGenerator")
+        .model("gemini-2.5-flash")
+        .instruction("猫についての短い物語を、テーマは " + topic + " に焦点を当てて書いてください。")
+        .build();
+
+    // session.state().put("topic", "friendship") と仮定すると、LLM は
+    // 次の指示を受け取ります:
+    // "猫についての短い物語を、テーマは friendship に焦点を当てて書いてください。"
+    ```
+
 #### 重要な考慮事項
 
 * キーの存在：指示文字列で参照するキーがsession.stateに存在することを確認してください。キーが見つからない場合、エージェントはエラーをスローします。存在するかもしれないし、しないかもしれないキーを使用するには、キーの後に疑問符(?)を含めることができます(例: {topic?})。
@@ -167,6 +183,29 @@
     --8<-- "examples/go/snippets/sessions/instruction_provider/instruction_provider_example.go:bypass_state_injection"
     ```
 
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.Instruction;
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.agents.ReadonlyContext;
+    import io.reactivex.rxjava3.core.Single;
+
+    // これは Instruction.Provider です
+    Instruction.Provider myInstructionProvider = new Instruction.Provider(
+        (ReadonlyContext context) -> {
+            // 状態挿入は行われず、波括弧はリテラルテキストとして扱われます。
+            return Single.just("出力を JSON 形式で返してください: {\"city\": \"<name>\", \"population\": <number>}");
+        }
+    );
+
+    LlmAgent agent = LlmAgent.builder()
+        .model("gemini-2.5-flash")
+        .name("template_helper_agent")
+        .instruction(myInstructionProvider)
+        .build();
+    ```
+
 `InstructionProvider` を使いながら指示に状態を挿入したい場合は、`inject_session_state` ユーティリティ関数を使用できます。有効な状態変数名に一致する `{key}` プレースホルダーだけが置換され、それ以外のテキスト（有効な識別子に一致しない内容を含む波括弧も含む）はそのまま残ります。
 
 === "Python"
@@ -193,6 +232,31 @@
 
     ```go
     --8<-- "examples/go/snippets/sessions/instruction_provider/instruction_provider_example.go:manual_state_injection"
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.Instruction;
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.agents.ReadonlyContext;
+    import com.google.adk.utils.InstructionUtils;
+    import io.reactivex.rxjava3.core.Single;
+
+    Instruction.Provider myDynamicInstructionProvider = new Instruction.Provider(
+        (ReadonlyContext context) -> {
+            String template = "これは {adjective} な指示です。JSON の例は次のとおりです: {\"key\": \"value\"}.";
+            // 'adjective' 状態変数は挿入されます。
+            // JSON の波括弧内は有効な識別子ではないため、そのまま残ります。
+            return InstructionUtils.injectSessionState(context.invocationContext(), template);
+        }
+    );
+
+    LlmAgent agent = LlmAgent.builder()
+        .model("gemini-2.5-flash")
+        .name("dynamic_template_helper_agent")
+        .instruction(myDynamicInstructionProvider)
+        .build();
     ```
 
 **直接挿入の利点**

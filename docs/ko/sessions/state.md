@@ -108,6 +108,22 @@
     --8<-- "examples/go/snippets/sessions/instruction_template/instruction_template_example.go:key_template"
     ```
 
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.LlmAgent;
+
+    LlmAgent storyGenerator = LlmAgent.builder()
+        .name("StoryGenerator")
+        .model("gemini-2.5-flash")
+        .instruction("고양이에 대한 짧은 이야기를 작성하되, 주제는 " + topic + "에 초점을 맞추세요.")
+        .build();
+
+    // session.state().put("topic", "friendship")라고 가정하면, LLM은
+    // 다음 지침을 받게 됩니다:
+    // "고양이에 대한 짧은 이야기를 작성하되, 주제는 friendship에 초점을 맞추세요."
+    ```
+
 #### 중요 고려사항
 
 * 키 존재 여부: 지침 문자열에서 참조하는 키가 session.state에 존재하는지 확인하세요. 키가 없으면 에이전트가 오류를 발생시킵니다. 존재할 수도 있고 아닐 수도 있는 키를 사용하려면 키 뒤에 물음표(?)를 포함할 수 있습니다 (예: {topic?}).
@@ -167,6 +183,29 @@
     --8<-- "examples/go/snippets/sessions/instruction_provider/instruction_provider_example.go:bypass_state_injection"
     ```
 
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.Instruction;
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.agents.ReadonlyContext;
+    import io.reactivex.rxjava3.core.Single;
+
+    // 이것은 Instruction.Provider입니다
+    Instruction.Provider myInstructionProvider = new Instruction.Provider(
+        (ReadonlyContext context) -> {
+            // 상태 주입은 일어나지 않으며, 중괄호는 리터럴 텍스트로 처리됩니다.
+            return Single.just("출력을 JSON 형식으로 작성하세요: {\"city\": \"<name>\", \"population\": <number>}");
+        }
+    );
+
+    LlmAgent agent = LlmAgent.builder()
+        .model("gemini-2.5-flash")
+        .name("template_helper_agent")
+        .instruction(myInstructionProvider)
+        .build();
+    ```
+
 `InstructionProvider`를 사용하면서도 지침에 상태를 주입하고 싶다면 `inject_session_state` 유틸리티 함수를 사용할 수 있습니다. 유효한 상태 변수 이름에 해당하는 `{key}` 자리표시자만 치환되며, 그 외의 텍스트(유효한 식별자가 아닌 내용을 담은 중괄호 포함)는 그대로 유지됩니다.
 
 === "Python"
@@ -193,6 +232,31 @@
 
     ```go
     --8<-- "examples/go/snippets/sessions/instruction_provider/instruction_provider_example.go:manual_state_injection"
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.Instruction;
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.agents.ReadonlyContext;
+    import com.google.adk.utils.InstructionUtils;
+    import io.reactivex.rxjava3.core.Single;
+
+    Instruction.Provider myDynamicInstructionProvider = new Instruction.Provider(
+        (ReadonlyContext context) -> {
+            String template = "이것은 {adjective} 지침입니다. JSON 예시는 다음과 같습니다: {\"key\": \"value\"}.";
+            // 'adjective' 상태 변수는 주입됩니다.
+            // JSON 중괄호 안의 내용은 유효한 식별자가 아니므로 그대로 유지됩니다.
+            return InstructionUtils.injectSessionState(context.invocationContext(), template);
+        }
+    );
+
+    LlmAgent agent = LlmAgent.builder()
+        .model("gemini-2.5-flash")
+        .name("dynamic_template_helper_agent")
+        .instruction(myDynamicInstructionProvider)
+        .build();
     ```
 
 **직접 주입의 이점**

@@ -4,7 +4,7 @@
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 도구들이 특정 작업을 수행하는 동안 사용할 수 있는 중요한 정보의 묶음을 의미합니다. 현재 작업이나 대화 차례를 효과적으로 처리하는 데 필요한 배경지식 및 리소스라고 생각할 수 있습니다.
+ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 도구들이 특정 작업을 수행하는 동안 사용할 수 있는 중요한 정보의 묶음을 의미합니다. 현재 작업이나 대화 차례를 효과적으로 처리하는 데 필요한 배경지식 및 리소스라고 생각할 수 있습니다.
 
 에이전트는 종종 최신 사용자 메시지 이상의 정보가 있어야 제대로 작동합니다. 컨텍스트는 다음을 가능하게 하므로 필수적입니다.
 
@@ -22,31 +22,29 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
 === "Python"
 
     ```python
-    # 개념적 의사 코드: 프레임워크가 컨텍스트를 제공하는 방식 (내부 로직)
-    
-    # runner = Runner(agent=my_root_agent, session_service=..., artifact_service=...)
-    # user_message = types.Content(...)
-    # session = session_service.get_session(...) # 또는 새로 생성
-    
-    # --- runner.run_async(...) 내부 ---
-    # 1. 프레임워크가 이 특정 실행을 위한 주 컨텍스트를 생성합니다
-    # invocation_context = InvocationContext(
-    #     invocation_id="this-run-에-대한-고유-id",
-    #     session=session,
-    #     user_content=user_message,
-    #     agent=my_root_agent, # 시작 에이전트
-    #     session_service=session_service,
-    #     artifact_service=artifact_service,
-    #     memory_service=memory_service,
-    #     # ... 기타 필요한 필드 ...
-    # )
-    #
-    # 2. 프레임워크가 에이전트의 run 메서드를 호출하며 컨텍스트를 암묵적으로 전달합니다
-    #    (에이전트의 메서드 시그니처가 이를 받게 됩니다, 예: runAsyncImpl(InvocationContext invocationContext))
-    # await my_root_agent.run_async(invocation_context)
-    #   --- 내부 로직 끝 ---
-    #
-    # 개발자로서 여러분은 메서드 인자로 제공되는 컨텍스트 객체를 사용하게 됩니다.
+    # 프레임워크가 컨텍스트를 제공하는 방식
+    from google.adk import Runner
+
+    # 1. 에이전트와 서비스로 Runner를 초기화합니다
+    runner = Runner(
+        app_name="my_app",
+        agent=my_root_agent,
+        session_service=my_session_service,
+        artifact_service=my_artifact_service,
+    )
+
+    # 2. 사용자 입력으로 run_async를 호출합니다
+    # 참고: run_async는 Event를 순차적으로 내보내는 비동기 제너레이터입니다.
+    # 프레임워크는 내부적으로 InvocationContext를 생성하고 이를
+    # 에이전트 코드, 콜백, 도구에 암묵적으로 전달합니다.
+    async for event in runner.run_async(
+        user_id="user123",
+        session_id="session456",
+        new_message=user_message
+    ):
+        print(event.stringify_content())
+
+    # 개발자는 메서드 인자로 제공되는 컨텍스트 객체를 다루게 됩니다.
     ```
 
 === "Go"
@@ -59,7 +57,7 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
 === "Java"
 
     ```java
-    /* 개념적 의사 코드: 프레임워크가 컨텍스트를 제공하는 방식 (내부 로직) */
+    /* 프레임워크가 컨텍스트를 제공하는 방식 */
     InMemoryRunner runner = new InMemoryRunner(agent);
     Session session = runner
         .sessionService()
@@ -69,15 +67,15 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
     try (Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {
       while (true) {
         System.out.print("\nYou > ");
+        String userInput = scanner.nextLine();
+        if ("quit".equalsIgnoreCase(userInput)) {
+          break;
+        }
+        Content userMsg = Content.fromParts(Part.fromText(userInput));
+        Flowable<Event> events = runner.runAsync(session.userId(), session.id(), userMsg);
+        System.out.print("\nAgent > ");
+        events.blockingForEach(event -> System.out.print(event.stringifyContent()));
       }
-      String userInput = scanner.nextLine();
-      if ("quit".equalsIgnoreCase(userInput)) {
-        break;
-      }
-      Content userMsg = Content.fromParts(Part.fromText(userInput));
-      Flowable<Event> events = runner.runAsync(session.userId(), session.id(), userMsg);
-      System.out.print("\nAgent > ");
-      events.blockingForEach(event -> System.out.print(event.stringifyContent()));
     }
     ```
 
@@ -92,7 +90,7 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
     *   **사용 사례:** 주로 에이전트의 핵심 로직이 전체 세션이나 서비스에 직접 접근해야 할 때 사용됩니다. 하지만 종종 상태 및 아티팩트 상호작용은 자체 컨텍스트를 사용하는 콜백/도구에 위임됩니다. 또한 호출 자체를 제어하는 데 사용됩니다(예: `ctx.end_invocation = True` 설정).
 
     === "Python"
-    
+
         ```python
         # 의사 코드: InvocationContext를 받는 에이전트 구현
         from google.adk.agents import BaseAgent
@@ -109,7 +107,25 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
                 # ... ctx를 사용하는 에이전트 로직 ...
                 yield # ... 이벤트 ...
         ```
-    
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: InvocationContext를 받는 에이전트 구현
+        import { BaseAgent, InvocationContext, Event } from '@google/adk';
+
+        class MyAgent extends BaseAgent {
+          async *runAsyncImpl(ctx: InvocationContext): AsyncGenerator<Event, void, undefined> {
+            // 직접 접근 예제
+            const agentName = ctx.agent.name;
+            const sessionId = ctx.session.id;
+            console.log(`에이전트 ${agentName}가 세션 ${sessionId}에서 호출 ${ctx.invocationId}을 위해 실행 중`);
+            // ... ctx를 사용하는 에이전트 로직 ...
+            yield; // ... 이벤트 ...
+          }
+        }
+        ```
+
     === "Go"
 
         ```go
@@ -124,60 +140,24 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
     === "Java"
     
         ```java
-        // 의사 코드: InvocationContext를 받는 에이전트 구현
+        // 예제: InvocationContext를 받는 에이전트 구현
         import com.google.adk.agents.BaseAgent;
         import com.google.adk.agents.InvocationContext;
-        
-            LlmAgent root_agent =
-                LlmAgent.builder()
-                    .model("gemini-***")
-                    .name("sample_agent")
-                    .description("사용자 질문에 답합니다.")
-                    .instruction(
-                        """
-                        여기에 에이전트를 위한 지침을 제공하세요.
-                        """
-                    )
-                    .tools(sampleTool)
-                    .outputKey("YOUR_KEY")
-                    .build();
-    
-            ConcurrentMap<String, Object> initialState = new ConcurrentHashMap<>();
-            initialState.put("YOUR_KEY", "");
-          
-            InMemoryRunner runner = new InMemoryRunner(agent);
-            Session session =
-                  runner
-                      .sessionService()
-                      .createSession(runner.appName(), USER_ID, initialState, SESSION_ID )
-                      .blockingGet();
-    
-           try (Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8)) {
-                while (true) {
-                  System.out.print("\nYou > ");
-                  String userInput = scanner.nextLine();
-        
-                  if ("quit".equalsIgnoreCase(userInput)) {
-                    break;
-                  }
-                  
-                  Content userMsg = Content.fromParts(Part.fromText(userInput));
-                  Flowable<Event> events = 
-                          runner.runAsync(session.userId(), session.id(), userMsg);
-        
-                  System.out.print("\nAgent > ");
-                  events.blockingForEach(event -> 
-                          System.out.print(event.stringifyContent()));
-              }
-        
+        import com.google.adk.events.Event;
+        import io.reactivex.rxjava3.core.Flowable;
+
+        public class MyAgent extends BaseAgent {
+            @Override
             protected Flowable<Event> runAsyncImpl(InvocationContext invocationContext) {
                 // 직접 접근 예제
-                String agentName = invocationContext.agent.name
-                String sessionId = invocationContext.session.id
-                String invocationId = invocationContext.invocationId
-                System.out.println("에이전트 " + agent_name + "가 세션 " + session_id + "에서 호출 " + invocationId + "을(를) 위해 실행 중")
-                // ... ctx를 사용하는 에이전트 로직 ...
+                String agentName = invocationContext.agent().name();
+                String sessionId = invocationContext.session().id();
+                String invocationId = invocationContext.invocationId();
+                System.out.println("에이전트 " + agentName + "가 세션 " + sessionId + "에서 호출 " + invocationId + "을 위해 실행 중");
+                // ... invocationContext를 사용하는 에이전트 로직 ...
+                return Flowable.empty();
             }
+        }
         ```
 
 2.  **`ReadonlyContext`**
@@ -1075,7 +1055,7 @@ ADK(Agent Development Kit)에서 "컨텍스트(context)"는 에이전트와 그 
 ### 도구 인증 처리 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 도구에 필요한 API 키나 다른 자격 증명을 안전하게 관리합니다.
@@ -1172,6 +1152,56 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
         console.error(`자격 증명 사용 오류: ${e}`);
         return { error: 'Failed to use credential' };
       }
+	    }
+	    ```
+
+=== "Java"
+
+    ```java
+    // 예제: 인증이 필요한 도구
+    import com.google.adk.tools.ToolContext;
+    import java.util.Map;
+
+    // 참고: AuthConfig, requestCredential, getAuthResponse는 아직
+    // Java ADK 공개 API에 완전히 구현되어 있지 않습니다.
+    // 이 예제는 세션 상태에 외부에서 인증 정보를 채우는 방식을 전제로 합니다.
+
+    public class SecureApiTool {
+      private static final String AUTH_STATE_KEY = "user:my_api_credential";
+
+      public Map<String, String> callSecureApi(ToolContext context, String requestData) {
+        // 1. 자격 증명이 이미 상태에 있는지 확인
+        Object credential = context.state().get(AUTH_STATE_KEY);
+
+        if (credential == null) {
+          // 2. 없다면 요청
+          System.out.println("자격 증명을 찾을 수 없어 요청합니다...");
+          try {
+            // context.requestCredential(MY_API_AUTH_CONFIG); // Java ADK에서는 아직 미구현
+            return Map.of("status", "Authentication required. Please provide credentials.");
+          } catch (Exception e) {
+            return Map.of("error", "Auth or credential request error: " + e.getMessage());
+          }
+        }
+
+        // 3. 자격 증명이 있다면 (요청 후 이전 턴에서 왔을 수 있음)
+        //    또는 외부 인증 흐름이 완료된 후의 후속 호출이라면
+        try {
+          // String apiKey = context.getAuthResponse(MY_API_AUTH_CONFIG).getApiKey();
+          String apiKey = credential.toString(); // 예제를 위해 단순화
+
+          // 세션 내 미래 호출을 위해 상태에 다시 저장
+          context.state().put(AUTH_STATE_KEY, apiKey);
+
+          System.out.println("검색된 자격 증명을 사용하여 데이터로 API를 호출합니다: " + requestData);
+          String apiResult = "API result for " + requestData;
+
+          return Map.of("result", apiResult);
+        } catch (Exception e) {
+          System.err.println("자격 증명 사용 오류: " + e.getMessage());
+          return Map.of("error", "Failed to use credential");
+        }
+      }
     }
     ```
 *기억하세요: `request_credential`은 도구를 일시 중지시키고 인증 필요성을 알립니다. 사용자/시스템이 자격 증명을 제공하면, 후속 호출에서 `get_auth_response`(또는 상태를 다시 확인)를 통해 도구가 계속 진행할 수 있습니다.* `tool_context.function_call_id`는 프레임워크에 의해 요청과 응답을 연결하는 데 암묵적으로 사용됩니다.
@@ -1179,7 +1209,7 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
 ### 메모리 활용 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 과거 또는 외부 소스에서 관련 정보에 접근합니다.
@@ -1225,13 +1255,39 @@ def find_related_info(tool_context: ToolContext, topic: str) -> dict:
       } catch (e) {
         return { error: `Memory service error: ${e}` };
       }
+	    }
+	    ```
+
+=== "Java"
+
+    ```java
+    // 예제: 메모리 검색을 사용하는 도구
+    import com.google.adk.tools.ToolContext;
+    import com.google.adk.memory.SearchMemoryResponse;
+    import io.reactivex.rxjava3.core.Single;
+    import java.util.Map;
+
+    public class MemorySearchTool {
+      public Single<Map<String, String>> findRelatedInfo(ToolContext context, String topic) {
+        return context.searchMemory("Information about " + topic)
+            .map(searchResults -> {
+              if (searchResults != null && searchResults.results() != null && !searchResults.results().isEmpty()) {
+                System.out.println("'" + topic + "'에 대해 " + searchResults.results().size() + "개의 메모리 결과를 찾았습니다");
+                String topResultText = searchResults.results().get(0).text();
+                return Map.of("memory_snippet", topResultText);
+              } else {
+                return Map.of("message", "관련된 메모리를 찾지 못했습니다.");
+              }
+            })
+            .onErrorReturnItem(Map.of("error", "Memory service error"));
+      }
     }
     ```
 
 ### 고급: 직접적인 `InvocationContext` 사용 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 대부분의 상호작용은 `CallbackContext`나 `ToolContext`를 통해 이루어지지만, 때로는 에이전트의 핵심 로직(`_run_async_impl`/`_run_live_impl`)이 직접 접근해야 할 때가 있습니다.
@@ -1261,6 +1317,48 @@ class MyControllingAgent(BaseAgent):
 
         # ... 일반적인 에이전트 처리 ...
         yield # ... 이벤트 ...
+    ```
+
+=== "Java"
+
+    ```java
+    // 예제: 에이전트의 runAsyncImpl 내부
+    import com.google.adk.agents.BaseAgent;
+    import com.google.adk.agents.InvocationContext;
+    import com.google.adk.events.Event;
+    import com.google.genai.types.Content;
+    import com.google.genai.types.Part;
+    import io.reactivex.rxjava3.core.Flowable;
+    import java.util.List;
+
+    public class MyControllingAgent extends BaseAgent {
+
+      @Override
+      protected Flowable<Event> runAsyncImpl(InvocationContext ctx) {
+        // 예제: 특정 서비스 사용 가능 여부 확인
+        if (ctx.memoryService() == null) {
+          System.out.println("이 호출에는 메모리 서비스를 사용할 수 없습니다.");
+        }
+
+        // 예제: 특정 조건에 따른 조기 종료
+        Boolean criticalError = (Boolean) ctx.session().state().getOrDefault("critical_error_flag", false);
+        if (criticalError != null && criticalError) {
+          System.out.println("치명적인 오류가 감지되어 호출을 종료합니다.");
+          ctx.setEndInvocation(true); // 프레임워크에 처리 중단 신호
+
+          Event errorEvent = Event.builder()
+              .author(name())
+              .invocationId(ctx.invocationId())
+              .content(Content.builder().parts(List.of(Part.builder().text("치명적인 오류로 인해 중지합니다.").build())).build())
+              .build();
+
+          return Flowable.just(errorEvent);
+        }
+
+        // ... 일반적인 에이전트 처리 ...
+        return Flowable.empty();
+      }
+    }
     ```
 
 `ctx.end_invocation = True`를 설정하는 것은 에이전트나 그 콜백/도구 내에서(각각의 컨텍스트 객체를 통해 기본 `InvocationContext`의 플래그에 접근하여 수정 가능) 전체 요청-응답 주기를 정상적으로 중지시키는 방법입니다.
