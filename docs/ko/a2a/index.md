@@ -18,6 +18,7 @@ ADK의 A2A 기능에 대해 알아보려면 아래 가이드를 참조하세요.
   이 가이드에서는 에이전트가 A2A 프로토콜을 사용하여 다른 원격 에이전트를 사용하도록 허용하는 방법을 보여줍니다.
 
   *   **[A2A 빠른 시작(소비) - Python](./quickstart-consuming.md)**
+      * **[A2A 확장 - V2 구현](./a2a-extension.md)**
   *   **[A2A 빠른 시작(소비) - Go](./quickstart-consuming-go.md)**
 
 

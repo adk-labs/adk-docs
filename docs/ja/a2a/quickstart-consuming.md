@@ -156,10 +156,14 @@ prime_agent = RemoteA2aAgent(
     agent_card=(
         f"http://localhost:8001/a2a/check_prime_agent{AGENT_CARD_WELL_KNOWN_PATH}"
     ),
+    use_legacy=False,
 )
 
 <...code truncated>
 ```
+
+!!! note "新しい A2A 統合を使う"
+    `use_legacy=False` を設定すると、エージェントはリモートエージェントへ [A2A 拡張](a2a-extension.md) を送信するため、新しい ADK-A2A 統合を使用します。
 
 次に、エージェントで`RemoteA2aAgent`を単純に使用できます。この場合、`prime_agent`は以下の`root_agent`のサブエージェントの1つとして使用されます。
 
@@ -193,6 +197,61 @@ root_agent = Agent(
         ]
     ),
 )
+```
+
+### 高度な設定: カスタムコンバーターとインターセプター
+
+内部的に `RemoteA2aAgent` は、A2A プロトコル形式と ADK ネイティブの `Event` システムの間で変換を行います。`RemoteA2aAgent` の `config` パラメータに [`A2aRemoteAgentConfig`](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/agent/config.py) オブジェクトを渡すことで、この挙動をカスタマイズできます。
+
+これにより、カスタムの型マッピングを定義し、リクエストパラメータを注入し、リクエストやレスポンスをインターセプトできます。
+
+#### コンバーター
+
+コンバーターは、受信した A2A レスポンスをネイティブ ADK オブジェクトへ変換します。次のフックに対して独自のマッピング関数を提供できます。
+
+*   **`a2a_message_converter`**: 標準の A2A Message を ADK `Event` オブジェクトへ変換します。
+*   **`a2a_task_converter`**: A2A Task を ADK `Event` へ変換します。
+*   **`a2a_status_update_converter`**: A2A `TaskStatusUpdateEvent` を ADK `Event` オブジェクトへ変換します。
+*   **`a2a_artifact_update_converter`**: A2A `TaskArtifactUpdateEvent` を ADK `Event` オブジェクトへ変換します。
+*   **`a2a_part_converter`**: 他のコンバーターが内部的に利用する低レベルフックで、個々の A2A Message Part を GenAI `Part` オブジェクトへ変換します。
+
+!!! note
+    これらのカスタムクライアントコンバーターは、レスポンスが [agent executor](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/a2a_agent_executor_impl.py) の新しい実装から返ってくる場合にのみ使用されます。詳細は [A2A 拡張](a2a-extension.md) を参照してください。
+
+#### リクエストインターセプター
+
+`request_interceptors` のリストを注入して、A2A リクエストへミドルウェアロジックを追加できます。
+
+*   **`before_request`**: エージェントがリクエスト処理を開始する前に実行されます。`A2AMessage` を変更したり、ADK `Event` を返してリクエストを即座に中止し、そのイベントを呼び出し元へ返したりできます。
+*   **`after_request`**: エージェントがリクエストを処理した後に実行されます。生成された ADK `Event` を変更したり、`None` を返してイベントを完全に除外したりできます。
+
+#### リクエストパラメータ設定
+
+インターセプターを通じて、A2A リクエストの `ParametersConfig` を変更し、次を注入することもできます。
+
+*   **`request_metadata`**: カスタムのメタデータ辞書をリクエストヘッダーへ渡します。
+*   **`client_call_context`**: 基盤のトランスポート向けに特定のクライアント呼び出しコンテキストを注入します。
+
+```python
+<...code truncated...>
+
+from google.adk.agents.remote_a2a_agent import AGENT_CARD_WELL_KNOWN_PATH
+from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
+
+prime_agent = RemoteA2aAgent(
+    name="prime_agent",
+    description="Agent that handles checking if numbers are prime.",
+    agent_card=(
+        f"http://localhost:8001/a2a/check_prime_agent{AGENT_CARD_WELL_KNOWN_PATH}"
+    ),
+    use_legacy=False,
+    config=A2aRemoteAgentConfig(
+        a2a_message_converter=my_a2a_message_converter,
+        request_interceptors=[my_request_interceptor],
+    ),
+)
+
+<...code truncated>
 ```
 
 ## 対話の例

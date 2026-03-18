@@ -97,6 +97,15 @@ from google.adk.a2a.utils.agent_to_a2a import to_a2a
 a2a_app = to_a2a(root_agent, port=8001, agent_card="/path/to/your/agent-card.json")
 ```
 
+### 内部動作: `to_a2a()` メソッド
+
+`to_a2a()` を呼び出すと、ADK はエージェントを公開するための複数のセットアップ手順を自動的に処理します。
+
+* **`A2aAgentExecutor` のセットアップ:** `A2aAgentExecutor` が A2A プロトコルと ADK エージェントの橋渡し役として初期化されます。カスタム `Runner` を渡さない場合は、アーティファクト、セッション、メモリ、認証情報向けのインメモリサービスを使うデフォルトの `Runner` が自動生成されます。
+* **状態管理:** A2A タスクを追跡する `InMemoryTaskStore` と、プッシュ通知を扱う `InMemoryPushNotificationConfigStore` を生成します。
+* **リクエスト処理:** 受信した A2A HTTP リクエストを `A2aAgentExecutor` と状態ストアへルーティングする `DefaultRequestHandler` を生成します。
+* **Starlette アプリと Agent Card:** Starlette アプリケーションを生成します。アプリケーションの起動時に、提供された Agent Card を読み込むか、`AgentCardBuilder` を使ってエージェント設定から Agent Card を自動生成します。その後、必要な A2A API ルートをすべてマウントします。
+
 それでは、サンプルコードを見ていきましょう。
 
 ### 1. サンプルコードの取得 { #getting-the-sample-code }
@@ -227,6 +236,43 @@ adk Webサーバーを開くには、[http://localhost:8000](http://localhost:80
 ユーザー：10面体のサイコロを振って、それが素数かどうかを確認してください
 ボット：8を振りました。
 ボット：8は素数ではありません。
+```
+
+## 高度な設定: カスタムコンバーターとインターセプター
+
+`to_a2a()` が提供する以上に細かな制御が必要な場合は、[`A2aAgentExecutorConfig`](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/config.py) を直接生成して `A2aAgentExecutor` に渡すことができます。これにより、既定のデータコンバーターを上書きし、実行ミドルウェアを注入できます。
+
+### コンバーター
+
+コンバーターは、A2A プロトコルのペイロードと ADK ネイティブの `Event` または `Part` オブジェクトの間で双方向変換を処理します。次のフックに対して独自のマッピング関数を提供できます。
+
+*   **`a2a_part_converter`**: A2A Message Part を ADK `Part` オブジェクトへ変換します。
+*   **`gen_ai_part_converter`**: ネイティブ ADK `Part` オブジェクトを A2A Message Part へ変換します。
+*   **`request_converter`**: 受信した A2A リクエストを ADK `RunRequest` へ変換します。
+*   **`event_converter`**: *(レガシー)* ADK Event を A2A Event へ変換し、レガシー executor 実装で使用されます。
+*   **`adk_event_converter`**: *(新規)* ADK Event を A2A Event へ変換し、新しい更新版 executor 実装で使用されます。
+
+### 実行インターセプター
+
+`execute_interceptors` のリストを注入して、`A2aAgentExecutor` のペイロード処理へミドルウェアロジックを追加できます。
+
+*   **`before_agent`**: エージェントがリクエスト処理を開始する前に実行されます。受信した `RequestContext` を検査または変更できます。
+*   **`after_event`**: ADK イベントが A2A イベントへ変換された *後で* 実行されます。キューへ入る前の出力イベントを変更したり、`None` を返してイベントを除外したりできます。
+*   **`after_agent`**: エージェントの処理が終了し、最終イベントが準備された後に実行されます。送信前の終端ステータスイベント（例: `completed` や `failed`）を検査または変更する用途で使います。
+
+## Agent Executor V2
+
+新しい [agent executor](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/a2a_agent_executor_impl.py) は、通常、クライアントが必要な [A2A 拡張](a2a-extension.md) を送信したときに有効になります。
+
+ただし、拡張をバイパスし、`A2aAgentExecutor` の生成時に `force_new_version=True` フラグを設定して、サーバーに新しい executor バージョンの使用を強制することもできます。これにより、既存クライアントを修正して拡張を送るようにしなくても、新しい executor ロジックを利用できます。
+
+```python
+from google.adk.a2a.executor import A2aAgentExecutor
+
+executor = A2aAgentExecutor(
+            ...,
+            force_new_version=True
+        )
 ```
 
 ## 次のステップ

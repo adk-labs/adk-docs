@@ -18,6 +18,7 @@ ADKのA2A機能については、以下のガイドをご覧ください。
   これらのガイドでは、エージェントがA2Aプロトコルを使用して別のリモートエージェントを使用できるようにする方法を示します。
 
   *   **[A2Aクイックスタート（消費）- Python](./quickstart-consuming.md)**
+      * **[A2A拡張 - V2 実装](./a2a-extension.md)**
   *   **[A2Aクイックスタート（消費）- Go](./quickstart-consuming-go.md)**
 
 

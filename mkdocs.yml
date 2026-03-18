@@ -391,6 +391,7 @@ plugins:
                 - A2A 빠른 시작 (사용):
                   - Python: a2a/quickstart-consuming.md
                   - Go: a2a/quickstart-consuming-go.md
+                - A2A 확장: a2a/a2a-extension.md
               - 양방향 스트리밍 (실시간):
                 - streaming/index.md
                 - 양방향 스트리밍 개발 가이드 시리즈:
@@ -541,6 +542,7 @@ plugins:
                 - A2Aクイックスタート(利用):
                   - Python: a2a/quickstart-consuming.md
                   - Go: a2a/quickstart-consuming-go.md
+                - A2A拡張: a2a/a2a-extension.md
               - 双方向ストリーミング（ライブ）:
                 - streaming/index.md
                 - 双方向ストリーミング開発ガイドシリーズ:

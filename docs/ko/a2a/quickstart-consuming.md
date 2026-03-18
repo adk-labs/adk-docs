@@ -156,10 +156,14 @@ prime_agent = RemoteA2aAgent(
     agent_card=(
         f"http://localhost:8001/a2a/check_prime_agent{AGENT_CARD_WELL_KNOWN_PATH}"
     ),
+    use_legacy=False,
 )
 
 <...code truncated>
 ```
+
+!!! note "새 A2A 통합 사용"
+    `use_legacy=False`로 설정하면 에이전트가 원격 에이전트에 [A2A 확장](a2a-extension.md)을 전송하므로 새로운 ADK-A2A 통합을 사용합니다.
 
 그런 다음 에이전트에서 `RemoteA2aAgent`를 간단히 사용할 수 있습니다. 이 경우 `prime_agent`는 아래 `root_agent`의 하위 에이전트 중 하나로 사용됩니다.
 
@@ -193,6 +197,61 @@ root_agent = Agent(
         ]
     ),
 )
+```
+
+### 고급 구성: 사용자 정의 컨버터와 인터셉터
+
+내부적으로 `RemoteA2aAgent`는 A2A 프로토콜 형식과 ADK의 네이티브 `Event` 시스템 사이를 변환합니다. `RemoteA2aAgent`의 `config` 매개변수로 [`A2aRemoteAgentConfig`](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/agent/config.py) 객체를 전달하면 이 동작을 사용자 정의할 수 있습니다.
+
+이를 통해 사용자 정의 타입 매핑을 정의하고, 요청 매개변수를 주입하고, 요청이나 응답을 가로챌 수 있습니다.
+
+#### 컨버터
+
+컨버터는 들어오는 A2A 응답을 네이티브 ADK 객체로 변환합니다. 다음 훅에 대해 사용자 정의 매핑 함수를 제공할 수 있습니다.
+
+*   **`a2a_message_converter`**: 표준 A2A Message를 ADK `Event` 객체로 변환합니다.
+*   **`a2a_task_converter`**: A2A Task를 ADK `Event`로 변환합니다.
+*   **`a2a_status_update_converter`**: A2A `TaskStatusUpdateEvent`를 ADK `Event` 객체로 변환합니다.
+*   **`a2a_artifact_update_converter`**: A2A `TaskArtifactUpdateEvent`를 ADK `Event` 객체로 변환합니다.
+*   **`a2a_part_converter`**: 다른 컨버터가 내부적으로 사용하는 저수준 훅으로, 개별 A2A Message Part를 GenAI `Part` 객체로 변환합니다.
+
+!!! note
+    이 사용자 정의 클라이언트 컨버터는 응답이 [agent executor](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/a2a_agent_executor_impl.py)의 새 구현에서 올 때만 사용됩니다. 자세한 내용은 [A2A 확장](a2a-extension.md)을 참고하세요.
+
+#### 요청 인터셉터
+
+`request_interceptors` 목록을 주입해 A2A 요청에 미들웨어 로직을 추가할 수 있습니다.
+
+*   **`before_request`**: 에이전트가 요청 처리를 시작하기 전에 실행됩니다. `A2AMessage`를 수정하거나, ADK `Event`를 반환해 요청을 즉시 중단하고 해당 이벤트를 호출자에게 반환할 수 있습니다.
+*   **`after_request`**: 에이전트가 요청을 처리한 뒤 실행됩니다. 생성된 ADK `Event`를 수정하거나, `None`을 반환해 이벤트를 완전히 필터링하고 삭제할 수 있습니다.
+
+#### 요청 매개변수 구성
+
+인터셉터를 통해 A2A 요청의 `ParametersConfig`를 수정하여 다음을 주입할 수도 있습니다.
+
+*   **`request_metadata`**: 사용자 정의 메타데이터 딕셔너리를 요청 헤더에 전달합니다.
+*   **`client_call_context`**: 기본 전송 계층에 특정 클라이언트 호출 컨텍스트를 주입합니다.
+
+```python
+<...code truncated...>
+
+from google.adk.agents.remote_a2a_agent import AGENT_CARD_WELL_KNOWN_PATH
+from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
+
+prime_agent = RemoteA2aAgent(
+    name="prime_agent",
+    description="Agent that handles checking if numbers are prime.",
+    agent_card=(
+        f"http://localhost:8001/a2a/check_prime_agent{AGENT_CARD_WELL_KNOWN_PATH}"
+    ),
+    use_legacy=False,
+    config=A2aRemoteAgentConfig(
+        a2a_message_converter=my_a2a_message_converter,
+        request_interceptors=[my_request_interceptor],
+    ),
+)
+
+<...code truncated>
 ```
 
 ## 상호 작용 예
