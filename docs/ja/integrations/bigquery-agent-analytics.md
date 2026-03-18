@@ -640,7 +640,7 @@ LIMIT 10;
 
 ## 高度な分析クエリ
 
-**`trace_id` を使って特定の会話 turn を追跡**
+### `trace_id` を使って特定の会話ターンを追跡
 
 ```sql
 SELECT timestamp, event_type, agent, JSON_VALUE(content, '$.response') as summary
@@ -649,7 +649,7 @@ WHERE trace_id = 'your-trace-id'
 ORDER BY timestamp ASC;
 ```
 
-**トークン使用量分析 (JSON フィールドへのアクセス)**
+### トークン使用量分析 (JSON フィールドへのアクセス)
 
 ```sql
 SELECT
@@ -658,7 +658,7 @@ FROM `your-gcp-project-id.your-dataset-id.agent_events`
 WHERE event_type = 'LLM_RESPONSE';
 ```
 
-**マルチモーダルコンテンツの問い合わせ (`content_parts` と `ObjectRef` を使用)**
+### マルチモーダルコンテンツの問い合わせ (`content_parts` と `ObjectRef` を使用)
 
 ```sql
 SELECT
@@ -671,7 +671,7 @@ WHERE part.mime_type LIKE 'image/%'
 ORDER BY timestamp DESC;
 ```
 
-**BigQuery リモートモデル (Gemini) でマルチモーダルコンテンツを分析**
+### BigQuery リモートモデル (Gemini) でマルチモーダルコンテンツを分析
 
 ```sql
 SELECT
@@ -691,7 +691,7 @@ ORDER BY logs.timestamp DESC
 LIMIT 1;
 ```
 
-**レイテンシ分析 (LLM とツール)**
+### レイテンシ分析 (LLM とツール)
 
 ```sql
 SELECT
@@ -702,7 +702,7 @@ WHERE event_type IN ('LLM_RESPONSE', 'TOOL_COMPLETED')
 GROUP BY event_type;
 ```
 
-**Span 階層と duration 分析**
+### Span 階層と duration 分析
 
 ```sql
 SELECT
@@ -723,7 +723,7 @@ WHERE trace_id = 'your-trace-id'
 ORDER BY timestamp ASC;
 ```
 
-**エラー分析 (LLM とツールのエラー)**
+### エラー分析 (LLM とツールのエラー)
 
 ```sql
 SELECT
@@ -739,7 +739,7 @@ ORDER BY timestamp DESC
 LIMIT 20;
 ```
 
-**Tool Provenance 分析**
+### Tool Provenance 分析
 
 ```sql
 SELECT
@@ -753,7 +753,7 @@ GROUP BY tool_origin, tool_name
 ORDER BY call_count DESC;
 ```
 
-**HITL インタラクション分析**
+### HITL インタラクション分析
 
 ```sql
 SELECT
@@ -798,7 +798,6 @@ SELECT
     session_id,
     AI.GENERATE(
         ('Analyze this conversation log and explain the root cause of the failure. Log: ', full_history),
-        connection_id => 'your-gcp-project-id.us.my-connection',
         endpoint => 'gemini-2.5-flash'
     ).result AS root_cause_explanation
 FROM SessionContext;

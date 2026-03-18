@@ -643,7 +643,7 @@ LIMIT 10;
 
 ## 고급 분석 쿼리
 
-**`trace_id`로 특정 대화 turn 추적**
+### `trace_id`로 특정 대화 턴 추적
 
 ```sql
 SELECT timestamp, event_type, agent, JSON_VALUE(content, '$.response') as summary
@@ -652,7 +652,7 @@ WHERE trace_id = 'your-trace-id'
 ORDER BY timestamp ASC;
 ```
 
-**토큰 사용량 분석(JSON 필드 접근)**
+### 토큰 사용량 분석(JSON 필드 접근)
 
 ```sql
 SELECT
@@ -661,7 +661,7 @@ FROM `your-gcp-project-id.your-dataset-id.agent_events`
 WHERE event_type = 'LLM_RESPONSE';
 ```
 
-**멀티모달 콘텐츠 조회(`content_parts` 및 `ObjectRef` 사용)**
+### 멀티모달 콘텐츠 조회(`content_parts` 및 `ObjectRef` 사용)
 
 ```sql
 SELECT
@@ -674,7 +674,7 @@ WHERE part.mime_type LIKE 'image/%'
 ORDER BY timestamp DESC;
 ```
 
-**BigQuery 원격 모델(Gemini)로 멀티모달 콘텐츠 분석**
+### BigQuery 원격 모델(Gemini)로 멀티모달 콘텐츠 분석
 
 ```sql
 SELECT
@@ -694,7 +694,7 @@ ORDER BY logs.timestamp DESC
 LIMIT 1;
 ```
 
-**지연 시간 분석(LLM 및 도구)**
+### 지연 시간 분석(LLM 및 도구)
 
 ```sql
 SELECT
@@ -705,7 +705,7 @@ WHERE event_type IN ('LLM_RESPONSE', 'TOOL_COMPLETED')
 GROUP BY event_type;
 ```
 
-**Span 계층 및 duration 분석**
+### Span 계층 및 지속 시간 분석
 
 ```sql
 SELECT
@@ -726,7 +726,7 @@ WHERE trace_id = 'your-trace-id'
 ORDER BY timestamp ASC;
 ```
 
-**오류 분석(LLM 및 도구 오류)**
+### 오류 분석(LLM 및 도구 오류)
 
 ```sql
 SELECT
@@ -742,7 +742,7 @@ ORDER BY timestamp DESC
 LIMIT 20;
 ```
 
-**Tool Provenance 분석**
+### Tool Provenance 분석
 
 ```sql
 SELECT
@@ -756,7 +756,7 @@ GROUP BY tool_origin, tool_name
 ORDER BY call_count DESC;
 ```
 
-**HITL 상호작용 분석**
+### HITL 상호작용 분석
 
 ```sql
 SELECT
@@ -801,7 +801,6 @@ SELECT
     session_id,
     AI.GENERATE(
         ('Analyze this conversation log and explain the root cause of the failure. Log: ', full_history),
-        connection_id => 'your-gcp-project-id.us.my-connection',
         endpoint => 'gemini-2.5-flash'
     ).result AS root_cause_explanation
 FROM SessionContext;

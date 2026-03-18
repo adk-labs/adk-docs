@@ -33,3 +33,5 @@
     [:octicons-arrow-right-24: TypeScript로 시작](typescript.md) <br>
 
 </div>
+
+기술 개요부터 시작하려면 이 [링크](about.md)를 확인하세요.

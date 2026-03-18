@@ -33,3 +33,5 @@ Agent Development Kit（ADK）は、開発者がAI搭載エージェントを迅
     [:octicons-arrow-right-24: TypeScriptで始める](typescript.md) <br>
 
 </div>
+
+技術概要から始めるには、この[リンク](about.md)を確認してください。

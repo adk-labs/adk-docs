@@ -320,7 +320,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
             // ... name, model, description
             .instruction(
                     "あなたは首都情報エージェントです。国が与えられたら、首都を含むJSONオブジェクトのみで応答してください。フォーマット: {\"capital\": \"capital_name\"}")
-            .outputSchema(capitalOutput) // JSON出力を強制
+            .outputSchema(CAPITAL_OUTPUT) // JSON出力を強制
             .outputKey("found_capital") // 結果を state.get("found_capital") に保存
             // ここでは tools(getCapitalCity) を効果的に使用できない
             .build();
