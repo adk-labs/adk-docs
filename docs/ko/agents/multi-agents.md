@@ -1270,4 +1270,55 @@ ADK의 구성 기본 요소를 결합하여 다중 에이전트 협업을 위한
     --8<-- "examples/go/snippets/agents/multi-agent/main.go:human-in-loop-pattern"
     ```
 
-이러한 패턴들은 다중 에이전트 시스템을 구조화하기 위한 시작점을 제공합니다. 특정 애플리케이션에 가장 효과적인 아키텍처를 만들기 위해 필요에 따라 혼합하여 사용할 수 있습니다.
+#### Human in the Loop with Policy
+
+보다 구조화된 Human-in-the-Loop 구현 방법은 `PolicyEngine`을 사용하는 것입니다. 이 접근 방식은 도구가 실행되기 전에 사용자 확인 단계를 트리거할 수 있는 정책을 정의할 수 있게 해줍니다. `SecurityPlugin`은 도구 호출을 가로채고 `PolicyEngine`을 참조한 뒤, 정책에 따라 자동으로 사용자 확인을 요청합니다. 이 패턴은 거버넌스와 보안 규칙을 강제하는 데 더 강력합니다.
+
+작동 방식:
+
+1.  **`SecurityPlugin`**: 이 플러그인을 `Runner`에 추가합니다. 모든 도구 호출에 대한 인터셉터 역할을 합니다.
+2.  **`BasePolicyEngine`**: 이 인터페이스를 구현하는 커스텀 클래스를 만듭니다. `evaluate()` 메서드에 도구 호출에 확인이 필요한지 결정하는 로직을 넣습니다.
+3.  **`PolicyOutcome.CONFIRM`**: `evaluate()`가 이 결과를 반환하면 `SecurityPlugin`은 도구 실행을 일시 중지하고 `getAskUserConfirmationFunctionCalls`를 사용해 특별한 `FunctionCall`을 생성합니다.
+4.  **애플리케이션 처리**: 애플리케이션 코드는 이 특별한 함수 호출을 받아 사용자에게 확인 요청을 표시합니다.
+5.  **사용자 확인**: 사용자가 확인하면 애플리케이션은 `FunctionResponse`를 에이전트로 다시 보내고, `SecurityPlugin`은 원래 도구 실행을 진행할 수 있습니다.
+
+!!! Note "TypeScript 권장 패턴"
+    정책 기반 패턴은 TypeScript에서 Human-in-the-Loop 워크플로를 구현하는 데 권장되는 방식입니다. 다른 ADK 언어의 지원은 향후 릴리스에서 계획되어 있습니다.
+
+커스텀 `PolicyEngine`을 사용해 임의의 도구 실행 전에 사용자 확인을 요구하는 개념 예시는 다음과 같습니다.
+
+=== "TypeScript"
+
+    ```typescript
+    const rootAgent = new LlmAgent({
+      name: 'weather_time_agent',
+      model: 'gemini-2.5-flash',
+      description:
+          '도시의 시간과 날씨에 대한 질문에 답하는 에이전트입니다.',
+      instruction:
+          '도시의 시간과 날씨에 대한 사용자 질문에 답할 수 있는 유용한 에이전트입니다.',
+      tools: [getWeatherTool],
+    });
+
+    class CustomPolicyEngine implements BasePolicyEngine {
+      async evaluate(_context: ToolCallPolicyContext): Promise<PolicyCheckResult> {
+        // 기본 허용형 구현
+        return Promise.resolve({
+          outcome: PolicyOutcome.CONFIRM,
+          reason: '도구 호출에 대한 확인이 필요합니다.',
+        });
+      }
+    }
+
+    const runner = new InMemoryRunner({
+        agent: rootAgent,
+        appName,
+        plugins: [new SecurityPlugin({policyEngine: new CustomPolicyEngine()})]
+    });
+    ```
+
+    전체 코드 샘플은 [여기](https://github.com/google/adk-docs/blob/main/examples/typescript/snippets/agents/workflow-agents/hitl_confirmation_agent.ts)에서 볼 수 있습니다.
+
+### 패턴 결합
+
+이러한 패턴은 다중 에이전트 시스템을 구조화하기 위한 출발점입니다. 특정 애플리케이션에 가장 효과적인 아키텍처를 만들기 위해 필요에 따라 혼합하여 사용할 수 있습니다.

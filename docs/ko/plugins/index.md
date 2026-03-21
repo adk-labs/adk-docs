@@ -446,6 +446,17 @@ async def on_user_message_callback(
 ) -> Optional[types.Content]:
 ```
 
+=== "TypeScript"
+
+    ```typescript
+    async onUserMessageCallback(
+        invocationContext: InvocationContext,
+        user_message: Content
+    ): Promise<Content | undefined> {
+      // 여기에 구현을 작성합니다
+    }
+    ```
+
 ```java
 @Override
 public Maybe<Content> onUserMessageCallback(
@@ -469,6 +480,14 @@ async def before_run_callback(
     self, *, invocation_context: InvocationContext
 ) -> Optional[types.Content]:
 ```
+
+=== "TypeScript"
+
+    ```typescript
+    async beforeRunCallback(invocationContext: InvocationContext): Promise<Content | undefined> {
+      // 여기에 구현을 작성합니다
+    }
+    ```
 
 ```java
 @Override
@@ -519,6 +538,18 @@ async def on_model_error_callback(
 ) -> Optional[LlmResponse]:
 ```
 
+=== "TypeScript"
+
+    ```typescript
+    async onModelErrorCallback(
+        context: Context,
+        llmRequest: LlmRequest,
+        error: Error
+    ): Promise<LlmResponse | undefined> {
+        // 여기에 구현을 작성합니다
+    }
+    ```
+
 ```java
 @Override
 public Maybe<LlmResponse> onModelErrorCallback(
@@ -560,6 +591,19 @@ async def on_tool_error_callback(
 ) -> Optional[dict]:
 ```
 
+=== "TypeScript"
+
+    ```typescript
+    async onToolErrorCallback(
+        tool: BaseTool,
+        toolArgs: { [key: string]: any },
+        context: Context,
+        error: Error
+    ): Promise<{ [key:string]: any } | undefined> {
+        // 여기에 구현을 작성합니다
+    }
+    ```
+
 ```java
 @Override
 public Maybe<Map<String, Object>> onToolErrorCallback(
@@ -584,6 +628,17 @@ async def on_event_callback(
 ) -> Optional[Event]:
 ```
 
+=== "TypeScript"
+
+    ```typescript
+    async onEventCallback(
+        invocationContext: InvocationContext,
+        event: Event
+    ): Promise<Event | undefined> {
+        // 여기에 구현을 작성합니다
+    }
+    ```
+
 ```java
 @Override
 public Maybe<Event> onEventCallback(InvocationContext invocationContext, Event event) {
@@ -606,6 +661,14 @@ async def after_run_callback(
     self, *, invocation_context: InvocationContext
 ) -> Optional[None]:
 ```
+
+=== "TypeScript"
+
+    ```typescript
+    async afterRunCallback(invocationContext: InvocationContext): Promise<void> {
+        // 여기에 구현을 작성합니다
+    }
+    ```
 
 ```java
 @Override
