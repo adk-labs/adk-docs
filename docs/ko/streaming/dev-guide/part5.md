@@ -291,8 +291,8 @@ DEMO_AGENT_MODEL=gemini-2.5-flash-native-audio-preview-12-2025
 
 ## Audio Transcription
 
-Live API는 사용자 입력/모델 출력 오디오를 자동 텍스트 전사할 수 있습니다.
-별도 STT 서비스 없이 실시간 자막/로그/접근성 기능 구현이 가능합니다.
+Live API는 사용자 입력과 모델 출력 오디오를 자동으로 텍스트 전사할 수 있습니다.
+별도 STT 서비스를 붙이지 않아도 실시간 자막, 대화 로그, 접근성 기능을 구현할 수 있습니다.
 
 ```python
 from google.genai import types
@@ -311,8 +311,8 @@ run_config = RunConfig(
 )
 ```
 
-전사는 `Event.input_transcription`, `Event.output_transcription`으로 전달됩니다.
-`Transcription` 객체는 `.text`, `.finished`를 가집니다.
+전사는 `Event.input_transcription`, `Event.output_transcription` 필드로 전달됩니다.
+각 `Transcription` 객체는 `.text`와 `.finished` 속성을 가집니다.
 
 ```python
 async for event in runner.run_live(...):
@@ -333,11 +333,23 @@ async for event in runner.run_live(...):
 
     1) 객체 존재 확인 → 2) 텍스트 비어있지 않은지 확인
 
+### 전사 전달 방식
+
+전사는 `content.parts`가 아니라 별도 필드로 들어옵니다. 텍스트/오디오 이벤트와 분리해서 처리해야 합니다.
+
 ### 멀티 에이전트 전사 요구사항
 
 `sub_agents`가 있는 멀티 에이전트 시나리오에서는
 에이전트 전환 컨텍스트 유지를 위해 전사가 자동 활성화됩니다.
 `RunConfig`에서 `None`으로 꺼도 내부적으로 활성화됩니다.
+
+### 클라이언트 측 오디오 전사 처리
+
+웹 애플리케이션에서는 서버가 전사 이벤트를 브라우저로 전달하고, UI가 이를 자막이나 말풍선으로 렌더링하는 패턴이 일반적입니다.
+
+1. 서버는 ADK 이벤트를 그대로 WebSocket으로 전달
+2. 브라우저는 `inputTranscription` / `outputTranscription` 이벤트를 구분해 처리
+3. `finished: true`일 때 말풍선을 최종 확정
 
 ## Voice Configuration (Speech Config)
 
@@ -371,6 +383,8 @@ agent = Agent(
 )
 ```
 
+에이전트 레벨 설정은 멀티 에이전트 워크플로에서 특히 유용합니다. 서로 다른 페르소나나 역할에 다른 목소리를 부여할 수 있습니다.
+
 ### RunConfig-Level Configuration
 
 ```python
@@ -390,6 +404,8 @@ run_config = RunConfig(
 )
 ```
 
+세션 수준 `speech_config`는 단일 에이전트 앱이나 모든 에이전트가 동일한 음성을 사용해야 하는 경우에 적합합니다.
+
 ### 우선순위
 
 1. Gemini 인스턴스 `speech_config`
@@ -397,6 +413,11 @@ run_config = RunConfig(
 3. Live API 기본 음성
 
 멀티 에이전트에서는 에이전트별 다른 음성을 부여할 수 있습니다.
+
+### 구성 파라미터
+
+- `voice_config`: 사용할 프리빌트 음성을 지정합니다.
+- `language_code`: 음성 합성 언어 코드를 지정합니다.
 
 ### 음성 목록
 
@@ -412,16 +433,37 @@ Half-cascade 지원 음성:
 
 Native audio는 위 + TTS 확장 목록을 지원합니다.
 
+### 플랫폼 가용성
+
+- Gemini Live API: 문서화된 음성을 그대로 사용할 수 있습니다.
+- Vertex AI Live API: 지원 음성이 다를 수 있으므로 공식 문서를 확인해야 합니다.
+
+### 중요 사항
+
+- 음성 설정은 오디오 출력이 가능한 Live API 모델에서만 사용할 수 있습니다.
+- `speech_config`는 에이전트 레벨과 세션 레벨 둘 다 설정할 수 있으며, 에이전트 레벨이 우선합니다.
+- Native audio 모델은 문맥에서 언어를 자동 판별하는 경우가 많습니다.
+
+!!! note "더 알아보기"
+
+    완전한 RunConfig 참고는 [Part 4: RunConfig 이해하기](part4.md)를 참고하세요.
+
 ## Voice Activity Detection (VAD)
 
 VAD는 사용자의 발화 시작/종료를 자동 감지해 자연스러운 턴테이킹을 제공합니다.
 기본값은 **활성화**입니다.
+
+### VAD 동작 방식
+
+VAD가 켜져 있으면 Live API는 사용자의 발화 시작, 발화 종료, 턴 전환, 중단을 자동으로 감지합니다.
 
 ### VAD 비활성화가 필요한 경우
 
 - push-to-talk
 - 클라이언트 측 VAD 사용
 - 수동 턴 제어 UX 요구
+
+VAD를 끄면 수동 활동 신호(`ActivityStart`/`ActivityEnd`)를 사용해 턴을 제어해야 합니다.
 
 ```python
 from google.genai import types
@@ -445,6 +487,24 @@ run_config = RunConfig(
 - CPU/네트워크 절감
 - 로컬 감지로 응답성 향상
 - 민감도 튜닝 가능
+
+### 서버 측 구성
+
+서버는 `RunConfig.realtime_input_config`로 자동 활동 감지를 끄고, 클라이언트가 보낸 활동 신호를 그대로 `LiveRequestQueue`에 전달합니다.
+
+### 클라이언트 측 구현
+
+브라우저의 AudioWorklet에서 RMS를 계산해 음성 여부를 판단하고, 음성이 감지된 구간에만 오디오를 전송합니다.
+
+### 클라이언트 측 조정
+
+`isSilence` 상태와 타임아웃을 함께 사용하면 자연스러운 말 끊김과 재시작을 처리할 수 있습니다.
+
+### 클라이언트 측 VAD의 장점
+
+- CPU와 네트워크 사용량 감소
+- 서버 왕복 없이 빠른 감지
+- 환경에 맞는 감도 조정 가능
 
 !!! note "Activity signal 타이밍"
 
@@ -473,6 +533,21 @@ run_config = RunConfig(
 - Gemini Live API native audio 모델에서 지원
 - half-cascade 모델에서는 미지원
 - Vertex AI에서는 모델 가용성 차이에 따라 지원 여부가 달라질 수 있음
+
+### 언제 끄면 좋은가
+
+- 형식적이거나 엄격한 업무 환경
+- 결정론적 동작이 중요한 테스트/디버깅
+- 감정 반응이 불필요한 고정형 UX
+
+## Live API 모델 호환성과 가용성
+
+가장 최신의 모델 호환성과 가용성 정보는 항상 공식 문서를 기준으로 확인해야 합니다.
+
+- Gemini Live API 모델: [Gemini models documentation](https://ai.google.dev/gemini-api/docs/models/gemini)
+- Vertex AI Live API 모델: [Vertex AI model documentation](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models)
+
+프로덕션 배포 전에는 플랫폼별 지원 여부를 반드시 확인하세요.
 
 ## 요약
 

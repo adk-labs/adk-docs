@@ -218,37 +218,69 @@ finally:
 - `UNAVAILABLE`, `DEADLINE_EXCEEDED`, `RESOURCE_EXHAUSTED` → 재시도 가능한 경우 `continue`
 - 항상 `finally`에서 `queue.close()`로 정리
 
-## 텍스트 이벤트 플래그 처리
+## 텍스트 이벤트 처리
+
+텍스트 이벤트의 `partial`, `interrupted`, `turn_complete` 플래그를 이해하는 것은 반응성 높은 스트리밍 UI를 만드는 데 중요합니다.
 
 ### `partial`
 
-- `partial=True`: 증분 텍스트
-- `partial=False`: 병합 완료 텍스트
+이 플래그는 증분 텍스트 청크와 완전히 병합된 텍스트를 구분하는 데 사용됩니다.
+
+```python
+async for event in runner.run_live(...):
+    if event.content and event.content.parts:
+        if event.content.parts[0].text:
+            text = event.content.parts[0].text
+
+            if event.partial:
+                update_streaming_display(text)
+            else:
+                display_complete_message(text)
+```
+
+- `partial=True`: 이전 이벤트 이후 새로 생성된 증분 텍스트
+- `partial=False`: 현재 응답 조각의 병합 완료 텍스트
+
+!!! note
+
+    `partial`은 텍스트 콘텐츠에만 의미가 있습니다. 오디오는 각 청크가 독립적이며, 도구 호출과 전사는 기본적으로 완전한 이벤트입니다.
 
 ### `interrupted`
 
-사용자 중단 시 `interrupted=True` 이벤트가 오며,
-현재 출력 렌더링/오디오 재생을 즉시 중단해야 합니다.
+사용자가 모델 응답 도중 새 입력을 보내면 `interrupted=True` 이벤트가 발생합니다. 이 신호를 받으면 현재 렌더링 중인 출력과 오디오 재생을 즉시 중단해야 합니다.
+
+```python
+async for event in runner.run_live(...):
+    if event.interrupted:
+        stop_streaming_display()
+        show_user_interruption_indicator()
+```
 
 ### `turn_complete`
 
-모델이 턴 응답을 완료했음을 의미합니다.
-입력 UI 재활성화, 타이핑 인디케이터 제거 등에 사용합니다.
+`turn_complete=True`는 모델이 이번 턴의 전체 응답을 완료했음을 의미합니다. 이 시점에서 입력 UI를 다시 활성화하고, 타이핑 인디케이터를 제거하며, 로그에서 턴 경계를 표시할 수 있습니다.
 
 ## 이벤트 JSON 직렬화
 
-`Event`는 Pydantic 모델이므로 `model_dump_json()`으로 직렬화합니다.
+`Event`는 Pydantic 모델이므로 `model_dump_json()`으로 직렬화할 수 있습니다.
 
 ```python
 event_json = event.model_dump_json(exclude_none=True, by_alias=True)
 ```
 
-오디오 `inline_data`는 JSON에서 base64 인코딩되어 payload가 커집니다.
-오디오 중심 앱은 바이너리 프레임과 메타데이터 텍스트를 분리 전송하는 패턴이 효율적입니다.
+오디오 `inline_data`는 JSON으로 보내면 base64 문자열이 되므로 payload가 커집니다. 오디오 중심 애플리케이션에서는 바이너리 프레임과 메타데이터 텍스트를 분리하는 패턴이 더 효율적입니다.
+
+### `Event` 직렬화 옵션
+
+실제 전송용으로는 `exclude_none=True`, `by_alias=True`를 자주 사용합니다.
+
+### 클라이언트 측 역직렬화
+
+클라이언트에서는 같은 스키마를 사용해 JSON을 다시 `Event`로 복원하고, 텍스트/오디오/전사 필드를 분기 처리하면 됩니다.
 
 ## run_live()의 자동 도구 실행
 
-ADK는 Live API 원시 사용 시 필요한 도구 실행 오케스트레이션을 자동화합니다.
+ADK는 Live API 원시 호출에서 직접 구현해야 하는 도구 실행 오케스트레이션을 자동으로 처리합니다.
 
 ```python
 import os
@@ -263,8 +295,7 @@ agent = Agent(
 )
 ```
 
-`runner.run_live()` 호출 시 ADK는 함수 호출 감지, 병렬 실행, 콜백 처리,
-응답 포맷팅, 모델 재전송까지 자동 처리합니다.
+`runner.run_live()`는 함수 호출 감지, 도구 실행, 응답 재전송을 자동으로 조율합니다. 일반적으로는 직접 tool execution 코드를 작성할 필요가 없습니다.
 
 ### 도구 이벤트 관찰
 
@@ -278,13 +309,12 @@ async for event in runner.run_live(...):
 
 ### 장기 실행/스트리밍 툴
 
-- long-running tool: `is_long_running=True`
-- streaming tool: `LiveRequestQueue` 타입 `input_stream` 파라미터를 통해 실시간 업데이트 전송
+- `is_long_running=True`로 오랫동안 실행되는 도구를 표현할 수 있습니다.
+- 스트리밍 툴은 `LiveRequestQueue`의 `input_stream` 파라미터를 통해 실시간 업데이트를 전송할 수 있습니다.
 
 ## InvocationContext
 
-`run_live()` 내부에서는 단일 invocation 동안 유지되는 `InvocationContext`가 생성됩니다.
-(한 번의 `run_live()` 호출 = 하나의 InvocationContext)
+`run_live()` 내부에서는 단일 invocation 동안 유지되는 `InvocationContext`가 생성됩니다. 즉, 한 번의 `run_live()` 호출은 하나의 `InvocationContext`와 대응됩니다.
 
 ### tool/callback에서 자주 쓰는 필드
 
@@ -299,9 +329,11 @@ async for event in runner.run_live(...):
 def my_tool(context: InvocationContext, query: str):
     user_id = context.session.user_id
     recent_events = context.session.events[-5:]
-    prefs = context.session.state.get('user_preferences', {})
+    prefs = context.session.state.get("user_preferences", {})
     # ...
 ```
+
+`InvocationContext`는 현재 invocation의 실행 상태를 담는 컨테이너입니다. 특히 세션 state와 이벤트 이력을 도구/콜백에서 참조할 때 유용합니다.
 
 ## 멀티 에이전트 워크플로 모범 사례
 
@@ -313,29 +345,24 @@ ADK Gemini Live API Toolkit은 다음 패턴을 지원합니다.
 
 ### SequentialAgent + BIDI
 
-`task_completed()` 호출은 현재 에이전트 완료를 의미하며,
-ADK가 다음 에이전트로 자동 전환합니다.
-앱 코드는 같은 `run_live()` 루프에서 이벤트를 계속 소비하면 됩니다.
+`task_completed()` 호출은 현재 에이전트가 작업을 끝냈음을 의미하며, ADK는 다음 에이전트로 자동 전환합니다. 앱 코드는 같은 `run_live()` 루프에서 이벤트를 계속 소비하면 됩니다.
 
 **권장 원칙:**
 
-1. 단일 이벤트 루프 사용
-2. 단일 `LiveRequestQueue` 유지
-3. `event.author`로 현재 에이전트 파악
-4. 에이전트 전환을 앱에서 수동 관리하지 않음
+1. 단일 이벤트 루프를 유지합니다.
+2. 단일 `LiveRequestQueue`를 유지합니다.
+3. `event.author`로 현재 에이전트를 식별합니다.
+4. 에이전트 전환을 앱에서 수동 관리하지 않습니다.
+
+### 진행 중인 이벤트 흐름 이해
+
+SequentialAgent를 쓸 때는 `task_completed()`가 즉시 루프를 끝내지 않는다는 점이 중요합니다. 현재 에이전트의 작업이 끝나면 다음 에이전트로 자연스럽게 넘어가며, 마지막 에이전트가 완료될 때만 루프가 종료됩니다.
 
 ## 요약
 
-이번 파트에서는 ADK Gemini Live API Toolkit의 이벤트 처리 전반을 학습했습니다.
-텍스트/오디오/전사/도구 호출/에러 이벤트 처리,
-`partial`/`interrupted`/`turn_complete` 기반 UI 상태 제어,
-JSON 직렬화와 네트워크 전송,
-ADK 자동 도구 실행,
-InvocationContext 기반 상태 관리,
-멀티 에이전트 워크플로 처리까지 다뤘습니다.
+이번 파트에서는 ADK Gemini Live API Toolkit의 이벤트 처리 전반을 학습했습니다. 텍스트/오디오/전사/도구 호출/오류 이벤트 처리, `partial`/`interrupted`/`turn_complete` 기반 UI 상태 제어, JSON 직렬화와 네트워크 전송, ADK 자동 도구 실행, `InvocationContext` 기반 상태 관리, 멀티 에이전트 워크플로 처리까지 다뤘습니다.
 
-다음 파트에서는 RunConfig를 활용해 모달리티, 세션 재개, 비용 제어 등
-고급 스트리밍 동작을 구성합니다.
+다음 파트에서는 RunConfig를 활용해 모달리티, 세션 재개, 비용 제어 같은 고급 스트리밍 동작을 구성합니다.
 
 ---
 
