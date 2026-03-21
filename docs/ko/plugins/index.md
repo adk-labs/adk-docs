@@ -80,7 +80,7 @@ class CountInvocationPlugin(BasePlugin):
 print(f"[Plugin] LLM request count: {self.llm_request_count}")
 ```
 
-**TypeScript**
+=== "TypeScript"
 
 ```typescript title="count_plugin.ts"
 import { BaseAgent, BasePlugin, Context } from "@google/adk";
@@ -116,7 +116,7 @@ export class CountInvocationPlugin extends BasePlugin {
 }
 ```
 
-**Java**
+=== "Java"
 
 ```java title="CountInvocationPlugin.java"
 import com.google.adk.agents.BaseAgent;
@@ -211,7 +211,7 @@ if __name__ == "__main__":
   asyncio.run(main())
 ```
 
-**TypeScript**
+=== "TypeScript"
 
 ```typescript
 import { InMemoryRunner, LlmAgent, FunctionTool } from "@google/adk";
@@ -268,7 +268,7 @@ async function main(): Promise<void> {
 main();
 ```
 
-**Java**
+=== "Java"
 
 ```java
 import com.google.adk.agents.LlmAgent;

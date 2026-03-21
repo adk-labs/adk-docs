@@ -48,6 +48,37 @@
         print("temp_service의 최종 상태 - ", temp_service)
        ```
 
+=== "TypeScript"
+
+       ```typescript
+        import { InMemorySessionService } from "@google/adk";
+
+        // 속성을 검토하기 위해 간단한 세션 생성
+        const tempService = new InMemorySessionService();
+        const exampleSession = await tempService.createSession({
+            appName: "my_app",
+            userId: "example_user",
+            state: {"initial_key": "initial_value"} // 상태는 초기화될 수 있습니다
+        });
+
+        console.log("--- 세션 속성 검토 ---");
+        console.log(`ID ('id'):                ${exampleSession.id}`);
+        console.log(`애플리케이션 이름 ('appName'): ${exampleSession.appName}`);
+        console.log(`사용자 ID ('userId'):         ${exampleSession.userId}`);
+        console.log(`상태 ('state'):           ${JSON.stringify(exampleSession.state)}`); // 참고: 여기서는 초기 상태만 표시됩니다
+        console.log(`이벤트 ('events'):         ${JSON.stringify(exampleSession.events)}`); // 초기에는 비어 있습니다
+        console.log(`마지막 업데이트 ('lastUpdateTime'): ${exampleSession.lastUpdateTime}`);
+        console.log("---------------------------------");
+
+        // 정리 (이 예시에서는 선택 사항)
+        const finalStatus = await tempService.deleteSession({
+            appName: exampleSession.appName,
+            userId: exampleSession.userId,
+            sessionId: exampleSession.id
+        });
+        console.log("temp_service의 최종 상태 - ", finalStatus);
+       ```
+
 === "Go"
 
        ```go
@@ -112,10 +143,18 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
     === "Python"
 
            ```py
-            from google.adk.sessions import InMemorySessionService
-            session_service = InMemorySessionService()
-           ```
-    === "Go"
+        from google.adk.sessions import InMemorySessionService
+        session_service = InMemorySessionService()
+      ```
+
+    === "TypeScript"
+
+      ```typescript
+        import { InMemorySessionService } from "@google/adk";
+        const sessionService = new InMemorySessionService();
+      ```
+
+=== "Go"
 
            ```go
             import "google.golang.org/adk/session"
@@ -202,6 +241,16 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
                    .blockingGet();
            ```
 
+!!! warning "비동기 드라이버 요구사항"
+
+    `DatabaseSessionService`는 비동기 데이터베이스 드라이버가 필요합니다. SQLite를 사용할 때는 연결 문자열에서 `sqlite` 대신 `sqlite+aiosqlite`를 사용해야 합니다.
+    PostgreSQL, MySQL과 같은 다른 데이터베이스의 경우 `asyncpg`(PostgreSQL) 또는 `aiomysql`(MySQL)처럼 비동기 호환 드라이버를 사용하고 있는지 확인하세요.
+
+!!! note "ADK Python v1.22.0에서 세션 데이터베이스 스키마 변경"
+
+    ADK Python v1.22.0에서 세션 데이터베이스 스키마가 변경되었으며, 세션 데이터베이스 마이그레이션이 필요합니다.
+    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/adk-docs/sessions/session/migrate/)을 참조하세요.
+
 3.  **`DatabaseSessionService`**
 
     <div class="language-support-tag">
@@ -216,7 +265,9 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
     ```py
     from google.adk.sessions import DatabaseSessionService
     # 로컬 SQLite 파일을 사용하는 예시:
-    db_url = "sqlite:///./my_agent_data.db"
+    # 참고: 구현에는 비동기 데이터베이스 드라이버가 필요합니다.
+    # SQLite의 경우 비동기 호환성을 보장하기 위해 'sqlite' 대신 'sqlite+aiosqlite'를 사용하세요.
+    db_url = "sqlite+aiosqlite:///./my_agent_data.db"
     session_service = DatabaseSessionService(db_url=db_url)
     ```
 
