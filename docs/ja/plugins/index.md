@@ -615,6 +615,134 @@ public Completable afterRunCallback(InvocationContext invocationContext) {
 }
 ```
 
+## コールバックフックのタブ要約
+
+### ユーザーメッセージの要点
+
+=== "概要"
+
+    ユーザー入力を監視し、プロンプト改変や監査ログに使います。
+
+=== "Python"
+
+    `before_agent_callback` の前処理で入力検査を挟めます。
+
+=== "TypeScript"
+
+    入力整形の前処理を `beforeAgentCallback` にまとめます。
+
+=== "Java"
+
+    Java では `beforeAgentCallback` で同様の前処理を行います。
+
+### ランナー開始の要点
+
+=== "概要"
+
+    ワークフロー開始時にメトリクスやトレースの初期化を行います。
+
+=== "Python"
+
+    `before_run_callback` 相当のフックで初期化します。
+
+=== "TypeScript"
+
+    起動時のセットアップを `beforeRunCallback` に集約します。
+
+=== "Java"
+
+    Java でも起動直後の初期化を 1 箇所にまとめます。
+
+### エージェント実行の要点
+
+=== "概要"
+
+    agent ごとのロギング、ポリシー確認、状態注入に使います。
+
+=== "Python"
+
+    `before_agent_callback` / `after_agent_callback` を使います。
+
+=== "TypeScript"
+
+    Agent の実行前後で `beforeAgentCallback` を使います。
+
+=== "Java"
+
+    `beforeAgentCallback` と対応する後処理を使います。
+
+### モデルの要点
+
+=== "概要"
+
+    モデルリクエストやレスポンスの整形、エラーの標準化に使います。
+
+=== "Python"
+
+    `before_model_callback` で LLMRequest を調整します。
+
+=== "TypeScript"
+
+    `beforeModelCallback` で LLM 入出力を整形します。
+
+=== "Java"
+
+    Java では `beforeModelCallback` を使って同様に制御します。
+
+### ツールの要点
+
+=== "概要"
+
+    ツール実行前後で権限チェック、監査、エラー処理を行います。
+
+=== "Python"
+
+    `before_tool_callback` / `after_tool_callback` を使います。
+
+=== "TypeScript"
+
+    `beforeToolCallback` / `afterToolCallback` で制御します。
+
+=== "Java"
+
+    Java でもツール呼び出しの前後でフックできます。
+
+### イベントコールバックの要点
+
+=== "概要"
+
+    `Event` を加工して、送信前のメタデータ追加や副作用を実行します。
+
+=== "Python"
+
+    `on_event_callback` でイベント差し替えや監査ログを行えます。
+
+=== "TypeScript"
+
+    `onEventCallback` でストリーミング前の整形を集約します。
+
+=== "Java"
+
+    Java でもイベント送信前の加工をフックできます。
+
+### ランナー終了コールバックの要点
+
+=== "概要"
+
+    全イベント処理後のクリーンアップと最終レポートに使います。
+
+=== "Python"
+
+    `after_run_callback` で接続やメトリクスを閉じます。
+
+=== "TypeScript"
+
+    `afterRunCallback` で後処理をまとめます。
+
+=== "Java"
+
+    Java でも終了後のティアダウンを 1 箇所に集約します。
+
 ## 次のステップ
 
 ADKプロジェクトにプラグインを開発して適用するためのこれらのリソースを確認してください。

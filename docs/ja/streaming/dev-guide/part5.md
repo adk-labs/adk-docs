@@ -412,6 +412,169 @@ proactivity と affective dialog は native audio モデル向けの拡張機能
 
 利用可否は Gemini Live API / Vertex AI Live API とモデル世代に依存します。
 
+### How to Handle Model Names
+
+環境変数を使うと、開発と本番でモデル名を切り替えやすくなります。
+
+```python
+import os
+
+model_name = os.getenv("DEMO_AGENT_MODEL", "gemini-2.5-flash-native-audio-preview-12-2025")
+```
+
+### Live API Models Compatibility and Availability
+
+| 機能 | Native Audio | Half-Cascade |
+|---|---|---|
+| 音声入力 | ✅ | ✅ |
+| 音声出力 | ✅ | TTS 経由 |
+| 文字起こし | ✅ | ✅ |
+| 動画 | 条件付き | 条件付き |
+
+### Default behavior: Audio transcription is ENABLED by default
+
+デフォルトでは入力/出力の transcription が有効です。
+
+```python
+from google.adk.agents.run_config import RunConfig
+
+run_config = RunConfig(
+    response_modalities=["AUDIO"],
+)
+```
+
+### Both input and output transcription are automatically configured
+
+通常は明示設定がなくても、字幕用途の transcription が流れます。
+
+### To disable transcription explicitly:
+
+```python
+run_config = RunConfig(
+    response_modalities=["AUDIO"],
+    input_audio_transcription=None,
+    output_audio_transcription=None,
+)
+```
+
+### Enable only input transcription (disable output):
+
+```python
+run_config = RunConfig(
+    response_modalities=["AUDIO"],
+    input_audio_transcription=types.AudioTranscriptionConfig(),
+    output_audio_transcription=None,
+)
+```
+
+### Enable only output transcription (disable input):
+
+```python
+run_config = RunConfig(
+    response_modalities=["AUDIO"],
+    input_audio_transcription=None,
+    output_audio_transcription=types.AudioTranscriptionConfig(),
+)
+```
+
+### ... runner setup code ...
+
+```python
+async for event in runner.run_live(...):
+    if event.input_transcription:
+        ...
+```
+
+### Handling Audio Transcription at the Client
+
+クライアントは transcription を字幕やログへ流すだけでよく、別 STT を必須にしません。
+
+### Multi-Agent Transcription Requirements
+
+`sub_agents` を使うときは、次の agent へコンテキストを渡すため transcription が特に重要です。
+
+### Agent-Level Configuration
+
+agent ごとに音声設定を分けると、役割の違いを表現しやすくなります。
+
+### RunConfig-Level Configuration
+
+RunConfig 側の設定は全体既定値として使います。
+
+### Configuration Precedence
+
+agent レベル設定が RunConfig より優先されます。
+
+### Multi-Agent Voice Configuration
+
+複数 agent の voice を使い分けると、会話の担当が分かりやすくなります。
+
+### Configuration Parameters
+
+| パラメータ | 用途 |
+|---|---|
+| `voice_config` | 音声選択 |
+| `language_code` | 言語設定 |
+| `prebuilt_voice_config` | 既定 voice |
+
+### Available Voices
+
+Puck / Charon / Kore / Fenrir / Aoede / Leda / Orus / Zephyr などが利用できます。
+
+### Platform Availability
+
+利用可否はモデルと実行基盤の両方で決まります。
+
+### Important Notes
+
+- Native audio は音声中心
+- Half-cascade は文字起こし + TTS
+- 設定差分を環境変数で吸収すると運用しやすい
+
+### Client-Side VAD Example
+
+#### Server-Side Configuration
+
+```python
+from google.genai import types
+from google.adk.agents.run_config import RunConfig
+
+run_config = RunConfig(
+    response_modalities=["AUDIO"],
+    realtime_input_config=types.RealtimeInputConfig(
+        automatic_activity_detection=types.AutomaticActivityDetection(
+            disabled=True
+        )
+    )
+)
+```
+
+#### WebSocket Upstream Task
+
+音声チャンクを WebSocket で上流へ送ります。
+
+#### Client-Side VAD Implementation
+
+```javascript
+function onSpeechBoundary(audioChunk) {
+    sendChunk(audioChunk);
+}
+```
+
+#### Client-Side Coordination
+
+録音、送信、字幕表示の状態をそろえて扱います。
+
+#### Benefits of Client-Side VAD
+
+- レイテンシを下げやすい
+- 送信量を抑えやすい
+- UI と制御を同じ場所で持てる
+
+### Platform Compatibility
+
+機能ごとの対応可否は Gemini Live API / Vertex AI Live API で差があります。
+
 ## まとめ
 
 このパートでは、ADK Gemini Live API Toolkit におけるマルチモーダル実装を学びました。

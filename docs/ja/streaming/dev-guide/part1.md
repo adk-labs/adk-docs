@@ -447,6 +447,105 @@ python src/part1/1-3-1_environment_setup.py
 - キューを閉じる
 - 必要であればセッション状態を永続化する
 
+## ADK Gemini Live API Toolkit Demo
+
+ここでは、リアルタイム会話型アプリの基本デモを想定します。
+音声、テキスト、映像を扱う会話体験を、ADK の構成要素で組み立てるのが狙いです。
+
+## 1.1 What is Bidi-streaming?
+
+双方向ストリーミングは、送信と受信を同時に行える会話モデルです。
+
+### Key Characteristics
+
+| 特徴 | 説明 |
+|---|---|
+| 双方向通信 | 送信しながら受信できる |
+| 割り込み | 会話途中で入力できる |
+| マルチモーダル | テキスト・音声・映像を扱う |
+
+### Difference from Other Streaming Types
+
+!!! note "ストリーミングの違い"
+
+    サーバーサイドストリーミングは一方向、トークンレベルストリーミングは応答の逐次配信、Bidi-streaming は双方向会話です。
+
+### Real-World Applications
+
+- **Customer Service & Contact Centers**: 途中で割り込める応対
+- **E-commerce & Personalized Shopping**: 商品比較と推薦
+- **Field Service & Technical Assistance**: 現場写真と会話の組み合わせ
+- **Healthcare & Telemedicine**: 問診中の即時補助
+- **Financial Services & Wealth Management**: リアルタイム相談
+
+## 1.2 Gemini Live API and Vertex AI Live API
+
+### What is the Live API?
+
+Live API は、リアルタイム入力を受け取りながら応答を返すストリーミング API です。
+
+### Gemini Live API vs Vertex AI Live API
+
+| 項目 | Gemini Live API | Vertex AI Live API |
+|---|---|---|
+| 主な用途 | 迅速な開発 | 組織向け運用 |
+| 認証 | Google AI Studio API key | Google Cloud 認証 |
+| 利用開始 | すぐに試せる | プロジェクト設定が必要 |
+
+## 1.3 ADK Gemini Live API Toolkit: For Building Realtime Agent Applications
+
+### Platform Flexibility
+
+ADK は開発と本番で異なる Live API を選べます。
+
+#### How Platform Selection Works
+
+- **Development Phase: Gemini Live API (Google AI Studio)**
+- **Production Phase: Vertex AI Live API (Google Cloud)**
+
+```env
+# .env.development
+GOOGLE_GENAI_USE_VERTEXAI=FALSE
+GOOGLE_API_KEY=your_actual_api_key_here
+```
+
+```env
+# .env.production
+GOOGLE_GENAI_USE_VERTEXAI=TRUE
+GOOGLE_CLOUD_PROJECT=your_actual_project_id
+GOOGLE_CLOUD_LOCATION=us-central1
+```
+
+!!! tip "運用の考え方"
+
+    まず Google AI Studio で動作を確認し、本番では Vertex AI に切り替えると検証がしやすくなります。
+
+## FastAPI Application Example
+
+以下は、Streaming アプリを FastAPI でつなぐ時の典型的な構成です。
+
+### Phase 1: Application Initialization (once at startup)
+
+#### Define Your SessionService
+
+セッション保存先を用意します。
+
+#### Define Your Runner
+
+`Runner` は 1 回の会話実行を調停します。
+
+### WebSocket Endpoint
+
+WebSocket でクライアントと ADK を接続します。
+
+## Key Concepts
+
+### Production Considerations
+
+- 再接続を前提にする
+- セッションは永続化する
+- UI は partial イベントを受け取る
+
 ## 1.6 このパートで学ぶこと { #what-we-will-learn }
 
 このパートの学習目標は次のとおりです。

@@ -525,6 +525,39 @@ run_config = RunConfig(
 `support_cfc=True` では、設定上 SSE を選んでも内部的に Live API(WebSocket) を使用します。
 `gemini-2.x` 系が必要で、`gemini-1.5-x` は非対応です。
 
+### 追加の制御ポイント
+
+| 項目 | 説明 |
+|---|---|
+| `max_llm_calls` | 1 invocation 内の LLM 呼び出し上限 |
+| `save_live_blob` | 音声/動画の永続化設定 |
+| `custom_metadata` | 追加メタデータ |
+| `support_cfc` | compositional function calling |
+
+### 運用上のチェックリスト
+
+- `response_modalities` は 1 セッション 1 種類にする
+- 長時間会話では session resumption を有効化する
+- 高負荷環境では context window compression を検討する
+- クォータ監視はアプリ側でも行う
+
+### Example: metadata と blob 保存を併用する
+
+```python
+run_config = RunConfig(
+    max_llm_calls=500,
+    save_live_blob=True,
+    custom_metadata={"user_tier": "premium", "session_type": "support"},
+    support_cfc=True,
+)
+```
+
+### Example: TEXT / AUDIO 切り替えの意図
+
+- TEXT はチャット中心の UI に向く
+- AUDIO は音声対話に向く
+- 両方の同時指定は不可
+
 ## まとめ
 
 このパートでは、RunConfig によって ADK Gemini Live API Toolkit セッションを
