@@ -313,6 +313,105 @@ run_config = RunConfig(
 
 これらは主に native audio モデル向け機能です。
 
+### Live API Models Compatibility and Availability
+
+モデルごとに、音声入力、音声出力、転写、動画サポートの可否が異なります。
+
+### Handling Audio Transcription at the Client
+
+クライアント側では `input_transcription` と `output_transcription` を字幕表示やログに使います。
+
+### Multi-Agent Transcription Requirements
+
+`sub_agents` を使う構成では、転送のために文字起こしが重要になります。
+
+### Agent-Level Configuration
+
+agent レベルで `speech_config` を設定すると、その agent に専用の音声を持たせられます。
+
+### RunConfig-Level Configuration
+
+RunConfig 側でも `speech_config` を設定できます。
+
+### Configuration Precedence
+
+優先順位は agent レベルの設定が RunConfig より上です。
+
+### Multi-Agent Voice Configuration
+
+複数 agent の会話では、役割に応じて voice を使い分けると聞き取りやすくなります。
+
+### Configuration Parameters
+
+- `voice_config`
+- `language_code`
+- `prebuilt_voice_config`
+
+### Available Voices
+
+使用可能な音声はモデルやプラットフォームによって異なります。
+
+### Platform Availability
+
+Vertex AI と Gemini Live API で利用可能な機能に差があります。
+
+### Important Notes
+
+- Native audio は AUDIO-only の前提です
+- Half-cascade は TEXT と TTS の組み合わせです
+- 既定値はモデルごとに異なります
+
+### Voice Activity Detection (VAD)
+
+VAD はユーザーの発話開始/終了を自動判定するための仕組みです。
+
+### How VAD Works
+
+自動活動検出が有効な場合、音声入力のまとまりを ADK が判断します。
+
+### When to Disable VAD
+
+Push-to-talk のように自前で区切りたい場合のみ無効化します。
+
+### VAD Configurations
+
+- 自動 VAD
+- 手動 activity signal
+
+### Client-Side VAD Example
+
+ブラウザ側で音声区切りを制御する場合の構成を示します。
+
+#### Server-Side Configuration
+
+サーバー側では `automatic_activity_detection.disabled=True` などで VAD を無効化します。
+
+#### WebSocket Upstream Task
+
+音声チャンクを WebSocket 経由で上流へ送る処理を担当します。
+
+#### Client-Side VAD Implementation
+
+クライアントで発話単位を切ると、帯域と遅延を抑えやすくなります。
+
+#### Client-Side Coordination
+
+UI、録音、送信を同じ状態機械で連携させます。
+
+#### Benefits of Client-Side VAD
+
+- 応答性が高い
+- 無駄な音声送信を減らせる
+- UI と発話制御を合わせやすい
+
+### Proactivity and Affective Dialog
+
+proactivity と affective dialog は native audio モデル向けの拡張機能です。
+
+### Platform Compatibility
+
+利用可否は Gemini Live API / Vertex AI Live API とモデル世代に依存します。
+
 ## まとめ
 
 このパートでは、ADK Gemini Live API Toolkit におけるマルチモーダル実装を学びました。

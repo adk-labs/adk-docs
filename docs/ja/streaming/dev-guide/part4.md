@@ -410,6 +410,74 @@ run_config = RunConfig(
 - 上限超過時は待機キューへ
 - セッション終了時に次ユーザーを昇格
 
+### ADK Session と Live API Session
+
+ADK の `Session` は永続状態、Live API session はストリーミング接続中の論理会話です。
+
+### Live API 接続とセッション
+
+接続方式と会話状態の寿命は別概念として扱います。
+
+#### プラットフォーム別の接続/セッション制限
+
+各プラットフォームで同時接続数やセッション上限が異なります。
+
+### ADK の再接続管理の範囲
+
+ADK はセッション再開を補助しますが、アプリケーション側の状態設計も必要です。
+
+### ADK がセッション再開をどう管理するか
+
+再接続時に同じ `session_id` を使い、会話継続を透過的に扱います。
+
+### 自動再接続シーケンス図
+
+再接続の流れは、クライアント・ADK・Live API の 3 層で整理すると分かりやすくなります。
+
+### Platform Behavior and Official Limits
+
+公式の制限値に合わせて、`quota` と `duration` を監視してください。
+
+### When NOT to Use Context Window Compression
+
+短時間セッションや小さなコンテキストでは、圧縮を入れない方がシンプルです。
+
+## Live API 接続・セッション管理のベストプラクティス
+
+### 必須: session resumption を有効化する
+
+長時間会話では再接続を前提に設計します。
+
+### 推奨: 長時間会話には context window compression
+
+会話が長くなるならコンテキスト圧縮で継続性を確保します。
+
+### 補助: セッション時間を監視する
+
+制限に近づいたら UI で通知するのが安全です。
+
+### 同時 Live API セッションクォータの理解
+
+アプリの接続数とモデル側の制限を両方見ます。
+
+### クォータ管理のアーキテクチャ
+
+#### Pattern 1: Direct Mapping (Simple Applications)
+
+接続数が少ない小規模アプリ向けです。
+
+#### Pattern 2: Session Pooling with Queueing
+
+セッションプールで待機列を管理し、上限を越えないようにします。
+
+### この invocation の全イベントにメタデータを付与する
+
+`custom_metadata` はイベントの追跡や分析に使えます。
+
+### A2A request metadata は custom_metadata に自動マッピングされる
+
+A2A 互換のリクエスト情報は RunConfig の metadata に反映されます。
+
 ## Miscellaneous Controls
 
 ```python

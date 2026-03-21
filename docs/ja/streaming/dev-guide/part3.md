@@ -87,6 +87,10 @@ async for event in runner.run_live(
 
 ## イベント理解
 
+### Event クラス
+
+`Event` はストリーミング中のあらゆる状態変化を運ぶ Pydantic モデルです。
+
 ### Event の主要フィールド
 
 - `content`
@@ -97,6 +101,10 @@ async for event in runner.run_live(
 - `input_transcription` / `output_transcription`
 - `usage_metadata`
 - `error_code` / `error_message`
+
+#### Event Identity
+
+`event.id` はイベントごとに一意、`event.invocation_id` は同一 invocation 内で共通です。
 
 ### event.id と invocation_id
 
@@ -113,6 +121,10 @@ async for event in runner.run_live(...):
 
 - モデル応答は `"model"` ではなく agent 名
 - ユーザー音声文字起こしイベントは `author="user"`
+
+### Event Authorship
+
+`author` は「誰がそのイベントを出したか」を表す属性です。
 
 ## イベントタイプ別処理
 
@@ -209,16 +221,39 @@ finally:
 
 ## JSON シリアライズ
 
+### Using event.model_dump_json()
+
 `Event` は Pydantic モデルなので `model_dump_json()` で送信できます。
 
 ```python
 event_json = event.model_dump_json(exclude_none=True, by_alias=True)
 ```
 
+### Serialization options
+
+- `exclude_none=True` で不要なフィールドを省く
+- `by_alias=True` でクライアント互換の JSON にする
+
+### Deserializing the Client Side
+
+受信側は JSON から `Event` 相当の構造へ戻して UI を更新します。
+
+### Audio Transmission Optimization
+
+音声はバイナリフレーム、メタデータは JSON として分けると効率的です。
+
 音声 `inline_data` は JSON 化で base64 になりサイズ増。
 本番では音声をバイナリフレーム、メタデータをテキストで分離送信する方法が有効です。
 
 ## run_live() の自動ツール実行
+
+### The Challenge with Raw Live API
+
+生の Live API では、ストリーミング中のツール実行を自前で調停する必要があります。
+
+### How ADK Simplifies Tool Use
+
+ADK はツール呼び出し、応答、順序制御をまとめて面倒見ます。
 
 ADK は Live API 生利用で必要なツール実行オーケストレーションを自動化します。
 
@@ -245,10 +280,39 @@ async for event in runner.run_live(...):
 
 long-running tool / streaming tool も `run_live()` 内で連携できます。
 
+### Tool Execution Events
+
+イベントを監視するだけで、どのツールが呼ばれたかを把握できます。
+
+### Long-Running and Streaming Tools
+
+長時間ツールや streaming tool も `run_live()` の流れに組み込めます。
+
+### Key Takeaway
+
+アプリケーションはループに集中し、ツールの制御は ADK に任せるのが基本です。
+
 ## InvocationContext
 
 `run_live()` 1 回につき 1 つの `InvocationContext` が生成されます。
 ツール/コールバックで次の情報にアクセスできます。
+
+- `context.invocation_id`
+- `context.session.events`
+- `context.session.state`
+- `context.session.user_id`
+- `context.run_config`
+- `context.end_invocation`
+
+### What is an Invocation?
+
+1 回の `run_live()` 実行を 1 つの invocation として扱います。
+
+### Who Uses InvocationContext?
+
+ツール、コールバック、エージェント内部ロジックが invocation 情報を参照します。
+
+#### What InvocationContext Contains
 
 - `context.invocation_id`
 - `context.session.events`
@@ -265,18 +329,48 @@ Gemini Live API Toolkit での代表パターン:
 - coordinator + sub-agent（`transfer_to_agent`）
 - SequentialAgent パイプライン（`task_completed`）
 
-### SequentialAgent のポイント
+### SequentialAgent と BIDI streaming
 
-`task_completed()` は current agent の完了を示し、
-ADK が次 agent へ透過的に引き継ぎます。
-アプリは同じ `run_live()` ループでイベントを処理し続ければよいです。
+SequentialAgent は `run_live()` の単一ループを保ったまま、担当エージェントを順番に引き継ぎます。
 
-**推奨原則:**
+### 推奨パターン: 透過的な Sequential Flow
 
-1. 単一イベントループ
-2. 単一 `LiveRequestQueue`
-3. `event.author` で現在エージェントを把握
-4. 遷移をアプリ側で手動管理しない
+アプリ側は現在の agent を表示するだけにして、遷移の制御は ADK に任せます。
+
+### エージェント遷移中のイベントフロー
+
+- Researcher が入力を受け取る
+- Writer が中間成果をまとめる
+- Reviewer が最終確認する
+
+### 設計原則
+
+#### 1. 単一イベントループ
+
+1 つの async for ループで全エージェントを処理します。
+
+#### 2. Persistent Queue
+
+入力キューは workflow 全体で共有し、エージェントごとに作り直しません。
+
+#### 3. Agent-Aware UI (Optional)
+
+表示層が現在の agent 名を把握すると、会話の進行が理解しやすくなります。
+
+#### 4. Transition Notifications
+
+必要に応じて agent 切り替え時の通知を UI に出します。
+
+### transfer_to_agent と task_completed の違い
+
+- `transfer_to_agent`: coordinator が次の担当を選ぶ
+- `task_completed`: 現在の agent が完了し、シーケンスが次へ進む
+
+### ベストプラクティス要約
+
+- ループは 1 つに保つ
+- queue は 1 つに保つ
+- agent 遷移はアプリロジックで複製しない
 
 ## まとめ
 

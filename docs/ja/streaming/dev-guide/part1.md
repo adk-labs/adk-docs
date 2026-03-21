@@ -407,11 +407,59 @@ python src/part1/1-3-1_environment_setup.py
     - APIキーの検証
     - 基本的なインポートの確認
 
-### 次のステップ
+## 1.4 ADK Gemini Live API Toolkit のアーキテクチャ概要 { #adk-gemini-live-api-toolkit-architecture-overview }
 
-環境がセットアップされたので、コアとなるストリーミングAPIについて深く学ぶ準備ができました。次のパート（近日公開予定）では、以下について学びます：
+このパートでは、ADK のストリーミング実装がクライアント、ADK ランタイム、Gemini Live API をどう接続するかを整理します。
+アプリ側は WebSocket の低レベル制御を抱え込まず、`LiveRequestQueue` と `Runner` を中心に責務を分離するのが基本です。
 
-- **LiveRequestQueue**: 双方向コミュニケーションの心臓部
-- **run_live() メソッド**: ストリーミングセッションの開始
-- **イベント処理**: リアルタイム応答のハンドリング
-- **Gemini Live API**: 直接的な統合パターン
+### 高レベルアーキテクチャ
+
+- **クライアント層**: Web / モバイル UI、音声入力、映像入力、WebSocket 接続
+- **ADK 層**: `LiveRequestQueue`、`Runner`、`Session`、`Agent`
+- **Gemini 層**: Gemini Live API または Vertex AI Live API
+
+この分離により、アプリケーションは UI と会話ロジックに集中でき、ストリーミング制御や状態管理は ADK に任せられます。
+
+## 1.5 ADK Gemini Live API Toolkit アプリケーションのライフサイクル { #adk-gemini-live-api-toolkit-application-lifecycle }
+
+実運用では、ストリーミングアプリは次の流れで動きます。
+
+### Phase 1: アプリケーション初期化
+
+- Agent を定義する
+- `SessionService` を選ぶ
+- `Runner` を用意する
+
+### Phase 2: セッション初期化
+
+- 既存セッションを取得するか、新規作成する
+- `RunConfig` を決める
+- `LiveRequestQueue` を生成する
+
+### Phase 3: `run_live()` による Bidi-streaming
+
+- ユーザー入力をキューへ送る
+- `run_live()` が返すイベントを逐次処理する
+- UI の表示、音声再生、ツール呼び出しを更新する
+
+### Phase 4: Live API セッションの終了
+
+- キューを閉じる
+- 必要であればセッション状態を永続化する
+
+## 1.6 このパートで学ぶこと { #what-we-will-learn }
+
+このパートの学習目標は次のとおりです。
+
+- **前提知識**: Python、非同期処理、基本的な Web API
+- **学習リソース**: ADK の Runner / Session / Agent の基本
+- **到達目標**: 双方向ストリーミングを使ったリアルタイムアプリの土台を理解する
+
+## まとめ
+
+ここまでで、ADK Gemini Live API Toolkit を使うための基本的な構成要素と運用の流れを確認しました。
+次のパートでは、`LiveRequestQueue` と `run_live()` を使った実際のメッセージ送受信とイベント処理に進みます。
+
+---
+
+← [Previous: Part 2: Sending Messages with LiveRequestQueue](part2.md) | [Next: Part 3: Event Handling with run_live()](part3.md) →
