@@ -14,7 +14,7 @@ catalog_tags: ["mcp","data","google"]
 
 GoogleのAgent Development Kit（ADK）は、ツールボックスを組み込みでサポートしています。ツールボックスの[はじめに](https://googleapis.github.io/genai-toolbox/getting-started/)または[構成](https://googleapis.github.io/genai-toolbox/getting-started/configure/)の詳細については、[ドキュメント](https://googleapis.github.io/genai-toolbox/getting-started/introduction/)を参照してください。
 
-![GenAIツールボックス](../../assets/mcp_db_toolbox.png)
+![GenAIツールボックス](../assets/mcp_db_toolbox.png)
 
 ## サポートされているデータソース
 

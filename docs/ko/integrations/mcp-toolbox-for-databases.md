@@ -14,7 +14,7 @@ catalog_tags: ["mcp","data","google"]
 
 Google의 에이전트 개발 키트(ADK)는 도구 상자를 기본적으로 지원합니다. 도구 상자 [시작하기](https://googleapis.github.io/genai-toolbox/getting-started/) 또는 [구성하기](https://googleapis.github.io/genai-toolbox/getting-started/configure/)에 대한 자세한 내용은 [설명서](https://googleapis.github.io/genai-toolbox/getting-started/introduction/)를 참조하세요.
 
-![GenAI 도구 상자](../../assets/mcp_db_toolbox.png)
+![GenAI 도구 상자](../assets/mcp_db_toolbox.png)
 
 ## 지원되는 데이터 소스
 

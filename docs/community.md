@@ -13,7 +13,7 @@ Development Kit community.
 <div class="resource-grid">
   <a href="https://www.youtube.com/watch?v=zgrOwow_uTQ" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-agent-development-kit.jpg" alt="Introducing Agent Development Kit">
+      <img src="assets/community-agent-development-kit.jpg" alt="Introducing Agent Development Kit">
     </div>
     <div class="card-content">
       <div class="type">Video Demo</div>
@@ -23,7 +23,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/watch?v=44C8u0CDtSo" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-building-your-first-agent.jpg" alt="Building your first agent with ADK">
+      <img src="assets/community-building-your-first-agent.jpg" alt="Building your first agent with ADK">
     </div>
     <div class="card-content">
       <div class="type">Video</div>
@@ -33,7 +33,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/watch?v=5ZmaWY7UX6k" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-agent-tools-101.jpg" alt="ADK Agent Tools 101">
+      <img src="assets/community-agent-tools-101.jpg" alt="ADK Agent Tools 101">
     </div>
     <div class="card-content">
       <div class="type">Video</div>
@@ -100,7 +100,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/watch?v=P4VFL9nIaIA" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-adk-masterclass.jpg" alt="ADK Masterclass Thumbnail">
+      <img src="assets/community-adk-masterclass.jpg" alt="ADK Masterclass Thumbnail">
     </div>
     <div class="card-content">
       <div class="type">Video Course</div>
@@ -110,7 +110,7 @@ Development Kit community.
   </a>
   <a href="https://raphaelmansuy.github.io/adk_training/" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-adk-training-hub.png" alt="ADK Training Hub Banner">
+      <img src="assets/community-adk-training-hub.png" alt="ADK Training Hub Banner">
     </div>
     <div class="card-content">
       <div class="type">Website</div>
@@ -120,7 +120,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/playlist?list=PLLrA_pU9-Gz2HwepRUVpq1TEPuYWo_fSi" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-master-agentic-ai-with-adk.jpg" alt="Master Agentic AI with ADK">
+      <img src="assets/community-master-agentic-ai-with-adk.jpg" alt="Master Agentic AI with ADK">
     </div>
     <div class="card-content">
       <div class="type">YouTube Playlist</div>
@@ -130,7 +130,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/playlist?list=PL6tW9BrhiPTAZts0W5nQS9dbW6VMnLKab" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-adk-course.jpg" alt="ADK Course">
+      <img src="assets/community-adk-course.jpg" alt="ADK Course">
     </div>
     <div class="card-content">
       <div class="type">YouTube Playlist</div>
@@ -140,7 +140,7 @@ Development Kit community.
   </a>
   <a href="https://iamulya.one/tags/building-intelligent-agents-with-google-adk/" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-building-intelligent-agents-with-adk.jpg" alt="Building intelligent agents with ADK">
+      <img src="assets/community-building-intelligent-agents-with-adk.jpg" alt="Building intelligent agents with ADK">
     </div>
     <div class="card-content">
       <div class="type">Blog Series</div>
@@ -150,7 +150,7 @@ Development Kit community.
   </a>
   <a href="https://github.com/arjunprabhulal/google-adk-masterclass" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-adk-masterclass-hands-on.png" alt="Google ADK Masterclass Hands-on Series">
+      <img src="assets/community-adk-masterclass-hands-on.png" alt="Google ADK Masterclass Hands-on Series">
     </div>
     <div class="card-content">
       <div class="type">Online Course</div>
@@ -160,7 +160,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/playlist?list=PL0Zc2RFDZsM_MkHOzWNJpaT4EH5fQxA8n" class="resource-card">
       <div class="card-image-wrapper">
-        <img src="../assets/community-adk-news-jp.jpg" alt="ADK News">
+        <img src="assets/community-adk-news-jp.jpg" alt="ADK News">
       </div>
       <div class="card-content">
         <div class="type">YouTube Playlist</div>
@@ -175,7 +175,7 @@ Development Kit community.
 <div class="resource-grid">
   <a href="https://www.youtube.com/watch?v=efcUXoMX818" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-data-science-agent.jpg" alt="Building a data science agent with ADK">
+      <img src="assets/community-data-science-agent.jpg" alt="Building a data science agent with ADK">
     </div>
     <div class="card-content">
       <div class="type">Video Tutorial</div>
@@ -185,7 +185,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/watch?v=hPzjkQFV5yI" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-brand-search-optimization-agent.jpg" alt="Building a brand search optimization agent with ADK">
+      <img src="assets/community-brand-search-optimization-agent.jpg" alt="Building a brand search optimization agent with ADK">
     </div>
     <div class="card-content">
       <div class="type">Video Tutorial</div>
@@ -195,7 +195,7 @@ Development Kit community.
   </a>
   <a href="https://github.com/google/adk-docs/blob/main/examples/python/notebooks/shop_agent.ipynb" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-shoppers-concierge-demo.jpg" alt="ADK Shopper's Concierge Demo">
+      <img src="assets/community-shoppers-concierge-demo.jpg" alt="ADK Shopper's Concierge Demo">
     </div>
     <div class="card-content">
       <div class="type">Jupyter Notebook</div>
@@ -205,7 +205,7 @@ Development Kit community.
   </a>
   <a href="https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-adk-vertex-ai-live-api.png" alt="ADK + Vertex AI Live API">
+      <img src="assets/community-adk-vertex-ai-live-api.png" alt="ADK + Vertex AI Live API">
     </div>
     <div class="card-content">
       <div class="type">Blog Post</div>
@@ -215,7 +215,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/watch?v=LwHPYyw7u6U" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-shoppers-concierge-demo.jpg" alt="ADK Shopper's Concierge Demo">
+      <img src="assets/community-shoppers-concierge-demo.jpg" alt="ADK Shopper's Concierge Demo">
     </div>
     <div class="card-content">
       <div class="type">Video Demo</div>
@@ -225,7 +225,7 @@ Development Kit community.
   </a>
   <a href="https://agentdirectory.folch.ai/" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-agent-directory.png" alt="ADK Agent Directory">
+      <img src="assets/community-agent-directory.png" alt="ADK Agent Directory">
     </div>
     <div class="card-content">
       <div class="type">Gallery</div>
@@ -240,7 +240,7 @@ Development Kit community.
 <div class="resource-grid">
   <a href="https://www.youtube.com/watch?v=L6V6aQixOZU" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-discover-adk-java.jpg" alt="Discover ADK Java for Building AI Agents">
+      <img src="assets/community-discover-adk-java.jpg" alt="Discover ADK Java for Building AI Agents">
     </div>
     <div class="card-content">
       <div class="type">Video Talk</div>
@@ -250,7 +250,7 @@ Development Kit community.
   </a>
   <a href="https://www.youtube.com/playlist?list=PLLMxXO6kMiNhP87WYQ8CeC3xpV3EnF9cu" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-google-adk-for-java-experiments.jpg" alt="ADK for Java (Experiments)">
+      <img src="assets/community-google-adk-for-java-experiments.jpg" alt="ADK for Java (Experiments)">
     </div>
     <div class="card-content">
       <div class="type">YouTube Playlist</div>
@@ -260,7 +260,7 @@ Development Kit community.
   </a>
   <a href="https://codelabs.developers.google.com/adk-java-getting-started" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-build-ai-agents-with-adk-for-java.png" alt="Build AI Agents with ADK for Java">
+      <img src="assets/community-build-ai-agents-with-adk-for-java.png" alt="Build AI Agents with ADK for Java">
     </div>
     <div class="card-content">
       <div class="type">Codelab</div>

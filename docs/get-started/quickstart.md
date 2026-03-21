@@ -3,7 +3,7 @@
 This quickstart guides you through installing the Agent Development Kit (ADK),
 setting up a basic agent with multiple tools, and running it locally either in the terminal or in the interactive, browser-based dev UI.
 
-<!-- <img src="../../assets/quickstart.png" alt="Quickstart setup"> -->
+<!-- <img src="../assets/quickstart.png" alt="Quickstart setup"> -->
 
 This quickstart assumes a local IDE (VS Code, PyCharm, IntelliJ IDEA, etc.)
 with Python 3.10+ or Java 17+ and terminal access. This method runs the
