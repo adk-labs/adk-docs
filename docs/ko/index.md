@@ -1,5 +1,6 @@
 ---
 hide:
+  - navigation
   - toc
 ---
 
@@ -11,6 +12,12 @@ hide:
 </div>
 
 Agent Development Kit (ADK)는 **AI 에이전트 개발 및 배포**를 위한 유연한 모듈식 프레임워크입니다. Gemini 및 Google 생태계에 최적화되어 있지만, ADK는 **모델에 구애받지 않고(model-agnostic)**, **배포 환경에 제약이 없으며(deployment-agnostic)**, **다른 프레임워크와의 호환성**을 위해 구축되었습니다. ADK는 에이전트 개발이 일반적인 소프트웨어 개발처럼 느껴지도록 설계되었으며, 개발자가 간단한 작업부터 복잡한 워크플로에 이르는 에이전트 아키텍처를 쉽게 생성, 배포 및 오케스트레이션할 수 있도록 지원합니다.
+
+??? warning "새 소식: 그래프 기반 워크플로가 포함된 ADK Python 2.0 Alpha!"
+
+    ADK 2.0 Alpha 릴리스는 그래프 기반 워크플로 지원을 통해 에이전트
+    오케스트레이션을 크게 업그레이드합니다. Alpha 릴리스를 다운로드하고
+    [ADK 2.0을 사용해 보세요](/adk-docs/ko/2.0/).
 
 ??? tip "새 소식: ADK Python Skills 출시!"
 

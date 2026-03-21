@@ -421,6 +421,8 @@ plugins:
                 - REST API: api-reference/rest/index.md
               - 커뮤니티 자료: community.md
               - 기여 가이드: contributing-guide.md
+            - ADK 2.0:
+              - 개요: 2.0/index.md
         - locale: ja
           name: 日本語
           build: true
@@ -572,6 +574,8 @@ plugins:
                 - REST API: api-reference/rest/index.md
               - コミュニティリソース: community.md
               - コントリビューションガイド: contributing-guide.md
+            - ADK 2.0:
+              - 概要: 2.0/index.md
         
 
 # Navigation
