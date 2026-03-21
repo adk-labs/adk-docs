@@ -966,6 +966,21 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
 - **구조화 로깅**: 디버깅을 위해 구조화 로깅을 사용하세요.
 - **영속 세션 서비스**: `DatabaseSessionService` 또는 `VertexAiSessionService`를 고려하세요.
 
+| 점검 항목 | 권장 사항 |
+|---|---|
+| 세션 생성 | `get_or_create` 패턴으로 중복 생성 방지 |
+| 스트리밍 큐 | 세션마다 새 `LiveRequestQueue` 사용 |
+| 종료 처리 | `finally`에서 큐 닫기 |
+| 모델 구성 | 환경 변수로 모델명 분리 |
+| 전사/오디오 | `RunConfig`와 클라이언트 재생 경로를 함께 검증 |
+
+추가로 다음과 같은 운영 체크리스트를 유지하면 좋습니다.
+
+1. `run_live()` 호출 전 세션 존재 여부를 확인합니다.
+2. `response_modalities`가 모델과 일치하는지 검증합니다.
+3. WebSocket 연결 종료와 `LiveRequestQueue.close()`의 순서를 일치시킵니다.
+4. 장애 복구 시 `session_resumption`이 활성화되어 있는지 확인합니다.
+
 ## 1.6 배울 내용
 
 이 가이드는 ADK Gemini Live API Toolkit 아키텍처를 메시지의 업스트림 흐름, 이벤트의 다운스트림 흐름, 세션 동작 구성, 멀티모달 기능 구현이라는 자연스러운 순서로 안내합니다. 각 파트는 실제 적용 가능한 패턴과 함께 스트리밍 아키텍처의 특정 구성 요소에 초점을 맞춥니다.

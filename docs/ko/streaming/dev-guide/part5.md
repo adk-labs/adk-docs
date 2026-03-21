@@ -488,6 +488,104 @@ run_config = RunConfig(
 - 로컬 감지로 응답성 향상
 - 민감도 튜닝 가능
 
+### 서버 측 구성 예시
+
+클라이언트가 활동 신호를 직접 보내는 구조에서는 서버가 자동 VAD를 끄고, `LiveRequestQueue`에 들어오는 신호를 그대로 모델에 전달합니다.
+
+```python
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from google.adk.agents.run_config import RunConfig, StreamingMode
+from google.adk.agents.live_request_queue import LiveRequestQueue
+from google.genai import types
+
+run_config = RunConfig(
+    streaming_mode=StreamingMode.BIDI,
+    response_modalities=["AUDIO"],
+    realtime_input_config=types.RealtimeInputConfig(
+        automatic_activity_detection=types.AutomaticActivityDetection(
+            disabled=True
+        )
+    )
+)
+```
+
+### 클라이언트 측 VAD 구현 예시
+
+브라우저의 AudioWorklet에서 RMS를 계산해 음성 여부를 판단하고, 음성이 감지된 구간에만 오디오를 전송합니다.
+
+```javascript
+class VADProcessor extends AudioWorkletProcessor {
+    constructor() {
+        super();
+        this.threshold = 0.05;
+    }
+
+    process(inputs, outputs, parameters) {
+        const input = inputs[0];
+        if (input && input.length > 0) {
+            const channelData = input[0];
+            let sum = 0;
+            for (let i = 0; i < channelData.length; i++) {
+                sum += channelData[i] ** 2;
+            }
+            const rms = Math.sqrt(sum / channelData.length);
+            this.port.postMessage({
+                voice: rms > this.threshold,
+                rms: rms
+            });
+        }
+        return true;
+    }
+}
+registerProcessor("vad-processor", VADProcessor);
+```
+
+### 클라이언트 측 VAD 조정 예시
+
+```javascript
+let isSilence = true;
+let lastVoiceTime = 0;
+const SILENCE_TIMEOUT = 2000;
+
+const vadNode = new AudioWorkletNode(audioContext, "vad-processor");
+vadNode.port.onmessage = (event) => {
+    const { voice, rms } = event.data;
+
+    if (voice) {
+        if (isSilence) {
+            websocket.send(JSON.stringify({ type: "activity_start" }));
+            isSilence = false;
+        }
+        lastVoiceTime = Date.now();
+    } else {
+        if (!isSilence && Date.now() - lastVoiceTime > SILENCE_TIMEOUT) {
+            websocket.send(JSON.stringify({ type: "activity_end" }));
+            isSilence = true;
+        }
+    }
+};
+
+audioRecorderNode.port.onmessage = (event) => {
+    const audioData = event.data;
+    if (!isSilence) {
+        const pcm16 = convertFloat32ToPCM(audioData);
+        const base64Audio = arrayBufferToBase64(pcm16);
+
+        websocket.send(JSON.stringify({
+            type: "audio",
+            mime_type: "audio/pcm;rate=16000",
+            data: base64Audio
+        }));
+    }
+};
+```
+
+### 클라이언트 측 VAD 장점 요약
+
+- CPU와 네트워크 사용량 감소
+- 서버 왕복 없이 빠른 감지
+- 환경에 맞는 감도 조정 가능
+
 ### 서버 측 구성
 
 서버는 `RunConfig.realtime_input_config`로 자동 활동 감지를 끄고, 클라이언트가 보낸 활동 신호를 그대로 `LiveRequestQueue`에 전달합니다.
@@ -534,11 +632,52 @@ run_config = RunConfig(
 - half-cascade 모델에서는 미지원
 - Vertex AI에서는 모델 가용성 차이에 따라 지원 여부가 달라질 수 있음
 
+### 실용 예시 - Customer Service Bot
+
+```python
+from google.genai import types
+from google.adk.agents.run_config import RunConfig, StreamingMode
+
+run_config = RunConfig(
+    response_modalities=["AUDIO"],
+    streaming_mode=StreamingMode.BIDI,
+    proactivity=types.ProactivityConfig(proactive_audio=True),
+    enable_affective_dialog=True
+)
+
+# 예시 상호작용:
+# 고객: "주문이 3주째 안 와요..."
+# 모델: "정말 죄송합니다. 주문 상태를 바로 확인해 보겠습니다."
+```
+
+### Proactivity 테스트 방법
+
+1. 열린 문맥을 제공합니다.
+   ```text
+   사용자: "다음 달에 일본 여행을 계획 중이에요."
+   예상: 모델이 후속 질문이나 제안을 합니다.
+   ```
+2. 감정 반응을 테스트합니다.
+   ```text
+   사용자: [짜증 난 톤] "이거 전혀 안 돼요!"
+   예상: 모델이 감정을 인식하고 답변 톤을 조정합니다.
+   ```
+3. 예기치 않은 자발적 응답이 있는지 확인합니다.
+   - 관련 정보가 가끔 자동 제안되는지 확인
+   - 정말 무관한 입력은 무시하는지 확인
+   - 문맥 기반 제안이 나타나는지 확인
+
 ### 언제 끄면 좋은가
 
 - 형식적이거나 엄격한 업무 환경
 - 결정론적 동작이 중요한 테스트/디버깅
 - 감정 반응이 불필요한 고정형 UX
+
+### 비활성화를 고려할 때
+
+- 고정형 UX가 중요한 경우
+- 접근성보다 일관성이 우선인 경우
+- 디버깅 중 결정론적 출력을 보고 싶은 경우
 
 ## Live API 모델 호환성과 가용성
 
@@ -548,6 +687,12 @@ run_config = RunConfig(
 - Vertex AI Live API 모델: [Vertex AI model documentation](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models)
 
 프로덕션 배포 전에는 플랫폼별 지원 여부를 반드시 확인하세요.
+
+### 추가 검증 체크리스트
+
+- 모델명이 현재 문서와 일치하는지 확인합니다.
+- 플랫폼별 지원 음성이 같은지 확인합니다.
+- 전사, VAD, proactivity를 함께 사용할 때의 동작을 개발 환경에서 먼저 검증합니다.
 
 ## 요약
 

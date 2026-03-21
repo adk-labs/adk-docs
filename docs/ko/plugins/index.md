@@ -677,6 +677,63 @@ public Completable afterRunCallback(InvocationContext invocationContext) {
 }
 ```
 
+## 언어별 빠른 참고
+
+플러그인 콜백을 언어별로 한 번 더 정리해 두면, English 원문과의 탭 구조도 더 비슷해집니다.
+
+### 사용자 메시지 콜백 예시
+
+=== "Python"
+
+    ```python
+    async def on_user_message_callback(self, *, invocation_context, user_message):
+        return user_message
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    async onUserMessageCallback(invocationContext, userMessage) {
+      return userMessage;
+    }
+    ```
+
+=== "Java"
+
+    ```java
+    @Override
+    public Maybe<Content> onUserMessageCallback(
+      InvocationContext invocationContext, Content userMessage) {
+      return Maybe.empty();
+    }
+    ```
+
+### 러너 종료 콜백 예시
+
+=== "Python"
+
+    ```python
+    async def after_run_callback(self, *, invocation_context):
+        return None
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    async afterRunCallback(invocationContext) {
+      // cleanup
+    }
+    ```
+
+=== "Java"
+
+    ```java
+    @Override
+    public Completable afterRunCallback(InvocationContext invocationContext) {
+      return Completable.complete();
+    }
+    ```
+
 ## 다음 단계
 
 ADK 프로젝트에 플러그인을 개발하고 적용하기 위한 다음 리소스를 확인하십시오.
