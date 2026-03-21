@@ -77,7 +77,7 @@ class CountInvocationPlugin(BasePlugin):
   ) -> None:
     """LLMリクエストの数をカウントします。"""
     self.llm_request_count += 1
-print(f"[Plugin] LLMリクエストの数: {self.llm_request_count}")
+    print(f"[Plugin] LLMリクエストの数: {self.llm_request_count}")
 ```
 
 **TypeScript**

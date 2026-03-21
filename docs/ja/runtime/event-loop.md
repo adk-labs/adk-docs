@@ -82,6 +82,7 @@ ADK Runtime の中心は **Event Loop** です。
       * `SessionService`: Session 保存/読込、state 適用、履歴管理
       * `ArtifactService`: バイナリアーティファクト管理
       * `MemoryService`: （任意）長期意味記憶
+      * **役割:** `Runner` がイベント処理時に使うバックエンド層です。`event.actions` に含まれる `state_delta` や `artifact_delta` を反映し、会話やアーティファクトの永続化を担います。
 
 5. ### `Session`
 
@@ -91,6 +92,7 @@ ADK Runtime の中心は **Event Loop** です。
 
       * **役割:** 1 ユーザークエリに対する処理単位
       * **機能:** 複数の agent run / LLM call / tool 実行を `invocation_id` で束ねる
+      * **補足:** `temp:` プレフィックスの状態は 1 回の invocation にだけスコープされ、次のターンには引き継がれません。
 
 ## シンプルな invocation フロー
 
@@ -145,6 +147,10 @@ Runner が処理した後に永続化が保証されます。
 - 最終イベント（`partial=False` など）で状態差分をコミット
 - 非ストリーミングは単一イベントで処理
 
+ストリーミングでは、UI への逐次表示を優先しつつ、状態の永続化は最終イベントで一度だけ行うため、
+`partial=True` のイベントは通常そのまま上流へ流し、`actions` の反映は抑制されます。
+非ストリーミングでは、1 つのイベントをまとめて処理するため、状態更新がより単純になります。
+
 これにより、UI の逐次表示と状態一貫性を両立できます。
 
 ## Async が基本 (`run_async`)
@@ -154,6 +160,9 @@ LLM 応答待ちやツール実行を効率よく扱うためです。
 
 - 主要入口: `Runner.run_async`
 - 同期 `run` は便宜用ラッパーで、内部で `run_async` を使うことが多い
+  - Python は `asyncio`
+  - TypeScript は `Promise` / `AsyncGenerator`
+  - Java は `RxJava`
 
 ### 同期コールバック/ツール利用時の注意
 
