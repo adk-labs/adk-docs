@@ -111,3 +111,21 @@ adk run my-agent/agent.ts
 ```bash
 adk web my-agent/agent.ts
 ```
+
+이 명령은 에이전트를 위한 채팅 인터페이스가 포함된 웹 서버를 시작합니다.
+웹 인터페이스는 `http://localhost:8000`에서 사용할 수 있습니다. 오른쪽 상단에서
+에이전트를 선택하고 요청을 입력하세요.
+
+![adk-web-dev-ui-chat.png](/adk-docs/assets/adk-web-dev-ui-chat.png)
+
+!!! warning "주의: ADK Web은 개발용만 사용하세요"
+
+    ADK Web은 ***프로덕션 배포용이 아닙니다***. 개발 및 디버깅 목적으로만
+    사용해야 합니다.
+
+## 다음: 에이전트 빌드하기
+
+ADK를 설치하고 첫 번째 에이전트를 실행했다면, 이제 빌드 가이드를 사용해
+자신만의 에이전트를 만들어 보세요.
+
+*  [에이전트 빌드하기](/adk-docs/ko/tutorials/)
