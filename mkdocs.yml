@@ -423,6 +423,13 @@ plugins:
               - 기여 가이드: contributing-guide.md
             - ADK 2.0:
               - 개요: 2.0/index.md
+              - 그래프 기반 워크플로:
+                - workflows/index.md
+                - 그래프 경로: workflows/graph-routes.md
+                - 데이터 처리: workflows/data-handling.md
+                - 인간 입력: workflows/human-input.md
+              - 협업 에이전트: workflows/collaboration.md
+              - 동적 워크플로: workflows/dynamic.md
         - locale: ja
           name: 日本語
           build: true
@@ -576,6 +583,13 @@ plugins:
               - コントリビューションガイド: contributing-guide.md
             - ADK 2.0:
               - 概要: 2.0/index.md
+              - グラフベースのワークフロー:
+                - workflows/index.md
+                - グラフルート: workflows/graph-routes.md
+                - データ処理: workflows/data-handling.md
+                - 人間入力: workflows/human-input.md
+              - 協調エージェント: workflows/collaboration.md
+              - 動的ワークフロー: workflows/dynamic.md
         
 
 # Navigation
