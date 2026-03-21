@@ -228,6 +228,22 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     )
     ```
 
+=== "TypeScript"
+
+    ```typescript
+    import { GenerateContentConfig } from '@google/genai';
+
+    const generateContentConfig: GenerateContentConfig = {
+        temperature: 0.2, // より決定論的な出力
+        maxOutputTokens: 250,
+    };
+
+    const agent = new LlmAgent({
+        // ... other params
+        generateContentConfig,
+    });
+    ```
+
 === "Go"
 
     ```go
@@ -445,6 +461,12 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     
         ```python
         --8<-- "examples/python/snippets/agents/llm-agent/capital_agent.py"
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        --8<-- "examples/typescript/snippets/agents/llm-agent/capital_agent.ts"
         ```
     
     === "Go"
