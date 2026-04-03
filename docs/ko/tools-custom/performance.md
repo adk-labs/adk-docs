@@ -4,7 +4,7 @@
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.10.0</span>
 </div>
 
-Python용 에이전트 개발 키트(ADK) 버전 1.10.0부터 프레임워크는 에이전트가 요청한 모든 [함수 도구](/adk-docs/ko/tools-custom/function-tools/)를 병렬로 실행하려고 시도합니다. 이 동작은 특히 여러 외부 API 또는 장기 실행 작업에 의존하는 에이전트의 경우 에이전트의 성능과 응답성을 크게 향상시킬 수 있습니다. 예를 들어 각각 2초가 걸리는 3개의 도구가 있는 경우 병렬로 실행하면 총 실행 시간은 6초가 아닌 2초에 가까워집니다. 도구 함수를 병렬로 실행하는 기능은 특히 다음과 같은 시나리오에서 에이전트의 성능을 향상시킬 수 있습니다.
+Python용 에이전트 개발 키트(ADK) 버전 1.10.0부터 프레임워크는 에이전트가 요청한 모든 [함수 도구](/ko/tools-custom/function-tools/)를 병렬로 실행하려고 시도합니다. 이 동작은 특히 여러 외부 API 또는 장기 실행 작업에 의존하는 에이전트의 경우 에이전트의 성능과 응답성을 크게 향상시킬 수 있습니다. 예를 들어 각각 2초가 걸리는 3개의 도구가 있는 경우 병렬로 실행하면 총 실행 시간은 6초가 아닌 2초에 가까워집니다. 도구 함수를 병렬로 실행하는 기능은 특히 다음과 같은 시나리오에서 에이전트의 성능을 향상시킬 수 있습니다.
 
 -   **연구 작업:** 워크플로의 다음 단계로 진행하기 전에 에이전트가 여러 소스에서 정보를 수집하는 경우.
 -   **API 호출:** 에이전트가 여러 항공사의 API를 사용하여 이용 가능한 항공편을 검색하는 등 여러 API에 독립적으로 액세스하는 경우.
@@ -140,4 +140,4 @@ AI 모델에 대한 프롬프트를 빌드할 때 함수 호출을 병렬로 수
 
 ## 다음 단계
 
-에이전트 및 함수 호출용 도구 빌드에 대한 자세한 내용은 [함수 도구](/adk-docs/ko/tools-custom/function-tools/)를 참조하십시오. 병렬 처리를 활용하는 도구의 자세한 예는 [adk-python](https://github.com/google/adk-python/tree/main/contributing/samples/parallel_functions) 리포지토리의 샘플을 참조하십시오.
+에이전트 및 함수 호출용 도구 빌드에 대한 자세한 내용은 [함수 도구](/ko/tools-custom/function-tools/)를 참조하십시오. 병렬 처리를 활용하는 도구의 자세한 예는 [adk-python](https://github.com/google/adk-python/tree/main/contributing/samples/parallel_functions) 리포지토리의 샘플을 참조하십시오.

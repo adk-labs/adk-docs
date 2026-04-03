@@ -1,7 +1,7 @@
 ---
 catalog_title: Postman
 catalog_description: API コレクション、ワークスペース管理、クライアントコード生成を行います
-catalog_icon: /adk-docs/integrations/assets/postman.png
+catalog_icon: /integrations/assets/postman.png
 catalog_tags: ["mcp"]
 ---
 

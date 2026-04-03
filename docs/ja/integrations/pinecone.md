@@ -1,7 +1,7 @@
 ---
 catalog_title: Pinecone
 catalog_description: データ保存、セマンティック検索、結果のリランキングを行います
-catalog_icon: /adk-docs/integrations/assets/pinecone.png
+catalog_icon: /integrations/assets/pinecone.png
 catalog_tags: ["data","mcp"]
 ---
 

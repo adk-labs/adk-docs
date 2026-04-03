@@ -2,7 +2,7 @@
 
 この手順では、[Agent Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)
 ランタイム環境にデプロイした ADK エージェントをテストする方法を説明します。
-この手順を使う前に、[利用可能な方法](/adk-docs/deploy/agent-engine/) のいずれかで
+この手順を使う前に、[利用可能な方法](/deploy/agent-engine/) のいずれかで
 エージェントを Agent Engine ランタイムにデプロイしておく必要があります。
 このガイドでは、Google Cloud Console での確認・操作方法に加え、
 REST API 呼び出しまたは Vertex AI SDK for Python での操作方法を示します。

@@ -4,7 +4,7 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.10.0</span>
 </div>
 
-Python用Agent Development Kit（ADK）バージョン1.10.0以降、フレームワークはエージェントが要求した[関数ツール](/adk-docs/ja/tools-custom/function-tools/)を並列で実行しようとします。この動作により、特に複数の外部APIや長時間実行タスクに依存するエージェントの場合、エージェントのパフォーマンスと応答性が大幅に向上します。たとえば、それぞれ2秒かかる3つのツールがある場合、それらを並列で実行すると、合計実行時間は6秒ではなく2秒に近くなります。ツール関数を並列で実行する機能は、特に次のシナリオでエージェントのパフォーマンスを向上させることができます。
+Python用Agent Development Kit（ADK）バージョン1.10.0以降、フレームワークはエージェントが要求した[関数ツール](/ja/tools-custom/function-tools/)を並列で実行しようとします。この動作により、特に複数の外部APIや長時間実行タスクに依存するエージェントの場合、エージェントのパフォーマンスと応答性が大幅に向上します。たとえば、それぞれ2秒かかる3つのツールがある場合、それらを並列で実行すると、合計実行時間は6秒ではなく2秒に近くなります。ツール関数を並列で実行する機能は、特に次のシナリオでエージェントのパフォーマンスを向上させることができます。
 
 -   **調査タスク:** ワークフローの次の段階に進む前に、エージェントが複数のソースから情報を収集する場合。
 -   **API呼び出し:** エージェントが複数の航空会社のAPIを使用して利用可能なフライトを検索するなど、複数のAPIに個別にアクセスする場合。
@@ -140,4 +140,4 @@ AIモデルのプロンプトを作成する場合は、関数呼び出しを並
 
 ## 次のステップ
 
-エージェントおよび関数呼び出し用のツールの構築の詳細については、[関数ツール](/adk-docs/ja/tools-custom/function-tools/)を参照してください。並列処理を活用するツールの詳細な例については、[adk-python](https://github.com/google/adk-python/tree/main/contributing/samples/parallel_functions)リポジトリのサンプルを参照してください。
+エージェントおよび関数呼び出し用のツールの構築の詳細については、[関数ツール](/ja/tools-custom/function-tools/)を参照してください。並列処理を活用するツールの詳細な例については、[adk-python](https://github.com/google/adk-python/tree/main/contributing/samples/parallel_functions)リポジトリのサンプルを参照してください。

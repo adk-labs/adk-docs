@@ -1,7 +1,7 @@
 ---
 catalog_title: StackOne
 catalog_description: 에이전트를 200개 이상의 SaaS 제공업체에 연결합니다
-catalog_icon: /adk-docs/integrations/assets/stackone.png
+catalog_icon: /integrations/assets/stackone.png
 catalog_tags: ["connectors"]
 ---
 

@@ -1,7 +1,7 @@
 ---
 catalog_title: Linear
 catalog_description: 課題管理、プロジェクト追跡、開発ワークフローの効率化を行います
-catalog_icon: /adk-docs/integrations/assets/linear.png
+catalog_icon: /integrations/assets/linear.png
 catalog_tags: ["mcp"]
 ---
 

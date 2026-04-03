@@ -68,7 +68,7 @@ root = Agent(
 エージェント、サブエージェント、ワークフローノードで
 ***input_schema*** と ***output_schema*** を使ってデータを構造化する
 詳細については、
-[エージェントワークフローのデータ処理](/adk-docs/ja/workflows/data-handling/)
+[エージェントワークフローのデータ処理](/ja/workflows/data-handling/)
 を参照してください。
 
 ## モード設定と挙動

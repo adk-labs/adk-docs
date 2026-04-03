@@ -1,7 +1,7 @@
 ---
 catalog_title: Apigee API Hub
 catalog_description: Apigee API hub의 문서화된 API를 도구로 손쉽게 변환
-catalog_icon: /adk-docs/integrations/assets/apigee.png
+catalog_icon: /integrations/assets/apigee.png
 catalog_tags: ["connectors", "google"]
 ---
 
@@ -17,7 +17,7 @@ catalog_tags: ["connectors", "google"]
 
 **사전 준비**
 
-1. [ADK 설치](/adk-docs/get-started/installation/)
+1. [ADK 설치](/get-started/installation/)
 2. [Google Cloud CLI](https://cloud.google.com/sdk/docs/install?db=bigtable-docs#installation_instructions) 설치
 3. 문서화된(OpenAPI 사양) API를 보유한 [Apigee API Hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub) 인스턴스
 4. 프로젝트 구조를 설정하고 필요한 파일 생성

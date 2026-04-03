@@ -1,7 +1,7 @@
 ---
 catalog_title: Qdrant
 catalog_description: 시맨틱 벡터 검색으로 정보를 저장하고 조회합니다
-catalog_icon: /adk-docs/integrations/assets/qdrant.png
+catalog_icon: /integrations/assets/qdrant.png
 catalog_tags: ["data","mcp"]
 ---
 

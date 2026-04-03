@@ -37,7 +37,7 @@ Cloud Console、gcloud、ADK CLI を使用します。この方法は Google Clo
     * GCP ホームページでプロジェクト ID（英数字とハイフン）を確認し、
       プロジェクト番号ではなくプロジェクト ID をメモしてください（例: alphanumeric with hyphens）。
 
-    <img src="/adk-docs/assets/project-id.png" alt="Google Cloud Project ID">
+    <img src="/assets/project-id.png" alt="Google Cloud Project ID">
 
 4. **Vertex AI を有効化**
     * Agent Engine を使うには [Vertex AI API](https://console.cloud.google.com/apis/library/aiplatform.googleapis.com) を有効化します。
@@ -92,7 +92,7 @@ multi_tool_agent/
 ```
 
 プロジェクトファイル構成の詳細は
-[multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)
+[multi_tool_agent](https://github.com/google/tree/main/examples/python/snippets/get-started/multi_tool_agent)
 サンプルを参照してください。
 
 ## エージェントのデプロイ {#deploy-agent}
@@ -116,7 +116,7 @@ adk deploy agent_engine \
 
 `region` については [Vertex AI Agent Builder locations](https://docs.cloud.google.com/agent-builder/locations#supported-regions-agent-engine) ページで
 サポートリージョンを確認してください。
-`adk deploy agent_engine` の CLI オプションについては [ADK CLI リファレンス](https://google.github.io/adk-docs/api-reference/cli/cli.html#adk-deploy-agent-engine)
+`adk deploy agent_engine` の CLI オプションについては [ADK CLI リファレンス](https://adk.dev/api-reference/cli/cli.html#adk-deploy-agent-engine)
 を参照してください。
 
 ### デプロイコマンドの出力
@@ -160,7 +160,7 @@ REST API の詳細は Agent Engine ドキュメントの
 [デプロイ済みエージェントの管理](https://docs.cloud.google.com/agent-builder/agent-engine/manage/overview)
 を確認してください。
 ADK エージェントのテストや操作については
-[Agent Engine でデプロイされたエージェントをテストする](/adk-docs/deploy/agent-engine/test/)
+[Agent Engine でデプロイされたエージェントをテストする](/deploy/agent-engine/test/)
 を参照してください。
 
 ### 監視と検証
@@ -176,5 +176,5 @@ ADK エージェントのテストや操作については
 
 ADK エージェントのデプロイが完了したら、新しいホステッド環境でワークフローをテストしてください。
 詳細は
-[Agent Engine 上でデプロイ済みエージェントをテスト](/adk-docs/deploy/agent-engine/test/)
+[Agent Engine 上でデプロイ済みエージェントをテスト](/deploy/agent-engine/test/)
 を参照してください。

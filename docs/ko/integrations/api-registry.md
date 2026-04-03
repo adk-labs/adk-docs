@@ -1,7 +1,7 @@
 ---
 catalog_title: API Registry
 catalog_description: Google Cloud 서비스를 MCP 도구로 동적으로 연결합니다
-catalog_icon: /adk-docs/integrations/assets/developer-tools-color.svg
+catalog_icon: /integrations/assets/developer-tools-color.svg
 catalog_tags: ["google", "mcp", "connectors"]
 ---
 

@@ -15,16 +15,16 @@ ADK はモデル統合のために主に2種類の仕組みを使用します。
    Google エコシステムと密接に統合されたモデルの場合、モデル名またはエンドポイント
    リソース文字列を渡すことで、ADK の内部レジストリが適切なバックエンドクライアントへ変換します。
 
-      *  [Gemini モデル](/adk-docs/agents/models/google-gemini/)
-      *  [Claude モデル](/adk-docs/agents/models/anthropic/)
-      *  [Vertex AI ホスティングモデル](/adk-docs/agents/models/vertex/)
+      *  [Gemini モデル](/agents/models/google-gemini/)
+      *  [Claude モデル](/agents/models/anthropic/)
+      *  [Vertex AI ホスティングモデル](/agents/models/vertex/)
 
 2. **モデルコネクター:** Google エコシステム外のモデルや、特定のクライアント設定を要するモデルに対しては、
    `ApigeeLlm` や `LiteLlm` のようなラッパークラスをインスタンス化し、`LlmAgent` の
    `model` パラメータに渡します。
 
-      *  [Apigee モデル](/adk-docs/agents/models/apigee/)
-      *  [LiteLLM モデル](/adk-docs/agents/models/litellm/)
-      *  [Ollama モデルホスティング](/adk-docs/agents/models/ollama/)
-      *  [vLLM モデルホスティング](/adk-docs/agents/models/vllm/)
-      *  [LiteRT-LM モデルホスティング](/adk-docs/ja/agents/models/litert-lm/)
+      *  [Apigee モデル](/agents/models/apigee/)
+      *  [LiteLLM モデル](/agents/models/litellm/)
+      *  [Ollama モデルホスティング](/agents/models/ollama/)
+      *  [vLLM モデルホスティング](/agents/models/vllm/)
+      *  [LiteRT-LM モデルホスティング](/ja/agents/models/litert-lm/)

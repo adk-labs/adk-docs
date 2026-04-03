@@ -112,4 +112,4 @@ memory_service = VertexAiMemoryBankService(agent_engine_id=APP_ID)
 
 このサンプルでは、`VertexAiSessionService` と `VertexAiMemoryBankService` の両方を利用してコンテキスト管理を行う天気エージェントを作成します。これにより、エージェントはユーザーの好みや会話を思い出すことができます！
 
-**[Vertex AI Expressモードを使用したセッションとメモリ機能を持つ天気エージェント](https://github.com/google/adk-docs/blob/main/examples/python/notebooks/express-mode-weather-agent.ipynb)**
+**[Vertex AI Expressモードを使用したセッションとメモリ機能を持つ天気エージェント](https://github.com/google/blob/main/examples/python/notebooks/express-mode-weather-agent.ipynb)**

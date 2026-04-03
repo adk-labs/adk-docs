@@ -57,7 +57,7 @@ root_agent = Agent(
    # 에이전트의 고유 이름입니다.
    name="basic_search_agent",
    # 에이전트가 사용할 대규모 언어 모델(LLM)입니다.
-   # https://google.github.io/adk-docs/get-started/streaming/quickstart-streaming/#supported-models 에서
+   # https://adk.dev/get-started/streaming/quickstart-streaming/#supported-models 에서
    # 라이브(Live)를 지원하는 최신 모델 ID를 입력해 주세요.
    model="...",
    # 에이전트의 목적에 대한 짧은 설명입니다.

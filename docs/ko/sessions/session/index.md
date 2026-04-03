@@ -172,11 +172,11 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 2.  **`VertexAiSessionService`**
 
     *   **작동 방식:** 세션 관리를 위해 API 호출을 통해 Google Cloud Vertex AI 인프라를 사용합니다.
-    *   **영속성:** 있음. 데이터는 [Vertex AI Agent Engine](https://google.github.io/adk-docs/deploy/agent-engine/)을 통해 안정적이고 확장 가능하게 관리됩니다.
+    *   **영속성:** 있음. 데이터는 [Vertex AI Agent Engine](https://adk.dev/deploy/agent-engine/)을 통해 안정적이고 확장 가능하게 관리됩니다.
     *   **필요 사항:**
         *   Google Cloud 프로젝트 (`pip install vertexai`)
         *   이 [단계](https://cloud.google.com/vertex-ai/docs/pipelines/configure-project#storage)에 따라 구성할 수 있는 Google Cloud Storage 버킷.
-        *   이 [튜토리얼](https://google.github.io/adk-docs/deploy/agent-engine/)에 따라 설정할 수 있는 Reasoning Engine 리소스 이름/ID.
+        *   이 [튜토리얼](https://adk.dev/deploy/agent-engine/)에 따라 설정할 수 있는 Reasoning Engine 리소스 이름/ID.
         *   Google Cloud 프로젝트가 없고 VertexAiSessionService를 무료로 사용해보고 싶다면, [세션 및 메모리 무료로 사용해보기](express-mode.md)를 참조하세요.
     *   **적합한 경우:** Google Cloud에 배포된 확장 가능한 프로덕션 애플리케이션, 특히 다른 Vertex AI 기능과 통합할 때.
 
@@ -249,7 +249,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 !!! note "ADK Python v1.22.0에서 세션 데이터베이스 스키마 변경"
 
     ADK Python v1.22.0에서 세션 데이터베이스 스키마가 변경되었으며, 세션 데이터베이스 마이그레이션이 필요합니다.
-    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/adk-docs/sessions/session/migrate/)을 참조하세요.
+    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/sessions/session/migrate/)을 참조하세요.
 
 3.  **`DatabaseSessionService`**
 

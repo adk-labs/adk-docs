@@ -1,7 +1,7 @@
 ---
 catalog_title: Stripe
 catalog_description: 결제, 고객, 구독, 인보이스를 관리합니다
-catalog_icon: /adk-docs/integrations/assets/stripe.png
+catalog_icon: /integrations/assets/stripe.png
 catalog_tags: ["mcp"]
 ---
 

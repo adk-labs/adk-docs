@@ -1,7 +1,7 @@
 ---
 catalog_title: Atlassian
 catalog_description: 課題を管理し、ページを検索し、チームコンテンツを更新します
-catalog_icon: /adk-docs/integrations/assets/atlassian.png
+catalog_icon: /integrations/assets/atlassian.png
 catalog_tags: ["mcp"]
 ---
 

@@ -48,7 +48,7 @@ npm install -D @google/adk-devtools
 
 ### 에이전트 코드 정의
 
-`getCurrentTime`이라는 [Function Tool](/adk-docs/tools/function-tools/)의 간단한 구현을 포함한
+`getCurrentTime`이라는 [Function Tool](/tools/function-tools/)의 간단한 구현을 포함한
 기본 에이전트 코드를 만듭니다.
 프로젝트 디렉터리에 `agent.ts`를 만들고 다음 코드를 추가합니다.
 
@@ -92,7 +92,7 @@ echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
 
 ??? tip "ADK에서 다른 AI 모델 사용"
     ADK는 여러 생성형 AI 모델을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법은
-    [Models & Authentication](/adk-docs/agents/models)을 참조하세요.
+    [Models & Authentication](/agents/models)을 참조하세요.
 
 ## 에이전트 실행
 
@@ -116,7 +116,7 @@ adk web my-agent/agent.ts
 웹 인터페이스는 `http://localhost:8000`에서 사용할 수 있습니다. 오른쪽 상단에서
 에이전트를 선택하고 요청을 입력하세요.
 
-![adk-web-dev-ui-chat.png](/adk-docs/assets/adk-web-dev-ui-chat.png)
+![adk-web-dev-ui-chat.png](/assets/adk-web-dev-ui-chat.png)
 
 !!! warning "주의: ADK Web은 개발용만 사용하세요"
 
@@ -128,4 +128,4 @@ adk web my-agent/agent.ts
 ADK를 설치하고 첫 번째 에이전트를 실행했다면, 이제 빌드 가이드를 사용해
 자신만의 에이전트를 만들어 보세요.
 
-*  [에이전트 빌드하기](/adk-docs/ko/tutorials/)
+*  [에이전트 빌드하기](/ko/tutorials/)

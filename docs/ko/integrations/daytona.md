@@ -1,7 +1,7 @@
 ---
 catalog_title: Daytona
 catalog_description: 보안 샌드박스에서 코드 실행, 셸 명령 실행, 파일 관리를 수행합니다
-catalog_icon: /adk-docs/integrations/assets/daytona.png
+catalog_icon: /integrations/assets/daytona.png
 catalog_tags: ["code"]
 ---
 

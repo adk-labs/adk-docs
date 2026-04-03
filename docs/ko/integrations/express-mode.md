@@ -1,7 +1,7 @@
 ---
 catalog_title: Vertex AI express mode
 catalog_description: 비용 없이 Vertex AI 서비스를 사용해 개발을 시작해 볼 수 있습니다
-catalog_icon: /adk-docs/integrations/assets/vertex-ai.png
+catalog_icon: /integrations/assets/vertex-ai.png
 catalog_tags: ["google"]
 ---
 # Vertex AI 익스프레스 모드: Vertex AI 세션 및 메모리 사용하기
@@ -118,4 +118,4 @@ memory_service = VertexAiMemoryBankService(agent_engine_id=APP_ID)
 
 이 샘플에서는 `VertexAiSessionService`와 `VertexAiMemoryBankService`를 모두 활용하여 컨텍스트를 관리하는 날씨 에이전트를 만듭니다. 이를 통해 에이전트는 사용자의 선호도와 대화 내용을 기억할 수 있습니다!
 
-**[Vertex AI 익스프레스 모드를 사용한 세션 및 메모리 기능이 있는 날씨 에이전트](https://github.com/google/adk-docs/blob/main/examples/python/notebooks/express-mode-weather-agent.ipynb)**
+**[Vertex AI 익스프레스 모드를 사용한 세션 및 메모리 기능이 있는 날씨 에이전트](https://github.com/google/blob/main/examples/python/notebooks/express-mode-weather-agent.ipynb)**

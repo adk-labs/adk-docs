@@ -6,7 +6,7 @@
   <!-- Line 1: Open in Colab -->
   <!-- This div ensures the link takes up its own line and adds space below -->
   <div style="margin-bottom: 10px;">
-    <a href="https://colab.research.google.com/github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: #4285F4;">
+    <a href="https://colab.research.google.com/github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: #4285F4;">
       <img width="32px" src="https://www.gstatic.com/pantheon/images/bigquery/welcome_page/colab-logo.svg" alt="Google Colaboratory logo">
       <span>Colab에서 열기</span>
     </a>
@@ -19,26 +19,26 @@
     <span style="font-weight: bold;">공유하기:</span>
 
     <!-- Social Media Links -->
-    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on LinkedIn">
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on LinkedIn">
       <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg" alt="LinkedIn logo" style="vertical-align: middle;">
     </a>
-    <a href="https://bsky.app/intent/compose?text=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Bluesky">
+    <a href="https://bsky.app/intent/compose?text=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Bluesky">
       <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg" alt="Bluesky logo" style="vertical-align: middle;">
     </a>
-    <a href="https://twitter.com/intent/tweet?url=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on X (Twitter)">
+    <a href="https://twitter.com/intent/tweet?url=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on X (Twitter)">
       <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg" alt="X logo" style="vertical-align: middle;">
     </a>
-    <a href="https://reddit.com/submit?url=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Reddit">
+    <a href="https://reddit.com/submit?url=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Reddit">
       <img width="20px" src="https://redditinc.com/hubfs/Reddit%20Inc/Brand/Reddit_Logo.png" alt="Reddit logo" style="vertical-align: middle;">
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Facebook">
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Facebook">
       <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook logo" style="vertical-align: middle;">
     </a>
   </div>
 
 </div>
 
-이 튜토리얼은 [Agent Development Kit](https://google.github.io/adk-docs/get-started/)를 위한 [빠른 시작 예제(Quickstart example)](https://google.github.io/adk-docs/get-started/quickstart/)에서 확장된 내용입니다. 이제 더 깊이 파고들어 더욱 정교한 **다중 에이전트 시스템(multi-agent system)**을 구축할 준비가 되었습니다.
+이 튜토리얼은 [Agent Development Kit](https://adk.dev/get-started/)를 위한 [빠른 시작 예제(Quickstart example)](https://adk.dev/get-started/quickstart/)에서 확장된 내용입니다. 이제 더 깊이 파고들어 더욱 정교한 **다중 에이전트 시스템(multi-agent system)**을 구축할 준비가 되었습니다.
 
 우리는 단순한 기초 위에 고급 기능을 점진적으로 쌓아 올리며 **날씨 봇 에이전트 팀**을 구축하는 여정을 시작할 것입니다. 날씨를 조회할 수 있는 단일 에이전트로 시작하여 다음과 같은 기능들을 점차 추가할 것입니다:
 
@@ -86,7 +86,7 @@
 
 **대안: ADK 내장 도구 사용 (Web UI / CLI / API Server)**
 
-ADK의 표준 도구를 사용하여 러너 및 세션 관리를 자동으로 처리하는 설정을 선호하는 경우, [여기](https://github.com/google/adk-docs/tree/main/examples/python/tutorial/agent_team/adk-tutorial)에서 해당 목적에 맞게 구성된 코드를 찾을 수 있습니다. 해당 버전은 `adk web`(웹 UI용), `adk run`(CLI 상호 작용용) 또는 `adk api_server`(API 노출용)와 같은 명령어로 직접 실행되도록 설계되었습니다. 해당 대체 리소스에 제공된 `README.md` 지침을 따르세요.
+ADK의 표준 도구를 사용하여 러너 및 세션 관리를 자동으로 처리하는 설정을 선호하는 경우, [여기](https://github.com/google/tree/main/examples/python/tutorial/agent_team/adk-tutorial)에서 해당 목적에 맞게 구성된 코드를 찾을 수 있습니다. 해당 버전은 `adk web`(웹 UI용), `adk run`(CLI 상호 작용용) 또는 `adk api_server`(API 노출용)와 같은 명령어로 직접 실행되도록 설계되었습니다. 해당 대체 리소스에 제공된 `README.md` 지침을 따르세요.
 
 ---
 

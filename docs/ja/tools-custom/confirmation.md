@@ -15,11 +15,11 @@
 
 リクエストがユーザーにどのように伝達されるかを設定でき、システムはADKサーバーのREST APIを介して送信された[リモート応答](#remote-response)を使用することもできます。ADK Webユーザーインターフェイスで確認機能を使用する場合、エージェントワークフローは図1に示すように、ユーザーに入力を要求するダイアログボックスを表示します。
 
-![ツール確認のためのデフォルトのユーザーインターフェイスのスクリーンショット](/adk-docs/ja/assets/confirmation-ui.png)
+![ツール確認のためのデフォルトのユーザーインターフェイスのスクリーンショット](/ja/assets/confirmation-ui.png)
 
 **図1.** 高度なツール応答実装を使用した確認応答要求ダイアログボックスの例。
 
-次のセクションでは、確認シナリオでこの機能を使用する方法について説明します。完全なコードサンプルについては、[human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py)の例を参照してください。エージェントワークフローに人間の入力を組み込む追加の方法があります。詳細については、[ヒューマンインザループ](/adk-docs/ja/agents/multi-agents/#human-in-the-loop-pattern)エージェントパターンを参照してください。
+次のセクションでは、確認シナリオでこの機能を使用する方法について説明します。完全なコードサンプルについては、[human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py)の例を参照してください。エージェントワークフローに人間の入力を組み込む追加の方法があります。詳細については、[ヒューマンインザループ](/ja/agents/multi-agents/#human-in-the-loop-pattern)エージェントパターンを参照してください。
 
 ## ブール値の確認 {#boolean-confirmation}
 
@@ -149,22 +149,22 @@ def request_time_off(days: int, tool_context: ToolContext):
 !!! note "注：再開機能による確認"
 
     ADKエージェントワークフローが
-    [再開](/adk-docs/ja/runtime/resume/)機能で構成されている場合は、確認
+    [再開](/ja/runtime/resume/)機能で構成されている場合は、確認
     応答とともに呼び出しID（`invocation_id`）パラメーターも指定する必要があります。
     指定する呼び出しIDは、確認リクエストを生成した呼び出しと同じでなければなりません。
     そうしないと、システムは確認応答で新しい呼び出しを開始します。
     エージェントが再開機能を使用する場合は、応答に含めることができるように、
     確認リクエストとともに呼び出しIDをパラメーターとして含めることを検討してください。
     再開機能の使用方法の詳細については、
-    [停止したエージェントの再開](/adk-docs/ja/runtime/resume/)を参照してください。
+    [停止したエージェントの再開](/ja/runtime/resume/)を参照してください。
 
 ## 既知の制限 {#known-limitations}
 
 ツール確認機能には、次の制限があります。
 
--   [DatabaseSessionService](/adk-docs/ja/api-reference/python/google-adk.html#google.adk.sessions.DatabaseSessionService)はこの機能ではサポートされていません。
--   [VertexAiSessionService](/adk-docs/ja/api-reference/python/google-adk.html#google.adk.sessions.VertexAiSessionService)はこの機能ではサポートされていません。
+-   [DatabaseSessionService](/ja/api-reference/python/google-adk.html#google.adk.sessions.DatabaseSessionService)はこの機能ではサポートされていません。
+-   [VertexAiSessionService](/ja/api-reference/python/google-adk.html#google.adk.sessions.VertexAiSessionService)はこの機能ではサポートされていません。
 
 ## 次のステップ
 
-エージェントワークフロー用のADKツールの構築の詳細については、[関数ツール](/adk-docs/ja/tools-custom/function-tools/)を参照してください。
+エージェントワークフロー用のADKツールの構築の詳細については、[関数ツール](/ja/tools-custom/function-tools/)を参照してください。

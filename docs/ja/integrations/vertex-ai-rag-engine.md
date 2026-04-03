@@ -1,7 +1,7 @@
 ---
 catalog_title: Vertex AI RAG Engine
 catalog_description: Vertex AI RAG Engine を使ってプライベートデータを検索します
-catalog_icon: /adk-docs/integrations/assets/vertex-ai.png
+catalog_icon: /integrations/assets/vertex-ai.png
 catalog_tags: ["data","google"]
 ---
 
@@ -21,7 +21,7 @@ Vertex AI RAG Engine でグラウンディングを使う場合は、事前に R
 
     このツールは、1 つのエージェントインスタンス内で ***単独でのみ*** 使用できます。
     この制限と回避策の詳細は
-    [ADK ツールの制限事項](/adk-docs/tools/limitations/)を参照してください。
+    [ADK ツールの制限事項](/tools/limitations/)を参照してください。
 
 === "Python"
 

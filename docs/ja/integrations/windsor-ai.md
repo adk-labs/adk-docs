@@ -1,7 +1,7 @@
 ---
 catalog_title: Windsor.ai
 catalog_description: 325 以上のプラットフォームからマーケティング、営業、顧客データを照会・分析します
-catalog_icon: /adk-docs/integrations/assets/windsor-ai.png
+catalog_icon: /integrations/assets/windsor-ai.png
 catalog_tags: ["mcp", "data"]
 ---
 

@@ -1,7 +1,7 @@
 ---
 catalog_title: ElevenLabs
 catalog_description: 음성 생성, 보이스 클론, 오디오 전사, 효과음 생성을 수행합니다
-catalog_icon: /adk-docs/integrations/assets/elevenlabs.png
+catalog_icon: /integrations/assets/elevenlabs.png
 catalog_tags: ["mcp"]
 ---
 

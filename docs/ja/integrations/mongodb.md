@@ -1,7 +1,7 @@
 ---
 catalog_title: MongoDB
 catalog_description: コレクション照会、データベース管理、スキーマ分析を行います
-catalog_icon: /adk-docs/integrations/assets/mongodb.png
+catalog_icon: /integrations/assets/mongodb.png
 catalog_tags: ["data","mcp"]
 ---
 

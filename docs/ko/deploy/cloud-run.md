@@ -27,7 +27,7 @@
     2. 에이전트 인스턴스는 런처 구성에 전달되며, 일반적으로 agent.NewSingleLoader(yourAgent)를 사용합니다. adkgo 도구는 이 런처를 사용하여 올바른 서비스로 에이전트를 시작합니다.
     3. go.mod 및 go.sum 파일은 종속성을 관리하기 위해 프로젝트 디렉토리에 있습니다.
 
-    자세한 내용은 다음 섹션을 참조하십시오. Github 저장소에서 [샘플 앱](https://github.com/google/adk-docs/tree/main/examples/go/cloud-run)도 찾을 수 있습니다.
+    자세한 내용은 다음 섹션을 참조하십시오. Github 저장소에서 [샘플 앱](https://github.com/google/tree/main/examples/go/cloud-run)도 찾을 수 있습니다.
 
 === "Java"
 
@@ -35,7 +35,7 @@
     2. 에이전트 변수는 전역이며 `public static final BaseAgent ROOT_AGENT` 형식을 따릅니다.
     3. 에이전트 정의는 정적 클래스 메서드에 있습니다.
 
-    자세한 내용은 다음 섹션을 참조하십시오. Github 저장소에서 [샘플 앱](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run)도 찾을 수 있습니다.
+    자세한 내용은 다음 섹션을 참조하십시오. Github 저장소에서 [샘플 앱](https://github.com/google/tree/main/examples/java/cloud-run)도 찾을 수 있습니다.
 
 
 ## 환경 변수
@@ -426,7 +426,7 @@ google-adk
 
            * 에이전트의 정의는 정적 메서드로 노출되거나 선언 중에 인라인될 수 있습니다.
 
-        `CapitalAgent` 예제의 코드는 [예제](https://github.com/google/adk-docs/blob/main/examples/java/cloud-run/src/main/java/agents/capitalagent/CapitalAgent.java) 저장소에서 참조하십시오.
+        `CapitalAgent` 예제의 코드는 [예제](https://github.com/google/blob/main/examples/java/cloud-run/src/main/java/agents/capitalagent/CapitalAgent.java) 저장소에서 참조하십시오.
 
     2. pom.xml 파일에 다음 종속성과 플러그인을 추가하십시오.
 

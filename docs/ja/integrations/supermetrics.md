@@ -1,7 +1,7 @@
 ---
 catalog_title: Supermetrics
 catalog_description: リアルタイムのマーケティング、広告、CRM データを取得して分析します
-catalog_icon: /adk-docs/integrations/assets/supermetrics.png
+catalog_icon: /integrations/assets/supermetrics.png
 catalog_tags: ["mcp", "data"]
 ---
 

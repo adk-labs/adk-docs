@@ -31,6 +31,24 @@
 
     ADK를 설치하고 환경을 설정하려면 다음 단계를 진행하십시오.
 
+=== "Go"
+
+    새 프로젝트를 시작하는 경우 새 Go 모듈을 만들 수 있습니다:
+
+    ```bash
+    mkdir my-adk-agent
+    cd my-adk-agent
+    go mod init example.com/my-agent
+    ```
+
+    ADK를 프로젝트에 추가하려면 다음 명령을 실행합니다:
+
+    ```bash
+    go get google.golang.org/adk
+    ```
+
+    그러면 ADK가 `go.mod` 파일의 종속성으로 추가됩니다.
+
 ## 2. 에이전트 프로젝트 생성 { #create-agent-project }
 
 ### 프로젝트 구조
@@ -132,6 +150,51 @@
     --8<-- "examples/java/cloud-run/src/main/java/agents/multitool/MultiToolAgent.java:full_code"
     ```
 
+=== "Go"
+
+    다음과 같은 프로젝트 구조를 생성해야 합니다.
+
+    ```console
+    my-adk-agent/
+        agent.go
+        .env
+        go.mod
+    ```
+
+    ### `agent.go`
+
+    프로젝트 폴더에 `agent.go` 파일을 만듭니다.
+
+    === "OS X &amp; Linux"
+        ```bash
+        touch agent.go
+        ```
+
+    === "Windows"
+        ```console
+        type nul > agent.go
+        ```
+
+    다음 코드를 `agent.go`에 복사하여 붙여넣습니다.
+
+    ```go title="agent.go"
+    --8<-- "examples/go/snippets/get-started/multi_tool_agent/main.go:full_code"
+    ```
+
+    ### `.env`
+
+    같은 폴더에 `.env` 파일을 만듭니다.
+
+    === "OS X &amp; Linux"
+        ```bash
+        touch .env
+        ```
+
+    === "Windows"
+        ```console
+        type nul > .env
+        ```
+
 ![intro_components.png](../assets/quickstart-flow-tool.png)
 
 ## 3. 모델 설정 { #set-up-the-model }
@@ -139,7 +202,7 @@
 에이전트가 사용자 요청을 이해하고 응답을 생성하는 기능은 LLM(대규모 언어 모델)에 의해 구동됩니다. 에이전트는 이 외부 LLM 서비스에 보안 호출을 수행해야 하며, 이는 **인증 자격 증명**이 필요합니다. 유효한 인증 없이는 LLM 서비스가 에이전트의 요청을 거부하고 에이전트는 작동할 수 없습니다.
 
 !!!tip "모델 인증 가이드"
-    다양한 모델에 대한 인증에 대한 자세한 가이드는 [인증 가이드](/adk-docs/ko/agents/models/google-gemini#google-ai-studio)를 참조하십시오.
+    다양한 모델에 대한 인증에 대한 자세한 가이드는 [인증 가이드](/ko/agents/models/google-gemini#google-ai-studio)를 참조하십시오.
     이것은 에이전트가 LLM 서비스에 호출을 할 수 있도록 하는 중요한 단계입니다.
 
 === "Gemini - Google AI Studio"
@@ -154,6 +217,13 @@
         Java를 사용하는 경우 환경 변수를 정의합니다.
 
         ```console title="terminal"
+        export GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
+        ```
+
+        Go를 사용하는 경우 터미널에서 환경 변수를 정의하거나 `.env` 파일을 사용합니다:
+
+        ```bash title="terminal"
         export GOOGLE_GENAI_USE_VERTEXAI=FALSE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
@@ -180,6 +250,14 @@
         export GOOGLE_CLOUD_LOCATION=LOCATION
         ```
 
+        Go를 사용하는 경우 터미널에서 환경 변수를 정의하거나 `.env` 파일을 사용합니다:
+
+        ```bash title="terminal"
+        export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        export GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
+        export GOOGLE_CLOUD_LOCATION=LOCATION
+        ```
+
 === "Gemini - Google Cloud Vertex AI Express 모드 사용"
     1. 무료 Google Cloud 프로젝트에 가입하고 적격 계정으로 Gemini를 무료로 사용할 수 있습니다!
         * [Vertex AI Express 모드가 포함된 Google Cloud 프로젝트](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 설정합니다.
@@ -194,6 +272,13 @@
         Java를 사용하는 경우 환경 변수를 정의합니다.
 
         ```console title="terminal"
+        export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
+        ```
+
+        Go를 사용하는 경우 터미널에서 환경 변수를 정의하거나 `.env` 파일을 사용합니다:
+
+        ```bash title="terminal"
         export GOOGLE_GENAI_USE_VERTEXAI=TRUE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
         ```
@@ -304,7 +389,46 @@
 
         ![adk-api-server.png](../assets/adk-api-server.png)
 
-        `adk api_server`를 테스트에 사용하는 방법을 배우려면 [API 서버 사용에 대한 문서](/adk-docs/ko/runtime/api-server/)를 참조하십시오.
+        `adk api_server`를 테스트에 사용하는 방법을 배우려면 [API 서버 사용에 대한 문서](/ko/runtime/api-server/)를 참조하십시오.
+
+=== "Go"
+
+    터미널을 사용하여 에이전트 프로젝트 디렉터리로 이동합니다:
+
+    ```console
+    my-adk-agent/      <-- 이 디렉토리로 이동
+        agent.go
+        .env
+        go.mod
+    ```
+
+    에이전트와 상호 작용하는 여러 가지 방법이 있습니다.
+
+    === "개발 UI (web)"
+
+        다음 명령을 실행하여 **개발 UI**를 시작합니다. 활성화할 서브 런처를 지정해야 합니다(예: `webui`, `api`).
+
+        ```bash
+        go run agent.go web webui api
+        ```
+
+        **1단계:** 제공된 URL(일반적으로 `http://localhost:8080`)을 브라우저에서 직접 엽니다.
+
+        **2단계.** UI의 왼쪽 상단 모서리에서 드롭다운에서 에이전트를 선택합니다. "weather_time_agent"를 선택합니다.
+
+        **3단계.** 이제 텍스트 상자를 사용하여 에이전트와 대화할 수 있습니다.
+
+    === "터미널 (console)"
+
+        터미널에서 에이전트와 채팅하려면 다음 명령을 실행합니다.
+
+        ```bash
+        go run agent.go console
+        ```
+
+        **참고:** `console`이 코드에서 첫 번째 서브 런처인 경우(예: `full.NewLauncher()`), `go run agent.go`만 실행해도 됩니다.
+
+        종료하려면 Cmd/Ctrl+C를 사용합니다.
 
 === "Java"
 

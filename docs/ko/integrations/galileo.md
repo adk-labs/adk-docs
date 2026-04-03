@@ -1,7 +1,7 @@
 ---
 catalog_title: Galileo
 catalog_description: ADK 에이전트를 위한 엔드투엔드 트레이싱, 평가, 모니터링
-catalog_icon: /adk-docs/integrations/assets/galileo.png
+catalog_icon: /integrations/assets/galileo.png
 catalog_tags: ["observability", "evaluation"]
 ---
 
@@ -129,7 +129,7 @@ What time is it in London?
 
 Project를 선택한 뒤 Log Stream에서 트레이스와 스팬을 확인합니다.
 
-![Galileo Traces](/adk-docs/integrations/assets/galileo-log.png)
+![Galileo Traces](/integrations/assets/galileo-log.png)
 
 ## 리소스
 

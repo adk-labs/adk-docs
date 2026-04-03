@@ -1,7 +1,7 @@
 ---
 catalog_title: Spanner 도구
 catalog_description: Spanner와 상호작용하여 데이터를 조회하고 검색 및 SQL 실행을 수행합니다
-catalog_icon: /adk-docs/integrations/assets/spanner.png
+catalog_icon: /integrations/assets/spanner.png
 catalog_tags: ["data","google"]
 ---
 

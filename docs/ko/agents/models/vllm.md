@@ -6,7 +6,7 @@
 
 [vLLM](https://github.com/vllm-project/vllm) 같은 도구를 사용하면
 모델을 효율적으로 호스팅하고 OpenAI 호환 API 엔드포인트로 제공할 수 있습니다.
-ADK는 Python에서 [LiteLLM](/adk-docs/agents/models/litellm/) 라이브러리를 통해
+ADK는 Python에서 [LiteLLM](/agents/models/litellm/) 라이브러리를 통해
 vLLM 모델을 사용할 수 있습니다.
 
 ## 설정
@@ -27,13 +27,13 @@ import subprocess
 from google.adk.agents import LlmAgent
 from google.adk.models.lite_llm import LiteLlm
 
-# --- Example Agent using a model hosted on a vLLM endpoint ---
+# --- Gemma 4 모델이 호스팅된 vLLM 엔드포인트를 사용하는 예시 에이전트 ---
 
 # Endpoint URL provided by your vLLM deployment
 api_base_url = "https://your-vllm-endpoint.run.app/v1"
 
 # Model name as recognized by *your* vLLM endpoint configuration
-model_name_at_endpoint = "hosted_vllm/google/gemma-3-4b-it" # Example from vllm_test.py
+model_name_at_endpoint = "hosted_vllm/google/gemma-4-E4B-it" # vllm_test.py 예시
 
 # Authentication (Example: using gcloud identity token for a Cloud Run deployment)
 # Adapt this based on your endpoint's security
@@ -50,8 +50,15 @@ agent_vllm = LlmAgent(
     model=LiteLlm(
         model=model_name_at_endpoint,
         api_base=api_base_url,
+        # Gemma 4 전용 extra_body 값입니다.
+        extra_body={
+            "chat_template_kwargs": {
+                "enable_thinking": True # thinking 활성화
+            },
+            "skip_special_tokens": False # False로 설정해야 함
+        },
         # Pass authentication headers if needed
-        extra_headers=auth_headers
+        extra_headers=auth_headers,
         # Alternatively, if endpoint uses an API key:
         # api_key="YOUR_ENDPOINT_API_KEY"
     ),

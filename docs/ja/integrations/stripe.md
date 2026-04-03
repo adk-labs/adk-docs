@@ -1,7 +1,7 @@
 ---
 catalog_title: Stripe
 catalog_description: 決済、顧客、サブスクリプション、請求書を管理します
-catalog_icon: /adk-docs/integrations/assets/stripe.png
+catalog_icon: /integrations/assets/stripe.png
 catalog_tags: ["mcp"]
 ---
 

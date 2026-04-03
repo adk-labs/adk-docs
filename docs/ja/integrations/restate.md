@@ -1,7 +1,7 @@
 ---
 catalog_title: Restate
 catalog_description: 耐久セッションと人間承認を備えた高耐障害エージェント実行/オーケストレーション
-catalog_icon: /adk-docs/integrations/assets/restate.svg
+catalog_icon: /integrations/assets/restate.svg
 catalog_tags: []
 ---
 

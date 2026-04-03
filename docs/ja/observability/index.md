@@ -8,11 +8,11 @@
 通常不十分です。
 
 Agent Development Kit (ADK) は、エージェントの監視とデバッグのために、
-設定可能な [ロギング](/adk-docs/observability/logging/)
+設定可能な [ロギング](/observability/logging/)
 機能を提供します。ただし、監視と分析には、より高度な
-[可観測性 ADK 連携](/adk-docs/integrations/?topic=observability)
+[可観測性 ADK 連携](/integrations/?topic=observability)
 を検討する必要がある場合があります。
 
 !!! tip "可観測性向け ADK 連携"
     ADK 向けの事前構築済み可観測性ライブラリの一覧は
-    [Tools and Integrations](/adk-docs/integrations/?topic=observability) を参照してください。
+    [Tools and Integrations](/integrations/?topic=observability) を参照してください。

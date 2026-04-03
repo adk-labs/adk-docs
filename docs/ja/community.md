@@ -190,7 +190,7 @@
       <p>小売Webサイトの不足している情報を補完して製品データを強化するエージェントの構築方法を学びます。</p>
     </div>
   </a>
-  <a href="https://github.com/google/adk-docs/blob/main/examples/python/notebooks/shop_agent.ipynb" class="resource-card">
+  <a href="https://github.com/google/blob/main/examples/python/notebooks/shop_agent.ipynb" class="resource-card">
     <div class="card-image-wrapper">
       <img src="../assets/community-shoppers-concierge-demo.jpg" alt="ADKショッパーズコンシェルジュのデモ">
     </div>
@@ -273,8 +273,8 @@
 
 <ul class="translation-list">
   <li><a href="https://adk.wiki/">🇨🇳 中国語 (中文) ドキュメント</a></li>
-  <li><a href="https://adk-labs.github.io/adk-docs/ko/">🇰🇷 韓国語 (Korean) ドキュメント</a></li>
-  <li><a href="https://adk-labs.github.io/adk-docs/ja/">🇯🇵 日本語 (日本語) ドキュメント</a></li>
+  <li><a href="https://adk-labs.github.io/ko/">🇰🇷 韓国語 (Korean) ドキュメント</a></li>
+  <li><a href="https://adk-labs.github.io/ja/">🇯🇵 日本語 (日本語) ドキュメント</a></li>
   <li><a href="https://adk-es.fabian-castro-c.dev/">🇪🇸 スペイン語 (Español) ドキュメント</a></li>
 </ul>
 

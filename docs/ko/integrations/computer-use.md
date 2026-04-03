@@ -1,7 +1,7 @@
 ---
 catalog_title: Computer Use
 catalog_description: Gemini 모델로 컴퓨터 사용자 인터페이스를 조작합니다
-catalog_icon: /adk-docs/integrations/assets/gemini-spark.svg
+catalog_icon: /integrations/assets/gemini-spark.svg
 catalog_tags: ["google"]
 ---
 # Gemini와 함께하는 컴퓨터 사용 도구 세트

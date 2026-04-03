@@ -1,7 +1,7 @@
 ---
 catalog_title: Qdrant
 catalog_description: セマンティックベクトル検索で情報を保存・取得します
-catalog_icon: /adk-docs/integrations/assets/qdrant.png
+catalog_icon: /integrations/assets/qdrant.png
 catalog_tags: ["data","mcp"]
 ---
 

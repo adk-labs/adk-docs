@@ -1,7 +1,7 @@
 ---
 catalog_title: Paypal
 catalog_description: 결제를 관리하고 인보이스 전송 및 구독 처리를 수행합니다
-catalog_icon: /adk-docs/integrations/assets/paypal.png
+catalog_icon: /integrations/assets/paypal.png
 catalog_tags: ["mcp"]
 ---
 

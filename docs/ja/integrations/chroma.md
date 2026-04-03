@@ -1,7 +1,7 @@
 ---
 catalog_title: Chroma
 catalog_description: セマンティックベクトル検索で情報を保存・取得します
-catalog_icon: /adk-docs/integrations/assets/chroma.png
+catalog_icon: /integrations/assets/chroma.png
 catalog_tags: ["data","mcp"]
 ---
 

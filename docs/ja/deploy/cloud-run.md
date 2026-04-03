@@ -27,7 +27,7 @@
     2. エージェントインスタンスはランチャー構成に渡され、通常はagent.NewSingleLoader(yourAgent)を使用します。adkgoツールは、このランチャーを使用して、正しいサービスでエージェントを起動します。
     3. go.modおよびgo.sumファイルは、依存関係を管理するためにプロジェクトディレクトリにあります。
 
-    詳細については、次のセクションを参照してください。GitHubリポジトリで[サンプルアプリ](https://github.com/google/adk-docs/tree/main/examples/go/cloud-run)も参照できます。
+    詳細については、次のセクションを参照してください。GitHubリポジトリで[サンプルアプリ](https://github.com/google/tree/main/examples/go/cloud-run)も参照できます。
 
 === "Java"
 
@@ -35,7 +35,7 @@
     2. エージェント変数はグローバルで、`public static final BaseAgent ROOT_AGENT`形式に従います。
     3. エージェント定義は静的クラスメソッドにあります。
 
-    詳細については、次のセクションを参照してください。GitHubリポジトリで[サンプルアプリ](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run)も参照できます。
+    詳細については、次のセクションを参照してください。GitHubリポジトリで[サンプルアプリ](https://github.com/google/tree/main/examples/java/cloud-run)も参照できます。
 
 
 ## 環境変数
@@ -426,7 +426,7 @@ google-adk
 
            * エージェントの定義は、静的メソッドで公開することも、宣言時にインラインで記述することもできます。
 
-        `CapitalAgent`のコード例は、[examples](https://github.com/google/adk-docs/blob/main/examples/java/cloud-run/src/main/java/agents/capitalagent/CapitalAgent.java)リポジトリを参照してください。
+        `CapitalAgent`のコード例は、[examples](https://github.com/google/blob/main/examples/java/cloud-run/src/main/java/agents/capitalagent/CapitalAgent.java)リポジトリを参照してください。
 
     2. pom.xmlファイルに次の依存関係とプラグインを追加してください。
 

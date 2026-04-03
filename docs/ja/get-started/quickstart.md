@@ -31,6 +31,24 @@
 
     ADKをインストールし、環境をセットアップするには、次の手順に進んでください。
 
+=== "Go"
+
+    新しいプロジェクトを始める場合は、新しいGoモジュールを作成できます:
+
+    ```bash
+    mkdir my-adk-agent
+    cd my-adk-agent
+    go mod init example.com/my-agent
+    ```
+
+    ADKをプロジェクトに追加するには、次のコマンドを実行します:
+
+    ```bash
+    go get google.golang.org/adk
+    ```
+
+    これで、ADKが`go.mod`ファイルの依存関係として追加されます。
+
 ## 2. エージェントプロジェクトを作成する { #create-agent-project }
 
 ### プロジェクト構造
@@ -132,6 +150,51 @@
     --8<-- "examples/java/cloud-run/src/main/java/agents/multitool/MultiToolAgent.java:full_code"
     ```
 
+=== "Go"
+
+    次のプロジェクト構造を作成する必要があります。
+
+    ```console
+    my-adk-agent/
+        agent.go
+        .env
+        go.mod
+    ```
+
+    ### `agent.go`
+
+    プロジェクトフォルダに`agent.go`ファイルを作成します。
+
+    === "OS X &amp; Linux"
+        ```bash
+        touch agent.go
+        ```
+
+    === "Windows"
+        ```console
+        type nul > agent.go
+        ```
+
+    次のコードを`agent.go`にコピーして貼り付けます。
+
+    ```go title="agent.go"
+    --8<-- "examples/go/snippets/get-started/multi_tool_agent/main.go:full_code"
+    ```
+
+    ### `.env`
+
+    同じフォルダに`.env`ファイルを作成します。
+
+    === "OS X &amp; Linux"
+        ```bash
+        touch .env
+        ```
+
+    === "Windows"
+        ```console
+        type nul > .env
+        ```
+
 ![intro_components.png](../assets/quickstart-flow-tool.png)
 
 ## 3. モデルをセットアップする { #set-up-the-model }
@@ -139,7 +202,7 @@
 エージェントがユーザー要求を理解し、応答を生成する能力は、大規模言語モデル (LLM) によって強化されています。エージェントは、この外部LLMサービスに安全な呼び出しを行う必要があり、これには**認証情報**が必要です。有効な認証がないと、LLMサービスはエージェントの要求を拒否し、エージェントは機能できません。
 
 !!!tip "モデル認証ガイド"
-    さまざまなモデルの認証に関する詳細なガイドについては、[認証ガイド](/adk-docs/ja/agents/models/google-gemini#google-ai-studio)を参照してください。
+    さまざまなモデルの認証に関する詳細なガイドについては、[認証ガイド](/ja/agents/models/google-gemini#google-ai-studio)を参照してください。
     これは、エージェントがLLMサービスに呼び出しを行えるようにするための重要なステップです。
 
 === "Gemini - Google AI Studio"
@@ -154,6 +217,13 @@
         Javaを使用している場合は、環境変数を定義します。
 
         ```console title="terminal"
+        export GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
+        ```
+
+        Goを使用している場合は、ターミナルで環境変数を定義するか、`.env`ファイルを使用します:
+
+        ```bash title="terminal"
         export GOOGLE_GENAI_USE_VERTEXAI=FALSE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
@@ -180,6 +250,14 @@
         export GOOGLE_CLOUD_LOCATION=LOCATION
         ```
 
+        Goを使用している場合は、ターミナルで環境変数を定義するか、`.env`ファイルを使用します:
+
+        ```bash title="terminal"
+        export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        export GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
+        export GOOGLE_CLOUD_LOCATION=LOCATION
+        ```
+
 === "Gemini - Google Cloud Vertex AI Expressモードの使用"
     1. 無料のGoogle Cloudプロジェクトにサインアップし、対象となるアカウントでGeminiを無料で利用できます！
         * [Vertex AI ExpressモードのGoogle Cloudプロジェクト](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)をセットアップします。
@@ -194,6 +272,13 @@
         Javaを使用している場合は、環境変数を定義します。
 
         ```console title="terminal"
+        export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
+        ```
+
+        Goを使用している場合は、ターミナルで環境変数を定義するか、`.env`ファイルを使用します:
+
+        ```bash title="terminal"
         export GOOGLE_GENAI_USE_VERTEXAI=TRUE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
         ```
@@ -304,7 +389,46 @@
 
         ![adk-api-server.png](../assets/adk-api-server.png)
 
-        テストのために`adk api_server`を使用する方法については、[APIサーバーの使用に関するドキュメント](/adk-docs/ja/runtime/api-server/)を参照してください。
+        テストのために`adk api_server`を使用する方法については、[APIサーバーの使用に関するドキュメント](/ja/runtime/api-server/)を参照してください。
+
+=== "Go"
+
+    ターミナルを使って、エージェントプロジェクトのディレクトリに移動します:
+
+    ```console
+    my-adk-agent/      <-- このディレクトリに移動
+        agent.go
+        .env
+        go.mod
+    ```
+
+    エージェントと対話する方法は複数あります。
+
+    === "開発UI (web)"
+
+        次のコマンドを実行して**開発UI**を起動します。アクティブにするサブランチャーを指定する必要があります（例: `webui`、`api`）。
+
+        ```bash
+        go run agent.go web webui api
+        ```
+
+        **ステップ1:** 提供されたURL (通常は`http://localhost:8080`) をブラウザで直接開きます。
+
+        **ステップ2.** UIの左上隅にあるドロップダウンでエージェントを選択できます。「weather_time_agent」を選択します。
+
+        **ステップ3.** 次に、テキストボックスを使用してエージェントとチャットできます。
+
+    === "ターミナル (console)"
+
+        ターミナルでエージェントとチャットするには、次のコマンドを実行します。
+
+        ```bash
+        go run agent.go console
+        ```
+
+        **注:** `console`がコード内で最初のサブランチャーである場合（`full.NewLauncher()`のように）、`go run agent.go`だけを実行することもできます。
+
+        終了するには、Cmd/Ctrl+Cを使用します。
 
 === "Java"
 

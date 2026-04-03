@@ -1,7 +1,7 @@
 ---
 catalog_title: AgentMail
 catalog_description: AI 에이전트가 메시지를 보내고 받고 관리할 수 있는 이메일 수신함을 생성합니다
-catalog_icon: /adk-docs/integrations/assets/agentmail.png
+catalog_icon: /integrations/assets/agentmail.png
 catalog_tags: ["mcp"]
 ---
 

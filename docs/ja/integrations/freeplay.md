@@ -1,7 +1,7 @@
 ---
 catalog_title: Freeplay
 catalog_description: Freeplay を使ってエンドツーエンドの可観測性とともに AI エージェントを構築・最適化・評価します
-catalog_icon: /adk-docs/integrations/assets/freeplay.png
+catalog_icon: /integrations/assets/freeplay.png
 catalog_tags: ["observability"]
 ---
 # Freeplay を使用したエージェントのオブザーバビリティと評価

@@ -21,11 +21,11 @@ CLI, Antigravity, Claude Code, Cursor를 포함한 모든 호환 도구에서
 ADK 개발 스킬을 설치하려면 프로젝트 디렉터리에서 다음 명령을 실행하세요.
 
 ```bash
-npx skills add google/adk-docs/skills -y -g
+npx skills add google/skills -y -g
 ```
 
 다음이 포함된 [GitHub의 ADK Dev
-Skills](https://github.com/google/adk-docs/tree/main/skills)를 살펴보세요.
+Skills](https://github.com/google/tree/main/skills)를 살펴보세요.
 
 | Skill | 설명 |
 |-------|------|
@@ -72,7 +72,7 @@ gemini extensions install https://github.com/derailed-dash/adk-docs-ext
             "mcpdoc",
             "mcpdoc",
             "--urls",
-            "AgentDevelopmentKit:https://google.github.io/adk-docs/llms.txt",
+            "AgentDevelopmentKit:https://adk.dev/llms.txt",
             "--transport",
             "stdio"
           ]
@@ -87,7 +87,7 @@ gemini extensions install https://github.com/derailed-dash/adk-docs-ext
 서버를 추가하려면 다음을 실행하세요.
 
 ```bash
-claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls AgentDevelopmentKit:https://google.github.io/adk-docs/llms.txt --transport stdio
+claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls AgentDevelopmentKit:https://adk.dev/llms.txt --transport stdio
 ```
 
 ### Cursor
@@ -109,7 +109,7 @@ claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls Age
             "mcpdoc",
             "mcpdoc",
             "--urls",
-            "AgentDevelopmentKit:https://google.github.io/adk-docs/llms.txt",
+            "AgentDevelopmentKit:https://adk.dev/llms.txt",
             "--transport",
             "stdio"
           ]
@@ -132,5 +132,5 @@ ADK 문서는 [`llms.txt` 표준](https://llmstxt.org/)을 따르는 머신
 
 | 파일 | 설명 | URL |
 |------|------|-----|
-| `llms.txt` | 링크가 포함된 문서 인덱스 | [`google.github.io/adk-docs/llms.txt`](https://google.github.io/adk-docs/llms.txt) |
-| `llms-full.txt` | 전체 문서를 하나의 파일로 제공 | [`google.github.io/adk-docs/llms-full.txt`](https://google.github.io/adk-docs/llms-full.txt) |
+| `llms.txt` | 링크가 포함된 문서 인덱스 | [`google.github.io/llms.txt`](https://adk.dev/llms.txt) |
+| `llms-full.txt` | 전체 문서를 하나의 파일로 제공 | [`google.github.io/llms-full.txt`](https://adk.dev/llms-full.txt) |

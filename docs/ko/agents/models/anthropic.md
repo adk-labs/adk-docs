@@ -7,8 +7,8 @@
 ADK의 `Claude` 래퍼 클래스를 사용하면 Anthropic API 키 또는
 Vertex AI 백엔드를 통해 Java ADK 애플리케이션에 Anthropic의 Claude 모델을 직접 통합할 수 있습니다.
 또한 Google Cloud Vertex AI 서비스를 통해 Anthropic 모델에 접근할 수 있습니다.
-자세한 내용은 [Vertex AI의 타사 모델](/adk-docs/agents/models/vertex/#third-party-models-on-vertex-ai-eg-anthropic-claude) 섹션을 참조하세요.
-또한 Python에서는 [LiteLLM](/adk-docs/agents/models/litellm/) 라이브러리를 통해 Anthropic 모델을 사용할 수 있습니다.
+자세한 내용은 [Vertex AI의 타사 모델](/agents/models/vertex/#third-party-models-on-vertex-ai-eg-anthropic-claude) 섹션을 참조하세요.
+또한 Python에서는 [LiteLLM](/agents/models/litellm/) 라이브러리를 통해 Anthropic 모델을 사용할 수 있습니다.
 
 ## 시작하기
 

@@ -1,7 +1,7 @@
 ---
 catalog_title: MLflow
 catalog_description: 에이전트 실행, 도구 호출, 모델 요청의 OpenTelemetry 트레이스를 수집합니다
-catalog_icon: /adk-docs/integrations/assets/mlflow.png
+catalog_icon: /integrations/assets/mlflow.png
 catalog_tags: ["observability"]
 ---
 

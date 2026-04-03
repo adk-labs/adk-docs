@@ -1,7 +1,7 @@
 ---
 catalog_title: Daytona
 catalog_description: 安全なサンドボックスでコード実行、シェル実行、ファイル管理を行います
-catalog_icon: /adk-docs/integrations/assets/daytona.png
+catalog_icon: /integrations/assets/daytona.png
 catalog_tags: ["code"]
 ---
 

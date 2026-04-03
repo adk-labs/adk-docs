@@ -1,7 +1,7 @@
 ---
 catalog_title: GKE Code Executor
 catalog_description: 안전하고 확장 가능한 GKE 환경에서 AI 생성 코드를 실행합니다
-catalog_icon: /adk-docs/integrations/assets/gke.png
+catalog_icon: /integrations/assets/gke.png
 catalog_tags: ["code","google"]
 ---
 

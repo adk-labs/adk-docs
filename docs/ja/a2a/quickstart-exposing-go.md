@@ -32,7 +32,7 @@ Go ADKを使用して構築された既存のエージェントを取得し、A2
 
 まず、Goがインストールされ、環境が設定されていることを確認してください。
 
-[**`a2a_basic`** サンプル](https://github.com/google/adk-docs/tree/main/examples/go/a2a_basic)をクローンして移動できます。
+[**`a2a_basic`** サンプル](https://github.com/google/tree/main/examples/go/a2a_basic)をクローンして移動できます。
 
 ```bash
 cd examples/go/a2a_basic

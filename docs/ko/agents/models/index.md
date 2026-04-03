@@ -15,16 +15,16 @@ ADK는 모델 통합을 위해 주로 두 가지 메커니즘을 사용합니다
    모델 이름 또는 엔드포인트 리소스 문자열을 전달하면 ADK 내부 레지스트리가
    이를 적절한 백엔드 클라이언트로 변환합니다.
 
-      *  [Gemini 모델](/adk-docs/agents/models/google-gemini/)
-      *  [Claude 모델](/adk-docs/agents/models/anthropic/)
-      *  [Vertex AI 호스팅 모델](/adk-docs/agents/models/vertex/)
+      *  [Gemini 모델](/agents/models/google-gemini/)
+      *  [Claude 모델](/agents/models/anthropic/)
+      *  [Vertex AI 호스팅 모델](/agents/models/vertex/)
 
 2. **모델 커넥터:** Google 생태계 외부 모델이나 특정 클라이언트 설정이 필요한 모델의 경우,
    `ApigeeLlm` 또는 `LiteLlm` 같은 특정 래퍼 클래스를 인스턴스화해
    이를 `LlmAgent`의 `model` 매개변수로 전달합니다.
 
-      *  [Apigee 모델](/adk-docs/agents/models/apigee/)
-      *  [LiteLLM 모델](/adk-docs/agents/models/litellm/)
-      *  [Ollama 모델 호스팅](/adk-docs/agents/models/ollama/)
-      *  [vLLM 모델 호스팅](/adk-docs/agents/models/vllm/)
-      *  [LiteRT-LM 모델 호스팅](/adk-docs/ko/agents/models/litert-lm/)
+      *  [Apigee 모델](/agents/models/apigee/)
+      *  [LiteLLM 모델](/agents/models/litellm/)
+      *  [Ollama 모델 호스팅](/agents/models/ollama/)
+      *  [vLLM 모델 호스팅](/agents/models/vllm/)
+      *  [LiteRT-LM 모델 호스팅](/ko/agents/models/litert-lm/)

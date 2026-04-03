@@ -6,7 +6,7 @@
   <!-- Line 1: Open in Colab -->
   <!-- This div ensures the link takes up its own line and adds space below -->
   <div style="margin-bottom: 10px;">
-    <a href="https://colab.research.google.com/github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: #4285F4;">
+    <a href="https://colab.research.google.com/github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" style="display: inline-flex; align-items: center; gap: 5px; text-decoration: none; color: #4285F4;">
       <img width="32px" src="https://www.gstatic.com/pantheon/images/bigquery/welcome_page/colab-logo.svg" alt="Google Colaboratory logo">
       <span>Colabで開く</span>
     </a>
@@ -19,26 +19,26 @@
     <span style="font-weight: bold;">共有:</span>
 
     <!-- Social Media Links -->
-    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on LinkedIn">
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on LinkedIn">
       <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/8/81/LinkedIn_icon.svg" alt="LinkedIn logo" style="vertical-align: middle;">
     </a>
-    <a href="https://bsky.app/intent/compose?text=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Bluesky">
+    <a href="https://bsky.app/intent/compose?text=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Bluesky">
       <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bluesky_Logo.svg" alt="Bluesky logo" style="vertical-align: middle;">
     </a>
-    <a href="https://twitter.com/intent/tweet?url=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on X (Twitter)">
+    <a href="https://twitter.com/intent/tweet?url=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on X (Twitter)">
       <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/5/5a/X_icon_2.svg" alt="X logo" style="vertical-align: middle;">
     </a>
-    <a href="https://reddit.com/submit?url=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Reddit">
+    <a href="https://reddit.com/submit?url=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Reddit">
       <img width="20px" src="https://redditinc.com/hubfs/Reddit%20Inc/Brand/Reddit_Logo.png" alt="Reddit logo" style="vertical-align: middle;">
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//github/google/adk-docs/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Facebook">
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A//github/google/blob/main/examples/python/tutorial/agent_team/adk_tutorial.ipynb" target="_blank" title="Share on Facebook">
       <img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook logo" style="vertical-align: middle;">
     </a>
   </div>
 
 </div>
 
-このチュートリアルは、[Agent Development Kit](https://google.github.io/adk-docs/get-started/)の[クイックスタート例](https://google.github.io/adk-docs/get-started/quickstart/)から拡張されたものです。これで、より深く掘り下げ、より洗練された**マルチエージェントシステム**を構築する準備が整いました。
+このチュートリアルは、[Agent Development Kit](https://adk.dev/get-started/)の[クイックスタート例](https://adk.dev/get-started/quickstart/)から拡張されたものです。これで、より深く掘り下げ、より洗練された**マルチエージェントシステム**を構築する準備が整いました。
 
 シンプルな基盤の上に高度な機能を段階的に積み重ねながら、**天気ボットのエージェントチーム**の構築に着手します。天気を調べることができる単一のエージェントから始めて、次のような機能を順次追加していきます。
 
@@ -86,7 +86,7 @@
 
 **代替手段：ADKの組み込みツール（Web UI / CLI / API Server）を使用する場合**
 
-ADKの標準ツールを使用してランナーとセッション管理を自動的に処理する設定を希望する場合は、[こちら](https://github.com/google/adk-docs/tree/main/examples/python/tutorial/agent_team/adk-tutorial)にその目的に合わせて構成されたコードがあります。そのバージョンは、`adk web`（Web UI用）、`adk run`（CLI対話用）、または`adk api_server`（API公開用）のようなコマンドで直接実行するように設計されています。その代替リソースにある`README.md`の指示に従ってください。
+ADKの標準ツールを使用してランナーとセッション管理を自動的に処理する設定を希望する場合は、[こちら](https://github.com/google/tree/main/examples/python/tutorial/agent_team/adk-tutorial)にその目的に合わせて構成されたコードがあります。そのバージョンは、`adk web`（Web UI用）、`adk run`（CLI対話用）、または`adk api_server`（API公開用）のようなコマンドで直接実行するように設計されています。その代替リソースにある`README.md`の指示に従ってください。
 
 ---
 

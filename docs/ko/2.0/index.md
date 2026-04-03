@@ -13,13 +13,13 @@ ADK 2.0은 정교한 AI 에이전트를 구축하기 위한 강력한 도구를 
 수행하도록 구조화할 수 있게 해줍니다. ADK 2.0은 Python용 Alpha 릴리스로
 제공되며 다음 핵심 기능을 포함합니다.
 
-- [**그래프 기반 워크플로**](/adk-docs/ko/workflows/): 작업이 라우팅되고
+- [**그래프 기반 워크플로**](/ko/workflows/): 작업이 라우팅되고
   실행되는 방식을 더 세밀하게 제어할 수 있는 결정론적 에이전트 워크플로를
   구축합니다.
-- [**협업 에이전트**](/adk-docs/ko/workflows/collaboration/): 조정 역할의
+- [**협업 에이전트**](/ko/workflows/collaboration/): 조정 역할의
   에이전트와 함께 여러 서브에이전트가 협력하는 복잡한 에이전트 아키텍처를
   구축합니다.
-- [**동적 워크플로**](/adk-docs/ko/workflows/dynamic/): 반복 루프와 복잡한
+- [**동적 워크플로**](/ko/workflows/dynamic/): 반복 루프와 복잡한
   의사결정 기반 분기를 포함하는 더 복잡한 워크플로를 코드 기반 로직으로
   구현합니다.
 
@@ -102,9 +102,9 @@ ADK 2.0을 설치하려면 다음 단계를 따르세요.
 
 ADK 2.0 기능으로 에이전트를 구축하는 개발자 가이드를 확인하세요.
 
-- [**그래프 기반 워크플로**](/adk-docs/ko/workflows/)
-- [**협업 에이전트**](/adk-docs/ko/workflows/collaboration/)
-- [**동적 워크플로**](/adk-docs/ko/workflows/dynamic/)
+- [**그래프 기반 워크플로**](/ko/workflows/)
+- [**협업 에이전트**](/ko/workflows/collaboration/)
+- [**동적 워크플로**](/ko/workflows/dynamic/)
 
 테스트와 영감을 위해 다음 ADK 2.0 코드 샘플도 확인해 보세요.
 

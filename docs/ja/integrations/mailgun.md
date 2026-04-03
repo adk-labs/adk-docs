@@ -1,7 +1,7 @@
 ---
 catalog_title: Mailgun
 catalog_description: メール送信、配信指標追跡、メーリングリスト管理を行います
-catalog_icon: /adk-docs/integrations/assets/mailgun.png
+catalog_icon: /integrations/assets/mailgun.png
 catalog_tags: ["mcp"]
 ---
 

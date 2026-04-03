@@ -12,7 +12,7 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 단계적인 프로세스 워크플로를 정의할 수 있게 하며, 프롬프트 기반 에이전트만
 사용하는 방식보다 더 높은 정밀도와 신뢰성을 제공합니다.
 
-![Graph-based flight upgrade agent](/adk-docs/assets/graph-workflow-router.svg)
+![Graph-based flight upgrade agent](/assets/graph-workflow-router.svg)
 
 ```python
 root_agent = Workflow(
@@ -46,7 +46,7 @@ root_agent = Workflow(
     [피드백](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=v2)을
     보내주시기 바랍니다.
 
-[그래프 기반 에이전트 워크플로](/adk-docs/ko/workflows/)를 확인하여 ADK의
+[그래프 기반 에이전트 워크플로](/ko/workflows/)를 확인하여 ADK의
 그래프 기반 워크플로를 시작해 보세요.
 
 ## 노드
@@ -66,7 +66,7 @@ def my_function_node(node_input: str):
 ```
 
 노드 사이에서 데이터를 전달하는 방법에 대한 자세한 내용은
-[에이전트 워크플로의 데이터 처리](/adk-docs/ko/workflows/data-handling/)를
+[에이전트 워크플로의 데이터 처리](/ko/workflows/data-handling/)를
 참조하세요.
 
 ## 워크플로 그래프 구문
@@ -90,7 +90,7 @@ root_agent = Workflow(
     그래프 기반 워크플로에 ***Agents*** 또는 ***LlmAgents*** 를 추가할 수
     있지만, 이들은 task 또는 single-turn 모드로 설정되어야 합니다. 에이전트
     모드에 대한 자세한 내용은
-    [협업 에이전트 팀 구축하기](/adk-docs/ko/workflows/collaboration/#모드-구성과-동작)을
+    [협업 에이전트 팀 구축하기](/ko/workflows/collaboration/#모드-구성과-동작)을
     참조하세요.
 
 ### 순차 경로
@@ -159,7 +159,7 @@ root_agent = Workflow(
 때까지 기다렸다가, 이 노드들의 출력 집합을 다음 노드로 전달하는
 ***JoinNode*** 객체를 사용합니다.
 
-![Tasks connecting to a JoinNode](/adk-docs/assets/graph-joinnode.svg)
+![Tasks connecting to a JoinNode](/assets/graph-joinnode.svg)
 
 **그림 2.** 병렬 작업 노드의 출력은 JoinNode 객체를 사용해 합칠 수 있습니다.
 
@@ -192,7 +192,7 @@ edges=[
 캡슐화하고 싶을 수 있습니다. 이 목적을 위해 하나 이상의 ***Workflow*** 객체를
 다른 워크플로 에이전트 그래프 내부의 노드로 사용할 수 있습니다.
 
-![Nested Workflows inside a parent Workflow](/adk-docs/assets/graph-workflow-nodes.svg)
+![Nested Workflows inside a parent Workflow](/assets/graph-workflow-nodes.svg)
 
 **그림 3.** 부모 ***Workflow*** 내부 노드로 사용되는 중첩 ***Workflows***.
 

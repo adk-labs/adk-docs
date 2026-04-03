@@ -1,7 +1,7 @@
 ---
 catalog_title: Pub/Sub 도구
 catalog_description: Google Cloud Pub/Sub에서 메시지를 게시, pull, acknowledge 합니다
-catalog_icon: /adk-docs/integrations/assets/pubsub.png
+catalog_icon: /integrations/assets/pubsub.png
 catalog_tags: ["google"]
 ---
 

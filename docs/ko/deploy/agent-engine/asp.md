@@ -43,8 +43,8 @@ ASP 및 CLI 도구 사용 방법은 다음을 참고하세요.
 Agent Engine에 ADK 프로젝트를 배포하려면 배포 작업을 지원하는 추가 파일이 필요합니다. 다음 ASP 명령은 프로젝트를 백업한 뒤 배포용 파일을 추가합니다.
 
 이 가이드는 배포를 위해 기존 ADK 프로젝트를 수정한다고 가정합니다. ADK 프로젝트가 없는 경우 또는 테스트 프로젝트를 사용하려면
-[Quickstart](/adk-docs/get-started/quickstart/) 가이드를 먼저 수행해
-[multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)
+[Quickstart](/get-started/quickstart/) 가이드를 먼저 수행해
+[multi_tool_agent](https://github.com/google/tree/main/examples/python/snippets/get-started/multi_tool_agent)
 프로젝트를 생성하세요. 아래 예시는 `multi_tool_agent` 프로젝트를 사용합니다.
 
 Agent Engine 배포를 위해 ADK 프로젝트를 준비하려면:
@@ -132,12 +132,12 @@ ADK 프로젝트를 Google Cloud 프로젝트에 배포하려면:
     ```
 
 성공적으로 완료되면 Google Cloud Agent Engine에서 실행 중인 에이전트와 상호 작용할 수 있습니다.
-배포 에이전트 테스트 방법은 [배포된 에이전트 테스트](/adk-docs/deploy/agent-engine/test/)를 참고하세요.
+배포 에이전트 테스트 방법은 [배포된 에이전트 테스트](/deploy/agent-engine/test/)를 참고하세요.
 
 ### ADK 프로젝트 변경 사항 {#adk-asp-changes}
 
 ASP 도구는 배포를 위해 프로젝트에 추가 파일을 추가합니다. 아래 절차는 기존 프로젝트를 수정하기 전에 백업합니다.
-원본 예시 프로젝트는 [multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)이며,
+원본 예시 프로젝트는 [multi_tool_agent](https://github.com/google/tree/main/examples/python/snippets/get-started/multi_tool_agent)이며,
 최초 구조는 아래와 같습니다.
 
 ```
@@ -170,4 +170,4 @@ ASP 사용 상세는 [개발 가이드](https://googlecloudplatform.github.io/ag
 ## 배포된 에이전트 테스트
 
 ADK 에이전트 배포 후 새로운 호스팅 환경에서 워크플로를 테스트해야 합니다. Agent Engine에 배포된 ADK 에이전트 테스트 방법은
-[Agent Engine에서 배포된 에이전트 테스트](/adk-docs/deploy/agent-engine/test/)를 참고하세요.
+[Agent Engine에서 배포된 에이전트 테스트](/deploy/agent-engine/test/)를 참고하세요.

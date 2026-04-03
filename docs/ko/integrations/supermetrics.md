@@ -1,7 +1,7 @@
 ---
 catalog_title: Supermetrics
 catalog_description: 실시간 마케팅, 광고, CRM 데이터를 조회하고 분석합니다
-catalog_icon: /adk-docs/integrations/assets/supermetrics.png
+catalog_icon: /integrations/assets/supermetrics.png
 catalog_tags: ["mcp", "data"]
 ---
 

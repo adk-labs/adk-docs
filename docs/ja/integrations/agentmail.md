@@ -1,7 +1,7 @@
 ---
 catalog_title: AgentMail
 catalog_description: AIエージェントがメールを送受信し、管理するための受信トレイを作成
-catalog_icon: /adk-docs/integrations/assets/agentmail.png
+catalog_icon: /integrations/assets/agentmail.png
 catalog_tags: ["mcp"]
 ---
 

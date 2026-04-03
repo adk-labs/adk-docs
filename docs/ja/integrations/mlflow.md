@@ -1,7 +1,7 @@
 ---
 catalog_title: MLflow
 catalog_description: エージェント実行、ツール呼び出し、モデル要求の OpenTelemetry トレースを収集します
-catalog_icon: /adk-docs/integrations/assets/mlflow.png
+catalog_icon: /integrations/assets/mlflow.png
 catalog_tags: ["observability"]
 ---
 

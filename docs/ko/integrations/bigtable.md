@@ -1,7 +1,7 @@
 ---
 catalog_title: Bigtable 도구
 catalog_description: Bigtable과 상호작용하여 데이터를 조회하고 SQL을 실행합니다
-catalog_icon: /adk-docs/integrations/assets/bigtable.png
+catalog_icon: /integrations/assets/bigtable.png
 catalog_tags: ["data", "google"]
 ---
 

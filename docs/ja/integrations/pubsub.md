@@ -1,7 +1,7 @@
 ---
 catalog_title: Pub/Sub ツール
 catalog_description: Google Cloud Pub/Sub でメッセージの publish、pull、acknowledge を行います
-catalog_icon: /adk-docs/integrations/assets/pubsub.png
+catalog_icon: /integrations/assets/pubsub.png
 catalog_tags: ["google"]
 ---
 

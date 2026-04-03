@@ -109,7 +109,7 @@
     </project>
     ```
 
-    참조용 [전체 pom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml) 파일은 다음과 같습니다.
+    참조용 [전체 pom.xml](https://github.com/google/tree/main/examples/java/cloud-run/pom.xml) 파일은 다음과 같습니다.
 
     gradle을 사용하는 경우 build.gradle에 종속성을 추가합니다.
 

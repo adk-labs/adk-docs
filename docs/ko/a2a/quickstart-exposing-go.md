@@ -32,7 +32,7 @@ Go ADK를 사용하여 빌드된 기존 에이전트를 가져와 A2A 시작 프
 
 먼저 Go가 설치되어 있고 환경이 설정되어 있는지 확인하십시오.
 
-여기에서 [**`a2a_basic`** 샘플](https://github.com/google/adk-docs/tree/main/examples/go/a2a_basic)로 복제하고 이동할 수 있습니다.
+여기에서 [**`a2a_basic`** 샘플](https://github.com/google/tree/main/examples/go/a2a_basic)로 복제하고 이동할 수 있습니다.
 
 ```bash
 cd examples/go/a2a_basic

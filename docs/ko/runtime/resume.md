@@ -24,9 +24,9 @@ app = App(
 ```
 
 !!! warning "주의: 장기 실행 함수, 확인, 인증"
-    [장기 실행 함수](/adk-docs/ko/tools-custom/function-tools/#long-run-tool),
-    [확인](/adk-docs/ko/tools-custom/confirmation/) 또는
-    [인증](/adk-docs/ko/tools-custom/authentication/)을 사용하는 에이전트의 경우
+    [장기 실행 함수](/ko/tools-custom/function-tools/#long-run-tool),
+    [확인](/ko/tools-custom/confirmation/) 또는
+    [인증](/ko/tools-custom/authentication/)을 사용하는 에이전트의 경우
     사용자 입력이 필요한 경우 재개 가능한 확인을 추가하면 이러한 기능의 작동 방식이 변경됩니다.
     자세한 내용은 해당 기능에 대한 설명서를 참조하십시오.
 
@@ -38,7 +38,7 @@ app = App(
 
 ## 중지된 워크플로 재개
 
-ADK 워크플로 실행이 중지되면 워크플로 인스턴스에 대한 호출 ID가 포함된 명령을 사용하여 워크플로를 재개할 수 있습니다. 호출 ID는 워크플로의 [이벤트](/adk-docs/ko/events/#understanding-and-using-events) 기록에서 찾을 수 있습니다. ADK API 서버가 중단되거나 전원이 꺼진 경우 실행 중인지 확인한 다음 다음 API 요청 예제와 같이 다음 명령을 실행하여 워크플로를 재개합니다.
+ADK 워크플로 실행이 중지되면 워크플로 인스턴스에 대한 호출 ID가 포함된 명령을 사용하여 워크플로를 재개할 수 있습니다. 호출 ID는 워크플로의 [이벤트](/ko/events/#understanding-and-using-events) 기록에서 찾을 수 있습니다. ADK API 서버가 중단되거나 전원이 꺼진 경우 실행 중인지 확인한 다음 다음 API 요청 예제와 같이 다음 명령을 실행하여 워크플로를 재개합니다.
 
 ```console
 # 필요한 경우 API 서버 다시 시작:
@@ -71,7 +71,7 @@ runner.run_async(user_id='u_123', session_id='s_abc',
 
 ## 작동 방식
 
-재개 기능은 [이벤트](/adk-docs/ko/events/) 및 [이벤트 작업](/adk-docs/ko/events/#detecting-actions-and-side-effects)을 사용하여 증분 단계를 포함하여 완료된 에이전트 워크플로 작업을 기록하여 작동합니다. 재개 가능한 워크플로 내에서 에이전트 작업의 완료를 추적합니다. 워크플로가 중단된 후 나중에 다시 시작되면 시스템은 각 에이전트의 완료 상태를 설정하여 워크플로를 재개합니다. 에이전트가 완료되지 않은 경우 워크플로 시스템은 해당 에이전트에 대해 완료된 모든 이벤트를 복원하고 부분적으로 완료된 상태에서 워크플로를 다시 시작합니다. 다중 에이전트 워크플로의 경우 특정 재개 동작은 아래에 설명된 대로 워크플로의 다중 에이전트 클래스에 따라 다릅니다.
+재개 기능은 [이벤트](/ko/events/) 및 [이벤트 작업](/ko/events/#detecting-actions-and-side-effects)을 사용하여 증분 단계를 포함하여 완료된 에이전트 워크플로 작업을 기록하여 작동합니다. 재개 가능한 워크플로 내에서 에이전트 작업의 완료를 추적합니다. 워크플로가 중단된 후 나중에 다시 시작되면 시스템은 각 에이전트의 완료 상태를 설정하여 워크플로를 재개합니다. 에이전트가 완료되지 않은 경우 워크플로 시스템은 해당 에이전트에 대해 완료된 모든 이벤트를 복원하고 부분적으로 완료된 상태에서 워크플로를 다시 시작합니다. 다중 에이전트 워크플로의 경우 특정 재개 동작은 아래에 설명된 대로 워크플로의 다중 에이전트 클래스에 따라 다릅니다.
 
 -   **순차 에이전트**: 저장된 상태에서 current_sub_agent를 읽어 시퀀스에서 실행할 다음 하위 에이전트를 찾습니다.
 -   **루프 에이전트**: current_sub_agent 및 times_looped 값을 사용하여 마지막으로 완료된 반복 및 하위 에이전트에서 루프를 계속합니다.
@@ -96,7 +96,7 @@ runner.run_async(user_id='u_123', session_id='s_abc',
 -   **에이전트 상태 검사점 추가**: 에이전트의 비동기 실행 함수를 수정하여 에이전트의 전체 작업의 각 완료된 단계에 대한 에이전트 상태를 생성하고 저장합니다.
 -   **에이전트 상태를 추적하기 위해 에이전트 상태 끝 추가:** 에이전트의 전체 작업이 성공적으로 완료되면 `end_of_agent=True` 상태를 포함하도록 에이전트의 비동기 실행 함수를 수정합니다.
 
-다음 예제는 [사용자 지정 에이전트](/adk-docs/ko/agents/custom-agents/#full-code-example) 가이드에 표시된 예제 StoryFlowAgent 클래스에 필요한 코드 수정을 보여줍니다.
+다음 예제는 [사용자 지정 에이전트](/ko/agents/custom-agents/#full-code-example) 가이드에 표시된 예제 StoryFlowAgent 클래스에 필요한 코드 수정을 보여줍니다.
 
 ```python
 class WorkflowStep(int, Enum):

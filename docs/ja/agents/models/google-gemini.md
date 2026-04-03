@@ -6,10 +6,10 @@
 
 ADK は、幅広い機能を備えた Google Gemini 系の生成 AI モデルをサポートします。
 ADK は次のような豊富な Gemini 機能をサポートしています。
-[コード実行](/adk-docs/tools/gemini-api/code-execution/)、
-[Google Search](/adk-docs/tools/gemini-api/google-search/)、
-[コンテキストキャッシュ](/adk-docs/context/caching/)、
-[コンピュータ使用](/adk-docs/tools/gemini-api/computer-use/)、
+[コード実行](/tools/gemini-api/code-execution/)、
+[Google Search](/tools/gemini-api/google-search/)、
+[コンテキストキャッシュ](/context/caching/)、
+[コンピュータ使用](/tools/gemini-api/computer-use/)、
 および [Interactions API](#interactions-api) を含みます。
 
 ## はじめに
@@ -107,7 +107,7 @@ ADK は次のような豊富な Gemini 機能をサポートしています。
         または `.properties`（Java）を作成し、次の行を追加します。ADK はこのファイルを自動的に読み込みます。
 
         ```shell
-        export GOOGLE_API_KEY="YOUR_GOOGLE_API_KEY"
+        export GOOGLE_GENAI_API_KEY="YOUR_GOOGLE_API_KEY"
         export GOOGLE_GENAI_USE_VERTEXAI=FALSE
         ```
 
@@ -348,7 +348,7 @@ Gemini の [Interactions API](https://ai.google.dev/gemini-api/docs/interactions
 
 ### 既知の制限
 
-Interactions API は、[Google Search](/adk-docs/tools/built-in-tools/#google-search) のような
+Interactions API は、[Google Search](/tools/built-in-tools/#google-search) のような
 カスタム関数呼び出しツールと、同じエージェント内の組み込みツールを混在して使用することを**サポートしません**。
 `bypass_multi_tools_limit` パラメータで組み込みツールをカスタムツールとして動作させることで
 回避できます。

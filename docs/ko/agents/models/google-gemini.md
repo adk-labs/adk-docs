@@ -5,10 +5,10 @@
 </div>
 
 ADK는 다양한 기능을 제공하는 강력한 Gemini 계열의 생성형 AI 모델을 지원합니다.
-ADK는 [코드 실행](/adk-docs/tools/gemini-api/code-execution/),
-[Google Search](/adk-docs/tools/gemini-api/google-search/),
-[컨텍스트 캐싱](/adk-docs/context/caching/),
-[컴퓨터 사용](/adk-docs/tools/gemini-api/computer-use/),
+ADK는 [코드 실행](/tools/gemini-api/code-execution/),
+[Google Search](/tools/gemini-api/google-search/),
+[컨텍스트 캐싱](/context/caching/),
+[컴퓨터 사용](/tools/gemini-api/computer-use/),
 및 [Interactions API](#interactions-api)를 비롯해 여러 Gemini 기능을 지원합니다.
 
 ## 시작하기
@@ -102,7 +102,7 @@ ADK는 [코드 실행](/adk-docs/tools/gemini-api/code-execution/),
     2.  **환경 변수 설정:** 프로젝트 루트 디렉터리에 `.env`(Python) 또는 `.properties`(Java) 파일을 만들고 다음 라인을 추가합니다. ADK가 해당 파일을 자동으로 로드합니다.
 
         ```shell
-        export GOOGLE_API_KEY="YOUR_GOOGLE_API_KEY"
+        export GOOGLE_GENAI_API_KEY="YOUR_GOOGLE_API_KEY"
         export GOOGLE_GENAI_USE_VERTEXAI=FALSE
         ```
 
@@ -336,7 +336,7 @@ Gemini [Interactions API](https://ai.google.dev/gemini-api/docs/interactions)
 
 ### 알려진 제한
 
-Interactions API는 [Google Search](/adk-docs/tools/built-in-tools/#google-search)와 같은
+Interactions API는 [Google Search](/tools/built-in-tools/#google-search)와 같은
 커스텀 함수 호출 도구와 내장 도구를 동일 에이전트에서 함께 사용할 수 **없습니다**.
 `bypass_multi_tools_limit` 매개변수를 사용해 내장 도구를 커스텀 도구로 동작하도록 설정하여 제한을 우회할 수 있습니다.
 

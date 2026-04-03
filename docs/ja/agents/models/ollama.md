@@ -5,7 +5,7 @@
 </div>
 
 [Ollama](https://ollama.com/)はオープンソースモデルをローカルでホストして実行できるツールです。
-ADKは[LiteLLM](/adk-docs/agents/models/litellm/)モデルコネクターライブラリを通じて
+ADKは[LiteLLM](/agents/models/litellm/)モデルコネクターライブラリを通じて
 Ollamaでホストされたモデルを統合します。
 
 ## はじめに

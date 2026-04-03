@@ -33,7 +33,7 @@ A2A基本サンプルは、以下で構成されています。
 
 まず、Goがインストールされ、環境が設定されていることを確認してください。
 
-[**`a2a_basic`** サンプル](https://github.com/google/adk-docs/tree/main/examples/go/a2a_basic)をクローンして移動できます。
+[**`a2a_basic`** サンプル](https://github.com/google/tree/main/examples/go/a2a_basic)をクローンして移動できます。
 
 ```bash
 cd examples/go/a2a_basic

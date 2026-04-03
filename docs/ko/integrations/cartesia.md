@@ -1,7 +1,7 @@
 ---
 catalog_title: Cartesia
 catalog_description: 음성을 생성하고 보이스 현지화 및 오디오 콘텐츠 제작을 수행합니다
-catalog_icon: /adk-docs/integrations/assets/cartesia.png
+catalog_icon: /integrations/assets/cartesia.png
 catalog_tags: ["mcp"]
 ---
 

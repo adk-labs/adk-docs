@@ -724,7 +724,7 @@ Google Cloud Console [Quotas page](https://console.cloud.google.com/iam-admin/qu
 프로젝트/리전/모델별 값을 확인하고 증가 요청할 수 있습니다.
 `roles/servicemanagement.quotaAdmin` 권한이 필요합니다.
 
-![Quota value on Cloud Console](/adk-docs/streaming/dev-guide/assets/adk-streaming-guide-quota-console.png)
+![Quota value on Cloud Console](/streaming/dev-guide/assets/adk-streaming-guide-quota-console.png)
 
 **핵심 차이:**
 
@@ -824,8 +824,8 @@ BIDI에서는 다음 보호를 별도 구현하세요.
 
 현재 ADK 구현에서 실제로 저장되는 것은 **오디오**입니다.
 
-- **[Session service](https://google.github.io/adk-docs/sessions/)**: 대화 이력에 오디오 참조 저장
-- **[Artifact service](https://google.github.io/adk-docs/artifacts/)**: 오디오 파일 저장
+- **[Session service](https://adk.dev/sessions/)**: 대화 이력에 오디오 참조 저장
+- **[Artifact service](https://adk.dev/artifacts/)**: 오디오 파일 저장
 
 **활용 사례:**
 
@@ -958,7 +958,7 @@ CFC는 BIDI에서도 동작하지만,
 
 - [Gemini Function Calling Guide](https://ai.google.dev/gemini-api/docs/function-calling)
 - [ADK Parallel Functions Example](https://github.com/google/adk-python/blob/427a983b18088bdc22272d02714393b0a779ecdf/contributing/samples/parallel_functions/agent.py)
-- [ADK Performance Guide](https://google.github.io/adk-docs/tools/performance/)
+- [ADK Performance Guide](https://adk.dev/tools/performance/)
 
 ## 요약
 

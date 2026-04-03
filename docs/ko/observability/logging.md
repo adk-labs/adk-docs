@@ -78,6 +78,66 @@ ADK는 표준 로그 수준을 사용하여 메시지를 분류합니다. 설정
 
 > **참고:** 프로덕션 환경에서는 `INFO` 또는 `WARNING`을 사용하는 것이 좋습니다. `DEBUG` 로그는 매우 장황하고 민감한 정보를 포함할 수 있으므로, 문제를 적극적으로 해결할 때만 `DEBUG`를 활성화하세요.
 
+## Go에서 로깅 설정
+
+Go에서는 ADK가 일반 이벤트에는 표준 `log` 패키지를 사용하고, GenAI 활동 로깅에는 OpenTelemetry를 사용합니다.
+
+### OpenTelemetry 로깅
+
+ADK Go는 OpenTelemetry(OTel)를 사용해 GenAI 요청과 응답을 기록합니다. 기본적으로 보안상 프롬프트 내용은 로그에서 생략됩니다. 환경 변수나 프로그래밍 방식 설정으로 프롬프트 로깅을 활성화할 수 있습니다.
+
+#### 프롬프트 로깅 활성화
+
+다음 환경 변수를 `true`로 설정하면 OTel 로그에 전체 프롬프트가 포함됩니다:
+
+```bash
+export OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true
+```
+
+#### 프로그래밍 방식 설정
+
+`google.golang.org/adk/telemetry` 패키지를 사용하여 telemetry provider를 구성할 수 있습니다.
+
+```go
+import (
+	"context"
+	"google.golang.org/adk/telemetry"
+)
+
+func main() {
+	ctx := context.Background()
+
+	// 프롬프트 내용 로깅을 활성화한 상태로 텔레메트리를 초기화합니다.
+	tp, err := telemetry.New(ctx,
+		telemetry.WithGenAICaptureMessageContent(true),
+		// GCP 내보내기를 위해 WithOtelToCloud(true) 같은 다른 옵션도 추가할 수 있습니다.
+	)
+	if err != nil {
+		// 오류 처리
+	}
+	defer tp.Shutdown(ctx)
+
+	// 전역 OTel provider로 등록합니다.
+	tp.SetGlobalOtelProviders()
+
+	// 이어서 ADK 에이전트 코드를 작성합니다...
+}
+```
+
+### 일반 로깅
+
+일반 이벤트(예: 서버 시작이나 HTTP 요청)는 표준 Go `log` 패키지를 사용해 기록합니다. 로그는 기본적으로 `stderr`로 전송됩니다.
+
+### ADK Go 런처를 사용한 로깅 설정
+
+ADK Go `full.Launcher` 또는 `prod.Launcher`를 사용할 때 텔레메트리는 자동으로 초기화됩니다. `-otel_to_cloud` 플래그를 사용해 GCP 내보내기를 활성화할 수 있습니다:
+
+```bash
+go run main.go web -otel_to_cloud a2a
+```
+
+---
+
 ## 로그 읽기 및 이해하기
 
 `basicConfig` 예제의 `format` 문자열은 각 로그 메시지의 구조를 결정합니다.

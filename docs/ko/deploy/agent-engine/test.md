@@ -2,7 +2,7 @@
 
 이 안내서는 [Agent Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)
 런타임 환경에 배포된 ADK 에이전트를 테스트하는 방법을 설명합니다.
-이 안내를 사용하기 전에 [사용 가능한 방법](/adk-docs/deploy/agent-engine/) 중 하나로
+이 안내를 사용하기 전에 [사용 가능한 방법](/deploy/agent-engine/) 중 하나로
 에이전트를 Agent Engine 런타임 환경에 배포해 두어야 합니다.
 이 가이드는 Google Cloud Console에서 배포된 에이전트를 확인하고 상호작용하는 방법,
 그리고 REST API 호출 또는 Vertex AI SDK for Python으로 에이전트와 상호작용하는 방법을 다룹니다.

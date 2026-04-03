@@ -1,7 +1,7 @@
 ---
 catalog_title: Monocle
 catalog_description: LLM 애플리케이션을 위한 오픈소스 관측성, 추적, 디버깅을 제공합니다
-catalog_icon: /adk-docs/integrations/assets/monocle.png
+catalog_icon: /integrations/assets/monocle.png
 catalog_tags: ["observability"]
 ---
 # Monocle을 사용한 에이전트 관측성

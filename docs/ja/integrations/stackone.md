@@ -1,7 +1,7 @@
 ---
 catalog_title: StackOne
 catalog_description: エージェントを 200 以上の SaaS プロバイダに接続します
-catalog_icon: /adk-docs/integrations/assets/stackone.png
+catalog_icon: /integrations/assets/stackone.png
 catalog_tags: ["connectors"]
 ---
 

@@ -1,7 +1,7 @@
 ---
 catalog_title: Notion
 catalog_description: ワークスペースを検索し、ページを作成し、タスクとデータベースを管理します
-catalog_icon: /adk-docs/integrations/assets/notion.png
+catalog_icon: /integrations/assets/notion.png
 catalog_tags: ["mcp"]
 ---
 # Notion

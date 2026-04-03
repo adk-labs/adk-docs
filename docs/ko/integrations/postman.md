@@ -1,7 +1,7 @@
 ---
 catalog_title: Postman
 catalog_description: API 컬렉션과 워크스페이스를 관리하고 클라이언트 코드를 생성합니다
-catalog_icon: /adk-docs/integrations/assets/postman.png
+catalog_icon: /integrations/assets/postman.png
 catalog_tags: ["mcp"]
 ---
 

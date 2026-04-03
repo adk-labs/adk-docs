@@ -47,7 +47,7 @@ npm install -D @google/adk-devtools
 
 ### エージェントコードを定義
 
-`getCurrentTime` という [Function Tool](/adk-docs/tools/function-tools/) のシンプルな実装を含む、
+`getCurrentTime` という [Function Tool](/tools/function-tools/) のシンプルな実装を含む、
 基本エージェントのコードを作成します。`my-agent` プロジェクトに `agent.ts` を作成して次を追加します。
 
 ```typescript title="my-agent/agent.ts"
@@ -89,7 +89,7 @@ echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
 
 ??? tip "ADK で他の AI モデルを使用"
     ADK は多くの生成AIモデルをサポートします。ADK エージェントで他のモデルを設定する方法は
-    [Models & Authentication](/adk-docs/agents/models) を参照してください。
+    [Models & Authentication](/agents/models) を参照してください。
 
 ## エージェントを実行
 
@@ -119,4 +119,4 @@ adk web my-agent/agent.ts
 ADK をインストールし、最初のエージェントを実行できるようになったので、
 ビルドガイドを使って独自のエージェントを作ってみてください。
 
-* [エージェントの構築](/adk-docs/tutorials/)
+* [エージェントの構築](/tutorials/)

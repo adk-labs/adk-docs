@@ -1,6 +1,6 @@
 # Cloud Trace를 사용한 에이전트 관찰 가능성
 
-ADK를 사용하면 [여기](https://google.github.io/adk-docs/evaluate/#debugging-with-the-trace-view)에서 설명하는 강력한 웹 개발 UI를 활용하여 로컬에서 에이전트 상호 작용을 검사하고 관찰할 수 있습니다. 그러나 클라우드 배포를 목표로 하는 경우 실제 트래픽을 관찰하기 위한 중앙 집중식 대시보드가 필요합니다.
+ADK를 사용하면 [여기](https://adk.dev/evaluate/#debugging-with-the-trace-view)에서 설명하는 강력한 웹 개발 UI를 활용하여 로컬에서 에이전트 상호 작용을 검사하고 관찰할 수 있습니다. 그러나 클라우드 배포를 목표로 하는 경우 실제 트래픽을 관찰하기 위한 중앙 집중식 대시보드가 필요합니다.
 
 Cloud Trace는 Google Cloud Observability의 구성 요소입니다. 추적 기능에 특히 중점을 두어 애플리케이션의 성능을 모니터링, 디버깅 및 개선하기 위한 강력한 도구입니다. ADK(Agent Development Kit) 애플리케이션의 경우 Cloud Trace는 포괄적인 추적을 지원하여 요청이 에이전트의 상호 작용을 통해 어떻게 흐르는지 이해하고 AI 에이전트 내의 성능 병목 현상이나 오류를 식별하는 데 도움을 줍니다.
 

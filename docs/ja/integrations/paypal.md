@@ -1,7 +1,7 @@
 ---
 catalog_title: Paypal
 catalog_description: 決済管理、請求書送信、サブスクリプション管理を行います
-catalog_icon: /adk-docs/integrations/assets/paypal.png
+catalog_icon: /integrations/assets/paypal.png
 catalog_tags: ["mcp"]
 ---
 

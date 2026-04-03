@@ -63,7 +63,7 @@ root = Agent(
 식별하고 서브에이전트에 할당합니다. 서브에이전트가 작업을 완료하면 자동으로
 조정 에이전트로 복귀합니다. 에이전트, 서브에이전트, 워크플로 노드에서
 ***input_schema*** 와 ***output_schema*** 를 사용해 데이터를 구조화하는 방법은
-[에이전트 워크플로의 데이터 처리](/adk-docs/ko/workflows/data-handling/)를
+[에이전트 워크플로의 데이터 처리](/ko/workflows/data-handling/)를
 참조하세요.
 
 ## 모드 구성과 동작

@@ -1,7 +1,7 @@
 ---
 catalog_title: BigQuery 도구
 catalog_description: BigQuery에 연결해 데이터를 조회하고 분석을 수행합니다
-catalog_icon: /adk-docs/integrations/assets/bigquery.png
+catalog_icon: /integrations/assets/bigquery.png
 catalog_tags: ["data", "google"]
 ---
 

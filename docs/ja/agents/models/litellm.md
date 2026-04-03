@@ -17,8 +17,8 @@ LiteLLM ライブラリを使うことで、リモートまたはローカルで
 *   **リモートモデルホスト:** `LiteLlm` ラッパークラスを使用し、`LlmAgent` の `model` パラメータとして設定します。
 *   **ローカルモデルホスト:** ローカルモデルサーバーを参照するように設定された
     `LiteLlm` ラッパークラスを使用します。ローカルホスティング例は
-    [Ollama](/adk-docs/agents/models/ollama/) や
-    [vLLM](/adk-docs/agents/models/vllm/) のドキュメントを参照してください。
+    [Ollama](/agents/models/ollama/) や
+    [vLLM](/agents/models/vllm/) のドキュメントを参照してください。
 
 ??? warning "LiteLLM の Windows 文字エンコーディング"
 

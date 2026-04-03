@@ -1,7 +1,7 @@
 ---
 catalog_title: 코드 실행
 catalog_description: Gemini 모델을 사용해 코드를 실행하고 디버깅합니다
-catalog_icon: /adk-docs/integrations/assets/gemini-spark.svg
+catalog_icon: /integrations/assets/gemini-spark.svg
 catalog_tags: ["code", "google"]
 ---
 
@@ -19,7 +19,7 @@ catalog_tags: ["code", "google"]
 
     이 도구는 하나의 에이전트 인스턴스 내에서 ***단독으로만*** 사용할 수 있습니다.
     이 제한과 우회 방법에 대한 자세한 내용은
-    [ADK 도구 제한 사항](/adk-docs/tools/limitations/#one-tool-one-agent)을 참조하세요.
+    [ADK 도구 제한 사항](/tools/limitations/#one-tool-one-agent)을 참조하세요.
 
 === "Python"
 

@@ -298,7 +298,7 @@ Vertex AI は、Meta Llama などのオープンソースモデルを Model-as-a
     [LiteLLM](https://docs.litellm.ai/) ライブラリを使って、Vertex AI MaaS の Meta Llama などのオープンモデルを利用できます。
 
     **統合方法:** `LiteLlm` ラッパークラスを使用し、`LlmAgent` の `model` パラメータに設定します。
-    ADK で LiteLLM を使用する方法は [ADK エージェント向け LiteLLM モデルコネクタ](/adk-docs/agents/models/litellm/#litellm-model-connector-for-adk-agents) を参照してください。
+    ADK で LiteLLM を使用する方法は [ADK エージェント向け LiteLLM モデルコネクタ](/agents/models/litellm/#litellm-model-connector-for-adk-agents) を参照してください。
 
     **セットアップ:**
 

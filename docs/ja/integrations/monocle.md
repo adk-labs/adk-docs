@@ -1,7 +1,7 @@
 ---
 catalog_title: Monocle
 catalog_description: LLM アプリケーション向けのオープンソース可観測性、トレース、デバッグを提供します
-catalog_icon: /adk-docs/integrations/assets/monocle.png
+catalog_icon: /integrations/assets/monocle.png
 catalog_tags: ["observability"]
 ---
 # Monocleによるエージェントの可観測性

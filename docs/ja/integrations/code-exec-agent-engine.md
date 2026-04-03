@@ -1,7 +1,7 @@
 ---
 catalog_title: Code Execution Tool with Agent Engine
 catalog_description: 安全でスケーラブルな GKE 環境で AI 生成コードを実行します
-catalog_icon: /adk-docs/integrations/assets/vertex-ai.png
+catalog_icon: /integrations/assets/vertex-ai.png
 catalog_tags: ["code", "google"]
 ---
 # Agent Engineを使用したコード実行ツール

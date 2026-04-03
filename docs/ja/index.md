@@ -13,19 +13,21 @@ hide:
 
 Agent Development Kit (ADK) は、**AIエージェントの開発とデプロイ**のための、柔軟でモジュール化されたフレームワークです。GeminiやGoogleエコシステム向けに最適化されていますが、ADKは**モデル非依存**かつ**デプロイ環境非依存**であり、**他のフレームワークとの互換性**も考慮して構築されています。ADKは、エージェント開発をよりソフトウェア開発に近い感覚で行えるように設計されており、開発者が単純なタスクから複雑なワークフローに及ぶエージェントアーキテクチャを容易に作成、デプロイ、オーケストレーションできるようにします。
 
-??? warning "お知らせ: グラフベースのワークフローを備えた ADK Python 2.0 Alpha!"
+??? tip "お知らせ: ADK Go 1.0.0 をリリース!"
 
-    ADK 2.0 Alpha リリースは、グラフベースのワークフローをサポートし、
-    エージェントのオーケストレーションを大きく強化します。Alpha リリースを
-    ダウンロードして [ADK 2.0 を試してみてください](/adk-docs/ja/2.0/)。
+    ADK Go 1.0.0 リリースでは、OpenTelemetry 統合、プラグインによる
+    自己修復ロジック、改善されたヒューマンインプット対応など、
+    いくつかの主要機能が追加されました。詳しくは
+    [ADK Go v1.0 の発表](https://developers.googleblog.com/adk-go-10-arrives/)
+    を参照してください。
 
-??? tip "お知らせ: ADK Python Skills がリリースされました！"
+??? tip "お知らせ: ADK Java 1.0.0 をリリース!"
 
-    ADK Python 開発向けの [Agent Skills](https://agentskills.io/) を使うと、
-    AI 支援型の開発環境で ADK エージェントをすばやく、より効果的に
-    コーディングできます。詳しくは、
-    [AI を使ったコーディング](/adk-docs/ja/tutorials/coding-with-ai/#adk-skills)
-    の ADK Skills ドキュメントを参照してください。
+    ADK Java 1.0.0 が利用可能になりました。このリリースには複数の
+    バグ修正と機能改善が含まれています。詳細は
+    [ブログでの発表](https://developers.googleblog.com/announcing-adk-for-java-100-building-the-future-of-ai-agents-in-java/)
+    をご覧ください。これらの改善を活用し、アプリケーションの最適な
+    パフォーマンスを確保するために ADK Java 1.0.0 へアップグレードしてください。
 
 <div id="centered-install-tabs" class="install-command-container" markdown="1">
 
@@ -55,23 +57,23 @@ Agent Development Kit (ADK) は、**AIエージェントの開発とデプロイ
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk</artifactId>
-        <version>0.6.0</version>
+        <version>1.0.0</version>
     </dependency>
     ```
 
     ```gradle title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:0.6.0'
+        implementation 'com.google.adk:google-adk:1.0.0'
     }
     ```
 
 </div>
 
 <p style="text-align:center;">
-  <a href="/adk-docs/get-started/python/" class="md-button" style="margin:3px">Pythonで始める</a>
-  <a href="/adk-docs/get-started/typescript/" class="md-button" style="margin:3px">TypeScriptで始める</a>
-  <a href="/adk-docs/get-started/go/" class="md-button" style="margin:3px">Goで始める</a>
-  <a href="/adk-docs/get-started/java/" class="md-button" style="margin:3px">Javaで始める</a>
+  <a href="/get-started/python/" class="md-button" style="margin:3px">Pythonで始める</a>
+  <a href="/get-started/typescript/" class="md-button" style="margin:3px">TypeScriptで始める</a>
+  <a href="/get-started/go/" class="md-button" style="margin:3px">Goで始める</a>
+  <a href="/get-started/java/" class="md-button" style="margin:3px">Javaで始める</a>
 </p>
 
 ---

@@ -1,7 +1,7 @@
 ---
 catalog_title: GoodMem
 catalog_description: 대화 전반에 걸쳐 에이전트에 영속적인 의미 메모리를 추가합니다
-catalog_icon: /adk-docs/integrations/assets/goodmem.svg
+catalog_icon: /integrations/assets/goodmem.svg
 catalog_tags: ["data"]
 ---
 

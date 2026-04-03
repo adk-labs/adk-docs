@@ -1,7 +1,7 @@
 ---
 catalog_title: Arize AX
 catalog_description: LLM アプリケーション向けに本番運用レベルの可観測性、デバッグ、品質改善を支援します
-catalog_icon: /adk-docs/integrations/assets/arize.png
+catalog_icon: /integrations/assets/arize.png
 catalog_tags: ["observability"]
 ---
 # Agent Observability with Arize AX

@@ -1,7 +1,7 @@
 ---
 catalog_title: n8n
 catalog_description: 자동화 워크플로를 트리거하고 앱을 연결하며 데이터를 처리합니다
-catalog_icon: /adk-docs/integrations/assets/n8n.png
+catalog_icon: /integrations/assets/n8n.png
 catalog_tags: ["mcp", "connectors"]
 ---
 

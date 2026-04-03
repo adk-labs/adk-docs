@@ -1,7 +1,7 @@
 ---
 catalog_title: Bigtable ツール
 catalog_description: Bigtable と連携してデータ取得と SQL 実行を行います
-catalog_icon: /adk-docs/integrations/assets/bigtable.png
+catalog_icon: /integrations/assets/bigtable.png
 catalog_tags: ["data", "google"]
 ---
 

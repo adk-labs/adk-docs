@@ -1,7 +1,7 @@
 ---
 catalog_title: Linear
 catalog_description: 이슈를 관리하고 프로젝트를 추적하며 개발 워크플로를 간소화합니다
-catalog_icon: /adk-docs/integrations/assets/linear.png
+catalog_icon: /integrations/assets/linear.png
 catalog_tags: ["mcp"]
 ---
 

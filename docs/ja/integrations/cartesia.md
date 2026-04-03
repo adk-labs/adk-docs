@@ -1,7 +1,7 @@
 ---
 catalog_title: Cartesia
 catalog_description: 音声生成、音声ローカライズ、オーディオコンテンツ作成を行います
-catalog_icon: /adk-docs/integrations/assets/cartesia.png
+catalog_icon: /integrations/assets/cartesia.png
 catalog_tags: ["mcp"]
 ---
 

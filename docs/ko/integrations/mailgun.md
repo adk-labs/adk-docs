@@ -1,7 +1,7 @@
 ---
 catalog_title: Mailgun
 catalog_description: 이메일 전송, 전달 지표 추적, 메일링 리스트 관리를 수행합니다
-catalog_icon: /adk-docs/integrations/assets/mailgun.png
+catalog_icon: /integrations/assets/mailgun.png
 catalog_tags: ["mcp"]
 ---
 

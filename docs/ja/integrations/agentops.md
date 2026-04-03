@@ -1,7 +1,7 @@
 ---
 catalog_title: AgentOps
 catalog_description: ADK エージェント向けにセッションリプレイ、メトリクス、モニタリングを提供します
-catalog_icon: /adk-docs/integrations/assets/agentops.png
+catalog_icon: /integrations/assets/agentops.png
 catalog_tags: ["observability"]
 ---
 # AgentOpsによるエージェントの可観測性

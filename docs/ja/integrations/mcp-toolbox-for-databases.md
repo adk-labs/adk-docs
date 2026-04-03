@@ -1,7 +1,7 @@
 ---
 catalog_title: MCP Toolbox for Databases
 catalog_description: 30 以上の多様なデータソースをエージェントに接続します
-catalog_icon: /adk-docs/integrations/assets/mcp-toolbox-for-databases.png
+catalog_icon: /integrations/assets/mcp-toolbox-for-databases.png
 catalog_tags: ["mcp","data","google"]
 ---
 # データベース向けMCPツールボックス

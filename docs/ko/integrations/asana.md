@@ -1,7 +1,7 @@
 ---
 catalog_title: Asana
 catalog_description: 팀 협업을 위해 프로젝트, 작업, 목표를 관리합니다
-catalog_icon: /adk-docs/integrations/assets/asana.png
+catalog_icon: /integrations/assets/asana.png
 catalog_tags: ["mcp"]
 ---
 
@@ -106,7 +106,7 @@ ADK 에이전트를 [Asana](https://asana.com/) 워크 매니지먼트
 Asana의 MCP 서버에는 카테고리별로 구성된 30개 이상의 도구가 포함되어 있습니다. 도구는
 에이전트 연결 시 자동으로 탐지됩니다. 에이전트를 실행한 뒤
 트레이스 그래프에서 사용 가능한 도구를 보려면
-[ADK Web UI](/adk-docs/runtime/web-interface/)를 사용하세요.
+[ADK Web UI](/runtime/web-interface/)를 사용하세요.
 
 Category | Description
 -------- | -----------

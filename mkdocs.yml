@@ -308,6 +308,7 @@ plugins:
               - 에이전트용 모델:
                 - agents/models/index.md
                 - Gemini: agents/models/google-gemini.md
+                - Gemma: agents/models/google-gemma.md
                 - Claude: agents/models/anthropic.md
                 - Vertex AI 호스팅: agents/models/vertex.md
                 - Apigee AI Gateway: agents/models/apigee.md
@@ -354,6 +355,8 @@ plugins:
                 - evaluate/index.md
                 - 기준: evaluate/criteria.md
                 - 사용자 시뮬레이션: evaluate/user-sim.md
+                - 커스텀 메트릭: evaluate/custom_metrics.md
+                - 최적화: optimize/index.md
               - 안전 및 보안:
                 - safety/index.md
             - 구성 요소:
@@ -390,9 +393,11 @@ plugins:
                 - A2A 빠른 시작 (노출):
                   - Python: a2a/quickstart-exposing.md
                   - Go: a2a/quickstart-exposing-go.md
+                  - Java: a2a/quickstart-exposing-java.md
                 - A2A 빠른 시작 (사용):
                   - Python: a2a/quickstart-consuming.md
                   - Go: a2a/quickstart-consuming-go.md
+                  - Java: a2a/quickstart-consuming-java.md
                 - A2A 확장: a2a/a2a-extension.md
               - 양방향 스트리밍 (실시간):
                 - streaming/index.md
@@ -412,15 +417,16 @@ plugins:
               - 릴리스 노트: release-notes.md
               - API 레퍼런스:
                 - api-reference/index.md
-                - Python ADK: /adk-docs/api-reference/python/index.html
-                - Typescript ADK: /adk-docs/api-reference/typescript/index.html
+                - Python ADK: /api-reference/python/index.html
+                - Typescript ADK: /api-reference/typescript/index.html
                 - Go ADK: https://pkg.go.dev/google.golang.org/adk
-                - Java ADK: /adk-docs/api-reference/java/index.html
-                - CLI 레퍼런스: /adk-docs/api-reference/cli/index.html
-                - 에이전트 설정 레퍼런스: /adk-docs/api-reference/agentconfig/index.html
-                - REST API: api-reference/rest/index.md
-              - 커뮤니티 자료: community.md
-              - 기여 가이드: contributing-guide.md
+                - Java ADK: /api-reference/java/index.html
+                - CLI 레퍼런스: /api-reference/cli/index.html
+                - 에이전트 설정 레퍼런스: /api-reference/agentconfig/index.html
+                - REST API: api-reference/rest/index.html
+            - 커뮤니티:
+              - community/index.md
+              - 기여 가이드: community/contributing-guide.md
             - ADK 2.0:
               - 개요: 2.0/index.md
               - 그래프 기반 워크플로:
@@ -468,6 +474,7 @@ plugins:
               - エージェント向けモデル:
                 - agents/models/index.md
                 - Gemini: agents/models/google-gemini.md
+                - Gemma: agents/models/google-gemma.md
                 - Claude: agents/models/anthropic.md
                 - Vertex AI hosted: agents/models/vertex.md
                 - Apigee AI Gateway: agents/models/apigee.md
@@ -514,6 +521,8 @@ plugins:
                 - evaluate/index.md
                 - 基準: evaluate/criteria.md
                 - ユーザーシミュレーション: evaluate/user-sim.md
+                - カスタムメトリクス: evaluate/custom_metrics.md
+                - 最適化: optimize/index.md
               - 安全性とセキュリティ:
                 - safety/index.md
             - コンポーネント:
@@ -550,9 +559,11 @@ plugins:
                 - A2Aクイックスタート(公開):
                   - Python: a2a/quickstart-exposing.md
                   - Go: a2a/quickstart-exposing-go.md
+                  - Java: a2a/quickstart-exposing-java.md
                 - A2Aクイックスタート(利用):
                   - Python: a2a/quickstart-consuming.md
                   - Go: a2a/quickstart-consuming-go.md
+                  - Java: a2a/quickstart-consuming-java.md
                 - A2A拡張: a2a/a2a-extension.md
               - 双方向ストリーミング（ライブ）:
                 - streaming/index.md
@@ -572,15 +583,16 @@ plugins:
               - リリースノート: release-notes.md
               - APIリファレンス:
                 - api-reference/index.md
-                - Python ADK: /adk-docs/api-reference/python/index.html
-                - Typescript ADK: /adk-docs/api-reference/typescript/index.html
+                - Python ADK: /api-reference/python/index.html
+                - Typescript ADK: /api-reference/typescript/index.html
                 - Go ADK: https://pkg.go.dev/google.golang.org/adk
-                - Java ADK: /adk-docs/api-reference/java/index.html
-                - CLIリファレンス: /adk-docs/api-reference/cli/index.html
-                - エージェント設定リファレンス: /adk-docs/api-reference/agentconfig/index.html
-                - REST API: api-reference/rest/index.md
-              - コミュニティリソース: community.md
-              - コントリビューションガイド: contributing-guide.md
+                - Java ADK: /api-reference/java/index.html
+                - CLIリファレンス: /api-reference/cli/index.html
+                - エージェント設定リファレンス: /api-reference/agentconfig/index.html
+                - REST API: api-reference/rest/index.html
+            - コミュニティ:
+              - community/index.md
+              - コントリビューションガイド: community/contributing-guide.md
             - ADK 2.0:
               - 概要: 2.0/index.md
               - グラフベースのワークフロー:

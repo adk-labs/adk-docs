@@ -109,7 +109,7 @@
     </project>
     ```
 
-    参照用の[完全なpom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml)ファイルは次のとおりです。
+    参照用の[完全なpom.xml](https://github.com/google/tree/main/examples/java/cloud-run/pom.xml)ファイルは次のとおりです。
 
     gradleを使用している場合は、build.gradleに依存関係を追加します。
 

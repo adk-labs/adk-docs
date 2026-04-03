@@ -1,7 +1,7 @@
 ---
 catalog_title: GitLab
 catalog_description: セマンティックコード検索を実行し、パイプラインを検査し、マージリクエストを管理します
-catalog_icon: /adk-docs/integrations/assets/gitlab.png
+catalog_icon: /integrations/assets/gitlab.png
 catalog_tags: ["code", "mcp"]
 ---
 # GitLab

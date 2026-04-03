@@ -57,7 +57,7 @@ root_agent = Agent(
    # エージェントの一意の名前。
    name="basic_search_agent",
    # エージェントが使用する大規模言語モデル（LLM）。
-   # https://google.github.io/adk-docs/get-started/streaming/quickstart-streaming/#supported-models から
+   # https://adk.dev/get-started/streaming/quickstart-streaming/#supported-models から
    # Live をサポートする最新のモデル ID を入力してください。
    model="...",
    # エージェントの目的についての短い説明。

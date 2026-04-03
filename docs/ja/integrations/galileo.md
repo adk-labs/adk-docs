@@ -1,7 +1,7 @@
 ---
 catalog_title: Galileo
 catalog_description: ADK エージェントのためのエンドツーエンドのトレーシング、評価、監視
-catalog_icon: /adk-docs/integrations/assets/galileo.png
+catalog_icon: /integrations/assets/galileo.png
 catalog_tags: ["observability", "evaluation"]
 ---
 
@@ -124,7 +124,7 @@ What time is it in London?
 
 Project を選択し、Log Stream 内でトレースとスパンを確認します。
 
-![Galileo Traces](/adk-docs/integrations/assets/galileo-log.png)
+![Galileo Traces](/integrations/assets/galileo-log.png)
 
 ## リソース
 

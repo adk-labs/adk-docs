@@ -1,7 +1,7 @@
 ---
 catalog_title: BigQuery ツール
 catalog_description: BigQuery に接続してデータ取得と分析を行います
-catalog_icon: /adk-docs/integrations/assets/bigquery.png
+catalog_icon: /integrations/assets/bigquery.png
 catalog_tags: ["data", "google"]
 ---
 

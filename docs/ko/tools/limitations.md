@@ -16,9 +16,9 @@
 함께 사용할 수 없습니다. 다음 ADK 도구는 하나의 에이전트 객체에서
 다른 도구 없이 단독으로만 사용할 수 있습니다.
 
-*   Gemini API의 [Code Execution](/adk-docs/tools/gemini-api/code-execution/)
-*   Gemini API의 [Google Search](/adk-docs/tools/gemini-api/google-search/)
-*   [Vertex AI Search](/adk-docs/tools/google-cloud/vertex-ai-search/)
+*   Gemini API의 [Code Execution](/tools/gemini-api/code-execution/)
+*   Gemini API의 [Google Search](/tools/gemini-api/google-search/)
+*   [Vertex AI Search](/tools/google-cloud/vertex-ai-search/)
 
 예를 들어, 아래와 같이 이들 도구 중 하나를 다른 도구와 함께
 하나의 에이전트에서 사용하는 방식은 ***지원되지 않습니다***.

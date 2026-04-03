@@ -1,7 +1,7 @@
 ---
 catalog_title: W&B Weave
 catalog_description: 모델 호출과 에이전트 성능을 로깅하고 시각화하며 분석합니다
-catalog_icon: /adk-docs/integrations/assets/weave.png
+catalog_icon: /integrations/assets/weave.png
 catalog_tags: ["observability"]
 ---
 # WandB의 Weave를 사용한 에이전트 관찰 가능성

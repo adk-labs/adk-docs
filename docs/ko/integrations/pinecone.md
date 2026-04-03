@@ -1,7 +1,7 @@
 ---
 catalog_title: Pinecone
 catalog_description: 데이터를 저장하고 시맨틱 검색 및 결과 재정렬을 수행합니다
-catalog_icon: /adk-docs/integrations/assets/pinecone.png
+catalog_icon: /integrations/assets/pinecone.png
 catalog_tags: ["data","mcp"]
 ---
 

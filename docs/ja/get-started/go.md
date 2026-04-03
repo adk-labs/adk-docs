@@ -35,7 +35,7 @@ my_agent/
 
 ### エージェントコードを定義する
 
-組み込みの[Google検索ツール](/adk-docs/ja/tools/built-in-tools/#google-search)を使用する基本的なエージェントのコードを作成します。プロジェクトディレクトリの`my_agent/agent.go`ファイルに次のコードを追加します。
+組み込みの[Google検索ツール](/ja/tools/built-in-tools/#google-search)を使用する基本的なエージェントのコードを作成します。プロジェクトディレクトリの`my_agent/agent.go`ファイルに次のコードを追加します。
 
 ```go title="my_agent/agent.go"
 package main
@@ -58,7 +58,7 @@ import (
 func main() {
 	ctx := context.Background()
 
-	model, err := gemini.NewModel(ctx, "gemini-3-pro-preview", &genai.ClientConfig{
+	model, err := gemini.NewModel(ctx, "gemini-2.5-flash", &genai.ClientConfig{
 		APIKey: os.Getenv("GOOGLE_API_KEY"),
 	})
 	if err != nil {
@@ -117,7 +117,7 @@ go mod tidy
     ```
 
 ??? tip "ADKで他のAIモデルを使用する"
-    ADKは多くの生成AIモデルの使用をサポートしています。ADKエージェントで他のモデルを構成する方法の詳細については、[モデルと認証](/adk-docs/ja/agents/models)を参照してください。
+    ADKは多くの生成AIモデルの使用をサポートしています。ADKエージェントで他のモデルを構成する方法の詳細については、[モデルと認証](/ja/agents/models)を参照してください。
 
 
 ## エージェントを実行する
@@ -133,7 +133,7 @@ go mod tidy
 go run agent.go
 ```
 
-![adk-run.png](/adk-docs/ja/assets/adk-run.png)
+![adk-run.png](/ja/assets/adk-run.png)
 
 ### ウェブインターフェースで実行する
 
@@ -146,7 +146,7 @@ go run agent.go web api webui
 
 このコマンドは、エージェント用のチャットインターフェースを備えたウェブサーバーを起動します。ウェブインターフェースは(http://localhost:8080)でアクセスできます。左上隅でエージェントを選択し、リクエストを入力します。
 
-![adk-web-dev-ui-chat.png](/adk-docs/ja/assets/adk-web-dev-ui-chat.png)
+![adk-web-dev-ui-chat.png](/ja/assets/adk-web-dev-ui-chat.png)
 
 !!! warning "注意: ADK Web は開発用途限定"
 
@@ -157,4 +157,4 @@ go run agent.go web api webui
 
 ADKがインストールされ、最初のエージェントが実行中になったので、ビルドガイドを使用して独自のエージェントを構築してみてください。
 
-*  [エージェントを構築する](/adk-docs/ja/tutorials/)
+*  [エージェントを構築する](/ja/tutorials/)

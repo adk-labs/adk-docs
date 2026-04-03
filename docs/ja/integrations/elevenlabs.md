@@ -1,7 +1,7 @@
 ---
 catalog_title: ElevenLabs
 catalog_description: 音声生成、音声クローン、音声文字起こし、効果音生成を行います
-catalog_icon: /adk-docs/integrations/assets/elevenlabs.png
+catalog_icon: /integrations/assets/elevenlabs.png
 catalog_tags: ["mcp"]
 ---
 

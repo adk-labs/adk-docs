@@ -190,7 +190,7 @@
       <p>누락된 정보를 채워 소매 웹사이트의 제품 데이터를 향상시키는 에이전트를 구축하는 방법을 배웁니다.</p>
     </div>
   </a>
-  <a href="https://github.com/google/adk-docs/blob/main/examples/python/notebooks/shop_agent.ipynb" class="resource-card">
+  <a href="https://github.com/google/blob/main/examples/python/notebooks/shop_agent.ipynb" class="resource-card">
     <div class="card-image-wrapper">
       <img src="../assets/community-shoppers-concierge-demo.jpg" alt="ADK 쇼핑 컨시어지 데모">
     </div>
@@ -273,8 +273,8 @@
 
 <ul class="translation-list">
   <li><a href="https://adk.wiki/">🇨🇳 중국어 (中文) 문서</a></li>
-  <li><a href="https://adk-labs.github.io/adk-docs/ko/">🇰🇷 한국어 (Korean) 문서</a></li>
-  <li><a href="https://adk-labs.github.io/adk-docs/ja/">🇯🇵 일본어 (日本語) 문서</a></li>
+  <li><a href="https://adk-labs.github.io/ko/">🇰🇷 한국어 (Korean) 문서</a></li>
+  <li><a href="https://adk-labs.github.io/ja/">🇯🇵 일본어 (日本語) 문서</a></li>
   <li><a href="https://adk-es.fabian-castro-c.dev/">🇪🇸 스페인어 (Español) 문서</a></li>
 </ul>
 

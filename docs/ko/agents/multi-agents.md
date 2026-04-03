@@ -1317,7 +1317,7 @@ ADK의 구성 기본 요소를 결합하여 다중 에이전트 협업을 위한
     });
     ```
 
-    전체 코드 샘플은 [여기](https://github.com/google/adk-docs/blob/main/examples/typescript/snippets/agents/workflow-agents/hitl_confirmation_agent.ts)에서 볼 수 있습니다.
+    전체 코드 샘플은 [여기](https://github.com/google/blob/main/examples/typescript/snippets/agents/workflow-agents/hitl_confirmation_agent.ts)에서 볼 수 있습니다.
 
 ### 패턴 결합
 

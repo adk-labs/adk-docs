@@ -1,7 +1,7 @@
 # 스트리밍 도구
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">실험적 기능</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-preview">실험적 기능</span>
 </div>
 
 스트리밍 도구를 사용하면 도구(함수)가 중간 결과를 에이전트에게 스트리밍으로 다시 보낼 수 있으며, 에이전트는 이러한 중간 결과에 응답할 수 있습니다.
@@ -147,6 +147,101 @@ root_agent = Agent(
     ]
 )
 ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.LiveRequestQueue;
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.tools.Annotations.Schema;
+    import com.google.adk.tools.FunctionTool;
+    import com.google.genai.Client;
+    import com.google.genai.types.Content;
+    import com.google.genai.types.GenerateContentConfig;
+    import com.google.genai.types.GenerateContentResponse;
+    import com.google.genai.types.Part;
+    import io.reactivex.rxjava3.core.Flowable;
+    import java.util.Arrays;
+    import java.util.Collections;
+    import java.util.Map;
+    import java.util.concurrent.TimeUnit;
+
+    public class StreamingTools {
+
+      @Schema(description = "이 함수는 주어진 stock_symbol의 가격을 지속적이고, 스트리밍하며, 비동기적인 방식으로 모니터링합니다.")
+      public static Flowable<Map<String, Object>> monitorStockPrice(@Schema(name = "stockSymbol") String stockSymbol) {
+        System.out.println(stockSymbol + "의 주가 모니터링을 시작합니다!");
+
+        return Flowable.concat(
+            Flowable.<Map<String, Object>>just(Collections.singletonMap("result", "the price for " + stockSymbol + " is 300")).delay(4, TimeUnit.SECONDS),
+            Flowable.<Map<String, Object>>just(Collections.singletonMap("result", "the price for " + stockSymbol + " is 400")).delay(4, TimeUnit.SECONDS),
+            Flowable.<Map<String, Object>>just(Collections.singletonMap("result", "the price for " + stockSymbol + " is 900")).delay(20, TimeUnit.SECONDS),
+            Flowable.<Map<String, Object>>just(Collections.singletonMap("result", "the price for " + stockSymbol + " is 500")).delay(20, TimeUnit.SECONDS)
+        );
+      }
+
+      // 비디오 스트리밍의 경우, `inputStream`은 ADK가 비디오 스트림을 전달하기 위해 필요한 예약된 매개변수입니다.
+      @Schema(description = "비디오 스트림에 몇 명의 사람이 있는지 모니터링합니다.")
+      public static Flowable<Map<String, Object>> monitorVideoStream(@Schema(name = "inputStream") LiveRequestQueue inputStream) {
+        System.out.println("monitor_video_stream을 시작합니다!");
+        Client client = Client.builder().build();
+        String promptText = "이 이미지에 있는 사람 수를 세어주세요. 숫자만으로 응답해주세요.";
+
+        // RxJava를 사용하여 스트림을 처리합니다
+        return inputStream.get()
+            .filter(req -> req.blob().isPresent() && "image/jpeg".equals(req.blob().get().mimeType()))
+            .sample(500, TimeUnit.MILLISECONDS) // 0.5초마다 한 프레임 처리
+            .map(req -> {
+              System.out.println("큐에서 가장 최근 프레임을 처리합니다");
+              Part imagePart = Part.builder().inlineData(req.blob().get()).build();
+              Content contents = Content.builder()
+                  .role("user")
+                  .parts(Arrays.asList(imagePart, Part.fromText(promptText)))
+                  .build();
+
+              GenerateContentResponse response = client.models().generateContent(
+                  "gemini-2.5-flash",
+                  contents,
+                  GenerateContentConfig.builder()
+                      .systemInstruction(Content.builder().parts(Arrays.asList(
+                          Part.fromText("당신은 유용한 비디오 분석 어시스턴트입니다. 이 이미지나 비디오에 있는 사람 수를 셀 수 있습니다. 숫자만으로 응답해주세요.")
+                      )).build())
+                      .build()
+              );
+              return (Map<String, Object>) Collections.<String, Object>singletonMap("result", response.text());
+            })
+            .distinctUntilChanged()
+            .doOnNext(res -> System.out.println("응답: " + res));
+      }
+
+      // 요청 시 스트리밍 도구를 중지시키기 위해 이 정확한 함수를 사용하세요.
+      @Schema(description = "스트리밍을 중지합니다")
+      public static void stopStreaming(
+          @Schema(name = "functionName", description = "중지할 스트리밍 함수의 이름.") String functionName) {
+        // 스트리밍 중지 로직
+      }
+
+      public static void main(String[] args) {
+        LlmAgent rootAgent = LlmAgent.builder()
+            .model("gemini-2.0-flash-exp")
+            .name("video_streaming_agent")
+            .instruction(
+                "당신은 모니터링 에이전트입니다. 제공된 도구/함수를 사용하여 비디오 모니터링과 주가 모니터링을 할 수 있습니다.\n" +
+                "사용자가 비디오 스트림을 모니터링하고 싶어하면,\n" +
+                "monitorVideoStream 함수를 사용하여 모니터링할 수 있습니다. monitorVideoStream이\n" +
+                "경고를 반환하면 사용자에게 알려주어야 합니다.\n" +
+                "사용자가 주가를 모니터링하고 싶어하면, monitorStockPrice를 사용할 수 있습니다.\n" +
+                "너무 많은 질문을 하지 마세요. 너무 말이 많지 않도록 하세요."
+            )
+            .tools(Arrays.asList(
+                FunctionTool.create(StreamingTools.class, "monitorVideoStream"),
+                FunctionTool.create(StreamingTools.class, "monitorStockPrice"),
+                FunctionTool.create(StreamingTools.class, "stopStreaming")
+            ))
+            .build();
+      }
+    }
+    ```
 
 테스트를 위한 몇 가지 샘플 쿼리입니다:
 - XYZ 주식의 주가를 모니터링하는 것을 도와주세요.

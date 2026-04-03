@@ -395,7 +395,7 @@ run_config = RunConfig(
 | **Maximum concurrent sessions** | Up to 1,000 | Per project |
 | **Session creation/deletion/update** | 100 per minute | Per project, per region |
 
-![Quota value on Cloud Console](/adk-docs/streaming/dev-guide/assets/adk-streaming-guide-quota-console.png)
+![Quota value on Cloud Console](/streaming/dev-guide/assets/adk-streaming-guide-quota-console.png)
 
 ### 推奨アーキテクチャ
 

@@ -17,8 +17,8 @@ LiteLLM 라이브러리를 사용해 원격 또는 로컬로 호스팅된 AI 모
 *   **원격 모델 호스트:** `LiteLlm` 래퍼 클래스를 사용해 `LlmAgent`의
     `model` 매개변수로 지정합니다.
 *   **로컬 모델 호스트:** 로컬 모델 서버를 가리키도록 `LiteLlm` 래퍼를 설정합니다.
-    로컬 모델 호스팅 예시는 [Ollama](/adk-docs/agents/models/ollama/) 또는
-    [vLLM](/adk-docs/agents/models/vllm/) 문서를 참조하세요.
+    로컬 모델 호스팅 예시는 [Ollama](/agents/models/ollama/) 또는
+    [vLLM](/agents/models/vllm/) 문서를 참조하세요.
 
 ??? warning "Windows에서 LiteLLM 인코딩"
 

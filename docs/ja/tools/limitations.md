@@ -17,9 +17,9 @@
 併用できません。次の ADK ツールは、1 つのエージェントオブジェクト内で
 他ツールなしに単独でのみ使用できます。
 
-*   Gemini API の [Code Execution](/adk-docs/tools/gemini-api/code-execution/)
-*   Gemini API の [Google Search](/adk-docs/tools/gemini-api/google-search/)
-*   [Vertex AI Search](/adk-docs/tools/google-cloud/vertex-ai-search/)
+*   Gemini API の [Code Execution](/tools/gemini-api/code-execution/)
+*   Gemini API の [Google Search](/tools/gemini-api/google-search/)
+*   [Vertex AI Search](/tools/google-cloud/vertex-ai-search/)
 
 たとえば、次のようにこれらのツールのいずれかを他ツールと一緒に
 単一エージェントで使う方法は ***サポートされていません***。

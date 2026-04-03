@@ -1,7 +1,7 @@
 ---
 catalog_title: MongoDB
 catalog_description: 컬렉션 질의, 데이터베이스 관리, 스키마 분석을 수행합니다
-catalog_icon: /adk-docs/integrations/assets/mongodb.png
+catalog_icon: /integrations/assets/mongodb.png
 catalog_tags: ["data","mcp"]
 ---
 

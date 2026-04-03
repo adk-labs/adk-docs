@@ -7,8 +7,8 @@
 ADK の `Claude` ラッパークラスを使用すると、Anthropic API キー、または Vertex AI
 バックエンド経由で Java ADK アプリケーションに Anthropic の Claude モデルを直接統合できます。
 また、Google Cloud Vertex AI サービスからも Anthropic モデルにアクセスできます。
-詳細は [Vertex AI のサードパーティモデル](/adk-docs/agents/models/vertex/#third-party-models-on-vertex-ai-eg-anthropic-claude) セクションを参照してください。
-Python の場合は [LiteLLM](/adk-docs/agents/models/litellm/) ライブラリ経由で
+詳細は [Vertex AI のサードパーティモデル](/agents/models/vertex/#third-party-models-on-vertex-ai-eg-anthropic-claude) セクションを参照してください。
+Python の場合は [LiteLLM](/agents/models/litellm/) ライブラリ経由で
 Anthropic モデルを利用することもできます。
 
 ## はじめに

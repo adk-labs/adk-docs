@@ -245,5 +245,5 @@ root_agent = Workflow(
 ```
 
 이 워크플로의 완전하지만 단순화된 버전은
-[그래프 기반 에이전트 워크플로](/adk-docs/ko/workflows/#시작하기)를
+[그래프 기반 에이전트 워크플로](/ko/workflows/#시작하기)를
 참조하세요.
