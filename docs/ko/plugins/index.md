@@ -1,7 +1,7 @@
 # 플러그인
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.7.0</span>
+    <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.7.0</span><span class="lst-typescript">TypeScript v0.2.5</span><span class="lst-go">Go v0.4.0</span><span class="lst-java">Java v0.3.0</span>
 </div>
 
 ADK(Agent Development Kit)의 플러그인은 콜백 후크를 사용하여 에이전트 워크플로 수명 주기의 다양한 단계에서 실행될 수 있는 사용자 지정 코드 모듈입니다. 플러그인은 에이전트 워크플로 전반에 걸쳐 적용되는 기능에 사용합니다. 플러그인의 일반적인 애플리케이션은 다음과 같습니다.
@@ -356,7 +356,7 @@ Hello world: query is [hello world]
 ```
 
 
-ADK 에이전트 실행에 대한 자세한 내용은 [빠른 시작](/ko/get-started/quickstart/#run-your-agent) 가이드를 참조하세요.
+ADK 에이전트 실행에 대한 자세한 내용은 [에이전트 런타임](/ko/runtime/#ways-to-run-agents) 가이드를 참조하세요.
 
 ## 플러그인으로 워크플로 빌드
 
@@ -738,5 +738,5 @@ public Completable afterRunCallback(InvocationContext invocationContext) {
 
 ADK 프로젝트에 플러그인을 개발하고 적용하기 위한 다음 리소스를 확인하십시오.
 
--   더 많은 ADK 플러그인 코드 예시는 [ADK Python 저장소](https://github.com/google/adk-python/tree/main/src/google/adk/plugins)를 참조하십시오.
+-   더 많은 ADK 플러그인 코드 예시는 [ADK Samples 저장소](https://github.com/google/adk-samples)를 참조하십시오.
 -   보안 목적으로 플러그인을 적용하는 방법에 대한 정보는 [보안 가드레일을 위한 콜백 및 플러그인](/ko/safety/#callbacks-and-plugins-for-security-guardrails)을 참조하십시오.

@@ -1,7 +1,7 @@
 # エージェント設定でエージェントを構築する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-preview">実験的</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">実験的</span>
 </div>
 
 ADKエージェント設定機能を使用すると、コードを記述することなくADKワークフローを構築できます。エージェント設定は、エージェントの簡単な説明を含むYAML形式のテキストファイルを使用するため、誰でもADKエージェントを組み立てて実行できます。以下は、基本的なエージェント設定定義の簡単な例です。
@@ -94,7 +94,7 @@ ADKの[サンプルリポジトリ](https://github.com/search?q=repo%3Agoogle%2F
     -   `adk run` - ユーザーインターフェースなしでターミナルでエージェントを実行します。
     -   `adk api_server` - 他のアプリケーションで使用できるサービスとしてエージェントを実行します。
 
-エージェントの実行方法の詳細については、[クイックスタート](/ja/get-started/quickstart/#run-your-agent)の*エージェントを実行する*トピックを参照してください。ADKコマンドラインオプションの詳細については、[ADK CLIリファレンス](/ja/api-reference/cli/)を参照してください。
+エージェントの実行方法の詳細については、[エージェントランタイム](/ja/runtime/#ways-to-run-agents)を参照してください。ADKコマンドラインオプションの詳細については、[ADK CLIリファレンス](/ja/api-reference/cli/)を参照してください。
 
 ### プログラムから実行する
 

@@ -1,7 +1,7 @@
 # 에이전트 구성을 사용하여 에이전트 빌드
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-preview">실험용</span>
+  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">실험용</span>
 </div>
 
 ADK 에이전트 구성 기능을 사용하면 코드를 작성하지 않고도 ADK 워크플로를 빌드할 수 있습니다. 에이전트 구성은 에이전트에 대한 간략한 설명이 포함된 YAML 형식 텍스트 파일을 사용하므로 누구나 ADK 에이전트를 조립하고 실행할 수 있습니다. 다음은 기본 에이전트 구성 정의의 간단한 예입니다.
@@ -94,7 +94,7 @@ ADK [샘플 저장소](https://github.com/search?q=repo%3Agoogle%2Fadk-python+pa
     -   `adk run` - 사용자 인터페이스 없이 터미널에서 에이전트를 실행합니다.
     -   `adk api_server` - 다른 애플리케이션에서 사용할 수 있는 서비스로 에이전트를 실행합니다.
 
-에이전트 실행 방법에 대한 자세한 내용은 [빠른 시작](/ko/get-started/quickstart/#run-your-agent)의 *에이전트 실행* 항목을 참조하세요. ADK 명령줄 옵션에 대한 자세한 내용은 [ADK CLI 참조](/ko/api-reference/cli/)를 참조하세요.
+에이전트 실행 방법에 대한 자세한 내용은 [에이전트 런타임](/ko/runtime/#ways-to-run-agents)을 참조하세요. ADK 명령줄 옵션에 대한 자세한 내용은 [ADK CLI 참조](/ko/api-reference/cli/)를 참조하세요.
 
 ### 프로그래밍 방식으로 실행하기
 

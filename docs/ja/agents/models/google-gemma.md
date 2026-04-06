@@ -17,28 +17,65 @@ Google Cloud 上のさまざまなセルフホスティング विकल्प
 
 [Google AI Studio](https://aistudio.google.com/app/apikey) で API キーを作成します。
 
-```python
-# Set GEMINI_API_KEY environment variable to your API key
-# export GEMINI_API_KEY="YOUR_API_KEY"
+=== "Python"
+    ```python
+    # GEMINI_API_KEY 環境変数に API キーを設定します。
+    # export GEMINI_API_KEY="YOUR_API_KEY"
 
-from google.adk.agents import LlmAgent
-from google.adk.models import Gemini
+    from google.adk.agents import LlmAgent
+    from google.adk.models import Gemini
 
-# Simple tool to try
-def get_weather(location: str) -> str:
-    return f"Location: {location}. Weather: sunny, 76 degrees Fahrenheit, 8 mph wind."
+    # 試しに使えるシンプルなツール
+    def get_weather(location: str) -> str:
+        return f"場所: {location}. 天気: 晴れ、華氏76度、風速8mph。"
 
-root_agent = LlmAgent(
-    model=Gemini(model="gemma-4-31b-it"),
-    name="weather_agent",
-    instruction="You are a helpful assistant that can provide current weather.",
-    tools=[get_weather]
-)
-```
+    root_agent = LlmAgent(
+        model=Gemini(model="gemma-4-31b-it"),
+        name="weather_agent",
+        instruction="現在の天気を案内できる役立つアシスタントです。",
+        tools=[get_weather]
+    )
+    ```
+
+=== "Java"
+    ```java
+    // GEMINI_API_KEY 環境変数に API キーを設定します。
+    // export GEMINI_API_KEY="YOUR_API_KEY"
+
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.tools.Annotations.Schema;
+    import com.google.adk.tools.FunctionTool;
+
+    LlmAgent weatherAgent = LlmAgent.builder()
+        .model("gemma-4-31b-it")
+        .name("weather_agent")
+        .instruction("""
+            現在の天気を案内できる役立つアシスタントです。
+        """)
+        .tools(FunctionTool.create(this, "getWeather"))
+        .build();
+
+    @Schema(
+        name = "getWeather",
+        description = "指定した場所の天気予報を取得します。"
+    )
+    public Map<String, String> getWeather(
+        @Schema(
+            name = "location",
+            description = "天気予報を取得する場所"
+        )
+        String location
+    ) {
+        return Map.of(
+            "forecast",
+            "場所: " + location + ". 天気: 晴れ、華氏76度、風速8mph。"
+        );
+    }
+    ```
 
 ## vLLM の例
 
-これらのサービスで Gemma 4 エンドポイントにアクセスするには、Python 用の [LiteLLM](/agents/models/litellm/) ライブラリ経由で vLLM モデルを使えます。
+これらのサービスで Gemma 4 エンドポイントにアクセスするには、Python 用の [LiteLLM](/agents/models/litellm/) ライブラリと Java 用の [LangChain4j](https://docs.langchain4j.dev/) を通じて vLLM モデルを利用できます。
 
 以下の例では、ADK エージェントで Gemma 4 vLLM エンドポイントを使う方法を示します。
 
@@ -47,62 +84,147 @@ root_agent = LlmAgent(
 1. **モデルのデプロイ:** 選んだモデルを
     [Vertex AI](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemma4)、
     [Google Kubernetes Engine](https://docs.cloud.google.com/kubernetes-engine/docs/tutorials/serve-gemma-gpu-vllm)、
-    または [Cloud Run](https://docs.cloud.google.com/run/docs/run-gemma-on-cloud-run) を使ってデプロイし、
+    または [Cloud Run](https://docs.cloud.google.com/run/docs/run-gemma-on-cloud-run) にデプロイし、
     OpenAI 互換 API エンドポイントを使用します。
-    API base URL に `/v1` が含まれる点に注意してください（例: `https://your-vllm-endpoint.run.app/v1`）。
-    * *ADK Tools で重要:* デプロイ時には、提供するサービングツールが互換性のある tool/function calling と reasoning parser をサポートし、有効化していることを確認してください。
-2. **認証:** エンドポイントが認証をどのように扱うかを決めます（例: API key、bearer token）。
+    API のベース URL には `/v1` が含まれる点に注意してください（例: `https://your-vllm-endpoint.run.app/v1`）。
+    * *ADK ツールで重要:* デプロイ時には、利用するサービングツールが互換性のある tool/function calling と reasoning parser をサポートし、有効化していることを確認してください。
+2. **認証:** エンドポイントが認証をどのように処理するかを決めます（例: API key、bearer token）。
 
 ### コード
 
-```python
-import subprocess
-from google.adk.agents import LlmAgent
-from google.adk.models.lite_llm import LiteLlm
+=== "Python"
+    ```python
+    import subprocess
+    from google.adk.agents import LlmAgent
+    from google.adk.models.lite_llm import LiteLlm
 
-# --- Example Agent using a model hosted on a vLLM endpoint ---
+    # --- vLLM エンドポイント上のモデルを使うサンプルエージェント ---
 
-# Endpoint URL provided by your model deployment
-api_base_url = "https://your-vllm-endpoint.run.app/v1"
+    # モデルデプロイで提供されるエンドポイント URL
+    api_base_url = "https://your-vllm-endpoint.run.app/v1"
 
-# Model name as recognized by *your* vLLM endpoint configuration
-model_name_at_endpoint = "openai/google/gemma-4-31B-it"
+    # 利用中の vLLM エンドポイント設定で認識されるモデル名
+    model_name_at_endpoint = "openai/google/gemma-4-31B-it"
 
-# Simple tool to try
-def get_weather(location: str) -> str:
-    return f"Location: {location}. Weather: sunny, 76 degrees Fahrenheit, 8 mph wind."
+    # 試しに使えるシンプルなツール
+    def get_weather(location: str) -> str:
+        return f"場所: {location}. 天気: 晴れ、華氏76度、風速8mph。"
 
-# Authentication (Example: using gcloud identity token for a Cloud Run deployment)
-# Adapt this based on your endpoint's security
-try:
-    gcloud_token = subprocess.check_output(
-        ["gcloud", "auth", "print-identity-token", "-q"]
-    ).decode().strip()
-    auth_headers = {"Authorization": f"Bearer {gcloud_token}"}
-except Exception as e:
-    print(f"Warning: Could not get gcloud token - {e}.")
-    auth_headers = None # Or handle error appropriately
+    # 認証例: Cloud Run デプロイで gcloud identity token を使用
+    # エンドポイントのセキュリティ方式に合わせて調整してください。
+    try:
+        gcloud_token = subprocess.check_output(
+            ["gcloud", "auth", "print-identity-token", "-q"]
+        ).decode().strip()
+        auth_headers = {"Authorization": f"Bearer {gcloud_token}"}
+    except Exception as e:
+        print(f"警告: gcloud トークンを取得できませんでした - {e}.")
+        auth_headers = None  # 必要に応じて適切にエラー処理してください。
 
-root_agent = LlmAgent(
-    model=LiteLlm(
-        model=model_name_at_endpoint,
-        api_base=api_base_url,
-        # Pass authentication headers if needed
-        extra_headers=auth_headers
-        # Alternatively, if endpoint uses an API key:
-        # api_key="YOUR_ENDPOINT_API_KEY",
-        extra_body={
-            "chat_template_kwargs": {
-                "enable_thinking": True # Enable thinking
+    root_agent = LlmAgent(
+        model=LiteLlm(
+            model=model_name_at_endpoint,
+            api_base=api_base_url,
+            # 必要なら認証ヘッダーを渡します。
+            extra_headers=auth_headers,
+            # エンドポイントが API キーを使う場合は次のように指定できます。
+            # api_key="YOUR_ENDPOINT_API_KEY",
+            extra_body={
+                "chat_template_kwargs": {
+                    "enable_thinking": True  # 思考機能を有効化
+                },
+                "skip_special_tokens": False  # False に設定する必要があります。
             },
-            "skip_special_tokens": False # Should be set to False
-        },
-    ),
-    name="weather_agent",
-    instruction="You are a helpful assistant that can provide current weather.",
-    tools=[get_weather] # Tools!
-)
-```
+        ),
+        name="weather_agent",
+        instruction="現在の天気を案内できる役立つアシスタントです。",
+        tools=[get_weather],  # ツール登録
+    )
+    ```
+
+=== "Java"
+    vLLM でホストされた Gemma を使うには、OpenAI 互換ライブラリを使用する必要があります。
+    LangChain4j は `pom.xml` に追加できる OpenAI 依存関係を提供します。
+
+    ```xml
+    <!-- LangChain4j to ADK bridge -->
+    <dependency>
+        <groupId>com.google.adk</groupId>
+        <artifactId>google-adk-langchain4j</artifactId>
+        <version>${adk.version}</version>
+    </dependency>
+    <!-- Core LangChain4j library -->
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-core</artifactId>
+        <version>${langchain4j.version}</version>
+    </dependency>
+    <!-- OpenAI compatible model -->
+    <dependency>
+        <groupId>dev.langchain4j</groupId>
+        <artifactId>langchain4j-open-ai</artifactId>
+        <version>${langchain4j.version}</version>
+    </dependency>
+    ```
+
+    OpenAI 互換のチャットモデル（ストリーミングまたは非ストリーミング）を作成し、`LangChain4j` ラッパーで包んでから `LlmAgent` に渡します。
+
+    ```java
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.models.langchain4j.LangChain4j;
+    import com.google.adk.tools.Annotations.Schema;
+    import com.google.adk.tools.FunctionTool;
+    import dev.langchain4j.model.chat.StreamingChatModel;
+    import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+
+    // モデルデプロイで提供されるエンドポイント URL
+    String apiBaseUrl = "https://your-vllm-endpoint.run.app/v1";
+
+    // 利用中の vLLM エンドポイント設定で認識されるモデル名
+    String gemmaModelName = "gg-hf-gg/gemma-4-31b-it";
+
+    // まず LangChain4j で OpenAI 互換チャットモデルを定義します。
+    StreamingChatModel model =
+        OpenAiStreamingChatModel.builder()
+            .modelName(gemmaModelName)
+            // エンドポイントに API キーが必要なら使用します。
+            // .apiKey("YOUR_ENDPOINT_API_KEY")
+            .baseUrl(apiBaseUrl)
+            .customParameters(
+                Map.of(
+                    "skip_special_tokens", false,
+                    "chat_template_kwargs", Map.of("enable_thinking", true)
+                )
+            )
+            .build();
+
+    // LangChain4j ラッパーモデルでエージェントを構成します。
+    LlmAgent weatherAgent = LlmAgent.builder()
+        .model(new LangChain4j(model))
+        .name("weather_agent")
+        .instruction("""
+            現在の天気を案内できる役立つアシスタントです。
+        """)
+        .tools(FunctionTool.create(this, "getWeather"))
+        .build();
+
+    @Schema(
+        name = "getWeather",
+        description = "指定した場所の天気予報を取得します。"
+    )
+    public Map<String, String> getWeather(
+        @Schema(
+            name = "location",
+            description = "天気予報を取得する場所"
+        )
+        String location
+    ) {
+        return Map.of(
+            "forecast",
+            "場所: " + location + ". 天気: 晴れ、華氏76度、風速8mph。"
+        );
+    }
+    ```
 
 ## Gemma 4, ADK, Google Maps MCP を使ったフードツアーエージェントの作成
 このサンプルでは、Gemma 4、ADK、Google Maps MCP サーバーを使って、パーソナライズされたフードツアーエージェントを作成する方法を示します。エージェントは、ユーザーが提供した料理の写真またはテキスト説明、場所、任意の予算を受け取り、食事場所を提案して徒歩ルートにまとめます。
@@ -114,7 +236,7 @@ root_agent = LlmAgent(
 - Google Cloud Console で [Google Maps API](https://console.cloud.google.com/maps-api/) を有効にします。
 - [Google Maps Platform API key](https://console.cloud.google.com/maps-api/credentials) を作成します。
   `MAPS_API_KEY` 環境変数を API キーに設定します。
-- ADK をインストールし、Python 環境で設定します。
+- ADK をインストールして Python 環境で設定するか、Java プロジェクトで Java 依存関係を設定します。
 
 ### プロジェクト構成
 ```bash

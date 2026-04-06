@@ -96,27 +96,27 @@
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
-                <version>0.6.0</version>
+                <version>1.0.0</version>
             </dependency>
             <!-- エージェントをデバッグするためのADK開発Web UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
-                <version>0.6.0</version>
+                <version>1.0.0</version>
             </dependency>
         </dependencies>
 
     </project>
     ```
 
-    参照用の[完全なpom.xml](https://github.com/google/tree/main/examples/java/cloud-run/pom.xml)ファイルは次のとおりです。
+    参照用の[完全なpom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml)ファイルは次のとおりです。
 
     gradleを使用している場合は、build.gradleに依存関係を追加します。
 
     ```title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:0.6.0'
-        implementation 'com.google.adk:google-adk-dev:0.6.0'
+        implementation 'com.google.adk:google-adk:1.0.0'
+        implementation 'com.google.adk:google-adk-dev:1.0.0'
     }
     ```
 
@@ -125,4 +125,4 @@
 
 ## 次のステップ
 
-* [**クイックスタート**](quickstart.md)で最初のエージェントを作成してみてください
+* [**はじめに**](/ja/get-started/)で最初のエージェントを作成してみてください

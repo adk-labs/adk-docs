@@ -225,6 +225,8 @@ plugins:
         'observability/arize-ax.md': 'integrations/arize-ax.md'
         'contributing-guide.md': 'community/contributing-guide.md'
         'get-started/quickstart.md': get-started/index.md
+        'ko/get-started/quickstart.md': 'ko/get-started/index.md'
+        'ja/get-started/quickstart.md': 'ja/get-started/index.md'
 
   - llmstxt:
       markdown_description: An open-source, code-first toolkit for building, evaluating, and deploying sophisticated AI agents with flexibility and control.
@@ -286,7 +288,7 @@ plugins:
                 - Java: get-started/java.md
               - 에이전트 만들기:
                 - tutorials/index.md
-                - 다중 도구 에이전트: get-started/quickstart.md
+                - 다중 도구 에이전트: tutorials/multi-tool-agent.md
                 - 에이전트 팀: tutorials/agent-team.md
                 - 스트리밍 에이전트:
                   - get-started/streaming/index.md
@@ -452,7 +454,7 @@ plugins:
                 - Java: get-started/java.md
               - エージェントを作成:
                 - tutorials/index.md
-                - マルチツールエージェント: get-started/quickstart.md
+                - マルチツールエージェント: tutorials/multi-tool-agent.md
                 - エージェントチーム: tutorials/agent-team.md
                 - ストリーミングエージェント:
                   - get-started/streaming/index.md

@@ -1,7 +1,7 @@
 # プラグイン
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.7.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.7.0</span><span class="lst-typescript">TypeScript v0.2.5</span><span class="lst-go">Go v0.4.0</span><span class="lst-java">Java v0.3.0</span>
 </div>
 
 Agent Development Kit (ADK) のプラグインは、コールバックフックを使用してエージェントワークフローのライフサイクルのさまざまな段階で実行できるカスタムコードモジュールです。プラグインは、エージェントワークフロー全体に適用される機能に使用します。プラグインの一般的な用途は次のとおりです。
@@ -357,7 +357,7 @@ Hello world: query is [hello world]
 ```
 
 
-ADKエージェントの実行に関する詳細については、[クイックスタート](/ja/get-started/quickstart/#run-your-agent)ガイドを参照してください。
+ADKエージェントの実行に関する詳細については、[エージェントランタイム](/ja/runtime/#ways-to-run-agents)ガイドを参照してください。
 
 ## プラグインでワークフローを構築する
 
@@ -747,5 +747,5 @@ public Completable afterRunCallback(InvocationContext invocationContext) {
 
 ADKプロジェクトにプラグインを開発して適用するためのこれらのリソースを確認してください。
 
--   より多くのADKプラグインコードの例については、[ADK Pythonリポジトリ](https://github.com/google/adk-python/tree/main/src/google/adk/plugins)を参照してください。
+-   より多くのADKプラグインコードの例については、[ADK Samplesリポジトリ](https://github.com/google/adk-samples)を参照してください。
 -   セキュリティ目的でプラグインを適用する方法については、[セキュリティガードレールのためのコールバックとプラグイン](/ja/safety/#callbacks-and-plugins-for-security-guardrails)を参照してください。

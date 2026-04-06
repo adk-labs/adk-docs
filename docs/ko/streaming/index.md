@@ -21,6 +21,34 @@ ADK의 Gemini Live API Toolkit은 [Gemini Live API](https://ai.google.dev/gemini
   </div>
 </div>
 
+## 라이브 데모
+
+<div class="grid cards" markdown>
+
+-   :material-shopping-outline: **LensMosaic: 라이브 AI 기반 시각 쇼핑**
+
+    ---
+
+    [![LensMosaic 스크린샷](https://raw.githubusercontent.com/kazunori279/lens-mosaic/main/assets/lens-mosaic-demo.png)](https://lens-mosaic-nhhfh7g7iq-uc.a.run.app)
+
+    라이브 카메라 입력, 음성 상호작용, 지능형 상품 검색을 결합한 데모 앱입니다. 카메라를 어떤 물체에든 비추면 비슷한 상품을 찾고, 시각·음성 입력을 결합해 개인화 추천을 받거나, 실시간 AI 쇼핑 어시스턴트와 대화할 수 있습니다. ADK Gemini Live API Toolkit, Gemini Embedding, Vector Search, FastAPI로 구축되었습니다.
+
+    - [LensMosaic 데모](https://lens-mosaic-nhhfh7g7iq-uc.a.run.app)
+    - [소스 코드](https://github.com/kazunori279/lens-mosaic)
+
+-   :material-microphone-outline: **ADK Gemini Live API Toolkit 데모**
+
+    ---
+
+    [![Bidi Demo 스크린샷](https://raw.githubusercontent.com/google/adk-samples/main/python/agents/bidi-demo/assets/bidi-demo-screen.png)](https://bidi-demo-761793285222.us-central1.run.app/)
+
+    텍스트, 오디오, 이미지를 지원하는 ADK Gemini Live API Toolkit의 프로덕션 준비형 레퍼런스 구현입니다. 이 FastAPI 기반 데모는 실시간 WebSocket 통신, 자동 전사, Google Search 도구 호출, 전체 스트리밍 라이프사이클 관리를 보여 줍니다.
+
+    - [Bidi 데모](https://bidi-demo-761793285222.us-central1.run.app/)
+    - [소스 코드](https://github.com/google/adk-samples/tree/main/python/agents/bidi-demo)
+
+</div>
+
 <div class="grid cards" markdown>
 
 -   :material-console-line: **빠른 시작 (Gemini Live API Toolkit)**

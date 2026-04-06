@@ -38,7 +38,7 @@
 
 </div>
 
-이 튜토리얼은 [Agent Development Kit](https://adk.dev/get-started/)를 위한 [빠른 시작 예제(Quickstart example)](https://adk.dev/get-started/quickstart/)에서 확장된 내용입니다. 이제 더 깊이 파고들어 더욱 정교한 **다중 에이전트 시스템(multi-agent system)**을 구축할 준비가 되었습니다.
+이 튜토리얼은 [멀티-툴 에이전트](/ko/tutorials/multi-tool-agent/) 프로젝트에서 확장된 내용입니다. 이제 더 깊이 파고들어 더욱 정교한 **다중 에이전트 시스템(multi-agent system)**을 구축할 준비가 되었습니다.
 
 우리는 단순한 기초 위에 고급 기능을 점진적으로 쌓아 올리며 **날씨 봇 에이전트 팀**을 구축하는 여정을 시작할 것입니다. 날씨를 조회할 수 있는 단일 에이전트로 시작하여 다음과 같은 기능들을 점차 추가할 것입니다:
 

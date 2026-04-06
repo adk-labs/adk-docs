@@ -96,27 +96,27 @@
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
-                <version>0.6.0</version>
+                <version>1.0.0</version>
             </dependency>
             <!-- 에이전트를 디버그하기 위한 ADK 개발 웹 UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
-                <version>0.6.0</version>
+                <version>1.0.0</version>
             </dependency>
         </dependencies>
 
     </project>
     ```
 
-    참조용 [전체 pom.xml](https://github.com/google/tree/main/examples/java/cloud-run/pom.xml) 파일은 다음과 같습니다.
+    참조용 [전체 pom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml) 파일은 다음과 같습니다.
 
     gradle을 사용하는 경우 build.gradle에 종속성을 추가합니다.
 
     ```title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:0.6.0'
-        implementation 'com.google.adk:google-adk-dev:0.6.0'
+        implementation 'com.google.adk:google-adk:1.0.0'
+        implementation 'com.google.adk:google-adk-dev:1.0.0'
     }
     ```
 
@@ -125,4 +125,4 @@
 
 ## 다음 단계
 
-* [**빠른 시작**](quickstart.md)으로 첫 번째 에이전트 만들기를 시도해 보십시오.
+* [**시작하기**](/ko/get-started/)로 첫 번째 에이전트 만들기를 시도해 보십시오.

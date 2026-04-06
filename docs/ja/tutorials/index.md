@@ -12,7 +12,7 @@
 
     複数のツールを使用するワークフローを作成します。
 
-    [:octicons-arrow-right-24: マルチツールエージェントを構築する](../get-started/quickstart.md)
+    [:octicons-arrow-right-24: マルチツールエージェントを構築する](/ja/tutorials/multi-tool-agent/)
 
 -   :material-console-line: **エージェントチーム**
 
@@ -20,7 +20,7 @@
 
     エージェントの委任、セッション管理、セーフティコールバックを含むマルチエージェントワークフローを構築します。
 
-    [:octicons-arrow-right-24: エージェントチームを構築する](../tutorials/agent-team.md)
+    [:octicons-arrow-right-24: エージェントチームを構築する](/ja/tutorials/agent-team/)
 
 -   :material-console-line: **ストリーミングエージェント**
 
