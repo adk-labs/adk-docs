@@ -1,6 +1,6 @@
 {
-  "last_checked_at_utc": "2026-04-09T03:20:09Z",
-  "last_upstream_sha": "4eae06c647e362004fa00f061aabde32735840b2",
+  "last_checked_at_utc": "2026-04-10T03:33:49Z",
+  "last_upstream_sha": "60f388b81da0f5c47a769f8684bb1c7b8fde0227",
   "upstream_branch": "main",
   "upstream_remote_name": "upstream",
   "upstream_url": "https://github.com/google/adk-docs.git"
