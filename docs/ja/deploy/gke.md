@@ -134,7 +134,7 @@ your-project-directory/
 
     # エージェントにツールを追加
     capital_agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="capital_agent", # エージェントの名前
         description="指定された国の首都に関するユーザーの質問に答えます。",
         instruction="""あなたは国の首都を提供するエージェントです...（以前の指示テキスト）""",
@@ -596,7 +596,7 @@ sessions.db
 
 デプロイされたエージェントにADK Dev UIを使用している場合、テキストベースのチャットは機能しますが、音声（例：マイクボタンのクリック）は失敗します。ポッドログに、モデルが「live apiでサポートされていない」ことを示す`websockets.exceptions.ConnectionClosedError`が表示されることがあります。
 
-このエラーは、エージェントがGemini Live APIをサポートしていないモデル（例の`gemini-2.0-flash`など）で構成されているために発生します。Live APIは、オーディオとビデオのリアルタイム双方向ストリーミングに必要です。
+このエラーは、エージェントがGemini Live APIをサポートしていないモデル（例の`gemini-flash-latest`など）で構成されているために発生します。Live APIは、オーディオとビデオのリアルタイム双方向ストリーミングに必要です。
 
 ## クリーンアップ
 

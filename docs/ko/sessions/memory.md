@@ -62,6 +62,13 @@ ADK는 각각 다른 사용 사례에 맞게 조정된 두 가지 고유한 `Mem
     InMemoryMemoryService memoryService = new InMemoryMemoryService();
     ```
 
+=== "TypeScript"
+
+    ```typescript
+    import { InMemoryMemoryService } from '@google/adk';
+    const memoryService = new InMemoryMemoryService();
+    ```
+
 
 **예: 메모리 추가 및 검색**
 
@@ -81,7 +88,7 @@ ADK는 각각 다른 사용 사례에 맞게 조정된 두 가지 고유한 `Mem
     # --- 상수 ---
     APP_NAME = "memory_example_app"
     USER_ID = "mem_user"
-    MODEL = "gemini-1.5-flash" # 유효한 모델 사용
+    MODEL = "gemini-flash-latest" # 유효한 모델 사용
 
     # --- 에이전트 정의 ---
     # 에이전트 1: 정보 캡처를 위한 간단한 에이전트
@@ -167,6 +174,12 @@ ADK는 각각 다른 사용 사례에 맞게 조정된 두 가지 고유한 `Mem
     --8<-- "examples/go/snippets/sessions/memory_example/memory_example.go:full_example"
     ```
 
+=== "TypeScript"
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/sessions/memory_example.ts:full_example"
+    ```
+
 === "Java"
 
     ```java
@@ -186,7 +199,7 @@ ADK는 각각 다른 사용 사례에 맞게 조정된 두 가지 고유한 `Mem
 
       private static final String APP_NAME = "memory_example_app";
       private static final String USER_ID = "mem_user";
-      private static final String MODEL = "gemini-2.0-flash";
+      private static final String MODEL = "gemini-flash-latest";
 
       public static void main(String[] args) {
         // 서비스
@@ -283,6 +296,19 @@ ADK는 각각 다른 사용 사례에 맞게 조정된 두 가지 고유한 `Mem
             return new ToolOutput(response.memories().toString());
           });
     }
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    import { LlmAgent, PRELOAD_MEMORY } from '@google/adk';
+
+    const agent = new LlmAgent({
+        model: MODEL_ID,
+        name: 'weather_sentiment_agent',
+        instruction: "...",
+        tools: [PRELOAD_MEMORY]
+    });
     ```
 
 ## Vertex AI 메모리 뱅크
@@ -391,6 +417,28 @@ LlmAgent agent = new LlmAgent.Builder()
     .tools(new LoadMemoryTool())
     .build();
 ```
+
+=== "TypeScript"
+
+    ```typescript
+    import { LlmAgent, PRELOAD_MEMORY, SingleAgentCallback } from '@google/adk';
+
+    const autoSaveSessionToMemoryCallback: SingleAgentCallback = async (callbackContext) => {
+        if (callbackContext.invocationContext.memoryService) {
+            await callbackContext.invocationContext.memoryService.addSessionToMemory(
+                callbackContext.invocationContext.session
+            );
+        }
+    };
+
+    const agent = new LlmAgent({
+        model: MODEL,
+        name: "Generic_QA_Agent",
+        instruction: "Answer the user's questions",
+        tools: [PRELOAD_MEMORY],
+        afterAgentCallback: autoSaveSessionToMemoryCallback,
+    });
+    ```
 
 세션에서 메모리를 추출하려면 `add_session_to_memory`를 호출해야 합니다. 예를 들어 콜백을 통해 이를 자동화할 수 있습니다.
 

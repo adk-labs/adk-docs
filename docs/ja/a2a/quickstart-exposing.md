@@ -49,7 +49,7 @@ ADKを使用して構築された既存のエージェントを取得し、`to_a
 ```python
 # ここにエージェントコード
 root_agent = Agent(
-    model='gemini-2.0-flash',
+    model='gemini-flash-latest',
     name='hello_world_agent',
     
     <...your agent code...>

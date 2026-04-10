@@ -176,7 +176,7 @@ def city_time_function(city: str):
 
 city_report_agent = Agent(
     name="city_report_agent",
-    model="gemini-2.5-flash",
+    model="gemini-flash-latest",
     input_schema=CityTime,
     instruction="""output the data provided by the previous node.""",
 )
@@ -225,7 +225,7 @@ async def city_workflow(ctx: Context):
 ```python
 coder_agent = LlmAgent(
     name="generator_agent",
-    model="gemini-2.5-flash",
+    model="gemini-flash-latest",
     instruction="Write python code for user request.",
     output_schema=str,
 )
@@ -235,7 +235,7 @@ compile_lint_check = ApiNode()
 
 fixer_agent = LlmAgent(
     name="generator_agent",
-    model="gemini-2.5-flash",
+    model="gemini-flash-latest",
     instruction="""Refactor current code {code}.
         Based on compile & lint review: {findings}""",
     output_schema=str,

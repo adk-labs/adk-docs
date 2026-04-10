@@ -64,7 +64,7 @@ OpenAPI 사양을 에이전트에 통합하려면 다음 단계를 따르세요.
 
     my_agent = LlmAgent(
         name="api_interacting_agent",
-        model="gemini-2.0-flash", # 또는 선호하는 모델
+        model="gemini-flash-latest", # 또는 선호하는 모델
         tools=[toolset], # 툴셋 전달
         # ... 기타 에이전트 설정 ...
     )

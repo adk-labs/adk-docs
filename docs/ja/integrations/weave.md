@@ -95,7 +95,7 @@ calculator_tool = FunctionTool(func=calculator)
 # LLMエージェントを作成
 root_agent = LlmAgent(
     name="MathAgent",
-    model="gemini-2.0-flash-exp",
+    model="gemini-flash-latest",
     instruction=(
         "あなたは数学ができる、役に立つアシスタントです。"
         "数学の問題が出されたら、電卓ツールを使って解いてください。"

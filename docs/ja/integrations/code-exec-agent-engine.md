@@ -32,7 +32,7 @@ from google.adk.agents.llm_agent import Agent
 from google.adk.code_executors.agent_engine_sandbox_code_executor import AgentEngineSandboxCodeExecutor
 
 root_agent = Agent(
-    model="gemini-2.5-flash",
+    model="gemini-flash-latest",
     name="agent_engine_code_execution_agent",
     instruction="あなたは、質問に答えたり問題を解決したりするためにコードを記述して実行できる便利なエージェントです。",
     code_executor=AgentEngineSandboxCodeExecutor(
@@ -150,7 +150,7 @@ def base_system_instruction():
   """
 
 root_agent = Agent(
-    model="gemini-2.5-flash",
+    model="gemini-flash-latest",
     name="agent_engine_code_execution_agent",
     instruction=base_system_instruction() + """
 

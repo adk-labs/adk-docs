@@ -249,7 +249,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 !!! note "ADK Python v1.22.0에서 세션 데이터베이스 스키마 변경"
 
     ADK Python v1.22.0에서 세션 데이터베이스 스키마가 변경되었으며, 세션 데이터베이스 마이그레이션이 필요합니다.
-    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/sessions/session/migrate/)을 참조하세요.
+    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/ko/sessions/session/migrate/)을 참조하세요.
 
 3.  **`DatabaseSessionService`**
 
@@ -275,7 +275,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 
 ## 세션 생명주기
 
-<img src="../../assets/session_lifecycle.png" alt="세션 생명주기">
+<img src="../../assets/event-loop.png" alt="세션 생명주기">
 
 대화의 한 턴(turn) 동안 `Session`과 `SessionService`가 함께 작동하는 단순화된 흐름은 다음과 같습니다.
 

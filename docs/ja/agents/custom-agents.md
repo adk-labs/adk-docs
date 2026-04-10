@@ -278,7 +278,7 @@
 === "Python"
 
     ```python
-    GEMINI_2_FLASH = "gemini-2.0-flash" # モデル定数を定義
+    GEMINI_2_FLASH = "gemini-flash-latest" # モデル定数を定義
     --8<-- "examples/python/snippets/agents/custom-agent/storyflow_agent.py:llmagents"
     ```
 === "Java"

@@ -93,7 +93,7 @@
 
     story_generator = LlmAgent(
         name="StoryGenerator",
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         instruction="""猫についての短い物語を、テーマ：{topic}に焦点を当てて書いてください。"""
     )
 
@@ -115,7 +115,7 @@
 
     LlmAgent storyGenerator = LlmAgent.builder()
         .name("StoryGenerator")
-        .model("gemini-2.5-flash")
+        .model("gemini-flash-latest")
         .instruction("猫についての短い物語を、テーマは " + topic + " に焦点を当てて書いてください。")
         .build();
 
@@ -153,7 +153,7 @@
         return '出力を JSON 形式で返してください: {"city": "<name>", "population": <number>}'
 
     agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="template_helper_agent",
         instruction=my_instruction_provider
     )
@@ -171,7 +171,7 @@
     }
 
     const agent = new LlmAgent({
-        model: "gemini-2.5-flash",
+        model: "gemini-flash-latest",
         name: "template_helper_agent",
         instruction: myInstructionProvider
     });
@@ -200,7 +200,7 @@
     );
 
     LlmAgent agent = LlmAgent.builder()
-        .model("gemini-2.5-flash")
+        .model("gemini-flash-latest")
         .name("template_helper_agent")
         .instruction(myInstructionProvider)
         .build();
@@ -222,7 +222,7 @@
         return await instructions_utils.inject_session_state(template, context)
 
     agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="dynamic_template_helper_agent",
         instruction=my_dynamic_instruction_provider
     )
@@ -253,7 +253,7 @@
     );
 
     LlmAgent agent = LlmAgent.builder()
-        .model("gemini-2.5-flash")
+        .model("gemini-flash-latest")
         .name("dynamic_template_helper_agent")
         .instruction(myDynamicInstructionProvider)
         .build();
@@ -293,7 +293,7 @@
     # output_keyでエージェントを定義
     greeting_agent = LlmAgent(
         name="Greeter",
-        model="gemini-2.0-flash", # 有効なモデルを使用
+        model="gemini-flash-latest", # 有効なモデルを使用
         instruction="短く、親しみやすい挨拶を生成してください。",
         output_key="last_greeting" # 応答をstate['last_greeting']に保存
     )

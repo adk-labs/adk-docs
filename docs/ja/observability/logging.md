@@ -178,7 +178,7 @@ go run main.go web -otel_to_cloud a2a
 
     ```log
     ...
-    2025-07-10 15:26:13,778 - DEBUG - google_adk.google.adk.models.google_llm - Sending out request, model: gemini-2.0-flash, backend: GoogleLLMVariant.GEMINI_API, stream: False
+    2025-07-10 15:26:13,778 - DEBUG - google_adk.google.adk.models.google_llm - Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: False
     2025-07-10 15:26:13,778 - DEBUG - google_adk.google.adk.models.google_llm - 
     LLM Request:
     -----------------------------------------------------------

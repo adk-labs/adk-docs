@@ -2,6 +2,12 @@
 
 이 가이드는 참여 방법을 안내합니다.
 
+## 커뮤니티 참여하기
+
+* ADK에 대해 토론하거나 질문을 하거나 에이전트 전반에 대해 이야기하고 싶다면 Reddit의 **[r/agentdevelopmentkit](https://www.reddit.com/r/agentdevelopmentkit/)**를 방문하세요.
+* 월간 커뮤니티 콜 업데이트를 받고 싶다면 **[ADK Community Google Group](https://groups.google.com/g/adk-community)**에 참여하세요.
+* 버그를 신고하거나 ADK 프레임워크에 기여하고 싶다면 아래 섹션에서 적절한 저장소를 찾는 방법과 시작 방법을 확인하세요.
+
 ## 기여 준비하기
 
 ### 올바른 리포지토리 선택하기
@@ -32,17 +38,6 @@ ADK 프로젝트는 여러 리포지토리로 나뉘어 있습니다. 기여할 
 ### 커뮤니티 가이드라인 검토하기
 
 이 프로젝트는 [Google의 오픈소스 커뮤니티 가이드라인](https://opensource.google/conduct/)을 따릅니다.
-
-## 논의에 참여하기
-
-질문이 있거나, 아이디어를 공유하고 싶거나, ADK를 어떻게 사용하는지 이야기하고 싶으신가요? **[Python](https://github.com/google/adk-python/discussions)**, **[TypeScript](https://github.com/google/adk-js/discussions)**, **[Go](https://github.com/google/adk-go/discussions)**, **[Java](https://github.com/google/adk-java/discussions)** Discussions로 오세요!
-
-이 공간은 주로 다음을 위한 곳입니다.
-
-* 질문하고 커뮤니티와 유지보수자에게 도움받기
-* 프로젝트나 사용 사례 공유하기 (`Show and Tell`)
-* 공식 이슈를 만들기 전에 기능 개선이나 변경 사항을 논의하기
-* ADK에 관한 일반적인 대화
 
 ## 기여 방법
 

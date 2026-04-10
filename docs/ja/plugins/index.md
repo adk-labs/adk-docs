@@ -173,7 +173,7 @@ async def hello_world(tool_context: ToolContext, query: str):
   print(f'Hello world: query is [{query}]')
 
 root_agent = Agent(
-    model='gemini-2.0-flash',
+    model='gemini-flash-latest',
     name='hello_world',
     description='ユーザーのクエリでハローワールドを出力します。',
     instruction="""
@@ -237,7 +237,7 @@ const helloWorldTool = new FunctionTool({
 });
 
 const rootAgent = new LlmAgent({
-    model: "gemini-2.5-flash",
+    model: "gemini-flash-latest",
     name: "hello_world",
     description: "Prints hello world with user query.",
     instruction: `Use hello_world tool to print hello world and user query.`,
@@ -296,7 +296,7 @@ public class Main {
 
   public static void main(String[] args) {
     LlmAgent rootAgent = LlmAgent.builder()
-        .model("gemini-2.0-flash")
+        .model("gemini-flash-latest")
         .name("hello_world")
         .description("Prints hello world with user query.")
         .instruction("Use hello_world tool to print hello world and user query.")

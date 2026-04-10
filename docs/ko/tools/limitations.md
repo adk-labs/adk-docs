@@ -28,7 +28,7 @@
     ```py
     root_agent = Agent(
         name="RootAgent",
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         description="Code Agent",
         tools=[custom_function],
         code_executor=BuiltInCodeExecutor() # <-- 도구와 함께 사용 시 지원되지 않음
@@ -65,7 +65,7 @@
     from google.adk.code_executors import BuiltInCodeExecutor
 
     search_agent = Agent(
-        model='gemini-2.0-flash',
+        model='gemini-flash-latest',
         name='SearchAgent',
         instruction="""
         You're a specialist in Google Search
@@ -73,7 +73,7 @@
         tools=[google_search],
     )
     coding_agent = Agent(
-        model='gemini-2.0-flash',
+        model='gemini-flash-latest',
         name='CodeAgent',
         instruction="""
         You're a specialist in Code Execution
@@ -82,7 +82,7 @@
     )
     root_agent = Agent(
         name="RootAgent",
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         description="Root Agent",
         tools=[AgentTool(agent=search_agent), AgentTool(agent=coding_agent)],
     )
@@ -100,7 +100,7 @@
 
     public class NestedAgentApp {
 
-      private static final String MODEL_ID = "gemini-2.0-flash";
+      private static final String MODEL_ID = "gemini-flash-latest";
 
       public static void main(String[] args) {
 
@@ -171,7 +171,7 @@ ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해
 
     ```py
     url_context_agent = Agent(
-        model='gemini-2.5-flash',
+        model='gemini-flash-latest',
         name='UrlContextAgent',
         instruction="""
         You're a specialist in URL Context
@@ -179,7 +179,7 @@ ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해
         tools=[url_context],
     )
     coding_agent = Agent(
-        model='gemini-2.5-flash',
+        model='gemini-flash-latest',
         name='CodeAgent',
         instruction="""
         You're a specialist in Code Execution
@@ -188,7 +188,7 @@ ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해
     )
     root_agent = Agent(
         name="RootAgent",
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         description="Root Agent",
         sub_agents=[
             url_context_agent,
@@ -202,7 +202,7 @@ ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해
     ```java
     LlmAgent searchAgent =
         LlmAgent.builder()
-            .model("gemini-2.5-flash")
+            .model("gemini-flash-latest")
             .name("SearchAgent")
             .instruction("You're a specialist in Google Search")
             .tools(new GoogleSearchTool())
@@ -210,7 +210,7 @@ ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해
 
     LlmAgent codingAgent =
         LlmAgent.builder()
-            .model("gemini-2.5-flash")
+            .model("gemini-flash-latest")
             .name("CodeAgent")
             .instruction("You're a specialist in Code Execution")
             .tools(new BuiltInCodeExecutionTool())
@@ -220,7 +220,7 @@ ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해
     LlmAgent rootAgent =
         LlmAgent.builder()
             .name("RootAgent")
-            .model("gemini-2.5-flash")
+            .model("gemini-flash-latest")
             .description("Root Agent")
             .subAgents(searchAgent, codingAgent) // 하위 에이전트가 내장 도구를 사용하므로 지원되지 않음
             .build();

@@ -97,7 +97,7 @@ async def monitor_video_stream(
 
       # 제공된 이미지와 프롬프트를 기반으로 콘텐츠를 생성하도록 모델을 호출합니다
       response = client.models.generate_content(
-          model="gemini-2.0-flash-exp",
+              model="gemini-flash-latest",
           contents=contents,
           config=genai_types.GenerateContentConfig(
               system_instruction=(
@@ -130,7 +130,7 @@ def stop_streaming(function_name: str):
 
 
 root_agent = Agent(
-    model="gemini-2.0-flash-exp",
+        model="gemini-flash-latest",
     name="video_streaming_agent",
     instruction="""
       당신은 모니터링 에이전트입니다. 제공된 도구/함수를 사용하여 비디오 모니터링과 주가 모니터링을 할 수 있습니다.
@@ -200,7 +200,7 @@ root_agent = Agent(
                   .build();
 
               GenerateContentResponse response = client.models().generateContent(
-                  "gemini-2.5-flash",
+                  "gemini-flash-latest",
                   contents,
                   GenerateContentConfig.builder()
                       .systemInstruction(Content.builder().parts(Arrays.asList(
@@ -223,7 +223,7 @@ root_agent = Agent(
 
       public static void main(String[] args) {
         LlmAgent rootAgent = LlmAgent.builder()
-            .model("gemini-2.0-flash-exp")
+            .model("gemini-flash-latest")
             .name("video_streaming_agent")
             .instruction(
                 "당신은 모니터링 에이전트입니다. 제공된 도구/함수를 사용하여 비디오 모니터링과 주가 모니터링을 할 수 있습니다.\n" +

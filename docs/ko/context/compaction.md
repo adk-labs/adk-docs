@@ -58,7 +58,7 @@ from google.adk.apps.llm_event_summarizer import LlmEventSummarizer
 from google.adk.models import Gemini
 
 # 요약에 사용할 AI 모델 정의:
-summarization_llm = Gemini(model="gemini-2.5-flash")
+summarization_llm = Gemini(model="gemini-flash-latest")
 
 # 사용자 지정 모델로 요약기 생성:
 my_summarizer = LlmEventSummarizer(llm=summarization_llm)

@@ -58,7 +58,7 @@ from google.adk.apps.llm_event_summarizer import LlmEventSummarizer
 from google.adk.models import Gemini
 
 # 要約に使用するAIモデルを定義します。
-summarization_llm = Gemini(model="gemini-2.5-flash")
+summarization_llm = Gemini(model="gemini-flash-latest")
 
 # カスタムモデルでサマライザーを作成します。
 my_summarizer = LlmEventSummarizer(llm=summarization_llm)

@@ -48,6 +48,16 @@ BigQuery Agent Analytics プラグインは、Agent Development Kit (ADK) に対
     -   **ローカル:** `gcloud auth application-default login` を実行
     -   **クラウド:** サービスアカウントに必要な権限があることを確認
 
+??? note "Gemini モデルセレクタ `gemini-flash-latest`"
+
+    ADK ドキュメントのほとんどのコード例では `gemini-flash-latest` を使って
+    [最新の利用可能な](https://ai.google.dev/gemini-api/docs/models#latest)
+    Gemini Flash バージョンを選択します。ただし、`us-central1` のようなリージョナル
+    エンドポイントで Gemini を使う場合、この選択文字列は動作しないことがあります。
+    その場合は [Gemini models](https://ai.google.dev/gemini-api/docs/models) ページや
+    Google Cloud の [Gemini models](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models) 一覧から
+    具体的なモデルのバージョン文字列を使ってください。
+
 ### IAM 権限
 
 エージェントが正しく動作するには、エージェントを実行するプリンシパル (サービスアカウントやユーザーアカウントなど) に次の Google Cloud ロールが必要です。
@@ -84,7 +94,11 @@ trace.set_tracer_provider(TracerProvider())
 # --- Configuration ---
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id")
 DATASET_ID = os.environ.get("BIG_QUERY_DATASET_ID", "your-big-query-dataset-id")
-LOCATION = os.environ.get("GOOGLE_CLOUD_LOCATION", "US") # default location is US in the plugin
+# GOOGLE_CLOUD_LOCATION は有効な Vertex AI リージョン (例: "us-central1") である必要があります。
+# BQ_LOCATION は BigQuery データセットのロケーションで、"US" や "EU" のような
+# マルチリージョン、または "us-central1" のような単一リージョンです。
+VERTEX_LOCATION = os.environ.get("GOOGLE_CLOUD_LOCATION", "us-central1")
+BQ_LOCATION = os.environ.get("BQ_LOCATION", "US")
 GCS_BUCKET = os.environ.get("GCS_BUCKET_NAME", "your-gcs-bucket-name") # Optional
 
 if PROJECT_ID == "your-gcp-project-id":
@@ -92,7 +106,7 @@ if PROJECT_ID == "your-gcp-project-id":
 
 # --- CRITICAL: Set environment variables BEFORE Gemini instantiation ---
 os.environ['GOOGLE_CLOUD_PROJECT'] = PROJECT_ID
-os.environ['GOOGLE_CLOUD_LOCATION'] = LOCATION
+os.environ['GOOGLE_CLOUD_LOCATION'] = VERTEX_LOCATION
 os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True'
 
 # --- Initialize the Plugin with Config ---
@@ -110,7 +124,7 @@ bq_logging_plugin = BigQueryAgentAnalyticsPlugin(
     dataset_id=DATASET_ID,
     table_id="agent_events", # default table name is agent_events
     config=bq_config,
-    location=LOCATION
+    location=BQ_LOCATION
 )
 
 # --- Initialize Tools and Model ---
@@ -119,7 +133,7 @@ bigquery_toolset = BigQueryToolset(
     credentials_config=BigQueryCredentialsConfig(credentials=credentials)
 )
 
-llm = Gemini(model="gemini-2.5-flash")
+llm = Gemini(model="gemini-flash-latest")
 
 root_agent = Agent(
     model=llm,
@@ -146,6 +160,250 @@ FROM `your-gcp-project-id.your-big-query-dataset-id.agent_events`
 ORDER BY timestamp DESC
 LIMIT 20;
 ```
+
+## プラグイン付きで Agent Engine にデプロイ {#deploy-agent-engine}
+
+このプラグインを含むエージェントは
+[Vertex AI Agent Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview) にデプロイできます。
+このセクションでは、ADK CLI を使ったデプロイ手順と、代替として Vertex AI SDK を使う方法を説明します。
+
+!!! important "バージョン要件"
+
+    このプラグインを Agent Engine にデプロイするには、ADK Python バージョン **1.24.0 以上**を使用してください。
+    以前のバージョンでは、プラグインの非同期ログ writer がサーバーレスランタイムにより終了される前に
+    保留中のイベントを flush できない問題がありました。1.24.0 以降では、各 invocation の終了時に
+    同期 flush を行い、すべてのイベントが確実に書き込まれます。
+
+### 前提条件
+
+デプロイ前に、一般的な [Agent Engine の設定](/ja/deploy/agent-engine/deploy/#setup-cloud-project) を完了してください。
+次を含みます。
+
+1.  **Vertex AI API** と **Cloud Resource Manager API** が有効な Google Cloud プロジェクト
+2.  対象プロジェクトの **BigQuery データセット** (または適切な権限を持つクロスプロジェクトデータセット)
+3.  デプロイアーティファクト用の **Cloud Storage ステージングバケット**
+4.  デプロイするサービスアカウントに [IAM 権限](#iam-権限) に記載したロールが付与されていること
+5.  コーディング環境が
+    [認証済み](/ja/deploy/agent-engine/deploy/#prerequisites-coding-env)
+    であり、`gcloud auth login` と `gcloud auth application-default login` を実行済みであること
+
+### ステップ 1: エージェントとプラグインの定義
+
+プラグインを含む `App` オブジェクトを持つエージェントプロジェクトフォルダを作成します。
+`App` オブジェクトは、プラグインを使った Agent Engine デプロイに必須です。
+
+```
+my_bq_agent/
+├── __init__.py
+├── agent.py
+└── requirements.txt
+```
+
+```python title="my_bq_agent/__init__.py"
+from . import agent
+```
+
+```python title="my_bq_agent/agent.py"
+import os
+import google.auth
+from google.adk.agents import Agent
+from google.adk.apps import App
+from google.adk.models.google_llm import Gemini
+from google.adk.plugins.bigquery_agent_analytics_plugin import (
+    BigQueryAgentAnalyticsPlugin,
+    BigQueryLoggerConfig,
+)
+from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+
+# --- Configuration ---
+PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id")
+DATASET_ID = os.environ.get("BQ_DATASET", "agent_analytics")
+# BQ_LOCATION は BigQuery データセットのロケーションです。"US"/"EU" のような
+# マルチリージョン、または "us-central1" のような単一リージョンです。
+# これは GOOGLE_CLOUD_LOCATION で指定する Vertex AI リージョンとは別です。
+BQ_LOCATION = os.environ.get("BQ_LOCATION", "US")
+
+os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
+
+# --- Plugin ---
+bq_analytics_plugin = BigQueryAgentAnalyticsPlugin(
+    project_id=PROJECT_ID,
+    dataset_id=DATASET_ID,
+    location=BQ_LOCATION,
+    config=BigQueryLoggerConfig(
+        batch_size=1,
+        batch_flush_interval=0.5,
+        log_session_metadata=True,
+    ),
+)
+
+# --- Tools ---
+credentials, _ = google.auth.default(
+    scopes=["https://www.googleapis.com/auth/cloud-platform"]
+)
+bigquery_toolset = BigQueryToolset(
+    credentials_config=BigQueryCredentialsConfig(credentials=credentials)
+)
+
+# --- Agent ---
+root_agent = Agent(
+    model=Gemini(model="gemini-flash-latest"),
+    name="my_bq_agent",
+    instruction="You are a helpful assistant with access to BigQuery tools.",
+    tools=[bigquery_toolset],
+)
+
+# --- App (required for Agent Engine with plugins) ---
+app = App(
+    name="my_bq_agent",
+    root_agent=root_agent,
+    plugins=[bq_analytics_plugin],
+)
+```
+
+```text title="my_bq_agent/requirements.txt"
+google-adk[bigquery]
+google-cloud-bigquery-storage
+pyarrow
+opentelemetry-api
+opentelemetry-sdk
+```
+
+### ステップ 2: ADK CLI でデプロイ
+
+`adk deploy agent_engine` コマンドを使ってエージェントをデプロイします。`--adk_app`
+フラグは CLI にどの `App` オブジェクトを使うかを伝えます。
+
+```shell
+PROJECT_ID=your-gcp-project-id
+LOCATION=us-central1
+
+adk deploy agent_engine \
+    --project=$PROJECT_ID \
+    --region=$LOCATION \
+    --staging_bucket=gs://your-staging-bucket \
+    --display_name="My BQ Analytics Agent" \
+    --adk_app=agent.app \
+    my_bq_agent
+```
+
+!!! tip "`--adk_app` フラグ"
+
+    `--adk_app` フラグは、`App` オブジェクトのモジュールパスと変数名を指定します。
+    この例では `agent.app` が `agent.py` の `app` 変数を指します。
+    これにより、デプロイでプラグイン設定が正しく取り込まれます。
+
+デプロイが成功すると、次のような出力が表示されます。
+
+```shell
+AgentEngine created. Resource name: projects/123456789/locations/us-central1/reasoningEngines/751619551677906944
+```
+
+次のステップで使う **Resource name** を控えておいてください。
+
+### ステップ 3: デプロイしたエージェントをテスト
+
+デプロイ後は、Vertex AI SDK を使ってエージェントを問い合わせできます。
+
+```python title="test_deployed_agent.py"
+import uuid
+import vertexai
+
+PROJECT_ID = "your-gcp-project-id"
+LOCATION = "us-central1"
+AGENT_ID = "751619551677906944"  # deployment output から取得
+
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+client = vertexai.Client(project=PROJECT_ID, location=LOCATION)
+
+agent = client.agent_engines.get(
+    name=f"projects/{PROJECT_ID}/locations/{LOCATION}/reasoningEngines/{AGENT_ID}"
+)
+
+user_id = f"test_user_{uuid.uuid4().hex[:8]}"
+for chunk in agent.stream_query(
+    message="List datasets in my project", user_id=user_id
+):
+    print(chunk, end="", flush=True)
+```
+
+### ステップ 4: BigQuery でイベントを確認
+
+デプロイしたエージェントに数回クエリを送ったあと、BigQuery テーブルを問い合わせて
+イベントが記録されていることを確認します。
+
+```sql
+SELECT timestamp, event_type, agent, content
+FROM `your-gcp-project-id.agent_analytics.agent_events`
+ORDER BY timestamp DESC
+LIMIT 20;
+```
+
+`INVOCATION_STARTING`, `LLM_REQUEST`, `LLM_RESPONSE`, `TOOL_STARTING`,
+`TOOL_COMPLETED`, `INVOCATION_COMPLETED` のようなイベントが表示されるはずです。
+
+### 代替: Vertex AI SDK でデプロイ
+
+Vertex AI SDK を直接使ってプログラムでデプロイすることもできます。CI/CD パイプラインや
+カスタムデプロイワークフローに有用です。
+
+```python title="deploy.py"
+import vertexai
+from vertexai import agent_engines
+from my_bq_agent.agent import app
+
+PROJECT_ID = "your-gcp-project-id"
+LOCATION = "us-central1"
+STAGING_BUCKET = "gs://your-staging-bucket"
+
+vertexai.init(
+    project=PROJECT_ID, location=LOCATION, staging_bucket=STAGING_BUCKET
+)
+client = vertexai.Client(project=PROJECT_ID, location=LOCATION)
+
+remote_app = client.agent_engines.create(
+    agent=app,
+    config={
+        "display_name": "My BQ Analytics Agent",
+        "staging_bucket": STAGING_BUCKET,
+        "requirements": [
+            "google-adk[bigquery]",
+            "google-cloud-aiplatform[agent_engines]",
+            "google-cloud-bigquery-storage",
+            "pyarrow",
+            "opentelemetry-api",
+            "opentelemetry-sdk",
+        ],
+    },
+)
+print(f"Deployed agent: {remote_app.api_resource.name}")
+```
+
+### トラブルシューティング
+
+デプロイ後に BigQuery テーブルへイベントが表示されない場合は、次を確認してください。
+
+1.  **ADK バージョンの確認**: `google-adk>=1.24.0` が requirements に含まれているか確認します。
+    以前のバージョンでは、サーバーレスランタイムがプロセスを停止する前に保留中イベントを flush できません。
+
+2.  **デバッグログを有効化**: `agent.py` の先頭に以下を追加して、静かに失敗しているエラーを可視化します。
+
+    ```python
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    logging.getLogger("google_adk").setLevel(logging.DEBUG)
+    ```
+
+3.  **IAM 権限を確認**: Agent Engine サービスアカウントには、対象テーブルに対する `roles/bigquery.dataEditor` と
+    プロジェクトに対する `roles/bigquery.jobUser` が必要です。**クロスプロジェクト** ロギングでは、
+    ソースプロジェクトで BigQuery API が有効であり、かつ対象テーブルに対してサービスアカウントに
+    `bigquery.tables.updateData` 権限があることも確認してください。
+
+4.  **プラグイン初期化を確認**: Cloud Logging で `resource.type="reasoning_engine"` をフィルタし、
+    プラグイン起動メッセージやエラーログを探します。
+
+5.  **デバッグ用に即時 flush を使う**: バッファリングの問題を切り分けるため、
+    `BigQueryLoggerConfig` で `batch_size=1` と `batch_flush_interval=0.1` を設定します。
 
 ## トレーシングと可観測性
 
@@ -243,7 +501,7 @@ plugin = BigQueryAgentAnalyticsPlugin(..., config=config)
 | **span_id** | `STRING` | `NULLABLE` | **OpenTelemetry** Span ID (16 文字の 16 進数) です。この特定の原子的操作を一意に識別します。 | `69867a836cd94798be2759d8e0d70215` |
 | **parent_span_id** | `STRING` | `NULLABLE` | 直前の呼び出し元の Span ID です。親子実行ツリー (DAG) の再構築に使用します。 | `ef5843fe40764b4b8afec44e78044205` |
 | **content** | `JSON` | `NULLABLE` | 主要なイベントペイロードです。構造は `event_type` に応じて変化します。 | `{"system_prompt": "You are...", "prompt": [{"role": "user", "content": "hello"}], "response": "Hi", "usage": {"total": 15}}` |
-| **attributes** | `JSON` | `NULLABLE` | メタデータ / エンリッチメント情報 (使用量統計、モデル情報、tool provenance、custom tags) です。 | `{"model": "gemini-2.5-flash", "usage_metadata": {"total_token_count": 15}, "session_metadata": {"session_id": "...", "app_name": "...", "user_id": "...", "state": {}}, "custom_tags": {"env": "prod"}}` |
+| **attributes** | `JSON` | `NULLABLE` | メタデータ / エンリッチメント情報 (使用量統計、モデル情報、tool provenance、custom tags) です。 | `{"model": "gemini-flash-latest", "usage_metadata": {"total_token_count": 15}, "session_metadata": {"session_id": "...", "app_name": "...", "user_id": "...", "state": {}}, "custom_tags": {"env": "prod"}}` |
 | **latency_ms** | `JSON` | `NULLABLE` | 性能メトリクスです。標準キーは `total_ms` (総所要時間) と `time_to_first_token_ms` (ストリーミング遅延) です。 | `{"total_ms": 1250, "time_to_first_token_ms": 450}` |
 | **status** | `STRING` | `NULLABLE` | 上位レベルの結果です。値は `OK` (成功) または `ERROR` (失敗) です。 | `OK` |
 | **error_message** | `STRING` | `NULLABLE` | 人間が読める例外メッセージやスタックトレース断片です。`status` が `ERROR` の場合にのみ設定されます。 | `Error 404: Dataset not found` |
@@ -336,7 +594,7 @@ CLUSTER BY event_type, agent, user_id;
   },
   "attributes": {
     "root_agent_name": "my_bq_agent",
-    "model": "gemini-2.5-flash",
+    "model": "gemini-flash-latest",
     "tools": ["list_dataset_ids", "execute_sql"],
     "llm_config": {
       "temperature": 0.5,
@@ -363,7 +621,7 @@ CLUSTER BY event_type, agent, user_id;
   },
   "attributes": {
     "root_agent_name": "my_bq_agent",
-    "model_version": "gemini-2.5-flash-001",
+    "model_version": "gemini-flash-latest",
     "usage_metadata": {
       "prompt_token_count": 10129,
       "candidates_token_count": 19,
@@ -798,7 +1056,7 @@ SELECT
     session_id,
     AI.GENERATE(
         ('Analyze this conversation log and explain the root cause of the failure. Log: ', full_history),
-        endpoint => 'gemini-2.5-flash'
+        endpoint => 'gemini-flash-latest'
     ).result AS root_cause_explanation
 FROM SessionContext;
 ```
@@ -821,6 +1079,77 @@ FROM SessionContext;
 ```text
 https://lookerstudio.google.com/reporting/create?c.reportId=f1c5b513-3095-44f8-90a2-54953d41b125&ds.ds3.connector=bigQuery&ds.ds3.type=TABLE&ds.ds3.projectId=<your-project-id>&ds.ds3.datasetId=<your-dataset-id>&ds.ds3.tableId=<your-table-id>
 ```
+
+## 機密資格情報のロギングを避ける {#security-credentials}
+
+!!! warning "OAuth トークン、API キー、クライアントシークレットをログに残さないでください"
+
+    BigQuery Agent Analytics プラグインは、ツール引数、LLM プロンプト、HITL 資格情報要求などの
+    認証関連イベントを含む詳細なイベントペイロードをキャプチャします。エージェントが
+    **認証済みツール** (たとえば OAuth2 を使う `AuthenticatedFunctionTool`) を使用している場合、
+    プラグインは `client_secret`、`access_token`、API キーなどの機密値を BigQuery テーブルの
+    `content` 列に記録してしまう可能性があります。
+
+    これは既知の問題です
+    ([google/adk-python#3845](https://github.com/google/adk-python/issues/3845))
+    であり、分析データにおける資格情報漏えいにつながる可能性があります。
+
+BigQuery に機密資格情報が保存されないようにするには、次のいずれか、または複数の方法を使ってください。
+
+### `content_formatter` で秘密情報をマスクする
+
+`BigQueryLoggerConfig` にカスタム `content_formatter` 関数を指定し、記録前に機密フィールドを削除またはマスクします。
+
+```python
+import json
+import re
+from typing import Any
+
+SENSITIVE_KEYS = {"client_secret", "access_token", "refresh_token", "api_key", "secret"}
+
+def redact_credentials(event_content: Any, event_type: str) -> str:
+    """ログされたコンテンツから OAuth の秘密値とトークンをマスクします。"""
+    if isinstance(event_content, dict):
+        text = json.dumps(event_content)
+    else:
+        text = str(event_content)
+
+    for key in SENSITIVE_KEYS:
+        # JSON 風文字列の値をマスクします: "client_secret": "GOCSPX-xxx"
+        text = re.sub(
+            rf'("{key}"\s*:\s*)"[^"]*"',
+            rf'\1"[REDACTED]"',
+            text,
+            flags=re.IGNORECASE,
+        )
+    return text
+
+config = BigQueryLoggerConfig(
+    content_formatter=redact_credentials,
+    # ... other options
+)
+```
+
+### `event_denylist` で資格情報イベントを除外する
+
+認証関連イベントを記録する必要がない場合は、それらを完全に除外できます。
+
+```python
+config = BigQueryLoggerConfig(
+    event_denylist=[
+        "HITL_CREDENTIAL_REQUEST",
+        "HITL_CREDENTIAL_REQUEST_COMPLETED",
+    ],
+    # ... other options
+)
+```
+
+### 一般的なベストプラクティス
+
+-   **秘密情報をコードにハードコードしないでください。** OAuth クライアントシークレットや API キーは、
+    環境変数や Google Cloud Secret Manager のようなシークレットマネージャーに保存してください。
+-   **BigQuery テーブルへのアクセスを制限**し、ログデータを読める人を最小限に抑えてください。
+-   **ログを定期的に監査**し、予期しない機密データが収集されていないか確認してください。
 
 ## フィードバック
 

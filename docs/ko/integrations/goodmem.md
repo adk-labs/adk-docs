@@ -56,7 +56,7 @@ pip install goodmem-adk
 
     agent = LlmAgent(
         name="memory_agent",
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         instruction="당신은 지속적인 메모리를 가진 유용한 어시스턴트입니다.",
     )
 
@@ -83,7 +83,7 @@ pip install goodmem-adk
 
     agent = LlmAgent(
         name="memory_agent",
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         instruction="당신은 지속적인 메모리를 가진 유용한 어시스턴트입니다.",
         tools=[save_tool, fetch_tool],
     )

@@ -49,7 +49,7 @@ ADK를 사용하여 구축된 기존 에이전트를 `to_a2a()` 함수로 간단
 ```python
 # 여기에 에이전트 코드
 root_agent = Agent(
-    model='gemini-2.0-flash',
+    model='gemini-flash-latest',
     name='hello_world_agent',
     
     <...에이전트 코드...>

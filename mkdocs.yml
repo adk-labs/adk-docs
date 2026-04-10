@@ -11,6 +11,8 @@ exclude_docs:
 not_in_nav: |
   /integrations/*.md
   /_includes/**
+  /ko/_includes/**
+  /ja/_includes/**
 
 # Exclude docs from build
 exclude_docs:
@@ -359,6 +361,7 @@ plugins:
                 - evaluate/index.md
                 - 기준: evaluate/criteria.md
                 - 사용자 시뮬레이션: evaluate/user-sim.md
+                - 환경 시뮬레이션: evaluate/environment_simulation.md
                 - 커스텀 메트릭: evaluate/custom_metrics.md
                 - 최적화: optimize/index.md
               - 안전 및 보안:
@@ -525,6 +528,7 @@ plugins:
                 - evaluate/index.md
                 - 基準: evaluate/criteria.md
                 - ユーザーシミュレーション: evaluate/user-sim.md
+                - 環境シミュレーション: evaluate/environment_simulation.md
                 - カスタムメトリクス: evaluate/custom_metrics.md
                 - 最適化: optimize/index.md
               - 安全性とセキュリティ:

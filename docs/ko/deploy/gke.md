@@ -134,7 +134,7 @@ your-project-directory/
 
     # 에이전트에 도구 추가
     capital_agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="capital_agent", # 에이전트 이름
         description="주어진 국가의 수도에 대한 사용자 질문에 답변합니다.",
         instruction="""당신은 국가의 수도를 제공하는 에이전트입니다... (이전 지침 텍스트)""",
@@ -597,7 +597,7 @@ sessions.db
 
 배포된 에이전트에 ADK Dev UI를 사용할 때 텍스트 기반 채팅은 작동하지만 음성(예: 마이크 버튼 클릭)은 실패합니다. 파드 로그에 모델이 "라이브 API에서 지원되지 않는다"는 `websockets.exceptions.ConnectionClosedError`가 표시될 수 있습니다.
 
-이 오류는 에이전트가 Gemini Live API를 지원하지 않는 모델(예제의 `gemini-2.0-flash`와 같은)로 구성되었기 때문에 발생합니다. Live API는 오디오와 비디오의 실시간 양방향 스트리밍에 필요합니다.
+이 오류는 에이전트가 Gemini Live API를 지원하지 않는 모델(예제의 `gemini-flash-latest`와 같은)로 구성되었기 때문에 발생합니다. Live API는 오디오와 비디오의 실시간 양방향 스트리밍에 필요합니다.
 
 ## 정리
 

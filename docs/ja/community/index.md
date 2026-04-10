@@ -2,6 +2,12 @@
 
 ようこそ！このページでは、Agent Development Kit コミュニティによって作成・維持されているリソースを紹介します。
 
+## コミュニティに参加する
+
+* ADK について議論したり、質問したり、エージェント全般について話したい場合は、Reddit の **[r/agentdevelopmentkit](https://www.reddit.com/r/agentdevelopmentkit/)** に参加してください。
+* 月次コミュニティコールの更新を受け取りたい場合は、**[ADK Community Google Group](https://groups.google.com/g/adk-community)** に参加してください。
+* バグを報告したり ADK フレームワークに貢献したりしたい場合は、**[貢献ガイド](/ja/community/contributing-guide/)** を確認して、適切なリポジトリを見つけて始めてください。
+
 !!! info
 
     Google と ADK チームは、これらの外部コミュニティリソースにリンクされているコンテンツをサポートしていません。
@@ -43,11 +49,8 @@
 
 ## ADK コミュニティコール
 
-!!! tip "つながりを保つ"
-
-    更新情報、カレンダー招待、ADK コミュニティとの交流のために、[ADK Community Google Group](https://groups.google.com/g/adk-community) に参加してください。
-
-    以下の最近の録画を確認するか、[YouTube プレイリスト](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3) で過去のすべてのコールをご覧ください。
+ADK Community Google Group に参加して、次回のコールに関する更新を受け取ってください。
+最近の録画は以下で確認でき、[YouTube プレイリスト](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3) では過去のすべてのコールを確認できます。
 
 <div class="resource-grid">
   <a href="https://www.youtube.com/watch?v=bPngDY7EuOQ" class="resource-card">
@@ -283,6 +286,6 @@
 
 共有したい ADK リソースがありますか。チュートリアル、翻訳、ツール、動画、サンプルなど、何でも歓迎です。
 
-参加方法の詳細は、**[コントリビューションガイド](/community/contributing-guide/)** の手順をご覧ください。
+参加方法の詳細は、**[コントリビューションガイド](/ja/community/contributing-guide/)** の手順をご覧ください。
 
 Agent Development Kit へのご貢献に感謝します！ ❤️

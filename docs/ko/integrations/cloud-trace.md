@@ -68,7 +68,7 @@ def get_weather(city: str) -> dict:
 # 도구가 있는 에이전트 생성
 root_agent = Agent(
     name="weather_agent",
-    model="gemini-2.5-flash",
+    model="gemini-flash-latest",
     description="날씨 도구를 사용하여 질문에 답변하는 에이전트.",
     instruction="답을 찾으려면 사용 가능한 도구를 사용해야 합니다.",
     tools=[get_weather],

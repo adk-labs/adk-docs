@@ -18,14 +18,14 @@
 
 *   **`description` (任意、マルチエージェントで推奨):** エージェントの能力に関する簡潔な要約を提供します。この説明は主に、*他の*LLMエージェントがこのエージェントにタスクをルーティングすべきかどうかを判断するために使用されます。同僚と区別できるように、具体的に記述してください（例: 「請求エージェント」ではなく、「現在の請求書に関する問い合わせを処理します」）。
 
-*   **`model` (必須):** このエージェントの推論を支える基盤となるLLMを指定します。これは`"gemini-2.0-flash"`のような文字列識別子です。モデルの選択は、エージェントの能力、コスト、パフォーマンスに影響します。利用可能なオプションと考慮事項については、[モデル](/ja/agents/models/)ページを参照してください。
+*   **`model` (必須):** このエージェントの推論を支える基盤となるLLMを指定します。これは`"gemini-flash-latest"`のような文字列識別子です。モデルの選択は、エージェントの能力、コスト、パフォーマンスに影響します。利用可能なオプションと考慮事項については、[モデル](/ja/agents/models/)ページを参照してください。
 
 === "Python"
 
     ```python
     # 例: 基本的なアイデンティティの定義
     capital_agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="capital_agent",
         description="与えられた国の首都に関するユーザーの質問に答えます。"
         # instruction と tools は次に追加します
@@ -44,7 +44,7 @@
     // 例: 基本的なアイデンティティの定義
     LlmAgent capitalAgent =
         LlmAgent.builder()
-            .model("gemini-2.0-flash")
+            .model("gemini-flash-latest")
             .name("capital_agent")
             .description("与えられた国の首都に関するユーザーの質問に答えます。")
             // instruction と tools は次に追加します
@@ -80,7 +80,7 @@
     ```python
     # 例: 指示の追加
     capital_agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="capital_agent",
         description="与えられた国の首都に関するユーザーの質問に答えます。",
         instruction="""あなたは国の首都を提供するエージェントです。
@@ -107,7 +107,7 @@
     // 例: 指示の追加
     LlmAgent capitalAgent =
         LlmAgent.builder()
-            .model("gemini-2.0-flash")
+            .model("gemini-flash-latest")
             .name("capital_agent")
             .description("与えられた国の首都に関するユーザーの質問に答えます。")
             .instruction(
@@ -149,7 +149,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     
     # エージェントにツールを追加
     capital_agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="capital_agent",
         description="与えられた国の首都に関するユーザーの質問に答えます。",
         instruction="""あなたは国の首都を提供するエージェントです... (前の指示テキスト)""",
@@ -188,7 +188,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     FunctionTool capitalTool = FunctionTool.create(experiment.getClass(), "getCapitalCity");
     LlmAgent capitalAgent =
         LlmAgent.builder()
-            .model("gemini-2.0-flash")
+            .model("gemini-flash-latest")
             .name("capital_agent")
             .description("与えられた国の首都に関するユーザーの質問に答えます。")
             .instruction("あなたは国の首都を提供するエージェントです... (前の指示テキスト)")
@@ -397,7 +397,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     from google.genai import types
 
     my_agent = Agent(
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         planner=BuiltInPlanner(
             thinking_config=types.ThinkingConfig(
                 include_thoughts=True,
@@ -415,7 +415,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     from google.adk.planners import PlanReActPlanner
 
     my_agent = Agent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         planner=PlanReActPlanner(),
         # ... ここにツールを記述
     )

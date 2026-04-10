@@ -73,7 +73,7 @@ def get_current_time(city: str) -> dict:
     return {"status": "success", "city": city, "time": "午前10時30分"}
 
 root_agent = Agent(
-    model='gemini-3-flash-preview',
+    model='gemini-flash-latest',
     name='root_agent',
     description="指定された都市の現在時刻を伝えます。",
     instruction="あなたは都市の現在時刻を伝えるのに役立つアシスタントです。この目的のために'get_current_time'ツールを使用してください。",

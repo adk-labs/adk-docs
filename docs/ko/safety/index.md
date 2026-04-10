@@ -362,7 +362,7 @@ Gemini 모델은 콘텐츠 및 브랜드 안전성을 향상시키는 데 활용
 
     # 가상 에이전트 설정
     root_agent = LlmAgent( # 특정 에이전트 타입 사용
-        model='gemini-2.0-flash',
+        model='gemini-flash-latest',
         name='root_agent',
         instruction="...",
         before_tool_callback=validate_tool_params, # 콜백 할당
@@ -400,7 +400,7 @@ Gemini 모델은 콘텐츠 및 브랜드 안전성을 향상시키는 데 활용
 
     // 가상 에이전트 설정
     const rootAgent = new LlmAgent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-flash-latest',
         name: 'root_agent',
         instruction: "...",
         beforeToolCallback: validateToolParams,
@@ -468,7 +468,7 @@ Gemini 모델은 콘텐츠 및 브랜드 안전성을 향상시키는 데 활용
 
     // 가상 에이전트 설정
     // rootAgent, err := llmagent.New(llmagent.Config{
-    // 	Model: "gemini-2.0-flash",
+    // 	Model: "gemini-flash-latest",
     // 	Name: "root_agent",
     // 	Instruction: "...",
     // 	BeforeToolCallbacks: []llmagent.BeforeToolCallback{validateToolParams},
@@ -507,7 +507,7 @@ Gemini 모델은 콘텐츠 및 브랜드 안전성을 향상시키는 데 활용
     public void runAgent() {
     LlmAgent agent =
         LlmAgent.builder()
-            .model("gemini-2.0-flash")
+            .model("gemini-flash-latest")
             .name("AgentWithBeforeToolCallback")
             .instruction("...")
             .beforeToolCallback(this::validateToolParams) // 콜백 할당

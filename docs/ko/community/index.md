@@ -2,6 +2,12 @@
 
 환영합니다! 이 페이지에는 Agent Development Kit 커뮤니티가 만들고 유지 관리하는 리소스가 모여 있습니다.
 
+## 커뮤니티 참여하기
+
+* ADK에 대해 토론하거나 질문을 하거나 에이전트 전반에 대해 이야기하고 싶다면 Reddit의 **[r/agentdevelopmentkit](https://www.reddit.com/r/agentdevelopmentkit/)**를 방문하세요.
+* 월간 커뮤니티 콜 업데이트를 받고 싶다면 **[ADK Community Google Group](https://groups.google.com/g/adk-community)**에 참여하세요.
+* 버그를 신고하거나 ADK 프레임워크에 기여하고 싶다면 **[기여 가이드](/ko/community/contributing-guide/)**를 확인하여 적절한 저장소를 찾고 시작하세요.
+
 !!! info
 
     Google과 ADK 팀은 이 외부 커뮤니티 리소스에 연결된 콘텐츠에 대해 지원을 제공하지 않습니다.
@@ -43,11 +49,8 @@
 
 ## ADK 커뮤니티 콜
 
-!!! tip "계속 연결하기"
-
-    업데이트, 캘린더 초대, ADK 커뮤니티와의 연결을 위해 [ADK Community Google Group](https://groups.google.com/g/adk-community)에 참여하세요.
-
-    아래의 최근 녹화본을 보거나, [YouTube 재생 목록](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3)에서 지난 모든 콜을 둘러보세요.
+ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 받아보세요.
+최근 녹화본은 아래에서 확인할 수 있고, 전체 [YouTube 재생 목록](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3)도 둘러볼 수 있습니다.
 
 <div class="resource-grid">
   <a href="https://www.youtube.com/watch?v=bPngDY7EuOQ" class="resource-card">
@@ -283,6 +286,6 @@
 
 공유할 ADK 리소스가 있나요? 튜토리얼, 번역, 도구, 동영상, 예제 등 무엇이든 좋습니다.
 
-참여 방법은 **[기여 가이드](/community/contributing-guide/)**의 단계를 참고하세요.
+참여 방법은 **[기여 가이드](/ko/community/contributing-guide/)**의 단계를 참고하세요.
 
 Agent Development Kit에 기여해 주셔서 감사합니다! ❤️

@@ -295,8 +295,8 @@ ADK는 SSE를 통해 Gemini 1.5 모델도 지원합니다.
 
 **모델:**
 
-- `gemini-1.5-pro`
-- `gemini-1.5-flash`
+- `gemini-pro-latest`
+- `gemini-flash-latest`
 
 **지원:**
 

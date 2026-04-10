@@ -65,7 +65,7 @@ public class HelloTimeAgent {
                 당신은 지정된 도시의 현재 시간을 알려주는 유용한 도우미입니다.
                 이를 위해 'getCurrentTime' 도구를 사용하십시오.
                 """)
-            .model("gemini-2.5-flash")
+            .model("gemini-flash-latest")
             .tools(FunctionTool.create(HelloTimeAgent.class, "getCurrentTime"))
             .build();
     }

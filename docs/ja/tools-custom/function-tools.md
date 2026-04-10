@@ -471,9 +471,9 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
 
 ### 仕組み
 
-1. `main_agent`が長いテキストを受信すると、その指示により、長いテキストには「summarize」ツールを使用するように指示されます。  
+1. `root_agent`が長いテキストを受信すると、その指示により、長いテキストには「summarize」ツールを使用するように指示されます。
 2. フレームワークは、「summarize」を`summary_agent`をラップする`AgentTool`として認識します。  
-3. 舞台裏では、`main_agent`は長いテキストを入力として`summary_agent`を呼び出します。  
+3. 舞台裏では、`root_agent`は長いテキストを入力として`summary_agent`を呼び出します。
 4. `summary_agent`は、その指示に従ってテキストを処理し、要約を生成します。  
-5. **`summary_agent`からの応答は、`main_agent`に返されます。**  
-6. `main_agent`は、要約を取得して、ユーザーへの最終的な応答を作成できます（例：「テキストの要約は次のとおりです...」）
+5. **`summary_agent`からの応答は、`root_agent`に返されます。**
+6. `root_agent`は、要約を取得して、ユーザーへの最終的な応答を作成できます（例：「テキストの要約は次のとおりです...」）

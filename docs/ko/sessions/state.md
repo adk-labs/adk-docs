@@ -93,7 +93,7 @@
 
     story_generator = LlmAgent(
         name="StoryGenerator",
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         instruction="""고양이에 대한 짧은 이야기를 작성하되, 주제는 {topic}에 초점을 맞추세요."""
     )
 
@@ -115,7 +115,7 @@
 
     LlmAgent storyGenerator = LlmAgent.builder()
         .name("StoryGenerator")
-        .model("gemini-2.5-flash")
+        .model("gemini-flash-latest")
         .instruction("고양이에 대한 짧은 이야기를 작성하되, 주제는 " + topic + "에 초점을 맞추세요.")
         .build();
 
@@ -153,7 +153,7 @@
         return '출력을 JSON 형식으로 작성하세요: {"city": "<name>", "population": <number>}'
 
     agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="template_helper_agent",
         instruction=my_instruction_provider
     )
@@ -171,7 +171,7 @@
     }
 
     const agent = new LlmAgent({
-        model: "gemini-2.5-flash",
+        model: "gemini-flash-latest",
         name: "template_helper_agent",
         instruction: myInstructionProvider
     });
@@ -200,7 +200,7 @@
     );
 
     LlmAgent agent = LlmAgent.builder()
-        .model("gemini-2.5-flash")
+        .model("gemini-flash-latest")
         .name("template_helper_agent")
         .instruction(myInstructionProvider)
         .build();
@@ -222,7 +222,7 @@
         return await instructions_utils.inject_session_state(template, context)
 
     agent = LlmAgent(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         name="dynamic_template_helper_agent",
         instruction=my_dynamic_instruction_provider
     )
@@ -253,7 +253,7 @@
     );
 
     LlmAgent agent = LlmAgent.builder()
-        .model("gemini-2.5-flash")
+        .model("gemini-flash-latest")
         .name("dynamic_template_helper_agent")
         .instruction(myDynamicInstructionProvider)
         .build();
@@ -293,7 +293,7 @@
     # output_key로 에이전트 정의
     greeting_agent = LlmAgent(
         name="Greeter",
-        model="gemini-2.0-flash", # 유효한 모델 사용
+        model="gemini-flash-latest", # 유효한 모델 사용
         instruction="짧고 친근한 인사말을 생성하세요.",
         output_key="last_greeting" # 응답을 state['last_greeting']에 저장
     )

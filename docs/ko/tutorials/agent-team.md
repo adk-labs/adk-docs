@@ -157,7 +157,7 @@ os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
 # --- 쉬운 사용을 위해 모델 상수 정의 ---
 
 # 더 많은 지원 모델은 여기서 참조 가능: https://ai.google.dev/gemini-api/docs/models#model-variations
-MODEL_GEMINI_2_5_FLASH = "gemini-2.5-flash"
+MODEL_GEMINI_2_5_FLASH = "gemini-flash-latest"
 
 # 더 많은 지원 모델은 여기서 참조 가능: https://docs.litellm.ai/docs/providers/openai#openai-chat-completion-models
 MODEL_GPT_4O = "openai/gpt-4.1" # 시도 가능: gpt-4.1-mini, gpt-4o 등

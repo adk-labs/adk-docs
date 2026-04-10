@@ -98,7 +98,7 @@ def get_weather(city: str) -> dict:
 # ツール付きのエージェントを作成します
 agent = Agent(
     name="weather_agent",
-    model="gemini-2.0-flash",
+    model="gemini-flash-latest",
     description="天気に関する質問に答えるエージェントです。",
     instruction="利用可能なツールを使って必ず答えを見つけてください。",
     tools=[get_weather],

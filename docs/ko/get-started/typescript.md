@@ -70,7 +70,7 @@ const getCurrentTime = new FunctionTool({
 
 export const rootAgent = new LlmAgent({
   name: 'hello_time_agent',
-  model: 'gemini-2.5-flash',
+  model: 'gemini-flash-latest',
   description: 'Tells the current time in a specified city.',
   instruction: `You are a helpful assistant that tells the current time in a city.
                 Use the 'getCurrentTime' tool for this purpose.`,
@@ -92,7 +92,7 @@ echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
 
 ??? tip "ADK에서 다른 AI 모델 사용"
     ADK는 여러 생성형 AI 모델을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법은
-    [Models & Authentication](/agents/models)을 참조하세요.
+    [Models & Authentication](/ko/agents/models/)을 참조하세요.
 
 ## 에이전트 실행
 

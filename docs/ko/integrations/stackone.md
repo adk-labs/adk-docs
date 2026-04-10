@@ -93,7 +93,7 @@ uv add stackone-adk
             print(f"Discovered {len(tools)} tools")
 
             agent = Agent(
-                model="gemini-2.5-flash",
+                model="gemini-flash-latest",
                 name="scheduling_agent",
                 description="Manages scheduling, HR, and CRM through StackOne.",
                 instruction=(
@@ -147,7 +147,7 @@ uv add stackone-adk
             print(f"Discovered {len(tools)} tools")
 
             agent = Agent(
-                model="gemini-2.5-flash",
+                model="gemini-flash-latest",
                 name="scheduling_agent",
                 description="Manages scheduling, HR, and CRM through StackOne.",
                 instruction=(

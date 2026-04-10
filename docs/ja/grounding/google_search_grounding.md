@@ -86,7 +86,7 @@ from google.adk.tools import google_search
 
 root_agent = Agent(
     name="google_search_agent",
-    model="gemini-2.5-flash",
+    model="gemini-flash-latest",
     instruction="必要に応じてGoogle検索を使用して質問に答えます。常に情報源を引用してください。",
     description="Google検索機能を備えたプロフェッショナルな検索アシスタント",
     tools=[google_search]

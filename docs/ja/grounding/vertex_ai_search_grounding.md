@@ -93,7 +93,7 @@ DATASTORE_ID = "projects/YOUR_PROJECT_ID/locations/global/collections/default_co
 
 root_agent = Agent(
     name="vertex_search_agent",
-    model="gemini-2.5-flash",
+    model="gemini-flash-latest",
     instruction="Vertex AI Searchを使用して社内ドキュメントから情報を検索し、質問に回答します。可能な場合は常に情報源を引用してください。",
     description="Vertex AI Search機能を備えたエンタープライズドキュメント検索アシスタント",
     tools=[VertexAiSearchTool(data_store_id=DATASTORE_ID)]

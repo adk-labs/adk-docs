@@ -17,7 +17,7 @@ catalog_tags: ["connectors", "google"]
 
 **前提条件**
 
-1. [ADK をインストール](/get-started/installation/)
+1. [ADK をインストール](/ja/get-started/installation/)
 2. [Google Cloud CLI](https://cloud.google.com/sdk/docs/install?db=bigtable-docs#installation_instructions) のインストール
 3. 文書化済み（OpenAPI 仕様）API を持つ [Apigee API Hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub) インスタンス
 4. プロジェクト構成を設定し、必要なファイルを作成
@@ -95,7 +95,7 @@ project_root_folder
     from .tools import sample_toolset
 
     root_agent = LlmAgent(
-        model='gemini-2.0-flash',
+        model='gemini-flash-latest',
         name='enterprise_assistant',
         instruction='Help user, leverage the tools you have access to',
         tools=sample_toolset.get_tools(),

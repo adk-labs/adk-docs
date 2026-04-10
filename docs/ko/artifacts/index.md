@@ -144,7 +144,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     from google.adk.sessions import InMemorySessionService
 
     # 예시: Runner에 아티팩트 서비스 설정하기
-    my_agent = LlmAgent(name="artifact_user_agent", model="gemini-2.0-flash")
+    my_agent = LlmAgent(name="artifact_user_agent", model="gemini-flash-latest")
     artifact_service = InMemoryArtifactService() # 구현체 선택
     session_service = InMemorySessionService()
 
@@ -186,7 +186,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     // 예시: Runner에 아티팩트 서비스 설정하기
     LlmAgent myAgent =  LlmAgent.builder()
       .name("artifact_user_agent")
-      .model("gemini-2.0-flash")
+      .model("gemini-flash-latest")
       .build();
     InMemoryArtifactService artifactService = new InMemoryArtifactService(); // 구현체 선택
     InMemorySessionService sessionService = new InMemorySessionService();
@@ -339,7 +339,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     from google.adk.sessions import InMemorySessionService
 
     # 에이전트 정의
-    agent = LlmAgent(name="my_agent", model="gemini-2.0-flash")
+    agent = LlmAgent(name="my_agent", model="gemini-flash-latest")
 
     # 원하는 아티팩트 서비스 인스턴스화
     artifact_service = InMemoryArtifactService()
@@ -360,7 +360,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     import { LlmAgent, InMemoryRunner, InMemoryArtifactService, InMemorySessionService } from '@google/adk';
 
     // 에이전트 정의
-    const agent = new LlmAgent({name: "my_agent", model: "gemini-2.5-flash"});
+    const agent = new LlmAgent({name: "my_agent", model: "gemini-flash-latest"});
 
     // 원하는 아티팩트 서비스 인스턴스화
     const artifactService = new InMemoryArtifactService();
@@ -410,7 +410,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
         // 에이전트 정의
         LlmAgent agent = LlmAgent.builder()
             .name("my_agent")
-            .model("gemini-2.0-flash")
+            .model("gemini-flash-latest")
             .build();
     
         // 원하는 아티팩트 서비스 인스턴스화

@@ -227,8 +227,8 @@ export ADK_ENABLE_PROGRESSIVE_SSE_STREAMING=1
 
 **Models:**
 
-- `gemini-1.5-pro`
-- `gemini-1.5-flash`
+- `gemini-pro-latest`
+- `gemini-flash-latest`
 
 **Supported:**
 
