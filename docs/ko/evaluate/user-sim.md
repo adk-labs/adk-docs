@@ -179,7 +179,7 @@ adk eval \
     # 이전과 동일
   },
   "user_simulator_config": {
-    "model": "gemini-2.5-flash",
+    "model": "gemini-flash-latest",
     "model_configuration": {
       "thinking_config": {
         "include_thoughts": true,

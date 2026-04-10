@@ -16,6 +16,9 @@
 `hallucinations_v1` | 컨텍스트에 대한 에이전트 응답의 LLM 판단 근거 | 아니요 | 아니요 | 예 | 예
 `safety_v1` | 에이전트 응답의 안전성/무해성 | 아니요 | 아니요 | 예 | 예
 `per_turn_user_simulator_quality_v1` | LLM이 판단하는 사용자 시뮬레이터 품질 | 아니요 | 아니요 | 예 | 예
+`multi_turn_task_success_v1` | 대화 목표 달성 여부 평가 | 아니요 | 아니요 | 예 | 예
+`multi_turn_trajectory_quality_v1` | 대화의 전체 궤적 평가 | 아니요 | 아니요 | 예 | 예
+`multi_turn_tool_use_quality_v1` | 대화 중 수행된 함수 호출 평가 | 아니요 | 아니요 | 예 | 예
 
 ## tool_trajectory_avg_score
 
@@ -163,7 +166,7 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
     "final_response_match_v2": {
       "threshold": 0.8,
       "judge_model_options": {
-            "judge_model": "gemini-1.5-flash",
+            "judge_model": "gemini-flash-latest",
             "num_samples": 5
           }
         }
@@ -202,7 +205,7 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
     "rubric_based_final_response_quality_v1": {
       "threshold": 0.8,
       "judge_model_options": {
-        "judge_model": "gemini-1.5-flash",
+        "judge_model": "gemini-flash-latest",
         "num_samples": 5
       },
       "rubrics": [
@@ -254,7 +257,7 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
     "rubric_based_tool_use_quality_v1": {
       "threshold": 1.0,
       "judge_model_options": {
-        "judge_model": "gemini-1.5-flash",
+        "judge_model": "gemini-flash-latest",
         "num_samples": 5
       },
       "rubrics": [
@@ -309,7 +312,7 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
     "hallucinations_v1": {
       "threshold": 0.8,
       "judge_model_options": {
-            "judge_model": "gemini-1.5-flash",
+            "judge_model": "gemini-flash-latest",
           },
       "evaluate_intermediate_nl_responses": true
     }
@@ -380,7 +383,7 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
     "per_turn_user_simulator_quality_v1": {
       "threshold": 1.0,
       "judge_model_options": {
-        "judge_model": "gemini-2.5-flash",
+        "judge_model": "gemini-flash-latest",
         "num_samples": 5
       },
       "stop_signal": "</finished>"
@@ -392,3 +395,99 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
 ### 출력 및 해석 방법
 
 이 기준은 0.0에서 1.0 사이의 점수를 반환하며, 대화 시나리오에 따라 사용자 시뮬레이터 응답이 유효하다고 판단된 턴의 비율을 나타냅니다. 1.0은 모든 턴에서 기대한 동작을 수행했음을 의미하고, 0.0에 가까울수록 많은 턴에서 시나리오를 벗어났음을 의미합니다. 값이 높을수록 좋습니다.
+
+## multi_turn_task_success_v1
+
+이 기준은 다중 턴 대화에서 에이전트가 대화의 목표를 달성했는지 평가합니다.
+
+### 이 기준을 언제 사용해야 합니까?
+
+대화의 최종 결과가 의도한 목표를 얼마나 잘 달성했는지 측정하고 싶을 때 사용합니다. 이 메트릭은 개별 단계가 아니라 최종 성과에 초점을 맞춥니다.
+
+### 세부 정보
+
+이 기준은 다중 턴 대화의 모든 턴을 고려하여 작업이 성공적으로 완료되었는지 판단합니다. 평가는 Vertex AI General AI Eval SDK에 위임됩니다.
+
+### 이 기준을 사용하는 방법은 무엇입니까?
+
+이 기준을 사용하려면 Google Cloud 프로젝트가 필요합니다. Vertex AI SDK가 올바르게 작동하도록 에이전트 디렉터리의 `.env` 파일 등에 `GOOGLE_CLOUD_PROJECT`와 `GOOGLE_CLOUD_LOCATION` 환경 변수를 설정해야 합니다.
+
+`EvalConfig`의 `criteria` 사전에서 이 기준의 임계값을 지정할 수 있습니다. 값은 0.0에서 1.0 사이의 부동 소수점이어야 하며, 대화가 성공으로 간주되기 위한 최소 점수를 의미합니다.
+
+`EvalConfig` 항목 예:
+
+```json
+{
+  "criteria": {
+    "multi_turn_task_success_v1": 0.8
+  }
+}
+```
+
+### 출력 및 해석 방법
+
+이 기준은 0.0에서 1.0 사이의 점수를 반환합니다. 1.0에 가까울수록 작업 달성도가 높고, 0.0에 가까울수록 목표 달성에 실패했음을 의미합니다.
+
+## multi_turn_trajectory_quality_v1
+
+이 기준은 대화의 전체 궤적 품질을 평가합니다.
+
+### 이 기준을 언제 사용해야 합니까?
+
+목표를 달성하는 데 사용된 경로가 효율적이고 효과적이며 논리적인지 평가하고 싶을 때 사용합니다. `multi_turn_task_success_v1`이 목표 달성 여부에 초점을 둔다면, 이 기준은 그 목표를 어떤 경로로 달성했는지를 봅니다.
+
+### 세부 정보
+
+이 기준은 다중 턴 상호작용의 전체 궤적 품질을 평가하는 참조 없는 메트릭입니다. 평가는 Vertex AI General AI Eval SDK에 위임됩니다.
+
+### 이 기준을 사용하는 방법은 무엇입니까?
+
+이 기준을 사용하려면 Google Cloud 프로젝트가 필요합니다. Vertex AI SDK가 올바르게 작동하도록 에이전트 디렉터리의 `.env` 파일 등에 `GOOGLE_CLOUD_PROJECT`와 `GOOGLE_CLOUD_LOCATION` 환경 변수를 설정해야 합니다.
+
+`EvalConfig`의 `criteria` 사전에서 이 기준의 임계값을 지정할 수 있습니다. 값은 0.0에서 1.0 사이의 부동 소수점이어야 하며, 궤적 품질이 통과로 간주되기 위한 최소 점수를 의미합니다.
+
+`EvalConfig` 항목 예:
+
+```json
+{
+  "criteria": {
+    "multi_turn_trajectory_quality_v1": 0.8
+  }
+}
+```
+
+### 출력 및 해석 방법
+
+이 기준은 0.0에서 1.0 사이의 점수를 반환합니다. 1.0에 가까울수록 궤적의 품질이 높고, 0.0에 가까울수록 궤적이 비효율적이거나 품질이 낮음을 의미합니다.
+
+## multi_turn_tool_use_quality_v1
+
+이 기준은 다중 턴 대화 중 수행된 함수 호출을 평가합니다.
+
+### 이 기준을 언제 사용해야 합니까?
+
+여러 턴에 걸쳐 수행된 도구 또는 함수 호출의 품질, 관련성, 정확성을 평가하고 싶을 때 사용합니다. 복잡한 다단계 워크플로에서 에이전트가 적절한 도구를 언제 어떻게 선택하는지 디버깅하는 데 유용합니다.
+
+### 세부 정보
+
+이 메트릭은 참조 궤적 없이 함수 호출 동작을 평가합니다. 평가는 Vertex AI General AI Eval SDK에 위임됩니다.
+
+### 이 기준을 사용하는 방법은 무엇입니까?
+
+이 기준을 사용하려면 Google Cloud 프로젝트가 필요합니다. Vertex AI SDK가 올바르게 작동하도록 에이전트 디렉터리의 `.env` 파일 등에 `GOOGLE_CLOUD_PROJECT`와 `GOOGLE_CLOUD_LOCATION` 환경 변수를 설정해야 합니다.
+
+`EvalConfig`의 `criteria` 사전에서 이 기준의 임계값을 지정할 수 있습니다. 값은 0.0에서 1.0 사이의 부동 소수점이어야 하며, 도구 사용 품질이 통과로 간주되기 위한 최소 점수를 의미합니다.
+
+`EvalConfig` 항목 예:
+
+```json
+{
+  "criteria": {
+    "multi_turn_tool_use_quality_v1": 0.8
+  }
+}
+```
+
+### 출력 및 해석 방법
+
+이 기준은 0.0에서 1.0 사이의 점수를 반환합니다. 1.0에 가까울수록 대화 전반의 도구 사용이 우수함을 의미하고, 0.0에 가까울수록 도구 사용이 부적절했음을 의미합니다.
