@@ -195,7 +195,7 @@ ADK에는 다음 샘플러와 에이전트 옵티마이저가 제공됩니다.
 `GEPARootAgentPromptOptimizer`는 다음 필드를 포함하는 `GEPARootAgentPromptOptimizerConfig`로 설정할 수 있습니다.
 
 * `optimizer_model` (선택): 평가 결과를 분석하고 에이전트를 최적화하는 데 사용하는 모델입니다.
-기본값은 `"gemini-2.5-flash"`입니다.
+기본값은 `"gemini-flash-latest"`입니다.
 * `model_configuration` (선택): 옵티마이저 모델의 구성입니다.
 기본값은 1만 토큰 think budget을 가진 구성입니다.
 * `max_metric_calls` (선택): 최적화 중 실행할 평가의 최대 횟수입니다.

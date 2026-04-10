@@ -146,7 +146,7 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
     # Agent와 함께 사용하는 예시:
     gke_sandbox_agent = LlmAgent(
         name="gke_sandbox_coding_agent",
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         instruction="당신은 샌드박스를 사용해 Python 코드를 작성하고 실행하는 유용한 AI 에이전트입니다.",
         code_executor=gke_sandbox_executor,
     )
@@ -178,7 +178,7 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
     # Agent와 함께 사용하는 예시:
     gke_agent = LlmAgent(
         name="gke_coding_agent",
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         instruction="당신은 Python 코드를 작성하고 실행하는 유용한 AI 에이전트입니다.",
         code_executor=gke_executor,
     )

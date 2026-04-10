@@ -106,6 +106,64 @@ MCP 도구 상자는 다음 데이터베이스 및 데이터 플랫폼에 대한
     )
     ```
 
+=== "TypeScript"
+
+    ADK는 MCP Toolbox를 사용하기 위해 `@toolbox-sdk/adk` TypeScript 패키지를 사용합니다. 시작하기 전에 패키지를 설치하세요.
+
+    ```shell
+    npm install @toolbox-sdk/adk
+    ```
+
+    ### MCP Toolbox 도구 로드
+
+    MCP Toolbox 서버가 구성되어 실행 중이면 ADK를 사용해 서버에서 도구를 로드할 수 있습니다.
+
+    ```typescript
+    import {InMemoryRunner, LlmAgent} from '@google/adk';
+    import {Content} from '@google/genai';
+    import {ToolboxClient} from '@toolbox-sdk/adk';
+
+    const toolboxClient = new ToolboxClient('http://127.0.0.1:5000');
+    const loadedTools = await toolboxClient.loadToolset();
+
+    export const rootAgent = new LlmAgent({
+      name: 'weather_time_agent',
+      model: 'gemini-flash-latest',
+      description: '도시의 시간과 날씨에 대한 질문에 답하는 에이전트입니다.',
+      instruction:
+        '도시의 시간과 날씨에 관한 사용자 질문에 답할 수 있는 유용한 에이전트입니다.',
+      tools: loadedTools,
+    });
+
+    async function main() {
+      const userId = 'test_user';
+      const appName = rootAgent.name;
+      const runner = new InMemoryRunner({agent: rootAgent, appName});
+      const session = await runner.sessionService.createSession({
+        appName,
+        userId,
+      });
+
+      const prompt = '뉴욕의 날씨는 어떤가요? 시간도 알려주세요.';
+      const content: Content = {
+        role: 'user',
+        parts: [{text: prompt}],
+      };
+      console.log(content);
+      for await (const e of runner.runAsync({
+        userId,
+        sessionId: session.id,
+        newMessage: content,
+      })) {
+        if (e.content?.parts?.[0]?.text) {
+          console.log(`${e.author}: ${JSON.stringify(e.content, null, 2)}`);
+        }
+      }
+    }
+
+    main().catch(console.error);
+    ```
+
 === "Go"
 
     ADK는 도구 상자를 사용하기 위해 `mcp-toolbox-sdk-go` go 모듈에 의존합니다. 시작하기 전에 모듈을 설치하세요.

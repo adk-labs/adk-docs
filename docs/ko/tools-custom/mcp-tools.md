@@ -76,7 +76,7 @@ TARGET_FOLDER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "/
 # ./adk_agent_samples/mcp_agent/your_folder를 만든 경우,
 
 root_agent = LlmAgent(
-    model='gemini-1.5-flash',
+    model='gemini-flash-latest',
     name='filesystem_assistant_agent',
     instruction='사용자가 파일을 관리하도록 돕습니다. 파일을 나열하고 읽는 등의 작업을 수행할 수 있습니다.',
     tools=[
@@ -189,7 +189,7 @@ public class McpAgentCreator {
                 List<McpTool> tools = result.getTools();
 
                 LlmAgent agent = LlmAgent.builder()
-                        .model("gemini-1.5-flash")
+                        .model("gemini-flash-latest")
                         .name("enterprise_assistant")
                         .description("사용자가 파일 시스템에 액세스하도록 돕는 에이전트")
                         .instruction(
@@ -244,198 +244,183 @@ public class McpAgentCreator {
 ```
 
 
-### 예 2: Google 지도 MCP 서버
+### 예 2: Google Maps Grounding Lite MCP 서버
 
-이 예제는 Google 지도 MCP 서버에 연결하는 방법을 보여줍니다.
+[Google Maps Platform Grounding Lite](https://developers.google.com/maps/ai/grounding-lite)는 Google Maps의 신뢰할 수 있는 지리공간 데이터를 사용해 AI 애플리케이션을 쉽게 그라운딩할 수 있도록 지원하는 Model Context Protocol(MCP) 호환 서비스입니다. 이 MCP 서버는 LLM이 장소, 날씨, 경로 기능에 접근할 수 있는 도구를 제공합니다. MCP 서버를 지원하는 도구라면 어디서든 Grounding Lite를 활성화해 시험해 볼 수 있습니다.
 
-#### 1단계: API 키 가져오기 및 API 활성화
+Grounding Lite는 LLM이 다음과 같은 Google Maps 기능에 접근할 수 있도록 돕습니다.
 
-1.  **Google 지도 API 키:** [API 키 사용](https://developers.google.com/maps/documentation/javascript/get-api-key#create-api-keys)의 지침에 따라 Google 지도 API 키를 얻습니다.
-2.  **API 활성화:** Google Cloud 프로젝트에서 다음 API가 활성화되어 있는지 확인합니다.
-    *   Directions API
-    *   Routes API
-    지침은 [Google 지도 플랫폼 시작하기](https://developers.google.com/maps/get-started#enable-api-sdk) 설명서를 참조하십시오.
+*   **장소 검색:** 장소 정보를 요청하고, AI가 생성한 장소 요약과 함께 Place ID, 위도/경도 좌표, 각 장소의 Google Maps 링크를 받을 수 있습니다. 반환된 Place ID와 좌표는 다른 Google Maps Platform API와 함께 사용해 지도에 장소를 표시하는 데 활용할 수 있습니다.
+*   **날씨 조회:** 날씨 정보를 요청하고 현재 상태, 시간별 예보, 일별 예보를 받을 수 있습니다.
+*   **경로 계산:** 두 위치 사이의 운전 또는 도보 경로 정보를 요청하고 거리 및 소요 시간 정보를 받을 수 있습니다.
 
-#### 2단계: Google 지도용 `MCPToolset`으로 에이전트 정의
+#### 1단계: Google Cloud 프로젝트에서 Maps Grounding Lite 서비스 활성화
 
-`agent.py` 파일(예: `./adk_agent_samples/mcp_agent/agent.py`)을 수정합니다. `YOUR_GOOGLE_MAPS_API_KEY`를 얻은 실제 API 키로 바꿉니다.
+1.  아직 프로젝트가 없다면 [Google Cloud 프로젝트를 설정](https://developers.google.com/maps/get-started#create-project)합니다.
+2.  [Google Cloud Console](https://console.developers.google.com)에서 Grounding Lite에 사용할 프로젝트를 선택합니다.
+3.  [Google Cloud Console API 라이브러리](https://console.developers.google.com/apis/library/mapstools.googleapis.com)에서 Grounding Lite를 활성화합니다.
+4.  [Google Maps Platform API 키를 가져옵니다](https://developers.google.com/maps/get-started#api-key).
+
+#### 2단계: Google Maps Grounding Lite용 `McpToolset`으로 에이전트 정의
+
+`agent.py` 파일(예: `./adk_agent_samples/mcp_agent/agent.py`)을 수정합니다. `YOUR_GOOGLE_MAPS_API_KEY`를 실제로 발급받은 API 키로 바꾸세요.
 
 ```python
 # ./adk_agent_samples/mcp_agent/agent.py
 import os
-from google.adk.agents import LlmAgent
+from google.adk.agents.llm_agent import Agent
 from google.adk.tools.mcp_tool import McpToolset
-from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-from mcp import StdioServerParameters
+from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPConnectionParams
 
-# 환경 변수에서 API 키를 검색하거나 직접 삽입합니다.
-# 환경 변수를 사용하는 것이 일반적으로 더 안전합니다.
-# 이 환경 변수가 'adk web'을 실행하는 터미널에 설정되어 있는지 확인합니다.
+# 환경 변수에서 API 키를 읽거나 직접 삽입합니다.
+# 일반적으로는 환경 변수를 사용하는 편이 더 안전합니다.
+# 이 환경 변수는 `adk web`을 실행하는 터미널에 설정되어 있어야 합니다.
 # 예: export GOOGLE_MAPS_API_KEY="YOUR_ACTUAL_KEY"
-google_maps_api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
-if not google_maps_api_key:
-    # 테스트를 위한 대체 또는 직접 할당 - 프로덕션에는 권장되지 않음
-    google_maps_api_key = "YOUR_GOOGLE_MAPS_API_KEY_HERE" # env var를 사용하지 않는 경우 교체
-    if google_maps_api_key == "YOUR_GOOGLE_MAPS_API_KEY_HERE":
-        print("경고: GOOGLE_MAPS_API_KEY가 설정되지 않았습니다. 환경 변수 또는 스크립트에서 설정하십시오.")
-        # 키가 중요하고 찾을 수 없는 경우 오류를 발생시키거나 종료할 수 있습니다.
+if not GOOGLE_MAPS_API_KEY:
+    # 테스트용 폴백 또는 직접 할당 - 프로덕션에서는 권장하지 않습니다.
+    GOOGLE_MAPS_API_KEY = "YOUR_GOOGLE_MAPS_API_KEY_HERE"  # env var를 사용하지 않는 경우 교체
+    if GOOGLE_MAPS_API_KEY == "YOUR_GOOGLE_MAPS_API_KEY_HERE":
+        print("경고: GOOGLE_MAPS_API_KEY가 설정되지 않았습니다. 환경 변수 또는 스크립트에서 설정하세요.")
+        # 키가 반드시 필요하다면 여기서 오류를 발생시키거나 종료할 수 있습니다.
 
-root_agent = LlmAgent(
-    model='gemini-1.5-flash',
-    name='maps_assistant_agent',
-    instruction='Google 지도 도구를 사용하여 지도, 길 찾기 및 장소 찾기를 돕습니다.',
+root_agent = Agent(
+    model='gemini-flash-latest',
+    name='travel_planner_agent',
+    description='여행 경로 계획을 돕는 유용한 어시스턴트입니다.',
     tools=[
         McpToolset(
-            connection_params=StdioConnectionParams(
-                server_params = StdioServerParameters(
-                    command='npx',
-                    args=[
-                        "-y",
-                        "@modelcontextprotocol/server-google-maps",
-                    ],
-                    # API 키를 npx 프로세스에 환경 변수로 전달합니다.
-                    # 이것이 Google 지도용 MCP 서버가 키를 예상하는 방식입니다.
-                    env={
-                        "GOOGLE_MAPS_API_KEY": google_maps_api_key
-                    }
-                ),
-            ),
-            # 필요한 경우 특정 지도 도구에 대해 필터링할 수 있습니다.
-            # tool_filter=['get_directions', 'find_place_by_id']
+            connection_params=StreamableHTTPConnectionParams(
+                url="https://mapstools.googleapis.com/mcp",
+                headers={
+                    "X-Goog-Api-Key": GOOGLE_MAPS_API_KEY,
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text/event-stream"
+                }
+            )
         )
-    ],
+    ]
 )
 ```
 
 #### 3단계: `__init__.py`가 있는지 확인
 
-예 1에서 이것을 만든 경우 이 단계를 건너뛸 수 있습니다. 그렇지 않으면 `./adk_agent_samples/mcp_agent/` 디렉터리에 `__init__.py`가 있는지 확인하십시오.
+예 1에서 이미 만들었다면 건너뛸 수 있습니다. 그렇지 않다면 `./adk_agent_samples/mcp_agent/` 디렉터리에 `__init__.py`가 있는지 확인하세요.
 
 ```python
 # ./adk_agent_samples/mcp_agent/__init__.py
 from . import agent
 ```
 
-#### 4단계: `adk web` 실행 및 상호 작용
+#### 4단계: `adk web` 실행 및 상호작용
 
 1.  **환경 변수 설정(권장):**
-    `adk web`을 실행하기 전에 터미널에서 Google 지도 API 키를 환경 변수로 설정하는 것이 가장 좋습니다.
+    `adk web`을 실행하기 전에 터미널에서 Google Maps API 키를 환경 변수로 설정하는 것이 좋습니다.
     ```shell
     export GOOGLE_MAPS_API_KEY="YOUR_ACTUAL_GOOGLE_MAPS_API_KEY"
     ```
-    `YOUR_ACTUAL_GOOGLE_MAPS_API_KEY`를 키로 바꿉니다.
+    `YOUR_ACTUAL_GOOGLE_MAPS_API_KEY`를 실제 키로 바꾸세요.
 
-2.  **`adk web` 실행**:
-    `mcp_agent`의 상위 디렉터리(예: `adk_agent_samples`)로 이동하여 다음을 실행합니다.
+2.  **`adk web` 실행:**
+    `mcp_agent`의 상위 디렉터리(예: `adk_agent_samples`)로 이동해 다음을 실행합니다.
     ```shell
-    cd ./adk_agent_samples # 또는 동등한 상위 디렉터리
+    cd ./adk_agent_samples # 또는 이에 해당하는 상위 디렉터리
     adk web
     ```
 
-3.  **UI에서 상호 작용**:
-    *   `maps_assistant_agent`를 선택합니다.
-    *   다음과 같은 프롬프트를 시도해 보십시오.
-        *   "GooglePlex에서 SFO까지 길 찾기."
-        *   "골든 게이트 파크 근처 커피숍 찾기."
-        *   "프랑스 파리에서 독일 베를린까지의 경로는 무엇입니까?"
+3.  **UI에서 상호작용:**
+    *   `travel_planner_agent`를 선택합니다.
+    *   다음과 같은 프롬프트를 시도해 보세요.
+        *   "내일 샌프란시스코에 있을 예정인데, 날씨가 어떤가요?"
+        *   "골든게이트 파크 근처의 커피숍을 찾아줘."
+        *   "GooglePlex에서 SFO까지 가는 길을 알려줘."
 
-에이전트가 Google 지도 MCP 도구를 사용하여 길 찾기 또는 위치 기반 정보를 제공하는 것을 볼 수 있습니다.
+에이전트가 Google Maps Grounding Lite MCP 도구를 사용해 길 안내나 위치 기반 정보를 제공하는 것을 확인할 수 있습니다.
 
-<img src="../../assets/adk-tool-mcp-maps-adk-web-demo.png" alt="ADK 웹을 사용한 MCP - Google 지도 예">
+<img src="../../assets/adk-tool-maps-lite-mcp-adk-web-demo.png" alt="ADK 웹을 사용한 Google Maps Grounding Lite MCP 예시">
 
 
-Java의 경우 다음 샘플을 참조하여 `MCPToolset`을 초기화하는 에이전트를 정의하십시오.
+Java에서는 `McpToolset`을 초기화하는 에이전트를 정의하려면 다음 샘플을 참조하세요.
 
 ```java
 package agents;
 
-import com.google.adk.JsonBaseModel;
 import com.google.adk.agents.LlmAgent;
-import com.google.adk.agents.RunConfig;
 import com.google.adk.runner.InMemoryRunner;
-import com.google.adk.tools.mcp.McpTool;
+import com.google.adk.sessions.SessionKey;
 import com.google.adk.tools.mcp.McpToolset;
-import com.google.adk.tools.mcp.McpToolset.McpToolsAndToolsetResult;
-
-
+import com.google.adk.tools.mcp.StreamableHttpServerParameters;
 import com.google.genai.types.Content;
 import com.google.genai.types.Part;
 
-import io.modelcontextprotocol.client.transport.ServerParameters;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.Arrays;
+import java.util.Map;
 
 public class MapsAgentCreator {
 
     /**
-     * Google 지도용 McpToolset을 초기화하고, 도구를 검색하고,
-     * LlmAgent를 만들고, 지도 관련 프롬프트를 보내고, 도구 세트를 닫습니다.
-     * @param args 명령줄 인수(사용되지 않음).
+     * Google Maps Grounding Lite용 McpToolset을 초기화하고,
+     * LlmAgent를 생성한 뒤 지도 관련 프롬프트를 보내고, toolset을 닫습니다.
      */
     public static void main(String[] args) {
-        // TODO: Places API가 활성화된 프로젝트에서 실제 Google 지도 API 키로 바꾸십시오.
-        String googleMapsApiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+        // 환경 변수에서 읽기
+        String googleMapsApiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 
-        Map<String, String> envVariables = new HashMap<>();
-        envVariables.put("GOOGLE_MAPS_API_KEY", googleMapsApiKey);
+        if (googleMapsApiKey == null || googleMapsApiKey.trim().isEmpty()) {
+            // 테스트용 폴백 또는 직접 할당 - 프로덕션에서는 권장하지 않습니다.
+            googleMapsApiKey = "YOUR_GOOGLE_MAPS_API_KEY_HERE"; // env var를 사용하지 않는 경우 교체
+            if ("YOUR_GOOGLE_MAPS_API_KEY_HERE".equals(googleMapsApiKey)) {
+                System.out.println("경고: GOOGLE_MAPS_API_KEY가 설정되지 않았습니다. 환경 변수 또는 스크립트에서 설정하세요.");
+            }
+        }
 
-        ServerParameters connectionParams = ServerParameters.builder("npx")
-                .args(List.of(
-                        "-y",
-                        "@modelcontextprotocol/server-google-maps"
-                ))
-                .env(Collections.unmodifiableMap(envVariables))
+        // 원격 MCP 연결에 사용할 헤더 설정
+        Map<String, String> headers = new HashMap<>();
+        headers.put("X-Goog-Api-Key", googleMapsApiKey);
+        headers.put("Content-Type", "application/json");
+        headers.put("Accept", "application/json, text/event-stream");
+
+        // 원격 HTTP MCP 서버 연결에는 StreamableHttpServerParameters를 사용합니다.
+        StreamableHttpServerParameters serverParams = StreamableHttpServerParameters.builder()
+                .url("https://mapstools.googleapis.com/mcp")
+                .headers(headers)
                 .build();
 
-        try {
-            CompletableFuture<McpToolsAndToolsetResult> futureResult =
-                    McpToolset.fromServer(connectionParams, JsonBaseModel.getMapper());
+        try (McpToolset toolset = new McpToolset(serverParams)) {
+            // 설정된 Toolset으로 Agent 생성
+            LlmAgent agent = LlmAgent.builder()
+                    .model("gemini-flash-latest")
+                    .name("travel_planner_agent")
+                    .description("여행 경로 계획을 돕는 유용한 어시스턴트입니다.")
+                    .tools(toolset)
+                    .build();
 
-            McpToolsAndToolsetResult result = futureResult.join();
+            System.out.println("에이전트 생성됨: " + agent.name());
 
-            try (McpToolset toolset = result.getToolset()) {
-                List<McpTool> tools = result.getTools();
+            // 러너와 세션 설정
+            InMemoryRunner runner = new InMemoryRunner(agent);
+            String userId = "maps-user-" + System.currentTimeMillis();
+            String sessionId = "maps-session-" + System.currentTimeMillis();
 
-                LlmAgent agent = LlmAgent.builder()
-                        .model("gemini-1.5-flash")
-                        .name("maps_assistant")
-                        .description("지도 도우미")
-                        .instruction("사용 가능한 도구를 사용하여 지도 및 길 찾기를 돕습니다.")
-                        .tools(tools)
-                        .build();
+            String promptText = "매디슨 스퀘어 가든에서 가장 가까운 약국까지 가는 길을 알려주세요.";
 
-                System.out.println("에이전트 생성됨: " + agent.name());
+            // 먼저 세션을 명시적으로 생성합니다.
+            SessionKey sessionKey = runner.sessionService()
+                    .createSession(runner.appName(), userId, null, sessionId)
+                    .blockingGet()
+                    .sessionKey();
+            System.out.println("세션 생성됨: " + sessionId + " 사용자: " + userId);
 
-                InMemoryRunner runner = new InMemoryRunner(agent);
-                String userId = "maps-user-" + System.currentTimeMillis();
-                String sessionId = "maps-session-" + System.currentTimeMillis();
+            Content promptContent = Content.fromParts(Part.fromText(promptText));
 
-                String promptText = "매디슨 스퀘어 가든에서 가장 가까운 약국까지 길을 알려주세요.";
+            System.out.println("\n프롬프트 전송 중: \"" + promptText + "\" 를 에이전트에 보냅니다...\n");
 
-                try {
-                    runner.sessionService().createSession(runner.appName(), userId, null, sessionId).blockingGet();
-                    System.out.println("세션 생성됨: " + sessionId + " 사용자: " + userId);
-                } catch (Exception sessionCreationException) {
-                    System.err.println("세션 생성 실패: " + sessionCreationException.getMessage());
-                    sessionCreationException.printStackTrace();
-                    return;
-                }
-
-                Content promptContent = Content.fromParts(Part.fromText(promptText))
-
-                System.out.println("\n프롬프트 전송 중: \"" + promptText + "\" 에이전트로...\n");
-
-                runner.runAsync(userId, sessionId, promptContent, RunConfig.builder().build())
-                        .blockingForEach(event -> {
-                            System.out.println("이벤트 수신됨: " + event.toJson());
-                        });
-            }
+            // 프롬프트를 비동기 실행하고 스트리밍 이벤트를 출력합니다.
+            runner.runAsync(sessionKey, promptContent)
+                    .blockingForEach(event -> {
+                        System.out.println("이벤트 수신됨: " + event.toJson());
+                    });
         } catch (Exception e) {
             System.err.println("오류 발생: " + e.getMessage());
             e.printStackTrace();
@@ -444,9 +429,42 @@ public class MapsAgentCreator {
 }
 ```
 
-성공적인 응답은 다음과 같습니다.
-```shell
-이벤트 수신됨: {"id":"1a4deb46-c496-4158-bd41-72702c773368","invocationId":"e-48994aa0-531c-47be-8c57-65215c3e0319","author":"maps_assistant","content":{"parts":[{"text":"알겠습니다. 몇 가지 옵션이 있습니다. 가장 가까운 곳은 5 Pennsylvania Plaza, New York, NY 10001, United States에 있는 CVS 약국입니다. 길을 알려드릴까요?\n"}],"role":"model"},"actions":{"stateDelta":{},"artifactDelta":{},"requestedAuthConfigs":{}},"timestamp":1747380026642}
+TypeScript에서는 `MCPToolset`을 초기화하는 에이전트를 정의하려면 다음 샘플을 참조하세요.
+
+```typescript
+import 'dotenv/config';
+import {LlmAgent, MCPToolset} from '@google/adk';
+
+// 환경 변수에서 API 키를 읽어옵니다.
+// 이 환경 변수는 `adk web`을 실행하는 터미널에 설정되어 있어야 합니다.
+// 예: export GOOGLE_MAPS_API_KEY="YOUR_ACTUAL_KEY"
+const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+if (!googleMapsApiKey) {
+  console.warn('경고: GOOGLE_MAPS_API_KEY가 설정되지 않았습니다.');
+  // 핵심 그라운딩 키 없이 에이전트가 시작되지 않도록 여기서 오류를 발생시킵니다.
+  throw new Error(
+    'GOOGLE_MAPS_API_KEY가 제공되지 않았습니다. "export GOOGLE_MAPS_API_KEY=YOUR_ACTUAL_KEY"를 실행해 설정하세요.'
+  );
+}
+
+export const rootAgent = new LlmAgent({
+  model: 'gemini-flash-latest',
+  name: 'travel_planner_agent',
+  description: '여행 계획을 돕는 유용한 어시스턴트입니다.',
+  tools: [
+    new MCPToolset({
+      // 원격 Grounding Lite 서비스에는 Python의 StreamableHTTPConnectionParams와 같은 의미로
+      // SseConnectionParams를 사용해 연결합니다.
+      type: 'SseConnectionParams',
+      url: 'https://mapstools.googleapis.com/mcp',
+      headers: {
+        'X-Goog-Api-Key': googleMapsApiKey,
+        'Content-Type': 'application/json',
+        Accept: 'application/json, text/event-stream',
+      },
+    }),
+  ],
+});
 ```
 
 ## 2. ADK 도구를 사용하여 MCP 서버 구축(ADK를 노출하는 MCP 서버)
@@ -622,7 +640,7 @@ if PATH_TO_YOUR_MCP_SERVER_SCRIPT == "/path/to/your/my_adk_mcp_server.py":
     # 경로가 중요한 경우 선택적으로 오류 발생
 
 root_agent = LlmAgent(
-    model='gemini-1.5-flash',
+    model='gemini-flash-latest',
     name='web_reader_mcp_client_agent',
     instruction="사용자가 제공한 URL에서 콘텐츠를 가져오려면 'load_web_page' 도구를 사용하십시오.",
     tools=[
@@ -730,7 +748,7 @@ async def get_agent_async():
 
   # 에이전트에서 사용
   root_agent = LlmAgent(
-      model='gemini-1.5-flash', # 필요에 따라 모델 이름 조정
+      model='gemini-flash-latest', # 필요에 따라 모델 이름 조정
       name='enterprise_assistant',
       instruction='사용자가 파일 시스템에 액세스하도록 돕습니다.',
       tools=[toolset], # ADK 에이전트에 MCP 도구 제공
@@ -821,7 +839,7 @@ from mcp import StdioServerParameters
 _allowed_path = os.path.dirname(os.path.abspath(__file__))
 
 root_agent = LlmAgent(
-    model='gemini-1.5-flash',
+    model='gemini-flash-latest',
     name='enterprise_assistant',
     instruction=f'사용자가 파일 시스템에 액세스하도록 돕습니다. 허용된 디렉터리: {_allowed_path}',
     tools=[

@@ -157,7 +157,7 @@ GKE Code Executor ツールを使って ADK プロジェクトを正しくデプ
     # Agent と組み合わせる例:
     gke_sandbox_agent = LlmAgent(
         name="gke_sandbox_coding_agent",
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         instruction="あなたはサンドボックスを使って Python コードを書いて実行する有用な AI エージェントです。",
         code_executor=gke_sandbox_executor,
     )
@@ -189,7 +189,7 @@ GKE Code Executor ツールを使って ADK プロジェクトを正しくデプ
     # Agent と組み合わせる例:
     gke_agent = LlmAgent(
         name="gke_coding_agent",
-        model="gemini-2.5-flash",
+        model="gemini-flash-latest",
         instruction="あなたは Python コードを書いて実行する有用な AI エージェントです。",
         code_executor=gke_executor,
     )
