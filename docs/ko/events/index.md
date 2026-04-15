@@ -34,6 +34,40 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
     #     # ...
     ```
 
+=== "TypeScript"
+    TypeScript에서는 `Event` 타입의 인터페이스입니다.
+
+    ```typescript
+    import {Content} from '@google/genai';
+
+    /**
+     * 이벤트의 개념적 구조 (TypeScript)
+     */
+    export interface Event extends LlmResponse {
+      /** 이 특정 이벤트의 고유 ID. */
+      id: string;
+      /** 전체 상호작용 실행의 ID. */
+      invocationId: string;
+      /** 'user' 또는 에이전트 이름. */
+      author?: string;
+      /** 부수 효과 및 제어에 중요합니다. */
+      actions: EventActions;
+      /** 생성 시각. */
+      timestamp: number;
+      /** 스트리밍 출력인가요? */
+      partial?: boolean;
+      /** 턴이 종료되었나요? */
+      turnComplete?: boolean;
+      /** 계층 구조 경로. */
+      branch?: string;
+      /** 장기 실행 도구의 ID 목록. */
+      longRunningToolIds?: string[];
+      /** 응답의 콘텐츠. */
+      content?: Content;
+      // ... errorCode, errorMessage 같은 다른 LlmResponse 필드
+    }
+    ```
+
 === "Go"
     Go에서는 `google.golang.org/adk/session.Event` 타입의 구조체입니다.
 
@@ -143,6 +177,47 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
     #         print("  유형: 상태/아티팩트 업데이트")
     #     else:
     #         print("  유형: 제어 신호 또는 기타")
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 의사 코드: 기본 이벤트 식별 (TypeScript)
+    import {
+      Event,
+      getFunctionCalls,
+      getFunctionResponses
+    } from '@google/adk';
+
+    export async function processEvents(runnerEvents: AsyncIterable<Event>) {
+      for await (const event of runnerEvents) {
+        console.log(`이벤트 출처: ${event.author}`);
+
+        if (event.content && event.content.parts && event.content.parts.length > 0) {
+          if (getFunctionCalls(event).length > 0) {
+            console.log('  유형: 도구 호출 요청');
+          } else if (getFunctionResponses(event).length > 0) {
+            console.log('  유형: 도구 결과');
+          } else if (event.content.parts[0].text) {
+            if (event.partial) {
+              console.log('  유형: 스트리밍 텍스트 청크');
+            } else {
+              console.log('  유형: 완전한 텍스트 메시지');
+            }
+          } else {
+            console.log('  유형: 기타 콘텐츠 (예: 코드 결과)');
+          }
+        } else if (
+          event.actions &&
+          (Object.keys(event.actions.stateDelta).length > 0 ||
+            Object.keys(event.actions.artifactDelta).length > 0)
+        ) {
+          console.log('  유형: 상태/아티팩트 업데이트');
+        } else {
+          console.log('  유형: 제어 신호 또는 기타');
+        }
+      }
+    }
     ```
 
 === "Go"
@@ -266,6 +341,21 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
                 # 애플리케이션은 이를 기반으로 실행을 디스패치할 수 있습니다
         ```
 
+    === "TypeScript"
+
+        ```typescript
+        export function handleFunctionCalls(event: Event) {
+            const calls = getFunctionCalls(event);
+            if (calls.length > 0) {
+                for (const call of calls) {
+                    const toolName = call.name;
+                    const argumentsDict = call.args; // 객체 형태입니다.
+                    console.log(`  도구: ${toolName}, 인수: ${JSON.stringify(argumentsDict)}`);
+                }
+            }
+        }
+        ```
+
     === "Go"
 
         ```go
@@ -321,6 +411,22 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
                 tool_name = response.name
                 result_dict = response.response # 도구가 반환한 딕셔너리
                 print(f"  도구 결과: {tool_name} -> {result_dict}")
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        // 의사 코드: 함수 응답 처리 (TypeScript)
+        export function handleFunctionResponses(event: Event) {
+            const responses = getFunctionResponses(event);
+            if (responses.length > 0) {
+                for (const response of responses) {
+                    const toolName = response.name;
+                    const result = response.response; // 도구가 반환한 객체
+                    console.log(`  도구 결과: ${toolName} -> ${JSON.stringify(result)}`);
+                }
+            }
+        }
         ```
 
     === "Go"
@@ -381,6 +487,16 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
             print(f"  상태 변경: {event.actions.state_delta}")
             # 필요한 경우 로컬 UI 또는 애플리케이션 상태 업데이트
         ```
+    === "TypeScript"
+        `delta = event.actions.stateDelta` (`{key: value}` 쌍의 객체).
+        ```typescript
+        export function handleStateChanges(event: Event) {
+            if (event.actions && Object.keys(event.actions.stateDelta).length > 0) {
+                console.log(`  상태 변경: ${JSON.stringify(event.actions.stateDelta)}`);
+                // 필요한 경우 로컬 UI 또는 애플리케이션 상태 업데이트
+            }
+        }
+        ```
     === "Go"
         `delta := event.Actions.StateDelta` (`map[string]any`).
         ```go
@@ -420,6 +536,17 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         if event.actions and event.actions.artifact_delta:
             print(f"  저장된 아티팩트: {event.actions.artifact_delta}")
             # UI가 아티팩트 목록을 새로 고칠 수 있음
+        ```
+
+    === "TypeScript"
+        `artifact_changes = event.actions.artifactDelta` (`{filename: version}` 형태의 객체).
+        ```typescript
+        export function handleArtifactChanges(event: Event) {
+            if (event.actions && Object.keys(event.actions.artifactDelta).length > 0) {
+                console.log(`  저장된 아티팩트: ${JSON.stringify(event.actions.artifactDelta)}`);
+                // UI가 아티팩트 목록을 새로 고칠 수 있음
+            }
+        }
         ```
 
     === "Go"
@@ -474,6 +601,26 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
                 print("  신호: 에스컬레이션 (루프 종료)")
             if event.actions.skip_summarization:
                 print("  신호: 도구 결과 요약 건너뛰기")
+        ```
+
+    === "TypeScript"
+        *   `event.actions.transferToAgent` (string): 제어가 명명된 에이전트로 넘어가야 합니다.
+        *   `event.actions.escalate` (boolean): 루프가 종료되어야 합니다.
+        *   `event.actions.skipSummarization` (boolean): 도구 결과를 LLM이 요약하지 않아야 합니다.
+        ```typescript
+        export function handleControlFlow(event: Event) {
+            if (event.actions) {
+                if (event.actions.transferToAgent) {
+                    console.log(`  신호: ${event.actions.transferToAgent}(으)로 제어 이전`);
+                }
+                if (event.actions.escalate) {
+                    console.log('  신호: 에스컬레이션 (루프 종료)');
+                }
+                if (event.actions.skipSummarization) {
+                    console.log('  신호: 도구 결과 요약 건너뛰기');
+                }
+            }
+        }
         ```
 
     === "Go"
@@ -569,6 +716,53 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         #         else:
         #              # 해당되는 경우 다른 유형의 최종 응답 처리
         #              print("표시: 최종 비텍스트 응답 또는 신호.")
+        ```
+
+    === "TypeScript"
+        ```typescript
+        // 의사 코드: 애플리케이션에서 최종 응답 처리하기 (TypeScript)
+        import {
+            Event,
+            getFunctionResponses,
+            isFinalResponse,
+            stringifyContent
+        } from '@google/adk';
+
+        async function handleFinalResponses(runnerEvents: AsyncIterable<Event>) {
+            let fullResponseText = '';
+
+            for await (const event of runnerEvents) {
+                // 필요한 경우 스트리밍 텍스트 누적...
+                if (event.partial) {
+                    fullResponseText += stringifyContent(event);
+                }
+
+                // 표시 가능한 최종 이벤트인지 확인
+                if (isFinalResponse(event)) {
+                    console.log('\n--- 최종 출력 감지 ---');
+
+                    const eventText = stringifyContent(event);
+                    if (fullResponseText || eventText) {
+                        // 스트림의 마지막 부분이거나 단일 메시지라면 누적 텍스트를 사용
+                        const finalText = fullResponseText + (event.partial ? '' : eventText);
+                        console.log(`사용자에게 표시: ${finalText.trim()}`);
+                        fullResponseText = ''; // 누적기 리셋
+                    } else if (
+                        event.actions?.skipSummarization &&
+                        getFunctionResponses(event).length > 0
+                    ) {
+                        // 필요한 경우 원시 도구 결과 표시 처리
+                        const responseData = getFunctionResponses(event)[0].response;
+                        console.log(`원시 도구 결과 표시: ${JSON.stringify(responseData)}`);
+                    } else if (event.longRunningToolIds && event.longRunningToolIds.length > 0) {
+                        console.log('메시지 표시: 도구가 백그라운드에서 실행 중입니다...');
+                    } else {
+                        // 해당되는 경우 다른 유형의 최종 응답 처리
+                        console.log('표시: 최종 비텍스트 응답 또는 신호.');
+                    }
+                }
+            }
+        }
         ```
 
     === "Go"
@@ -844,6 +1038,9 @@ ADK 애플리케이션에서 이벤트를 효과적으로 사용하려면 다음
 
     === "Python"
         `BaseAgent` 하위 클래스에서 `yield Event(author=self.name, ...)`를 사용하세요.
+
+    === "TypeScript"
+        커스텀 에이전트 로직에서 `Event`를 구성할 때 작성자를 설정하세요. 예: `createEvent({ author: this.name, ... })`
 
     === "Go"
         커스텀 에이전트 `Run` 메서드에서 프레임워크가 일반적으로 작성자를 처리합니다. 이벤트를 수동으로 생성하는 경우 작성자를 설정하세요: `yield(&session.Event{Author: a.name, ...}, nil)`

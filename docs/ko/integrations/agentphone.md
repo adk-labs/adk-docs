@@ -180,22 +180,22 @@ Tool | Description
 ---- | -----------
 `list_numbers` | 계정의 모든 전화번호 목록 조회
 `buy_number` | 국가 및 지역번호를 지정해 새 전화번호 구매
-`release_number` | 전화번호를 영구적으로 통신사 풀로 반환
 
 ### SMS / 메시지
 
 Tool | Description
 ---- | -----------
+`send_message` | 에이전트의 전화번호로 SMS 또는 iMessage 전송
 `get_messages` | 특정 전화번호의 SMS 메시지 조회
-`list_conversations` | 모든 번호에 걸친 SMS 대화 스레드 목록 조회
+`list_conversations` | 에이전트 기준으로 필터링할 수 있는 SMS 대화 스레드 목록 조회
 `get_conversation` | 전체 메시지 이력이 포함된 특정 대화 조회
+`update_conversation` | 대화의 메타데이터 설정 또는 해제
 
 ### 음성 통화
 
 Tool | Description
 ---- | -----------
-`list_calls` | 모든 번호에 대한 최근 통화 목록 조회
-`list_calls_for_number` | 특정 전화번호에 대한 통화 목록 조회
+`list_calls` | 에이전트, 번호, 상태, 방향 기준으로 필터링할 수 있는 최근 통화 목록 조회
 `get_call` | 선택적 장기 폴링을 포함한 통화 세부 정보와 기록 조회
 `make_call` | 웹훅을 사용해 대화 처리를 위한 발신 통화 시작
 `make_conversation_call` | 전체 대화 기록을 반환하는 자율형 AI 통화 시작
@@ -210,18 +210,20 @@ Tool | Description
 `delete_agent` | 에이전트 삭제
 `get_agent` | 번호와 음성 설정을 포함한 에이전트 세부 정보 조회
 `attach_number` | 전화번호를 에이전트에 할당
+`detach_number` | 전화번호를 에이전트에서 분리
 `list_voices` | 사용 가능한 음성 옵션 목록 조회
 
 ### 웹훅
 
+모든 웹훅 도구는 선택적 `agent_id` 매개변수를 지원합니다. 이를 제공하면 해당 에이전트의 웹훅을 대상으로 하고, 생략하면 프로젝트 기본 웹훅을 대상으로 합니다. 에이전트 수준 웹훅이 프로젝트 수준 웹훅보다 우선합니다.
+
 Tool | Description
 ---- | -----------
-`get_webhook` | 프로젝트 수준 웹훅 설정 조회
-`set_webhook` | 인바운드 메시지와 통화 이벤트를 위한 프로젝트 수준 웹훅 설정
-`delete_webhook` | 프로젝트 수준 웹훅 제거
-`get_agent_webhook` | 특정 에이전트의 웹훅 조회
-`set_agent_webhook` | 에이전트별 웹훅 설정(프로젝트 수준 설정을 덮어씀)
-`delete_agent_webhook` | 에이전트별 웹훅 제거
+`get_webhook` | 웹훅 구성 조회
+`set_webhook` | 인바운드 메시지와 통화 이벤트용 웹훅 URL 설정
+`delete_webhook` | 웹훅 제거
+`test_webhook` | 테스트 이벤트를 전송해 웹훅 동작 확인
+`list_webhook_deliveries` | 최근 웹훅 전송 이력 조회
 
 ## 구성
 

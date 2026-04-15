@@ -8,7 +8,7 @@
   </div>
   <div class="feature-visual">
     <div class="ui-wrapper">
-      <img src="assets/adk-eval-case.gif" alt="ADK Web Eval UI" class="devui-img">
+      <img src="../assets/adk-eval-case.gif" alt="ADK Web Eval UI" class="devui-img">
     </div>
   </div>
 </div>

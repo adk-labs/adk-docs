@@ -8,7 +8,7 @@
   </div>
   <div class="feature-visual">
     <div class="ui-wrapper">
-      <img src="assets/integrations-list.png" alt="ADK Integrations List" class="devui-img">
+      <img src="../assets/integrations-list.png" alt="ADK Integrations List" class="devui-img">
     </div>
   </div>
 </div>

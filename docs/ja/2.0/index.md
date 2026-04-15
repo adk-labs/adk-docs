@@ -70,7 +70,7 @@ ADK 2.0 をインストールするには、次の手順に従ってください
     Python 仮想環境を作成します。
 
     ```shell
-    python -m venv .venv
+    python3 -m venv .venv
     ```
 
     Python 仮想環境を有効化します。

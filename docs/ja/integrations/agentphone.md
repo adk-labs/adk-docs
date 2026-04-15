@@ -177,22 +177,22 @@ Tool | Description
 ---- | -----------
 `list_numbers` | アカウント内の全電話番号を一覧表示
 `buy_number` | 国や市外局番を指定して新しい電話番号を購入
-`release_number` | 電話番号をキャリアプールへ恒久的に返却
 
 ### SMS / メッセージ
 
 Tool | Description
 ---- | -----------
+`send_message` | エージェントの電話番号から SMS または iMessage を送信
 `get_messages` | 特定の電話番号の SMS メッセージを取得
-`list_conversations` | すべての番号にまたがる SMS 会話スレッドを一覧表示
+`list_conversations` | エージェントで絞り込み可能な SMS 会話スレッドを一覧表示
 `get_conversation` | 完全なメッセージ履歴を含む会話を取得
+`update_conversation` | 会話のメタデータを設定または解除
 
 ### 音声通話
 
 Tool | Description
 ---- | -----------
-`list_calls` | すべての番号に対する最近の通話を一覧表示
-`list_calls_for_number` | 特定の電話番号の通話を一覧表示
+`list_calls` | エージェント、番号、状態、方向で絞り込み可能な最近の通話を一覧表示
 `get_call` | オプションの長時間ポーリング付きで通話詳細と書き起こしを取得
 `make_call` | Webhook を使って会話処理のための発信通話を開始
 `make_conversation_call` | 完全な書き起こしを返す自律型 AI 通話を開始
@@ -207,18 +207,20 @@ Tool | Description
 `delete_agent` | エージェントを削除
 `get_agent` | 番号と音声設定を含むエージェント詳細を取得
 `attach_number` | 電話番号をエージェントに割り当て
+`detach_number` | 電話番号をエージェントから切り離す
 `list_voices` | 利用可能な音声オプションを一覧表示
 
 ### Webhook
 
+すべての Webhook ツールは任意の `agent_id` パラメータを受け取ります。指定するとそのエージェントの Webhook を対象にし、省略するとプロジェクト既定の Webhook を対象にします。エージェントレベルの Webhook はプロジェクトレベルより優先されます。
+
 Tool | Description
 ---- | -----------
-`get_webhook` | プロジェクトレベルの Webhook 設定を取得
-`set_webhook` | 受信メッセージと通話イベント用のプロジェクトレベル Webhook を設定
-`delete_webhook` | プロジェクトレベルの Webhook を削除
-`get_agent_webhook` | 特定エージェントの Webhook を取得
-`set_agent_webhook` | エージェント固有の Webhook を設定（プロジェクトレベル設定を上書き）
-`delete_agent_webhook` | エージェント固有の Webhook を削除
+`get_webhook` | Webhook 設定を取得
+`set_webhook` | 受信メッセージと通話イベント用の Webhook URL を設定
+`delete_webhook` | Webhook を削除
+`test_webhook` | テストイベントを送信して Webhook の動作を確認
+`list_webhook_deliveries` | 最近の Webhook 配信履歴を表示
 
 ## 構成
 

@@ -67,7 +67,7 @@ ADK 2.0을 설치하려면 다음 단계를 따르세요.
     Python 가상 환경을 생성합니다.
 
     ```shell
-    python -m venv .venv
+    python3 -m venv .venv
     ```
 
     Python 가상 환경을 활성화합니다.

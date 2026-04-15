@@ -18,7 +18,7 @@ pip install google-adk
     Python仮想環境を作成します。
 
     ```shell
-    python -m venv .venv
+    python3 -m venv .venv
     ```
 
     Python仮想環境をアクティブ化します。

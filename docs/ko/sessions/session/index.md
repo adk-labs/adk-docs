@@ -43,7 +43,7 @@
         print(f"---------------------------------")
 
         # 정리 (이 예시에서는 선택 사항)
-        temp_service = await temp_service.delete_session(app_name=example_session.app_name,
+        await temp_service.delete_session(app_name=example_session.app_name,
                                     user_id=example_session.user_id, session_id=example_session.id)
         print("temp_service의 최종 상태 - ", temp_service)
        ```
@@ -208,7 +208,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
           // export GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
           // export GOOGLE_CLOUD_LOCATION="your-gcp-location"
 
-          modelName := "gemini-1.5-flash-001" // 원하는 모델로 교체하세요
+          modelName := "gemini-flash-latest" // 원하는 모델로 교체하세요
           vertexService, err := session.VertexAIService(ctx, modelName)
           if err != nil {
             log.Printf("VertexAIService를 초기화할 수 없었습니다 (gcloud 프로젝트가 설정되지 않은 경우 예상되는 동작입니다): %v", err)

@@ -18,7 +18,7 @@ pip install google-adk
     Python 가상 환경을 생성합니다.
 
     ```shell
-    python -m venv .venv
+    python3 -m venv .venv
     ```
 
     Python 가상 환경을 활성화합니다.

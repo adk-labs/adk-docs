@@ -237,3 +237,39 @@ adk eval \
   }
 }
 ```
+
+## ユーザーシミュレーションで評価ケースを生成する
+
+評価ケースを手動で作成すると時間がかかり、想定される失敗モードを十分に網羅できないことがあります。ADK には、Vertex AI Eval SDK を使ってエージェント定義に基づく多様で現実的な会話シナリオを自動生成するコマンドがあります。
+
+!!! warning "前提条件: Vertex AI 認証情報"
+    評価ケースの生成では [Vertex Gen AI Evaluation Service API](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/evaluation-overview) を使用します。Vertex AI API が有効な Google Cloud プロジェクトと、環境に設定された有効な Application Default Credentials (ADC) が必要です。
+
+### コマンド構文
+
+```bash
+adk eval_set generate_eval_cases \
+    <AGENT_MODULE_FILE_PATH> \
+    <EVAL_SET_ID> \
+    --user_simulation_config_file=<PATH_TO_CONFIG_FILE>
+```
+
+### 設定ファイル形式
+
+`--user_simulation_config_file` には、`ConversationGenerationConfig` スキーマに一致する JSON ファイルを指定します。
+
+```json
+{
+  "count": 5,
+  "generation_instruction": "ユーザーがさまざまな条件でホームデバイスを操作してほしいと依頼するシナリオを生成します。",
+  "environment_context": "利用可能なデバイス: device_1（照明）、device_2（サーモスタット）。",
+  "model_name": "gemini-flash-latest"
+}
+```
+
+### 設定フィールド
+
+*   **`count`** (必須): 生成する会話シナリオの数です。
+*   **`generation_instruction`** (任意): テストしたいシナリオの種類や目標を指示する自然言語プロンプトです。
+*   **`environment_context`** (任意): エージェントのツールが参照できるバックエンドデータや状態を説明するコンテキストです。これにより、生成器は現実的なデータ（たとえば有効なデバイス ID）に基づくクエリを作成できます。
+*   **`model_name`** (必須): 生成に使用する Gemini モデルです（例: `gemini-flash-latest`）。

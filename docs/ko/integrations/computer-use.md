@@ -26,7 +26,7 @@ catalog_tags: ["google"]
     Python 가상 환경 생성:
 
     ```shell
-    python -m venv .venv
+    python3 -m venv .venv
     ```
 
     Python 가상 환경 활성화:

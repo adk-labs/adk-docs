@@ -14,7 +14,7 @@
 
     ```bash
     # 생성
-    python -m venv .venv
+    python3 -m venv .venv
     # 활성화(새 터미널마다)
     # macOS/Linux: source .venv/bin/activate
     # Windows CMD: .venv\Scripts\activate.bat

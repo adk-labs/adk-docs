@@ -17,7 +17,7 @@ ADK에서 음성/비디오 스트리밍을 사용하려면 Live API를 지원하
 
 ```bash
 # 생성
-python -m venv .venv
+python3 -m venv .venv
 # 활성화 (새 터미널을 열 때마다 실행)
 # macOS/Linux: source .venv/bin/activate
 # Windows CMD: .venv\Scripts\activate.bat

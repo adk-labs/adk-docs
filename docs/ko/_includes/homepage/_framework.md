@@ -8,7 +8,7 @@
   </div>
   <div class="feature-visual">
     <div class="ui-wrapper">
-      <img src="assets/hp-adk-web1.png" alt="ADK Web Dev UI" class="devui-img">
+      <img src="../assets/hp-adk-web1.png" alt="ADK Web Dev UI" class="devui-img">
     </div>
   </div>
 </div>

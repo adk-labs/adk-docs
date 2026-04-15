@@ -1,7 +1,7 @@
 # 아티팩트(Artifacts)
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에 연결되거나, 여러 세션에 걸쳐 영구적으로 사용자와 연결된, 이름과 버전이 지정된 바이너리 데이터를 관리하기 위한 핵심적인 메커니즘을 나타냅니다. 아티팩트를 통해 에이전트와 도구는 단순한 텍스트 문자열을 넘어 파일, 이미지, 오디오 및 기타 바이너리 형식과 관련된 더 풍부한 상호작용을 처리할 수 있습니다.
@@ -38,6 +38,24 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 
     print(f"아티팩트 MIME 타입: {image_artifact.inline_data.mime_type}")
     print(f"아티팩트 데이터 (첫 10 바이트): {image_artifact.inline_data.data[:10]}...")
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    import {createPartFromBase64, type Part} from '@google/genai';
+
+    // 'imageBytes'에 PNG 이미지의 바이너리 데이터가 들어 있다고 가정합니다.
+    const imageBytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
+    // Node.js 환경에서는 Buffer.from(bytes).toString('base64')를 사용합니다.
+    const imageArtifact: Part = createPartFromBase64(
+      Buffer.from(imageBytes).toString('base64'),
+      'image/png',
+    );
+
+    console.log(`아티팩트 MIME 타입: ${imageArtifact.inlineData?.mimeType}`);
+    // 원시 바이트에 접근하려면 base64를 다시 디코딩해야 합니다.
     ```
 
 === "Go"
@@ -223,6 +241,23 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 
     print(f"생성된 파이썬 아티팩트의 MIME 타입: {pdf_artifact_py.inline_data.mime_type}")
     ```
+
+=== "TypeScript"
+
+    ```typescript
+    import {createPartFromBase64, type Part} from '@google/genai';
+
+    // 예시: 원시 바이트로부터 아티팩트 Part 생성하기
+    const pdfBytes = new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d, 0x31, 0x2e, 0x34]);
+    const pdfMimeType = 'application/pdf';
+
+    // Node.js 환경에서는 Buffer.from(bytes).toString('base64')를 사용합니다.
+    const pdfArtifact: Part = createPartFromBase64(
+      Buffer.from(pdfBytes).toString('base64'),
+      pdfMimeType,
+    );
+    console.log(`생성된 TypeScript 아티팩트의 MIME 타입: ${pdfArtifact.inlineData?.mimeType}`);
+    ```
     
 === "Go"
 
@@ -357,20 +392,28 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 === "TypeScript"
 
     ```typescript
-    import { LlmAgent, InMemoryRunner, InMemoryArtifactService, InMemorySessionService } from '@google/adk';
+    import {
+      InMemoryArtifactService,
+      InMemorySessionService,
+      LlmAgent,
+      Runner,
+    } from '@google/adk';
 
     // 에이전트 정의
-    const agent = new LlmAgent({name: "my_agent", model: "gemini-flash-latest"});
+    const agent = new LlmAgent({
+      name: 'my_agent',
+      model: 'gemini-flash-latest',
+    });
 
     // 원하는 아티팩트 서비스 인스턴스화
     const artifactService = new InMemoryArtifactService();
 
     // Runner에 제공
-    const runner = new InMemoryRunner({
-        agent: agent,
-        appName: "artifact_app",
-        sessionService: new InMemorySessionService(),
-        artifactService: artifactService, // 서비스는 여기에 제공되어야 합니다
+    const runner = new Runner({
+      agent,
+      appName: 'artifact_app',
+      sessionService: new InMemorySessionService(),
+      artifactService, // 서비스는 여기에 제공되어야 합니다
     });
     // artifactService가 구성되지 않으면 context 객체에서 artifact 메서드를 호출할 때 오류가 발생합니다.
     ```
@@ -470,22 +513,26 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     === "TypeScript"
 
         ```typescript
-        import type { Part } from '@google/genai';
-        import { createPartFromBase64 } from '@google/genai';
-        import { Context } from '@google/adk';
+        import {Context} from '@google/adk';
+        import {createPartFromBase64, type Part} from '@google/genai';
 
         async function saveGeneratedReport(context: Context, reportBytes: Uint8Array): Promise<void> {
-            /** 생성된 PDF 보고서 바이트를 아티팩트로 저장합니다. */
-            const reportArtifact: Part = createPartFromBase64(reportBytes.toString('base64'), "application/pdf");
+          /** 생성된 PDF 보고서 바이트를 아티팩트로 저장합니다. */
+          const reportArtifact: Part = createPartFromBase64(
+            Buffer.from(reportBytes).toString('base64'),
+            'application/pdf',
+          );
 
-            const filename = "generated_report.pdf";
+          const filename = 'generated_report.pdf';
 
-            try {
-                const version = await context.saveArtifact(filename, reportArtifact);
-                console.log(`TypeScript 아티팩트 '${filename}'을(를) 버전 ${version}(으)로 성공적으로 저장했습니다.`);
-            } catch (e: any) {
-                console.error(`TypeScript 아티팩트 저장 오류: ${e.message}. Runner에 ArtifactService가 설정되었나요?`);
-            }
+          try {
+            const version = await context.saveArtifact(filename, reportArtifact);
+            console.log(`TypeScript 아티팩트 '${filename}'을(를) 버전 ${version}(으)로 성공적으로 저장했습니다.`);
+          } catch (e: any) {
+            console.error(
+              `TypeScript 아티팩트 저장 오류: ${e.message}. Runner에 ArtifactService가 설정되었나요?`,
+            );
+          }
         }
         ```
 
@@ -584,29 +631,30 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     === "TypeScript"
 
         ```typescript
-        import { Context } from '@google/adk';
+        import {Context} from '@google/adk';
 
         async function processLatestReport(context: Context): Promise<void> {
-            /** 최신 보고서 아티팩트를 로드하고 데이터를 처리합니다. */
-            const filename = "generated_report.pdf";
-            try {
-                // 최신 버전 로드
-                const reportArtifact = await context.loadArtifact(filename);
+          /** 최신 보고서 아티팩트를 로드하고 데이터를 처리합니다. */
+          const filename = 'generated_report.pdf';
+          try {
+            // 최신 버전 로드
+            const reportArtifact = await context.loadArtifact(filename);
 
-                if (reportArtifact?.inlineData) {
-                    console.log(`최신 TypeScript 아티팩트 '${filename}'을(를) 성공적으로 로드했습니다.`);
-                    console.log(`MIME 타입: ${reportArtifact.inlineData.mimeType}`);
-                    // reportArtifact.inlineData.data(base64 문자열) 처리
-                    const pdfData = Buffer.from(reportArtifact.inlineData.data, 'base64');
-                    console.log(`보고서 크기: ${pdfData.length} 바이트.`);
-                    // ... 추가 처리 ...
-                } else {
-                    console.log(`TypeScript 아티팩트 '${filename}'을(를) 찾을 수 없습니다.`);
-                }
-
-            } catch (e: any) {
-                console.error(`TypeScript 아티팩트 로드 오류: ${e.message}. ArtifactService가 설정되었나요?`);
+            if (reportArtifact?.inlineData) {
+              console.log(`최신 TypeScript 아티팩트 '${filename}'을(를) 성공적으로 로드했습니다.`);
+              console.log(`MIME 타입: ${reportArtifact.inlineData.mimeType}`);
+              // reportArtifact.inlineData.data(base64 문자열) 처리
+              const pdfData = Buffer.from(reportArtifact.inlineData.data || '', 'base64');
+              console.log(`보고서 크기: ${pdfData.length} 바이트.`);
+              // ... 추가 처리 ...
+            } else {
+              console.log(`TypeScript 아티팩트 '${filename}'을(를) 찾을 수 없습니다.`);
             }
+          } catch (e: any) {
+            console.error(
+              `TypeScript 아티팩트 로드 오류: ${e.message}. ArtifactService가 설정되었나요?`,
+            );
+          }
         }
         ```
 
@@ -743,22 +791,24 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     === "TypeScript"
 
         ```typescript
-        import { Context } from '@google/adk';
+        import {Context} from '@google/adk';
 
         async function listUserFiles(context: Context): Promise<string> {
-            /** 사용 가능한 아티팩트 목록을 조회하는 도구입니다. */
-            try {
-                const availableFiles = await context.listArtifacts();
-                if (!availableFiles?.length) {
-                    return "저장된 아티팩트가 없습니다.";
-                } else {
-                    const fileListStr = availableFiles.map((fname) => `- ${fname}`).join("\n");
-                    return `사용 가능한 TypeScript 아티팩트는 다음과 같습니다:\n${fileListStr}`;
-                }
-            } catch (e: any) {
-                console.error(`TypeScript 아티팩트 목록 조회 오류: ${e.message}. ArtifactService가 설정되었나요?`);
-                return "오류: TypeScript 아티팩트 목록을 조회할 수 없습니다.";
+          /** 사용 가능한 아티팩트 목록을 조회하는 도구입니다. */
+          try {
+            const availableFiles = await context.listArtifacts();
+            if (!availableFiles || availableFiles.length === 0) {
+              return '저장된 아티팩트가 없습니다.';
+            } else {
+              const fileListStr = availableFiles.map((fname) => `- ${fname}`).join('\n');
+              return `사용 가능한 TypeScript 아티팩트는 다음과 같습니다:\n${fileListStr}`;
             }
+          } catch (e: any) {
+            console.error(
+              `TypeScript 아티팩트 목록 조회 오류: ${e.message}. ArtifactService가 설정되었나요?`,
+            );
+            return '오류: TypeScript 아티팩트 목록을 조회할 수 없습니다.';
+          }
         }
         ```
 
@@ -958,6 +1008,28 @@ ADK는 `BaseArtifactService` 인터페이스의 구체적인 구현체를 제공
             # GCS 클라이언트 초기화 중 잠재적인 오류 포착 (예: 인증 문제)
             print(f"파이썬 GcsArtifactService 초기화 오류: {e}")
             # 오류를 적절하게 처리합니다 - InMemory로 대체하거나 예외를 발생시킬 수 있습니다.
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        import {GcsArtifactService} from '@google/adk';
+
+        // GCS 버킷 이름을 지정합니다.
+        const gcsBucketName = 'your-gcs-bucket-for-adk-artifacts';
+
+        try {
+          const gcsService = new GcsArtifactService(gcsBucketName);
+          console.log(`TypeScript GcsArtifactService가 버킷에 대해 초기화되었습니다: ${gcsBucketName}`);
+          // 환경에 이 버킷에 액세스할 수 있는 자격 증명이 있는지 확인하세요.
+          // 예: 애플리케이션 기본 자격 증명(ADC)
+
+          // 그런 다음 Runner에 전달합니다.
+          // const runner = new Runner({..., artifactService: gcsService});
+        } catch (e: any) {
+          // GCS 클라이언트 초기화 중 발생할 수 있는 오류를 처리합니다(예: 인증 문제).
+          console.error(`TypeScript GcsArtifactService 초기화 오류: ${e.message}`);
+        }
         ```
 
     === "Java"

@@ -7,7 +7,7 @@
     [venv](https://docs.python.org/3/library/venv.html)를 사용하여 가상 Python 환경을 만드는 것이 좋습니다.
 
     ```shell
-    python -m venv .venv
+    python3 -m venv .venv
     ```
 
     이제 운영 체제 및 환경에 적합한 명령을 사용하여 가상 환경을 활성화할 수 있습니다.

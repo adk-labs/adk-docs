@@ -7,7 +7,7 @@
     [venv](https://docs.python.org/3/library/venv.html)を使用して仮想Python環境を作成することをお勧めします。
 
     ```shell
-    python -m venv .venv
+    python3 -m venv .venv
     ```
 
     次に、オペレーティングシステムと環境に適したコマンドを使用して仮想環境をアクティブ化できます。

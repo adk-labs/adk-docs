@@ -14,7 +14,7 @@
 
     ```bash
     # 作成
-    python -m venv .venv
+    python3 -m venv .venv
     # アクティブ化 (新しいターミナルごとに)
     # macOS/Linux: source .venv/bin/activate
     # Windows CMD: .venv\Scripts\activate.bat
