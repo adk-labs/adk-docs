@@ -29,6 +29,7 @@ body.adk-landing-page .md-main__inner { max-width: none !important; margin: 0 !i
 body.adk-landing-page .md-content { max-width: none !important; margin: 0 !important; flex-grow: 1 !important; }
 body.adk-landing-page .md-content__inner { max-width: 1280px !important; margin: 0 auto !important; padding: 0 clamp(16px, 4vw, 48px) !important; box-sizing: border-box !important; overflow-x: hidden !important; }
 body.adk-landing-page .md-header__inner { overflow-x: hidden !important; }
+body.adk-landing-page .md-path { display: none !important; }
 body.adk-landing-page .md-content__button { display: none !important; }
 
 /* Responsive header repo links — full text → icons only (≤1200px) → hidden (≤900px) */
