@@ -111,13 +111,13 @@ ADK 에이전트를 AI 애플리케이션용 벡터 데이터베이스인
 
 ### 문서
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `search-docs` | 공식 Pinecone 문서 검색
 
 ### 인덱스 관리
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `list-indexes` | 모든 Pinecone 인덱스 나열
 `describe-index` | 인덱스 구성 정보 조회
@@ -126,7 +126,7 @@ Tool | Description
 
 ### 데이터 작업
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `upsert-records` | 통합 추론이 활성화된 인덱스에 레코드 삽입/업데이트
 `search-records` | 메타데이터 필터링/재정렬 옵션으로 텍스트 질의 검색

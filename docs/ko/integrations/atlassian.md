@@ -107,7 +107,7 @@ ADK 에이전트를 [Atlassian](https://www.atlassian.com/)
 
 ## 사용 가능한 도구
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `atlassianUserInfo` | 사용자 정보 가져오기
 `getAccessibleAtlassianResources` | 접근 가능한 Atlassian 리소스 정보 가져오기

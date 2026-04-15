@@ -174,7 +174,7 @@ catalog_tags: ["mcp"]
 
 ## 利用可能なツール
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `list_comments` | 課題コメント一覧
 `create_comment` | 課題コメント作成

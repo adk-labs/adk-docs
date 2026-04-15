@@ -109,7 +109,7 @@ Meta Ads, LinkedIn Ads, Google Analytics 4 등 100개 이상의 소스에 걸친
 
 ## 사용 가능한 도구
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `data_source_discovery` | 사용 가능한 마케팅 데이터 소스(Google Ads, Meta Ads 등)와 해당 ID 목록 조회
 `accounts_discovery` | 특정 데이터 소스에 연결된 계정 탐색

@@ -106,7 +106,7 @@ ADK 에이전트를 트랜잭션 이메일 서비스인 [Mailgun](https://www.ma
 
 ### 메시징
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `send_email` | HTML 콘텐츠 및 첨부파일을 지원하는 이메일 전송
 `get_stored_message` | 저장된 이메일 메시지 조회
@@ -114,7 +114,7 @@ Tool | Description
 
 ### 도메인
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `get_domain` | 특정 도메인 상세 정보 조회
 `verify_domain` | 도메인 DNS 구성 검증
@@ -123,7 +123,7 @@ Tool | Description
 
 ### 웹훅
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `list_webhooks` | 도메인의 이벤트 웹훅 목록 조회
 `create_webhook` | 새 이벤트 웹훅 생성
@@ -132,28 +132,28 @@ Tool | Description
 
 ### 라우트
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `list_routes` | 인바운드 이메일 라우팅 규칙 조회
 `update_route` | 인바운드 라우팅 규칙 업데이트
 
 ### 메일링 리스트
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `create_mailing_list` | 새 메일링 리스트 생성
 `manage_list_members` | 메일링 리스트 멤버 추가/삭제/업데이트
 
 ### 템플릿
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `create_template` | 새 이메일 템플릿 생성
 `manage_template_versions` | 템플릿 버전 생성/관리
 
 ### 분석 및 통계
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `query_metrics` | 날짜 범위별 발송/사용 지표 조회
 `get_logs` | 이메일 이벤트 로그 조회
@@ -161,7 +161,7 @@ Tool | Description
 
 ### Suppressions
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `get_bounces` | 반송 이메일 주소 조회
 `get_unsubscribes` | 수신 거부 이메일 주소 조회
@@ -170,14 +170,14 @@ Tool | Description
 
 ### IP
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `list_ips` | IP 할당 정보 조회
 `get_ip_pools` | 전용 IP 풀 구성 조회
 
 ### 반송 분류
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `get_bounce_classification` | 반송 유형 및 전달 이슈 분석
 

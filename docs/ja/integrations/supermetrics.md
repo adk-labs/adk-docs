@@ -112,7 +112,7 @@ Google Ads、Meta Ads、LinkedIn Ads、Google Analytics 4 を含む
 
 ## 利用可能なツール
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `data_source_discovery` | 利用可能なマーケティングデータソース（Google Ads、Meta Ads など）とその ID を一覧表示
 `accounts_discovery` | 特定データソースに接続されたアカウントを探索

@@ -134,14 +134,14 @@ pip install "restate-sdk[serde]"
 
 Restate 플러그인은 ADK 에이전트에 다음 기능을 제공합니다:
 
-| Capability | Description |
+| 기능 | 설명 |
 | --- | --- |
-| Durable tool execution | `restate_object_context().run_typed()`로 도구 로직을 감싸 자동 재시도/복구 |
-| Human-in-the-loop | 외부 신호(예: 사람 승인)까지 `restate_object_context().awakeable()`로 실행 일시정지 |
-| Persistent sessions | `RestateSessionService()`가 에이전트 메모리/대화 상태를 durable하게 저장 |
-| Durable LLM calls | `RestatePlugin()`이 LLM 호출을 저널링하고 자동 재시도 |
-| Multi-agent communication | `restate_object_context().service_call()`로 durable cross-agent HTTP 호출 |
-| Parallel execution | `restate.gather()`로 도구/에이전트를 동시 실행하고 결정론적으로 복구 |
+| 내구성 있는 도구 실행 | `restate_object_context().run_typed()`로 도구 로직을 감싸 자동 재시도/복구 |
+| 사람 개입형 상호작용 | 외부 신호(예: 사람 승인)까지 `restate_object_context().awakeable()`로 실행 일시정지 |
+| 영구 세션 | `RestateSessionService()`가 에이전트 메모리/대화 상태를 durable하게 저장 |
+| 내구성 있는 LLM 호출 | `RestatePlugin()`이 LLM 호출을 저널링하고 자동 재시도 |
+| 멀티 에이전트 통신 | `restate_object_context().service_call()`로 durable cross-agent HTTP 호출 |
+| 병렬 실행 | `restate.gather()`로 도구/에이전트를 동시 실행하고 결정론적으로 복구 |
 
 ## 추가 리소스
 

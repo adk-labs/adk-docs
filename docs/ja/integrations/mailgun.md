@@ -106,7 +106,7 @@ ADK エージェントをトランザクションメールサービス [Mailgun]
 
 ### メッセージング
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `send_email` | HTML コンテンツと添付に対応したメール送信
 `get_stored_message` | 保存済みメールメッセージ取得
@@ -114,7 +114,7 @@ Tool | Description
 
 ### ドメイン
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `get_domain` | 特定ドメイン詳細を表示
 `verify_domain` | ドメイン DNS 設定を検証
@@ -123,7 +123,7 @@ Tool | Description
 
 ### Webhooks
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `list_webhooks` | ドメインのイベント Webhook 一覧
 `create_webhook` | 新規イベント Webhook 作成
@@ -132,28 +132,28 @@ Tool | Description
 
 ### Routes
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `list_routes` | 受信メールルーティングルール表示
 `update_route` | 受信ルーティングルール更新
 
 ### メーリングリスト
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `create_mailing_list` | 新規メーリングリスト作成
 `manage_list_members` | メーリングリストメンバー追加/削除/更新
 
 ### テンプレート
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `create_template` | 新規メールテンプレート作成
 `manage_template_versions` | テンプレートバージョン作成/管理
 
 ### 分析と統計
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `query_metrics` | 期間指定で送信/利用メトリクス照会
 `get_logs` | メールイベントログ取得
@@ -161,7 +161,7 @@ Tool | Description
 
 ### Suppressions
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `get_bounces` | バウンスメールアドレス表示
 `get_unsubscribes` | 配信停止メールアドレス表示
@@ -170,14 +170,14 @@ Tool | Description
 
 ### IPs
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `list_ips` | IP 割り当て表示
 `get_ip_pools` | 専用 IP プール設定表示
 
 ### バウンス分類
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `get_bounce_classification` | バウンスタイプと配信問題を分析
 

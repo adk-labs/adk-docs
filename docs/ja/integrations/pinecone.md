@@ -111,13 +111,13 @@ ADK エージェントを AI アプリ向けベクターデータベース
 
 ### ドキュメント
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `search-docs` | 公式 Pinecone ドキュメントを検索
 
 ### インデックス管理
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `list-indexes` | すべての Pinecone インデックスを一覧表示
 `describe-index` | インデックス設定を表示
@@ -126,7 +126,7 @@ Tool | Description
 
 ### データ操作
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `upsert-records` | 統合推論対応インデックスにレコードを挿入/更新
 `search-records` | メタデータフィルタとリランキング付きテキスト検索

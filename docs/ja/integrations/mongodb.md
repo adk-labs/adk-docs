@@ -128,7 +128,7 @@ MongoDB Atlas クラスターに接続します。この連携により、エー
 
 ### MongoDB データベースツール
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `find` | MongoDB コレクションに find クエリを実行
 `aggregate` | MongoDB コレクションで集計を実行
@@ -157,7 +157,7 @@ Tool | Description
     Atlas ツールには API 資格情報が必要です。Atlas ツールを有効化するには
     `MDB_MCP_API_CLIENT_ID` と `MDB_MCP_API_CLIENT_SECRET` を設定してください。
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `atlas-list-orgs` | MongoDB Atlas 組織一覧
 `atlas-list-projects` | MongoDB Atlas プロジェクト一覧

@@ -136,14 +136,14 @@ pip install "restate-sdk[serde]"
 
 Restate プラグインは ADK エージェントに次の機能を提供します:
 
-| Capability | Description |
+| 機能 | 説明 |
 | --- | --- |
-| Durable tool execution | `restate_object_context().run_typed()` でツールロジックを包み、自動リトライ/復旧 |
+| Durable なツール実行 | `restate_object_context().run_typed()` でツールロジックを包み、自動リトライ/復旧 |
 | Human-in-the-loop | 外部シグナル (例: 人間承認) まで `restate_object_context().awakeable()` で実行停止 |
-| Persistent sessions | `RestateSessionService()` がエージェントメモリ/会話状態を durable 保存 |
-| Durable LLM calls | `RestatePlugin()` が LLM 呼び出しをジャーナル化し自動リトライ |
-| Multi-agent communication | `restate_object_context().service_call()` による durable cross-agent HTTP 呼び出し |
-| Parallel execution | `restate.gather()` でツール/エージェントを並列実行し決定論的に復旧 |
+| 永続セッション | `RestateSessionService()` がエージェントメモリ/会話状態を durable 保存 |
+| Durable な LLM 呼び出し | `RestatePlugin()` が LLM 呼び出しをジャーナル化し自動リトライ |
+| マルチエージェント通信 | `restate_object_context().service_call()` による durable cross-agent HTTP 呼び出し |
+| 並列実行 | `restate.gather()` でツール/エージェントを並列実行し決定論的に復旧 |
 
 ## 追加リソース
 

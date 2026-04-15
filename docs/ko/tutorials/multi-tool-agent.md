@@ -27,6 +27,35 @@
     pip install google-adk
     ```
 
+=== "TypeScript"
+
+    새 프로젝트 디렉터리를 만들고 초기화한 다음, 종속성을 설치합니다:
+
+    ```bash
+    mkdir my-adk-agent
+    cd my-adk-agent
+    npm init -y
+    npm install @google/adk @google/adk-devtools
+    npm install -D typescript
+    ```
+
+    다음 내용으로 `tsconfig.json` 파일을 만드세요. 이 설정은 프로젝트가 최신 Node.js 모듈을 올바르게 처리하도록 보장합니다.
+
+    ```json title="tsconfig.json"
+    {
+      "compilerOptions": {
+        "target": "es2020",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "esModuleInterop": true,
+        "strict": true,
+        "skipLibCheck": true,
+        // CommonJS 모듈 문법을 허용하려면 false로 설정:
+        "verbatimModuleSyntax": false
+      }
+    }
+    ```
+
 === "Java"
 
     ADK를 설치하고 환경을 설정하려면 다음 단계를 진행하십시오.
@@ -125,6 +154,54 @@
 
     이 파일에 대한 추가 지침은 [모델 설정](#set-up-the-model) 섹션에 설명되어 있습니다.
 
+=== "TypeScript"
+
+    `my-adk-agent` 디렉터리에 다음과 같은 프로젝트 구조를 만들어야 합니다:
+
+    ```console
+    my-adk-agent/
+        agent.ts
+        .env
+        package.json
+        tsconfig.json
+    ```
+
+    ### `agent.ts`
+
+    프로젝트 폴더에 `agent.ts` 파일을 만듭니다:
+
+    === "OS X &amp; Linux"
+        ```shell
+        touch agent.ts
+        ```
+
+    === "Windows"
+        ```shell
+        type nul > agent.ts
+        ```
+
+    다음 코드를 `agent.ts`에 복사하여 붙여넣습니다:
+
+    ```typescript title="agent.ts"
+    --8<-- "examples/typescript/snippets/get-started/multi_tool_agent/agent.ts"
+    ```
+
+    ### `.env`
+
+    같은 폴더에 `.env` 파일을 만듭니다:
+
+    === "OS X &amp; Linux"
+        ```shell
+        touch .env
+        ```
+
+    === "Windows"
+        ```shell
+        type nul > .env
+        ```
+
+    이 파일에 대한 추가 지침은 다음 [모델 설정](#set-up-the-model) 섹션에서 설명합니다.
+
 === "Java"
 
     Java 프로젝트는 일반적으로 다음과 같은 프로젝트 구조를 가집니다.
@@ -221,6 +298,13 @@
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
+        TypeScript를 사용하는 경우 `.env` 파일은 `agent.ts` 파일 상단의 `import 'dotenv/config';` 줄에 의해 자동으로 로드됩니다.
+
+        ```env title="multi_tool_agent/.env"
+        GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        GOOGLE_GENAI_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
+        ```
+
         Go를 사용하는 경우 터미널에서 환경 변수를 정의하거나 `.env` 파일을 사용합니다:
 
         ```bash title="terminal"
@@ -250,6 +334,14 @@
         export GOOGLE_CLOUD_LOCATION=LOCATION
         ```
 
+        TypeScript를 사용하는 경우 `.env` 파일은 `agent.ts` 파일 상단의 `import 'dotenv/config';` 줄에 의해 자동으로 로드됩니다.
+
+        ```env title="multi_tool_agent/.env"
+        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
+        GOOGLE_CLOUD_LOCATION=LOCATION
+        ```
+
         Go를 사용하는 경우 터미널에서 환경 변수를 정의하거나 `.env` 파일을 사용합니다:
 
         ```bash title="terminal"
@@ -274,6 +366,13 @@
         ```console title="terminal"
         export GOOGLE_GENAI_USE_VERTEXAI=TRUE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
+        ```
+
+        TypeScript를 사용하는 경우 `.env` 파일은 `agent.ts` 파일 상단의 `import 'dotenv/config';` 줄에 의해 자동으로 로드됩니다.
+
+        ```env title="multi_tool_agent/.env"
+        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
         ```
 
         Go를 사용하는 경우 터미널에서 환경 변수를 정의하거나 `.env` 파일을 사용합니다:
@@ -390,6 +489,68 @@
         ![adk-api-server.png](../assets/adk-api-server.png)
 
         `adk api_server`를 테스트에 사용하는 방법을 배우려면 [API 서버 사용에 대한 문서](/ko/runtime/api-server/)를 참조하십시오.
+
+=== "TypeScript"
+
+    터미널을 사용하여 에이전트 프로젝트 디렉터리로 이동합니다:
+
+    ```console
+    my-adk-agent/      <-- 이 디렉터리로 이동
+        agent.ts
+        .env
+        package.json
+        tsconfig.json
+    ```
+
+    에이전트와 상호 작용하는 여러 가지 방법이 있습니다.
+
+    === "개발 UI (adk web)"
+
+        다음 명령을 실행하여 **개발 UI**를 시작합니다.
+
+        ```shell
+        npx adk web
+        ```
+
+        **1단계:** 제공된 URL(일반적으로 `http://localhost:8000` 또는 `http://127.0.0.1:8000`)을 브라우저에서 직접 엽니다.
+
+        **2단계.** UI 왼쪽 상단의 드롭다운에서 에이전트를 선택합니다. 에이전트는 파일명으로 표시되므로 `"agent"`를 선택해야 합니다.
+
+        !!!note "문제 해결"
+
+            드롭다운 메뉴에 `"agent"`가 보이지 않으면, `agent.ts` 파일이 있는 디렉터리에서 `npx adk web`을 실행하고 있는지 확인하세요.
+
+        **3단계.** 이제 텍스트 상자를 사용해 에이전트와 대화할 수 있습니다:
+
+        ![adk-web-dev-ui-chat.png](../assets/adk-web-dev-ui-chat.png)
+
+        **4단계.** 왼쪽의 `이벤트` 탭을 사용하면, 액션을 클릭하여 개별 함수 호출, 응답, 모델 응답을 검사할 수 있습니다:
+
+        ![adk-web-dev-ui-function-call.png](../assets/adk-web-dev-ui-function-call.png)
+
+        `이벤트` 탭에서는 `추적` 버튼을 클릭해 각 함수 호출의 지연 시간을 보여주는 이벤트별 추적 로그도 볼 수 있습니다:
+
+        ![adk-web-dev-ui-trace.png](../assets/adk-web-dev-ui-trace.png)
+
+    === "터미널 (adk run)"
+
+        다음 명령을 실행하여 에이전트와 대화합니다.
+
+        ```
+        npx adk run agent.ts
+        ```
+
+        ![adk-run.png](../assets/adk-run.png)
+
+        종료하려면 Cmd/Ctrl+C를 사용하세요.
+
+    === "API 서버 (adk api_server)"
+
+        `npx adk api_server`를 사용하면 단일 명령으로 로컬 Express.js 서버를 만들 수 있으므로, 에이전트를 배포하기 전에 로컬 cURL 요청을 테스트할 수 있습니다.
+
+        ![adk-api-server.png](../assets/adk-api-server.png)
+
+        `api_server`를 테스트에 사용하는 방법은 [테스트 문서](/ko/runtime/api-server/)를 참조하세요.
 
 === "Go"
 

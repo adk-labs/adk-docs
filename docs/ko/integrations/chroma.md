@@ -141,7 +141,7 @@ ADK 에이전트를 오픈소스 임베딩 데이터베이스인
 
 ### 컬렉션 관리
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `chroma_list_collections` | 페이지네이션 지원 포함 모든 컬렉션 나열
 `chroma_create_collection` | 선택적 HNSW 구성으로 새 컬렉션 생성
@@ -153,7 +153,7 @@ Tool | Description
 
 ### 문서 작업
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `chroma_add_documents` | 선택적 메타데이터/커스텀 ID와 함께 문서 추가
 `chroma_query_documents` | 고급 필터링이 가능한 시맨틱 검색 질의

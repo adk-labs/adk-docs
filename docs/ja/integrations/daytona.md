@@ -58,7 +58,7 @@ root_agent = Agent(
 
 ## 利用可能なツール
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `execute_code_in_daytona` | Python、JavaScript、TypeScript コードを実行
 `execute_command_in_daytona` | シェルコマンドを実行

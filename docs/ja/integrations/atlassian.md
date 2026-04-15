@@ -106,7 +106,7 @@ Jira のプロジェクト追跡と Confluence のナレッジ管理の橋渡し
 
 ## 利用可能なツール
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `atlassianUserInfo` | ユーザー情報を取得
 `getAccessibleAtlassianResources` | アクセス可能な Atlassian リソース情報を取得

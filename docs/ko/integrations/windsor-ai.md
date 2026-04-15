@@ -107,13 +107,13 @@ Windsor MCP는 통합된 비즈니스 데이터에 대한 자연어 인터페이
 개별 도구를 노출하는 대신, 질문을 해석하고 연결된 데이터 소스에서 구조화된
 인사이트를 반환합니다.
 
-Capability | Description
+기능 | 설명
 ---------- | -----------
-Data querying | 325개 이상의 연결 플랫폼에서 정규화된 데이터를 질의
-Performance analysis | 채널 전반의 KPI, 추세, 캠페인 지표 분석
-Report generation | 마케팅 대시보드와 크로스 채널 성과 리포트 생성
-Budget analysis | 지출 비효율을 식별하고 최적화 권고 제공
-Anomaly detection | 성과 데이터의 이상치와 비정상 패턴 감지
+데이터 질의 | 325개 이상의 연결 플랫폼에서 정규화된 데이터를 질의
+성과 분석 | 채널 전반의 KPI, 추세, 캠페인 지표 분석
+리포트 생성 | 마케팅 대시보드와 크로스 채널 성과 리포트 생성
+예산 분석 | 지출 비효율을 식별하고 최적화 권고 제공
+이상 징후 탐지 | 성과 데이터의 이상치와 비정상 패턴 감지
 
 ## 지원되는 데이터 소스
 
@@ -123,7 +123,7 @@ Windsor.ai는 325개 이상의 플랫폼에 연결되며, 다음이 포함됩니
 - **분석:** Google Analytics 4, Adobe Analytics
 - **CRM:** Salesforce, HubSpot
 - **이커머스:** Shopify
-- **기타:** [full list of connectors](https://windsor.ai/)는 Windsor.ai 웹사이트 참조
+- **기타:** [전체 커넥터 목록](https://windsor.ai/)은 Windsor.ai 웹사이트 참조
 
 ## 추가 리소스
 

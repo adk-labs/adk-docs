@@ -128,7 +128,7 @@ MongoDB Atlas 클러스터와 연결합니다. 이 통합을 통해 에이전트
 
 ### MongoDB 데이터베이스 도구
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `find` | MongoDB 컬렉션에 find 쿼리 실행
 `aggregate` | MongoDB 컬렉션에 집계 실행
@@ -157,7 +157,7 @@ Tool | Description
     Atlas 도구에는 API 자격 증명이 필요합니다. Atlas 도구를 활성화하려면
     `MDB_MCP_API_CLIENT_ID`와 `MDB_MCP_API_CLIENT_SECRET` 환경 변수를 설정하세요.
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `atlas-list-orgs` | MongoDB Atlas 조직 목록 조회
 `atlas-list-projects` | MongoDB Atlas 프로젝트 목록 조회

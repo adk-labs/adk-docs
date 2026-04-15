@@ -166,21 +166,21 @@ SMS の送受信、電話番号の管理、自然言語で動作する自律型 
 
 ### アカウント
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `account_overview` | アカウント全体のスナップショット: エージェント、番号、Webhook 状態、利用上限
 `get_usage` | 詳細な利用状況: プラン上限、番号クォータ、メッセージ/通話量
 
 ### 電話番号
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `list_numbers` | アカウント内の全電話番号を一覧表示
 `buy_number` | 国や市外局番を指定して新しい電話番号を購入
 
 ### SMS / メッセージ
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `send_message` | エージェントの電話番号から SMS または iMessage を送信
 `get_messages` | 特定の電話番号の SMS メッセージを取得
@@ -190,7 +190,7 @@ Tool | Description
 
 ### 音声通話
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `list_calls` | エージェント、番号、状態、方向で絞り込み可能な最近の通話を一覧表示
 `get_call` | オプションの長時間ポーリング付きで通話詳細と書き起こしを取得
@@ -199,7 +199,7 @@ Tool | Description
 
 ### エージェント
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `list_agents` | 電話番号と音声設定を含む全エージェントを一覧表示
 `create_agent` | 設定可能な音声とシステムプロンプトで新しいエージェントを作成
@@ -214,7 +214,7 @@ Tool | Description
 
 すべての Webhook ツールは任意の `agent_id` パラメータを受け取ります。指定するとそのエージェントの Webhook を対象にし、省略するとプロジェクト既定の Webhook を対象にします。エージェントレベルの Webhook はプロジェクトレベルより優先されます。
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `get_webhook` | Webhook 設定を取得
 `set_webhook` | 受信メッセージと通話イベント用の Webhook URL を設定
@@ -226,9 +226,9 @@ Tool | Description
 
 AgentPhone MCP Server は環境変数で構成できます。
 
-Variable | Description | Default
+環境変数 | 説明 | デフォルト
 -------- | ----------- | -------
-`AGENTPHONE_API_KEY` | AgentPhone API キー | Required (stdio mode)
+`AGENTPHONE_API_KEY` | AgentPhone API キー | 必須 (stdio モード)
 `AGENTPHONE_BASE_URL` | API ベース URL を上書き | `https://api.agentphone.to`
 
 リモート HTTP モードでは、環境変数ではなく `Authorization: Bearer` ヘッダーで API キーを渡します。

@@ -172,7 +172,7 @@ catalog_tags: ["mcp"]
 
 ## 사용 가능한 도구
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `list_comments` | 이슈 코멘트 목록 조회
 `create_comment` | 이슈에 코멘트 생성

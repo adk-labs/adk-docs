@@ -141,7 +141,7 @@ ADK エージェントをオープンソース埋め込みデータベース
 
 ### コレクション管理
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `chroma_list_collections` | ページネーション対応ですべてのコレクションを一覧表示
 `chroma_create_collection` | 任意 HNSW 設定付きで新規コレクション作成
@@ -153,7 +153,7 @@ Tool | Description
 
 ### ドキュメント操作
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `chroma_add_documents` | 任意メタデータとカスタム ID 付きでドキュメント追加
 `chroma_query_documents` | 高度フィルタ付きセマンティック検索クエリ

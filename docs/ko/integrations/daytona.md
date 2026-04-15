@@ -58,7 +58,7 @@ root_agent = Agent(
 
 ## 사용 가능한 도구
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `execute_code_in_daytona` | Python, JavaScript, TypeScript 코드 실행
 `execute_command_in_daytona` | 셸 명령 실행

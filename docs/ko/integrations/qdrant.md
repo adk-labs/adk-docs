@@ -108,7 +108,7 @@ ADK 에이전트를 오픈소스 벡터 검색 엔진인 [Qdrant](https://qdrant
 
 ## 사용 가능한 도구
 
-Tool | Description
+도구 | 설명
 ---- | -----------
 `qdrant-store` | 선택적 메타데이터와 함께 정보를 Qdrant에 저장
 `qdrant-find` | 자연어 질의로 관련 정보 검색
@@ -117,9 +117,9 @@ Tool | Description
 
 Qdrant MCP 서버는 환경 변수로 구성할 수 있습니다:
 
-Variable | Description | Default
+환경 변수 | 설명 | 기본값
 -------- | ----------- | -------
-`QDRANT_URL` | Qdrant 서버 URL | `None` (required)
+`QDRANT_URL` | Qdrant 서버 URL | `None` (필수)
 `QDRANT_API_KEY` | Qdrant Cloud 인증용 API 키 | `None`
 `COLLECTION_NAME` | 사용할 컬렉션 이름 | `None`
 `QDRANT_LOCAL_PATH` | 로컬 영구 저장 경로(URL 대안) | `None`

@@ -109,7 +109,7 @@ ADK エージェントをオープンソースのベクトル検索エンジン
 
 ## 利用可能なツール
 
-Tool | Description
+ツール | 説明
 ---- | -----------
 `qdrant-store` | 任意メタデータ付きで情報を Qdrant に保存
 `qdrant-find` | 自然言語クエリで関連情報を検索
@@ -118,9 +118,9 @@ Tool | Description
 
 Qdrant MCP サーバーは環境変数で設定できます:
 
-Variable | Description | Default
+環境変数 | 説明 | デフォルト
 -------- | ----------- | -------
-`QDRANT_URL` | Qdrant サーバー URL | `None` (required)
+`QDRANT_URL` | Qdrant サーバー URL | `None` (必須)
 `QDRANT_API_KEY` | Qdrant Cloud 認証 API キー | `None`
 `COLLECTION_NAME` | 使用するコレクション名 | `None`
 `QDRANT_LOCAL_PATH` | ローカル永続ストレージパス (URL の代替) | `None`
