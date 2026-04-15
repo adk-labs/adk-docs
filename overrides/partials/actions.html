@@ -1,4 +1,5 @@
-{% if page.edit_url and page.file.src_path != "index.md" %}
+{% set homepage_paths = ["index.md", "ko/index.md", "ja/index.md"] %}
+{% if page.edit_url and page.file.src_path not in homepage_paths %}
   {% if "content.action.edit" in features %}
     <a href="{{ page.edit_url }}" title="Edit this page on GitHub" class="md-content__button md-icon" rel="edit">
       {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
