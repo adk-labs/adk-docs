@@ -58,7 +58,7 @@ adk api_server --auto_create_session path/to/your/agent
 
 このパターンは、HTTP リクエストを実行できるあらゆるイベント ソースで機能します。
 
-??? 「例: 受信 Webhook の処理」
+??? "例: 受信 Webhook の処理"
 
     次の [Cloud Run function](https://cloud.google.com/functions/docs/writing/write-event-driven-functions)
     外部サービス (GitHub など) から Webhook を受信し、
@@ -94,7 +94,7 @@ adk api_server --auto_create_session path/to/your/agent
         return ("ok", 200)
     ```
 
-??? 「例：curlでイベントを送信する」
+??? "例：curlでイベントを送信する"
 
     ```bash
     curl -X POST http://localhost:8000/apps/my_agent/run \
@@ -146,7 +146,7 @@ Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエ
     `parse_event` イベントデータと属性を抽出して分析するツール
     内容。
 
-    ???+「エージェントコード(`event_processing_agent/agent.py`)」
+    ???+ "エージェントコード(`event_processing_agent/agent.py`)"
 
         ```python
         --8<-- "examples/python/snippets/runtime/triggers/event_processing_agent/agent.py:event_processor"
@@ -155,7 +155,7 @@ Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエ
 === "Go"
     次のエージェントは、トリガー エンドポイントからのイベントを処理します。イベントデータと属性を抽出し、内容を解析します。
 
-    ???+「エージェントコード(`event_processing_agent.go`)」
+    ???+ "エージェントコード(`event_processing_agent.go`)"
 
         ```go
         --8<-- "examples/go/snippets/runtime/triggers/event_processing_agent.go:event_processor"
@@ -175,7 +175,7 @@ Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエ
     運用環境の場合、トリガーをプログラムで有効にできます。
     カスタム FastAPI エントリ ポイント:
 
-    ???+「展開エントリ ポイント (`main.py`)」
+    ???+ "展開エントリ ポイント (`main.py`)"
 
         === "Python"
             ```python
@@ -320,7 +320,7 @@ Eventarc トリガー エンドポイント プロセス
 - **構造化コンテンツ モード**: すべての CloudEvents 属性とデータは
   JSON本体。
 
-??? 「curlでテストする（構造化モード）」
+??? "curlでテストする（構造化モード）"
 
     ```bash
     curl -X POST http://localhost:8000/apps/my_agent/trigger/eventarc \
@@ -337,7 +337,7 @@ Eventarc トリガー エンドポイント プロセス
       }'
     ```
 
-??? 「curlでテスト（バイナリモード）」
+??? "curlでテスト（バイナリモード）"
 
     ```bash
     curl -X POST http://localhost:8000/apps/my_agent/trigger/eventarc \

@@ -15,17 +15,16 @@ catalog_tags: ["observability"]
 
 [Datadog LLM
 Observability](https://www.datadoghq.com/product/llm-observability/)는 AI를 돕습니다.
-엔지니어, 데이터 과학자, 애플리케이션 개발자는 신속하게 개발하고,
-LLM 지원서를 평가하고 모니터링합니다. 자신있게 출력 품질을 향상시키고,
-구조화된 실험을 통해 성능, 비용, 전반적인 위험을 엔드투엔드로 분석합니다.
-AI 에이전트 추적 및 평가.
+엔지니어, 데이터 과학자, 애플리케이션 개발자가 LLM 애플리케이션을
+빠르게 개발, 평가, 모니터링할 수 있도록 지원합니다. 구조화된 실험,
+AI 에이전트 전반의 엔드투엔드 추적, 평가를 통해 출력 품질, 성능,
+비용, 전반적인 위험을 자신 있게 개선할 수 있습니다.
 
 ## 개요
 
-Datadog LLM 관찰 기능은 [automatically instrument and trace your agents
-built on Google
-ADK](https://docs.datadoghq.com/llm_observability/instrumentation/auto_instrumentation?tab=python#google-adk),
-다음을 수행할 수 있습니다.
+Datadog LLM 관찰 기능은 [Google ADK 기반 에이전트를 자동으로 계측하고
+추적](https://docs.datadoghq.com/llm_observability/instrumentation/auto_instrumentation?tab=python#google-adk)할 수 있으며,
+다음을 가능하게 합니다.
 
 - **에이전트 실행 및 상호 작용 관찰** - 모든 항목을 자동으로 캡처
   에이전트 실행, 도구 호출 및 에이전트 내 코드 실행

@@ -15,21 +15,21 @@ catalog_tags: ["observability"]
 
 [Datadog LLM
 Observability](https://www.datadoghq.com/product/llm-observability/) が AI を支援
-エンジニア、データ サイエンティスト、アプリケーション開発者は、迅速な開発を行い、
-LLM アプリケーションを評価および監視します。自信を持って出力品質を向上させ、
-エンドツーエンドの構造化された実験によるパフォーマンス、コスト、全体的なリスク
-AI エージェント全体のトレースと評価。
+エンジニア、データ サイエンティスト、アプリケーション開発者が
+LLM アプリケーションをすばやく開発、評価、監視できるよう支援します。
+構造化された実験、AI エージェント全体のエンドツーエンド トレース、
+評価により、出力品質、パフォーマンス、コスト、全体的なリスクを
+自信を持って改善できます。
 
 ## 概要
 
-Datadog LLM 可観測性は [automatically instrument and trace your agents
-built on Google
-ADK](https://docs.datadoghq.com/llm_observability/instrumentation/auto_instrumentation?tab=python#google-adk)、
+Datadog LLM 可観測性は [Google ADK で構築したエージェントを自動的に計測し、
+トレース](https://docs.datadoghq.com/llm_observability/instrumentation/auto_instrumentation?tab=python#google-adk)でき、
 次のことが可能になります。
 
 - **エージェントの実行と対話を観察** - すべてを自動的にキャプチャします
   エージェントの実行、ツールの呼び出し、エージェント内でのコードの実行
-- **基盤となる Google GenAI SDK で行われた **LLM の呼び出しと応答をキャプチャ**
+- 基盤となる Google GenAI SDK で行われた **LLM の呼び出しと応答をキャプチャ**
 - **エラー率、トークンの使用量、コストを提供することで問題をデバッグします**。
   LLM 呼び出しとツールの使用状況に関するすぐに使える評価
 
