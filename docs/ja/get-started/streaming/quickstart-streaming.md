@@ -136,7 +136,7 @@ cd app
 adk web
 ```
 
-!!!info "Windows ユーザーへの注意"
+!!! info "Windows ユーザーへの注意"
 
     `_make_subprocess_transport NotImplementedError` エラーが発生した場合は、代わりに `adk web --no-reload` を使用することを検討してください。
 

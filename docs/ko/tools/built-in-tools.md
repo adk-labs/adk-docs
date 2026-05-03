@@ -172,7 +172,7 @@ Vertex AI RAG 엔진으로 그라운딩을 사용하는 경우 사전에 RAG 코
 </div>
 
 `vertex_ai_search_tool`은 Google Cloud Vertex AI Search를 사용하여 에이전트가
-비공개로 구성된 데이터 저장소(예: 내부 문서, 회사 정책, 지식 기반)를 검색할 수 있도록 합니다. 이 내장 도구는 구성 중에 특정 데이터 저장소 ID를 제공해야 합니다. 도구에 대한 자세한 내용은 [Vertex AI 검색 그라운딩 이해](../grounding/vertex_ai_search_grounding.md)를 참조하세요.
+비공개로 구성된 데이터 저장소(예: 내부 문서, 회사 정책, 지식 기반)를 검색할 수 있도록 합니다. 이 내장 도구는 구성 중에 특정 데이터 저장소 ID를 제공해야 합니다. 도구에 대한 자세한 내용은 [Vertex AI 검색 그라운딩 이해](../grounding/grounding_with_search.md)를 참조하세요.
 
 
 ```py

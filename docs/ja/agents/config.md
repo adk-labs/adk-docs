@@ -200,7 +200,7 @@ sub_agents:
 
 ## エージェント設定のデプロイ
 
-コードベースのエージェントと同じ手順で、[Cloud Run](/ja/deploy/cloud-run/)および[エージェントエンジン](/ja/deploy/agent-engine/)を使用してエージェント設定エージェントをデプロイできます。エージェント設定ベースのエージェントを準備およびデプロイする方法の詳細については、[Cloud Run](/ja/deploy/cloud-run/)および[エージェントエンジン](/ja/deploy/agent-engine/)のデプロイガイドを参照してください。
+コードベースのエージェントと同じ手順で、[Cloud Run](/ja/deploy/cloud-run/) および [Agent Runtime](/ja/deploy/agent-runtime/) にエージェント設定ベースのエージェントをデプロイできます。エージェント設定ベースのエージェントを準備およびデプロイする方法の詳細については、[Cloud Run](/ja/deploy/cloud-run/) および [Agent Runtime](/ja/deploy/agent-runtime/) のデプロイガイドを参照してください。
 
 ## 既知の制限 {#known-limitations}
 

@@ -176,7 +176,7 @@ LIMIT 20;
 
 ### 사전 준비 사항
 
-배포하기 전에 일반 [Agent Engine 설정](/ko/deploy/agent-engine/deploy/#setup-cloud-project)을 완료해야 합니다.
+배포하기 전에 일반 [Agent Engine 설정](/ko/deploy/agent-runtime/deploy/#setup-cloud-project)을 완료해야 합니다.
 다음 항목을 포함합니다.
 
 1.  **Vertex AI API**와 **Cloud Resource Manager API**가 활성화된 Google Cloud 프로젝트
@@ -184,7 +184,7 @@ LIMIT 20;
 3.  배포 아티팩트를 위한 **Cloud Storage 스테이징 버킷**
 4.  배포용 서비스 계정에 [IAM 권한](#iam-권한)에서 나열한 역할이 부여되어 있어야 함
 5.  코딩 환경이
-    [인증됨](/ko/deploy/agent-engine/deploy/#prerequisites-coding-env)
+    [인증됨](/ko/deploy/agent-runtime/deploy/#prerequisites-coding-env)
     상태여야 하며 `gcloud auth login`과 `gcloud auth application-default login`을 실행해야 함
 
 ### 1단계: 에이전트와 플러그인 정의

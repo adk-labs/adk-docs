@@ -121,7 +121,7 @@ cd ./adk_agent_samples # 또는 동등한 상위 디렉터리
 adk web
 ```
 
-!!!info "Windows 사용자 참고"
+!!! info "Windows 사용자 참고"
 
     `_make_subprocess_transport NotImplementedError`가 발생하면 대신 `adk web --no-reload`를 사용해 보십시오.
 

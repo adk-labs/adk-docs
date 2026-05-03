@@ -128,7 +128,7 @@ mvn exec:java \
 
 **2단계:** UI의 왼쪽 상단 모서리에 있는 드롭다운에서 에이전트를 선택할 수 있습니다. "science-app"을 선택하세요.
 
-!!!note "문제 해결(Troubleshooting)"
+!!! note "문제 해결(Troubleshooting)"
 
     드롭다운 메뉴에 "science-app"이 보이지 않는다면, `mvn` 명령어를 maven 프로젝트의 루트 디렉토리에서 실행하고 있는지 확인하세요.
 

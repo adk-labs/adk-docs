@@ -206,11 +206,11 @@ ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 
   </a>
   <a href="https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-adk-vertex-ai-live-api.png" alt="ADK + Vertex AI Live API">
+      <img src="../assets/community-adk-gemini-live-api.png" alt="ADK + Gemini Live API">
     </div>
     <div class="card-content">
       <div class="type">블로그 पोस्ट</div>
-      <h3>📖 Google ADK + Vertex AI Live API</h3>
+      <h3>📖 Google ADK + Gemini Live API</h3>
       <p>Live API로 실시간 스트리밍 경험을 구축하여 ADK CLI를 넘어보세요.</p>
     </div>
   </a>

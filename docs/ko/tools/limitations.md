@@ -18,7 +18,7 @@
 
 *   Gemini API의 [Code Execution](/tools/gemini-api/code-execution/)
 *   Gemini API의 [Google Search](/tools/gemini-api/google-search/)
-*   [Vertex AI Search](/tools/google-cloud/vertex-ai-search/)
+*   [Vertex AI Search](/integrations/agent-search/)
 
 예를 들어, 아래와 같이 이들 도구 중 하나를 다른 도구와 함께
 하나의 에이전트에서 사용하는 방식은 ***지원되지 않습니다***.

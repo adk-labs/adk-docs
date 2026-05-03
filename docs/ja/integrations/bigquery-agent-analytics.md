@@ -176,7 +176,7 @@ LIMIT 20;
 
 ### 前提条件
 
-デプロイ前に、一般的な [Agent Engine の設定](/ja/deploy/agent-engine/deploy/#setup-cloud-project) を完了してください。
+デプロイ前に、一般的な [Agent Engine の設定](/ja/deploy/agent-runtime/deploy/#setup-cloud-project) を完了してください。
 次を含みます。
 
 1.  **Vertex AI API** と **Cloud Resource Manager API** が有効な Google Cloud プロジェクト
@@ -184,7 +184,7 @@ LIMIT 20;
 3.  デプロイアーティファクト用の **Cloud Storage ステージングバケット**
 4.  デプロイするサービスアカウントに [IAM 権限](#iam-権限) に記載したロールが付与されていること
 5.  コーディング環境が
-    [認証済み](/ja/deploy/agent-engine/deploy/#prerequisites-coding-env)
+    [認証済み](/ja/deploy/agent-runtime/deploy/#prerequisites-coding-env)
     であり、`gcloud auth login` と `gcloud auth application-default login` を実行済みであること
 
 ### ステップ 1: エージェントとプラグインの定義

@@ -257,7 +257,7 @@ app = agent_engines.AdkApp(
 )
 ```
 
-!!!info
+!!! info
     AdkAppがAgent Engineにデプロイされると、永続的でマネージドなセッション状態のために自動的に`VertexAiSessionService`を使用します。これにより、追加の設定なしでマルチターンの対話メモリが提供されます。ローカルでのテストでは、アプリケーションはデフォルトで一時的なインメモリのセッションサービスを使用します。
 
 ### エージェントのローカルテスト (任意)
@@ -642,7 +642,7 @@ async for event in remote_app.async_stream_query(
     print(event)
 ```
 
-!!!note 
+!!! note
     モデルとの基盤となる通信では画像のBase64エンコーディングが関与する場合がありますが、Agent Engineにデプロイされたエージェントに画像データを送信するための推奨およびサポートされている方法は、GCS URIを提供することです。
 
 ## デプロイペイロード {#payload}

@@ -27,7 +27,7 @@
 
   <details class="faq-item-arrow">
     <summary>ADK는 프로덕션에 어떻게 배포하나요?</summary>
-    <p>ADK는 <em>어디서나 배포</em>할 수 있는 유연성을 위해 설계되었습니다. 자체 인프라에서 컨테이너로 실행할 수도 있고, Google Cloud로의 기본 원클릭 배포를 활용할 수도 있습니다. Agent Engine(Vertex AI), Cloud Run 또는 GKE를 통해 Google Cloud에 배포하면, 에이전트는 관리형 인프라, 내장 인증, Cloud Trace 관측성, 엔터프라이즈급 보안을 즉시 갖추게 됩니다. 에이전트 코드를 한 줄도 바꾸지 않아도 됩니다. 로컬에서 개발하고, 전 세계로 확장하세요.</p>
+    <p>ADK는 <em>어디서나 배포</em>할 수 있는 유연성을 위해 설계되었습니다. 자체 인프라에서 컨테이너로 실행할 수도 있고, Google Cloud로의 기본 원클릭 배포를 활용할 수도 있습니다. Agent Runtime, Cloud Run 또는 GKE를 통해 Google Cloud에 배포하면, 에이전트는 관리형 인프라, 내장 인증, Cloud Trace 관측성, 엔터프라이즈급 보안을 즉시 갖추게 됩니다. 에이전트 코드를 한 줄도 바꾸지 않아도 됩니다. 로컬에서 개발하고, 전 세계로 확장하세요.</p>
   </details>
 
   <details class="faq-item-arrow">

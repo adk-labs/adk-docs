@@ -27,7 +27,7 @@
 
   <details class="faq-item-arrow">
     <summary>ADK は本番環境へどうデプロイしますか？</summary>
-    <p>ADK は <em>どこでもデプロイ</em> できる柔軟性を備えています。自社インフラでコンテナ化して実行することも、Google Cloud へのネイティブなワンコマンドデプロイを活用することもできます。Agent Engine(Vertex AI)、Cloud Run、GKE 経由で Google Cloud にデプロイすると、管理されたインフラ、組み込み認証、Cloud Trace の可観測性、エンタープライズ級セキュリティが、エージェントコードを 1 行も変えずにすぐ利用できます。ローカルで開発し、世界へスケールしましょう。</p>
+    <p>ADK は <em>どこでもデプロイ</em> できる柔軟性を備えています。自社インフラでコンテナ化して実行することも、Google Cloud へのネイティブなワンコマンドデプロイを活用することもできます。Agent Runtime、Cloud Run、GKE 経由で Google Cloud にデプロイすると、管理されたインフラ、組み込み認証、Cloud Trace の可観測性、エンタープライズ級セキュリティが、エージェントコードを 1 行も変えずにすぐ利用できます。ローカルで開発し、世界へスケールしましょう。</p>
   </details>
 
   <details class="faq-item-arrow">

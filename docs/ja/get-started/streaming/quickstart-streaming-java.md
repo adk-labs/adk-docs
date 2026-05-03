@@ -128,7 +128,7 @@ mvn exec:java \
 
 **ステップ 2:** UI の左上にあるドロップダウンでエージェントを選択できます。「science-app」を選択してください。
 
-!!!note "トラブルシューティング (Troubleshooting)"
+!!! note "トラブルシューティング (Troubleshooting)"
 
     ドロップダウンメニューに「science-app」が表示されない場合は、`mvn` コマンドを maven プロジェクトのルートから実行しているか確認してください。
 

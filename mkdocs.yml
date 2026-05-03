@@ -328,7 +328,7 @@ plugins:
                 - Gemini: agents/models/google-gemini.md
                 - Gemma: agents/models/google-gemma.md
                 - Claude: agents/models/anthropic.md
-                - Vertex AI 호스팅: agents/models/vertex.md
+                - Agent Platform 호스팅: agents/models/agent-platform.md
                 - Apigee AI Gateway: agents/models/apigee.md
                 - Ollama: agents/models/ollama.md
                 - vLLM: agents/models/vllm.md
@@ -354,21 +354,23 @@ plugins:
                 - 웹 인터페이스: runtime/web-interface.md
                 - 명령줄: runtime/command-line.md
                 - API 서버: runtime/api-server.md
+                - 앰비언트 에이전트: runtime/ambient-agents.md
                 - 에이전트 재개: runtime/resume.md
                 - 런타임 설정: runtime/runconfig.md
                 - 이벤트 루프: runtime/event-loop.md
               - 배포:
                 - deploy/index.md
-                - 에이전트 엔진:
-                  - deploy/agent-engine/index.md
-                  - 표준 배포: deploy/agent-engine/deploy.md
-                  - Agent Starter Pack: deploy/agent-engine/asp.md
-                  - 배포된 에이전트 테스트: deploy/agent-engine/test.md
+                - 에이전트 런타임:
+                  - deploy/agent-runtime/index.md
+                  - 표준 배포: deploy/agent-runtime/deploy.md
+                  - agents-cli: deploy/agent-runtime/agents-cli.md
+                  - 배포된 에이전트 테스트: deploy/agent-runtime/test.md
                 - Cloud Run: deploy/cloud-run.md
                 - GKE: deploy/gke.md
               - 관측성(Observability):
                 - observability/index.md
                 - 로깅: observability/logging.md
+                - 트레이스: observability/traces.md
               - 평가:
                 - evaluate/index.md
                 - 기준: evaluate/criteria.md
@@ -431,7 +433,7 @@ plugins:
               - 그라운딩:
                 - grounding/index.md
                 - Google 검색 그라운딩 이해: grounding/google_search_grounding.md
-                - Vertex AI 검색 그라운딩 이해: grounding/vertex_ai_search_grounding.md
+                - Search로 그라운딩: grounding/grounding_with_search.md
             - 레퍼런스:
               - 릴리스 노트: release-notes.md
               - API 레퍼런스:
@@ -495,7 +497,7 @@ plugins:
                 - Gemini: agents/models/google-gemini.md
                 - Gemma: agents/models/google-gemma.md
                 - Claude: agents/models/anthropic.md
-                - Vertex AI hosted: agents/models/vertex.md
+                - Agent Platform hosted: agents/models/agent-platform.md
                 - Apigee AI Gateway: agents/models/apigee.md
                 - Ollama: agents/models/ollama.md
                 - vLLM: agents/models/vllm.md
@@ -521,21 +523,23 @@ plugins:
                 - Webインターフェース: runtime/web-interface.md
                 - コマンドライン: runtime/command-line.md
                 - APIサーバー: runtime/api-server.md
+                - アンビエントエージェント: runtime/ambient-agents.md
                 - エージェントの再開: runtime/resume.md
                 - ランタイム設定: runtime/runconfig.md
                 - イベントループ: runtime/event-loop.md
               - デプロイ:
                 - deploy/index.md
-                - エージェントエンジン:
-                  - deploy/agent-engine/index.md
-                  - 標準デプロイ: deploy/agent-engine/deploy.md
-                  - Agent Starter Pack: deploy/agent-engine/asp.md
-                  - デプロイ済みエージェントのテスト: deploy/agent-engine/test.md
+                - エージェントランタイム:
+                  - deploy/agent-runtime/index.md
+                  - 標準デプロイ: deploy/agent-runtime/deploy.md
+                  - agents-cli: deploy/agent-runtime/agents-cli.md
+                  - デプロイ済みエージェントのテスト: deploy/agent-runtime/test.md
                 - Cloud Run: deploy/cloud-run.md
                 - GKE: deploy/gke.md
               - オブザーバビリティ:
                 - observability/index.md
                 - ロギング: observability/logging.md
+                - トレース: observability/traces.md
               - 評価:
                 - evaluate/index.md
                 - 基準: evaluate/criteria.md
@@ -598,7 +602,7 @@ plugins:
               - グラウンディング:
                 - grounding/index.md
                 - Google検索グラウンディングについて: grounding/google_search_grounding.md
-                - Vertex AI Searchグラウンディングについて: grounding/vertex_ai_search_grounding.md
+                - Search によるグラウンディング: grounding/grounding_with_search.md
             - リファレンス:
               - リリースノート: release-notes.md
               - APIリファレンス:

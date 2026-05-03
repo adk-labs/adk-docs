@@ -256,7 +256,7 @@ app = agent_engines.AdkApp(
 )
 ```
 
-!!!info
+!!! info
     AdkApp이 Agent Engine에 배포되면, 영구적인 관리형 세션 상태를 위해 자동으로 `VertexAiSessionService`를 사용합니다. 이를 통해 추가 구성 없이 다중 턴 대화 메모리를 제공합니다. 로컬 테스트의 경우, 애플리케이션은 기본적으로 임시 인메모리 세션 서비스를 사용합니다.
 
 ### 로컬에서 에이전트 테스트 (선택 사항)
@@ -634,7 +634,7 @@ async for event in remote_app.async_stream_query(
     print(event)
 ```
 
-!!!note 
+!!! note
     모델과의 기본 통신에는 이미지에 대한 Base64 인코딩이 포함될 수 있지만, Agent Engine에 배포된 에이전트에 이미지 데이터를 보내는 권장 및 지원되는 방법은 GCS URI를 제공하는 것입니다.
 
 ## 배포 페이로드 {#payload}

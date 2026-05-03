@@ -122,7 +122,7 @@ cd ./adk_agent_samples # または該当する親ディレクトリ
 adk web
 ```
 
-!!!info "Windows ユーザー向けの注意"
+!!! info "Windows ユーザー向けの注意"
 
     `_make_subprocess_transport NotImplementedError` が発生する場合は、代わりに `adk web --no-reload` の使用を検討してください。
 

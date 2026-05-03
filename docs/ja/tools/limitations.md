@@ -19,7 +19,7 @@
 
 *   Gemini API の [Code Execution](/tools/gemini-api/code-execution/)
 *   Gemini API の [Google Search](/tools/gemini-api/google-search/)
-*   [Vertex AI Search](/tools/google-cloud/vertex-ai-search/)
+*   [Vertex AI Search](/integrations/agent-search/)
 
 たとえば、次のようにこれらのツールのいずれかを他ツールと一緒に
 単一エージェントで使う方法は ***サポートされていません***。

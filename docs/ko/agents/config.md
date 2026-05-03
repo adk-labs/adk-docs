@@ -200,7 +200,7 @@ sub_agents:
 
 ## 에이전트 구성 배포
 
-코드 기반 에이전트와 동일한 절차를 사용하여 [Cloud Run](/ko/deploy/cloud-run/) 및 [에이전트 엔진](/ko/deploy/agent-engine/)을 사용하여 에이전트 구성 에이전트를 배포할 수 있습니다. 에이전트 구성 기반 에이전트를 준비하고 배포하는 방법에 대한 자세한 내용은 [Cloud Run](/ko/deploy/cloud-run/) 및 [에이전트 엔진](/ko/deploy/agent-engine/) 배포 가이드를 참조하세요.
+코드 기반 에이전트와 동일한 절차를 사용하여 [Cloud Run](/ko/deploy/cloud-run/) 및 [Agent Runtime](/ko/deploy/agent-runtime/)에 에이전트 구성 기반 에이전트를 배포할 수 있습니다. 에이전트 구성 기반 에이전트를 준비하고 배포하는 방법에 대한 자세한 내용은 [Cloud Run](/ko/deploy/cloud-run/) 및 [Agent Runtime](/ko/deploy/agent-runtime/) 배포 가이드를 참조하세요.
 
 ## 알려진 제한 사항 {#known-limitations}
 
