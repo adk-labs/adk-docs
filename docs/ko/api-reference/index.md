@@ -9,7 +9,7 @@
     ---
     Python 에이전트 개발 키트를 위한 전체 API 문서를 살펴보세요. Python으로 정교한 AI 에이전트를 구축하기 위한 모든 모듈, 클래스, 함수, 예제에 대한 상세 정보를 확인하실 수 있습니다.
 
-    [:octicons-arrow-right-24: Python API 문서 보기](python/index.html) <br>
+    [:octicons-arrow-right-24: Python API 문서 보기](https://adk.dev/api-reference/python/) <br>
     <!-- Assuming your Python API docs are in a 'python' subdirectory -->
     <!-- Or link to an external ReadTheDocs, etc. -->
     <!-- [:octicons-arrow-right-24: View Python API Docs](python/index.html) -->
@@ -21,7 +21,7 @@
     ---
     TypeScript Agent Development Kit의 전체 API 문서를 확인하세요. TypeScript로 강력하고 유연한 AI 에이전트를 구축할 수 있도록 모든 패키지, 클래스, 메서드에 대한 상세 정보를 제공합니다.
 
-    [:octicons-arrow-right-24: TypeScript API 문서 보기](typescript/index.html) <br>
+    [:octicons-arrow-right-24: TypeScript API 문서 보기](https://adk.dev/api-reference/typescript/) <br>
 
 <!-- This comment forces a block separation -->
 
@@ -39,7 +39,7 @@
     ---
     Java 에이전트 개발 키트를 위한 포괄적인 Javadoc을 확인하세요. 이 레퍼런스는 Java를 사용하여 견고한 AI 에이전트를 개발할 수 있도록 모든 패키지, 클래스, 인터페이스, 메서드에 대한 상세한 명세를 제공합니다.
 
-    [:octicons-arrow-right-24: Java API 문서 보기](java/index.html) <br>
+    [:octicons-arrow-right-24: Java API 문서 보기](https://adk.dev/api-reference/java/) <br>
     <!-- Assuming your Java API docs (Javadocs) are in a 'java' subdirectory -->
     <!-- Or link to an external Javadoc hosting site -->
     <!-- [:octicons-arrow-right-24: View Java API Docs](java/index.html) -->
@@ -51,7 +51,7 @@
     ---
     유효한 모든 옵션과 하위 명령어를 포함하여 CLI에 대한 전체 API 문서를 살펴보세요.
 
-    [:octicons-arrow-right-24: CLI 문서 보기](cli/index.html) <br>
+    [:octicons-arrow-right-24: CLI 문서 보기](https://adk.dev/api-reference/cli/) <br>
 
 <!-- This comment forces a block separation -->
 
@@ -60,7 +60,7 @@
     ---
     YAML 텍스트 파일을 사용하여 ADK를 구성하기 위한 전체 Agent Config 구문을 확인하세요.
 
-    [:octicons-arrow-right-24: Agent Config 레퍼런스 보기](agentconfig/index.html) <br>
+    [:octicons-arrow-right-24: Agent Config 레퍼런스 보기](https://adk.dev/api-reference/agentconfig/) <br>
 
 <!-- This comment forces a block separation -->
 
@@ -69,6 +69,6 @@
     ---
     ADK 웹 서버의 REST API를 살펴보세요. 이 레퍼런스는 사용 가능한 엔드포인트, 요청 및 응답 형식 등에 대한 자세한 정보를 제공합니다.
 
-    [:octicons-arrow-right-24: REST API 문서 보기](rest/index.md) <br>
+    [:octicons-arrow-right-24: REST API 문서 보기](https://adk.dev/api-reference/rest/) <br>
 
 </div>
