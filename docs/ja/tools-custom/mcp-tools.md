@@ -340,7 +340,7 @@ from . import agent
 
 エージェントが Google Maps Grounding Lite MCP ツールを使って、経路案内や位置情報ベースの情報を返すことを確認できます。
 
-<img src="../../assets/adk-tool-maps-lite-mcp-adk-web-demo.png" alt="ADK Web での Google Maps Grounding Lite MCP の例">
+<img src="../../../assets/adk-tool-maps-lite-mcp-adk-web-demo.png" alt="ADK Web での Google Maps Grounding Lite MCP の例">
 
 
 Java で `McpToolset` を初期化するエージェントを定義するには、次のサンプルを参照してください。

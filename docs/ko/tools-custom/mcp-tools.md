@@ -338,7 +338,7 @@ from . import agent
 
 에이전트가 Google Maps Grounding Lite MCP 도구를 사용해 길 안내나 위치 기반 정보를 제공하는 것을 확인할 수 있습니다.
 
-<img src="../../assets/adk-tool-maps-lite-mcp-adk-web-demo.png" alt="ADK 웹을 사용한 Google Maps Grounding Lite MCP 예시">
+<img src="../../../assets/adk-tool-maps-lite-mcp-adk-web-demo.png" alt="ADK 웹을 사용한 Google Maps Grounding Lite MCP 예시">
 
 
 Java에서는 `McpToolset`을 초기화하는 에이전트를 정의하려면 다음 샘플을 참조하세요.

@@ -1,7 +1,7 @@
 ---
 catalog_title: Data Agents
 catalog_description: AI 기반 에이전트로 데이터를 분석합니다
-catalog_icon: /integrations/assets/vertex-ai.png
+catalog_icon: /integrations/assets/agent-platform.svg
 catalog_tags: ["data", "google"]
 ---
 

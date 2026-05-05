@@ -1,7 +1,7 @@
 ---
 catalog_title: Vertex AI express mode
 catalog_description: Vertex AI サービスを無料で試しながら開発できます
-catalog_icon: /integrations/assets/vertex-ai.png
+catalog_icon: /integrations/assets/agent-platform.svg
 catalog_tags: ["google"]
 ---
 # Vertex AI Expressモード：Vertex AIセッションとメモリの使用

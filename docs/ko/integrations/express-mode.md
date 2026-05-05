@@ -1,7 +1,7 @@
 ---
 catalog_title: Vertex AI express mode
 catalog_description: 비용 없이 Vertex AI 서비스를 사용해 개발을 시작해 볼 수 있습니다
-catalog_icon: /integrations/assets/vertex-ai.png
+catalog_icon: /integrations/assets/agent-platform.svg
 catalog_tags: ["google"]
 ---
 # Vertex AI 익스프레스 모드: Vertex AI 세션 및 메모리 사용하기
