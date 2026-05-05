@@ -34,6 +34,15 @@ ADK는 개발 중 에이전트를 실행하고 테스트하는 여러 방법을 
 
     [:octicons-arrow-right-24: API 서버 사용하기](api-server.md)
 
+-   :material-access-point:{ .lg .middle } **앰비언트 에이전트**
+
+    ---
+
+    이벤트를 처리하고, 시스템을 모니터링하며, 사람의 개입 없이 비동기적으로
+    응답하는 자율 에이전트를 빌드합니다.
+
+    [:octicons-arrow-right-24: 앰비언트 에이전트 사용하기](ambient-agents.md)
+
 </div>
 
 ## 기술 레퍼런스
@@ -42,4 +51,5 @@ ADK는 개발 중 에이전트를 실행하고 테스트하는 여러 방법을 
 
 - **[Event Loop](event-loop.md)**: ADK를 구동하는 핵심 이벤트 루프와 yield/pause/resume 사이클을 이해합니다.
 - **[Resume Agents](resume.md)**: 이전 상태에서 에이전트 실행을 재개하는 방법을 배웁니다.
+- **[Cancel Agent Runs](cancel.md)**: AbortSignal(TypeScript)을 사용해 실행 중인 에이전트 호출을 정상적으로 취소합니다.
 - **[Runtime Config](runconfig.md)**: RunConfig로 런타임 동작을 구성합니다.

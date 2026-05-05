@@ -72,6 +72,18 @@ export GOOGLE_API_KEY=your-api-key
 
 서비스 계정으로 읽을 수 있는 비밀을 만들었는지 확인하십시오.
 
+### Cloud Build 권한
+
+`adk deploy` 명령은 Google Cloud Build를 사용해 빌드 프로세스를 자동화하므로,
+기본 Compute 서비스 계정에 Cloud Build를 사용할 권한을 부여해야 합니다.
+다음 명령 예시는 이 권한을 부여하는 방법을 보여줍니다.
+
+```bash
+gcloud projects add-iam-policy-binding [PROJECT_ID] \
+    --member="serviceAccount:[PROJECT_NUMBER]-compute@developer.gserviceaccount.com" \
+    --role="roles/cloudbuild.builds.builder"
+```
+
 ### GOOGLE_API_KEY 비밀 항목
 
 수동으로 비밀을 만들거나 CLI를 사용할 수 있습니다.

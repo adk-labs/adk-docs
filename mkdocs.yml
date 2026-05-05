@@ -322,6 +322,7 @@ plugins:
                   - 병렬 에이전트: agents/workflow-agents/parallel-agents.md
                 - 커스텀 에이전트: agents/custom-agents.md
                 - 다중 에이전트 시스템: agents/multi-agents.md
+                - 에이전트 라우팅: agents/routing.md
                 - 에이전트 설정: agents/config.md
               - 에이전트용 모델:
                 - agents/models/index.md
@@ -330,6 +331,7 @@ plugins:
                 - Claude: agents/models/anthropic.md
                 - Agent Platform 호스팅: agents/models/agent-platform.md
                 - Apigee AI Gateway: agents/models/apigee.md
+                - 모델 라우팅: agents/models/routing.md
                 - Ollama: agents/models/ollama.md
                 - vLLM: agents/models/vllm.md
                 - LiteLLM: agents/models/litellm.md
@@ -356,6 +358,7 @@ plugins:
                 - API 서버: runtime/api-server.md
                 - 앰비언트 에이전트: runtime/ambient-agents.md
                 - 에이전트 재개: runtime/resume.md
+                - 에이전트 실행 취소: runtime/cancel.md
                 - 런타임 설정: runtime/runconfig.md
                 - 이벤트 루프: runtime/event-loop.md
               - 배포:
@@ -370,6 +373,7 @@ plugins:
               - 관측성(Observability):
                 - observability/index.md
                 - 로깅: observability/logging.md
+                - 메트릭: observability/metrics.md
                 - 트레이스: observability/traces.md
               - 평가:
                 - evaluate/index.md
@@ -491,6 +495,7 @@ plugins:
                   - パラレルエージェント: agents/workflow-agents/parallel-agents.md
                 - カスタムエージェント: agents/custom-agents.md
                 - マルチエージェントシステム: agents/multi-agents.md
+                - エージェントルーティング: agents/routing.md
                 - エージェント設定: agents/config.md
               - エージェント向けモデル:
                 - agents/models/index.md
@@ -499,6 +504,7 @@ plugins:
                 - Claude: agents/models/anthropic.md
                 - Agent Platform hosted: agents/models/agent-platform.md
                 - Apigee AI Gateway: agents/models/apigee.md
+                - モデルルーティング: agents/models/routing.md
                 - Ollama: agents/models/ollama.md
                 - vLLM: agents/models/vllm.md
                 - LiteLLM: agents/models/litellm.md
@@ -525,6 +531,7 @@ plugins:
                 - APIサーバー: runtime/api-server.md
                 - アンビエントエージェント: runtime/ambient-agents.md
                 - エージェントの再開: runtime/resume.md
+                - エージェント実行のキャンセル: runtime/cancel.md
                 - ランタイム設定: runtime/runconfig.md
                 - イベントループ: runtime/event-loop.md
               - デプロイ:
@@ -539,6 +546,7 @@ plugins:
               - オブザーバビリティ:
                 - observability/index.md
                 - ロギング: observability/logging.md
+                - メトリクス: observability/metrics.md
                 - トレース: observability/traces.md
               - 評価:
                 - evaluate/index.md

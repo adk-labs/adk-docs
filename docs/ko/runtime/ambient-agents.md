@@ -1,12 +1,15 @@
-# 주변 에이전트
+# 앰비언트 에이전트로 작업 트리거하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-go">Go</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.29.0</span><span class="lst-go">Go v1.1.0</span>
 </div>
 
-ADK는 데이터를 처리하고 모니터링하는 자율 에이전트인 **주변 에이전트**를 지원합니다.
-이벤트를 처리하고 사람의 개입 없이 비동기적으로 응답합니다. 주변 사용
-대리인은 다음을 수행합니다.
+에이전트 워크플로를 실행할 때, 사람이 입력하기를 기다리는 대신 이벤트가 발생하거나
+새 데이터가 제공되는 시점에 워크플로를 활성화하고 싶을 수 있습니다. ADK 에이전트는
+트리거를 구성해 이벤트에 응답하고 작업을 수행할 수 있으며, 이를 *앰비언트 에이전트*라고
+합니다. 이러한 에이전트는 백그라운드 프로세스로 실행되어 데이터를 처리하고, 이벤트를
+모니터링하며, 사람의 개입 없이 비동기적으로 응답할 수 있습니다. 앰비언트 에이전트는
+다음 작업에 사용할 수 있습니다.
 
 - **클라우드 이벤트에 반응합니다.** 파일이 업로드되면 처리합니다.
   [Cloud Storage](https://cloud.google.com/storage), 데이터베이스에 응답

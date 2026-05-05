@@ -72,6 +72,19 @@ export GOOGLE_API_KEY=your-api-key
 
 サービスアカウントが読み取れるシークレットを作成したことを確認してください。
 
+### Cloud Build の権限
+
+`adk deploy` コマンドは Google Cloud Build を使用してビルドプロセスを
+自動化するため、デフォルトの Compute サービスアカウントに Cloud Build を
+使用する権限を付与する必要があります。次のコマンド例は、この権限を付与する
+方法を示しています。
+
+```bash
+gcloud projects add-iam-policy-binding [PROJECT_ID] \
+    --member="serviceAccount:[PROJECT_NUMBER]-compute@developer.gserviceaccount.com" \
+    --role="roles/cloudbuild.builds.builder"
+```
+
 ### GOOGLE_API_KEYシークレットのエントリ
 
 シークレットを手動で作成するか、CLIを使用できます。

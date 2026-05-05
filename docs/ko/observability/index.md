@@ -8,11 +8,11 @@
 기본적인 입력/출력 모니터링만으로는 보통 충분하지 않습니다.
 
 Agent Development Kit(ADK)는 에이전트 모니터링 및 디버깅을 위한
-구성 가능한 [로깅](/observability/logging/)
-기능을 제공합니다. 다만 모니터링 및 분석을 위해서는 더 고급의
-[observability ADK 통합](/integrations/?topic=observability)
+[로깅](/ko/observability/logging/), [메트릭](/ko/observability/metrics/),
+[트레이스](/ko/observability/traces/) 기능을 기본 제공합니다. 다만 모니터링 및
+분석을 위해서는 더 고급의 [observability ADK 통합](/ko/integrations/?topic=observability)
 기능도 고려해야 할 수 있습니다.
 
 !!! tip "관측 가능성을 위한 ADK 통합"
     ADK용 사전 구축된 관측 가능성 라이브러리 목록은
-    [도구 및 통합](/integrations/?topic=observability)을 참조하세요.
+    [도구 및 통합](/ko/integrations/?topic=observability)을 참조하세요.

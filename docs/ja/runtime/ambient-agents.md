@@ -1,12 +1,15 @@
-# 環境エージェント
+# アンビエントエージェントでアクションをトリガーする
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-go">Go</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.29.0</span><span class="lst-go">Go v1.1.0</span>
 </div>
 
-ADK は、**アンビエント エージェント**、データを処理し、監視する自律型エージェントをサポートします。
-イベントに応答し、人間の介入なしで非同期に応答します。アンビエントを使用する
-エージェントの目的:
+エージェントワークフローを実行するとき、人間の入力を待つのではなく、イベントや
+新しいデータの到着に応じてワークフローを起動したい場合があります。ADK エージェントは、
+イベントに応答して作業を実行するトリガーを構成できます。これを *アンビエントエージェント*
+と呼びます。これらのエージェントはバックグラウンドプロセスとして実行され、データを処理し、
+イベントを監視し、人間の介入なしに非同期で応答できます。アンビエントエージェントは
+次の用途に使用できます。
 
 - **クラウド イベントに反応します。** ファイルがアップロードされたときにファイルを処理します。
   [Cloud Storage](https://cloud.google.com/storage)、データベースに応答します
