@@ -182,6 +182,88 @@ uv add stackone-adk
         asyncio.run(main())
         ```
 
+## 検索と実行モード
+
+`mode="search_and_execute"` を使用すると、プラグインは `tool_search` と
+`tool_execute` のちょうど 2 つのツールだけを登録します。モデルは最初から
+全カタログを見るのではなく、実行時にこれらのツールを使って適切な StackOne
+ツールを見つけ、呼び出します。
+
+すべてのツール定義をモデルに登録すると、次の 3 つのコストがあります。
+
+- **トークンのオーバーヘッド:** ツールスキーマがプロンプトトークンを消費し、
+  推論に使えるトークンを減らします。
+- **ペイロード制限:** 大きなカタログはプロバイダのペイロード制限を超える
+  可能性があります。たとえば Gemini は、リクエストごとの関数宣言のサイズと
+  数にハードリミットを設けています。
+- **選択精度:** ツール候補が増えるほど、似た候補を区別する必要があるため、
+  ツール選択の品質が低下しやすくなります。
+
+このモードでは、カタログサイズにかかわらず登録されるツール数を 2 つに
+保ちます。モデルは実行時に自然言語クエリで適切なツールを解決します。
+
+このモードには `stackone-adk>=0.2.0` が必要です。
+
+=== "Python"
+
+    ```python
+    import asyncio
+
+    from google.adk.agents import Agent
+    from google.adk.apps import App
+    from google.adk.runners import InMemoryRunner
+    from stackone_adk import StackOnePlugin
+
+
+    async def main():
+        plugin = StackOnePlugin(
+            mode="search_and_execute",
+            account_ids=["YOUR_ACCOUNT_ID"],
+            search={"method": "auto", "top_k": 10},
+        )
+
+        agent = Agent(
+            model="gemini-flash-latest",
+            name="stackone_agent",
+            description="Connects to multiple SaaS providers through StackOne.",
+            instruction=(
+                "You are an assistant powered by StackOne. To answer the "
+                "user's request, first call tool_search with a short query "
+                "to find the right action, then call tool_execute with the "
+                "chosen tool name and parameters that match the schema "
+                "returned by tool_search."
+            ),
+            tools=plugin.get_tools(),
+        )
+
+        app = App(
+            name="stackone_app",
+            root_agent=agent,
+            plugins=[plugin],
+        )
+
+        async with InMemoryRunner(app=app) as runner:
+            events = await runner.run_debug(
+                "List the first 3 workers.",
+                quiet=True,
+            )
+            for event in reversed(events):
+                if event.content and event.content.parts:
+                    text_parts = [p.text for p in event.content.parts if p.text]
+                    if text_parts:
+                        print("".join(text_parts))
+                        break
+
+
+    asyncio.run(main())
+    ```
+
+モデルはまず自然言語クエリで `tool_search` を呼び出し、名前、説明、
+パラメータスキーマを含む短い候補ツール一覧を受け取ります。その後、モデルは
+選択したツール名とスキーマに合うパラメータで `tool_execute` を呼び出します。
+どちらの呼び出しも SDK を通じて StackOne の AI Integration Gateway に
+ルーティングされます。
+
 ## 利用可能なツール
 
 固定のツールセットを持つ統合とは異なり、StackOne のツールは StackOne API を通じて
@@ -228,6 +310,10 @@ Parameter | Type | Default | Description
 `providers` | `list[str] | None` | `None` | プロバイダ名でフィルタリングします（例: `["calendly", "hibob"]`）。
 `actions` | `list[str] | None` | `None` | glob 構文を使ったアクションパターンでフィルタリングします。
 `account_ids` | `list[str] | None` | `None` | 特定の接続済みアカウント ID にツールを限定します。
+`mode` | `Literal["search_and_execute"] | None` | `None` | ツール登録戦略です。`None` の場合、検出されたすべてのツールをエージェントに登録します。`"search_and_execute"` の場合、プラグインは 2 つのツール（`tool_search` と `tool_execute`）を登録し、モデルが実行時にツールを選択して呼び出します。
+`search` | `SearchConfig | None` | `None` | `StackOneToolSet` に転送される検索バックエンド構成です。`mode="search_and_execute"` のときに有効です。このモードでは既定値が `{"method": "auto"}` です。
+`execute` | `ExecuteToolsConfig | None` | `None` | `StackOneToolSet` に転送される実行構成です。
+`timeout` | `float` | `180.0` | HTTP 呼び出し（アカウント検出とツール実行）のリクエストごとのタイムアウト秒数です。遅いコネクタでは値を増やしてください。
 
 ### ツールフィルタリング
 

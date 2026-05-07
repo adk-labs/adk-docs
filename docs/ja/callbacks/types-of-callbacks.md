@@ -13,6 +13,33 @@
 !!! Note
     特定のメソッド名や戻り値の型は、SDKの言語によって若干異なる場合があります（例：Pythonでは`None`を返す、Javaでは`Optional.empty()`や`Maybe.empty()`を返す）。詳細は各言語のAPIドキュメントを参照してください。
 
+??? warning "Python: 文書化されたコールバックパラメータ名を使用する"
+
+    Python では ADK がコールバック引数をキーワードで渡すため、コールバック
+    関数のパラメータ名は文書化された名前と正確に一致している必要があります。
+    たとえば、エージェントおよびモデルのコールバックでは `callback_context` を、
+    ツールコールバックでは `tool_context` を使用します。これらのパラメータ名を
+    `ctx` のような別名に変更すると、実行時に `TypeError` が発生します。
+
+    ```python
+    # 正しい
+    def before_agent_callback(callback_context):
+        ...
+
+    # 誤り
+    def before_agent_callback(ctx):
+        ...
+    ```
+
+    | コールバック | 必須パラメータ名 |
+    |---|---|
+    | `before_agent_callback` | `callback_context` |
+    | `after_agent_callback` | `callback_context` |
+    | `before_model_callback` | `callback_context`, `llm_request` |
+    | `after_model_callback` | `callback_context`, `llm_response` |
+    | `before_tool_callback` | `tool`, `args`, `tool_context` |
+    | `after_tool_callback` | `tool`, `args`, `tool_context`, `tool_response` |
+
 ### Before Agent コールバック
 
 **タイミング：** エージェントの `_run_async_impl` (または `_run_live_impl`) メソッドが実行される*直前に*呼び出されます。エージェントの `InvocationContext` が作成された後、しかしそのコアロジックが開始される*前に*実行されます。

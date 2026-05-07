@@ -73,6 +73,9 @@ ADK 프레임워크는 이름, docstring, 매개변수, 유형 힌트 및 기본
 === "Python"
     매개변수는 **기본값**을 제공하는 경우 **선택 사항**으로 간주됩니다. 이것이 선택적 인수를 정의하는 표준 Python 방식입니다. `typing.Optional[SomeType]` 또는 `| None` 구문(Python 3.10 이상)을 사용하여 매개변수를 선택 사항으로 표시할 수도 있습니다.
 
+    기본값은 실제로 선택 사항인 값에만 사용하세요. 모델이 사용자 요청에서
+    추론해야 하거나 사용자에게 물어봐야 하는 정보에는 기본값을 추가하지 마세요.
+
     ???+ "예: 선택적 매개변수"
         ```python
         def search_flights(destination: str, departure_date: str, flexible_days: int = 0):

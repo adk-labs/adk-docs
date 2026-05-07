@@ -13,6 +13,33 @@
 !!! Note
     특정 메서드 이름이나 반환 타입은 SDK 언어에 따라 약간 다를 수 있습니다(예: Python에서는 `None`, Java에서는 `Optional.empty()` 또는 `Maybe.empty()` 반환). 자세한 내용은 각 언어별 API 문서를 참조하세요.
 
+??? warning "Python: 문서화된 콜백 파라미터 이름 사용"
+
+    Python에서는 ADK가 콜백 인수를 키워드로 전달하므로, 콜백 함수 파라미터
+    이름이 문서화된 이름과 정확히 일치해야 합니다. 예를 들어 에이전트 및
+    모델 콜백에는 `callback_context`를 사용하고, 도구 콜백에는
+    `tool_context`를 사용하세요. 이러한 파라미터 이름을 `ctx` 같은 별칭으로
+    바꾸면 런타임 `TypeError`가 발생합니다.
+
+    ```python
+    # 올바름
+    def before_agent_callback(callback_context):
+        ...
+
+    # 잘못됨
+    def before_agent_callback(ctx):
+        ...
+    ```
+
+    | 콜백 | 필수 파라미터 이름 |
+    |---|---|
+    | `before_agent_callback` | `callback_context` |
+    | `after_agent_callback` | `callback_context` |
+    | `before_model_callback` | `callback_context`, `llm_request` |
+    | `after_model_callback` | `callback_context`, `llm_response` |
+    | `before_tool_callback` | `tool`, `args`, `tool_context` |
+    | `after_tool_callback` | `tool`, `args`, `tool_context`, `tool_response` |
+
 ### Before Agent 콜백
 
 **시점:** 에이전트의 `_run_async_impl`(또는 `_run_live_impl`) 메서드가 실행되기 *직전에* 호출됩니다. 에이전트의 `InvocationContext`가 생성된 후, 하지만 핵심 로직이 시작되기 *전에* 실행됩니다.

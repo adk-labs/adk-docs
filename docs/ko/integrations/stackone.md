@@ -178,6 +178,85 @@ uv add stackone-adk
         asyncio.run(main())
         ```
 
+## 검색 및 실행 모드
+
+`mode="search_and_execute"`를 사용하면 플러그인은 정확히 두 개의 도구,
+`tool_search`와 `tool_execute`만 등록합니다. 모델은 전체 카탈로그를 처음부터
+보는 대신 런타임에 이 도구들을 사용해 적절한 StackOne 도구를 찾고 호출합니다.
+
+모든 도구 정의를 모델에 등록하면 세 가지 비용이 있습니다.
+
+- **토큰 오버헤드:** 도구 스키마가 프롬프트 토큰을 소비하여 추론에 사용할 수
+  있는 토큰을 줄입니다.
+- **페이로드 제한:** 큰 카탈로그는 제공업체의 페이로드 제한을 초과할 수 있습니다.
+  예를 들어 Gemini는 요청당 함수 선언의 크기와 수에 하드 제한을 적용합니다.
+- **선택 정확도:** 도구 후보 집합이 커질수록 비슷한 도구를 구분해야 하므로
+  도구 선택 품질이 낮아질 수 있습니다.
+
+이 모드는 카탈로그 크기와 관계없이 등록되는 도구 수를 두 개로 유지합니다.
+모델은 런타임에 자연어 쿼리로 적절한 도구를 찾습니다.
+
+이 모드에는 `stackone-adk>=0.2.0`이 필요합니다.
+
+=== "Python"
+
+    ```python
+    import asyncio
+
+    from google.adk.agents import Agent
+    from google.adk.apps import App
+    from google.adk.runners import InMemoryRunner
+    from stackone_adk import StackOnePlugin
+
+
+    async def main():
+        plugin = StackOnePlugin(
+            mode="search_and_execute",
+            account_ids=["YOUR_ACCOUNT_ID"],
+            search={"method": "auto", "top_k": 10},
+        )
+
+        agent = Agent(
+            model="gemini-flash-latest",
+            name="stackone_agent",
+            description="Connects to multiple SaaS providers through StackOne.",
+            instruction=(
+                "You are an assistant powered by StackOne. To answer the "
+                "user's request, first call tool_search with a short query "
+                "to find the right action, then call tool_execute with the "
+                "chosen tool name and parameters that match the schema "
+                "returned by tool_search."
+            ),
+            tools=plugin.get_tools(),
+        )
+
+        app = App(
+            name="stackone_app",
+            root_agent=agent,
+            plugins=[plugin],
+        )
+
+        async with InMemoryRunner(app=app) as runner:
+            events = await runner.run_debug(
+                "List the first 3 workers.",
+                quiet=True,
+            )
+            for event in reversed(events):
+                if event.content and event.content.parts:
+                    text_parts = [p.text for p in event.content.parts if p.text]
+                    if text_parts:
+                        print("".join(text_parts))
+                        break
+
+
+    asyncio.run(main())
+    ```
+
+모델은 먼저 자연어 쿼리와 함께 `tool_search`를 호출하고, 이름, 설명,
+파라미터 스키마가 포함된 짧은 후보 도구 목록을 받습니다. 그런 다음 모델은
+선택한 도구 이름과 스키마에 맞는 파라미터로 `tool_execute`를 호출합니다.
+두 호출 모두 SDK를 통해 StackOne의 AI Integration Gateway로 라우팅됩니다.
+
 ## 사용 가능한 도구
 
 고정된 도구 세트를 제공하는 통합과 달리 StackOne 도구는 StackOne API를 통해
@@ -223,6 +302,10 @@ Parameter | Type | Default | Description
 `providers` | `list[str] | None` | `None` | 제공업체 이름으로 필터링합니다(예: `["calendly", "hibob"]`).
 `actions` | `list[str] | None` | `None` | glob 문법을 사용하는 작업 패턴 필터입니다.
 `account_ids` | `list[str] | None` | `None` | 특정 연결 계정 ID로 도구 범위를 제한합니다.
+`mode` | `Literal["search_and_execute"] | None` | `None` | 도구 등록 전략입니다. `None`이면 탐지된 모든 도구를 에이전트에 등록합니다. `"search_and_execute"`이면 플러그인이 두 도구(`tool_search`, `tool_execute`)를 등록하고, 모델이 런타임에 도구를 선택하고 호출합니다.
+`search` | `SearchConfig | None` | `None` | `StackOneToolSet`으로 전달되는 검색 백엔드 구성입니다. `mode="search_and_execute"`일 때 적용됩니다. 해당 모드에서는 기본값이 `{"method": "auto"}`입니다.
+`execute` | `ExecuteToolsConfig | None` | `None` | `StackOneToolSet`으로 전달되는 실행 구성입니다.
+`timeout` | `float` | `180.0` | HTTP 호출(계정 탐지 및 도구 실행)의 요청별 제한 시간(초)입니다. 느린 커넥터에는 값을 늘리세요.
 
 ### 도구 필터링
 

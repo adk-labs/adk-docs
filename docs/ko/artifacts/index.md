@@ -757,6 +757,66 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
         }
         ```
 
+#### `LoadArtifactsTool` 사용하기
+
+모델이 답변하기 전에 어떤 사용 가능한 아티팩트를 로드할지 직접 결정해야 할 때
+`LoadArtifactsTool`을 추가할 수 있습니다. 사용자가 업로드한 파일이나, 대화
+컨텍스트에 보관하지 않고 아티팩트로 저장한 큰 생성 출력에 대해 후속 질문을
+할 때 유용합니다.
+
+`LoadArtifactsTool`은 모델 지침에 사용 가능한 아티팩트를 나열합니다. 모델이
+`load_artifacts` 도구를 호출하면 ADK는 선택한 아티팩트 내용을 해당 요청에
+임시로 추가하여, 모델이 파일 내용을 컨텍스트로 삼아 답변할 수 있게 합니다.
+로드된 아티팩트 내용은 세션 기록에 영구 저장되지 않으므로, 이후 턴에서 같은
+아티팩트가 다시 필요하면 모델이 도구를 다시 호출해야 합니다.
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import LlmAgent
+    from google.adk.tools.load_artifacts_tool import LoadArtifactsTool
+
+    root_agent = LlmAgent(
+        name="artifact_reader",
+        model="gemini-flash-latest",
+        instruction=(
+            "Answer questions about available user files. "
+            "Call load_artifacts before answering when you need file contents."
+        ),
+        tools=[
+            LoadArtifactsTool(),
+        ],
+    )
+    ```
+
+    이 에이전트의 `Runner`에 `artifact_service`가 구성되어 있는지 확인하세요.
+    그렇지 않으면 아티팩트 목록 조회와 로드가 실패합니다. 아티팩트에 사람이
+    읽기 쉬운 요약이 필요하다면 `LoadArtifactsTool`을 서브클래싱하고, 선택한
+    아티팩트 내용을 로드하기 전에 요청 지침을 맞춤설정하세요.
+
+=== "Go"
+
+    ```go
+    import (
+      "google.golang.org/adk/agent/llmagent"
+      "google.golang.org/adk/tool"
+      "google.golang.org/adk/tool/loadartifactstool"
+    )
+
+    agent, err := llmagent.New(llmagent.Config{
+        Name:        "artifact_reader",
+        Model:       model,
+        Instruction: "Answer questions about available user files. " +
+            "When user asks about artifacts, load them and describe them.",
+        Tools: []tool.Tool{
+            loadartifactstool.New(),
+        },
+    })
+    ```
+
+    이 에이전트의 `runner.Config`에 `ArtifactService`가 포함되어 있는지
+    확인하세요. 그렇지 않으면 아티팩트 목록 조회와 로드가 실패합니다.
+
 #### 아티팩트 파일 이름 목록 조회하기
 
 *   **코드 예시:**

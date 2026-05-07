@@ -110,10 +110,16 @@ go mod tidy
     echo 'export GOOGLE_API_KEY="YOUR_API_KEY"' > .env
     ```
 
-=== "Windows"
+=== "Windows PowerShell"
 
     ```console title="업데이트: my_agent/env.bat"
     echo 'set GOOGLE_API_KEY="YOUR_API_KEY"' > env.bat
+    ```
+
+=== "Windows Command Prompt"
+
+    ```console title="업데이트: my_agent/env.bat"
+    echo set GOOGLE_API_KEY="YOUR_API_KEY" > env.bat
     ```
 
 ??? tip "ADK에서 다른 AI 모델 사용"

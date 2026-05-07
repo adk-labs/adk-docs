@@ -23,13 +23,13 @@ pip install google-adk
 
     Python 가상 환경을 활성화합니다.
 
-    === "Windows CMD"
+    === "Windows Command Prompt"
 
         ```console
         .venv\Scripts\activate.bat
         ```
 
-    === "Windows Powershell"
+    === "Windows PowerShell"
 
         ```console
         .venv\Scripts\Activate.ps1
@@ -87,9 +87,23 @@ root_agent = Agent(
 
 터미널 창에서 `.env` 파일에 API 키를 환경 변수로 작성합니다.
 
-```console title="업데이트: my_agent/.env"
-echo 'GOOGLE_API_KEY="YOUR_API_KEY"' > .env
-```
+=== "MacOS / Linux"
+
+    ```bash title="업데이트: my_agent/.env"
+    echo 'GOOGLE_API_KEY="YOUR_API_KEY"' > .env
+    ```
+
+=== "Windows PowerShell"
+
+    ```console title="업데이트: my_agent/.env"
+    echo 'GOOGLE_API_KEY="YOUR_API_KEY"' > .env
+    ```
+
+=== "Windows Command Prompt"
+
+    ```console title="업데이트: my_agent/.env"
+    echo GOOGLE_API_KEY="YOUR_API_KEY" > .env
+    ```
 
 ??? tip "ADK에서 다른 AI 모델 사용"
     ADK는 다양한 생성형 AI 모델 사용을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법에 대한 자세한 내용은 [모델 및 인증](/ko/agents/models)을 참조하세요.

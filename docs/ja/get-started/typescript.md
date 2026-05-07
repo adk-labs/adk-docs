@@ -83,9 +83,23 @@ export const rootAgent = new LlmAgent({
 
 ターミナルで、プロジェクトの `.env` に API キーを書き込み、環境変数を設定します。
 
-```bash title="Update: my-agent/.env"
-echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
-```
+=== "MacOS / Linux"
+
+    ```bash title="Update: my-agent/.env"
+    echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
+    ```
+
+=== "Windows PowerShell"
+
+    ```console title="Update: my-agent/.env"
+    echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
+    ```
+
+=== "Windows Command Prompt"
+
+    ```console title="Update: my-agent/.env"
+    echo GEMINI_API_KEY="YOUR_API_KEY" > .env
+    ```
 
 ??? tip "ADK で他の AI モデルを使用"
     ADK は多くの生成AIモデルをサポートします。ADK エージェントで他のモデルを設定する方法は

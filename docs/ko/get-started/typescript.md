@@ -84,11 +84,25 @@ export const rootAgent = new LlmAgent({
 Gemini API 키가 없다면 [API 키 페이지](https://aistudio.google.com/app/apikey)에서
 Google AI Studio를 통해 키를 생성하세요.
 
-터미널 창에서 다음과 같이 `.env` 파일에 API 키를 기록해 환경 변수를 설정합니다.
+터미널 창에서 프로젝트의 `.env` 파일에 API 키를 기록해 환경 변수를 설정합니다.
 
-```bash title="Update: my-agent/.env"
-echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
-```
+=== "MacOS / Linux"
+
+    ```bash title="Update: my-agent/.env"
+    echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
+    ```
+
+=== "Windows PowerShell"
+
+    ```console title="Update: my-agent/.env"
+    echo 'GEMINI_API_KEY="YOUR_API_KEY"' > .env
+    ```
+
+=== "Windows Command Prompt"
+
+    ```console title="Update: my-agent/.env"
+    echo GEMINI_API_KEY="YOUR_API_KEY" > .env
+    ```
 
 ??? tip "ADK에서 다른 AI 모델 사용"
     ADK는 여러 생성형 AI 모델을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법은

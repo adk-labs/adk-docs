@@ -155,10 +155,16 @@ ADK 에이전트 프로젝트는 `pom.xml` 프로젝트 파일에 다음 종속�
     echo 'export GOOGLE_API_KEY="YOUR_API_KEY"' > .env
     ```
 
-=== "Windows"
+=== "Windows PowerShell"
 
     ```console title="업데이트: my_agent/env.bat"
     echo 'set GOOGLE_API_KEY="YOUR_API_KEY"' > env.bat
+    ```
+
+=== "Windows Command Prompt"
+
+    ```console title="업데이트: my_agent/env.bat"
+    echo set GOOGLE_API_KEY="YOUR_API_KEY" > env.bat
     ```
 
 ??? tip "ADK에서 다른 AI 모델 사용"
