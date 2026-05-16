@@ -31,7 +31,7 @@ server's REST API. When using the confirmation feature with the ADK web user
 interface, the agent workflow displays a dialog box to the user to request
 input, as shown in Figure 1:
 
-![Screenshot of default user interface for tool confirmation](/assets/confirmation-ui.png)
+![Screenshot of default user interface for tool confirmation](../assets/confirmation-ui.png)
 
 **Figure 1.** Example confirmation response request dialog box using an
 advanced, tool response implementation.

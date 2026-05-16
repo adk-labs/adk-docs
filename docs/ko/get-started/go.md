@@ -139,7 +139,7 @@ go mod tidy
 go run agent.go
 ```
 
-![adk-run.png](/ko/assets/adk-run.png)
+![adk-run.png](../assets/adk-run.png)
 
 ### 웹 인터페이스로 실행
 
@@ -152,7 +152,7 @@ go run agent.go web api webui
 
 이 명령은 에이전트용 채팅 인터페이스가 있는 웹 서버를 시작합니다. 웹 인터페이스는 (http://localhost:8080)에서 액세스할 수 있습니다. 왼쪽 상단 모서리에서 에이전트를 선택하고 요청을 입력합니다.
 
-![adk-web-dev-ui-chat.png](/ko/assets/adk-web-dev-ui-chat.png)
+![adk-web-dev-ui-chat.png](../assets/adk-web-dev-ui-chat.png)
 
 !!! warning "주의: ADK Web은 개발용으로만 사용하세요"
 

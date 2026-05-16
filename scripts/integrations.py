@@ -14,8 +14,33 @@
 
 import yaml
 import html
+import posixpath
 from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 from mkdocs.plugins import log
+
+
+def _is_external_url(url):
+    return url.startswith(("http://", "https://", "//", "mailto:", "tel:", "data:"))
+
+
+def _relative_site_url(url, current_dir):
+    """Convert docs-root paths to page-relative URLs for subpath deployments."""
+    if not url or _is_external_url(url) or url.startswith("#"):
+        return url
+
+    parsed = urlsplit(url)
+    path = parsed.path
+    if path.startswith("/"):
+        target = path.lstrip("/")
+    else:
+        target = path
+
+    start = current_dir.as_posix() if current_dir.as_posix() != "." else "."
+    relative = posixpath.relpath(target, start=start)
+    if relative == ".":
+        relative = ""
+    return urlunsplit(("", "", relative, parsed.query, parsed.fragment))
 
 def define_env(env):
     """
@@ -37,6 +62,7 @@ def define_env(env):
         # env.conf['docs_dir'] is the absolute path to docs.
         docs_dir = Path(env.conf['docs_dir'])
         files = sorted(docs_dir.glob(path_filter))
+        catalog_dir = Path(path_filter).parent
 
         # Collect all tags and cards data first
         all_tags = set()
@@ -85,13 +111,13 @@ def define_env(env):
                 tags = [t.lower() for t in tags]
                 all_tags.update(tags)
 
-                # Calculate root-relative link from file path
+                # Calculate page-relative link from file path. Root-relative links
+                # break when the docs are served from a GitHub Pages subpath.
                 rel_path = file_path.relative_to(docs_dir).with_suffix('')
-                link = f"/{rel_path}/"
+                link = f"{posixpath.relpath(rel_path.as_posix(), start=catalog_dir.as_posix())}/"
 
-                # Ensure icon path is root-relative
-                if not icon.startswith('/') and not icon.startswith('http'):
-                     icon = f"/{icon}"
+                # Keep icons page-relative for subpath deployments.
+                icon = _relative_site_url(icon, catalog_dir)
 
                 cards_data.append({
                     'title': title,

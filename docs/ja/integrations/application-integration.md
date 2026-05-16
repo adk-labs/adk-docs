@@ -127,7 +127,7 @@ connection と同じリージョンに Application Integration をプロビジ�
    connection と同じリージョンに Application Integration を
    [provision](https://console.cloud.google.com/integrations) します。
 
-   ![Google Cloud Tools](/assets/application-integration-overview.png)
+   ![Google Cloud Tools](../../assets/application-integration-overview.png)
 
 
 
@@ -135,7 +135,7 @@ connection と同じリージョンに Application Integration をプロビジ�
    テンプレートへ移動し、**USE TEMPLATE** をクリックします。
 
 
-    ![Google Cloud Tools](/assets/use-connection-tool-template.png)
+    ![Google Cloud Tools](../../assets/use-connection-tool-template.png)
 
 3. Integration Name を *ExecuteConnection* として入力します
    (この正確な名前を使う必要があります)。
@@ -144,7 +144,7 @@ connection と同じリージョンに Application Integration をプロビジ�
 4. <i>Application Integration</i> エディタで **PUBLISH** をクリックして integration を公開します。
 
 
-    ![Google Cloud Tools](/assets/publish-integration.png)
+    ![Google Cloud Tools](../../assets/publish-integration.png)
 
 
 ### Application Integration Toolset を作成

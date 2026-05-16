@@ -66,11 +66,11 @@ adk web path/to/your/agents_dir
 
 #### GCP 내보내기
 
-Google Cloud Monitoring으로 메트릭 내보내기를 활성화하려면 `-otel_to_cloud`
+Google Cloud Monitoring으로 메트릭 내보내기를 활성화하려면 `--otel_to_cloud`
 플래그를 사용하세요.
 
 ```bash
-adk web -otel_to_cloud path/to/your/agents_dir
+adk web --otel_to_cloud path/to/your/agents_dir
 ```
 
 ### 프로그래밍 방식 메트릭 내보내기

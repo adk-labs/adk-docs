@@ -24,7 +24,7 @@ information on
 MCP Toolbox, see the
 [documentation](https://mcp-toolbox.dev/documentation/introduction/).
 
-![MCP Toolbox for Databases](/integrations/assets/mcp-db-toolbox.png)
+![MCP Toolbox for Databases](assets/mcp-db-toolbox.png)
 
 ## Supported Data Sources
 

@@ -54,7 +54,7 @@ Google Cloud 구성에 이미 익숙한 사용자에게 권장됩니다.
       홈페이지. 프로젝트 ID(하이픈이 포함된 영숫자)를 기록해 두세요.
       _아님_ 프로젝트 번호(숫자)입니다.
 
-    <img src="/assets/project-id.png" alt="Google 클라우드 프로젝트 ID">
+    <img src="../../../assets/project-id.png" alt="Google 클라우드 프로젝트 ID">
 
 4. **프로젝트에서 에이전트 플랫폼 활성화**
     * Agent Runtime을 사용하기 위해서는 [enable the Agent Platform API](https://console.cloud.google.com/apis/library/aiplatform.googleapis.com)가 필요합니다. API를 활성화하려면 "활성화" 버튼을 클릭하세요. 일단 활성화되면,

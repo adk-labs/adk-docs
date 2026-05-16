@@ -124,7 +124,7 @@ What time is it in London?
 
 Project を選択し、Log Stream 内でトレースとスパンを確認します。
 
-![Galileo Traces](/integrations/assets/galileo-log.png)
+![Galileo Traces](../../integrations/assets/galileo-log.png)
 
 ## リソース
 

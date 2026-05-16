@@ -89,7 +89,7 @@ compressed upon completion of events 3, 6, 9, and so on. The overlap setting
 increases size of the second summary compression, and each summary afterwards,
 as shown in Figure 1.
 
-![Context compaction example illustration](/assets/context-compaction.svg)
+![Context compaction example illustration](../assets/context-compaction.svg)
 **Figure 1.** Illustration of event compaction configuration with an interval of 3
 and overlap of 1.
 

@@ -130,7 +130,7 @@ adk web my-agent/agent.ts
 웹 인터페이스는 `http://localhost:8000`에서 사용할 수 있습니다. 오른쪽 상단에서
 에이전트를 선택하고 요청을 입력하세요.
 
-![adk-web-dev-ui-chat.png](/assets/adk-web-dev-ui-chat.png)
+![adk-web-dev-ui-chat.png](../../assets/adk-web-dev-ui-chat.png)
 
 !!! warning "주의: ADK Web은 개발용만 사용하세요"
 

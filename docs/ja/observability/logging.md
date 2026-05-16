@@ -65,6 +65,14 @@ adk web --log_level DEBUG path/to/your/agents_dir
 > adk web -v path/to/your/agents_dir
 > ```
 
+#### GCP エクスポート設定
+
+GCP エクスポートは `--otel_to_cloud` フラグで有効にできます。
+
+```bash
+adk web --otel_to_cloud path/to/your/agents_dir
+```
+
 ### ログレベル
 
 ADKは標準のログレベルを使用してメッセージを分類します。設定されたレベルによって、どの情報が記録されるかが決まります。

@@ -1,6 +1,6 @@
 ---
 catalog_title: Atlan
-catalog_description: Atlan カタログでデータアセットを検索、探索、ガバナンスします
+catalog_description: metadata、lineage、business knowledge を検索、探索、ガバナンスします
 catalog_icon: /integrations/assets/atlan.png
 catalog_tags: ["mcp"]
 ---
@@ -11,21 +11,29 @@ catalog_tags: ["mcp"]
   <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
-[Atlan MCP Server](https://github.com/atlanhq/agent-toolkit) は ADK エージェントを
-[Atlan](https://www.atlan.com/) データカタログに接続し、warehouse、lake、BI
-ツール、pipeline 全体のデータアセットを自然言語で発見、探索、ガバナンス、管理
-できるようにします。
+[Atlan MCP Server](https://github.com/atlanhq/agent-toolkit) は ADK エージェントを、
+エンタープライズ AI のためのコンテキストレイヤーである
+[Atlan](https://www.atlan.com/) に接続します。これによりエージェントは、AI
+エージェントが効果的に作業するために必要な知識、データ、セマンティクスを含む
+組織の context repo にアクセスできます。この統合により、エージェントは
+エンタープライズコンテキストの検索と発見、end-to-end lineage の探索、ガバナンス
+されたデータ定義と glossary へのアクセス、SQL の実行、metadata graph の整理、
+data quality の確保を行い、すべてのエージェントタスクを信頼できる組織コンテキスト
+に基づかせることができます。
 
 ## ユースケース
 
-- **アセット発見:** semantic search を使って table、column、dashboard、pipeline
-  全体を検索し、分析や機能開発に適したデータを見つけます。
+- **エンタープライズコンテキストの検索と発見:** 自然言語でスタック全体の
+  table、column、dashboard、glossary term、data product を見つけます。
 
-- **Lineage と影響分析:** スキーマ変更前に、アセットの upstream source または
-  downstream consumer を追跡して依存関係を把握します。
+- **End-to-end lineage の探索:** システム全体でデータフローを upstream と
+  downstream に追跡し、スキーマ変更前に依存関係を把握します。
 
-- **ガバナンスと stewardship:** エージェントから説明を更新し、アセットを認証し、
-  glossary と data domain を管理し、data quality rule を作成またはスケジュールします。
+- **ガバナンスされたデータ定義へのアクセス:** glossary、data domain、認証済み
+  metadata を使って、エージェントの出力を信頼できる組織コンテキストに基づかせます。
+
+- **Metadata graph の整理:** エージェントから説明の更新、アセットの認証、
+  glossary の管理、data quality rule と schedule の定義、SQL の実行まで行います。
 
 ## 前提条件
 
@@ -50,7 +58,7 @@ catalog_tags: ["mcp"]
         root_agent = Agent(
             model="gemini-flash-latest",
             name="atlan_agent",
-            instruction="Help users search, explore, and govern data assets in Atlan",
+            instruction="Help users search, discover, and manage enterprise data assets using Atlan",
             tools=[
                 McpToolset(
                     connection_params=StdioConnectionParams(
@@ -79,7 +87,7 @@ catalog_tags: ["mcp"]
         const rootAgent = new LlmAgent({
             model: "gemini-flash-latest",
             name: "atlan_agent",
-            instruction: "Help users search, explore, and govern data assets in Atlan",
+            instruction: "Help users search, discover, and manage enterprise data assets using Atlan",
             tools: [
                 new MCPToolset({
                     type: "StdioConnectionParams",

@@ -54,7 +54,7 @@ Google Cloud への ADK エージェント コード
       ホームページ。プロジェクト ID (ハイフン付きの英数字) を必ずメモしてください。
       プロジェクト番号 (数値) ではありません。
 
-    <img src="/assets/project-id.png" alt="Google Cloud プロジェクト ID">
+    <img src="../../../assets/project-id.png" alt="Google Cloud プロジェクト ID">
 
 4. **プロジェクトでエージェント プラットフォームを有効にする**
     ※Agent Runtimeを使用するには、[enable the Agent Platform API](https://console.cloud.google.com/apis/library/aiplatform.googleapis.com)が必要です。 「有効にする」ボタンをクリックして API を有効にします。有効にすると、

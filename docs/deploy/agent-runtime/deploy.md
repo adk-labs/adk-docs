@@ -54,7 +54,7 @@ To deploy your agent to Agent Runtime, you need a Google Cloud project:
       homepage. Make sure to note the Project ID (alphanumeric with hyphens),
       _not_ the project number (numeric).
 
-    <img src="/assets/project-id.png" alt="Google Cloud Project ID">
+    <img src="../../../assets/project-id.png" alt="Google Cloud Project ID">
 
 4. **Enable Agent Platform in your project**
     * To use Agent Runtime, you need to [enable the Agent Platform API](https://console.cloud.google.com/apis/library/aiplatform.googleapis.com). Click on the "Enable" button to enable the API. Once enabled, it

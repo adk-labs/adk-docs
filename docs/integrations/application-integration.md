@@ -123,7 +123,7 @@ Connect your agent to enterprise applications using
 1. To use a connector from Integration Connectors, click **QUICK SETUP** and [provision](https://console.cloud.google.com/integrations)
    Application Integration in the same region as your connection.
 
-   ![Google Cloud Tools](/assets/application-integration-overview.png)
+   ![Google Cloud Tools](../assets/application-integration-overview.png)
 
 
 
@@ -131,7 +131,7 @@ Connect your agent to enterprise applications using
    template in the template library and click **USE TEMPLATE**.
 
 
-    ![Google Cloud Tools](/assets/use-connection-tool-template.png)
+    ![Google Cloud Tools](../assets/use-connection-tool-template.png)
 
 3. Enter the Integration Name as *ExecuteConnection* (it is mandatory to use this exact integration name only).
    Then, select the region to match your connection region and click **CREATE**.
@@ -139,7 +139,7 @@ Connect your agent to enterprise applications using
 4. Click **PUBLISH** to publish the integration in the <i>Application Integration</i> editor.
 
 
-    ![Google Cloud Tools](/assets/publish-integration.png)
+    ![Google Cloud Tools](../assets/publish-integration.png)
 
 
 ### Create an Application Integration Toolset

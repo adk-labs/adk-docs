@@ -50,10 +50,10 @@ adk web path/to/your/agents_dir
 
 #### GCP エクスポート
 
-Google Cloud Trace へのトレースのエクスポートを有効にするには、`-otel_to_cloud` フラグを使用します。
+Google Cloud Trace へのトレースのエクスポートを有効にするには、`--otel_to_cloud` フラグを使用します。
 
 ```bash
-adk web -otel_to_cloud path/to/your/agents_dir
+adk web --otel_to_cloud path/to/your/agents_dir
 ```
 
 ### プログラムによるトレースのエクスポート

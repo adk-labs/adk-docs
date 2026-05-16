@@ -724,7 +724,7 @@ Google Cloud Console [Quotas page](https://console.cloud.google.com/iam-admin/qu
 프로젝트/리전/모델별 값을 확인하고 증가 요청할 수 있습니다.
 `roles/servicemanagement.quotaAdmin` 권한이 필요합니다.
 
-![Quota value on Cloud Console](/streaming/dev-guide/assets/adk-streaming-guide-quota-console.png)
+![Quota value on Cloud Console](../../../streaming/dev-guide/assets/adk-streaming-guide-quota-console.png)
 
 **핵심 차이:**
 

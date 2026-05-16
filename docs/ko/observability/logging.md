@@ -65,6 +65,14 @@ adk web --log_level DEBUG path/to/your/agents_dir
 > adk web -v path/to/your/agents_dir
 > ```
 
+#### GCP 내보내기 설정
+
+GCP 내보내기는 `--otel_to_cloud` 플래그로 활성화할 수 있습니다.
+
+```bash
+adk web --otel_to_cloud path/to/your/agents_dir
+```
+
 ### 로그 수준
 
 ADK는 표준 로그 수준을 사용하여 메시지를 분류합니다. 설정된 수준에 따라 기록되는 정보가 결정됩니다.

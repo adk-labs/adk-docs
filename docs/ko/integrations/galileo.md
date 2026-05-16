@@ -129,7 +129,7 @@ What time is it in London?
 
 Project를 선택한 뒤 Log Stream에서 트레이스와 스팬을 확인합니다.
 
-![Galileo Traces](/integrations/assets/galileo-log.png)
+![Galileo Traces](../../integrations/assets/galileo-log.png)
 
 ## 리소스
 

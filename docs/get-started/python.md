@@ -132,7 +132,7 @@ Run your agent using the `adk run` command-line tool.
 adk run my_agent
 ```
 
-![adk-run.png](/assets/adk-run.png)
+![adk-run.png](../assets/adk-run.png)
 
 ### Run with web interface
 
@@ -153,7 +153,7 @@ This command starts a web server with a chat interface for your agent. You can
 access the web interface at (http://localhost:8000). Select the agent at the
 upper left corner and type a request.
 
-![adk-web-dev-ui-chat.png](/assets/adk-web-dev-ui-chat.png)
+![adk-web-dev-ui-chat.png](../assets/adk-web-dev-ui-chat.png)
 
 !!! warning "Caution: ADK Web for development only"
 

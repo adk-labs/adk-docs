@@ -125,14 +125,14 @@ gcloud auth application-default set-quota-project <project-id>
 1. Integration Connectors의 커넥터를 사용하려면 **QUICK SETUP**을 클릭하고,
    연결과 같은 리전에 Application Integration을 [프로비저닝](https://console.cloud.google.com/integrations)합니다.
 
-   ![Google Cloud Tools](/assets/application-integration-overview.png)
+   ![Google Cloud Tools](../../assets/application-integration-overview.png)
 
 
 
 2. 템플릿 라이브러리의 [Connection Tool](https://console.cloud.google.com/integrations/templates/connection-tool/locations/us-central1)로 이동해 **USE TEMPLATE**를 클릭합니다.
 
 
-    ![Google Cloud Tools](/assets/use-connection-tool-template.png)
+    ![Google Cloud Tools](../../assets/use-connection-tool-template.png)
 
 3. Integration Name을 *ExecuteConnection*으로 입력합니다(반드시 이 정확한 이름 사용).
    이후 연결 리전과 동일한 리전을 선택하고 **CREATE**를 클릭합니다.
@@ -140,7 +140,7 @@ gcloud auth application-default set-quota-project <project-id>
 4. <i>Application Integration</i> 편집기에서 **PUBLISH**를 클릭해 integration을 게시합니다.
 
 
-    ![Google Cloud Tools](/assets/publish-integration.png)
+    ![Google Cloud Tools](../../assets/publish-integration.png)
 
 
 ### Application Integration Toolset 생성

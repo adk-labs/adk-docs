@@ -120,7 +120,7 @@ root_agent = Agent(
 adk run my_agent
 ```
 
-![adk-run.png](/ja/assets/adk-run.png)
+![adk-run.png](../assets/adk-run.png)
 
 ### ウェブインターフェースで実行する
 
@@ -136,7 +136,7 @@ adk web --port 8000
 
 このコマンドは、エージェント用のチャットインターフェースを備えたウェブサーバーを起動します。ウェブインターフェースは(http://localhost:8000)でアクセスできます。左上隅でエージェントを選択し、リクエストを入力します。
 
-![adk-web-dev-ui-chat.png](/ja/assets/adk-web-dev-ui-chat.png)
+![adk-web-dev-ui-chat.png](../assets/adk-web-dev-ui-chat.png)
 
 !!! warning "注意: ADK Web は開発用途限定"
 

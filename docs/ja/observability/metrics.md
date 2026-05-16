@@ -71,10 +71,10 @@ adk web path/to/your/agents_dir
 #### GCP エクスポート
 
 Google Cloud Monitoring へのメトリクスエクスポートを有効にするには、
-`-otel_to_cloud` フラグを使用します。
+`--otel_to_cloud` フラグを使用します。
 
 ```bash
-adk web -otel_to_cloud path/to/your/agents_dir
+adk web --otel_to_cloud path/to/your/agents_dir
 ```
 
 ### プログラムによるメトリクスエクスポート

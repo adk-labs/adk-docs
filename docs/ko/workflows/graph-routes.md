@@ -12,7 +12,7 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 단계적인 프로세스 워크플로를 정의할 수 있게 하며, 프롬프트 기반 에이전트만
 사용하는 방식보다 더 높은 정밀도와 신뢰성을 제공합니다.
 
-![Graph-based flight upgrade agent](/assets/graph-workflow-router.svg)
+![Graph-based flight upgrade agent](../../assets/graph-workflow-router.svg)
 
 ```python
 root_agent = Workflow(
@@ -159,7 +159,7 @@ root_agent = Workflow(
 때까지 기다렸다가, 이 노드들의 출력 집합을 다음 노드로 전달하는
 ***JoinNode*** 객체를 사용합니다.
 
-![Tasks connecting to a JoinNode](/assets/graph-joinnode.svg)
+![Tasks connecting to a JoinNode](../../assets/graph-joinnode.svg)
 
 **그림 2.** 병렬 작업 노드의 출력은 JoinNode 객체를 사용해 합칠 수 있습니다.
 
@@ -192,7 +192,7 @@ edges=[
 캡슐화하고 싶을 수 있습니다. 이 목적을 위해 하나 이상의 ***Workflow*** 객체를
 다른 워크플로 에이전트 그래프 내부의 노드로 사용할 수 있습니다.
 
-![Nested Workflows inside a parent Workflow](/assets/graph-workflow-nodes.svg)
+![Nested Workflows inside a parent Workflow](../../assets/graph-workflow-nodes.svg)
 
 **그림 3.** 부모 ***Workflow*** 내부 노드로 사용되는 중첩 ***Workflows***.
 

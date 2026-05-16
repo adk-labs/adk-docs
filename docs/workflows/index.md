@@ -10,7 +10,7 @@ capabilities. Graph-based workflows allow you to define your agent logic as a
 graph of execution nodes and edges, combining AI-powered agents with
 deterministic tools and code.
 
-![Graph-based flight upgrade agent](/assets/workflow-design.svg)
+![Graph-based flight upgrade agent](../assets/workflow-design.svg)
 
 **Figure 1.** A graph-based agent design for flight upgrades, combining workflow
 nodes of different types, including Functions, human input, Tools, and LLM
@@ -120,7 +120,7 @@ as an execution ***Node*** in a graph and each node can be an AI agent, Tool, or
 your programmed code. The following diagram illustrates how a simple
 prompt-based agent would translate into a workflow agent graph:
 
-![Prompt-based agent to graph-based workflow](/assets/prompts-to-graphs.svg)
+![Prompt-based agent to graph-based workflow](../assets/prompts-to-graphs.svg)
 
 **Figure 2.** Structure of prompt-based agent instructions translated into a
 graph-based workflow.
