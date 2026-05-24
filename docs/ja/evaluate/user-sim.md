@@ -1,7 +1,7 @@
 # ユーザーシミュレーション
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.18.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.18.0</span>
 </div>
 
 会話型エージェントを評価する際、会話は予期しない方向に進むことがあるため、

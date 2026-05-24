@@ -1,7 +1,7 @@
 # クイックスタート: A2A経由でリモートエージェントを公開する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-preview">実験的</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-preview">Experimental</span>
 </div>
 
 このクイックスタートでは、開発者にとって最も一般的な出発点である**「エージェントがあります。他のエージェントがA2A経由で私のエージェントを使用できるように公開するにはどうすればよいですか？」**について説明します。これは、さまざまなエージェントが連携して対話する必要がある複雑なマルチエージェントシステムを構築するために不可欠です。

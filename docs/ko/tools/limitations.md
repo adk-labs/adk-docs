@@ -50,7 +50,7 @@
 ### 우회 방법 #1: AgentTool.create() 메서드
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-java">Java</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript (v0.6.1+)</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 아래 코드는 여러 내장 도구를 함께 사용하거나,
@@ -148,7 +148,7 @@
 ### 우회 방법 #2: bypass_multi_tools_limit
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-java">Java</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해

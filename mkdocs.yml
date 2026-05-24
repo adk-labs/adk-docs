@@ -18,8 +18,6 @@ not_in_nav: |
   /ja/_includes/**
 
 # Repository
-repo_name: adk-python
-repo_url: https://github.com/google/adk-python
 repo_name: adk-docs
 repo_url: https://github.com/google/adk-docs
 edit_uri: edit/main/docs/
@@ -42,20 +40,6 @@ extra_javascript:
 
 # Additional config
 extra:
-  second_repo_url: https://github.com/google/adk-java
-  second_repo_name: adk-java
-  first_repo_url: https://github.com/google/adk-python
-  first_repo_name: adk-python
-  first_repo_icon: fontawesome/brands/github
-  second_repo_url: https://github.com/google/adk-js
-  second_repo_name: adk-js
-  second_repo_icon: fontawesome/brands/github
-  third_repo_url: https://github.com/google/adk-go
-  third_repo_name: adk-go
-  third_repo_icon: fontawesome/brands/github
-  fourth_repo_url: https://github.com/google/adk-java
-  fourth_repo_name: adk-java
-  fourth_repo_icon: fontawesome/brands/github
   analytics:
     provider: google
     property: G-DKHZS27PHP
@@ -94,19 +78,15 @@ theme:
   features:
     - content.action.edit
     - content.action.view
-    - content.code.annotate
     - content.code.copy
-    - content.code.select
     - content.tabs.link
     - content.tooltips
-    - navigation.footer
     - navigation.indexes
     - navigation.instant
     - navigation.instant.progress
     - navigation.path
     - navigation.sections
     - navigation.top
-    - navigation.tracking
     - navigation.tabs
     - toc.follow
 
@@ -125,6 +105,7 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets:
+      check_paths: true
       dedent_subsections: true
   - pymdownx.superfences:
       custom_fences:
@@ -241,6 +222,24 @@ plugins:
         'get-started/quickstart.md': get-started/index.md
         'ko/get-started/quickstart.md': 'ko/get-started/index.md'
         'ja/get-started/quickstart.md': 'ja/get-started/index.md'
+        'ko/agents/multi-agents.md': 'ko/workflows/patterns.md'
+        'ja/agents/multi-agents.md': 'ja/workflows/patterns.md'
+        'ko/runtime/web-interface.md': 'ko/runtime/web-interface/index.md'
+        'ja/runtime/web-interface.md': 'ja/runtime/web-interface/index.md'
+        'ko/workflows/graph-routes.md': 'ko/graphs/routes.md'
+        'ja/workflows/graph-routes.md': 'ja/graphs/routes.md'
+        'ko/workflows/human-input.md': 'ko/graphs/human-input.md'
+        'ja/workflows/human-input.md': 'ja/graphs/human-input.md'
+        'ko/workflows/data-handling.md': 'ko/graphs/data-handling.md'
+        'ja/workflows/data-handling.md': 'ja/graphs/data-handling.md'
+        'ko/workflows/dynamic.md': 'ko/graphs/dynamic.md'
+        'ja/workflows/dynamic.md': 'ja/graphs/dynamic.md'
+        'agents/multi-agents.md': workflows/index.md
+        'workflows/graphs.md': graphs/index.md
+        'workflows/graph-routes.md': graphs/routes.md
+        'workflows/human-input.md': graphs/human-input.md
+        'workflows/data-handling.md': graphs/data-handling.md
+        'workflows/dynamic.md': graphs/dynamic.md
 
   - llmstxt:
       markdown_description: An open-source, code-first toolkit for building, evaluating, and deploying sophisticated AI agents with flexibility and control.
@@ -249,20 +248,22 @@ plugins:
         Build Agents:
         - get-started/*.md
         - tutorials/*.md
-        - visual-builder/*.md
         - agents/*.md
+        - graphs/*.md
         - workflows/*.md
         - integrations/*.md
-        - tools/*.md
-        - tools-custom/*.md
-        - skills/*.md
         Run Agents:
         - runtime/*.md
+        - visual-builder/*.md
         - deploy/*.md
         - observability/*.md
         - evaluate/*.md
+        - optimize/*.md
         - safety/*.md
         Components:
+        - tools/*.md
+        - tools-custom/*.md
+        - skills/*.md
         - context/*.md
         - sessions/*.md
         - callbacks/*.md
@@ -276,6 +277,7 @@ plugins:
         - grounding/*.md
         Reference:
         - release-notes.md
+        - 2.0/index.md
         - api-reference/index.md
         Community:
         - community/*.md
@@ -300,6 +302,7 @@ plugins:
                 - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
                 - Java: get-started/java.md
+                - Kotlin: get-started/kotlin.md
               - 에이전트 만들기:
                 - tutorials/index.md
                 - 다중 도구 에이전트: tutorials/multi-tool-agent.md
@@ -320,7 +323,7 @@ plugins:
                   - 루프 에이전트: agents/workflow-agents/loop-agents.md
                   - 병렬 에이전트: agents/workflow-agents/parallel-agents.md
                 - 커스텀 에이전트: agents/custom-agents.md
-                - 다중 에이전트 시스템: agents/multi-agents.md
+                - 다중 에이전트 시스템: workflows/patterns.md
                 - 에이전트 라우팅: agents/routing.md
                 - 에이전트 설정: agents/config.md
               - 에이전트용 모델:
@@ -352,7 +355,7 @@ plugins:
             - 에이전트 실행:
               - 에이전트 런타임:
                 - 에이전트 런타임: runtime/index.md
-                - 웹 인터페이스: runtime/web-interface.md
+                - 웹 인터페이스: runtime/web-interface/index.md
                 - 명령줄: runtime/command-line.md
                 - API 서버: runtime/api-server.md
                 - 앰비언트 에이전트: runtime/ambient-agents.md
@@ -445,6 +448,7 @@ plugins:
                 - Typescript ADK: /api-reference/typescript/index.html
                 - Go ADK: https://pkg.go.dev/google.golang.org/adk
                 - Java ADK: /api-reference/java/index.html
+                - Kotlin ADK: /api-reference/kotlin/index.html
                 - CLI 레퍼런스: /api-reference/cli/index.html
                 - 에이전트 설정 레퍼런스: /api-reference/agentconfig/index.html
                 - REST API: api-reference/rest/index.html
@@ -454,12 +458,12 @@ plugins:
             - ADK 2.0:
               - 개요: 2.0/index.md
               - 그래프 기반 워크플로:
-                - workflows/index.md
-                - 그래프 경로: workflows/graph-routes.md
-                - 데이터 처리: workflows/data-handling.md
-                - 인간 입력: workflows/human-input.md
+                - graphs/index.md
+                - 그래프 경로: graphs/routes.md
+                - 데이터 처리: graphs/data-handling.md
+                - 인간 입력: graphs/human-input.md
               - 협업 에이전트: workflows/collaboration.md
-              - 동적 워크플로: workflows/dynamic.md
+              - 동적 워크플로: graphs/dynamic.md
         - locale: ja
           name: 日本語
           build: true
@@ -473,6 +477,7 @@ plugins:
                 - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
                 - Java: get-started/java.md
+                - Kotlin: get-started/kotlin.md
               - エージェントを作成:
                 - tutorials/index.md
                 - マルチツールエージェント: tutorials/multi-tool-agent.md
@@ -493,7 +498,7 @@ plugins:
                   - ループエージェント: agents/workflow-agents/loop-agents.md
                   - パラレルエージェント: agents/workflow-agents/parallel-agents.md
                 - カスタムエージェント: agents/custom-agents.md
-                - マルチエージェントシステム: agents/multi-agents.md
+                - マルチエージェントシステム: workflows/patterns.md
                 - エージェントルーティング: agents/routing.md
                 - エージェント設定: agents/config.md
               - エージェント向けモデル:
@@ -525,7 +530,7 @@ plugins:
             - エージェントの実行:
               - エージェントランタイム:
                 - エージェントランタイム: runtime/index.md
-                - Webインターフェース: runtime/web-interface.md
+                - Webインターフェース: runtime/web-interface/index.md
                 - コマンドライン: runtime/command-line.md
                 - APIサーバー: runtime/api-server.md
                 - アンビエントエージェント: runtime/ambient-agents.md
@@ -618,6 +623,7 @@ plugins:
                 - Typescript ADK: /api-reference/typescript/index.html
                 - Go ADK: https://pkg.go.dev/google.golang.org/adk
                 - Java ADK: /api-reference/java/index.html
+                - Kotlin ADK: /api-reference/kotlin/index.html
                 - CLIリファレンス: /api-reference/cli/index.html
                 - エージェント設定リファレンス: /api-reference/agentconfig/index.html
                 - REST API: api-reference/rest/index.html
@@ -627,17 +633,18 @@ plugins:
             - ADK 2.0:
               - 概要: 2.0/index.md
               - グラフベースのワークフロー:
-                - workflows/index.md
-                - グラフルート: workflows/graph-routes.md
-                - データ処理: workflows/data-handling.md
-                - 人間入力: workflows/human-input.md
+                - graphs/index.md
+                - グラフルート: graphs/routes.md
+                - データ処理: graphs/data-handling.md
+                - 人間入力: graphs/human-input.md
               - 協調エージェント: workflows/collaboration.md
-              - 動的ワークフロー: workflows/dynamic.md
+              - 動的ワークフロー: graphs/dynamic.md
         
 
 # Navigation
 nav:
   - Home: index.md
+
   - Build Agents:
     - Get Started:
       - get-started/index.md
@@ -645,6 +652,8 @@ nav:
       - TypeScript: get-started/typescript.md
       - Go: get-started/go.md
       - Java: get-started/java.md
+      - Kotlin: get-started/kotlin.md
+      - Installation: get-started/installation.md
     - Build your Agent:
       - tutorials/index.md
       - Multi-tool agent: tutorials/multi-tool-agent.md
@@ -653,21 +662,28 @@ nav:
         - get-started/streaming/index.md
         - Python: get-started/streaming/quickstart-streaming.md
         - Java: get-started/streaming/quickstart-streaming-java.md
-      - Visual Builder: visual-builder/index.md
-      - Coding with AI: tutorials/coding-with-ai.md
-      - Advanced setup: get-started/installation.md
+      - Code with AI: tutorials/coding-with-ai.md
+      - Agent Config: agents/config.md
     - Agents:
       - agents/index.md
-      - LLM agents: agents/llm-agents.md
-      - Workflow agents:
+      - Simple agents: agents/llm-agents.md
+    - Graph Workflows:
+      - graphs/index.md
+      - Graph routes: graphs/routes.md
+      - Data handling: graphs/data-handling.md
+      - Human input: graphs/human-input.md
+      - Dynamic workflows: graphs/dynamic.md
+    - Multi-Agent Workflows:
+      - workflows/index.md
+      - Collaborative workflows: workflows/collaboration.md
+      - Template workflows:
         - agents/workflow-agents/index.md
-        - Sequential agents: agents/workflow-agents/sequential-agents.md
-        - Loop agents: agents/workflow-agents/loop-agents.md
-        - Parallel agents: agents/workflow-agents/parallel-agents.md
-      - Custom agents: agents/custom-agents.md
-      - Multi-agent systems: agents/multi-agents.md
+        - Sequential workflow: agents/workflow-agents/sequential-agents.md
+        - Loop workflow: agents/workflow-agents/loop-agents.md
+        - Parallel workflow: agents/workflow-agents/parallel-agents.md
+        - Custom template workflows: agents/custom-agents.md
       - Agent routing: agents/routing.md
-      - Agent Config: agents/config.md
+      - Workflow patterns: workflows/patterns.md
     - Models for Agents:
       - agents/models/index.md
       - Gemini: agents/models/google-gemini.md
@@ -680,24 +696,13 @@ nav:
       - vLLM: agents/models/vllm.md
       - LiteLLM: agents/models/litellm.md
       - LiteRT-LM: agents/models/litert-lm.md
-    - Tools and Integrations:
-      - integrations/index.md
-    - Custom Tools:
-      - tools-custom/index.md
-      - Function tools:
-        - Overview: tools-custom/function-tools.md
-        - Tool performance: tools-custom/performance.md
-        - Action confirmations: tools-custom/confirmation.md
-      - MCP tools: tools-custom/mcp-tools.md
-      - OpenAPI tools: tools-custom/openapi-tools.md
-      - Authentication: tools-custom/authentication.md
-      - Tool limitations: tools/limitations.md
-    - Skills for Agents:
-      - skills/index.md
+
   - Run Agents:
     - Agent Runtime:
       - Agent Runtime: runtime/index.md
-      - Web Interface: runtime/web-interface.md
+      - Web Interface:
+          - runtime/web-interface/index.md
+          - Visual Builder: visual-builder/index.md
       - Command Line: runtime/command-line.md
       - API Server: runtime/api-server.md
       - Ambient Agents: runtime/ambient-agents.md
@@ -728,32 +733,43 @@ nav:
       - Optimization: optimize/index.md
     - Safety and Security:
       - safety/index.md
+
   - Components:
     - Technical Overview: get-started/about.md
+    - Custom Tools:
+      - tools-custom/index.md
+      - Function tools:
+        - Overview: tools-custom/function-tools.md
+        - Tool performance: tools-custom/performance.md
+        - Action confirmations: tools-custom/confirmation.md
+      - MCP tools: tools-custom/mcp-tools.md
+      - OpenAPI tools: tools-custom/openapi-tools.md
+      - Authentication: tools-custom/authentication.md
+      - Tool limitations: tools/limitations.md
+    - Artifacts:
+      - artifacts/index.md
+    - Skills for Agents:
+      - skills/index.md
+    - App management:
+      - apps/index.md
+      - Callbacks:
+        - callbacks/index.md
+        - Types of callbacks: callbacks/types-of-callbacks.md
+        - Callback patterns: callbacks/design-patterns-and-best-practices.md
+      - Plugins: plugins/index.md
     - Context:
       - context/index.md
       - Context caching: context/caching.md
       - Context compression: context/compaction.md
-    - Sessions & Memory:
+    - Sessions and Memory:
       - sessions/index.md
       - Sessions:
         - sessions/session/index.md
         - Rewind sessions: sessions/session/rewind.md
         - Migrate sessions: sessions/session/migrate.md
       - State: sessions/state.md
+      - Events: events/index.md
       - Memory: sessions/memory.md
-    - Callbacks:
-      - callbacks/index.md
-      - Types of callbacks: callbacks/types-of-callbacks.md
-      - Callback patterns: callbacks/design-patterns-and-best-practices.md
-    - Artifacts:
-      - artifacts/index.md
-    - Events:
-      - events/index.md
-    - Apps:
-      - apps/index.md
-    - Plugins:
-      - plugins/index.md
     - MCP:
       - mcp/index.md
     - A2A Protocol:
@@ -782,8 +798,10 @@ nav:
       - grounding/index.md
       - Google Search Grounding: grounding/google_search_grounding.md
       - Grounding with Search: grounding/grounding_with_search.md
+
   - Integrations:
     - integrations/index.md
+
   - Reference:
     - API Reference:
       - api-reference/index.md
@@ -791,19 +809,15 @@ nav:
       - Typescript ADK: api-reference/typescript/index.html
       - Go ADK: https://pkg.go.dev/google.golang.org/adk
       - Java ADK: api-reference/java/index.html
+      - Kotlin ADK: api-reference/kotlin/index.html
       - CLI Reference: api-reference/cli/index.html
       - Agent Config Reference: api-reference/agentconfig/index.html
       - REST API: api-reference/rest/index.html
     - Release Notes: release-notes.md
+
   - Community:
     - community/index.md
     - Contributing Guide: community/contributing-guide.md
+
   - ADK 2.0:
-    - Overview: 2.0/index.md
-    - Graph-based workflows:
-      - workflows/index.md
-      - Graph routes: workflows/graph-routes.md
-      - Data handling: workflows/data-handling.md
-      - Human input: workflows/human-input.md
-    - Collaborative agents: workflows/collaboration.md
-    - Dynamic workflows: workflows/dynamic.md
+    - 2.0/index.md

@@ -1,7 +1,7 @@
 # 협업 에이전트 팀 구축하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-preview">Alpha</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 일부 복잡한 작업은 특정 책임을 가진 여러 에이전트를 필요로 하며, 특히 여러 개의
@@ -63,7 +63,7 @@ root = Agent(
 식별하고 서브에이전트에 할당합니다. 서브에이전트가 작업을 완료하면 자동으로
 조정 에이전트로 복귀합니다. 에이전트, 서브에이전트, 워크플로 노드에서
 ***input_schema*** 와 ***output_schema*** 를 사용해 데이터를 구조화하는 방법은
-[에이전트 워크플로의 데이터 처리](/ko/workflows/data-handling/)를
+[에이전트 워크플로의 데이터 처리](/ko/graphs/data-handling/)를
 참조하세요.
 
 ## 모드 구성과 동작

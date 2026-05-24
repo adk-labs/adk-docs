@@ -162,7 +162,7 @@ Vertex AI RAG 엔진으로 그라운딩을 사용하는 경우 사전에 RAG 코
 === "Python"
 
     ```py
-    --8<-- "examples/python/snippets/tools/built-in-tools/vertexai_rag_engine.py"
+    --8<-- "examples/python/snippets/tools/built-in-tools/rag_engine.py"
     ```
 
 ### Vertex AI 검색
@@ -176,7 +176,7 @@ Vertex AI RAG 엔진으로 그라운딩을 사용하는 경우 사전에 RAG 코
 
 
 ```py
---8<-- "examples/python/snippets/tools/built-in-tools/vertexai_search.py"
+--8<-- "examples/python/snippets/tools/built-in-tools/agent_search.py"
 ```
 
 

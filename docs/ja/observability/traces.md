@@ -1,7 +1,7 @@
 # エージェントアクティビティトレース
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.17.0</span><span class="lst-go">Go v1.0.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.17.0</span><span class="lst-go">Go v1.0.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 Agent Development Kit (ADK) は、リクエストがエージェントのアーキテクチャを通過する際のエンドツーエンドのプロセスを視覚化するのに役立つ分散トレース機能を提供します。メトリクスはプロセスにかかった「時間」を示し、ログは「何が起こった」かを示しますが、トレースはこれらのイベントを結び付けて、時間が費やされた正確な「場所」と、LLM 推論、ツール呼び出し、外部 API の間の階層関係を示します。

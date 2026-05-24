@@ -1,7 +1,7 @@
 # ADK エージェント向けスキル
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.25.0</span><span class="lst-preview">実験的</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.25.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v1.2.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 エージェント ***Skill*** は、ADK エージェントが特定のタスクを実行するために

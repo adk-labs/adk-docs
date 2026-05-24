@@ -1,7 +1,7 @@
 # エージェント向け Visual Builder
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.18.0</span><span class="lst-preview">実験的機能</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.18.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 ADK Visual Builderは、ADKエージェントを作成および管理するための視覚的なワークフロー設計環境を提供するWebベースのツールです。これを使用すると、初心者向けのグラフィカルインターフェースでエージェントを設計、構築、テストでき、エージェントの構築を支援するAI搭載アシスタントも含まれています。

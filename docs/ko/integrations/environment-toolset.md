@@ -8,7 +8,7 @@ catalog_tags: ["code", "google"]
 # ADK용 Environment Toolset
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.29.0</span><span class="lst-preview">실험적 기능</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.29.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 특히 코딩과 파일 작업처럼 여러 에이전트 요청에 걸쳐 유지되는

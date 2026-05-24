@@ -1,7 +1,7 @@
 # 에이전트 활동 메트릭
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.32.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.32.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 Agent Development Kit(ADK)는 에이전트의 성능, 비용, 사용 패턴을 이해하는 데 도움이

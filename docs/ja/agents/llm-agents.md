@@ -1,7 +1,7 @@
 # LLMエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 `LlmAgent`（しばしば`Agent`と略されます）はADKにおけるコアコンポーネントであり、アプリケーションの「思考」部分として機能します。大規模言語モデル（LLM）の能力を活用して、推論、自然言語の理解、意思決定、応答の生成、ツールとの対話を行います。
@@ -124,7 +124,7 @@
             .build();
     ```
 
-*（注：システムの*すべて*のエージェントに適用される指示については、ルートエージェントの`global_instruction`の使用を検討してください。詳細は[マルチエージェント](multi-agents.md)セクションで説明します。）*
+*（注：システムの*すべて*のエージェントに適用される指示については、ルートエージェントの`global_instruction`の使用を検討してください。詳細は[マルチエージェント](../workflows/patterns.md)セクションで説明します。）*
 
 ## エージェントの装備：ツール (`tools`)
 
@@ -133,7 +133,7 @@
 *   **`tools` (任意):** エージェントが使用できるツールのリストを提供します。リストの各項目は、次のいずれかです：
     *   ネイティブ関数またはメソッド（`FunctionTool`としてラップ）。Python ADKはネイティブ関数を自動的に`FunctionTool`にラップしますが、Javaでは`FunctionTool.create(...)`を使用してメソッドを明示的にラップする必要があります。
     *   `BaseTool`を継承するクラスのインスタンス。
-    *   別のエージェントのインスタンス（`AgentTool`、エージェント間の委任を可能にする - [マルチエージェント](multi-agents.md)参照）。
+    *   別のエージェントのインスタンス（`AgentTool`、エージェント間の委任を可能にする - [マルチエージェント](../workflows/patterns.md)参照）。
 
 LLMは、関数/ツール名、説明（docstringや`description`フィールドから）、およびパラメータスキーマを使用して、会話と指示に基づいてどのツールを呼び出すかを決定します。
 
@@ -382,7 +382,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 ### プランナー
 
 <div class="language-support-tag" title="">
-   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span>
+   <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
 **`planner` (任意):** `BasePlanner`インスタンスを割り当てて、実行前の複数ステップの推論と計画を有効にします。主なプランナーは2つあります：
@@ -441,7 +441,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 ### コード実行
 
 <div class="language-support-tag">
-   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span>
+   <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 *   **`code_executor` (任意):** `BaseCodeExecutor`インスタンスを提供して、エージェントがLLMの応答で見つかったコードブロックを実行できるようにします。（[ツール/組み込みツール](../tools/built-in-tools.md)参照）。
@@ -488,4 +488,4 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 このページでは`LlmAgent`の基本的な設定について説明しましたが、いくつかの関連概念はより高度な制御を提供し、他の場所で詳しく説明されています：
 
 *   **コールバック:** `before_model_callback`、`after_model_callback`などを使用して、実行ポイント（モデル呼び出しの前後、ツール呼び出しの前後）をインターセプトします。[コールバック](../callbacks/types-of-callbacks.md)を参照してください。
-*   **マルチエージェント制御:** 計画（`planner`）、エージェント転送の制御（`disallow_transfer_to_parent`, `disallow_transfer_to_peers`）、およびシステム全体の指示（`global_instruction`）を含む、エージェント対話の高度な戦略。[マルチエージェント](multi-agents.md)を参照してください。
+*   **マルチエージェント制御:** 計画（`planner`）、エージェント転送の制御（`disallow_transfer_to_parent`, `disallow_transfer_to_peers`）、およびシステム全体の指示（`global_instruction`）を含む、エージェント対話の高度な戦略。[マルチエージェント](../workflows/patterns.md)を参照してください。

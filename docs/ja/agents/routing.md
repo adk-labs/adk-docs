@@ -1,7 +1,7 @@
 # エージェント間でルーティングする
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-typescript">TypeScript v1.0.0</span><span class="lst-preview">試験運用</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-typescript">TypeScript v1.0.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 !!! example "試験運用"
@@ -21,7 +21,7 @@
 [ワークフローエージェント](workflow-agents/index.md)とは異なります。ワークフロー
 エージェントは複数のエージェントを固定パターンでオーケストレーションします。また、
 LLM がどのエージェントへ引き継ぐかを決める
-[LLM 主導の委譲](multi-agents.md#b-llm-driven-delegation-agent-transfer)とも
+[LLM 主導の委譲](../workflows/patterns.md#b-llm-driven-delegation-agent-transfer)とも
 異なります。`RoutedAgent` では、開発者が明示的なルーティング関数を書き、呼び出し
 ごとに **1 つの** エージェントを選択します。モデルレベルのルーティングについては
 [モデルルーティング](models/routing.md)を参照してください。

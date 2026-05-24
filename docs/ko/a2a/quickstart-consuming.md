@@ -1,7 +1,7 @@
 # 빠른 시작: A2A를 통해 원격 에이전트 사용하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-preview">실험적 기능</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-preview">Experimental</span>
 </div>
 
 이 빠른 시작은 모든 개발자에게 가장 일반적인 시작 지점인 **"원격 에이전트가 있는데, 내 ADK 에이전트가 A2A를 통해 이를 사용하게 하려면 어떻게 해야 하나요?"**에 대해 다룹니다. 이는 서로 다른 에이전트가 협력하고 상호 작용해야 하는 복잡한 다중 에이전트 시스템을 구축하는 데 중요합니다.

@@ -7,7 +7,7 @@ catalog_tags: ["google"]
 # 반영 및 재시도 도구 플러그인
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.16.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.16.0</span><span class="lst-go">Go v0.5.0</span>
 </div>
 
 반영 및 재시도 도구 플러그인은 에이전트가 ADK [도구](/ko/tools-custom/)의 오류 응답에서 복구하고 도구 요청을 자동으로 재시도하는 데 도움이 될 수 있습니다. 이 플러그인은 도구 오류를 가로채고, 반영 및 수정을 위해 AI 모델에 구조화된 지침을 제공하며, 구성 가능한 한도까지 작업을 재시도합니다. 이 플러그인은 다음 기능을 포함하여 에이전트 워크플로에 더 많은 복원력을 구축하는 데 도움이 될 수 있습니다.

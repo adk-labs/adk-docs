@@ -1,7 +1,7 @@
 # 信頼性向上のための A2A 拡張
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python 1.27.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.27.0</span>
 </div>
 
 ADK は、更新版 [A2aAgentExecutor](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/a2a_agent_executor_impl.py)

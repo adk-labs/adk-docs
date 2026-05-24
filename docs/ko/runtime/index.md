@@ -1,7 +1,7 @@
 # 에이전트 런타임
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADK는 개발 중 에이전트를 실행하고 테스트하는 여러 방법을 제공합니다. 개발 워크플로에 가장 잘 맞는 방법을 선택하세요.
@@ -16,7 +16,7 @@ ADK는 개발 중 에이전트를 실행하고 테스트하는 여러 방법을 
 
     `adk web`을 사용해 브라우저 기반 인터페이스에서 에이전트와 상호작용할 수 있습니다.
 
-    [:octicons-arrow-right-24: 웹 인터페이스 사용하기](web-interface.md)
+    [:octicons-arrow-right-24: 웹 인터페이스 사용하기](web-interface/index.md)
 
 -   :material-console:{ .lg .middle } **Command Line**
 

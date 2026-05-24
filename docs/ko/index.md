@@ -7,7 +7,7 @@ hide:
 <link rel="stylesheet" type="text/css" href="../stylesheets/homepage.css" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.9.0/dist/bundle/asciinema-player.css" />
 <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.9.0/dist/bundle/asciinema-player.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>document.body.classList.add('adk-landing-page');</script>
 
 <div class="adk-landing">
@@ -20,6 +20,9 @@ hide:
 <!-- Hero Section -->
 {{% include 'ko/_includes/homepage/_hero.md' %}}
 
+<!-- Graph Workflows -->
+{{% include 'ko/_includes/homepage/_graphs.md' %}}
+
 <!-- Framework -->
 {{% include 'ko/_includes/homepage/_framework.md' %}}
 
@@ -28,9 +31,6 @@ hide:
 
 <!-- AI Dev Tools -->
 {{% include 'ko/_includes/homepage/_ai-dev-tools.md' %}}
-
-<!-- Eval Section -->
-{{% include 'ko/_includes/homepage/_eval.md' %}}
 
 <!-- Ready to Build CTA Section -->
 {{% include 'ko/_includes/homepage/_build-cta.md' %}}
@@ -45,7 +45,7 @@ hide:
 // Tab switching logic
 document.addEventListener("DOMContentLoaded", function() {
   var tabs = document.querySelectorAll('.iterm-tab');
-  var langs = ['python', 'go', 'java', 'typescript'];
+  var langs = ['python', 'go', 'java', 'typescript', 'kotlin'];
 
   tabs.forEach(function(tab) {
     tab.addEventListener('click', function() {

@@ -1,7 +1,7 @@
 # プラグイン
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.7.0</span><span class="lst-typescript">TypeScript v0.2.5</span><span class="lst-go">Go v0.4.0</span><span class="lst-java">Java v0.3.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.7.0</span><span class="lst-typescript">TypeScript v0.2.5</span><span class="lst-go">Go v0.4.0</span><span class="lst-java">Java v0.3.0</span>
 </div>
 
 Agent Development Kit (ADK) のプラグインは、コールバックフックを使用してエージェントワークフローのライフサイクルのさまざまな段階で実行できるカスタムコードモジュールです。プラグインは、エージェントワークフロー全体に適用される機能に使用します。プラグインの一般的な用途は次のとおりです。

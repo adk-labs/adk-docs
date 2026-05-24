@@ -1,7 +1,7 @@
 # ADK 에이전트를 위한 스킬
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.25.0</span><span class="lst-preview">실험적</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.25.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v1.2.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 에이전트 ***스킬(Skill)*** 은 ADK 에이전트가 특정 작업을 수행할 때 사용할 수 있는

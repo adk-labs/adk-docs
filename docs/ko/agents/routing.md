@@ -1,7 +1,7 @@
 # 에이전트 간 라우팅
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-typescript">TypeScript v1.0.0</span><span class="lst-preview">실험적</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-typescript">TypeScript v1.0.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 !!! example "실험적"
@@ -19,7 +19,7 @@
 `RoutedAgent`는 `SequentialAgent` 또는 `ParallelAgent` 같은
 [워크플로 에이전트](workflow-agents/index.md)와 다릅니다. 워크플로 에이전트는
 여러 에이전트를 고정된 패턴으로 오케스트레이션합니다. 또한 LLM이 전달할 에이전트를
-결정하는 [LLM 기반 위임](multi-agents.md#b-llm-driven-delegation-agent-transfer)과도
+결정하는 [LLM 기반 위임](../workflows/patterns.md#b-llm-driven-delegation-agent-transfer)과도
 다릅니다. `RoutedAgent`에서는 개발자가 명시적인 라우팅 함수를 작성해 호출마다
 **하나의** 에이전트를 선택합니다. 모델 수준 라우팅은
 [모델 라우팅](models/routing.md)을 참조하세요.

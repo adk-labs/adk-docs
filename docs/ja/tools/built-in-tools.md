@@ -161,7 +161,7 @@ Vertex AI RAGエンジンでグラウンディングを使用する場合は、�
 === "Python"
 
     ```py
-    --8<-- "examples/python/snippets/tools/built-in-tools/vertexai_rag_engine.py"
+    --8<-- "examples/python/snippets/tools/built-in-tools/rag_engine.py"
     ```
 
 ### Vertex AI Search
@@ -174,7 +174,7 @@ Vertex AI RAGエンジンでグラウンディングを使用する場合は、�
 
 
 ```py
---8<-- "examples/python/snippets/tools/built-in-tools/vertexai_search.py"
+--8<-- "examples/python/snippets/tools/built-in-tools/agent_search.py"
 ```
 
 

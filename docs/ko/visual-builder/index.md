@@ -1,7 +1,7 @@
 # 에이전트용 Visual Builder
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.18.0</span><span class="lst-preview">실험적 기능</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.18.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 ADK Visual Builder는 ADK 에이전트를 생성하고 관리하기 위한 시각적 워크플로 설계 환경을 제공하는 웹 기반 도구입니다. 이 도구를 사용하면 초보자에게 친숙한 그래픽 인터페이스에서 에이전트를 설계, 구축 및 테스트할 수 있으며, 에이전트 구축을 돕는 AI 기반 어시스턴트가 포함되어 있습니다.

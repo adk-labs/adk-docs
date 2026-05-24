@@ -51,7 +51,7 @@
 ### 回避策 #1: AgentTool.create() メソッド
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-java">Java</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript (v0.6.1+)</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 次のコードサンプルは、複数の組み込みツールを使う方法、
@@ -149,7 +149,7 @@
 ### 回避策 #2: bypass_multi_tools_limit
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-java">Java</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADK Python には `GoogleSearchTool` と `VertexAiSearchTool` について

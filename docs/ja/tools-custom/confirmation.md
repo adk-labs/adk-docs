@@ -1,7 +1,7 @@
 # ADKツールの実行確認を取得する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-preview">試験運用版</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 一部のエージェントワークフローでは、意思決定、検証、セキュリティ、または一般的な監視のために確認が必要です。このような場合、ワークフローを続行する前に、人間または監視システムから応答を取得する必要があります。Agent Development Kit（ADK）の*ツール確認*機能を使用すると、ADKツールは実行を一時停止し、ユーザーまたは他のシステムと対話して確認したり、続行する前に構造化データを収集したりできます。ADKツールでツール確認を使用するには、次の方法があります。
@@ -19,7 +19,7 @@
 
 **図1.** 高度なツール応答実装を使用した確認応答要求ダイアログボックスの例。
 
-次のセクションでは、確認シナリオでこの機能を使用する方法について説明します。完全なコードサンプルについては、[human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py)の例を参照してください。エージェントワークフローに人間の入力を組み込む追加の方法があります。詳細については、[ヒューマンインザループ](/ja/agents/multi-agents/#human-in-the-loop-pattern)エージェントパターンを参照してください。
+次のセクションでは、確認シナリオでこの機能を使用する方法について説明します。完全なコードサンプルについては、[human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py)の例を参照してください。エージェントワークフローに人間の入力を組み込む追加の方法があります。詳細については、[ヒューマンインザループ](../workflows/patterns.md#human-in-the-loop-pattern)エージェントパターンを参照してください。
 
 ## ブール値の確認 {#boolean-confirmation}
 

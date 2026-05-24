@@ -1,7 +1,7 @@
 # 停止したエージェントを再開する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.14.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADKエージェントの実行は、ネットワーク接続の切断、停電、または必要な外部システムのオフラインなど、さまざまな要因によって中断される可能性があります。ADKの再開機能を使用すると、エージェントワークフローが中断したところから再開できるため、ワークフロー全体を再起動する必要がありません。ADK Python 1.16以降では、ADKワークフローを再開可能に構成して、ワークフローの実行を追跡し、予期しない中断の後に再開できるようにすることができます。

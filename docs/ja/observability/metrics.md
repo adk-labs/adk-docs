@@ -1,7 +1,7 @@
 # エージェント活動メトリクス
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.32.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.32.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 Agent Development Kit (ADK) は、エージェントのパフォーマンス、コスト、利用パターンを

@@ -1,7 +1,7 @@
 # 協調エージェントチームを構築する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-preview">Alpha</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 複雑なタスクの中には、特定の責務を持つ複数のエージェントを必要とし、
@@ -68,7 +68,7 @@ root = Agent(
 エージェント、サブエージェント、ワークフローノードで
 ***input_schema*** と ***output_schema*** を使ってデータを構造化する
 詳細については、
-[エージェントワークフローのデータ処理](/ja/workflows/data-handling/)
+[エージェントワークフローのデータ処理](/ja/graphs/data-handling/)
 を参照してください。
 
 ## モード設定と挙動

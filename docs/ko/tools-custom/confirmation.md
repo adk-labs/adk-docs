@@ -1,7 +1,7 @@
 # ADK 도구에 대한 작업 확인 받기
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-preview">실험적</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 일부 에이전트 워크플로는 의사 결정, 확인, 보안 또는 일반적인 감독을 위해 확인이 필요합니다. 이러한 경우 워크플로를 진행하기 전에 사람이나 감독 시스템으로부터 응답을 받아야 합니다. 에이전트 개발 키트(ADK)의 *도구 확인* 기능을 사용하면 ADK 도구가 실행을 일시 중지하고 사용자 또는 다른 시스템과 상호 작용하여 확인하거나 진행하기 전에 구조화된 데이터를 수집할 수 있습니다. 다음과 같은 방법으로 ADK 도구와 함께 도구 확인을 사용할 수 있습니다.
@@ -19,7 +19,7 @@
 
 **그림 1.** 고급 도구 응답 구현을 사용하는 예제 확인 응답 요청 대화 상자.
 
-다음 섹션에서는 확인 시나리오에 이 기능을 사용하는 방법을 설명합니다. 전체 코드 샘플은 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 예를 참조하십시오. 에이전트 워크플로에 사람의 입력을 통합하는 추가 방법이 있습니다. 자세한 내용은 [Human-in-the-loop](/ko/agents/multi-agents/#human-in-the-loop-pattern) 에이전트 패턴을 참조하십시오.
+다음 섹션에서는 확인 시나리오에 이 기능을 사용하는 방법을 설명합니다. 전체 코드 샘플은 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 예를 참조하십시오. 에이전트 워크플로에 사람의 입력을 통합하는 추가 방법이 있습니다. 자세한 내용은 [Human-in-the-loop](../workflows/patterns.md#human-in-the-loop-pattern) 에이전트 패턴을 참조하십시오.
 
 ## 부울 확인 {#boolean-confirmation}
 

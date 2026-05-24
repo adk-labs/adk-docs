@@ -1,7 +1,7 @@
 # 평가를 위한 환경 시뮬레이션
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.24.0</span>
+    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.24.0</span>
 </div>
 
 API, 데이터베이스, 서드파티 서비스 같은 외부 의존성에 기대는 에이전트를 평가할 때, 테스트 중에 실제 도구를 그대로 호출하면 느리고 비싸고 불안정할 수 있습니다. **환경 시뮬레이터**는 에이전트 자체를 수정하지 않고도, 실행 중인 도구 호출을 안전하게 가로채어 제어된 결정론적 응답으로 바꿔 줍니다. 이를 통해 에이전트 로직만 분리한 hermetic 오프라인 테스트를 만들고, 안정적인 채점을 수행할 수 있습니다.

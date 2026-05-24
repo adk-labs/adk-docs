@@ -1,7 +1,7 @@
 # ランタイム設定 (Runtime Configuration)
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 `RunConfig` は、streaming mode、speech setting、LLM call limit、live agent option など、
@@ -58,10 +58,16 @@
         .build();
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunConfigExample.kt:basic_usage"
+    ```
+
 ## セッションとコンテキストの管理
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
 </div>
 
 Long-running session では、どれだけの history を load するか、context window を圧縮するかを
@@ -150,10 +156,16 @@ Live API を使用します。
         .build();
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunConfigExample.kt:streaming_config"
+    ```
+
 ## 音声と発話の設定
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-java">Java</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-java">Java</span>
 </div>
 
 Voice-enabled agent では、speech synthesis、audio transcription、response modality を
@@ -240,7 +252,7 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
 ## Live agent の設定
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 `runner.run_live()` を使用するときは、次の追加パラメータで real-time behavior を設定します。

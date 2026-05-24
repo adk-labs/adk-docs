@@ -1,7 +1,7 @@
 # 에이전트 구성을 사용하여 에이전트 빌드
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">실험용</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">Experimental</span>
 </div>
 
 ADK 에이전트 구성 기능을 사용하면 코드를 작성하지 않고도 ADK 워크플로를 빌드할 수 있습니다. 에이전트 구성은 에이전트에 대한 간략한 설명이 포함된 YAML 형식 텍스트 파일을 사용하므로 누구나 ADK 에이전트를 조립하고 실행할 수 있습니다. 다음은 기본 에이전트 구성 정의의 간단한 예입니다.
