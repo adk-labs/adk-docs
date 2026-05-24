@@ -11,6 +11,13 @@
 
     [:octicons-arrow-right-24: Python으로 시작](python.md) <br>
 
+-   :fontawesome-brands-js:{ .lg .middle } **TypeScript 빠른 시작**
+
+    ---
+    몇 분 만에 첫 번째 TypeScript ADK 에이전트를 만듭니다.
+
+    [:octicons-arrow-right-24: TypeScript로 시작](typescript.md) <br>
+
 -   :fontawesome-brands-golang:{ .lg .middle } **Go 빠른 시작**
 
     ---
@@ -25,12 +32,12 @@
 
     [:octicons-arrow-right-24: Java로 시작](java.md) <br>
 
--   :fontawesome-brands-js:{ .lg .middle } **TypeScript 빠른 시작**
+-   :simple-kotlin:{ .lg .middle } **Kotlin 빠른 시작**
 
     ---
-    몇 분 만에 첫 번째 TypeScript ADK 에이전트를 만듭니다.
+    몇 분 만에 첫 번째 Kotlin ADK 에이전트를 만듭니다.
 
-    [:octicons-arrow-right-24: TypeScript로 시작](typescript.md) <br>
+    [:octicons-arrow-right-24: Kotlin으로 시작](kotlin.md) <br>
 
 </div>
 

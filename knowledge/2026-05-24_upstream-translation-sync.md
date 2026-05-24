@@ -105,3 +105,14 @@
 - Updated both current `community/index.md` pages and legacy localized `community.md` pages.
 - Verified no stale `https://adk.dev/ko/`, `https://adk.dev/ja/`, `https://adk-labs.github.io/ko/`, or `https://adk-labs.github.io/ja/` links remain in docs.
 - Verified both corrected URLs return HTTP `200`.
+
+## Follow-up: Localized Get Started Parity Fix
+
+- Updated KO/JA `get-started/index.md` cards to match upstream ordering:
+  - Python
+  - TypeScript
+  - Go
+  - Java
+  - Kotlin
+- Added the missing Kotlin quickstart card to both localized pages.
+- Verified card order parity across EN/KO/JA and reran `mkdocs build` successfully.

@@ -11,6 +11,13 @@ Agent Development Kit（ADK）は、開発者がAI搭載エージェントを迅
 
     [:octicons-arrow-right-24: Pythonで始める](python.md) <br>
 
+-   :fontawesome-brands-js:{ .lg .middle } **TypeScriptクイックスタート**
+
+    ---
+    数分で最初のTypeScript ADKエージェントを作成します。
+
+    [:octicons-arrow-right-24: TypeScriptで始める](typescript.md) <br>
+
 -   :fontawesome-brands-golang:{ .lg .middle } **Goクイックスタート**
 
     ---
@@ -25,12 +32,12 @@ Agent Development Kit（ADK）は、開発者がAI搭載エージェントを迅
 
     [:octicons-arrow-right-24: Javaで始める](java.md) <br>
 
--   :fontawesome-brands-js:{ .lg .middle } **TypeScriptクイックスタート**
+-   :simple-kotlin:{ .lg .middle } **Kotlinクイックスタート**
 
     ---
-    数分で最初のTypeScript ADKエージェントを作成します。
+    数分で最初のKotlin ADKエージェントを作成します。
 
-    [:octicons-arrow-right-24: TypeScriptで始める](typescript.md) <br>
+    [:octicons-arrow-right-24: Kotlinで始める](kotlin.md) <br>
 
 </div>
 
