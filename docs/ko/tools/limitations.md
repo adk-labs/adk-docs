@@ -225,3 +225,11 @@ ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해
             .subAgents(searchAgent, codingAgent) // 하위 에이전트가 내장 도구를 사용하므로 지원되지 않음
             .build();
     ```
+
+## Kotlin 해결 방법 예제
+
+영어 원문에 추가된 Kotlin 예제는 내장 도구 제한을 피하기 위해 루트 에이전트에서만 내장 도구를 직접 구성하는 패턴을 보여줍니다.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/LimitationsWorkaround.kt:workaround_1"
+```

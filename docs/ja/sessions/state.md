@@ -524,3 +524,31 @@
 * **記述的なキーとプレフィックス：** 明確な名前と適切なプレフィックス（`user:`、`app:`、`temp:`、またはなし）を使用してください。
 * **浅い構造：** 可能な限り深いネストは避けてください。
 * **標準的な更新フロー：** `append_event`に依存してください。
+
+## Kotlin の状態例の補足
+
+英語原文に追加された Kotlin の状態管理例を以下にも掲載します。
+
+### 指示文テンプレート
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_templating"
+```
+
+### 指示文プロバイダー
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_provider"
+```
+
+### 完全な例
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/StateExample.kt:full_example"
+```
+
+### コンテキストからの状態更新
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/StateExample.kt:state_updates_context"
+```

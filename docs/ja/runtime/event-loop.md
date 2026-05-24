@@ -247,3 +247,31 @@ LLM 応答待ちやツール実行を効率よく扱うためです。
 === "Java"
 
     RxJava でバックプレッシャーを意識して扱います。
+
+## Kotlin の実行ループ例
+
+英語原文に追加された Kotlin の実行ループ例を以下にも掲載します。
+
+### 概念的なループ
+
+```kotlin
+--8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:conceptual_loop"
+```
+
+### 実行ロジック
+
+```kotlin
+--8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:execution_logic"
+```
+
+### 状態更新のタイミング
+
+```kotlin
+--8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:state_update_timing"
+```
+
+### Dirty Read の例
+
+```kotlin
+--8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:dirty_read"
+```

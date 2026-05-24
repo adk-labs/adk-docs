@@ -524,3 +524,31 @@
 * **설명적인 키 및 접두사:** 명확한 이름과 적절한 접두사(`user:`, `app:`, `temp:` 또는 없음)를 사용하세요.
 * **얕은 구조:** 가능한 경우 깊은 중첩을 피하세요.
 * **표준 업데이트 흐름:** `append_event`에 의존하세요.
+
+## Kotlin 상태 예제 보강
+
+영어 원문에 추가된 Kotlin 상태 관리 예제를 아래에 함께 제공합니다.
+
+### 지시문 템플릿
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_templating"
+```
+
+### 지시문 제공자
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_provider"
+```
+
+### 전체 예제
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/StateExample.kt:full_example"
+```
+
+### 컨텍스트에서 상태 업데이트
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/StateExample.kt:state_updates_context"
+```

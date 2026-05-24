@@ -23,6 +23,12 @@ app = App(
 )
 ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunConfigExample.kt:resumability_config"
+    ```
+
 !!! warning "주의: 장기 실행 함수, 확인, 인증"
     [장기 실행 함수](/ko/tools-custom/function-tools/#long-run-tool),
     [확인](/ko/tools-custom/confirmation/) 또는
@@ -64,6 +70,12 @@ runner.run_async(user_id='u_123', session_id='s_abc',
 # new_message가 함수 응답으로 설정되면
 # 장기 실행 함수를 재개하려고 합니다.
 ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunConfigExample.kt:resume_usage"
+    ```
 
 !!! info "참고"
     ADK 웹 사용자 인터페이스에서 워크플로를 재개하거나 ADK

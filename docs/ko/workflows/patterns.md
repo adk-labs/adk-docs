@@ -1322,3 +1322,49 @@ ADK의 구성 기본 요소를 결합하여 다중 에이전트 협업을 위한
 ### 패턴 결합
 
 이러한 패턴은 다중 에이전트 시스템을 구조화하기 위한 출발점입니다. 특정 애플리케이션에 가장 효과적인 아키텍처를 만들기 위해 필요에 따라 혼합하여 사용할 수 있습니다.
+
+## Kotlin 패턴 예제
+
+영어 원문에 추가된 Kotlin 다중 에이전트 패턴 예제를 아래에 함께 제공합니다.
+
+### Coordinator/Dispatcher 패턴
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:coordinator_pattern"
+```
+
+### Sequential Pipeline 패턴
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:sequential_pipeline_pattern"
+```
+
+### Parallel Fan-Out/Gather 패턴
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:parallel_gather_pattern"
+```
+
+### Hierarchical Task Decomposition 패턴
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:hierarchical_pattern"
+```
+
+### Generator-Critic 패턴
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:generator_critic_pattern"
+```
+
+### Iterative Refinement 패턴
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:iterative_refinement_pattern"
+```
+
+### Human-in-the-Loop 패턴
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:human_in_loop_pattern"
+```

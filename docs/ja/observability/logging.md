@@ -229,3 +229,23 @@ go run main.go web -otel_to_cloud a2a
     -   モデルが応答するのにどれくらいの時間がかかっているか？
 
 この詳細な出力により、不適切なプロンプトエンジニアリングからツールの定義に関する問題まで、幅広い問題をログファイルから直接診断できます。
+
+### Kotlinのプログラムによる設定
+
+Kotlinでは、ADKは標準のJVMロギング機能（デフォルトではFlogger）とOpenTelemetryを使用して、構造化されたGenAIログを提供します。
+
+#### プロンプト内容のキャプチャ
+
+グローバルな`TelemetryConfig`を構成することで、完全なプロンプトロギングを有効にできます。
+
+```kotlin
+--8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:capture_content"
+```
+
+#### プラグインによるアクティビティロギング
+
+コンソールでエージェント活動（ユーザーメッセージ、モデルリクエスト/レスポンス、ツール呼び出し）の詳細ログを取得するには、`LoggingPlugin`を使用します。
+
+```kotlin
+--8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:logging_plugin"
+```

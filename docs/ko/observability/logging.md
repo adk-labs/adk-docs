@@ -229,3 +229,23 @@ go run main.go web -otel_to_cloud a2a
     -   모델이 응답하는 데 시간이 얼마나 걸리는가?
 
 이 상세한 출력을 통해 잘못된 프롬프트 엔지니어링부터 도구 정의 문제에 이르기까지 광범위한 문제를 로그 파일에서 직접 진단할 수 있습니다.
+
+### Kotlin 프로그래밍 방식 설정
+
+Kotlin에서 ADK는 표준 JVM 로깅 기능(기본적으로 Flogger)과 OpenTelemetry를 사용하여 구조화된 GenAI 로그를 제공합니다.
+
+#### 프롬프트 콘텐츠 캡처
+
+전역 `TelemetryConfig`를 구성하여 전체 프롬프트 로깅을 활성화할 수 있습니다.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:capture_content"
+```
+
+#### 플러그인을 사용한 활동 로깅
+
+콘솔에서 에이전트 활동(사용자 메시지, 모델 요청/응답, 도구 호출)에 대한 자세한 로그를 확인하려면 `LoggingPlugin`을 사용합니다.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:logging_plugin"
+```

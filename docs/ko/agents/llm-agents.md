@@ -618,3 +618,43 @@ _(이 예시는 핵심 개념을 보여줍니다. 더 복잡한 에이전트는 
 
 *   **콜백(Callbacks):** `before_model_callback`, `after_model_callback` 등을 사용하여 실행 지점(모델 호출 전/후, 도구 호출 전/후)을 가로채기. [콜백](../callbacks/types-of-callbacks.md) 참조.
 *   **다중 에이전트 제어:** 계획(`planner`), 에이전트 전환 제어(`disallow_transfer_to_parent`, `disallow_transfer_to_peers`), 시스템 전반의 명령(`global_instruction`)을 포함한 에이전트 상호 작용의 고급 전략. [다중 에이전트](../workflows/patterns.md) 참조.
+
+## Kotlin 예제 보강
+
+영어 원문에 추가된 Kotlin `LlmAgent` 예제를 아래에 함께 제공합니다.
+
+### 기본 식별 정보
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:identity"
+```
+
+### 지시문 구성
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:instruction"
+```
+
+### 도구 정의
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:tool_definition"
+```
+
+### 도구 사용
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:tool_usage"
+```
+
+### 생성 설정
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:gen_config"
+```
+
+### 전체 예제
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:full_example"
+```

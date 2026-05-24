@@ -1,7 +1,7 @@
 # 세션: 개별 대화 추적하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 소개에 이어, `Session`에 대해 자세히 알아보겠습니다. "대화 스레드"라는 개념을 다시 생각해 보세요. 매번 문자 메시지를 처음부터 새로 시작하지 않는 것처럼, 에이전트도 진행 중인 상호작용에 대한 컨텍스트가 필요합니다. **`Session`**은 이러한 개별 대화 스레드를 추적하고 관리하기 위해 특별히 설계된 ADK 객체입니다.
@@ -115,6 +115,36 @@
         var unused = exampleSessionService.deleteSession(appName, userId, sessionId);
        ```
 
+=== "Kotlin"
+
+       ```kotlin
+        import com.google.adk.kt.sessions.InMemorySessionService
+        import com.google.adk.kt.sessions.SessionKey
+
+        val sessionId = "123"
+        val appName = "example-app"
+        val userId = "example-user"
+        val initialState = mapOf("newKey" to "newValue")
+        val sessionService = InMemorySessionService()
+
+        // 세션 생성
+        val exampleSession = sessionService.createSession(
+            key = SessionKey(appName, userId, sessionId),
+            state = initialState
+        )
+        println("세션이 성공적으로 생성되었습니다.")
+
+        println("--- 세션 속성 검토 ---")
+        println("ID (`id`):                ${exampleSession.key.id}")
+        println("애플리케이션 이름 (`appName`): ${exampleSession.key.appName}")
+        println("사용자 ID (`userId`):         ${exampleSession.key.userId}")
+        println("상태 (`state`):           ${exampleSession.state}")
+        println("------------------------------------")
+
+        // 정리 (이 예시에서는 선택 사항)
+        sessionService.deleteSession(exampleSession.key)
+       ```
+
 *(*참고: 위에 표시된 상태는 초기 상태일 뿐입니다. 상태 업데이트는 '상태' 섹션에서 설명하는 것처럼 이벤트를 통해 발생합니다.)*
 
 ## `SessionService`로 세션 관리하기
@@ -167,6 +197,13 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
            ```java
             import com.google.adk.sessions.InMemorySessionService;
             InMemorySessionService exampleSessionService = new InMemorySessionService();
+           ```
+
+    === "Kotlin"
+
+           ```kotlin
+            import com.google.adk.kt.sessions.InMemorySessionService
+            val sessionService = InMemorySessionService()
            ```
 
 2.  **`VertexAiSessionService`**

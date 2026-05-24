@@ -1,5 +1,9 @@
 # マルチツールエージェントを構築する
 
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+</div>
+
 このクイックスタートでは、Agent Development Kit (ADK) をインストールし、複数のツールを備えた基本的なエージェントを設定し、ターミナルまたは対話型のブラウザベースの開発UIでローカルで実行する方法を説明します。
 
 <!-- <img src="../../assets/quickstart.png" alt="クイックスタートのセットアップ"> -->
@@ -59,6 +63,16 @@
 === "Java"
 
     ADKをインストールし、環境をセットアップするには、次の手順に進んでください。
+
+=== "Kotlin"
+
+    新しいKotlinプロジェクト（例: IntelliJ IDEAまたはGradle）を作成し、`build.gradle.kts`に次の依存関係を追加します。
+
+    ```kotlin
+    dependencies {
+        implementation("com.google.adk:google-adk-kotlin-core:0.1.0") // 実際のバージョンに置き換えてください
+    }
+    ```
 
 === "Go"
 
@@ -225,6 +239,30 @@
 
     ```java title="agents/multitool/MultiToolAgent.java"
     --8<-- "examples/java/cloud-run/src/main/java/agents/multitool/MultiToolAgent.java:full_code"
+    ```
+
+=== "Kotlin"
+
+    Kotlinプロジェクトでは、一般的に次のプロジェクト構造を使用します。
+
+    ```console
+    project_folder/
+    ├── build.gradle.kts
+    ├── src/
+    ├── └── main/
+    │       └── kotlin/
+    │           └── agents/
+    │               └── multitool/
+    ```
+
+    ### `MultiToolAgent.kt`を作成する
+
+    `src/main/kotlin/agents/multitool/`ディレクトリに`MultiToolAgent.kt`ソースファイルを作成します。
+
+    次のコードを`MultiToolAgent.kt`にコピーして貼り付けます。
+
+    ```kotlin title="src/main/kotlin/agents/multitool/MultiToolAgent.kt"
+    --8<-- "examples/kotlin/snippets/get-started/multi_tool_agent/MultiToolAgent.kt"
     ```
 
 === "Go"
@@ -669,6 +707,31 @@
         ```console
         gradle runAgent
         ```
+
+=== "Kotlin"
+
+    ターミナルでエージェントプロジェクトディレクトリに移動します。
+
+    ```console
+    project_folder/                <-- このディレクトリに移動
+    ├── build.gradle.kts
+    ├── src/
+    ├── └── main/
+    │       └── kotlin/
+    │           └── agents/
+    │               └── multitool/
+    │                   └── MultiToolAgent.kt
+    ```
+
+    ### エージェントを実行する
+
+    Gradleを使用してKotlinクラスの`main()`メソッドを実行できます。
+
+    ```console
+    ./gradlew run
+    ```
+
+    IntelliJ IDEAを使用している場合は、`main()`関数の横にある緑の実行矢印をクリックしても実行できます。
 
 
 

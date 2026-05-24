@@ -1,5 +1,9 @@
 # 멀티-툴 에이전트 구축하기
 
+<div class="language-support-tag">
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+</div>
+
 이 빠른 시작은 ADK(Agent Development Kit)를 설치하고, 여러 도구가 포함된 기본 에이전트를 설정하고, 터미널 또는 대화형 브라우저 기반 개발 UI에서 로컬로 실행하는 방법을 안내합니다.
 
 <!-- <img src="../../assets/quickstart.png" alt="빠른 시작 설정"> -->
@@ -59,6 +63,16 @@
 === "Java"
 
     ADK를 설치하고 환경을 설정하려면 다음 단계를 진행하십시오.
+
+=== "Kotlin"
+
+    새 Kotlin 프로젝트(예: IntelliJ IDEA 또는 Gradle 사용)를 만들고 `build.gradle.kts`에 다음 종속성을 추가합니다.
+
+    ```kotlin
+    dependencies {
+        implementation("com.google.adk:google-adk-kotlin-core:0.1.0") // 실제 버전으로 교체하세요
+    }
+    ```
 
 === "Go"
 
@@ -225,6 +239,30 @@
 
     ```java title="agents/multitool/MultiToolAgent.java"
     --8<-- "examples/java/cloud-run/src/main/java/agents/multitool/MultiToolAgent.java:full_code"
+    ```
+
+=== "Kotlin"
+
+    Kotlin 프로젝트는 일반적으로 다음 프로젝트 구조를 사용합니다.
+
+    ```console
+    project_folder/
+    ├── build.gradle.kts
+    ├── src/
+    ├── └── main/
+    │       └── kotlin/
+    │           └── agents/
+    │               └── multitool/
+    ```
+
+    ### `MultiToolAgent.kt` 생성
+
+    `src/main/kotlin/agents/multitool/` 디렉터리에 `MultiToolAgent.kt` 소스 파일을 만듭니다.
+
+    다음 코드를 `MultiToolAgent.kt`에 복사하여 붙여넣습니다.
+
+    ```kotlin title="src/main/kotlin/agents/multitool/MultiToolAgent.kt"
+    --8<-- "examples/kotlin/snippets/get-started/multi_tool_agent/MultiToolAgent.kt"
     ```
 
 === "Go"
@@ -669,6 +707,31 @@
         ```console
         gradle runAgent
         ```
+
+=== "Kotlin"
+
+    터미널에서 에이전트 프로젝트 디렉터리로 이동합니다.
+
+    ```console
+    project_folder/                <-- 이 디렉터리로 이동
+    ├── build.gradle.kts
+    ├── src/
+    ├── └── main/
+    │       └── kotlin/
+    │           └── agents/
+    │               └── multitool/
+    │                   └── MultiToolAgent.kt
+    ```
+
+    ### 에이전트 실행
+
+    Gradle을 사용하여 Kotlin 클래스의 `main()` 메서드를 실행할 수 있습니다.
+
+    ```console
+    ./gradlew run
+    ```
+
+    IntelliJ IDEA를 사용하는 경우 `main()` 함수 옆의 녹색 실행 화살표를 클릭해도 됩니다.
 
 
 

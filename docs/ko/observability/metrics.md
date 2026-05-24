@@ -109,3 +109,11 @@ os.environ["OTEL_SERVICE_NAME"] = "your-adk-agent"
 os.environ["OTEL_RESOURCE_ATTRIBUTES"] = "key1=value1,key2=value2"
 maybe_set_otel_providers([gcp_exporters])
 ```
+
+### Kotlin 프로그래밍 방식 설정
+
+Kotlin에서 ADK는 표준 `GlobalOpenTelemetry`를 사용하여 메트릭을 관리합니다. OpenTelemetry SDK에 `MeterProvider`를 구성하면 메트릭 수집을 활성화할 수 있습니다.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/observability/SetupExample.kt:full_example"
+```

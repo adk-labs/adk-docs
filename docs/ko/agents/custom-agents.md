@@ -345,3 +345,61 @@
         # StoryFlowAgent 예제의 전체 실행 가능 코드
         --8<-- "examples/java/snippets/src/main/java/agents/StoryFlowAgentExample.java:full_code"
         ```
+
+## Kotlin 예제 보강
+
+영어 원문에 추가된 Kotlin 커스텀/멀티 에이전트 예제를 아래에 함께 제공합니다.
+
+### 커스텀 에이전트 정의
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:custom_agent"
+```
+
+### 에이전트 계층
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:hierarchy"
+```
+
+### 순차 파이프라인
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:sequential_pipeline"
+```
+
+### 병렬 실행
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:parallel_execution"
+```
+
+### 조건 확인 에이전트
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:check_condition_agent"
+```
+
+### 조건부 루프
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:loop_with_condition"
+```
+
+### outputKey와 상태
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:output_key_state"
+```
+
+### LLM 기반 에이전트 전환
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:llm_transfer"
+```
+
+### 도구로서의 에이전트
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:agent_as_tool"
+```

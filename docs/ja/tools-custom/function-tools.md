@@ -481,3 +481,37 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
 4. `summary_agent`は、その指示に従ってテキストを処理し、要約を生成します。  
 5. **`summary_agent`からの応答は、`root_agent`に返されます。**
 6. `root_agent`は、要約を取得して、ユーザーへの最終的な応答を作成できます（例：「テキストの要約は次のとおりです...」）
+
+## Kotlin の関数ツール例の補足
+
+英語原文に追加された Kotlin の関数ツール例を以下にも掲載します。
+
+### 必須パラメータ
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/function-tools/RequiredParams.kt:required_params"
+```
+
+### 任意パラメータ
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/function-tools/OptionalParams.kt:optional_params"
+```
+
+### 完全な関数ツール例
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/function-tools/FuncTool.kt:full_example"
+```
+
+### 長時間実行ツール
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/function-tools/LongRunningTool.kt:long_running_tool"
+```
+
+### AgentTool
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/function-tools/AgentTool.kt:agent_tool"
+```

@@ -1118,3 +1118,67 @@ ADK는 `BaseArtifactService` 인터페이스의 구체적인 구현체를 제공
     * 버킷에 GCS 수명 주기 정책 사용.
     * `artifact_service.delete_artifact` 메서드를 활용하는 특정 도구나 관리 기능 구축(참고: 안전을 위해 delete는 컨텍스트 객체를 통해 노출되지 않음).
     * 필요한 경우 패턴 기반 삭제가 가능하도록 파일 이름을 신중하게 관리.
+
+## Kotlin 예제 보강
+
+영어 원문에 추가된 Kotlin 아티팩트 예제를 아래에 함께 제공합니다.
+
+### 아티팩트 표현
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:representation"
+```
+
+### Runner에 ArtifactService 설정
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:configure_runner"
+```
+
+### 아티팩트 데이터 생성
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:artifact_data"
+```
+
+### 사용자 네임스페이스
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:namespacing"
+```
+
+### 아티팩트 저장
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:interaction_save"
+```
+
+### 아티팩트 로드
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:interaction_load"
+```
+
+### LoadArtifactsTool 사용
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:load_artifacts_tool"
+```
+
+### 아티팩트 목록 조회
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:listing_artifacts"
+```
+
+### InMemoryArtifactService
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:in_memory_service"
+```
+
+### GcsArtifactService
+
+```kotlin
+--8<-- "examples/kotlin/snippets/artifacts/ArtifactExamples.kt:gcs_service"
+```

@@ -90,3 +90,11 @@ os.environ["OTEL_SERVICE_NAME"] = "your-adk-agent"
 os.environ["OTEL_RESOURCE_ATTRIBUTES"] = "key1=value1,key2=value2"
 maybe_set_otel_providers([gcp_exporters])
 ```
+
+### Kotlin 프로그래밍 방식 설정
+
+Kotlin에서 ADK는 전역 `GlobalOpenTelemetry` 인스턴스를 사용하여 트레이스를 내보냅니다. 에이전트를 시작하기 전에 OpenTelemetry SDK를 구성하세요.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/observability/SetupExample.kt:full_example"
+```

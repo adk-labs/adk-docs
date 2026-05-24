@@ -59,3 +59,40 @@
 - MkDocs build: completed successfully (`Documentation built in 48.32 seconds`).
 - Generated site asset audit: `site asset refs 40485`, `missing 0`.
 - Integration catalog audit confirmed e2a, Future AGI, Redis, and Google Cloud Skill Registry appear in EN/KO/JA catalog pages with no root-absolute catalog asset refs.
+
+## Follow-up: Kotlin Translation Gap Remediation
+
+### Scope
+
+- Re-reviewed upstream Kotlin-related documentation changes against KO/JA localized pages.
+- Confirmed localized document file coverage remained complete: `ko missing 0`, `ja missing 0`.
+- Found KO/JA pages where upstream Kotlin examples or Kotlin support tags had not yet been reflected.
+
+### Changes Applied
+
+- Added missing Kotlin support/example coverage to KO/JA docs for:
+  - `agents/custom-agents.md`
+  - `agents/llm-agents.md`
+  - `artifacts/index.md`
+  - `callbacks/index.md`
+  - `observability/index.md`
+  - `observability/logging.md`
+  - `observability/metrics.md`
+  - `observability/traces.md`
+  - `runtime/event-loop.md`
+  - `runtime/resume.md`
+  - `sessions/session/index.md`
+  - `sessions/state.md`
+  - `tools-custom/function-tools.md`
+  - `tools/limitations.md`
+  - `tutorials/multi-tool-agent.md`
+  - `workflows/patterns.md`
+- Fixed the upstream English `docs/observability/logging.md` Kotlin snippet include that had been split across two lines.
+
+### Validation
+
+- Kotlin reflection audit: `kotlin reflection issues 0`.
+- Snippet existence audit: `missing snippets 0`.
+- `git diff --check`: passed.
+- MkDocs build: completed successfully (`Documentation built in 49.87 seconds`).
+- Generated site asset audit: `site asset refs 40485`, `missing 0`.

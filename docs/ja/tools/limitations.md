@@ -226,3 +226,11 @@ ADK Python には `GoogleSearchTool` と `VertexAiSearchTool` について
             .subAgents(searchAgent, codingAgent) // サブエージェントが組み込みツールを使うため非サポート
             .build();
     ```
+
+## Kotlin の回避策例
+
+英語原文に追加された Kotlin の例では、組み込みツールの制限を避けるため、ルートエージェントでのみ組み込みツールを直接構成するパターンを示しています。
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/LimitationsWorkaround.kt:workaround_1"
+```

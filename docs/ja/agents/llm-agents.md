@@ -489,3 +489,43 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 
 *   **コールバック:** `before_model_callback`、`after_model_callback`などを使用して、実行ポイント（モデル呼び出しの前後、ツール呼び出しの前後）をインターセプトします。[コールバック](../callbacks/types-of-callbacks.md)を参照してください。
 *   **マルチエージェント制御:** 計画（`planner`）、エージェント転送の制御（`disallow_transfer_to_parent`, `disallow_transfer_to_peers`）、およびシステム全体の指示（`global_instruction`）を含む、エージェント対話の高度な戦略。[マルチエージェント](../workflows/patterns.md)を参照してください。
+
+## Kotlin の例の補足
+
+英語原文に追加された Kotlin の `LlmAgent` 例を以下にも掲載します。
+
+### 基本的な識別情報
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:identity"
+```
+
+### 指示文の構成
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:instruction"
+```
+
+### ツール定義
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:tool_definition"
+```
+
+### ツールの使用
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:tool_usage"
+```
+
+### 生成設定
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:gen_config"
+```
+
+### 完全な例
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:full_example"
+```

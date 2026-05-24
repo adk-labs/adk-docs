@@ -23,6 +23,12 @@ app = App(
 )
 ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunConfigExample.kt:resumability_config"
+    ```
+
 !!! warning "注意：長時間実行される関数、確認、認証"
     [長時間実行される関数](/ja/tools-custom/function-tools/#long-run-tool)、
     [確認](/ja/tools-custom/confirmation/)、または
@@ -64,6 +70,12 @@ runner.run_async(user_id='u_123', session_id='s_abc',
 # new_messageが関数応答に設定されている場合、
 # 長時間実行される関数を再開しようとしています。
 ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunConfigExample.kt:resume_usage"
+    ```
 
 !!! info "注"
     ADK Webユーザーインターフェイスからワークフローを再開したり、ADK

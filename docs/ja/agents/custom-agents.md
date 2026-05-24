@@ -345,3 +345,61 @@
         # StoryFlowAgentの例の完全な実行可能コード
         --8<-- "examples/java/snippets/src/main/java/agents/StoryFlowAgentExample.java:full_code"
         ```
+
+## Kotlin の例の補足
+
+英語原文に追加された Kotlin のカスタム/マルチエージェント例を以下にも掲載します。
+
+### カスタムエージェント定義
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:custom_agent"
+```
+
+### エージェント階層
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:hierarchy"
+```
+
+### 順次パイプライン
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:sequential_pipeline"
+```
+
+### 並列実行
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:parallel_execution"
+```
+
+### 条件確認エージェント
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:check_condition_agent"
+```
+
+### 条件付きループ
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:loop_with_condition"
+```
+
+### outputKey と状態
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:output_key_state"
+```
+
+### LLM によるエージェント転送
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:llm_transfer"
+```
+
+### ツールとしてのエージェント
+
+```kotlin
+--8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:agent_as_tool"
+```
