@@ -96,3 +96,12 @@
 - `git diff --check`: passed.
 - MkDocs build: completed successfully (`Documentation built in 49.87 seconds`).
 - Generated site asset audit: `site asset refs 40485`, `missing 0`.
+
+## Follow-up: Localized Community Link Fix
+
+- Fixed KO/JA community translation links to use GitHub Pages project paths:
+  - `https://adk-labs.github.io/adk-docs/ko/`
+  - `https://adk-labs.github.io/adk-docs/ja/`
+- Updated both current `community/index.md` pages and legacy localized `community.md` pages.
+- Verified no stale `https://adk.dev/ko/`, `https://adk.dev/ja/`, `https://adk-labs.github.io/ko/`, or `https://adk-labs.github.io/ja/` links remain in docs.
+- Verified both corrected URLs return HTTP `200`.

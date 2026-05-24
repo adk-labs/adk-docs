@@ -273,8 +273,8 @@
 
 <ul class="translation-list">
   <li><a href="https://adk.wiki/">🇨🇳 中国語 (中文) ドキュメント</a></li>
-  <li><a href="https://adk-labs.github.io/ko/">🇰🇷 韓国語 (Korean) ドキュメント</a></li>
-  <li><a href="https://adk-labs.github.io/ja/">🇯🇵 日本語 (日本語) ドキュメント</a></li>
+  <li><a href="https://adk-labs.github.io/adk-docs/ko/">🇰🇷 韓国語 (Korean) ドキュメント</a></li>
+  <li><a href="https://adk-labs.github.io/adk-docs/ja/">🇯🇵 日本語 (日本語) ドキュメント</a></li>
   <li><a href="https://adk-es.fabian-castro-c.dev/">🇪🇸 スペイン語 (Español) ドキュメント</a></li>
 </ul>
 
