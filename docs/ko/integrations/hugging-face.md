@@ -8,7 +8,7 @@ catalog_tags: ["mcp"]
 # ADK용 Hugging Face MCP 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [Hugging Face MCP Server](https://github.com/huggingface/hf-mcp-server)를 사용하면

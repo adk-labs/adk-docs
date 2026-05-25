@@ -8,7 +8,7 @@ catalog_tags: ["resilience"]
 # ADK용 Temporal 플러그인
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [Temporal](https://temporal.io)는 ADK 에이전트를 복원력 있고 확장 가능하며 프로덕션에 적합하게 만들어 주는 범용 지속 실행 플랫폼입니다.

@@ -6,6 +6,10 @@ catalog_tags: ["code", "mcp"]
 ---
 # GitLab
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+</div>
+
 [GitLab MCP Server](https://docs.gitlab.com/user/gitlab_duo/model_context_protocol/mcp_server/)は、
 ADKエージェントを[GitLab.com](https://gitlab.com/)またはセルフマネージドGitLabインスタンスに直接接続します。
 この統合により、エージェントはイシュー（Issue）やマージリクエスト（Merge Request）の管理、

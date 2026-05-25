@@ -8,7 +8,7 @@ catalog_tags: ["mcp", "connectors"]
 # ADK 向け n8n MCP ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [n8n MCP Server](https://docs.n8n.io/advanced-ai/accessing-n8n-mcp-server/) は

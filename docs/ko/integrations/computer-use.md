@@ -7,7 +7,7 @@ catalog_tags: ["google"]
 # Gemini와 함께하는 컴퓨터 사용 도구 세트
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.17.0</span><span class="lst-preview">Preview</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.17.0</span><span class="lst-preview">미리보기</span>
 </div>
 
 컴퓨터 사용 도구 세트를 사용하면 에이전트가 브라우저와 같은 컴퓨터의 사용자 인터페이스를 조작하여 작업을 완료할 수 있습니다. 이 도구는 특정 Gemini 모델과 [Playwright](https://playwright.dev/) 테스트 도구를 사용하여 Chromium 브라우저를 제어하고 스크린샷 찍기, 클릭, 입력 및 탐색을 통해 웹 페이지와 상호 작용할 수 있습니다.

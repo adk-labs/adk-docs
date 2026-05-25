@@ -1,7 +1,7 @@
 # 병렬 실행으로 도구 성능 향상
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.10.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.10.0</span>
 </div>
 
 Python용 에이전트 개발 키트(ADK) 버전 1.10.0부터 프레임워크는 에이전트가 요청한 모든 [함수 도구](/ko/tools-custom/function-tools/)를 병렬로 실행하려고 시도합니다. 이 동작은 특히 여러 외부 API 또는 장기 실행 작업에 의존하는 에이전트의 경우 에이전트의 성능과 응답성을 크게 향상시킬 수 있습니다. 예를 들어 각각 2초가 걸리는 3개의 도구가 있는 경우 병렬로 실행하면 총 실행 시간은 6초가 아닌 2초에 가까워집니다. 도구 함수를 병렬로 실행하는 기능은 특히 다음과 같은 시나리오에서 에이전트의 성능을 향상시킬 수 있습니다.

@@ -8,7 +8,7 @@ catalog_tags: []
 # ADK용 Restate 플러그인
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [Restate](https://restate.dev)는 ADK 에이전트를 본질적으로 복원력 있고 견고한

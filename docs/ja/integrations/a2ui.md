@@ -7,7 +7,7 @@ catalog_icon: /integrations/assets/a2ui.svg
 # ADK 向け A2UI - Agent-to-UI
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 A2UI を使うと、エージェントはテキストだけでなく、カード、フォーム、チャート、テーブルなどの **実際の UI** を生成できます。

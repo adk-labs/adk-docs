@@ -1,7 +1,7 @@
 # 에이전트 런타임에 배포
 
 <div class="language-support-tag" title="Agent Runtime currently supports only Python.">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 Google Cloud 에이전트 플랫폼

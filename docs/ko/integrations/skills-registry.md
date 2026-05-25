@@ -8,7 +8,7 @@ catalog_tags: ["google", "skills", "connectors"]
 # Google Cloud Skill Registry
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.27.0</span><span class="lst-preview">Preview</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.27.0</span><span class="lst-preview">미리보기</span>
 </div>
 
 Agent Development Kit(ADK)의 **Google Cloud Skill Registry** 통합을 사용하면

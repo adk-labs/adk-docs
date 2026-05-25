@@ -7,7 +7,7 @@ catalog_tags: ["google"]
 # Vertex AI Expressモード：Vertex AIセッションとメモリの使用
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
 `VertexAiSessionService` または `VertexAiMemoryBankService` の利用に興味があるものの、Google Cloudプロジェクトをお持ちでない場合は、Vertex AI Expressモードに登録することで、無料でこれらのサービスにアクセスして試すことができます。対象となる***gmail***アカウントで[こちら](https://console.cloud.google.com/expressmode)から登録できます。Vertex AI Expressモードの詳細については、[概要ページ](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)をご覧ください。

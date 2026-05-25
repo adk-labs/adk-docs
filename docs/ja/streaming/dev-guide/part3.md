@@ -579,17 +579,17 @@ function call / response のイベントでツール状態を追跡します。
 
 長時間ツールや streaming tool も同じイベントループに統合できます。
 
-## InvocationContext: The Execution State Container
+## InvocationContext: 実行状態コンテナ
 
-### What is an Invocation?
+### Invocation とは
 
 1 回の `run_live()` 実行です。
 
-### Who Uses InvocationContext?
+### InvocationContext を使うのは誰か
 
 tool / callback / agent が参照します。
 
-#### What InvocationContext Contains
+#### InvocationContext に含まれるもの
 
 - `context.invocation_id`
 - `context.session.events`
@@ -598,23 +598,23 @@ tool / callback / agent が参照します。
 - `context.run_config`
 - `context.end_invocation`
 
-## Best Practices for Multi-Agent Workflows
+## マルチエージェント ワークフローのベスト プラクティス
 
-### SequentialAgent with BIDI Streaming
+### BIDI ストリーミングでの SequentialAgent
 
 SequentialAgent は単一の `run_live()` ループを保ちます。
 
-### Recommended Pattern: Transparent Sequential Flow
+### 推奨パターン: 透過的な順次フロー
 
 agent の切り替えは ADK に任せます。
 
-### Event Flow During Agent Transitions
+### エージェント遷移中のイベントフロー
 
 1. Researcher が処理
 2. Writer が生成
 3. Reviewer が確認
 
-### Design Principles
+### 設計原則
 
 - 単一イベントループ
 - 単一 queue

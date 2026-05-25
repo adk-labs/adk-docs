@@ -1,7 +1,7 @@
 # ADK エージェント向けの AI モデル
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">Typescript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">Typescript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 Agent Development Kit (ADK) は柔軟な設計により、様々な大規模言語モデル（LLM）を

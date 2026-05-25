@@ -1,7 +1,7 @@
 # Google検索グラウンディングを理解する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 [Google検索グラウンディングツール](/ja/tools/gemini-api/google-search/)は、ウェブからリアルタイムで信頼できる情報にAIエージェントがアクセスできるようにする、Agent Development Kit (ADK) の強力な機能です。エージェントをGoogle検索に接続することで、信頼できる情報源に基づいた最新の回答をユーザーに提供できます。

@@ -1135,7 +1135,7 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
 ### 도구 인증 처리 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 도구에 필요한 API 키나 다른 자격 증명을 안전하게 관리합니다.
@@ -1289,7 +1289,7 @@ def call_secure_api(tool_context: ToolContext, request_data: str) -> dict:
 ### 메모리 활용 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 과거 또는 외부 소스에서 관련 정보에 접근합니다.
@@ -1367,7 +1367,7 @@ def find_related_info(tool_context: ToolContext, topic: str) -> dict:
 ### 고급: 직접적인 `InvocationContext` 사용 
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 대부분의 상호작용은 `CallbackContext`나 `ToolContext`를 통해 이루어지지만, 때로는 에이전트의 핵심 로직(`_run_async_impl`/`_run_live_impl`)이 직접 접근해야 할 때가 있습니다.

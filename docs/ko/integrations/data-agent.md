@@ -8,7 +8,7 @@ catalog_tags: ["data", "google"]
 # ADK용 Google Cloud Data Agents 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.23.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.23.0</span>
 </div>
 
 다음은 [Conversational Analytics API](https://docs.cloud.google.com/gemini/docs/conversational-analytics-api/overview) 기반 Data Agents와 통합하기 위한 도구 모음입니다.

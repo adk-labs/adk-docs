@@ -1,7 +1,7 @@
 # エージェントの検索によるグラウンディング
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 [Agent Search](/integrations/agent-search/) は、AI エージェントが企業のプライベート ドキュメントやデータ リポジトリから情報にアクセスできるようにするエージェント開発キット (ADK) の強力なツールです。エージェントをインデックス付きエンタープライズ コンテンツに接続することで、組織のナレッジ ベースに基づいた回答をユーザーに提供できます。

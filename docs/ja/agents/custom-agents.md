@@ -1,7 +1,7 @@
 # カスタムエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 カスタムエージェントは、`BaseAgent`を直接継承し、独自の制御フローを実装することで**任意のオーケストレーションロジック**を定義でき、ADKにおいて究極の柔軟性を提供します。これは、`SequentialAgent`、`LoopAgent`、`ParallelAgent`といった事前定義されたパターンを超え、非常に特殊で複雑なエージェントワークフローを構築することを可能にします。
@@ -402,4 +402,80 @@
 
 ```kotlin
 --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:agent_as_tool"
+```
+
+## TypeScript と Go の例の補足
+
+英語原文に含まれている TypeScript の StoryFlow 例と Go のマルチエージェント例を以下にも掲載します。
+
+### TypeScript: 初期化
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:init"
+```
+
+### TypeScript: 実行ロジック
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:executionlogic"
+```
+
+### TypeScript: LLM サブエージェント
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:llmagents"
+```
+
+### TypeScript: StoryFlow エージェント
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:story_flow_agent"
+```
+
+### TypeScript: 完全なコード
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts"
+```
+
+### Go: エージェント階層
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:hierarchy"
+```
+
+### Go: 順次パイプライン
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:sequential-pipeline"
+```
+
+### Go: 並列実行
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:parallel-execution"
+```
+
+### Go: 条件付きループ
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:loop-with-condition"
+```
+
+### Go: outputKey と状態
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:output-key-state"
+```
+
+### Go: LLM による転送
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:llm-transfer"
+```
+
+### Go: ツールとしてのエージェント
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:agent-as-tool"
 ```

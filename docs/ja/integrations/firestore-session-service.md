@@ -8,7 +8,7 @@ catalog_tags: ["data", "google"]
 # Firestore を使ったセッション状態管理
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-java">Java</span>
 </div>
 
 [Google Cloud Firestore](https://cloud.google.com/firestore) は、クライアントサイドおよびサーバーサイド開発向けにデータを保存・同期できる、柔軟でスケーラブルな NoSQL クラウドデータベースです。

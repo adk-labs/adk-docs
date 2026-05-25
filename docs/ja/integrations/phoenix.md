@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # Phoenixによるエージェントのオブザーバビリティ
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
+</div>
+
 [Phoenix](https://arize.com/docs/phoenix)は、LLMアプリケーションとAIエージェントを大規模に監視、デバッグ、改善するためのオープンソース、セルフホスト型のオブザーバビリティプラットフォームです。Google ADKアプリケーションに包括的なトレーシングと評価機能を提供します。始めるには、[無料アカウント](https://phoenix.arize.com/)にサインアップしてください。
 
 ## 概要

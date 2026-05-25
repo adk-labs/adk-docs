@@ -1,7 +1,7 @@
 # 루프 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `LoopAgent`는 하위 에이전트를 루프(즉, 반복적으로)로 실행하는 워크플로우 에이전트입니다. 이 에이전트는 명시된 반복 횟수만큼 또는 종료 조건이 충족될 때까지 **에이전트 시퀀스를 반복적으로 실행합니다**.
@@ -57,3 +57,11 @@
         ```java
         --8<-- "examples/java/snippets/src/main/java/agents/workflow/LoopAgentExample.java:init"
         ```
+
+## TypeScript 예제 보강
+
+영어 원문에 포함된 TypeScript 루프 에이전트 예제를 아래에 함께 제공합니다.
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/workflow-agents/loop_agent_doc_improv_agent.ts:init"
+```

@@ -6,6 +6,10 @@ catalog_tags: ["mcp"]
 ---
 # Notion
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+</div>
+
 [Notion MCP Server](https://github.com/makenotion/notion-mcp-server)は、ADKエージェントをNotionに接続し、ワークスペース内でページ、データベースなどを検索、作成、管理できるようにします。これにより、エージェントは自然言語を使用してNotionワークスペース内のコンテンツをクエリ、作成、整理できます。
 
 ## ユースケース

@@ -1,7 +1,7 @@
 # ADK 에이전트를 위한 vLLM 모델 호스트
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
 [vLLM](https://github.com/vllm-project/vllm) 같은 도구를 사용하면

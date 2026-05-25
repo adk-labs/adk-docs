@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # Freeplay を使用したエージェントのオブザーバビリティと評価
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
+</div>
+
 [Freeplay](https://freeplay.ai/) は、AI エージェントを構築および最適化するためのエンドツーエンドのワークフローを提供し、ADK と統合できます。Freeplay を使用すると、チーム全体が簡単に共同作業して、エージェントの指示 (プロンプト) を繰り返し、さまざまなモデルとエージェントの変更を試して比較し、オフラインとオンラインの両方で評価を実行して品質を測定し、本番環境を監視し、手動でデータを確認できます。
 
 Freeplay の主な利点:

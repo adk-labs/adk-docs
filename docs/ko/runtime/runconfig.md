@@ -1,7 +1,7 @@
 # 런타임 구성(Runtime Configuration)
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 `RunConfig`는 streaming mode, speech setting, LLM call limit, live agent option 등
@@ -67,7 +67,7 @@
 ## 세션 및 컨텍스트 관리
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 Long-running session에서는 얼마나 많은 history를 load할지, context window를 압축할지
@@ -164,7 +164,7 @@ Long-running session에서는 얼마나 많은 history를 load할지, context wi
 ## 오디오 및 음성 구성
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-java">Java</span>
 </div>
 
 Voice-enabled agent에서는 speech synthesis, audio transcription, response modality를
@@ -251,7 +251,7 @@ Voice-enabled agent에서는 speech synthesis, audio transcription, response mod
 ## Live agent 구성
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 `runner.run_live()`를 사용할 때는 다음 추가 매개변수로 real-time behavior를 구성합니다.

@@ -1,7 +1,7 @@
 # 関数ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 事前に構築されたADKツールが要件を満たさない場合は、カスタムの*関数ツール*を作成できます。関数ツールを構築すると、独自のデータベースへの接続や独自のアルゴリズムの実装など、カスタマイズされた機能を作成できます。
@@ -514,4 +514,32 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
 
 ```kotlin
 --8<-- "examples/kotlin/snippets/tools/function-tools/AgentTool.kt:agent_tool"
+```
+
+## TypeScript の関数ツール例の補足
+
+英語原文に含まれている TypeScript の関数ツール例を以下にも掲載します。
+
+### 基本的な関数ツール
+
+```typescript
+--8<-- "examples/typescript/snippets/tools/function-tools/function-tools-example.ts"
+```
+
+### 長時間実行関数の定義
+
+```typescript
+--8<-- "examples/typescript/snippets/tools/function-tools/long-running-function-tool-example.ts:define_long_running_function"
+```
+
+### 長時間実行関数ツールの完全な例
+
+```typescript
+--8<-- "examples/typescript/snippets/tools/function-tools/long-running-function-tool-example.ts"
+```
+
+### ツールとしてのエージェント
+
+```typescript
+--8<-- "examples/typescript/snippets/tools/function-tools/agent-as-a-tool-example.ts"
 ```

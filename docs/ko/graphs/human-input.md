@@ -1,7 +1,7 @@
 # 에이전트 워크플로를 위한 인간 입력
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 데이터 입력, 의사결정 검증, 또는 작업 허가를 위해 인간 입력을 요청할 수 있는

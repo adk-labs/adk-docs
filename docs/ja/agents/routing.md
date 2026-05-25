@@ -1,7 +1,7 @@
 # エージェント間でルーティングする
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-typescript">TypeScript v1.0.0</span><span class="lst-preview">Experimental</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-typescript">TypeScript v1.0.0</span><span class="lst-preview">実験的</span>
 </div>
 
 !!! example "試験運用"

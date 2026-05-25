@@ -8,7 +8,7 @@ catalog_tags: ["code", "google"]
 # ADK용 Gemini API 코드 실행 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `built_in_code_execution` 도구를 사용하면 에이전트가 코드를 실행할 수 있습니다.

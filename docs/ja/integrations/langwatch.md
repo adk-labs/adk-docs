@@ -8,7 +8,7 @@ catalog_tags: ["observability"]
 # ADK 向け LangWatch 可観測性
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 [LangWatch](https://langwatch.ai) は、可観測性、評価、プロンプト最適化のためのオープンソース LLMOps プラットフォームです。

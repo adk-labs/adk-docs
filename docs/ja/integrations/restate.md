@@ -8,7 +8,7 @@ catalog_tags: []
 # ADK 向け Restate プラグイン
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 [Restate](https://restate.dev) は ADK エージェントを本質的に高耐障害で堅牢な

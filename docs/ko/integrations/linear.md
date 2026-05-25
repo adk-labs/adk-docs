@@ -8,7 +8,7 @@ catalog_tags: ["mcp"]
 # ADK용 Linear MCP 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [Linear MCP Server](https://linear.app/docs/mcp)는 ADK 에이전트를

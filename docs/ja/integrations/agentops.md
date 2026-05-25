@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # AgentOpsによるエージェントの可観測性
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
+</div>
+
 **わずか2行のコード**で、[AgentOps](https://www.agentops.ai)はエージェントのセッションリプレイ、メトリクス、モニタリングを提供します。
 
 ## ADKにAgentOpsを選ぶ理由

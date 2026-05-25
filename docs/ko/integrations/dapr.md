@@ -8,7 +8,7 @@ catalog_tags: ["resilience"]
 # ADK용 Dapr 플러그인
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [Dapr](https://dapr.io)은 ADK 에이전트가 장애에 견고하게 동작하도록 돕는 분산

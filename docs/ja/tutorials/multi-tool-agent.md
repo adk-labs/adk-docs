@@ -1,7 +1,7 @@
 # マルチツールエージェントを構築する
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 このクイックスタートでは、Agent Development Kit (ADK) をインストールし、複数のツールを備えた基本的なエージェントを設定し、ターミナルまたは対話型のブラウザベースの開発UIでローカルで実行する方法を説明します。

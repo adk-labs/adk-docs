@@ -8,7 +8,7 @@ catalog_tags: ["connectors", "google"]
 # ADK 用 Apigee API Hub ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
 **ApiHubToolset** を使うと、Apigee API Hub の文書化された API を

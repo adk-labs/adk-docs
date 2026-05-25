@@ -1,7 +1,7 @@
 # 커스텀 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 커스텀 에이전트는 `BaseAgent`를 직접 상속하고 자신만의 제어 흐름을 구현하여 **임의의 오케스트레이션 로직**을 정의할 수 있게 함으로써 ADK에서 최고의 유연성을 제공합니다. 이는 `SequentialAgent`, `LoopAgent`, `ParallelAgent`의 사전 정의된 패턴을 넘어서, 매우 특수하고 복잡한 에이전트 워크플로우를 구축할 수 있게 해줍니다.
@@ -402,4 +402,80 @@
 
 ```kotlin
 --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:agent_as_tool"
+```
+
+## TypeScript 및 Go 예제 보강
+
+영어 원문에 포함된 TypeScript StoryFlow 예제와 Go 멀티 에이전트 예제를 아래에 함께 제공합니다.
+
+### TypeScript: 초기화
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:init"
+```
+
+### TypeScript: 실행 로직
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:executionlogic"
+```
+
+### TypeScript: LLM 하위 에이전트
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:llmagents"
+```
+
+### TypeScript: StoryFlow 에이전트
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:story_flow_agent"
+```
+
+### TypeScript: 전체 코드
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts"
+```
+
+### Go: 에이전트 계층
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:hierarchy"
+```
+
+### Go: 순차 파이프라인
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:sequential-pipeline"
+```
+
+### Go: 병렬 실행
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:parallel-execution"
+```
+
+### Go: 조건부 루프
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:loop-with-condition"
+```
+
+### Go: outputKey와 상태
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:output-key-state"
+```
+
+### Go: LLM 기반 전환
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:llm-transfer"
+```
+
+### Go: 도구로서의 에이전트
+
+```go
+--8<-- "examples/go/snippets/agents/multi-agent/main.go:agent-as-tool"
 ```

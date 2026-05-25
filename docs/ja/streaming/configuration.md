@@ -1,7 +1,7 @@
 # ストリーミング動作の設定
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">Experimental</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.5.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-preview">実験的</span>
 </div>
 
 ライブ（ストリーミング）エージェントには、設定可能な項目がいくつかあります。

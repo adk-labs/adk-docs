@@ -1,7 +1,7 @@
 # 協調エージェントチームを構築する
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 複雑なタスクの中には、特定の責務を持つ複数のエージェントを必要とし、

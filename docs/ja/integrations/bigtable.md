@@ -8,7 +8,7 @@ catalog_tags: ["data", "google"]
 # ADK 向け Bigtable ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.12.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.12.0</span>
 </div>
 
 Bigtable 連携を提供するツールセットは次のとおりです:

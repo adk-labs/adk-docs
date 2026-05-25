@@ -7,7 +7,7 @@ catalog_tags: ["google"]
 # リフレクトおよび再試行ツールプラグイン
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.16.0</span><span class="lst-go">Go v0.5.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.16.0</span><span class="lst-go">Go v0.5.0</span>
 </div>
 
 リフレクトおよび再試行ツールプラグインは、エージェントがADK[ツール](/ja/tools-custom/)からのエラー応答から回復し、ツールリクエストを自動的に再試行するのに役立ちます。このプラグインは、ツールの障害を傍受し、リフレクションと修正のためにAIモデルに構造化されたガイダンスを提供し、構成可能な制限まで操作を再試行します。このプラグインは、次の機能を含む、エージェントワークフローに回復性を高めるのに役立ちます。

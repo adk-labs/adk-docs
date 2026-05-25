@@ -7,7 +7,7 @@ catalog_tags: ["mcp","data","google"]
 # データベース向けMCPツールボックス
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">Typescript</span><span class="lst-go">Go</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">Typescript</span><span class="lst-go">Go</span>
 </div>
 
 [データベース向けMCPツールボックス](https://github.com/googleapis/genai-toolbox)は、データベース向けのオープンソースMCPサーバーです。エンタープライズグレードと本番品質を念頭に置いて設計されています。接続プーリング、認証などの複雑さを処理することで、ツールをより簡単、迅速、安全に開発できます。

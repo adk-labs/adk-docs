@@ -1,7 +1,7 @@
 # 에이전트를 위한 관측 가능성(Observability)
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 에이전트를 위한 관측 가능성은 시스템의 외부 텔레메트리와 구조화된 로그를

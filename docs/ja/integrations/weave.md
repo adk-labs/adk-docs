@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # WandBのWeaveによるエージェントの可観測性
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
+</div>
+
 [Weights & Biases (WandB) の Weave](https://weave-docs.wandb.ai/) は、モデル呼び出しのロギングと可視化のための強力なプラットフォームを提供します。Google ADKをWeaveと統合することで、OpenTelemetry（OTEL）トレースを使用して、エージェントのパフォーマンスと振る舞いを追跡・分析できます。
 
 ## 事前準備

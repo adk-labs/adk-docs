@@ -6,6 +6,10 @@ catalog_tags: []
 ---
 # AG-UI 및 CopilotKit으로 채팅 경험 구축
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+</div>
+
 에이전트 빌더로서 사용자가 풍부하고 반응이 빠른 인터페이스를 통해 에이전트와 상호 작용하기를 원합니다. 처음부터 UI를 구축하려면 특히 스트리밍 이벤트 및 클라이언트 상태를 지원하는 데 많은 노력이 필요합니다. 이것이 바로 [AG-UI](https://docs.ag-ui.com/)가 설계된 이유입니다. 에이전트에 직접 연결된 풍부한 사용자 경험입니다.
 
 [AG-UI](https://github.com/ag-ui-protocol/ag-ui)는 모바일에서 웹, 심지어 명령줄에 이르기까지 기술 스택 전반에 걸쳐 풍부한 클라이언트에 권한을 부여하는 일관된 인터페이스를 제공합니다. AG-UI를 지원하는 여러 클라이언트가 있습니다.

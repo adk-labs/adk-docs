@@ -1,7 +1,7 @@
 # 세션 데이터베이스 스키마 마이그레이션
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.22.1</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.22.1</span>
 </div>
 
 `DatabaseSessionService`를 사용 중이고 ADK Python 릴리스 v1.22.0 이상으로

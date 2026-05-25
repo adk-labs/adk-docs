@@ -8,7 +8,7 @@ catalog_tags: ["search","google"]
 # ADK용 Gemini API Google Search 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `google_search` 도구를 사용하면 에이전트가 Google Search를 이용해 웹 검색을 수행할 수 있습니다. `google_search` 도구는 Gemini 2 모델과만 호환됩니다. 도구에 대한 자세한 내용은 [Google Search grounding 이해하기](/ko/grounding/google_search_grounding/)를 참조하세요.

@@ -9,7 +9,7 @@ catalog_tags: ["code", "google"]
 # ADK용 에이전트 런타임 코드 실행 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.17.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.17.0</span>
 </div>
 
 에이전트 런타임 코드 실행 ADK 도구는 짧은 지연 시간과 높은

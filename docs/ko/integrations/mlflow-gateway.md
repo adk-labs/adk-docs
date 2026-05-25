@@ -9,7 +9,7 @@ catalog_tags: ["connectors"]
 # ADK 에이전트용 MLflow AI 게이트웨이
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [MLflow AI Gateway](https://mlflow.org/docs/latest/genai/governance/ai-gateway/)

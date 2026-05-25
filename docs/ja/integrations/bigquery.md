@@ -8,7 +8,7 @@ catalog_tags: ["data", "google"]
 # ADK 向け BigQuery ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.1.0</span>
 </div>
 
 BigQuery 連携を提供するツールセットは次のとおりです:

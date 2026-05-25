@@ -1,7 +1,7 @@
 # 評価のための環境シミュレーション
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.24.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.24.0</span>
 </div>
 
 API、データベース、サードパーティサービスなどの外部依存に頼るエージェントを評価する場合、テスト中にそれらのツールを実行すると遅く、高コストで、不安定になりがちです。**環境シミュレーター**を使うと、エージェント自体を変更せずに、実行中のツール呼び出しを安全に横取りし、制御された決定的な応答に置き換えられます。これにより、エージェントのロジックだけを分離した hermetic なオフラインテストを作成し、安定した採点を行えます。

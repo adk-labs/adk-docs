@@ -9,7 +9,7 @@ catalog_tags: ["google", "mcp", "connectors"]
 # Google Cloud 에이전트 레지스트리
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.26.0</span><span class="lst-preview">Preview</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.26.0</span><span class="lst-preview">미리보기</span>
 </div>
 
 ADK(에이전트 개발 키트) 내의 에이전트 레지스트리 클라이언트 라이브러리는 다음을 허용합니다.

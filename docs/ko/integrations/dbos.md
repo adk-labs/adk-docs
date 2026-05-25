@@ -8,7 +8,7 @@ catalog_tags: ["resilience"]
 # ADK용 DBOS 플러그인
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [DBOS](https://dbos.dev)는 신뢰할 수 있는 workflow와 AI agent를 만들기 위한 durable

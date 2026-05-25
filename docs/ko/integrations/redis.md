@@ -8,7 +8,7 @@ catalog_tags: ["data","mcp"]
 # ADK용 Redis 통합
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [adk-redis 통합](https://github.com/redis-developer/adk-redis)은 ADK

@@ -9,7 +9,7 @@ catalog_tags: ["observability"]
 # ADK の Datadog 可観測性
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 [Datadog LLM

@@ -9,7 +9,7 @@ catalog_tags: ["data","google"]
 # ADK용 지식 엔진 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `vertex_ai_rag_retrieval` 도구를 사용하면 에이전트가 개인 데이터를 수행할 수 있습니다.

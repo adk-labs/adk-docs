@@ -1,7 +1,7 @@
 # Geminiによるコンテキストキャッシュ
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.15.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.15.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 エージェントを使用してタスクを完了する場合、拡張された指示や大規模なデータセットを複数のエージェントリクエストにわたって生成AIモデルに再利用したい場合があります。エージェントリクエストごとにこのデータを再送信すると、時間がかかり、非効率的で、コストがかかる可能性があります。生成AIモデルでコンテキストキャッシュ機能を使用すると、応答を大幅に高速化し、リクエストごとにモデルに送信されるトークンの数を減らすことができます。

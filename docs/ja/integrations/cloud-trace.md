@@ -6,6 +6,10 @@ catalog_tags: ["observability", "google"]
 ---
 # Cloud Traceによるエージェントの可観測性
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span>
+</div>
+
 ADKを使用すると、[こちら](https://adk.dev/evaluate/#debugging-with-the-trace-view)で説明されている強力なWeb開発UIを利用して、エージェントのインタラクションをローカルで検査および監視できます。ただし、クラウドへのデプロイを目指す場合は、実際のトラフィックを監視するための一元化されたダッシュボードが必要になります。
 
 Cloud TraceはGoogle Cloud Observabilityのコンポーネントです。これは、特にトレース機能に重点を置くことで、アプリケーションのパフォーマンスを監視、デバッグ、改善するための強力なツールです。Agent Development Kit（ADK）アプリケーションの場合、Cloud Traceは包括的なトレースを可能にし、リクエストがエージェントのインタラクションをどのように通過するかを理解し、AIエージェント内のパフォーマンスのボトルネックやエラーを特定するのに役立ちます。

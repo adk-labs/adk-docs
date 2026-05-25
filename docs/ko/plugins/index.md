@@ -1,7 +1,7 @@
 # 플러그인
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.7.0</span><span class="lst-typescript">TypeScript v0.2.5</span><span class="lst-go">Go v0.4.0</span><span class="lst-java">Java v0.3.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.7.0</span><span class="lst-typescript">TypeScript v0.2.5</span><span class="lst-go">Go v0.4.0</span><span class="lst-java">Java v0.3.0</span>
 </div>
 
 ADK(Agent Development Kit)의 플러그인은 콜백 후크를 사용하여 에이전트 워크플로 수명 주기의 다양한 단계에서 실행될 수 있는 사용자 지정 코드 모듈입니다. 플러그인은 에이전트 워크플로 전반에 걸쳐 적용되는 기능에 사용합니다. 플러그인의 일반적인 애플리케이션은 다음과 같습니다.

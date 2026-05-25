@@ -8,7 +8,7 @@ catalog_tags: ["mcp"]
 # ADK 向け Atlan MCP ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [Atlan MCP Server](https://github.com/atlanhq/agent-toolkit) は ADK エージェントを、

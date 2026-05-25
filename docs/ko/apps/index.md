@@ -1,7 +1,7 @@
 # 앱: 워크플로 관리 클래스
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.14.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ***앱*** 클래스는 전체 에이전트 개발 키트(ADK) 에이전트 워크플로의 최상위 컨테이너입니다. ***루트 에이전트***별로 그룹화된 에이전트 모음의 수명 주기, 구성 및 상태를 관리하도록 설계되었습니다. **앱** 클래스는 에이전트 워크플로의 전체 운영 인프라에 대한 우려 사항을 개별 에이전트의 작업 지향적 추론과 분리합니다.

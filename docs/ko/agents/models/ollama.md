@@ -1,7 +1,7 @@
 # ADK 에이전트를 위한 Ollama 모델 호스트
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
 [Ollama](https://ollama.com/)는 오픈 소스 모델을 로컬에서 호스팅하고 실행할 수 있게 해주는 도구입니다.

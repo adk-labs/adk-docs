@@ -1,7 +1,7 @@
 # ADK エージェント用の Claude モデル
 
 <div class="language-support-tag" title="Java でサポートされています。Python の直接 Anthropic API（非 Vertex）は LiteLLM 経由でサポートされます。">
-   <span class="lst-supported">Supported in ADK</span><span class="lst-java">Java v0.2.0</span>
+   <span class="lst-supported">ADKでサポート</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 ADK の `Claude` ラッパークラスを使用すると、Anthropic API キー、または Vertex AI

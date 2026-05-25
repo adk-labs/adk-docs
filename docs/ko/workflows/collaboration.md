@@ -1,7 +1,7 @@
 # 협업 에이전트 팀 구축하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 일부 복잡한 작업은 특정 책임을 가진 여러 에이전트를 필요로 하며, 특히 여러 개의

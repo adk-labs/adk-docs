@@ -1,7 +1,7 @@
 # アプリ: ワークフロー管理クラス
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.14.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ***App***クラスは、Agent Development Kit（ADK）エージェントワークフロー全体の上位コンテナです。***ルートエージェント***によってグループ化されたエージェントのコレクションのライフサイクル、構成、および状態を管理するように設計されています。**App**クラスは、エージェントワークフローの全体的な運用インフラストラクチャの懸念事項を、個々のエージェントのタスク指向の推論から分離します。

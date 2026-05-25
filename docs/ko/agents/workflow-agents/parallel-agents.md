@@ -1,7 +1,7 @@
 # 병렬 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `ParallelAgent`는 하위 에이전트를 *동시에(concurrently)* 실행하는 [워크플로우 에이전트](index.md)입니다. 이는 작업이 독립적으로 수행될 수 있는 워크플로우의 속도를 크게 향상시킵니다.
@@ -62,3 +62,11 @@
         ```java
          --8<-- "examples/java/snippets/src/main/java/agents/workflow/ParallelResearchPipeline.java:full_code"
         ```
+
+## TypeScript 예제 보강
+
+영어 원문에 포함된 TypeScript 병렬 에이전트 예제를 아래에 함께 제공합니다.
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/workflow-agents/parallel_agent_web_research.ts:init"
+```

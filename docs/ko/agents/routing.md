@@ -1,7 +1,7 @@
 # 에이전트 간 라우팅
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-typescript">TypeScript v1.0.0</span><span class="lst-preview">Experimental</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-typescript">TypeScript v1.0.0</span><span class="lst-preview">실험적</span>
 </div>
 
 !!! example "실험적"

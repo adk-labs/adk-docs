@@ -8,7 +8,7 @@ catalog_tags: ["google", "mcp", "connectors"]
 # ADK 向け Google Cloud API Registry ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.20.0</span><span class="lst-preview">Preview</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.20.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
 Agent Development Kit (ADK) 向け Google Cloud API Registry コネクターツールを使うと、

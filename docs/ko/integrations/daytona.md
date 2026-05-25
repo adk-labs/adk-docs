@@ -8,7 +8,7 @@ catalog_tags: ["code"]
 # ADK용 Daytona 플러그인
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [Daytona ADK plugin](https://github.com/daytonaio/daytona-adk-plugin)은 ADK

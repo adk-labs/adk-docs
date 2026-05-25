@@ -1,7 +1,7 @@
 # ADK 에이전트를 위한 Claude 모델
 
 <div class="language-support-tag" title="Java에서 지원됩니다. Python은 Vertex를 거치지 않는 Anthropic API 직접 호출은 LiteLLM을 통해 지원됩니다.">
-   <span class="lst-supported">Supported in ADK</span><span class="lst-java">Java v0.2.0</span>
+   <span class="lst-supported">ADK에서 지원</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 ADK의 `Claude` 래퍼 클래스를 사용하면 Anthropic API 키 또는

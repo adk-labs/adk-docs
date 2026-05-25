@@ -1,7 +1,7 @@
 # 에이전트 워크플로용 그래프 경로 구축
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 엣지의 그래프로

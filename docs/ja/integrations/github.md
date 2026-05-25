@@ -8,7 +8,7 @@ catalog_tags: ["code", "mcp"]
 # ADK 向け GitHub MCP ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [GitHub MCP Server](https://github.com/github/github-mcp-server) は、AI ツールを
@@ -142,6 +142,6 @@ GitHub プラットフォームに直接接続します。これにより ADK �
 
 ## 追加リソース
 
-- [GitHub MCP Server Repository](https://github.com/github/github-mcp-server)
-- [Remote GitHub MCP Server Documentation](https://github.com/github/github-mcp-server/blob/main/docs/remote-server.md)
-- [Policies and Governance for the GitHub MCP Server](https://github.com/github/github-mcp-server/blob/main/docs/policies-and-governance.md)
+- [GitHub MCP サーバー リポジトリ](https://github.com/github/github-mcp-server)
+- [リモート GitHub MCP サーバー ドキュメント](https://github.com/github/github-mcp-server/blob/main/docs/remote-server.md)
+- [GitHub MCP サーバーのポリシーとガバナンス](https://github.com/github/github-mcp-server/blob/main/docs/policies-and-governance.md)

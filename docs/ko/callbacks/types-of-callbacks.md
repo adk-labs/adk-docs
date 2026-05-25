@@ -254,3 +254,43 @@
         ```java
         --8<-- "examples/java/snippets/src/main/java/callbacks/AfterToolCallbackExample.java:init"
         ```
+
+## TypeScript 콜백 예제 보강
+
+영어 원문에 포함된 TypeScript 콜백 유형별 예제를 아래에 함께 제공합니다.
+
+### Before Agent Callback
+
+```typescript
+--8<-- "examples/typescript/snippets/callbacks/before_agent_callback.ts"
+```
+
+### After Agent Callback
+
+```typescript
+--8<-- "examples/typescript/snippets/callbacks/after_agent_callback.ts"
+```
+
+### Before Model Callback
+
+```typescript
+--8<-- "examples/typescript/snippets/callbacks/before_model_callback.ts"
+```
+
+### After Model Callback
+
+```typescript
+--8<-- "examples/typescript/snippets/callbacks/after_model_callback.ts"
+```
+
+### Before Tool Callback
+
+```typescript
+--8<-- "examples/typescript/snippets/callbacks/before_tool_callback.ts"
+```
+
+### After Tool Callback
+
+```typescript
+--8<-- "examples/typescript/snippets/callbacks/after_tool_callback.ts"
+```

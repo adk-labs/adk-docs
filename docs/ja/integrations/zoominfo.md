@@ -8,7 +8,7 @@ catalog_tags: ["mcp", "connectors"]
 # ADK 向け ZoomInfo MCP ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [ZoomInfo MCP Server](https://docs.zoominfo.com/docs/zi-api-mcp-overview) は、

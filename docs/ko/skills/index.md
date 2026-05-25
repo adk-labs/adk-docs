@@ -1,7 +1,7 @@
 # ADK 에이전트를 위한 스킬
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.25.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v1.2.0</span><span class="lst-preview">Experimental</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.25.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v1.2.0</span><span class="lst-preview">실험적</span>
 </div>
 
 에이전트 ***스킬(Skill)*** 은 ADK 에이전트가 특정 작업을 수행할 때 사용할 수 있는
@@ -149,3 +149,19 @@ Skills 기능은 실험적이며 현재 다음 제한 사항이 있습니다.
     [skills_agent](https://github.com/google/adk-python/tree/main/contributing/samples/skills_agent)
 *   Agent Skills
     [specification documentation](https://agentskills.io/)
+
+## TypeScript Skills 예제 보강
+
+영어 원문에 포함된 TypeScript Skills 예제를 아래에 함께 제공합니다.
+
+### 시작하기
+
+```typescript
+--8<-- "examples/typescript/snippets/skills/get_started.ts:full_example"
+```
+
+### 인라인 Skill
+
+```typescript
+--8<-- "examples/typescript/snippets/skills/inline_skill.ts:full_example"
+```

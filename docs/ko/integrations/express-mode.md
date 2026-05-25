@@ -7,7 +7,7 @@ catalog_tags: ["google"]
 # Vertex AI 익스프레스 모드: Vertex AI 세션 및 메모리 사용하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-preview">미리보기</span>
 </div>
 
 `VertexAiSessionService` 또는 `VertexAiMemoryBankService` 사용에 관심이 있지만 Google Cloud 프로젝트가 없는 경우, Vertex AI 익스프레스 모드에 가입하여 무료로 액세스 권한을 얻고 이러한 서비스를 사용해 볼 수 있습니다! 자격 요건을 충족하는 ***gmail*** 계정으로 [여기](https://console.cloud.google.com/expressmode)에서 가입할 수 있습니다. Vertex AI 익스프레스 모드에 대한 자세한 내용은 [개요 페이지](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 참조하세요.

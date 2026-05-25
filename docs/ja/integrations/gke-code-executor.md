@@ -8,7 +8,7 @@ catalog_tags: ["code","google"]
 # ADK 向け Google Cloud GKE Code Executor ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.14.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span>
 </div>
 
 GKE Code Executor (`GkeCodeExecutor`) は、Google Kubernetes Engine (GKE) を

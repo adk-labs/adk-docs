@@ -1,7 +1,7 @@
 # 사용자 시뮬레이션
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.18.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.18.0</span>
 </div>
 
 대화형 에이전트를 평가할 때는 대화가 예상치 못한 방향으로 진행될 수 있기 때문에

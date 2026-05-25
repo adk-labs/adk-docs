@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # Monocleによるエージェントの可観測性
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
+</div>
+
 [Monocle](https://github.com/monocle2ai/monocle) は、LLMアプリケーションとAIエージェントの監視、デバッグ、改善のためのオープンソースの可観測性プラットフォームです。自動インスツルメンテーションを通じて、Google ADKアプリケーションに包括的なトレース機能を提供します。Monocleは、ローカルファイルやコンソール出力など、さまざまな宛先にエクスポートできるOpenTelemetry互換のトレースを生成します。
 
 ## 概要

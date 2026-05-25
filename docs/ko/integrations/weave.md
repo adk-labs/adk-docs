@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # WandB의 Weave를 사용한 에이전트 관찰 가능성
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
+</div>
+
 [Weights & Biases(WandB)의 Weave](https://weave-docs.wandb.ai/)는 모델 호출을 로깅하고 시각화하기 위한 강력한 플랫폼을 제공합니다. Google ADK를 Weave와 통합하면 OpenTelemetry(OTEL) 추적을 사용하여 에이전트의 성능과 동작을 추적하고 분석할 수 있습니다.
 
 ## 사전 준비 사항

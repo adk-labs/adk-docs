@@ -1,7 +1,7 @@
 # 빠른 시작: A2A를 통해 원격 에이전트 노출하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-preview">Experimental</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-preview">실험적</span>
 </div>
 
 이 빠른 시작 가이드는 모든 개발자의 가장 일반적인 출발점인 **"에이전트가 있는데, 다른 에이전트들이 A2A를 통해 내 에이전트를 사용할 수 있도록 어떻게 노출하나요?"**에 대해 다룹니다. 이는 서로 다른 에이전트들이 협력하고 상호 작용해야 하는 복잡한 다중 에이전트 시스템을 구축하는 데 매우 중요합니다.

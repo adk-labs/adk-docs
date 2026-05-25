@@ -8,7 +8,7 @@ catalog_tags: ["mcp", "data"]
 # ADK 向け Supermetrics MCP ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [Supermetrics MCP Server](https://mcp.supermetrics.com) は ADK エージェントを

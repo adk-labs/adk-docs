@@ -8,7 +8,7 @@ catalog_icon: /integrations/assets/cisco-ai-defense.png
 # ADK 用 Cisco AI Defense プラグイン
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 [Cisco AI

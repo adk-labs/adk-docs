@@ -8,7 +8,7 @@ catalog_tags: ["code", "google"]
 # ADK 向け Environment Toolset
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.29.0</span><span class="lst-preview">Experimental</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.29.0</span><span class="lst-preview">実験的</span>
 </div>
 
 特にコーディングやファイル操作のように、複数のエージェント要求にまたがって

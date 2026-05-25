@@ -9,7 +9,7 @@ catalog_tags: ["data","google"]
 # ADK 用のナレッジ エンジン ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `vertex_ai_rag_retrieval` ツールを使用すると、エージェントはプライベート データを実行できます。

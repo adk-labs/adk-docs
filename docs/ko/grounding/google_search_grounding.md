@@ -1,7 +1,7 @@
 # Google 검색 그라운딩 이해
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 [Google 검색 그라운딩 도구](/ko/tools/gemini-api/google-search/)는 ADK(Agent Development Kit)의 강력한 기능으로, AI 에이전트가 웹에서 실시간의 권위 있는 정보에 액세스할 수 있도록 합니다. 에이전트를 Google 검색에 연결하여 신뢰할 수 있는 출처를 기반으로 사용자에게 최신 답변을 제공할 수 있습니다.

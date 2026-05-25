@@ -8,7 +8,7 @@ catalog_tags: ["data","mcp"]
 # ADK 向け Qdrant MCP ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [Qdrant MCP Server](https://github.com/qdrant/mcp-server-qdrant) は

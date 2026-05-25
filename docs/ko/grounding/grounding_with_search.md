@@ -1,7 +1,7 @@
 # 에이전트 검색 기반
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 [Agent Search](/integrations/agent-search/)는 AI 에이전트가 개인 기업 문서 및 데이터 저장소의 정보에 액세스할 수 있도록 하는 ADK(에이전트 개발 키트)를 위한 강력한 도구입니다. 에이전트를 색인화된 엔터프라이즈 콘텐츠에 연결하면 사용자에게 조직의 지식 기반에 기반한 답변을 제공할 수 있습니다.

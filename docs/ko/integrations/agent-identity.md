@@ -8,7 +8,7 @@ catalog_tags: ["google"]
 # ADK용 Agent Identity Auth Manager
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.30.0</span><span class="lst-preview">Preview</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.30.0</span><span class="lst-preview">미리보기</span>
 </div>
 
 [Google Cloud Agent Identity](https://docs.cloud.google.com/iam/docs/agent-identity-overview)

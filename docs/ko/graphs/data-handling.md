@@ -1,7 +1,7 @@
 # 에이전트 워크플로의 데이터 처리
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 에이전트와 그래프 기반 노트 사이에서 데이터를 구조화하고 관리하는 일은 ADK로

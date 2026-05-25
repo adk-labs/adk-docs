@@ -1,7 +1,7 @@
 # ADK 에이전트를 위한 Google Gemini 모델
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADK는 다양한 기능을 제공하는 강력한 Gemini 계열의 생성형 AI 모델을 지원합니다.
@@ -288,7 +288,7 @@ Vertex AI의 Gemini는 엔터프라이즈급 기능, 보안, 규정 준수 제�
 ## Gemini Interactions API {#interactions-api}
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.21.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.21.0</span>
 </div>
 
 Gemini [Interactions API](https://ai.google.dev/gemini-api/docs/interactions)

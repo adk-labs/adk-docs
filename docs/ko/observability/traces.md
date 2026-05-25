@@ -1,7 +1,7 @@
 # 에이전트 활동 추적
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.17.0</span><span class="lst-go">Go v1.0.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.17.0</span><span class="lst-go">Go v1.0.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADK(에이전트 개발 키트)는 에이전트 아키텍처를 통해 이동하는 요청의 엔드투엔드 여정을 시각화하는 데 도움이 되는 분산 추적 기능을 제공합니다. 측정항목은 프로세스에 걸린 *시간*을 알려주고 로그는 *무슨 일이 일어났는지* 알려주지만, 추적은 이러한 이벤트를 연결하여 시간이 소요된 정확한 *어디*와 LLM 추론, 도구 호출 및 외부 API 간의 계층적 관계를 보여줍니다.

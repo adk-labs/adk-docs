@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # Phoenix를 사용한 에이전트 관측성(Observability)
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
+</div>
+
 [Phoenix](https://arize.com/docs/phoenix)는 대규모 LLM 애플리케이션 및 AI 에이전트를 모니터링, 디버깅, 개선하기 위한 오픈소스 셀프 호스팅 관측성 플랫폼입니다. Google ADK 애플리케이션을 위한 포괄적인 추적 및 평가 기능을 제공합니다. 시작하려면 [무료 계정](https://phoenix.arize.com/)에 가입하세요.
 
 ## 개요

@@ -1,7 +1,7 @@
 # エージェント CLI を使用してエージェント ランタイムにデプロイする
 
 <div class="language-support-tag" title="Agent Runtime currently supports only Python.">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 この展開手順では、次を使用して展開を実行する方法について説明します。

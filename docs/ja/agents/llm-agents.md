@@ -1,7 +1,7 @@
 # LLMエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 `LlmAgent`（しばしば`Agent`と略されます）はADKにおけるコアコンポーネントであり、アプリケーションの「思考」部分として機能します。大規模言語モデル（LLM）の能力を活用して、推論、自然言語の理解、意思決定、応答の生成、ツールとの対話を行います。
@@ -382,7 +382,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 ### プランナー
 
 <div class="language-support-tag" title="">
-   <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
 **`planner` (任意):** `BasePlanner`インスタンスを割り当てて、実行前の複数ステップの推論と計画を有効にします。主なプランナーは2つあります：
@@ -441,7 +441,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 ### コード実行
 
 <div class="language-support-tag">
-   <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 *   **`code_executor` (任意):** `BaseCodeExecutor`インスタンスを提供して、エージェントがLLMの応答で見つかったコードブロックを実行できるようにします。（[ツール/組み込みツール](../tools/built-in-tools.md)参照）。
@@ -528,4 +528,20 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 
 ```kotlin
 --8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:full_example"
+```
+
+## コード実行例の補足
+
+英語原文に含まれているコード実行例を以下にも掲載します。
+
+### Python
+
+```python
+--8<-- "examples/python/snippets/tools/built-in-tools/code_execution.py"
+```
+
+### Java
+
+```java
+--8<-- "examples/java/snippets/src/main/java/tools/CodeExecutionAgentApp.java:full_code"
 ```

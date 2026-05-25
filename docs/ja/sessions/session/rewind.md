@@ -1,7 +1,7 @@
 # エージェントのセッションを巻き戻す
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.17.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span>
 </div>
 
 ADK セッションの Rewind 機能を使うと、セッションを過去の

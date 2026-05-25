@@ -9,7 +9,7 @@ catalog_tags: ["data"]
 # ADK のデータベース メモリ サービス
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 [`adk-database-memory`](https://github.com/anmolg1997/adk-database-memory) は

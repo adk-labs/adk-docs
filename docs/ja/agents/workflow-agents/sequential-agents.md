@@ -1,7 +1,7 @@
 # シーケンシャルエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `SequentialAgent` は、サブエージェントをリストで指定された順序で実行する[ワークフローエージェント](index.md)です。
@@ -57,3 +57,11 @@ SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAg
         ```java
         --8<-- "examples/java/snippets/src/main/java/agents/workflow/SequentialAgentExample.java:init"
         ```
+
+## TypeScript の例の補足
+
+英語原文に含まれている TypeScript のシーケンシャルエージェント例を以下にも掲載します。
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/workflow-agents/sequential_agent_code_development_agent.ts:init"
+```

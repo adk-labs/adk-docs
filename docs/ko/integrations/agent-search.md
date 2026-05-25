@@ -9,7 +9,7 @@ catalog_tags: ["search","google"]
 # ADK용 에이전트 검색 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
 `vertex_ai_search_tool`는 Google Cloud Agent Search를 사용하여

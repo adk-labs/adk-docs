@@ -1,7 +1,7 @@
 # ADK 에이전트를 위한 LiteLLM 모델 커넥터
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
 [LiteLLM](https://docs.litellm.ai/)은 모델과 모델 호스팅 서비스를 위한

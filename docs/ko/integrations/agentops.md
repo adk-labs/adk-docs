@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # AgentOps를 사용한 에이전트 관찰 가능성
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
+</div>
+
 **단 두 줄의 코드**만으로 [AgentOps](https://www.agentops.ai)는 에이전트에 대한 세션 재생, 메트릭 및 모니터링을 제공합니다.
 
 ## ADK에 AgentOps를 사용하는 이유는 무엇인가요?

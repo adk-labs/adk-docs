@@ -8,7 +8,7 @@ catalog_tags: ["observability"]
 # ADK 向け Future AGI オブザーバビリティ
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 [Future AGI](https://futureagi.com) は、AI エージェント向けの

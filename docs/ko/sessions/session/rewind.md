@@ -1,7 +1,7 @@
 # 에이전트 세션 되감기(Rewind)
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.17.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.17.0</span>
 </div>
 
 ADK 세션 Rewind 기능을 사용하면 세션을 이전 요청 상태로 되돌릴 수 있어,

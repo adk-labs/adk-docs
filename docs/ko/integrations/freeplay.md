@@ -6,6 +6,10 @@ catalog_tags: ["observability"]
 ---
 # Freeplay를 사용한 에이전트 관찰 가능성 및 평가
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
+</div>
+
 [Freeplay](https://freeplay.ai/)는 AI 에이전트를 구축하고 최적화하기 위한 엔드투엔드 워크플로우를 제공하며 ADK와 통합될 수 있습니다. Freeplay를 사용하면 전체 팀이 쉽게 협업하여 에이전트 지침(프롬프트)을 반복하고, 다양한 모델과 에이전트 변경 사항을 실험 및 비교하고, 오프라인 및 온라인에서 평가를 실행하여 품질을 측정하고, 프로덕션을 모니터링하고, 데이터를 직접 검토할 수 있습니다.
 
 Freeplay의 주요 이점:

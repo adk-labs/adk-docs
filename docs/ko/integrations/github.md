@@ -8,7 +8,7 @@ catalog_tags: ["code", "mcp"]
 # ADK용 GitHub MCP 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
 [GitHub MCP Server](https://github.com/github/github-mcp-server)는 AI 도구를
@@ -142,6 +142,6 @@ GitHub 플랫폼에 직접 연결합니다. 이를 통해 ADK 에이전트는 �
 
 ## 추가 리소스
 
-- [GitHub MCP Server Repository](https://github.com/github/github-mcp-server)
-- [Remote GitHub MCP Server Documentation](https://github.com/github/github-mcp-server/blob/main/docs/remote-server.md)
-- [Policies and Governance for the GitHub MCP Server](https://github.com/github/github-mcp-server/blob/main/docs/policies-and-governance.md)
+- [GitHub MCP 서버 저장소](https://github.com/github/github-mcp-server)
+- [원격 GitHub MCP 서버 문서](https://github.com/github/github-mcp-server/blob/main/docs/remote-server.md)
+- [GitHub MCP 서버 정책 및 거버넌스](https://github.com/github/github-mcp-server/blob/main/docs/policies-and-governance.md)

@@ -8,7 +8,7 @@ catalog_tags: ["connectors"]
 # ADK용 StackOne 플러그인
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [StackOne ADK Plugin](https://github.com/StackOneHQ/stackone-adk-plugin)은

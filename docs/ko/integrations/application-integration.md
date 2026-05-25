@@ -8,7 +8,7 @@ catalog_tags: ["google", "connectors"]
 # ADK용 Google Cloud Application Integration 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.3.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.3.0</span>
 </div>
 
 **ApplicationIntegrationToolset**을 사용하면,

@@ -1,7 +1,7 @@
 # 스트리밍 동작 구성하기
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">Experimental</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-preview">실험적 기능</span>
 </div>
 
 라이브(스트리밍) 에이전트에 대해 설정할 수 있는 몇 가지 구성이 있습니다.

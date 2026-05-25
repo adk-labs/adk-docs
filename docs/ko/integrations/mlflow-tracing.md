@@ -9,7 +9,7 @@ catalog_tags: ["observability"]
 # ADK에 대한 MLflow 관측 가능성
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [MLflow Tracing](https://mlflow.org/docs/latest/genai/tracing/)는 다음을 제공합니다

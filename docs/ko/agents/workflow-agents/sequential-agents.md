@@ -1,7 +1,7 @@
 # 순차적 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
 `SequentialAgent`는 하위 에이전트를 목록에 명시된 순서대로 실행하는 [워크플로우 에이전트](index.md)입니다.
@@ -57,3 +57,11 @@ SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAg
         ```java
         --8<-- "examples/java/snippets/src/main/java/agents/workflow/SequentialAgentExample.java:init"
         ```
+
+## TypeScript 예제 보강
+
+영어 원문에 포함된 TypeScript 순차 에이전트 예제를 아래에 함께 제공합니다.
+
+```typescript
+--8<-- "examples/typescript/snippets/agents/workflow-agents/sequential_agent_code_development_agent.ts:init"
+```

@@ -1,7 +1,7 @@
 # 동적 워크플로
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 ADK 프레임워크는 [그래프 기반 워크플로](/ko/workflows/)의 더 유연하고

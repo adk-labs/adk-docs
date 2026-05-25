@@ -8,7 +8,7 @@ catalog_tags: ["data", "google"]
 # Firestore를 사용한 세션 상태 관리
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-java">Java</span>
 </div>
 
 [Google Cloud Firestore](https://cloud.google.com/firestore)는 클라이언트 및 서버 측 개발을 위해 데이터를 저장하고 동기화하는 유연하고 확장 가능한 NoSQL 클라우드 데이터베이스입니다.

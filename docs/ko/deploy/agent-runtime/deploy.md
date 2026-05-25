@@ -1,7 +1,7 @@
 # 에이전트 런타임에 배포
 
 <div class="language-support-tag" title="Agent Runtime currently supports only Python.">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 이 배포 절차에서는 표준 배포를 수행하는 방법을 설명합니다.

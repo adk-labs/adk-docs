@@ -1,7 +1,7 @@
 # 중지된 에이전트 재개
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.14.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADK 에이전트의 실행은 네트워크 연결 끊김, 정전 또는 필요한 외부 시스템 오프라인과 같은 다양한 요인으로 인해 중단될 수 있습니다. ADK의 재개 기능을 사용하면 에이전트 워크플로가 중단된 지점부터 다시 시작하여 전체 워크플로를 다시 시작할 필요가 없습니다. ADK Python 1.16 이상에서는 ADK 워크플로를 재개 가능하도록 구성하여 워크플로 실행을 추적한 다음 예기치 않은 중단 후 재개할 수 있습니다.

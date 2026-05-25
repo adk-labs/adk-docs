@@ -1,7 +1,7 @@
 # 그래프 기반 에이전트 워크플로
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
 </div>
 
 ADK의 그래프 기반 워크플로를 사용하면 더 정밀한 제어를 갖춘 에이전트를

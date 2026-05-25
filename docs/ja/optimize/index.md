@@ -1,7 +1,7 @@
 # エージェントの最適化
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.24.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.24.0</span>
 </div>
 
 ADK は、評価結果に基づいてエージェントを自動最適化するための拡張可能なフレームワークを提供します。

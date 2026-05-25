@@ -9,7 +9,7 @@ catalog_tags: ["code", "google"]
 # ADK 用エージェント ランタイム コード実行ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.17.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span>
 </div>
 
 エージェント ランタイム コード実行 ADK ツールは、低遅延、高

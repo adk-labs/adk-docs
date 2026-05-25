@@ -1,7 +1,7 @@
 # 에이전트 최적화
 
 <div class="language-support-tag">
-    <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.24.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.24.0</span>
 </div>
 
 ADK는 평가 결과를 기반으로 에이전트를 자동으로 최적화할 수 있는 확장 가능한 프레임워크를 제공합니다.

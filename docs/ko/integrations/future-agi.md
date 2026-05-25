@@ -8,7 +8,7 @@ catalog_tags: ["observability"]
 # ADK용 Future AGI 관측성
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [Future AGI](https://futureagi.com)는 AI 에이전트를 위한 관측성 및 평가

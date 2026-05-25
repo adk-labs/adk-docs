@@ -1,7 +1,7 @@
 # 並列実行によるツールパフォーマンスの向上
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.10.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.10.0</span>
 </div>
 
 Python用Agent Development Kit（ADK）バージョン1.10.0以降、フレームワークはエージェントが要求した[関数ツール](/ja/tools-custom/function-tools/)を並列で実行しようとします。この動作により、特に複数の外部APIや長時間実行タスクに依存するエージェントの場合、エージェントのパフォーマンスと応答性が大幅に向上します。たとえば、それぞれ2秒かかる3つのツールがある場合、それらを並列で実行すると、合計実行時間は6秒ではなく2秒に近くなります。ツール関数を並列で実行する機能は、特に次のシナリオでエージェントのパフォーマンスを向上させることができます。

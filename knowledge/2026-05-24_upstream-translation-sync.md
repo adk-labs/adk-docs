@@ -116,3 +116,27 @@
   - Kotlin
 - Added the missing Kotlin quickstart card to both localized pages.
 - Verified card order parity across EN/KO/JA and reran `mkdocs build` successfully.
+
+## Follow-up: Missed Translation Gap Remediation
+
+- Re-ran structural parity checks across EN/KO/JA docs for snippet includes, language support tags, card targets, and local image basenames.
+- Filled missing snippet includes in KO/JA pages for callbacks, LLM agents, workflow agents, custom agents, custom function tools, confirmation tools, and skills.
+- Added missing language support tags to KO/JA integration and A2A/streaming pages.
+- Re-synced KO/JA `agents/index.md` with the current upstream overview, including the `agents_overview.svg` figure and graph/workflow wording.
+- Re-synced KO/JA `agents/workflow-agents/index.md` with the current upstream template workflow content, including the ADK 2.0 graph workflow note and `template_workflows.svg` figure.
+- Fixed localized asset paths for the newly restored figures so KO/JA builds resolve shared assets from `site/assets`.
+- Translated remaining visible support badge text across KO/JA docs:
+  - `Supported in ADK` -> `ADK에서 지원` / `ADKでサポート`
+  - `Experimental` -> `실험적` / `実験的`
+  - `Preview` -> `미리보기` / `プレビュー`
+- Translated the remaining Japanese Arize AX observability/integration page content and residual English headings in the Japanese streaming guide.
+
+### Validation
+
+- Missing snippet path audit: `missing snippet paths 0`.
+- Missing language support class audit: `missing support docs 0`.
+- EN/KO/JA structural parity audit: no missing snippets, support classes, normalized card targets, or local image basenames.
+- Visible English prose audit: only expected BigQuery analytics log examples remain.
+- `git diff --check`: passed.
+- MkDocs build: completed successfully (`Documentation built in 38.25 seconds`).
+- Generated site asset audit: `site asset refs checked 37396`, `missing assets 0`.

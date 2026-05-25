@@ -9,7 +9,7 @@ catalog_tags: ["google", "mcp", "connectors"]
 # Google Cloud エージェント レジストリ
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.26.0</span><span class="lst-preview">Preview</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.26.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
 Agent Development Kit (ADK) 内の Agent Registry クライアント ライブラリでは、

@@ -8,7 +8,7 @@ catalog_tags: ["google"]
 # ADK용 Google Cloud Pub/Sub 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.22.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.22.0</span>
 </div>
 
 `PubSubToolset`을 사용하면 에이전트가

@@ -8,7 +8,7 @@ catalog_tags: ["observability", "google"]
 # ADK 向け BigQuery Agent Analytics プラグイン
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.21.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.21.0</span>
 </div>
 
 !!! important "バージョン要件"

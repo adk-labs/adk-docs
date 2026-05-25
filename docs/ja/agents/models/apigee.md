@@ -1,7 +1,7 @@
 # ADK エージェントのための Apigee AI Gateway
 
 <div class="language-support-tag">
-   <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v1.18.0</span><span class="lst-java">Java v0.4.0</span>
+   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.18.0</span><span class="lst-java">Java v0.4.0</span>
 </div>
 
 [Apigee](https://docs.cloud.google.com/apigee/docs/api-platform/get-started/what-apigee) は
