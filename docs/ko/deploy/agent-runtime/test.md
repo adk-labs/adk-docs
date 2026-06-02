@@ -1,5 +1,9 @@
 # 에이전트 런타임에서 배포된 에이전트를 테스트합니다.
 
+<div class="language-support-tag" title="Agent Runtime은 현재 Python과 Go를 지원합니다.">
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go v1.2.0</span>
+</div>
+
 이 지침에서는 다음에 배포된 ADK 에이전트를 테스트하는 방법을 설명합니다.
 [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)
 런타임 환경. 이 지침을 사용하기 전에 다음 사항을 완료해야 합니다.
@@ -36,8 +40,9 @@ Google Cloud Console로 프로젝트 정보를 찾으려면 다음 안내를 따
 1. Google Cloud Console에서 에이전트 런타임 페이지로 이동합니다.
     [https://console.cloud.google.com/vertex-ai/agents/agent-engines](https://console.cloud.google.com/vertex-ai/agents/agent-engines)
 
-1. 페이지 상단에서 **API URL**을 선택한 후 **Query
-    배포된 에이전트의 URL** 문자열은 다음 형식이어야 합니다.
+1. 확인하려는 인스턴스를 선택합니다.
+
+1. 페이지 상단에서 **Copy query URL**을 선택합니다. URL은 다음 형식이어야 합니다.
 
         https://$(LOCATION_ID)-aiplatform.googleapis.com/v1/projects/$(PROJECT_ID)/locations/$(LOCATION_ID)/reasoningEngines/$(RESOURCE_ID):query
 

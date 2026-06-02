@@ -1,7 +1,7 @@
 # 에이전트 런타임에 배포
 
-<div class="language-support-tag" title="Agent Runtime currently supports only Python.">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
+<div class="language-support-tag" title="Agent Runtime은 현재 Python과 Go를 지원합니다.">
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go v1.2.0</span>
 </div>
 
 이 배포 절차에서는 표준 배포를 수행하는 방법을 설명합니다.
@@ -110,16 +110,27 @@ Google Cloud와 코딩 환경이 준비되면 배포 준비가 완료됩니다.
 당신의 대리인. 지침에서는 에이전트 프로젝트 폴더가 있다고 가정합니다.
 예를 들면:
 
-```shell
-multi_tool_agent/
-├── .env
-├── __init__.py
-└── agent.py
-```
+=== "Python"
 
-프로젝트 파일 및 형식에 대한 자세한 내용은 다음을 참조하세요.
-[multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)
-코드 샘플.
+    ```shell
+    multi_tool_agent/
+    ├── .env
+    ├── __init__.py
+    └── agent.py
+    ```
+
+    프로젝트 파일 및 형식에 대한 자세한 내용은
+    [multi_tool_agent](https://github.com/google/adk-docs/tree/main/examples/python/snippets/get-started/multi_tool_agent)
+    코드 샘플을 참고하세요.
+
+=== "Go"
+
+    ```shell
+    multi_tool_agent/
+    ├── go.mod
+    ├── go.sum
+    └── main.go
+    ```
 
 ## 에이전트 배포 {#deploy-agent}
 
@@ -130,35 +141,85 @@ multi_tool_agent/
 다음 예제 배포 명령은 `multi_tool_agent` 샘플 코드를 다음과 같이 사용합니다.
 배포할 프로젝트:
 
-```shell
-PROJECT_ID=my-project-id
-LOCATION_ID=us-central1
+=== "Python"
 
-adk deploy agent_engine \
-        --project=$PROJECT_ID \
-        --region=$LOCATION_ID \
-        --display_name="My First Agent" \
-        multi_tool_agent
-```
+    ```shell
+    PROJECT_ID=my-project-id
+    LOCATION_ID=us-central1
+
+    adk deploy agent_engine \
+            --project=$PROJECT_ID \
+            --region=$LOCATION_ID \
+            --display_name="My First Agent" \
+            multi_tool_agent
+    ```
+
+=== "Go"
+
+    ```shell
+    PROJECT_ID=my-project-id
+    LOCATION_ID=us-central1
+
+    adkgo deploy agentengine \
+        -e ./main.go \
+        -s "multi_tool_agent" \
+        -p $PROJECT_ID \
+        -r $LOCATION_ID \
+        -d .
+    ```
 
 `region`의 경우 지원되는 지역 목록은 다음에서 확인할 수 있습니다.
 [Agent Builder locations page](https://docs.cloud.google.com/agent-builder/locations#supported-regions-agent-engine).
-`adk deploy agent_engine` 명령의 CLI 옵션에 대해 알아보려면 다음을 참조하세요.
-[ADK CLI Reference](/api-reference/cli/#adk-deploy-agent-engine).
+
+=== "Python"
+
+    `adk deploy agent_engine` 명령의 CLI 옵션은
+    [ADK CLI Reference](/api-reference/cli/#adk-deploy-agent-engine)를 참고하세요.
+
+=== "Go"
+
+    `adkgo deploy agentengine` 명령의 CLI 옵션을 알아보려면 `adkgo help deploy agentengine`을 실행하세요. 이 명령은 사용 가능한 옵션을 표시합니다. 중요한 옵션은 다음과 같습니다.
+
+    ```shell
+    -e, --entry_point_path string   Path to an entry point (go 'main')
+    -s, --name string               Agent Engine name
+    -p, --project_name string       GCP Project Name
+    -r, --region string             GCP Region
+    -d, --source_dir string         Directory to archive, defaults to current working directory
+    ```
 
 ### 배포 명령 출력
 
 성공적으로 배포되면 다음 출력이 표시됩니다.
 
-```shell
-Creating AgentEngine
-Create AgentEngine backing LRO: projects/123456789/locations/us-central1/reasoningEngines/751619551677906944/operations/2356952072064073728
-View progress and logs at https://console.cloud.google.com/logs/query?project=hopeful-sunset-478017-q0
-AgentEngine created. Resource name: projects/123456789/locations/us-central1/reasoningEngines/751619551677906944
-To use this AgentEngine in another session:
-agent_engine = vertexai.agent_engines.get('projects/123456789/locations/us-central1/reasoningEngines/751619551677906944')
-Cleaning up the temp folder: /var/folders/k5/pv70z5m92s30k0n7hfkxszfr00mz24/T/agent_engine_deploy_src/20251219_134245
-```
+=== "Python"
+
+    ```shell
+    Creating AgentEngine
+    Create AgentEngine backing LRO: projects/123456789/locations/us-central1/reasoningEngines/751619551677906944/operations/2356952072064073728
+    View progress and logs at https://console.cloud.google.com/logs/query?project=hopeful-sunset-478017-q0
+    AgentEngine created. Resource name: projects/123456789/locations/us-central1/reasoningEngines/751619551677906944
+    To use this AgentEngine in another session:
+    agent_engine = vertexai.agent_engines.get('projects/123456789/locations/us-central1/reasoningEngines/751619551677906944')
+    Cleaning up the temp folder: /var/folders/k5/pv70z5m92s30k0n7hfkxszfr00mz24/T/agent_engine_deploy_src/20251219_134245
+    ```
+
+=== "Go"
+
+    ```shell
+    Computing flags & preparing temp : Starting
+
+    ...
+
+        >  [Deployed Reasoning Engine: projects/887748635400/locations/us-central1/reasoningEngines/751619551677906944]
+        >  [Display Name: simpleText]
+
+    Deploying to Agent Engine : Finished successfully
+    Cleaning temp : Starting
+        >  [Clean temp starting with /tmp/agentEngine_20260424_141040__2470352066]
+
+    Cleaning temp : Finished successfully
+    ```
 
 이제 에이전트가 배포된 `RESOURCE_ID`가 있습니다.
 위 예에서는 `751619551677906944`입니다. 이 ID 번호가 필요합니다.

@@ -1,4 +1,11 @@
-# ADKのインストール
+---
+hide:
+  - toc
+---
+
+# 高度なセットアップ
+
+このページでは、サポートされている各言語で ADK をインストールして設定するための詳しい手順を説明します。ガイド形式の導入から始める場合は、[使用する言語のクイックスタート](/ja/get-started/)を参照してください。
 
 === "Python"
 
@@ -96,13 +103,13 @@
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
-                <version>1.0.0</version>
+                <version>1.3.0</version>
             </dependency>
             <!-- エージェントをデバッグするためのADK開発Web UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
-                <version>1.0.0</version>
+                <version>1.3.0</version>
             </dependency>
         </dependencies>
 
@@ -115,12 +122,32 @@
 
     ```title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:1.0.0'
-        implementation 'com.google.adk:google-adk-dev:1.0.0'
+        implementation 'com.google.adk:google-adk:1.3.0'
+        implementation 'com.google.adk:google-adk-dev:1.3.0'
     }
     ```
 
     また、Gradleが`-parameters`を`javac`に渡すように構成する必要があります。（または、`@Schema(name = "...")`を使用します）。
+
+=== "Kotlin"
+
+    **JVM で ADK Kotlin を使用する**
+
+    JVM 上の Kotlin では、`build.gradle.kts` に ADK コアライブラリと KSP アノテーションプロセッサを追加します。
+
+    ```kotlin title="build.gradle.kts"
+    plugins {
+        kotlin("jvm") version "2.1.20"
+        id("com.google.devtools.ksp") version "2.1.20-2.0.1"
+    }
+
+    dependencies {
+        implementation("com.google.adk:google-adk-kotlin-core:0.2.0")
+        ksp("com.google.adk:google-adk-kotlin-processor:0.2.0")
+    }
+    ```
+
+    KSP プロセッサは、関数ツールの登録に使用する `@Tool` アノテーション用のコードを生成します。完全なプロジェクト設定については、[Kotlin Quickstart](/ja/get-started/kotlin/)を参照してください。
 
 
 ## 次のステップ

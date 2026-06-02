@@ -107,8 +107,8 @@ ADK Kotlin 에이전트 프로젝트는 `build.gradle.kts` 프로젝트 파일�
 
 ```kotlin title="my_agent/build.gradle.kts (partial)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.1.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.1.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.2.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.2.0")
 }
 ```
 
@@ -127,9 +127,9 @@ dependencies {
     }
 
     dependencies {
-        implementation("com.google.adk:google-adk-kotlin-core:0.1.0")
-        implementation("com.google.adk:google-adk-kotlin-webserver:0.1.0")
-        ksp("com.google.adk:google-adk-kotlin-processor:0.1.0")
+        implementation("com.google.adk:google-adk-kotlin-core:0.2.0")
+        implementation("com.google.adk:google-adk-kotlin-webserver:0.2.0")
+        ksp("com.google.adk:google-adk-kotlin-processor:0.2.0")
     }
 
     kotlin {
@@ -141,6 +141,10 @@ dependencies {
             project.findProperty("mainClass") as? String
                 ?: "com.example.agent.MainKt"
         )
+    }
+
+    tasks.named<JavaExec>("run") {
+        standardInput = System.`in`
     }
     ```
 
@@ -230,9 +234,9 @@ ADK 웹 인터페이스로 에이전트를 실행하려면 `build.gradle.kts`에
 
 ```kotlin title="my_agent/build.gradle.kts (add to dependencies)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.1.0")
-    implementation("com.google.adk:google-adk-kotlin-webserver:0.1.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.1.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.2.0")
+    implementation("com.google.adk:google-adk-kotlin-webserver:0.2.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.2.0")
 }
 ```
 
@@ -242,7 +246,6 @@ dependencies {
 package com.example.agent
 
 import com.google.adk.kt.artifacts.InMemoryArtifactService
-import com.google.adk.kt.runners.InMemoryRunner
 import com.google.adk.kt.sessions.InMemorySessionService
 import com.google.adk.kt.webserver.AdkWebServer
 import com.google.adk.kt.webserver.loaders.SingleAgentLoader
@@ -258,11 +261,6 @@ fun main() {
         sessionService = sessionService,
         artifactService = artifactService,
         agentLoader = SingleAgentLoader(agent),
-        runner = InMemoryRunner(
-            agent = agent,
-            sessionService = sessionService,
-            artifactService = artifactService,
-        ),
         apiServerSpanExporter = ApiServerSpanExporter(),
     )
 

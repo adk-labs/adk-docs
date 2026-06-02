@@ -1,7 +1,7 @@
 # 에이전트 런타임에 배포
 
-<div class="language-support-tag" title="Agent Runtime currently supports only Python.">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
+<div class="language-support-tag" title="Agent Runtime은 현재 Python과 Go를 지원합니다.">
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go v1.2.0</span>
 </div>
 
 Google Cloud 에이전트 플랫폼
@@ -45,6 +45,12 @@ ADK 에이전트 프로젝트를 Agent Runtime에 배포하면 다음 내용이 
 - ADK 에이전트 코드
 - ADK 에이전트 코드에 선언된 모든 종속성
 
-배포에는 ADK API 서버 또는 ADK 웹 사용자가 포함되지 *않습니다*
-인터페이스 라이브러리. 에이전트 런타임 서비스는 ADK API용 라이브러리를 제공합니다.
-서버 기능.
+사용하는 프로그래밍 언어에 따라 다음 섹션에 설명된 추가 라이브러리가 포함될 수 있습니다.
+
+=== "Python"
+
+    Python으로 배포할 때는 ADK API 서버 또는 ADK 웹 사용자 인터페이스 라이브러리가 포함되지 *않습니다*. Agent Runtime 서비스가 ADK API 서버 기능에 필요한 라이브러리를 제공합니다.
+
+=== "Go"
+
+    Go로 배포할 때는 전용 ADK API 서버가 포함*됩니다*.

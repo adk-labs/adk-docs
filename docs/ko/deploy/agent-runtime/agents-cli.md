@@ -1,7 +1,7 @@
 # 에이전트 CLI를 사용하여 에이전트 런타임에 배포
 
-<div class="language-support-tag" title="Agent Runtime currently supports only Python.">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
+<div class="language-support-tag" title="Agent Runtime은 현재 Python과 Go를 지원합니다.">
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go v1.2.0</span>
 </div>
 
 이 배포 절차에서는 다음을 사용하여 배포를 수행하는 방법을 설명합니다.

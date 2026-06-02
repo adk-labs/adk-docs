@@ -62,17 +62,11 @@
 
 === "Java"
 
-    ADKをインストールし、環境をセットアップするには、次の手順に進んでください。
+    ADK Java をインストールして環境をセットアップするには、[Java Quickstart](/ja/get-started/java/)を参照してください。
 
 === "Kotlin"
 
-    新しいKotlinプロジェクト（例: IntelliJ IDEAまたはGradle）を作成し、`build.gradle.kts`に次の依存関係を追加します。
-
-    ```kotlin
-    dependencies {
-        implementation("com.google.adk:google-adk-kotlin-core:0.1.0") // 実際のバージョンに置き換えてください
-    }
-    ```
+    ADK Kotlin をインストールして環境をセットアップするには、[Kotlin Quickstart](/ja/get-started/kotlin/)を参照してください。
 
 === "Go"
 

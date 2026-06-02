@@ -1,5 +1,9 @@
 # エージェント ランタイムでデプロイされたエージェントをテストする
 
+<div class="language-support-tag" title="Agent Runtime は現在 Python と Go をサポートしています。">
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go v1.2.0</span>
+</div>
+
 これらの手順では、にデプロイされた ADK エージェントをテストする方法について説明します。
 [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)
 ランタイム環境。これらの手順を使用する前に、次の作業を完了する必要があります
@@ -36,8 +40,9 @@ Google Cloud Console でプロジェクト情報を検索するには:
 1. Google Cloud Console で、[エージェント ランタイム] ページに移動します。
     [https://console.cloud.google.com/vertex-ai/agents/agent-engines](https://console.cloud.google.com/vertex-ai/agents/agent-engines)
 
-1. ページの上部で [**API URL**] を選択し、**クエリをコピーします。
-    デプロイされたエージェントの URL** 文字列。次の形式である必要があります。
+1. 表示するインスタンスを選択します。
+
+1. ページ上部で **Copy query URL** を選択します。URL は次の形式になります。
 
         https://$(LOCATION_ID)-aiplatform.googleapis.com/v1/projects/$(PROJECT_ID)/locations/$(LOCATION_ID)/reasoningEngines/$(RESOURCE_ID):query
 
