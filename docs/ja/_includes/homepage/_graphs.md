@@ -1,5 +1,5 @@
 <!-- Developer Tools -->
-<div class="feature-split reverse">
+<div class="feature-split">
   <div class="feature-text">
     <span class="feature-badge">Graph Workflows</span>
     <h2>信頼できるロジック。知的な推論。</h2>

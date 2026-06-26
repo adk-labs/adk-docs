@@ -1,5 +1,5 @@
 <!-- Developer Tools -->
-<div class="feature-split reverse">
+<div class="feature-split">
   <div class="feature-text">
     <span class="feature-badge">Graph Workflows</span>
     <h2>신뢰할 수 있는 로직. 지능적인 추론.</h2>
