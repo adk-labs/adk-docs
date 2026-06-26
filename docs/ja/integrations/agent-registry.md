@@ -12,11 +12,7 @@ catalog_tags: ["google", "mcp", "connectors"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.26.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
-Agent Development Kit (ADK) 内の Agent Registry クライアント ライブラリでは、
-開発者が AI エージェントと MCP サーバーを検出、検索、接続できるようにする
-[Google Cloud Agent
-Registry](https://docs.cloud.google.com/agent-registry/overview) 内にカタログされています。これにより、
-管理されたコンポーネントを使用したエージェントベースのアプリケーションの動的な構成。
+Agent Development Kit (ADK) 内の Agent Registry クライアント ライブラリを使用すると、開発者は [Google Cloud Agent Registry](https://docs.cloud.google.com/agent-registry/overview) にカタログ化されている AI エージェントや MCP サーバーを検出、検索、接続できます。これにより、管理対象のコンポーネントを使用したエージェントベースのアプリケーションの動的な構成が可能になります。
 
 ## 使用例
 

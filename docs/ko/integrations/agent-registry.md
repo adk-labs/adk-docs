@@ -12,11 +12,7 @@ catalog_tags: ["google", "mcp", "connectors"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.26.0</span><span class="lst-preview">미리보기</span>
 </div>
 
-ADK(에이전트 개발 키트) 내의 에이전트 레지스트리 클라이언트 라이브러리는 다음을 허용합니다.
-개발자는 AI 에이전트 및 MCP 서버를 검색하고 조회하고 연결할 수 있습니다.
-[Google Cloud Agent
-Registry](https://docs.cloud.google.com/agent-registry/overview) 내에 카탈로그화되어 있습니다. 이를 통해
-관리되는 구성 요소를 사용하는 에이전트 기반 애플리케이션의 동적 구성.
+ADK(에이전트 개발 키트) 내의 에이전트 레지스트리 클라이언트 라이브러리를 통해 개발자는 [Google Cloud Agent Registry](https://docs.cloud.google.com/agent-registry/overview)에 카탈로그로 등록된 AI 에이전트 및 MCP 서버를 검색, 조회 및 연결할 수 있습니다. 이를 통해 관리형 구성 요소를 사용하는 에이전트 기반 애플리케이션의 동적 구성이 가능해집니다.
 
 ## 사용 사례
 
