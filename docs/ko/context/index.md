@@ -107,91 +107,33 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
     }
     ```
 
-## 다양한 종류의 컨텍스트
+## 컨텍스트 유형
 
-`InvocationContext`가 포괄적인 내부 컨테이너 역할을 하지만, ADK는 특정 상황에 맞춰진 특수한 컨텍스트 객체를 제공합니다. 이를 통해 모든 곳에서 내부 컨텍스트의 전체 복잡성을 다룰 필요 없이 당면한 작업에 적합한 도구와 권한을 가질 수 있습니다. 여러분이 마주하게 될 다양한 "종류"는 다음과 같습니다.
+ADK는 에이전트의 환경, 상태 및 리소스를 관리하는 중앙 메커니즘으로 `Context` 클래스를 사용합니다. `Context`가 모든 에이전트 상호 작용의 기본 역할을 하지만, 에이전트의 실행 흐름에서 사용되는 위치에 따라 기능과 권한의 최적의 균형을 제공하도록 설계된 특화된 "버전"으로 나타납니다.
+이러한 특정 컨텍스트 유형을 사용하면 ADK는 세션 상태, 메모리 또는 자격 증명과 같은 필요한 정보에 필요한 시간과 장소에 에이전트가 정확히 액세스할 수 있도록 보장합니다.
+마주하게 될 주요 컨텍스트 유형은 다음과 같습니다.
 
-1.  **`InvocationContext`**
-    *   **사용 위치:** 에이전트의 핵심 구현 메서드(`_run_async_impl`, `_run_live_impl`) 내에서 `ctx` 인자로 직접 받습니다.
-    *   **목적:** 현재 호출의 *전체* 상태에 대한 접근을 제공합니다. 이는 가장 포괄적인 컨텍스트 객체입니다.
-    *   **주요 내용:** `session`(`state`와 `events` 포함), 현재 `agent` 인스턴스, `invocation_id`, 초기 `user_content`, 설정된 서비스(`artifact_service`, `memory_service`, `session_service`)에 대한 참조, 그리고 라이브/스트리밍 모드와 관련된 필드에 직접 접근할 수 있습니다.
-    *   **사용 사례:** 주로 에이전트의 핵심 로직이 전체 세션이나 서비스에 직접 접근해야 할 때 사용됩니다. 하지만 종종 상태 및 아티팩트 상호작용은 자체 컨텍스트를 사용하는 콜백/도구에 위임됩니다. 또한 호출 자체를 제어하는 데 사용됩니다(예: `ctx.end_invocation = True` 설정).
+- **`InvocationContext`**: 서비스 참조 및 수명 주기 관리를 포함하여 전체 호출에 대한 포괄적인 뷰를 제공하기 위해 핵심 에이전트 실행(`_run_async_impl`, `_run_live_impl`) 중에 사용됩니다.
+  
+- **`ReadonlyContext`**: 명령 공급자(instruction provider) 내와 같이 변경이 불가능한 시나리오에서 사용되는 기본적인 컨텍스트 정보의 가볍고 제한적인 뷰입니다.
+  
+- **`Context`**: 에이전트 수명 주기 및 모델 콜백에서 사용됩니다. 세션 상태 읽기/쓰기, 아티팩트 관리 및 메모리 서비스에 데이터 주입을 위한 견고한 기능 세트를 제공합니다.
+  
+- **`ToolContext`**: 도구 실행 및 도구 관련 콜백에 맞게 조정되었습니다. Context의 기능 외에도 인증 흐름, 메모리 검색 및 아티팩트 검색을 위한 특화된 메서드가 포함되어 있습니다.
 
-    === "Python"
+!!! note
+    **호환성 정보**: Python 및 TypeScript에서 `CallbackContext`와 `ToolContext`는 `Context` 유형으로 대체되었습니다. `CallbackContext` 클래스는 하위 호환성을 보장하기 위해 `Context`에 대한 별칭(alias)으로 유지됩니다. 기존 코드베이스에서 `CallbackContext`를 만날 수 있지만, 통합된 모든 기능 세트를 활용하려면 모든 신규 개발에 **`Context` 클래스를 사용해야 합니다**.
 
-        ```python
-        # 예제: InvocationContext를 받는 에이전트 구현
-        from google.adk.agents import BaseAgent
-        from google.adk.agents.invocation_context import InvocationContext
-        from google.adk.events import Event
-        from typing import AsyncGenerator
-    
-        class MyAgent(BaseAgent):
-            async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
-                # 직접 접근 예제
-                agent_name = ctx.agent.name
-                session_id = ctx.session.id
-                print(f"에이전트 {agent_name}가 세션 {session_id}에서 호출 {ctx.invocation_id}을(를) 위해 실행 중")
-                # ... ctx를 사용하는 에이전트 로직 ...
-                yield # ... 이벤트 ...
-        ```
+### `InvocationContext`
+- **사용 위치:** 에이전트의 핵심 구현 메서드(`_run_async_impl`, `_run_live_impl`) 내에서 `ctx` 인자로 직접 받습니다.
+- **목적:** 현재 호출의 전체 상태에 대한 액세스를 제공합니다. 이는 가장 포괄적인 컨텍스트 객체입니다.
+- **주요 내용:** `session`(`state`와 `events` 포함), 현재 `agent` 인스턴스, `invocation_id`, 초기 `user_content`, 설정된 서비스(`artifact_service`, `memory_service`, `session_service`)에 대한 참조, 그리고 라이브/스트리밍 모드와 관련된 필드에 직접 액세스할 수 있습니다.
+- **사용 사례:** 주로 에이전트의 핵심 로직이 전체 세션이나 서비스에 직접 액세스해야 할 때 사용됩니다. 하지만 종종 상태 및 아티팩트 상호작용은 자체 컨텍스트를 사용하는 콜백/도구에 위임됩니다. 또한 호출 자체를 제어하는 데 사용됩니다(예: `ctx.end_invocation = True` 설정).
 
-    === "TypeScript"
-
-        ```typescript
-        // 의사 코드: InvocationContext를 받는 에이전트 구현
-        import { BaseAgent, InvocationContext, Event } from '@google/adk';
-
-        class MyAgent extends BaseAgent {
-          async *runAsyncImpl(ctx: InvocationContext): AsyncGenerator<Event, void, undefined> {
-            // 직접 접근 예제
-            const agentName = ctx.agent.name;
-            const sessionId = ctx.session.id;
-            console.log(`에이전트 ${agentName}가 세션 ${sessionId}에서 호출 ${ctx.invocationId}을 위해 실행 중`);
-            // ... ctx를 사용하는 에이전트 로직 ...
-            yield; // ... 이벤트 ...
-          }
-        }
-        ```
-
-    === "Go"
-
-        ```go
-        import (
-        	"google.golang.org/adk/agent"
-        	"google.golang.org/adk/session"
-        )
-        
-        --8<-- "examples/go/snippets/context/main.go:invocation_context_agent"
-        ```
-
-    === "Java"
-    
-        ```java
-        // 예제: InvocationContext를 받는 에이전트 구현
-        import com.google.adk.agents.BaseAgent;
-        import com.google.adk.agents.InvocationContext;
-        import com.google.adk.events.Event;
-        import io.reactivex.rxjava3.core.Flowable;
-
-        public class MyAgent extends BaseAgent {
-            @Override
-            protected Flowable<Event> runAsyncImpl(InvocationContext invocationContext) {
-                // 직접 접근 예제
-                String agentName = invocationContext.agent().name();
-                String sessionId = invocationContext.session().id();
-                String invocationId = invocationContext.invocationId();
-                System.out.println("에이전트 " + agentName + "가 세션 " + sessionId + "에서 호출 " + invocationId + "을 위해 실행 중");
-                // ... invocationContext를 사용하는 에이전트 로직 ...
-                return Flowable.empty();
-            }
-        }
-        ```
-
-2.  **`ReadonlyContext`**
-    *   **사용 위치:** 기본 정보에 대한 읽기 접근만 필요하고 수정은 허용되지 않는 시나리오(예: `InstructionProvider` 함수)에서 제공됩니다. 다른 컨텍스트의 기본 클래스이기도 합니다.
-    *   **목적:** 기본적인 컨텍스트 세부 정보에 대한 안전한 읽기 전용 뷰를 제공합니다.
-    *   **주요 내용:** `invocation_id`, `agent_name`, 그리고 현재 `state`의 읽기 전용 *뷰*.
+### `ReadonlyContext`
+    -   **사용 위치:** 기본 정보에 대한 읽기 접근만 필요하고 수정은 허용되지 않는 시나리오(예: `InstructionProvider` 함수)에서 제공됩니다. 다른 컨텍스트의 기본 클래스이기도 합니다.
+    -   **목적:** 기본적인 컨텍스트 세부 정보에 대한 안전한 읽기 전용 뷰를 제공합니다.
+    -   **주요 내용:** `invocation_id`, `agent_name`, 그리고 현재 `state`의 읽기 전용 *뷰*.
 
     === "Python"
     
@@ -245,13 +187,13 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
         }
         ```
     
-3.  **`CallbackContext`**
-    *   **사용 위치:** 에이전트 생명주기 콜백(`before_agent_callback`, `after_agent_callback`) 및 모델 상호작용 콜백(`before_model_callback`, `after_model_callback`)에 `callback_context`로 전달됩니다.
-    *   **목적:** *특히 콜백 내에서* 상태를 검사 및 수정하고, 아티팩트와 상호작용하며, 호출 세부 정보에 접근하는 것을 용이하게 합니다.
-    *   **주요 기능 (`ReadonlyContext`에 추가됨):**
-        *   **변경 가능한 `state` 속성:** 세션 상태를 읽고 *쓸 수* 있습니다. 여기서 변경된 사항(`callback_context.state['key'] = value`)은 추적되며 콜백 후 프레임워크가 생성하는 이벤트와 연결됩니다.
-        *   **아티팩트 메서드:** 설정된 `artifact_service`와 상호작용하기 위한 `load_artifact(filename)` 및 `save_artifact(filename, part)` 메서드.
-        *   직접적인 `user_content` 접근.
+### `CallbackContext` 및 `Context`
+    -   **사용 위치:** 에이전트 생명주기 콜백(`before_agent_callback`, `after_agent_callback`) 및 모델 상호작용 콜백(`before_model_callback`, `after_model_callback`)에 `callback_context`로 전달됩니다.
+    -   **목적:** *특히 콜백 내에서* 상태를 검사 및 수정하고, 아티팩트와 상호작용하며, 호출 세부 정보에 접근하는 것을 용이하게 합니다.
+    -   **주요 기능 (`ReadonlyContext`에 추가됨):**
+        -   **변경 가능한 `state` 속성:** 세션 상태를 읽고 *쓸 수* 있습니다. 여기서 변경된 사항(`callback_context.state['key'] = value`)은 추적되며 콜백 후 프레임워크가 생성하는 이벤트와 연결됩니다.
+        -   **아티팩트 메서드:** 설정된 `artifact_service`와 상호작용하기 위한 `load_artifact(filename)` 및 `save_artifact(filename, part)` 메서드.
+        -   직접적인 `user_content` 접근.
 
     *(참고: TypeScript에서는 `CallbackContext`와 `ToolContext`가 단일 `Context`
     타입으로 통합됩니다.)*
@@ -327,15 +269,15 @@ ADK(Agent Development Kit)에서 *컨텍스트(context)*는 에이전트와 그 
         }
         ```
 
-4.  **`ToolContext`**
-    *   **사용 위치:** `FunctionTool`을 지원하는 함수와 도구 실행 콜백(`before_tool_callback`, `after_tool_callback`)에 `tool_context`로 전달됩니다.
-    *   **목적:** `CallbackContext`가 제공하는 모든 것과 더불어 인증 처리, 메모리 검색, 아티팩트 목록 조회와 같이 도구 실행에 필수적인 특수 메서드를 제공합니다.
-    *   **주요 기능 (`CallbackContext`에 추가됨):**
-        *   **인증 메서드:** 인증 흐름을 트리거하는 `request_credential(auth_config)`와 사용자/시스템이 제공한 자격 증명을 검색하는 `get_auth_response(auth_config)`.
-        *   **아티팩트 목록 조회:** 세션에서 사용 가능한 아티팩트를 찾는 `list_artifacts()`.
-        *   **메모리 검색:** 설정된 `memory_service`에 질의하는 `search_memory(query)`.
-        *   **`function_call_id` 속성:** 이 도구 실행을 트리거한 LLM의 특정 함수 호출을 식별하며, 인증 요청이나 응답을 올바르게 연결하는 데 중요합니다.
-        *   **`actions` 속성:** 이 단계의 `EventActions` 객체에 직접 접근하여 도구가 상태 변경, 인증 요청 등을 신호할 수 있게 합니다.
+### `ToolContext`
+    -   **사용 위치:** `FunctionTool`을 지원하는 함수와 도구 실행 콜백(`before_tool_callback`, `after_tool_callback`)에 `tool_context`로 전달됩니다.
+    -   **목적:** `CallbackContext`가 제공하는 모든 것과 더불어 인증 처리, 메모리 검색, 아티팩트 목록 조회와 같이 도구 실행에 필수적인 특수 메서드를 제공합니다.
+    -   **주요 기능 (`CallbackContext`에 추가됨):**
+        -   **인증 메서드:** 인증 흐름을 트리거하는 `request_credential(auth_config)`와 사용자/시스템이 제공한 자격 증명을 검색하는 `get_auth_response(auth_config)`.
+        -   **아티팩트 목록 조회:** 세션에서 사용 가능한 아티팩트를 찾는 `list_artifacts()`.
+        -   **메모리 검색:** 설정된 `memory_service`에 질의하는 `search_memory(query)`.
+        -   **`function_call_id` 속성:** 이 도구 실행을 트리거한 LLM의 특정 함수 호출을 식별하며, 인증 요청이나 응답을 올바르게 연결하는 데 중요합니다.
+        -   **`actions` 속성:** 이 단계의 `EventActions` 객체에 직접 접근하여 도구가 상태 변경, 인증 요청 등을 신호할 수 있게 합니다.
 
     === "Python"
     

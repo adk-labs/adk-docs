@@ -308,6 +308,13 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
     session_service = DatabaseSessionService(db_url=db_url)
     ```
 
+#### 동시성 및 잠금 (Concurrency and locking)
+
+`DatabaseSessionService`는 2계층 잠금 아키텍처를 통해 동시 작업 중에 데이터 무결성을 보장합니다.
+
+* **프로세스 내 잠금 (In-Process locking):** 서비스는 내부의 프로세스 내 잠금을 사용하여 동일한 세션에 대한 `append_event` 호출을 직렬화합니다. 이는 동일한 프로세스 내에서 여러 요청이 동일한 세션을 동시에 업데이트하려고 할 때 발생할 수 있는 경합 조건(race condition)을 방지합니다.
+* **행 수준 잠금 (Row-Level locking):** PostgreSQL, MySQL, MariaDB의 경우, 서비스는 행 수준 잠금(`SELECT ... FOR UPDATE` 사용)을 사용하여 여러 프로세스나 복제본(replica)이 동일한 세션을 동시에 업데이트하려고 할 때 발생할 수 있는 경합 조건을 방지합니다.
+
 올바른 `SessionService`를 선택하는 것은 에이전트의 대화 기록과 임시 데이터가 어떻게 저장되고 유지되는지를 정의하는 핵심입니다.
 
 ## 세션 생명주기

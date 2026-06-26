@@ -1,4 +1,4 @@
-# 会話コンテキスト入門：セッション、状態、メモリ
+# 会話コンテキスト：セッション、状態、メモリ
 
 <div class="language-support-tag">
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>

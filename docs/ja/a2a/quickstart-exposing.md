@@ -101,14 +101,20 @@ a2a_app = to_a2a(root_agent, port=8001, agent_card="/path/to/your/agent-card.jso
 
 `to_a2a()` を呼び出すと、ADK はエージェントを公開するための複数のセットアップ手順を自動的に処理します。
 
-* **`A2aAgentExecutor` のセットアップ:** `A2aAgentExecutor` が A2A プロトコルと ADK エージェントの橋渡し役として初期化されます。カスタム `Runner` を渡さない場合は、アーティファクト、セッション、メモリ、認証情報向けのインメモリサービスを使うデフォルトの `Runner` が自動生成されます。
+* **`A2aAgentExecutor` のセットアップ:** `A2aAgentExecutor` が A2A プロトコルと ADK エージェントの橋渡し役として機能します。カスタム `Runner` を渡さない場合は、アーティファクト、セッション、メモリ、認証情報向けのインメモリサービスを使うデフォルトの `Runner` が自動生成されます。
 * **状態管理:** A2A タスクを追跡する `InMemoryTaskStore` と、プッシュ通知を扱う `InMemoryPushNotificationConfigStore` を生成します。
 * **リクエスト処理:** 受信した A2A HTTP リクエストを `A2aAgentExecutor` と状態ストアへルーティングする `DefaultRequestHandler` を生成します。
 * **Starlette アプリと Agent Card:** Starlette アプリケーションを生成します。アプリケーションの起動時に、提供された Agent Card を読み込むか、`AgentCardBuilder` を使ってエージェント設定から Agent Card を自動生成します。その後、必要な A2A API ルートをすべてマウントします。
 
+#### パラメータ
+* **`root_agent` (必須):** A2A プロトコルを通じて公開するプライマリ ADK エージェント インスタンス。
+* **`port` (任意):** アプリケーションが動作するポート番号。
+* **`push_config_store` (任意):** A2A プッシュ通知を管理するためのカスタム ストア実装。指定しない場合、システムはデフォルトでインメモリ ストア（`InMemoryPushNotificationConfigStore`）を使用します。
+* **`agent_card` (任意):** `AgentCard` オブジェクトまたは JSON ファイルへのパス。省略した場合、ADK はエージェントのコードからエージェント カードを自動生成します。
+
 それでは、サンプルコードを見ていきましょう。
 
-### 1. サンプルコードの取得 { #getting-the-sample-code }
+### サンプルコードの取得 { #getting-the-sample-code }
 
 まず、必要な依存関係がインストールされていることを確認してください。
 
@@ -146,12 +152,12 @@ a2a_root/
 - **`root_agent`**：包括的な指示を持つメインエージェント
 - **`a2a_app`**：`to_a2a()`ユーティリティを使用して作成されたA2Aアプリケーション
 
-### 2. リモートA2Aエージェントサーバーの起動 { #start-the-remote-a2a-agent-server }
+### リモートA2Aエージェントサーバーの起動 { #start-the-remote-a2a-agent-server }
 
-これで、hello_worldエージェント内の`a2a_app`をホストするリモートエージェントサーバーを起動できます。
+これでお、hello_worldエージェント内の`a2a_app`をホストするリモートエージェントサーバーを起動できます。
 
 ```bash
-# 現在の作業ディレクトリがadk-python/であることを確認してください
+# 現在の作業ディレクトリが adk-python/ であることを確認してください
 # uvicornを使用してリモートエージェントを起動します
 uvicorn contributing.samples.a2a_root.remote_a2a.hello_world.agent:a2a_app --host localhost --port 8001
 ```
@@ -168,9 +174,9 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://localhost:8001 (Press CTRL+C to quit)
 ```
 
-### 3. リモートエージェントが実行されていることを確認する { #check-that-your-remote-agent-is-running }
+### リモートエージェントが実行されていることを確認する { #check-that-your-remote-agent-is-running }
 
-`a2a_root/remote_a2a/hello_world/agent.py`の`to_a2a()`関数の一部として以前に自動生成されたエージェントカードにアクセスして、エージェントが起動して実行されていることを確認できます。
+`a2a_root/remote_a2a/hello_world/agent.py` の `to_a2a()` 関数の一部として自動生成されたエージェント カードにアクセスし、エージェントが起動して実行されていることを確認できます。
 
 [http://localhost:8001/.well-known/agent-card.json](http://localhost:8001/.well-known/agent-card.json)
 
@@ -196,7 +202,7 @@ INFO:     Uvicorn running on http://localhost:8001 (Press CTRL+C to quit)
     ","id":"hello_world_agent","name":"model","tags":["llm"]},{"description":"Roll a die and return the rolled result.\n\nArgs:\n  sides: The integer number of sides the die has.\n  tool_context:... [truncated]
 ```
 
-### 4. メイン（利用側）エージェントの実行 { #run-the-main-consuming-agent }
+### メイン（利用側）エージェントの実行 { #run-the-main-consuming-agent }
 
 リモートエージェントが実行されたので、開発UIを起動して、エージェントとして「a2a_root」を選択できます。
 

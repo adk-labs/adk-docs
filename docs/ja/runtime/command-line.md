@@ -104,6 +104,7 @@ adk run --replay path/to/input.json path/to/my_agent
 |--------|-------------|---------|
 | `--session_service_uri` | カスタムセッションストレージ URI | `.adk/session.db` 配下の SQLite |
 | `--artifact_service_uri` | カスタムアーティファクトストレージ URI | ローカル `.adk/artifacts` |
+| `--memory_service_uri` | カスタムメモリサービス URI | インメモリ（In-memory） |
 
 ### ストレージオプションの例
 
@@ -121,3 +122,4 @@ adk run --session_service_uri "sqlite:///my_sessions.db" path/to/my_agent
 | `--replay` | 非対話リプレイ用入力ファイルのパス |
 | `--session_service_uri` | カスタムセッションストレージ URI |
 | `--artifact_service_uri` | カスタムアーティファクトストレージ URI |
+| `--memory_service_uri` | カスタムメモリサービス URI |

@@ -159,11 +159,7 @@ adk optimize [OPTIONS] AGENT_MODULE_FILE_PATH
 기본값은 `INFO`입니다.
 사용 가능한 옵션은 `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`입니다.
 
-## 사용 가능한 샘플러와 에이전트 옵티마이저
-
-ADK에는 다음 샘플러와 에이전트 옵티마이저가 제공됩니다.
-`adk optimize` 명령은 아래에 설명된 `LocalEvalSampler`와 `GEPARootAgentPromptOptimizer`를 사용합니다.
-이 샘플러와 에이전트 옵티마이저는 직접 작성하는 스크립트에서도 사용할 수 있습니다.
+ADK는 adk optimize 명령줄을 사용하여 실행할 수 있는 몇 가지 샘플러와 에이전트 옵티마이저를 제공합니다. 사용 가능한 옵션은 다음과 같습니다.
 
 ### `LocalEvalSampler` {#localevalsampler}
 
@@ -204,6 +200,48 @@ ADK에는 다음 샘플러와 에이전트 옵티마이저가 제공됩니다.
 기본값은 3입니다.
 * `run_dir` (선택): 원하면 중간 및 최종 최적화 결과를 저장할 디렉터리입니다.
 웜 스타트를 지원합니다.
+
+### `SimplePromptOptimizer` {#simplepromptoptimizer}
+
+`SimplePromptOptimizer`는 실증적인 평가 데이터를 기반으로 에이전트의 루트 시스템 지침(instructions)을 체계적으로 개선하도록 설계된 자동화된 반복적 프롬프트 튜닝 구성 요소입니다. 여러 후보 에이전트의 다양한 파레토 프런티어(Pareto frontier)를 유지하는 GEPA 기반 옵티마이저와 달리, `SimplePromptOptimizer`는 지정된 일련의 반복 횟수(iterations)에 걸쳐 단일 기본 프롬프트를 개선하는 데 완전히 집중하는 직접적이고 순차적인 최적화 루프를 실행합니다.
+
+옵티마이저는 다음 4단계의 비동기 피드백 루프를 자동으로 실행합니다.
+
+1. **실행 (Execute)**: 대상 에이전트는 `Sampler` 클래스의 구현체에 의해 관리되는 특정 평가 작업 배치를 처리합니다.
+2. **평가 (Evaluate)**: 샘플러는 평가 데이터 세트에 대해 에이전트의 출력을 채점하고 구조화된 `SamplingResult`를 반환합니다.
+3. **비판 (Critique)**: 기본 최적화 대규모 언어 모델(LLM)(기본값은 Gemini-2.5-flash)이 현재 프롬프트와 함께 과거 평가 점수를 분석하여 특정 동작상의 약점이나 공백을 찾아냅니다.
+4. **재작성 (Rewrite)**: 최적화 모델은 발견된 약점을 해결하도록 맞춤화된 시스템 프롬프트의 업데이트된 변형을 생성합니다. 이 새로운 프롬프트는 다음 반복에 직접 입력됩니다.
+
+**참고:** 최적화 루프는 기존 에이전트 인스턴스를 즉석에서 변경(mutate)하지 않습니다. 완료되면 프로세스 중에 추출된 가장 높은 점수를 받은 에이전트 변형을 포함하는 `OptimizerResult`를 반환합니다.
+
+### 구성
+
+`SimplePromptOptimizerConfig` 인스턴스를 옵티마이저에 전달하여 루프의 동작을 구성합니다.
+
+| 매개변수 | 유형 | 기본값 | 설명 |
+| :---- | :---- | :---- | :---- |
+| `num_iterations` | int | *필수* | 실행할 최적화 라운드의 총 횟수입니다. |
+| `batch_size` | int | *필수* | 각 개별 반복 중에 샘플러가 처리하는 평가 샘플 케이스의 수입니다. |
+
+### 구현 예시
+
+구성이 정의되면 다음 코드로 최적화를 실행합니다.
+
+```python
+from google.adk.optimization import SimplePromptOptimizer, SimplePromptOptimizerConfig
+
+# 에이전트와 샘플러를 먼저 정의합니다...
+
+# 옵티마이저 구성
+config = SimplePromptOptimizerConfig(
+    num_iterations=5,
+    batch_size=10
+)
+
+# 최적화 실행
+optimizer = SimplePromptOptimizer(config=config)
+optimized_result = await optimizer.optimize(agent, sampler)
+```
 
 ## 핵심 데이터 타입
 

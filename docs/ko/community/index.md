@@ -53,6 +53,16 @@ ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 
 최근 녹화본은 아래에서 확인할 수 있고, 전체 [YouTube 재생 목록](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3)도 둘러볼 수 있습니다.
 
 <div class="resource-grid">
+  <a href="https://www.youtube.com/watch?v=vbqKmK0rArI" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/vbqKmK0rArI/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 5월">
+    </div>
+    <div class="card-content">
+      <div class="type">커뮤니티 콜</div>
+      <h3>📞 2026년 5월 녹화본</h3>
+      <p>ADK Python 2.0 GA 출시, Kotlin 및 Android용 ADK 첫 출시, 동적 기능 로드를 위한 Agents CLI 및 Skills 데모, Beever Atlas에 대한 커뮤니티 스포트라이트를 다룹니다.</p>
+    </div>
+  </a>
   <a href="https://www.youtube.com/watch?v=bPngDY7EuOQ" class="resource-card">
     <div class="card-image-wrapper">
       <img src="https://img.youtube.com/vi/bPngDY7EuOQ/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 3월">
@@ -71,16 +81,6 @@ ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 
       <div class="type">커뮤니티 콜</div>
       <h3>📞 2026년 2월 녹화본</h3>
       <p>내장 메트릭을 활용한 ADK 평가, 토큰 기반 컨텍스트 압축, BigQuery observability 플러그인, 그리고 Redis 통합에 대한 커뮤니티 스포트라이트를 다룹니다.</p>
-    </div>
-  </a>
-  <a href="https://www.youtube.com/watch?v=h9Lueiqo89E" class="resource-card">
-    <div class="card-image-wrapper">
-      <img src="https://img.youtube.com/vi/h9Lueiqo89E/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 1월">
-    </div>
-    <div class="card-content">
-      <div class="type">커뮤니티 콜</div>
-      <h3>📞 2026년 1월 녹화본</h3>
-      <p>크로스 언어 지원을 위한 Session Service 스키마, TypeScript 멀티 에이전트 데모, MCP 서버용 API Registry, 서드파티 도구 통합을 다룹니다.</p>
     </div>
   </a>
 

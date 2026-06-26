@@ -56,6 +56,10 @@ LLM は `conversation_plan` と会話履歴を組み合わせて、
 
 ## ユーザーペルソナ
 
+<div class="language-support-tag">
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.26.0</span>
+</div>
+
 User Persona は、シミュレートされたユーザーが会話中に採用する役割です。
 これは、コミュニケーションのスタイル、情報の提供方法、
 エラーへの反応の仕方など、ユーザーがエージェントとどう相互作用するかを定める

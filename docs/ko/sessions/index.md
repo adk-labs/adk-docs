@@ -1,4 +1,4 @@
-# 대화형 컨텍스트 소개: 세션, 상태, 그리고 메모리
+# 대화형 컨텍스트: 세션, 상태, 그리고 메모리
 
 <div class="language-support-tag">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>

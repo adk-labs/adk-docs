@@ -55,6 +55,10 @@ LLM은 `conversation_plan`과 대화 기록을 함께 사용해 사용자 프롬
 
 ## 사용자 페르소나
 
+<div class="language-support-tag">
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.26.0</span>
+</div>
+
 User Persona는 시뮬레이션된 사용자가 대화 중에 취하는 역할입니다.
 이는 사용자가 어떤 커뮤니케이션 스타일을 사용하는지, 정보를 어떻게 제공하는지,
 오류에 어떻게 반응하는지 등을 규정하는 **행동(behaviors)** 집합으로 정의됩니다.

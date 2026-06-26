@@ -101,14 +101,20 @@ a2a_app = to_a2a(root_agent, port=8001, agent_card="/path/to/your/agent-card.jso
 
 `to_a2a()`를 호출하면 ADK가 에이전트를 노출하기 위해 필요한 여러 설정 단계를 자동으로 처리합니다.
 
-* **`A2aAgentExecutor` 설정:** `A2aAgentExecutor`가 A2A 프로토콜과 ADK 에이전트 사이의 브리지 역할을 하도록 초기화됩니다. 사용자 정의 `Runner`를 제공하지 않으면, 아티팩트, 세션, 메모리, 자격 증명을 위한 인메모리 서비스를 사용하는 기본 `Runner`가 자동으로 생성됩니다.
+* **`A2aAgentExecutor` 설정:** `A2aAgentExecutor`가 A2A 프로토콜과 ADK 에이전트 사이의 브리지 역할을 합니다. 사용자 정의 `Runner`를 제공하지 않으면, 아티팩트, 세션, 메모리, 자격 증명을 위한 인메모리 서비스를 사용하는 기본 `Runner`가 자동으로 생성됩니다.
 * **상태 관리:** A2A 작업을 추적하기 위한 `InMemoryTaskStore`와 푸시 알림 처리를 위한 `InMemoryPushNotificationConfigStore`를 생성합니다.
 * **요청 처리:** 들어오는 A2A HTTP 요청을 `A2aAgentExecutor`와 상태 저장소로 라우팅하기 위해 `DefaultRequestHandler`를 생성합니다.
 * **Starlette 앱 및 Agent Card:** Starlette 애플리케이션을 생성합니다. 애플리케이션 시작 단계에서 제공한 Agent Card를 로드하거나, `AgentCardBuilder`를 사용해 에이전트 구성으로부터 Agent Card를 자동 생성합니다. 이후 필요한 A2A API 라우트를 모두 마운트합니다.
 
+#### 매개변수
+* **`root_agent` (필수):** A2A 프로토콜을 통해 노출하고자 하는 주 ADK 에이전트 인스턴스입니다.
+* **`port` (선택 사항):** 애플리케이션이 실행될 포트 번호입니다.
+* **`push_config_store` (선택 사항):** A2A 푸시 알림을 관리하기 위한 사용자 정의 저장소 구현입니다. 제공되지 않으면 시스템은 인메모리 저장소(`InMemoryPushNotificationConfigStore`)를 기본값으로 사용합니다.
+* **`agent_card` (선택 사항):** `AgentCard` 객체 또는 JSON 파일의 경로입니다. 생략할 경우 ADK는 에이전트 코드에서 에이전트 카드를 자동으로 생성합니다.
+
 이제 샘플 코드를 자세히 살펴보겠습니다.
 
-### 1. 샘플 코드 받기 { #getting-the-sample-code }
+### 샘플 코드 받기 { #getting-the-sample-code }
 
 먼저, 필요한 종속성이 설치되어 있는지 확인하세요:
 
@@ -146,7 +152,7 @@ a2a_root/
 -   **`root_agent`**: 포괄적인 지침이 포함된 메인 에이전트
 -   **`a2a_app`**: `to_a2a()` 유틸리티를 사용하여 생성된 A2A 애플리케이션
 
-### 2. 원격 A2A 에이전트 서버 시작하기 { #start-the-remote-a2a-agent-server }
+### 원격 A2A 에이전트 서버 시작하기 { #start-the-remote-a2a-agent-server }
 
 이제 원격 에이전트 서버를 시작할 수 있습니다. 이 서버는 hello_world 에이전트 내의 `a2a_app`을 호스팅합니다:
 
@@ -168,7 +174,7 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://localhost:8001 (Press CTRL+C to quit)
 ```
 
-### 3. 원격 에이전트가 실행 중인지 확인하기 { #check-that-your-remote-agent-is-running }
+### 원격 에이전트가 실행 중인지 확인하기 { #check-that-your-remote-agent-is-running }
 
 `a2a_root/remote_a2a/hello_world/agent.py`의 `to_a2a()` 함수 일부로 이전에 자동 생성된 에이전트 카드를 방문하여 에이전트가 실행 중인지 확인할 수 있습니다:
 
@@ -180,7 +186,7 @@ INFO:     Uvicorn running on http://localhost:8001 (Press CTRL+C to quit)
 {"capabilities":{},"defaultInputModes":["text/plain"],"defaultOutputModes":["text/plain"],"description":"8면 주사위를 굴리고 소수를 확인할 수 있는 헬로 월드 에이전트.","name":"hello_world_agent","protocolVersion":"0.2.6","skills":[...],"supportsAuthenticatedExtendedCard":false,"url":"http://localhost:8001","version":"0.0.1"}
 ```
 
-### 4. 메인 (소비) 에이전트 실행하기 { #run-the-main-consuming-agent }
+### 메인 (소비) 에이전트 실행하기 { #run-the-main-consuming-agent }
 
 이제 원격 에이전트가 실행 중이므로, 개발 UI를 시작하고 "a2a_root"를 에이전트로 선택할 수 있습니다.
 

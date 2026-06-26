@@ -4,9 +4,67 @@
   <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.16.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span>
 </div>
 
-ADK 에이전트는 실행되면서 사용자 지침, 검색된 데이터, 도구 응답 및 생성된 콘텐츠를 포함한 *컨텍스트* 정보를 수집합니다. 이 컨텍스트 데이터의 크기가 커질수록 에이전트 처리 시간도 일반적으로 증가합니다. 점점 더 많은 데이터가 에이전트가 사용하는 생성형 AI 모델로 전송되어 처리 시간이 길어지고 응답이 느려집니다. ADK 컨텍스트 압축 기능은 에이전트 워크플로 이벤트 기록의 이전 부분을 요약하여 에이전트가 실행되는 동안 컨텍스트 크기를 줄이도록 설계되었습니다.
+ADK 에이전트는 실행되면서 사용자 지침, 검색된 데이터, 도구 응답 및 생성된 콘텐츠를 포함한 *컨텍스트* 정보를 수집합니다. 이 컨텍스트 데이터의 크기가 커질수록 에이전트 처리 시간도 일반적으로 증가합니다. 점점 더 많은 데이터가 에이전트가 사용하는 생성형 AI 모델로 전송되어 처리 시간이 길어지고 응답이 느려집니다. ADK 컨텍스트 압축 기능은 지침, 입력 및 모델 응답을 포함하여 이전 세션 기록을 요약함으로써 에이전트가 실행되는 동안 컨텍스트 크기를 줄이도록 설계되었습니다. 이 프로세스는 컴팩트한 컨텍스트 창을 유지함으로써 필수적인 최근 상호 작용에 대한 에이전트의 접근 권한을 보장하는 동시에 **대기 시간을 최적화하고 비용을 절감**합니다.
 
-컨텍스트 압축 기능은 [세션](/ko/sessions/session/) 내에서 에이전트 워크플로 이벤트 데이터를 수집하고 요약하기 위해 *슬라이딩 윈도우* 접근 방식을 사용합니다. 이 기능을 에이전트에 구성하면 현재 세션에서 특정 수의 워크플로 이벤트(또는 호출) 임계값에 도달하면 이전 이벤트의 데이터를 요약합니다.
+압축은 `CompactionRequestProcessor`를 통해 SingleFlow에 직접 통합되어 `EventsCompactionConfig`에 설정한 규칙에 따라 자동 이벤트 압축을 가능하게 합니다.
+
+## 전략 선택
+
+`EventsCompactionConfig` 내에서 다음 전략을 사용하여 세션 데이터를 관리할 수 있습니다.
+
+- **토큰 기반 (기본)**: 소비된 실제 토큰 볼륨을 기반으로 정리를 트리거합니다. 이는 절대적인 안전망 역할을 하며 사용자가 대량의 코드 블록을 붙여넣거나 대용량 파일을 업로드하는 것과 같이 예측할 수 없는 작업량에 적합합니다.
+- **슬라이딩 윈도우 (턴 기반)**: 고정된 횟수의 대화 턴 후에 정리를 트리거합니다. 이는 일반적이고 예측 가능한 텍스트 채팅에 유용합니다.
+
+두 가지 압축 전략을 모두 구성하는 경우 시스템은 토큰 기반 압축을 우선시합니다. 세션 길이가 정의된 토큰 임계값을 초과하면 시스템은 토큰 기반 압축을 트리거하고 해당 턴에 대한 슬라이딩 윈도우 압축은 건너뜁니다.
+
+## 토큰 기반 압축
+
+토큰 기반 압축은 이벤트나 턴의 수가 아니라 토큰이나 데이터의 볼륨을 기반으로 컨텍스트 관리를 트리거합니다.
+
+### 구성 설정
+
+App 객체에 `EventsCompactionConfig` 설정을 추가하여 에이전트 워크플로에 토큰 기반 압축을 추가합니다. 다음을 지정해야 합니다.
+
+- **`token_threshold`**: 도달 시 테일 유지(tail-retention) 압축을 자동으로 트리거하는 토큰의 안전 한도입니다.
+- **`event_retention_size`**: 압축이 트리거될 때 요약되지 않은 "원시" 형식으로 유지되는 최근 이벤트/상호 작용의 수입니다. 이는 즉각적인 대화 컨텍스트 및 대명사 해상도를 유지합니다.
+
+프로젝트에서 이를 구현하려면 다음 구성을 사용하십시오.
+
+```python
+# 1. google.adk 네임스페이스를 사용하도록 가져오기 경로 수정
+from google.adk.apps.app import App, EventsCompactionConfig
+from google.adk.agents import Agent
+
+# 2. 루트 에이전트 초기화 (App 설정에 필수)
+root_agent = Agent(
+    name="my_root_agent",
+    description="Main coordinating agent for the workflow."
+)
+
+# 3. 토큰 기반 구성: 우선순위/사전 호출 레이어 활성화
+compaction_config = EventsCompactionConfig(
+    token_threshold=4000,     # 실제 토큰 수가 이를 초과할 때 압축 트리거
+    event_retention_size=5    # 토큰 한도 도달 시 원본 그대로 유지할 최근 이벤트 수
+)
+
+# 4. 필수 name 및 root_agent 필드와 구성 객체를 사용하여 등록
+app = App(
+    name="my_compacting_agent_app",
+    root_agent=root_agent,
+    events_compaction_config=compaction_config
+)
+```
+
+## 슬라이딩 윈도우 압축
+
+컨텍스트 압축 기능은 [세션](/ko/sessions/session/) 내에서 에이전트 워크플로 이벤트 데이터를 수집하고 요약하기 위해 *슬라이딩 윈도우* 접근 방식을 사용합니다. 에이전트에 이 기능을 구성하면 현재 세션 내에서 특정 워크플로 이벤트 또는 호출 수 임계값에 도달할 때 이전 이벤트의 데이터를 요약합니다.
+
+```python
+# (선택 사항) 보조 설정으로 이벤트 기반 슬라이딩 윈도우 사용
+compaction_config = EventsCompactionConfig(
+    compaction_interval=10,   # 표준 압축 사이의 턴 수
+    overlap_size=2,           # 겹치는 컨텍스트로 유지할 이벤트 수
+```
 
 ## 컨텍스트 압축 구성
 

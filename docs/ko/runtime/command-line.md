@@ -104,6 +104,7 @@ adk run --replay path/to/input.json path/to/my_agent
 |--------|-------------|---------|
 | `--session_service_uri` | 사용자 지정 세션 저장소 URI | `.adk/session.db` 아래 SQLite |
 | `--artifact_service_uri` | 사용자 지정 아티팩트 저장소 URI | 로컬 `.adk/artifacts` |
+| `--memory_service_uri` | 사용자 지정 메모리 서비스 URI | 인메모리(In-memory) |
 
 ### 저장소 옵션 예시
 
@@ -121,3 +122,4 @@ adk run --session_service_uri "sqlite:///my_sessions.db" path/to/my_agent
 | `--replay` | 비대화형 재생용 입력 파일 경로 |
 | `--session_service_uri` | 사용자 지정 세션 저장소 URI |
 | `--artifact_service_uri` | 사용자 지정 아티팩트 저장소 URI |
+| `--memory_service_uri` | 사용자 지정 메모리 서비스 URI |
