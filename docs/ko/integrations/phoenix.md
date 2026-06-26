@@ -2,7 +2,7 @@
 catalog_title: Phoenix
 catalog_description: LLM 애플리케이션을 위한 오픈소스·셀프호스팅 관측성, 추적, 평가를 제공합니다
 catalog_icon: /integrations/assets/phoenix.png
-catalog_tags: ["observability"]
+catalog_tags: ["observability", "evaluation"]
 ---
 # Phoenix를 사용한 에이전트 관측성(Observability)
 

@@ -1409,44 +1409,99 @@ config = BigQueryLoggerConfig(
 
 ### トレーシングと可観測性
 
-プラグインは分散トレーシングのために **OpenTelemetry** をサポートします。
-OpenTelemetry は ADK の core dependency に含まれており、常に利用可能です。
+プラグインは `trace_id`、`span_id`、`parent_span_id` の各列を、発行されるすべての行に入力するため、親子実行ツリー（Agent → LLM 呼び出し / ツール呼び出し）は BigQuery からきれいに再構築されます。
 
-- **自動 Span 管理:** プラグインはエージェント実行、LLM 呼び出し、ツール実行に
-  span を自動生成します。
-- **OpenTelemetry 統合:** 上の例のように `TracerProvider` が構成されている場合、
-  プラグインは有効な OTel span を使い、`trace_id`, `span_id`, `parent_span_id` を
-  標準 OTel 識別子で埋めます。これにより、エージェントログを分散システム内の他の
-  サービスと関連付けられます。
-- **Fallback メカニズム:** `TracerProvider` が構成されていない場合（つまり、
-  デフォルトの no-op provider のみが有効な場合）、プラグインは span 用の内部 UUID
-  を自動生成し、`invocation_id` を trace ID として使用します。これにより、
-  構成済み `TracerProvider` がなくても、親子階層（Agent -> Span -> Tool/LLM）は
-  BigQuery ログ内で *常に* 保持されます。
+- **内部での span 追跡、OTel span のエクスポートなし:** プラグインは、16 桁の hex 値の `span_id` からなる独自の内部スタックで親子階層を追跡します。ルート呼び出しの span は、アクティブな周囲の OTel span がある場合はその ID を再利用します（これにより runner の呼び出し span と一致します）。子 BQAA span は内部で生成されます。構成された OpenTelemetry `TracerProvider` で `tracer.start_span(...)` を呼び出さないため、そのインスツルメンテーションが構成されたエクスプローラーに到達することはありません。これにより、Agent Engine のテレメトリが有効になっている場合（`GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true`）や、他の Cloud Trace エクスポートツールをホストプロセスに接続した場合に、Cloud Trace で重複する span が発生するのを防ぎます。
+- **周囲の OTel Span がある場合の `trace_id` 継承:** 周囲のランタイムで既に OTel span（Agent Engine の呼び出し span、ADK `Runner` の呼び出し span、またはエージェント実行前に開始されたその他の span）が生成されている場合、プラグインはその `trace_id` を読み取ってすべての BigQuery 行に記録します。これにより、BigQuery の行は共有された `trace_id` を介して既存の Cloud Trace トレースにきれいに接続されます。
+- **周囲の Span がない場合のフォールバック:** アクティブな周囲の OTel span がない場合（例：ホスト側のトレーサーが構成されていない非 Agent Engine デプロイ）、プラグインは呼び出しごとに 32 桁の hex 値である `trace_id` を新しく生成し、外部にトレーサー設定がなくても BigQuery 内で親子階層構造が常に保存されるようにします。
+- **`TracerProvider` が不要:** ホストプロセスに OpenTelemetry `TracerProvider` を構成することは任意です。これは、プラグインの `trace_id` が既に存在するユーザーの周囲の span から取得されることを望む場合にのみ有用です（例：非 ADK サービスのテレメトリデータと関連付ける場合）。プラグインは、独自の記録管理のためにプロバイダーを必要としなくなりました。
+
+!!! info "プラグインが OTel エクスポートツールにデータを供給することに依存していた場合"
+
+    一部の古い構成では、OpenTelemetry span をエクスポートするために BQAA プラグインを補助チャネルとして使用していましたが、このパスは意図的に削除されました。代わりに、ホストアプリケーションで OTel インスツルメンテーションを構成してください。（Agent Engine はこれを自動的に接続します。ローカルデプロイの場合は、ADK 自体のフレームワークインスツルメンテーションまたは明示的な `TracerProvider` を使用してください。）プラグインの BigQuery 行は、引き続き `trace_id` を介してトレースに接続されます。
 
 ### 公開メソッド
 
-プラグインはライフサイクル管理のためにいくつかの public メソッドを公開しています。
+=== "Python"
 
-- **`await plugin.flush()`**: 保留中のすべてのイベントを BigQuery に flush します。
-  データ損失を避けるため、終了前に呼び出してください。
-- **`await plugin.shutdown(timeout=None)`**: プラグインを正常終了し、保留中イベントを
-  flush してリソースを解放します。任意の `timeout` パラメータは config の
-  `shutdown_timeout` を上書きします。
-- **`await plugin.create_analytics_views()`**: イベントタイプ別 analytics view を
-  すべて手動で再作成します。スキーマアップグレード後やビュー更新が必要なときに
-  便利です。
-- **非同期 context manager:** プラグインは自動起動と終了のために `async with` を
-  サポートします。
+    プラグインはライフサイクル管理のためにいくつかの公開メソッドを提供しています。
 
-    ```python
-    async with BigQueryAgentAnalyticsPlugin(
-        project_id=PROJECT_ID, dataset_id=DATASET_ID
-    ) as plugin:
-        # plugin is initialized and ready to use
-        ...
-    # plugin.shutdown() is called automatically on exit
+    - **`await plugin.flush()`**: 保留中のすべてのイベントを BigQuery に flush します。データ損失を避けるため、終了前に呼び出してください。
+    - **`await plugin.shutdown(timeout=None)`**: プラグインを正常終了し、保留中のイベントを flush してリソースを解放します。任意の `timeout` パラメータは config の `shutdown_timeout` を上書きします。
+    - **`await plugin.create_analytics_views()`**: イベントタイプ別 analytics view をすべて手動で再作成します。スキーマアップグレード後やビュー更新が必要なときに便利です。
+    - **`plugin.get_drop_stats()`**: `drop_reason` ごとにドロップされたイベント数のスナップショットを返します。以下の[ドロップされたイベントの可観測性](#dropped-event-observability)を参照してください。
+    - **非同期コンテキストマネージャー**: プラグインは自動起動と終了のために `async with` をサポートします。
+
+        ```python
+        async with BigQueryAgentAnalyticsPlugin(
+            project_id=PROJECT_ID, dataset_id=DATASET_ID
+        ) as plugin:
+            # plugin is initialized and ready to use
+            ...
+        # plugin.shutdown() is called automatically on exit
+        ```
+
+=== "Java"
+
+    Java では、プラグインのライフサイクルは `Plugin` から継承された `close()` メソッド（RxJava の `Completable` を返す）を介して管理されます。
+
+    - **`plugin.close()`**: プラグインを正常に終了し、保留中のイベントを flush し、リソース（BigQuery の書き込みクライアントおよびエグゼキュータを含む）を解放します。
+    - **自動クローズ**: `InMemoryRunner` を使用している場合、`runner.close()` を呼び出すと、登録されているすべてのプラグイン（BigQuery Agent Analytics プラグインを含む）が自動的にクローズされます。
+
+    ```java
+    // 手動シャットダウン
+    plugin.close().blockingAwait();
     ```
+
+### ドロップされたイベントの可観測性 {#dropped-event-observability}
+
+BigQuery へのロギングはベストエフォート（best-effort）方式です。メモリ内キューがオーバーフローするか、書き込みが最終的に失敗した場合、イベントがドロップされる可能性があります。プラグインは `drop_reason` ごとにドロップされた行を追跡し、ポーリング API を公開しているため、ホストはこれを検出してアラートを発信し、カウントを独自のモニタリングシステムに送信できます。
+
+**ドロップ理由:**
+
+| 理由 (Reason) | 原因 (Cause) |
+|---|---|
+| `queue_full` | メモリ内バッチキューがオーバーフローしました（ホストがドレイナー（drainer）が送信できる速度よりも速くイベントを生成しています）。`BigQueryLoggerConfig` の `queue_max_size` を増やすか、より大きなチャンクでドレインするために `batch_size` を上げるか、コンシューマー側をスケール（より多くの同時呼び出しをより高速に完了）させてください。 |
+| `arrow_prep_failed` | 行を Arrow 表現に変換できませんでした（通常、スキーマ/タイプの不一致）。ログを調査して問題のあるフィールドを確認してください。 |
+| `retry_exhausted` | Storage Write API の呼び出しが、再試行バジェットを使い果たすまで再試行可能なエラー（例：一時的な gRPC エラー）を返し続けました。 |
+| `non_retryable` | Storage Write API が再試行不可能なエラー（権限、割り当て、スキーマ拒否）を返しました。通常、管理者の介入が必要です。 |
+| `unexpected_error` | バッチの準備または書き込み中に捕捉されたその他の例外です。 |
+
+**カウントの読み取り:**
+
+```python
+# プラグイン起動後の {drop_reason: count} のスナップショット。
+stats = plugin.get_drop_stats()
+# 例: {"queue_full": 12, "retry_exhausted": 0, ...}
+
+total_dropped = sum(stats.values())
+```
+
+**モニタリングシステムへのエクスポート** — 定期的にポーリングして差分（delta）を送信します:
+
+```python
+import asyncio
+
+async def export_loop(plugin):
+    last = {k: 0 for k in (
+        "queue_full", "arrow_prep_failed",
+        "retry_exhausted", "non_retryable", "unexpected_error",
+    )}
+    while True:
+        current = plugin.get_drop_stats()
+        for reason, count in current.items():
+            delta = count - last.get(reason, 0)
+            if delta:
+                # 例: metric_client.write_point(
+                #         metric="bqaa_dropped_events",
+                #         labels={"reason": reason}, value=delta)
+                ...
+        last = current
+        await asyncio.sleep(60)
+```
+
+継続的に `queue_full` または `retry_exhausted` カウントが 0 以外になっている場合は、BQAA がデータ損失のリスクにさらされていることを示す最も明確なシグナルです。ダッシュボードまたはアラートに表示することをお勧めします。
+
 
 ### Multiprocessing と fork 安全性
 

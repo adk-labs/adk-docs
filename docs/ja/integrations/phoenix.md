@@ -2,7 +2,7 @@
 catalog_title: Phoenix
 catalog_description: LLM アプリケーション向けのオープンソース・セルフホスト可観測性、トレース、評価を提供します
 catalog_icon: /integrations/assets/phoenix.png
-catalog_tags: ["observability"]
+catalog_tags: ["observability", "evaluation"]
 ---
 # Phoenixによるエージェントのオブザーバビリティ
 

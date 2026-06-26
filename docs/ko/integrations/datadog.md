@@ -2,7 +2,7 @@
 catalog_title: Datadog
 catalog_description: LLM 지원서 개발, 평가 및 모니터링
 catalog_icon: /integrations/assets/datadog.png
-catalog_tags: ["observability"]
+catalog_tags: ["observability", "evaluation"]
 ---
 
 

@@ -2,7 +2,7 @@
 catalog_title: LangWatch
 catalog_description: ADK 에이전트를 위한 관찰성, 추적, 평가, 프롬프트 최적화
 catalog_icon: /integrations/assets/langwatch.png
-catalog_tags: ["observability"]
+catalog_tags: ["observability", "evaluation"]
 ---
 
 # ADK용 LangWatch 관찰성

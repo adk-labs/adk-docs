@@ -90,6 +90,7 @@ its contents, and finally execute it using a command.
     작업 디렉터리를 지정하면 생성된 파일을 에이전트 실행 후에도 계속 사용할 수 있습니다.
     자세한 내용은 [파일 유지](#file-persistence)를 참고하세요.
 -   **env_vars**: (선택 사항) 실행 컨텍스트에 설정할 환경 변수 딕셔너리입니다.
+-   **max_output_chars**: (선택 사항) 파일 읽기 또는 명령 실행에서 반환되는 최대 문자 수를 제한하기 위해 `EnvironmentToolset`과 함께 사용하는 매개변수입니다. 이를 통해 큰 파일 내용이나 명령 출력이 에이전트의 컨텍스트 창 한도를 초과하지 않도록 방지할 수 있습니다.
 
 다음 코드 샘플은 ***LocalEnvironment*** 객체에 이러한 옵션을 설정하는 방법을 보여 줍니다.
 

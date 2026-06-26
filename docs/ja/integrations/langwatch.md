@@ -2,7 +2,7 @@
 catalog_title: LangWatch
 catalog_description: ADK エージェント向けの可観測性、トレース、評価、プロンプト最適化
 catalog_icon: /integrations/assets/langwatch.png
-catalog_tags: ["observability"]
+catalog_tags: ["observability", "evaluation"]
 ---
 
 # ADK 向け LangWatch 可観測性

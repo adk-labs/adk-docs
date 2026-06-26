@@ -2,7 +2,7 @@
 catalog_title: Future AGI
 catalog_description: traceAI OpenTelemetry 통합으로 ADK 에이전트를 추적, 평가, 개선
 catalog_icon: /integrations/assets/futureagi.png
-catalog_tags: ["observability"]
+catalog_tags: ["observability", "evaluation"]
 ---
 
 # ADK용 Future AGI 관측성

@@ -2,7 +2,7 @@
 catalog_title: Google Cloud Skill Registry
 catalog_description: 원격 Skills를 동적으로 검색, 발견, 가져오기
 catalog_icon: /integrations/assets/agent-platform.svg
-catalog_tags: ["google", "skills", "connectors"]
+catalog_tags: ["google", "connectors"]
 ---
 
 # Google Cloud Skill Registry
