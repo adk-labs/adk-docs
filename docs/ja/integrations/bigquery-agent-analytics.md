@@ -1530,6 +1530,468 @@ Gunicorn デプロイでは特に次を推奨します。
     ことはありません。配信保証が必要な場合は、fork 前に `await plugin.flush()` を
     呼び出してください。
 
+## コンテキストグラフ {#context-graph}
+
+行レベルの `agent_events` に加えて、[BigQuery Agent Analytics SDK](https://github.com/GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK) を使用して**コンテキストグラフ**を実体化（materialize）できます。これは、エージェントの意思決定（処理したリクエスト、検討したオプション、選択した結果）をクエリ可能な BigQuery の [プロパティグラフ](https://cloud.google.com/bigquery/docs/graph-overview) です。単にイベントがログに記録されたという事実だけでなく、Graph Query Language（GQL）を使用して意思決定が何故行われたかの *理由* を追跡できます。
+
+![Context graph flow: an ADK agent's events flow through the BigQuery Agent Analytics plugin into the agent_events table; the SDK's bqaa context-graph command materializes a structured decision graph that auditors, operators, and executives consume through GQL in BigQuery Studio and Conversational Analytics — with no external graph database.](/integrations/assets/bigquery-agent-analytics-context-graph-flow.png)
+
+グラフは、テーブルの DDL と `CREATE PROPERTY GRAPH` スキーマの 2 つの宣言的なアーティファクトで定義されます。SDK の `bqaa context-graph --property-graph` コマンドは、これらと実際のテーブルスキーマから抽出対象（取得するエンティティと関係性、およびその列の型）を導き出します。一般的なケースでは別個のオントロジーやバインディングファイルは不要で、AI プロンプトのガイドとして説明が必要な場合や、エンティティの継承、派生プロパティ、または列名の変更が必要な場合にのみ明示的な `ontology.yaml` / `binding.yaml` を使用します。
+
+ローカルで 1 回実行するか、Cloud Scheduler でトリガーされる Cloud Run ジョブとしてスケジュール実行します。これには、読み取り専用イベント/書き込み可能グラフのデータセット分割、最小権限のサービスアカウント、構造化された JSON ログ、および Cloud Monitoring アラートが含まれます。運用リファレンス（前提条件、IAM マトリックス、推奨スケジュール、JSON ログの形状、監視、およびクリーンアップ）は SDK リポジトリにあります。
+
+- [定期的実体化（Periodic materialization）コードラボ](https://github.com/GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK/blob/main/docs/codelabs/periodic_materialization.md) — 意思決定グラフをエンドツーエンドで構築してクエリします。
+- [スケジュールされたデプロイのランブック](https://github.com/GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK/blob/main/docs/guides/scheduled-context-graph-deploy.md) — グラフをメンテナンス不要のスケジュールデプロイへ適用します。
+- [デプロイリファレンス（Cloud Run + Cloud Scheduler）](https://github.com/GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK/blob/main/examples/context_graph/periodic_materialization/README.md) — 完全な IAM マトリックス、スケジュール、監視、および Terraform モジュールです。
+
+## プラグインを使用して Agent Runtime にデプロイする {#deploy-agent-runtime}
+
+BigQuery Agent Analytics プラグインを含むエージェントを [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview) にデプロイできます。このセクションでは、ADK CLI を使用してデプロイする手順と、Agent Platform SDK をプログラムから使用してデプロイする代替手順を説明します。
+
+!!! important "バージョン要件"
+
+    このプラグインを使用して Agent Runtime にデプロイするには、ADK Python バージョン **1.24.0 以上** を使用してください。以前のバージョンでは、サーバーレスランタイムが保留中のイベントをフラッシュする前にプラグインの非同期ログライターを強制終了してしまう問題がありました。1.24.0 以降、プラグインは各呼び出しの最後に同期フラッシュを実行して、すべてのイベントが確実に書き込まれるようにします。
+
+### 前提条件
+
+デプロイする前に、以下を含む一般的な [Agent Runtime のセットアップ](/deploy/agent-runtime/deploy/#setup-cloud-project) を完了していることを確認してください。
+
+1. **Agent Platform API** と **Cloud Resource Manager API** が有効化された Google Cloud プロジェクト。
+2. 対象プロジェクト의 **BigQuery データセット**（または正しい権限を持つクロスプロジェクトデータセット）。
+3. デプロイアーティファクト用の **Cloud Storage ステージングバケット**。
+4. デプロイするサービスアカウントが [IAM 権限](#iam-permissions) にリストされている IAM ロールを持っていること。
+5. 開発環境が `gcloud auth login` および `gcloud auth application-default login` で [認証](/deploy/agent-runtime/deploy/#prerequisites-coding-env) されていること。
+
+### ステップ 1: エージェントとプラグインを定義する
+
+プラグインを含む `App` オブジェクトを持つエージェントプロジェクトフォルダを作成します。プラグインを含む Agent Runtime デプロイには `App` オブジェクトが必要です。
+
+```
+my_bq_agent/
+├── __init__.py
+├── agent.py
+└── requirements.txt
+```
+
+```python title="my_bq_agent/__init__.py"
+from . import agent
+```
+
+```python title="my_bq_agent/agent.py"
+import os
+import google.auth
+from google.adk.agents import Agent
+from google.adk.apps import App
+from google.adk.models.google_llm import Gemini
+from google.adk.plugins.bigquery_agent_analytics_plugin import (
+    BigQueryAgentAnalyticsPlugin,
+    BigQueryLoggerConfig,
+)
+from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+
+# --- 設定 ---
+PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id")
+DATASET_ID = os.environ.get("BQ_DATASET", "agent_analytics")
+# BQ_LOCATION は BigQuery データセットのロケーションです（マルチリージョン "US"/"EU" 또는
+# "us-central1" などのシングルリージョン）。これは GOOGLE_CLOUD_LOCATION で使用される
+# Agent Platform のリージョンとは別個です。
+BQ_LOCATION = os.environ.get("BQ_LOCATION", "US")
+
+os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
+
+# --- プラグイン ---
+bq_analytics_plugin = BigQueryAgentAnalyticsPlugin(
+    project_id=PROJECT_ID,
+    dataset_id=DATASET_ID,
+    location=BQ_LOCATION,
+    config=BigQueryLoggerConfig(
+        batch_size=1,
+        batch_flush_interval=0.5,
+        log_session_metadata=True,
+    ),
+)
+
+# --- ツール ---
+credentials, _ = google.auth.default(
+    scopes=["https://www.googleapis.com/auth/cloud-platform"]
+)
+bigquery_toolset = BigQueryToolset(
+    credentials_config=BigQueryCredentialsConfig(credentials=credentials)
+)
+
+# --- エージェント ---
+root_agent = Agent(
+    model=Gemini(model="gemini-flash-latest"),
+    name="my_bq_agent",
+    instruction="You are a helpful assistant with access to BigQuery tools.",
+    tools=[bigquery_toolset],
+)
+
+# --- アプリ (プラグインを伴う Agent Runtime のデプロイで必要) ---
+app = App(
+    name="my_bq_agent",
+    root_agent=root_agent,
+    plugins=[bq_analytics_plugin],
+)
+```
+
+```text title="my_bq_agent/requirements.txt"
+google-adk[bigquery]
+google-cloud-bigquery-storage
+pyarrow
+opentelemetry-api
+opentelemetry-sdk
+```
+
+### ステップ 2: ADK CLI を使用してデプロイする
+
+エージェントをデプロイするために `adk deploy agent_engine` コマンドを使用します。`--adk_app` フラグは使用する `App` オブジェクトを CLI に伝えます。
+
+```shell
+PROJECT_ID=your-gcp-project-id
+LOCATION=us-central1
+
+adk deploy agent_engine \
+    --project=$PROJECT_ID \
+    --region=$LOCATION \
+    --staging_bucket=gs://your-staging-bucket \
+    --display_name="My BQ Analytics Agent" \
+    --adk_app=agent.app \
+    my_bq_agent
+```
+
+!!! tip "`--adk_app` フラグ"
+
+    `--adk_app` フラグは `App` オブジェクトのモジュールパスと変数名を `module.variable` の形式で指定します。この例では、`agent.app` は `agent.py` 内の `app` 変数を参照します。これにより、デプロイ時にプラグイン設定が正しく反映されます。
+
+正常にデプロイされると、以下のような出力が表示されます。
+
+```shell
+AgentEngine created. Resource name: projects/123456789/locations/us-central1/reasoningEngines/751619551677906944
+```
+
+次のステップのために **Resource name** をメモしておいてください。
+
+### ステップ 3: デプロイされたエージェントをテストする
+
+デプロイ後、Agent Platform SDK を使用してエージェントにクエリを実行できます。
+
+```python title="test_deployed_agent.py"
+import uuid
+import vertexai
+
+PROJECT_ID = "your-gcp-project-id"
+LOCATION = "us-central1"
+AGENT_ID = "751619551677906944"  # デプロイ出力から取得した ID
+
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+client = vertexai.Client(project=PROJECT_ID, location=LOCATION)
+
+agent = client.agent_engines.get(
+    name=f"projects/{PROJECT_ID}/locations/{LOCATION}/reasoningEngines/{AGENT_ID}"
+)
+
+user_id = f"test_user_{uuid.uuid4().hex[:8]}"
+for chunk in agent.stream_query(
+    message="List datasets in my project", user_id=user_id
+):
+    print(chunk, end="", flush=True)
+```
+
+### ステップ 4: BigQuery でイベントを確認する
+
+デプロイされたエージェントにいくつかクエリを送信した後、BigQuery テーブルをクエリしてイベントがログに記録されていることを確認します。
+
+```sql
+SELECT timestamp, event_type, agent, content
+FROM `your-gcp-project-id.agent_analytics.agent_events`
+ORDER BY timestamp DESC
+LIMIT 20;
+```
+
+`INVOCATION_STARTING`, `LLM_REQUEST`, `LLM_RESPONSE`, `TOOL_STARTING`, `TOOL_COMPLETED`, `INVOCATION_COMPLETED` などのイベントが表示されるはずです。
+
+### 代替案: Agent Platform SDK を使用してデプロイする
+
+プログラムから直接デプロイすることもできます。これは CI/CD パイプラインやカスタムデプロイワークフローに便利です。
+
+```python title="deploy.py"
+import vertexai
+from my_bq_agent.agent import app
+
+PROJECT_ID = "your-gcp-project-id"
+LOCATION = "us-central1"
+STAGING_BUCKET = "gs://your-staging-bucket"
+
+vertexai.init(
+    project=PROJECT_ID, location=LOCATION, staging_bucket=STAGING_BUCKET
+)
+client = vertexai.Client(project=PROJECT_ID, location=LOCATION)
+
+remote_app = client.agent_engines.create(
+    agent=app,
+    config={
+        "display_name": "My BQ Analytics Agent",
+        "staging_bucket": STAGING_BUCKET,
+        "requirements": [
+            "google-adk[bigquery]",
+            "google-cloud-aiplatform[agent_engines]",
+            "google-cloud-bigquery-storage",
+            "pyarrow",
+            "opentelemetry-api",
+            "opentelemetry-sdk",
+        ],
+    },
+)
+print(f"Deployed agent: {remote_app.api_resource.name}")
+```
+
+### トラブルシューティング
+
+デプロイ後に BigQuery テーブルにイベントが表示されない場合:
+
+1. **ADK バージョンの確認**: 要件に `google-adk>=1.24.0` が含まれていることを確認してください。以前のバージョンでは、サーバーレスランタイムがプロセスを一時停止する前に保留中のイベントがフラッシュされません。
+2. **デバッグログの有効化**: `agent.py` の上部に以下を追加して、サイレントエラーを表示させます。
+
+    ```python
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    logging.getLogger("google_adk").setLevel(logging.DEBUG)
+    ```
+
+3. **IAM 権限の確認**: Agent Runtime のサービスアカウントには、ターゲットテーブルに対する `roles/bigquery.dataEditor` と、プロジェクトに対する `roles/bigquery.jobUser` ロールが必要です。**クロスプロジェクト** ログ記録の場合、ソースプロジェクトで BigQuery API が有効になっており、サービスアカウントが宛先テーブルに対する `bigquery.tables.updateData` を持っていることも確認してください。
+4. **プラグイン初期化の検証**: Cloud Logging で `resource.type="reasoning_engine"` でフィルタリングし、プラグインの起動メッセージやエラーログを探します。
+5. **デバッグのための即時フラッシュの使用**: バッファリングの問題を排除するために、`BigQueryLoggerConfig` で `batch_size=1` および `batch_flush_interval=0.1` に設定します。
+
+## セキュリティ: 機密性の高い資格情報のログ記録を避ける {#security-credentials}
+
+!!! warning "OAuth トークン、API キー、またはクライアントシークレットをログに記録しないでください"
+
+    BigQuery Agent Analytics プラグインは、ツールの引数、LLM プロンプト、認証関連イベント（HITL 資格情報リクエストなど）を含む詳細なイベントペイロードをキャプチャします。エージェントが**認証済みツール**（例：OAuth2 を使用した `AuthenticatedFunctionTool`）を使用している場合、プラグインは `client_secret`、`access_token`、または API キーなどの機密性の高い値を BigQuery テーブルの `content` 列に記録する可能性があります。
+
+    これは既知の懸念事項（[google/adk-python#3845](https://github.com/google/adk-python/issues/3845)）であり、分析データでの資格情報漏洩につながる可能性があります。
+
+プラグインには、一般的なシークレットを自動的に保護する**組み込みの秘匿化（redaction）**が含まれています。追加の制御のために、カスタム秘匿化を上に重ねることができます。
+
+### 組み込みの秘匿化 {#built-in-redaction}
+
+プラグインは、`content` または `attributes` JSON のどこに現れても、次のよく知られたキー名（大文字小文字を区別しない）の値を自動的に秘匿化します。
+
+`client_secret`, `access_token`, `refresh_token`, `id_token`, `api_key`, `password`
+
+さらに、**`temp:`** または **`secret:`** で始まる状態キーは、ログに記録された `state_delta` で自動的に `[REDACTED]` に置き換えられます。これは、`secret:` スコープ内に保存された ADK セッション状態（資格情報サービスによってキャッシュされた OAuth トークンなど）が BigQuery に永続化されないことを意味します。
+
+!!! info "設定不要"
+
+    組み込みの秘匿化は、構造化された属性と状態のログ記録に対して常に有効であり、属性値内のネストされたディクショナリや JSON エンコードされた文字列に再帰的に適用されます。カスタム `content_formatter` は未加工コンテンツに対して**最初に**実行されるため、自由形式のペイロードに現れる可能性のあるシークレットのマスキングを追加するために使用してください。
+
+### `content_formatter` を使用して追加のシークレットを秘匿化する
+
+書き込まれる前に機密フィールドを削除またはマスクするには、`BigQueryLoggerConfig` にカスタム `content_formatter` 関数を提供します。
+
+```python
+import json
+import re
+from typing import Any
+
+SENSITIVE_KEYS = {"client_secret", "access_token", "refresh_token", "api_key", "secret"}
+
+def redact_credentials(event_content: Any, event_type: str) -> str:
+    """ログに記録されたコンテンツから OAuth シークレットとトークンを秘匿化します。"""
+    if isinstance(event_content, dict):
+        text = json.dumps(event_content)
+    else:
+        text = str(event_content)
+
+    for key in SENSITIVE_KEYS:
+        # JSON 風の文字列の値を秘匿化: "client_secret": "GOCSPX-xxx"
+        text = re.sub(
+            rf'("{key}"\s*:\s*)"[^"]*"',
+            rf'\1"[REDACTED]"',
+            text,
+            flags=re.IGNORECASE,
+        )
+    return text
+
+config = BigQueryLoggerConfig(
+    content_formatter=redact_credentials,
+    # ... 他のオプション
+)
+```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.plugins.agentanalytics.BigQueryLoggerConfig;
+    import java.util.function.BiFunction;
+    import java.util.Set;
+
+    Set<String> SENSITIVE_KEYS = Set.of("client_secret", "access_token", "refresh_token", "api_key", "secret");
+
+    BiFunction<Object, String, Object> redactCredentials = (content, eventType) -> {
+      String text = content.toString();
+      for (String key : SENSITIVE_KEYS) {
+        // JSON 風の文字列の値を秘匿化: "client_secret": "GOCSPX-xxx"
+        text = text.replaceAll(
+            "(?i)(\"" + key + "\"\\s*:\\s*)\"[^\"]*\"",
+            "$1\"[REDACTED]\""
+        );
+      }
+      return text;
+    };
+
+    BigQueryLoggerConfig config = BigQueryLoggerConfig.builder()
+        .contentFormatter(redactCredentials)
+        // ... 他のオプション
+        .build();
+    ```
+
+### `event_denylist` を使用して資格情報イベントをスキップする
+
+認証関連イベントをログに記録する必要がない場合は、それらを完全に除外します。
+
+```python
+config = BigQueryLoggerConfig(
+    event_denylist=[
+        "HITL_CREDENTIAL_REQUEST",
+        "HITL_CREDENTIAL_REQUEST_COMPLETED",
+    ],
+    # ... 他のオプション
+)
+```
+
+=== "Java"
+
+    ```java
+    import com.google.common.collect.ImmutableList;
+
+    BigQueryLoggerConfig config = BigQueryLoggerConfig.builder()
+        .eventDenylist(ImmutableList.of(
+            "HITL_CREDENTIAL_REQUEST",
+            "HITL_CREDENTIAL_REQUEST_COMPLETED"
+        ))
+        // ... 他のオプション
+        .build();
+    ```
+
+### 一般的なベストプラクティス
+
+- エージェントのソースコードに**シークレットをハードコードしないでください**。OAuth クライアントシークレットや API キーには、環境変数やシークレットマネージャー（例：Google Cloud Secret Manager）を使用してください。
+- ログに記録されたイベントデータを読み取れるユーザーを制限するには、IAM を使用して **BigQuery 테이블へのアクセスを制限** してください。
+- 予期しない機密データがキャプチャされていないことを確認するために、定期的に **ログを監査** してください。
+
+## 運用 (Operations)
+
+### トレーシングと可観測性
+
+プラグインは、出力されるすべての行に `trace_id`、`span_id`、および `parent_span_id` 列を入力するため、親子実行ツリー（Agent → LLM 呼び出し / Tool 呼び出し）が BigQuery から綺麗に再構築されます。
+
+- **内部スパン追跡、OTel スパンのエクスポートはなし。** プラグインは、自身の内部スタックにある 16桁の `span_id` 値で親子階層を追跡します。ルート呼び出しスパンは、有効な場合に周囲の OTel スパンの ID を再利用します（Runner の呼び出しスパンに合わせるため）。子 BQAA スパンは内部的に生成されます。設定された OpenTelemetry `TracerProvider` で `tracer.start_span(...)` を呼び出すことはないため、その計測が設定されたエクスポートツールに到達することはありません。これにより、Agent Engine テレメトリが有効になっている場合（`GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true`）や、ホストプロセスに他の Cloud Trace エクスポートツールを接続した場合に、Cloud Trace で重複するスパンが発生するのを防ぎます。
+- **周囲の OTel スパンから `trace_id` を継承（存在する場合）。** 周囲のランタイムが OTel スパン（Agent Engine の呼び出しスパン、ADK `Runner` の呼び出しスパン、またはエージェント実行前に開いたスパン）をすでに開始している場合、プラグインはその `trace_id` を読み取ってすべての BigQuery 行にスタンプします。したがって、BigQuery の行は、共有された `trace_id` を介して既存の Cloud Trace トレースと綺麗に結合されます。
+- **周囲にスパンが存在しない場合のフォールバック。** 周囲の OTel スパンがアクティブでない場合（ホスト側にトレーサーが構成されていない非 Agent Engine デプロイなど）、プラグインは呼び出しごとに 32桁の `trace_id` を生成するため、外部トレーサーのセットアップがなくても親子階層は BigQuery で常に保存されます。
+- **`TracerProvider` は不要です。** ホストプロセスでの OpenTelemetry `TracerProvider` の構成はオプションです。これは、プラグインの `trace_id` を既存の周囲のスパンから取得したい場合（非 ADK サービスからのテレメトリと関連付けるため）にのみ重要です。プラグインは、自身の記録管理にプロバイダーを必要としなくなりました。
+
+!!! info "プラグインが OTel エクスポートツールにデータを供給することに依存していた場合"
+
+    一部の古い構成では、OpenTelemetry span をエクスポートするために BQAA プラグインを補助チャネルとして使用していましたが、このパスは意図的に削除されました。代わりに、ホストアプリケーションで OTel インスツルメンテーションを構成してください（Agent Engine はこれを自動的に接続します。ローカルデプロイの場合は、ADK 自体のフレームワークインスツルメンテーションまたは明示的な `TracerProvider` を使用してください）。プラグインの BigQuery 行は、引き続き `trace_id` を介してトレースに接続されます。
+
+### 公開メソッド
+
+=== "Python"
+
+    プラグインはライフサイクル管理のためにいくつかの public メソッドを公開しています。
+
+    - **`await plugin.flush()`**: 保留中のすべてのイベントを BigQuery に flush します。データ損失を避けるため、終了前に呼び出してください。
+    - **`await plugin.shutdown(timeout=None)`**: プラグインを正常終了し、保留中イベントを flush してリソースを解放します。任意の `timeout` パラメータは config の `shutdown_timeout` を上書きします。
+    - **`await plugin.create_analytics_views()`**: イベントタイプ別 analytics view をすべて手動で再作成します。スキーマアップグレード後やビュー更新が必要なときに便利です。
+    - **`plugin.get_drop_stats()`**: `drop_reason` ごとにドロップされたイベント数のスナップショットを返します。以下の[ドロップされたイベントの可観測性](#dropped-event-observability)を参照してください。
+    - **非同期コンテキストマネージャー**: プラグインは自動起動と終了のために `async with` をサポートします。
+
+        ```python
+        async with BigQueryAgentAnalyticsPlugin(
+            project_id=PROJECT_ID, dataset_id=DATASET_ID
+        ) as plugin:
+            # plugin is initialized and ready to use
+            ...
+        # plugin.shutdown() is called automatically on exit
+        ```
+
+=== "Java"
+
+    Java では、プラグインの ライフサイクルは `Plugin` から継承された `close()` メソッド（RxJava の `Completable` を返す）を介して管理されます。
+
+    - **`plugin.close()`**: プラグインを正常に終了し、保留中のイベントを flush し、リソース（BigQuery の書き込みクライアントおよびエグゼキュータを含む）を解放します。
+    - **自動クローズ**: `InMemoryRunner` を使用している場合、`runner.close()` を呼び出すと、登録されているすべてのプラグイン（BigQuery Agent Analytics プラグインを含む）が自動的にクローズされます。
+
+    ```java
+    // 手動シャットダウン
+    plugin.close().blockingAwait();
+    ```
+
+### ドロップされたイベントの可観測性 {#dropped-event-observability}
+
+BigQuery へのロギングはベストエフォート（best-effort）方式です。メモリ内キューがオーバーフローするか、書き込みが最終的に失敗した場合、イベントがドロップされる可能性があります。プラグインは `drop_reason` ごとにドロップされた行を追跡し、ポーリング API を公開しているため、ホストはこれを検出してアラートを発信し、カウントを独自のモニ타リングシステムに送信できます。
+
+**ドロップ理由:**
+
+| 理由 (Reason) | 原因 (Cause) |
+|---|---|
+| `queue_full` | メモリ内バッチキューがオーバーフローしました（ホストがドレイナー（drainer）が送信できる速度よりも速くイベントを生成しています）。`BigQueryLoggerConfig` の `queue_max_size` を増やすか、より大きなチャンクでドレインするために `batch_size` を上げるか、コンシューマー側をスケール（より多くの同時呼び出しをより高速に完了）させてください。 |
+| `arrow_prep_failed` | 行を Arrow 表現に変換できませんでした（通常、スキーマ/タイプの不一致）。ログを調査して問題のあるフィールドを確認してください。 |
+| `retry_exhausted` | Storage Write API の呼び出しが、再試行バジェットを使い果たすまで再試行可能なエラー（例：一時的な gRPC エラー）を返し続けました。 |
+| `non_retryable` | Storage Write API が再試行不可能なエラー（権限、割り当て、スキーマ拒否）を返しました。通常、管理者の介入が必要です。 |
+| `unexpected_error` | バッチの準備または書き込み中に捕捉されたその他の例外です。 |
+
+**カウントの読み取り:**
+
+```python
+# プラグイン起動後の {drop_reason: count} のスナップショット。
+stats = plugin.get_drop_stats()
+# 例: {"queue_full": 12, "retry_exhausted": 0, ...}
+
+total_dropped = sum(stats.values())
+```
+
+**モニタリングシステムへのエクスポート** — 定期的にポーリングして差分（delta）を送信します:
+
+```python
+import asyncio
+
+async def export_loop(plugin):
+    last = {k: 0 for k in (
+        "queue_full", "arrow_prep_failed",
+        "retry_exhausted", "non_retryable", "unexpected_error",
+    )}
+    while True:
+        current = plugin.get_drop_stats()
+        for reason, count in current.items():
+            delta = count - last.get(reason, 0)
+            if delta:
+                # 例: metric_client.write_point(
+                #         metric="bqaa_dropped_events",
+                #         labels={"reason": reason}, value=delta)
+                ...
+        last = current
+        await asyncio.sleep(60)
+```
+
+継続的に `queue_full` または `retry_exhausted` カウントが 0 以外になっている場合は、BQAA がデータ損失のリスクにさらされていることを示す最も明確なシグナルです。ダッシュボードまたはアラートに表示することをお勧めします。
+
+### Multiprocessing と fork 安全性
+
+プラグインは fork-aware です。gRPC C-core ライブラリをロードする前に `GRPC_ENABLE_FORK_SUPPORT=1` を設定し、子プロセスで継承されたランタイム状態（gRPC チャネル、書き込みストリーム、イベントループ）をリセットする `os.register_at_fork` ハンドラーを登録します。これは、プラグインがファイル記述子をリークしたり、親の接続でデータを送信したりすることなく、`os.fork()` 後も生き残ることができることを意味します。
+
+ただし、**`spawn` は本番デプロイに推奨されるマルチプロセッシング開始メソッドです**。`fork` は親のアドレス空間（処理中の gRPC 状態を含む）をコピーし、フォーク後のリセットによって各子の最初の書き込みにレイテンシが追加されます。`spawn` を使用すると、各ワーカーはプラグインをクリーンに初期化します。
+
+特に Gunicorn デプロイの場合：
+
+- 最初のイベントがログに記録されるまでプラグインがセットアップを遅延させる lazy 初期化と `--preload` を組み合わせるか、
+- `post_fork` フック内でプラグインを初期化し、各ワーカーが独自のクライアントを取得するようにします。
+
+!!! note
+
+    フォークセーフティメカニズムはランタイム状態のみをリセットします。フォークの時点で親プロセスでキューに入れられていたがまだフラッシュされていなかったイベントを再再生（replay）することはありません。確実に配信する必要がある場合は、フォークする前に `await plugin.flush()` を呼び出してください。
+
 ## 記録データを利用する追加方法
 
 ### BigQuery Agent Analytics SDK
