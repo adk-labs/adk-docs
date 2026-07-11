@@ -69,7 +69,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
     ```
 
 === "Go"
-    Go에서는 `google.golang.org/adk/session.Event` 타입의 구조체입니다.
+    Go에서는 `google.golang.org/adk/v2/session.Event` 타입의 구조체입니다.
 
     ```go
     // 이벤트의 개념적 구조 (Go - session/session.go 참조)
@@ -226,7 +226,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
       // 의사 코드: 기본 이벤트 식별 (Go)
     import (
       "fmt"
-      "google.golang.org/adk/session"
+      "google.golang.org/adk/v2/session"
       "google.golang.org/genai"
     )
 
@@ -361,7 +361,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```go
         import (
             "fmt"
-            "google.golang.org/adk/session"
+            "google.golang.org/adk/v2/session"
             "google.golang.org/genai"
         )
 
@@ -434,7 +434,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```go
         import (
             "fmt"
-            "google.golang.org/adk/session"
+            "google.golang.org/adk/v2/session"
             "google.golang.org/genai"
         )
 
@@ -502,7 +502,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```go
         import (
             "fmt"
-            "google.golang.org/adk/session"
+            "google.golang.org/adk/v2/session"
         )
 
         func handleStateChanges(event *session.Event) {
@@ -554,8 +554,8 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```go
         import (
             "fmt"
-            "google.golang.org/adk/artifact"
-            "google.golang.org/adk/session"
+            "google.golang.org/adk/v2/artifact"
+            "google.golang.org/adk/v2/session"
         )
 
         func handleArtifactChanges(event *session.Event) {
@@ -630,7 +630,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```go
         import (
             "fmt"
-            "google.golang.org/adk/session"
+            "google.golang.org/adk/v2/session"
         )
 
         func handleControlFlow(event *session.Event) {
@@ -772,7 +772,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         import (
             "fmt"
             "strings"
-            "google.golang.org/adk/session"
+            "google.golang.org/adk/v2/session"
             "google.golang.org/genai"
         )
 

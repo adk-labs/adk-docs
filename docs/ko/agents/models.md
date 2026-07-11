@@ -41,7 +41,7 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
 
         ```shell
         export GOOGLE_API_KEY="YOUR_GOOGLE_API_KEY"
-        export GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        export GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         ```
 
         (또는)
@@ -72,7 +72,7 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
     라이브러리에 Vertex AI를 사용하도록 명시적으로 지시합니다.
 
     ```shell
-    export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
     ```
 
 4. **모델:** [Vertex AI 문서](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models)에서 사용 가능한 모델 ID를 찾습니다.
@@ -84,7 +84,7 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
 2.  **환경 변수 설정:**
     ```shell
     export GOOGLE_API_KEY="PASTE_YOUR_EXPRESS_MODE_API_KEY_HERE"
-    export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
     ```
 
 ### **방법 C: 서비스 계정 (프로덕션 및 자동화용)**
@@ -132,8 +132,8 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
 
     ```go
     import (
-    	"google.golang.org/adk/agent/llmagent"
-    	"google.golang.org/adk/model/gemini"
+    	"google.golang.org/adk/v2/agent/llmagent"
+    	"google.golang.org/adk/v2/model/gemini"
     	"google.golang.org/genai"
     )
 
@@ -647,7 +647,7 @@ Google Cloud의 MLOps 에코시스템과 엔터프라이즈급 확장성, 안정
 3. **Vertex 백엔드 활성화:** 결정적으로 `google-genai` 라이브러리가 Vertex AI를 대상으로 하는지 확인합니다.
 
     ```shell
-    export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
     ```
 
 ### Model Garden 배포
@@ -716,7 +716,7 @@ Anthropic와 같은 일부 제공업체는 Vertex AI를 통해 직접 모델을 
 
     **설정:**
 
-    1. **Vertex AI 환경:** 통합 Vertex AI 설정(ADC, 환경 변수, `GOOGLE_GENAI_USE_VERTEXAI=TRUE`)이 완료되었는지 확인합니다.
+    1. **Vertex AI 환경:** 통합 Vertex AI 설정(ADC, 환경 변수, `GOOGLE_GENAI_USE_ENTERPRISE=TRUE`)이 완료되었는지 확인합니다.
 
     2. **제공업체 라이브러리 설치:** Vertex AI용으로 구성된 필요한 클라이언트 라이브러리를 설치합니다.
 

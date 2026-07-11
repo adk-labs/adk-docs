@@ -278,15 +278,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
                    .blockingGet();
            ```
 
-!!! warning "비동기 드라이버 요구사항"
-
-    `DatabaseSessionService`는 비동기 데이터베이스 드라이버가 필요합니다. SQLite를 사용할 때는 연결 문자열에서 `sqlite` 대신 `sqlite+aiosqlite`를 사용해야 합니다.
-    PostgreSQL, MySQL과 같은 다른 데이터베이스의 경우 `asyncpg`(PostgreSQL) 또는 `aiomysql`(MySQL)처럼 비동기 호환 드라이버를 사용하고 있는지 확인하세요.
-
-!!! note "ADK Python v1.22.0에서 세션 데이터베이스 스키마 변경"
-
-    ADK Python v1.22.0에서 세션 데이터베이스 스키마가 변경되었으며, 세션 데이터베이스 마이그레이션이 필요합니다.
-    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/ko/sessions/session/migrate/)을 참조하세요.
+ADK 에이전트에서 Google Cloud에 연결하는 방법에 대한 자세한 내용은 [Google Cloud 및 Agent Platform 연결하기](/ko/get-started/google-cloud/)를 참고하세요.
 
 3.  **`DatabaseSessionService`**
 
@@ -315,6 +307,16 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 * **프로세스 내 잠금 (In-Process locking):** 서비스는 내부의 프로세스 내 잠금을 사용하여 동일한 세션에 대한 `append_event` 호출을 직렬화합니다. 이는 동일한 프로세스 내에서 여러 요청이 동일한 세션을 동시에 업데이트하려고 할 때 발생할 수 있는 경합 조건(race condition)을 방지합니다.
 * **행 수준 잠금 (Row-Level locking):** PostgreSQL, MySQL, MariaDB의 경우, 서비스는 행 수준 잠금(`SELECT ... FOR UPDATE` 사용)을 사용하여 여러 프로세스나 복제본(replica)이 동일한 세션을 동시에 업데이트하려고 할 때 발생할 수 있는 경합 조건을 방지합니다.
 
+!!! warning "비동기 드라이버 요구사항"
+
+    `DatabaseSessionService`는 비동기 데이터베이스 드라이버가 필요합니다. SQLite를 사용할 때는 연결 문자열에서 `sqlite` 대신 `sqlite+aiosqlite`를 사용해야 합니다.
+    PostgreSQL, MySQL과 같은 다른 데이터베이스의 경우 `asyncpg`(PostgreSQL) 또는 `aiomysql`(MySQL)처럼 비동기 호환 드라이버를 사용하고 있는지 확인하세요.
+
+!!! note "ADK Python v1.22.0에서 세션 데이터베이스 스키마 변경"
+
+    ADK Python v1.22.0에서 세션 데이터베이스 스키마가 변경되었으며, 세션 데이터베이스 마이그레이션이 필요합니다.
+    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/ko/sessions/session/migrate/)을 참조하세요.
+
 올바른 `SessionService`를 선택하는 것은 에이전트의 대화 기록과 임시 데이터가 어떻게 저장되고 유지되는지를 정의하는 핵심입니다.
 
 ## 세션 생명주기
@@ -332,3 +334,14 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 7.  **대화 종료:** 대화가 끝나면, 더 이상 필요하지 않은 경우 애플리케이션은 `sessionService.delete_session(...)`을 호출하여 저장된 세션 데이터를 정리합니다.
 
 이러한 주기는 `SessionService`가 각 `Session` 객체와 관련된 히스토리와 상태를 관리함으로써 대화의 연속성을 어떻게 보장하는지 보여줍니다.
+
+## 세션 오류 문제 해결
+
+실행 중에 ADK는 구성 또는 상태 문제를 식별하는 데 도움이 되는 특정 예외를 발생시킬 수 있습니다.
+
+### `SessionNotFoundError`
+
+러너가 활성 세션 저장소에 존재하지 않는 세션에 액세스하거나 실행하려고 할 때 발생합니다. 이전 버전과의 호환성을 위해 `ValueError`를 상속합니다.
+
+* **일반적인 원인:** 유효하지 않거나 만료되었거나 누락된 `session_id`, 세션이 생성되기 전에 세션 실행.
+* **해결 방법:** 먼저 `create_session(...)`을 통해 세션이 존재하는지 확인하거나, `auto_create_session=True`로 `Runner`를 생성합니다.

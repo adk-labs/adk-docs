@@ -81,7 +81,7 @@
     ADKをプロジェクトに追加するには、次のコマンドを実行します:
 
     ```bash
-    go get google.golang.org/adk
+    go get google.golang.org/adk/v2
     ```
 
     これで、ADKが`go.mod`ファイルの依存関係として追加されます。
@@ -319,28 +319,28 @@
     2. Pythonを使用している場合は、(`multi_tool_agent/`) 内にある**`.env`**ファイルを開き、次のコードをコピーして貼り付けます。
 
         ```env title="multi_tool_agent/.env"
-        GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
         Javaを使用している場合は、環境変数を定義します。
 
         ```console title="terminal"
-        export GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        export GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
         TypeScript を使用する場合、`.env` ファイルは `agent.ts` の先頭にある `import 'dotenv/config';` 行によって自動的に読み込まれます。
 
         ```env title="multi_tool_agent/.env"
-        GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         GOOGLE_GENAI_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
         Goを使用している場合は、ターミナルで環境変数を定義するか、`.env`ファイルを使用します:
 
         ```bash title="terminal"
-        export GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        export GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
@@ -353,7 +353,7 @@
     4. Pythonを使用している場合は、(`multi_tool_agent/`) 内にある**`.env`**ファイルを開きます。次のコードをコピーして貼り付け、プロジェクトIDとロケーションを更新します。
 
         ```env title="multi_tool_agent/.env"
-        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
         GOOGLE_CLOUD_LOCATION=LOCATION
         ```
@@ -361,7 +361,7 @@
         Javaを使用している場合は、環境変数を定義します。
 
         ```console title="terminal"
-        export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         export GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
         export GOOGLE_CLOUD_LOCATION=LOCATION
         ```
@@ -369,7 +369,7 @@
         TypeScript を使用する場合、`.env` ファイルは `agent.ts` の先頭にある `import 'dotenv/config';` 行によって自動的に読み込まれます。
 
         ```env title="multi_tool_agent/.env"
-        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
         GOOGLE_CLOUD_LOCATION=LOCATION
         ```
@@ -377,7 +377,7 @@
         Goを使用している場合は、ターミナルで環境変数を定義するか、`.env`ファイルを使用します:
 
         ```bash title="terminal"
-        export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         export GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
         export GOOGLE_CLOUD_LOCATION=LOCATION
         ```
@@ -389,28 +389,28 @@
     2. Pythonを使用している場合は、(`multi_tool_agent/`) 内にある**`.env`**ファイルを開きます。次のコードをコピーして貼り付け、プロジェクトIDとロケーションを更新します。
 
         ```env title="multi_tool_agent/.env"
-        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
         ```
 
         Javaを使用している場合は、環境変数を定義します。
 
         ```console title="terminal"
-        export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
         ```
 
         TypeScript を使用する場合、`.env` ファイルは `agent.ts` の先頭にある `import 'dotenv/config';` 行によって自動的に読み込まれます。
 
         ```env title="multi_tool_agent/.env"
-        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         GOOGLE_GENAI_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
         ```
 
         Goを使用している場合は、ターミナルで環境変数を定義するか、`.env`ファイルを使用します:
 
         ```bash title="terminal"
-        export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         export GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_EXPRESS_MODE_API_KEY_HERE
         ```
 

@@ -65,12 +65,12 @@ hide:
     프로젝트에 ADK를 추가하려면 다음 명령을 실행합니다.
 
     ```shell
-    go get google.golang.org/adk
+    go get google.golang.org/adk/v2
     ```
 
     이렇게 하면 ADK가 `go.mod` 파일에 종속성으로 추가됩니다.
 
-    (선택 사항) `go.mod` 파일에서 `google.golang.org/adk` 항목을 확인하여 설치를 확인합니다.
+    (선택 사항) `go.mod` 파일에서 `google.golang.org/adk/v2` 항목을 확인하여 설치를 확인합니다.
 
 === "Java"
 

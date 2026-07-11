@@ -66,7 +66,7 @@ async def monitor_video_stream(
 ) -> AsyncGenerator[str, None]:
   """ビデオストリームに何人の人がいるかを監視します。"""
   print("monitor_video_streamを開始します！")
-  client = Client(vertexai=False)
+  client = Client(enterprise=False)
   prompt_text = (
       "この画像に写っている人数を数えてください。数字のみで応答してください。"
   )

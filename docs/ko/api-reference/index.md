@@ -30,7 +30,7 @@
     ---
     Go 에이전트 개발 키트를 위한 전체 API 문서를 살펴보세요. Go로 정교한 AI 에이전트를 구축하기 위한 모든 모듈, 클래스, 함수에 대한 상세 정보를 확인하실 수 있습니다.
 
-    [:octicons-arrow-right-24: Go API 문서 보기](https://pkg.go.dev/google.golang.org/adk) <br>
+    [:octicons-arrow-right-24: Go API 문서 보기](https://pkg.go.dev/google.golang.org/adk/v2) <br>
 
 <!-- This comment forces a block separation -->
 

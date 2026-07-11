@@ -118,7 +118,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
     === "Go"
 
            ```go
-            import "google.golang.org/adk/session"
+            import "google.golang.org/adk/v2/session"
 
             inMemoryService := session.InMemoryService()
            ```
@@ -161,7 +161,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
     === "Go"
 
           ```go
-          import "google.golang.org/adk/session"
+          import "google.golang.org/adk/v2/session"
 
           // 2. VertexAIService
           // 실행 전, 환경이 인증되었는지 확인하세요:

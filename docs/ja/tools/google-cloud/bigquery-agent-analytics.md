@@ -70,7 +70,7 @@ if LOCATION == "your-gcp-project-location":
 # --- 重要: Gemini インスタンス化の前に環境変数を設定 ---
 os.environ['GOOGLE_CLOUD_PROJECT'] = PROJECT_ID
 os.environ['GOOGLE_CLOUD_LOCATION'] = LOCATION
-os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True' # Vertex AI API が有効になっていることを確認
+os.environ['GOOGLE_GENAI_USE_ENTERPRISE'] = 'True' # Vertex AI API が有効になっていることを確認
 
 # --- プラグインの初期化 ---
 bq_logging_plugin = BigQueryAgentAnalyticsPlugin(

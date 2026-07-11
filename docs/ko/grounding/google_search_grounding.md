@@ -112,7 +112,7 @@ my_project/
     2. Python을 사용하는 경우 **`.env`** 파일을 열고 다음 코드를 복사하여 붙여넣습니다.
 
         ```env title=".env"
-        GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
@@ -127,7 +127,7 @@ my_project/
     2. Python을 사용하는 경우 **`.env`** 파일을 열고 다음 코드를 복사하여 붙여넣고 프로젝트 ID와 위치를 업데이트합니다.
 
         ```env title=".env"
-        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID
         GOOGLE_CLOUD_LOCATION=LOCATION
         ```

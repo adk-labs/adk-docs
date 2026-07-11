@@ -48,8 +48,8 @@ ADK는 [코드 실행](/tools/gemini-api/code-execution/),
 
     ```go
     import (
-    	"google.golang.org/adk/agent/llmagent"
-    	"google.golang.org/adk/model/gemini"
+    	"google.golang.org/adk/v2/agent/llmagent"
+    	"google.golang.org/adk/v2/model/gemini"
     	"google.golang.org/genai"
     )
 
@@ -111,7 +111,7 @@ ADK는 [코드 실행](/tools/gemini-api/code-execution/),
 
         ```shell
         export GOOGLE_GENAI_API_KEY="YOUR_GOOGLE_API_KEY"
-        export GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        export GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         ```
 
         (또는)
@@ -144,7 +144,7 @@ Vertex AI의 Gemini는 엔터프라이즈급 기능, 보안, 규정 준수 제�
     라이브러리에서 Vertex AI 사용을 명시적으로 지정합니다.
 
     ```shell
-    export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
     ```
 
 4. **모델:** 사용 가능한 모델 ID는
@@ -157,7 +157,7 @@ Vertex AI의 Gemini는 엔터프라이즈급 기능, 보안, 규정 준수 제�
 2.  **환경 변수 설정:**
     ```shell
     export GOOGLE_API_KEY="PASTE_YOUR_EXPRESS_MODE_API_KEY_HERE"
-    export GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
     ```
 
 ### **방식 C: 서비스 계정(프로덕션 및 자동화)**

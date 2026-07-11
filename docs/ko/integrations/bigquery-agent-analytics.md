@@ -99,7 +99,7 @@ from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryAgentAnal
 
 os.environ['GOOGLE_CLOUD_PROJECT'] = 'your-gcp-project-id'
 os.environ['GOOGLE_CLOUD_LOCATION'] = 'us-central1'
-os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True'
+os.environ['GOOGLE_GENAI_USE_ENTERPRISE'] = 'True'
 
 plugin = BigQueryAgentAnalyticsPlugin(
     project_id="your-gcp-project-id",
@@ -174,7 +174,7 @@ LIMIT 20;
     # --- CRITICAL: Set environment variables BEFORE Gemini instantiation ---
     os.environ['GOOGLE_CLOUD_PROJECT'] = PROJECT_ID
     os.environ['GOOGLE_CLOUD_LOCATION'] = VERTEX_LOCATION
-    os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True'
+    os.environ['GOOGLE_GENAI_USE_ENTERPRISE'] = 'True'
 
     # --- Initialize the Plugin with Config ---
     bq_config = BigQueryLoggerConfig(
@@ -1114,7 +1114,7 @@ DATASET_ID = os.environ.get("BQ_DATASET", "agent_analytics")
 # region used by GOOGLE_CLOUD_LOCATION.
 BQ_LOCATION = os.environ.get("BQ_LOCATION", "US")
 
-os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
+os.environ["GOOGLE_GENAI_USE_ENTERPRISE"] = "True"
 
 # --- Plugin ---
 bq_analytics_plugin = BigQueryAgentAnalyticsPlugin(
@@ -1585,7 +1585,7 @@ DATASET_ID = os.environ.get("BQ_DATASET", "agent_analytics")
 # Agent Platform 지역과 별개입니다.
 BQ_LOCATION = os.environ.get("BQ_LOCATION", "US")
 
-os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "True"
+os.environ["GOOGLE_GENAI_USE_ENTERPRISE"] = "True"
 
 # --- 플러그인 ---
 bq_analytics_plugin = BigQueryAgentAnalyticsPlugin(

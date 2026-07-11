@@ -4,7 +4,7 @@
 
 ## 사용 방법
 
-1. **가져오기:** 도구 모듈에서 원하는 도구를 가져옵니다. Python에서는 `agents.tools`이고, Go에서는 `google.golang.org/adk/tool/geminitool`이며, Java에서는 `com.google.adk.tools`입니다.
+1. **가져오기:** 도구 모듈에서 원하는 도구를 가져옵니다. Python에서는 `agents.tools`이고, Go에서는 `google.golang.org/adk/v2/tool/geminitool`이며, Java에서는 `com.google.adk.tools`입니다.
 2. **구성:** 필요한 매개변수가 있는 경우 제공하여 도구를 초기화합니다.
 3. **등록:** 초기화된 도구를 에이전트의 **도구** 목록에 추가합니다.
 

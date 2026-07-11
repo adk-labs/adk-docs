@@ -8,7 +8,7 @@
 
 エージェントをデプロイするには、GKE上で実行されているKubernetesクラスタが必要です。Google Cloudコンソールまたは`gcloud`コマンドラインツールを使用してクラスタを作成できます。
 
-この例では、シンプルなエージェントをGKEにデプロイします。エージェントは、LLMとして`Gemini 2.0 Flash`を使用するFastAPIアプリケーションになります。環境変数`GOOGLE_GENAI_USE_VERTEXAI`を使用して、LLMプロバイダーとしてVertex AIまたはAI Studioを使用できます。
+この例では、シンプルなエージェントをGKEにデプロイします。エージェントは、LLMとして`Gemini 2.0 Flash`を使用するFastAPIアプリケーションになります。環境変数`GOOGLE_GENAI_USE_ENTERPRISE`を使用して、LLMプロバイダーとしてVertex AIまたはAI Studioを使用できます。
 
 ## 環境変数
 
@@ -17,7 +17,7 @@
 ```bash
 export GOOGLE_CLOUD_PROJECT=your-project-id # あなたのGCPプロジェクトID
 export GOOGLE_CLOUD_LOCATION=us-central1 # または希望のロケーション
-export GOOGLE_GENAI_USE_VERTEXAI=true # Vertex AIを使用する場合はtrueに設定
+export GOOGLE_GENAI_USE_ENTERPRISE=true # Vertex AIを使用する場合はtrueに設定
 export GOOGLE_CLOUD_PROJECT_NUMBER=$(gcloud projects describe --format json $GOOGLE_CLOUD_PROJECT | jq -r ".projectNumber")
 ```
 
@@ -308,9 +308,9 @@ spec:
             value: $GOOGLE_CLOUD_PROJECT
           - name: GOOGLE_CLOUD_LOCATION
             value: $GOOGLE_CLOUD_LOCATION
-          - name: GOOGLE_GENAI_USE_VERTEXAI
-            value: "$GOOGLE_GENAI_USE_VERTEXAI"
-          # AI Studioを使用する場合は、GOOGLE_GENAI_USE_VERTEXAIをfalseに設定し、以下を設定します：
+          - name: GOOGLE_GENAI_USE_ENTERPRISE
+            value: "$GOOGLE_GENAI_USE_ENTERPRISE"
+          # AI Studioを使用する場合は、GOOGLE_GENAI_USE_ENTERPRISEをfalseに設定し、以下を設定します：
           # - name: GOOGLE_API_KEY
           #   value: $GOOGLE_API_KEY
           # エージェントが必要とするその他の環境変数を追加

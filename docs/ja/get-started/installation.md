@@ -65,12 +65,12 @@ hide:
     プロジェクトにADKを追加するには、次のコマンドを実行します。
 
     ```shell
-    go get google.golang.org/adk
+    go get google.golang.org/adk/v2
     ```
 
     これにより、ADKが`go.mod`ファイルに依存関係として追加されます。
 
-    （オプション）`go.mod`ファイルで`google.golang.org/adk`エントリを確認して、インストールを確認します。
+    （オプション）`go.mod`ファイルで`google.golang.org/adk/v2`エントリを確認して、インストールを確認します。
 
 === "Java"
 

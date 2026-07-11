@@ -90,7 +90,7 @@ from . import agent
     2. (`app/`) 内にある **`.env`** ファイルを開き、以下のコードをコピー＆ペーストします。
 
         ```env title=".env"
-        GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
@@ -105,7 +105,7 @@ from . import agent
     2. (`app/`) 内にある **`.env`** ファイルを開きます。以下のコードをコピー＆ペーストし、プロジェクト ID とロケーション（Region）を更新してください。
 
         ```env title=".env"
-        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         GOOGLE_CLOUD_PROJECT=PASTE_YOUR_ACTUAL_PROJECT_ID
         GOOGLE_CLOUD_LOCATION=us-central1
         ```

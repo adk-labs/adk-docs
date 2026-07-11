@@ -42,7 +42,7 @@ from google.adk.agents import Agent
 
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "{your-project-id}")
 os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
-os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
+os.environ.setdefault("GOOGLE_GENAI_USE_ENTERPRISE", "True")
 
 
 # 도구 함수 정의

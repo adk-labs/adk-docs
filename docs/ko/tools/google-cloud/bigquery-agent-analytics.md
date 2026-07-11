@@ -69,7 +69,7 @@ if LOCATION == "your-gcp-project-location":
 # --- 중요: Gemini 인스턴스화 전에 환경 변수 설정 ---
 os.environ['GOOGLE_CLOUD_PROJECT'] = PROJECT_ID
 os.environ['GOOGLE_CLOUD_LOCATION'] = LOCATION
-os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True' # Vertex AI API가 활성화되어 있는지 확인
+os.environ['GOOGLE_GENAI_USE_ENTERPRISE'] = 'True' # Vertex AI API가 활성화되어 있는지 확인
 
 # --- 플러그인 초기화 ---
 bq_logging_plugin = BigQueryAgentAnalyticsPlugin(

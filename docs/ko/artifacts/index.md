@@ -182,11 +182,11 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 		"context"
 		"log"
 
-		"google.golang.org/adk/agent/llmagent"
-		"google.golang.org/adk/artifactservice"
-		"google.golang.org/adk/llm/gemini"
-		"google.golang.org/adk/runner"
-		"google.golang.org/adk/sessionservice"
+		"google.golang.org/adk/v2/agent/llmagent"
+		"google.golang.org/adk/v2/artifactservice"
+		"google.golang.org/adk/v2/llm/gemini"
+		"google.golang.org/adk/v2/runner"
+		"google.golang.org/adk/v2/sessionservice"
 		"google.golang.org/genai"
 	)
 
@@ -425,11 +425,11 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 		"context"
 		"log"
 
-		"google.golang.org/adk/agent/llmagent"
-		"google.golang.org/adk/artifactservice"
-		"google.golang.org/adk/llm/gemini"
-		"google.golang.org/adk/runner"
-		"google.golang.org/adk/sessionservice"
+		"google.golang.org/adk/v2/agent/llmagent"
+		"google.golang.org/adk/v2/artifactservice"
+		"google.golang.org/adk/v2/llm/gemini"
+		"google.golang.org/adk/v2/runner"
+		"google.golang.org/adk/v2/sessionservice"
 		"google.golang.org/genai"
 	)
 
@@ -542,8 +542,8 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 		import (
 			"log"
 
-			"google.golang.org/adk/agent"
-			"google.golang.org/adk/llm"
+			"google.golang.org/adk/v2/agent"
+			"google.golang.org/adk/v2/llm"
 			"google.golang.org/genai"
 		)
 
@@ -664,8 +664,8 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 		import (
 			"log"
 
-			"google.golang.org/adk/agent"
-			"google.golang.org/adk/llm"
+			"google.golang.org/adk/v2/agent"
+			"google.golang.org/adk/v2/llm"
 		)
 
 		--8<-- "examples/go/snippets/artifacts/main.go:loading-artifacts"
@@ -798,9 +798,9 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 
     ```go
     import (
-      "google.golang.org/adk/agent/llmagent"
-      "google.golang.org/adk/tool"
-      "google.golang.org/adk/tool/loadartifactstool"
+      "google.golang.org/adk/v2/agent/llmagent"
+      "google.golang.org/adk/v2/tool"
+      "google.golang.org/adk/v2/tool/loadartifactstool"
     )
 
     agent, err := llmagent.New(llmagent.Config{
@@ -880,8 +880,8 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 			"log"
 			"strings"
 
-			"google.golang.org/adk/agent"
-			"google.golang.org/adk/llm"
+			"google.golang.org/adk/v2/agent"
+			"google.golang.org/adk/v2/llm"
 			"google.golang.org/genai"
 		)
 
@@ -1003,7 +1003,7 @@ ADK는 `BaseArtifactService` 인터페이스의 구체적인 구현체를 제공
 
         ```go
 		import (
-			"google.golang.org/adk/artifactservice"
+			"google.golang.org/adk/v2/artifactservice"
 		)
 
 		--8<-- "examples/go/snippets/artifacts/main.go:in-memory-service"

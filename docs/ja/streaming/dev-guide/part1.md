@@ -203,7 +203,7 @@ export SSL_CERT_FILE=$(python -m certifi)
     2. プロジェクトのルートに`.env`ファイルを作成します：
 
     ```env
-    GOOGLE_GENAI_USE_VERTEXAI=FALSE
+    GOOGLE_GENAI_USE_ENTERPRISE=FALSE
     GOOGLE_API_KEY=your_actual_api_key_here
     ```
 
@@ -216,7 +216,7 @@ export SSL_CERT_FILE=$(python -m certifi)
     5. プロジェクトのルートに`.env`ファイルを作成します：
 
     ```env
-    GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    GOOGLE_GENAI_USE_ENTERPRISE=TRUE
     GOOGLE_CLOUD_PROJECT=your_actual_project_id
     GOOGLE_CLOUD_LOCATION=us-central1
     ```
@@ -300,7 +300,7 @@ def validate_environment():
 
     # 環境変数の検証
     env_checks = [
-        ('GOOGLE_GENAI_USE_VERTEXAI', 'プラットフォーム構成'),
+        ('GOOGLE_GENAI_USE_ENTERPRISE', 'プラットフォーム構成'),
         ('GOOGLE_API_KEY', 'API認証'),
     ]
 
@@ -505,13 +505,13 @@ ADK は開発と本番で異なる Live API を選べます。
 
 ```env
 # .env.development
-GOOGLE_GENAI_USE_VERTEXAI=FALSE
+GOOGLE_GENAI_USE_ENTERPRISE=FALSE
 GOOGLE_API_KEY=your_actual_api_key_here
 ```
 
 ```env
 # .env.production
-GOOGLE_GENAI_USE_VERTEXAI=TRUE
+GOOGLE_GENAI_USE_ENTERPRISE=TRUE
 GOOGLE_CLOUD_PROJECT=your_actual_project_id
 GOOGLE_CLOUD_LOCATION=us-central1
 ```

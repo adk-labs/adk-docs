@@ -39,7 +39,7 @@
 === "Go"
 
     ```go
-    import "google.golang.org/adk/agent"
+    import "google.golang.org/adk/v2/agent"
 
     config := agent.RunConfig{
         StreamingMode: agent.StreamingModeSSE,
@@ -137,7 +137,7 @@ Live API を使用します。
 === "Go"
 
     ```go
-    import "google.golang.org/adk/agent"
+    import "google.golang.org/adk/v2/agent"
 
     config := agent.RunConfig{
         StreamingMode: agent.StreamingModeSSE,
@@ -316,5 +316,5 @@ field、type、default の完全な一覧は、各言語の API reference を参
 
 - [Python API reference](../api-reference/python/google-adk.html#google.adk.agents.RunConfig)
 - [TypeScript API reference](../api-reference/typescript/interfaces/RunConfig.html)
-- [Go API reference](https://pkg.go.dev/google.golang.org/adk/agent#RunConfig)
+- [Go API reference](https://pkg.go.dev/google.golang.org/adk/v2/agent#RunConfig)
 - [Java API reference](../api-reference/java/com/google/adk/agents/RunConfig.html)

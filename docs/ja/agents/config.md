@@ -57,14 +57,14 @@ Google Agent Development Kitライブラリをインストールし、Gemini API
 
     1.  Google APIを介してGeminiモデルにアクセスするには、APIキーを含む行をファイルに追加します。
 
-            GOOGLE_GENAI_USE_VERTEXAI=0
+            GOOGLE_GENAI_USE_ENTERPRISE=0
             GOOGLE_API_KEY=<your-Google-Gemini-API-key>
 
         Google AI Studioの[APIキー](https://aistudio.google.com/app/apikey)ページからAPIキーを取得できます。
 
     1.  Google Cloudを介してGeminiモデルにアクセスするには、次の行をファイルに追加します。
 
-            GOOGLE_GENAI_USE_VERTEXAI=1
+            GOOGLE_GENAI_USE_ENTERPRISE=1
             GOOGLE_CLOUD_PROJECT=<your_gcp_project>
             GOOGLE_CLOUD_LOCATION=us-central1
 

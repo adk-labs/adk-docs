@@ -109,7 +109,7 @@ public class ScienceTeacherAgent {
 *   今回は Vertex AI を使用しないことを指定する変数
 
 ```shell
-export GOOGLE_GENAI_USE_VERTEXAI=FALSE
+export GOOGLE_GENAI_USE_ENTERPRISE=FALSE
 export GOOGLE_API_KEY=YOUR_API_KEY
 ```
 

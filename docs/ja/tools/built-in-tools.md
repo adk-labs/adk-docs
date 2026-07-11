@@ -4,7 +4,7 @@
 
 ## 使用方法
 
-1.  **インポート:** ツールモジュールから目的のツールをインポートします。これはPythonでは`agents.tools`、Goでは`google.golang.org/adk/tool/geminitool`、Javaでは`com.google.adk.tools`です。
+1.  **インポート:** ツールモジュールから目的のツールをインポートします。これはPythonでは`agents.tools`、Goでは`google.golang.org/adk/v2/tool/geminitool`、Javaでは`com.google.adk.tools`です。
 2.  **設定:** ツールを初期化し、必要であれば必須パラメータを提供します。
 3.  **登録:** 初期化されたツールをエージェントの**tools**リストに追加します。
 

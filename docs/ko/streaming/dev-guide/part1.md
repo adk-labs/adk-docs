@@ -203,7 +203,7 @@ export SSL_CERT_FILE=$(python -m certifi)
     2. 프로젝트 루트에 `.env` 파일을 만드세요:
 
     ```env
-    GOOGLE_GENAI_USE_VERTEXAI=FALSE
+    GOOGLE_GENAI_USE_ENTERPRISE=FALSE
     GOOGLE_API_KEY=your_actual_api_key_here
     ```
 
@@ -216,7 +216,7 @@ export SSL_CERT_FILE=$(python -m certifi)
     5. 프로젝트 루트에 `.env` 파일을 만드세요:
 
     ```env
-    GOOGLE_GENAI_USE_VERTEXAI=TRUE
+    GOOGLE_GENAI_USE_ENTERPRISE=TRUE
     GOOGLE_CLOUD_PROJECT=your_actual_project_id
     GOOGLE_CLOUD_LOCATION=us-central1
     ```
@@ -300,7 +300,7 @@ def validate_environment():
 
     # 환경 변수 검증
     env_checks = [
-        ('GOOGLE_GENAI_USE_VERTEXAI', '플랫폼 구성'),
+        ('GOOGLE_GENAI_USE_ENTERPRISE', '플랫폼 구성'),
         ('GOOGLE_API_KEY', 'API 인증'),
     ]
 

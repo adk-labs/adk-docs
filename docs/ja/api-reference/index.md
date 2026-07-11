@@ -30,7 +30,7 @@
     ---
     Goエージェント開発キットの完全なAPIドキュメントをご覧ください。Goで高度なAIエージェントを構築するための、すべてのモジュール、クラス、関数に関する詳細な情報をご確認いただけます。
 
-    [:octicons-arrow-right-24: Go APIドキュメントを見る](https://pkg.go.dev/google.golang.org/adk) <br>
+    [:octicons-arrow-right-24: Go APIドキュメントを見る](https://pkg.go.dev/google.golang.org/adk/v2) <br>
 
 <!-- This comment forces a block separation -->
 

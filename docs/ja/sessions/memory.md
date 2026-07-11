@@ -52,8 +52,8 @@ Python ADKには3つの`MemoryService`実装が含まれています。以下の
 === "Go"
     ```go
     import (
-      "google.golang.org/adk/memory"
-      "google.golang.org/adk/session"
+      "google.golang.org/adk/v2/memory"
+      "google.golang.org/adk/v2/session"
     )
 
     // 状態とメモリを共有するには、ランナー間でサービスを共有する必要があります。
@@ -433,9 +433,9 @@ agent = Agent(
 === "Go"
 ```go
 import (
-    "google.golang.org/adk/agent/llmagent"
-    "google.golang.org/adk/tool"
-    "google.golang.org/adk/tool/preloadmemorytool"
+    "google.golang.org/adk/v2/agent/llmagent"
+    "google.golang.org/adk/v2/tool"
+    "google.golang.org/adk/v2/tool/preloadmemorytool"
 )
 
 agent, _ := llmagent.New(llmagent.Config{
@@ -510,11 +510,11 @@ agent = Agent(
 ```go
 import (
     "context"
-    "google.golang.org/adk/agent"
-    "google.golang.org/adk/agent/llmagent"
-    "google.golang.org/adk/session"
-    "google.golang.org/adk/tool"
-    "google.golang.org/adk/tool/loadmemorytool"
+    "google.golang.org/adk/v2/agent"
+    "google.golang.org/adk/v2/agent/llmagent"
+    "google.golang.org/adk/v2/session"
+    "google.golang.org/adk/v2/tool"
+    "google.golang.org/adk/v2/tool/loadmemorytool"
 )
 
 func autoSaveSessionToMemoryCallback(ctx agent.CallbackContext, s session.Session) (*genai.Content, error) {

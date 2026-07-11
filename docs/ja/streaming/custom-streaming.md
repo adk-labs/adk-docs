@@ -82,7 +82,7 @@ adk-streaming/
     2. (`app/`内にある)**`.env`**ファイルを開き、次のコードをコピー＆ペーストします。
 
         ```env title=".env"
-        GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         ```
 
@@ -97,7 +97,7 @@ adk-streaming/
     2. (`app/`内にある)**`.env`**ファイルを開きます。次のコードをコピー＆ペーストし、プロジェクトIDとロケーションを更新します。
 
         ```env title=".env"
-        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         GOOGLE_CLOUD_PROJECT=PASTE_YOUR_ACTUAL_PROJECT_ID
         GOOGLE_CLOUD_LOCATION=us-central1
         ```

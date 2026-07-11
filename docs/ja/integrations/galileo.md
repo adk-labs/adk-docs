@@ -34,7 +34,7 @@ pip install google-adk openinference-instrumentation-google-adk python-dotenv ga
 
 ```env title="my_agent/.env"
 # Gemini environment variables
-GOOGLE_GENAI_USE_VERTEXAI=0
+GOOGLE_GENAI_USE_ENTERPRISE=0
 GOOGLE_API_KEY="YOUR_API_KEY"
 
 # Galileo environment variables

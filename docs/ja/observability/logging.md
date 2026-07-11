@@ -104,12 +104,12 @@ export OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true
 
 #### プログラムによる設定
 
-`google.golang.org/adk/telemetry`パッケージを使用してtelemetry providerを設定できます。
+`google.golang.org/adk/v2/telemetry`パッケージを使用してtelemetry providerを設定できます。
 
 ```go
 import (
 	"context"
-	"google.golang.org/adk/telemetry"
+	"google.golang.org/adk/v2/telemetry"
 )
 
 func main() {

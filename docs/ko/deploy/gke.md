@@ -8,7 +8,7 @@
 
 에이전트를 배포하려면 GKE에서 실행 중인 Kubernetes 클러스터가 필요합니다. Google Cloud 콘솔이나 `gcloud` 명령줄 도구를 사용하여 클러스터를 생성할 수 있습니다.
 
-이 예제에서는 간단한 에이전트를 GKE에 배포합니다. 이 에이전트는 LLM으로 `Gemini 2.0 Flash`를 사용하는 FastAPI 애플리케이션입니다. 환경 변수 `GOOGLE_GENAI_USE_VERTEXAI`를 사용하여 Vertex AI 또는 AI Studio를 LLM 제공자로 사용할 수 있습니다.
+이 예제에서는 간단한 에이전트를 GKE에 배포합니다. 이 에이전트는 LLM으로 `Gemini 2.0 Flash`를 사용하는 FastAPI 애플리케이션입니다. 환경 변수 `GOOGLE_GENAI_USE_ENTERPRISE`를 사용하여 Vertex AI 또는 AI Studio를 LLM 제공자로 사용할 수 있습니다.
 
 ## 환경 변수
 
@@ -17,7 +17,7 @@
 ```bash
 export GOOGLE_CLOUD_PROJECT=your-project-id # GCP 프로젝트 ID
 export GOOGLE_CLOUD_LOCATION=us-central1 # 또는 선호하는 위치
-export GOOGLE_GENAI_USE_VERTEXAI=true # Vertex AI를 사용하는 경우 true로 설정
+export GOOGLE_GENAI_USE_ENTERPRISE=true # Vertex AI를 사용하는 경우 true로 설정
 export GOOGLE_CLOUD_PROJECT_NUMBER=$(gcloud projects describe --format json $GOOGLE_CLOUD_PROJECT | jq -r ".projectNumber")
 ```
 
@@ -308,9 +308,9 @@ spec:
             value: $GOOGLE_CLOUD_PROJECT
           - name: GOOGLE_CLOUD_LOCATION
             value: $GOOGLE_CLOUD_LOCATION
-          - name: GOOGLE_GENAI_USE_VERTEXAI
-            value: "$GOOGLE_GENAI_USE_VERTEXAI"
-          # AI Studio를 사용하는 경우, GOOGLE_GENAI_USE_VERTEXAI를 false로 설정하고 다음을 설정합니다:
+          - name: GOOGLE_GENAI_USE_ENTERPRISE
+            value: "$GOOGLE_GENAI_USE_ENTERPRISE"
+          # AI Studio를 사용하는 경우, GOOGLE_GENAI_USE_ENTERPRISE를 false로 설정하고 다음을 설정합니다:
           # - name: GOOGLE_API_KEY
           #   value: $GOOGLE_API_KEY
           # 에이전트가 필요로 할 수 있는 다른 모든 필요한 환경 변수를 추가합니다

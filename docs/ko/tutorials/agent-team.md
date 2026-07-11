@@ -147,7 +147,7 @@ print(f"OpenAI API Key set: {'Yes' if os.environ.get('OPENAI_API_KEY') and os.en
 print(f"Anthropic API Key set: {'Yes' if os.environ.get('ANTHROPIC_API_KEY') and os.environ['ANTHROPIC_API_KEY'] != 'YOUR_ANTHROPIC_API_KEY' else 'No (REPLACE PLACEHOLDER!)'}")
 
 # 이 다중 모델 설정에서는 Vertex AI가 아닌 API 키를 직접 사용하도록 ADK 구성
-os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
+os.environ["GOOGLE_GENAI_USE_ENTERPRISE"] = "False"
 
 
 # @markdown **보안 참고:** 노트북에 API 키를 직접 하드코딩하는 것보다 보안적으로 관리(예: Colab Secrets 또는 환경 변수 사용)하는 것이 모범 사례입니다. 위의 플레이스홀더 문자열을 교체하세요.

@@ -79,7 +79,7 @@ adk-streaming-ws/
     2. （`app/`）内にある**`.env`**ファイルを開き、次のコードをコピー＆ペーストしてください。
 
         ```env title=".env"
-        GOOGLE_GENAI_USE_VERTEXAI=FALSE
+        GOOGLE_GENAI_USE_ENTERPRISE=FALSE
         GOOGLE_API_KEY=PASTE_YOUR_ACTUAL_API_KEY_HERE
         DEMO_AGENT_MODEL=gemini-2.5-flash-native-audio-preview-09-2025
         #DEMO_AGENT_MODEL=gemini-2.0-flash-exp # 上記モデルが動作しない場合
@@ -96,7 +96,7 @@ adk-streaming-ws/
     2. （`app/`）内にある**`.env`**ファイルを開きます。次のコードをコピー＆ペーストし、プロジェクトIDとロケーションを更新してください。
 
         ```env title=".env"
-        GOOGLE_GENAI_USE_VERTEXAI=TRUE
+        GOOGLE_GENAI_USE_ENTERPRISE=TRUE
         GOOGLE_CLOUD_PROJECT=PASTE_YOUR_ACTUAL_PROJECT_ID
         GOOGLE_CLOUD_LOCATION=us-central1
         DEMO_AGENT_MODEL=gemini-live-2.5-flash-preview-native-audio-09-2025

@@ -147,7 +147,7 @@ print(f"OpenAI API Key set: {'Yes' if os.environ.get('OPENAI_API_KEY') and os.en
 print(f"Anthropic API Key set: {'Yes' if os.environ.get('ANTHROPIC_API_KEY') and os.environ['ANTHROPIC_API_KEY'] != 'YOUR_ANTHROPIC_API_KEY' else 'No (REPLACE PLACEHOLDER!)'}")
 
 # このマルチモデル設定ではVertex AIではなくAPIキーを直接使用するようにADKを構成
-os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
+os.environ["GOOGLE_GENAI_USE_ENTERPRISE"] = "False"
 
 
 # @markdown **セキュリティ上の注意:** APIキーをノートブックに直接ハードコーディングするのではなく、安全に管理（ColabのSecretsや環境変数を使用するなど）することがベストプラクティスです。上記のプレースホルダー文字列を置き換えてください。

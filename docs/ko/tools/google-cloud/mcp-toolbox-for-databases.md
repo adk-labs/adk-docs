@@ -124,7 +124,7 @@ MCP 도구 상자는 다음 데이터베이스 및 데이터 플랫폼에 대한
     	"fmt"
 
     	"github.com/googleapis/mcp-toolbox-sdk-go/tbadk"
-    	"google.golang.org/adk/agent/llmagent"
+    	"google.golang.org/adk/v2/agent/llmagent"
     )
 
     func main() {

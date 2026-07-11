@@ -68,15 +68,17 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
 
 ---
 
-## ジャーニー1：認証済みツールを使用したエージェントアプリケーションの構築
+## 認証済みツールを使用したエージェントアプリケーションの構築
 
 このセクションでは、エージェントアプリケーション内で認証が必要な既存のツール（`RestApiTool/ OpenAPIToolset`、`APIHubToolset`、`GoogleApiToolSet`のツールなど）を使用することに焦点を当てます。主な責任は、ツールを構成し、対話型認証フローのクライアント側部分（ツールで必要な場合）を処理することです。
 
-### 1. 認証によるツールの構成
+### 認証によるツールの構成
 
 認証済みツールをエージェントに追加する場合は、必要な`AuthScheme`とアプリケーションの初期`AuthCredential`を提供する必要があります。
 
-**A. OpenAPIベースのツールセットの使用（`OpenAPIToolset`、`APIHubToolset`など）**
+ツールセットのタイプ（OpenAPIベースまたはGoogle APIツールセット）や、Cloud IAMで保護されたサービスでアクセストークンの代わりにIDトークンが必要かどうかに応じて、認証構成を使い分けることができます。以下の各セクションで詳細を説明します。
+
+#### OpenAPIベースのツールセットの使用（`OpenAPIToolset`、`APIHubToolset`など）
 
 ツールセットの初期化中にスキームと資格情報を渡します。ツールセットは、生成されたすべてのツールにそれらを適用します。ADKで認証付きのツールを作成する方法はいくつかあります。
 
@@ -190,7 +192,7 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
       )
       ```
 
-**B. Google APIツールセットの使用（例：`calendar_tool_set`）**
+#### Google APIツールセットの使用（例：`calendar_tool_set`）
 
 これらのツールセットには、多くの場合、専用の構成メソッドがあります。
 
@@ -203,7 +205,7 @@ from google.adk.tools.google_api_tool import calendar_tool_set
 client_id = "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com"
 client_secret = "YOUR_GOOGLE_OAUTH_CLIENT_SECRET"
 
-# このツールセットタイプの特定の構成メソッドを使用します
+# 이 도구 세트 유형에 대한 특정 구성 메서드 사용
 calendar_tool_set.configure_auth(
     client_id=oauth_client_id, client_secret=oauth_client_secret
 )
@@ -211,7 +213,72 @@ calendar_tool_set.configure_auth(
 # agent = LlmAgent(..., tools=calendar_tool_set.get_tool('calendar_tool_set'))
 ```
 
-認証要求フロー（ツールが認証資格情報を要求する場合）のシーケンス図は次のようになります。
+#### ID トークンの使用
+
+エージェントが制限されたサービス（プライベートな Cloud Run や Cloud Function など）を呼び出す場合、エージェントは権限だけでなく、自身の ID を証明する必要があります。Cloud IAM を使用してアクセスするサービスを呼び出す場合は、ID トークンを使用する必要があります。
+
+* **アクセストークン (デフォルト)**: Google API（Drive、BigQuery など）を呼びします。これは「入館カード」のようなものです。
+    
+* **ID トークン**: IAM で保護された独自サービスを呼び出します。これは「パスポート」のようなものです。
+
+##### 構成
+
+ID トークン認証を実装するには、以下のパラメータを使用して ServiceAccount を構成し、ターゲット サービスの URL を `audience` として指定します。
+
+```python
+from google.adk.auth.auth_credential import ServiceAccount
+from google.adk.tools.openapi_tool.auth.auth_helpers import service_account_scheme_credential
+from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import OpenAPIToolset
+
+# ID トークン認証を使用するように ServiceAccount を構成します。
+# <YOUR_AUDIENCE_URL> を呼び出すサービスの URL に置き換えてください。
+sa_config = ServiceAccount(
+    use_default_credential=True,
+    use_id_token=True,
+    audience="<YOUR_AUDIENCE_URL>",
+)
+
+auth_scheme, auth_credential = service_account_scheme_credential(sa_config)
+
+sample_toolset = OpenAPIToolset(
+    spec_str=sa_openapi_spec_str, # OpenAPI 仕様を入力します
+    spec_str_type="json",
+    auth_scheme=auth_scheme,
+    auth_credential=auth_credential,
+)
+```
+
+!!! tip "認証エラーのトラブルシューティング"
+
+    認証エラーを受け取った場合は、サービス アカウントがターゲット サービスに対して「Cloud Run 起動元 (Cloud Run Invoker)」またはそれと同等のロールを持っていることを確認してください。
+
+##### 主な要点
+
+* **Audience（オーディエンス）の要件**: `audience` は、トークンを特定の宛先にバインドして、他のサービスに対してトークンが「リプレイ（再利用）」されるのを防ぐセキュリティ機能です。
+  
+* **自動更新なし**: ユーザー用の標準的な OAuth2 アクセストークンとは異なり、サービス アカウントの ID トークンは要求時に取得されます。バックグラウンドタイマーで自動更新されることはありません。
+  
+* **フロー**: 意図を定義すれば、ADK がハンドシェイクを処理し、Google の認証サーバーからトークンを取得して、送信する HTTP ヘッダーに挿入します。
+
+##### ServiceAccount 構成パラメータ
+
+* `service_account_credential` (オプション): サービスアカウントの JSON キーファイルへのパスまたは辞書を提供します。ローカルまたは Google Cloud の外で実行する場合に使用します。
+  
+* `use_default_credential` (オプション): アプリケーションのデフォルト認証情報 (ADC) を使用するには True に設定します。エージェントがすでに Cloud Run や Cloud Functions などの Google Cloud 内で実行されている場合は、ローカルのキーファイルが不要になるため推奨されます。
+  
+* `use_id_token` (IAM で必要): ID トークンベースの認証を有効にするには True に設定します。これにより、ADK は Google API 用のアクセストークンを要求する代わりに、独自の IAM セキュリティで保護されたサービス用の ID トークンを要求するように切り替わります。
+  
+* `audience` (`use_id_token=True` の場合必須): 呼び出すサービスの URL（例: `https://my-service.run.app`）です。これは、トークンがその特定の宛先に対してのみ有効であることを保証するセキュリティバインディングです。
+  
+* `scopes` (オプション): Drive や BigQuery などの Google Cloud API 用のアクセストークンを要求する場合にのみ使用します。プライベートサービス認証に ID トークンを使用する場合は、これを設定する必要はありません。
+
+!!! tip "`use_id_token` と `audience` のペアリング"
+
+    常に `use_id_token=True` と `audience` を組み合わせて使用してください。片方だけを提供し、もう片方を提供しない場合、ADK は誤った設定を防ぐためにエラーを発生させます。
+
+#### 認証要求フロー
+
+この図は、ユーザーの初期クエリから、ADKによる認証要求の検出、リダイレクト処理、および認証時のツール呼び出しの自動再試行に至るまでのエンドツーエンドの認証ハンドシェイクフローを表しています。
 
 ![認証](../assets/auth_part1.svg) 
 
@@ -420,7 +487,7 @@ if auth_request_function_call_id and auth_config:
 
 ![認証](../assets/auth_part2.svg)
 
-## ジャーニー2：認証が必要なカスタムツール（`FunctionTool`）の構築
+## 認証が必要なカスタムツール（`FunctionTool`）の構築
 
 このセクションでは、新しいADKツールを作成する際に、カスタムPython関数*内*で認証ロジックを実装することに焦点を当てます。例として`FunctionTool`を実装します。
 

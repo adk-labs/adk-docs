@@ -12,7 +12,7 @@ ADK 문서를 연결해 코딩 에이전트에 ADK 전문성을 제공하세요.
 
 ## Agents CLI {#agents-cli}
 
-[Agents CLI](https://google.github.io/agents-cli/) 도구 세트를 사용하면 Antigravity, Gemini CLI, Claude Code, Cursor를 포함하여 즐겨 사용하는 AI 코딩 환경에 ADK 에이전트 전문성을 연결할 수 있습니다. 현재 사용 중인 AI 기반 개발 환경에 Agents CLI를 설치하여 ADK 에이전트를 스캐폴딩, 빌드, 테스트, 평가 및 배포하세요. 다음과 같은 Agents CLI 스킬로 개발 환경을 보완할 수 있습니다.
+[Agents CLI](https://google.github.io/agents-cli/) 도구 세트를 사용하면 Antigravity, Claude Code, Cursor 및 기타 AI 코딩 도구를 포함하여 즐겨 사용하는 AI 코딩 환경에 ADK 에이전트 전문성을 연결할 수 있습니다. 현재 사용 중인 AI 기반 개발 환경에 Agents CLI를 설치하여 ADK 에이전트를 스캐폴딩, 빌드, 테스트, 평가 및 배포하세요. 다음과 같은 Agents CLI 스킬로 개발 환경을 보완할 수 있습니다.
 
 *   개발 수명 주기 및 코딩 가이드라인
 *   프로젝트 스캐폴딩
@@ -34,16 +34,6 @@ uvx google-agents-cli setup
 
 MCP 서버를 사용하도록 코딩 도구를 구성하면 ADK 문서를 검색하고 읽을 수
 있습니다. 아래에는 널리 쓰이는 도구의 설정 방법이 나와 있습니다.
-
-### Gemini CLI
-
-[Gemini CLI](https://geminicli.com/)에 ADK 문서 MCP 서버를 추가하려면
-[ADK Docs Extension](https://github.com/derailed-dash/adk-docs-ext)을
-설치하세요.
-
-```bash
-gemini extensions install https://github.com/derailed-dash/adk-docs-ext
-```
 
 ### Antigravity
 
