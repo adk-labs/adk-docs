@@ -302,6 +302,7 @@ plugins:
                 - Python: get-started/python.md
                 - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
+                - Google Cloud: get-started/google-cloud.md
                 - Java: get-started/java.md
                 - Kotlin: get-started/kotlin.md
               - 에이전트 만들기:
@@ -318,6 +319,7 @@ plugins:
               - 에이전트:
                 - agents/index.md
                 - LLM 에이전트: agents/llm-agents.md
+                - Managed agents (관리형 에이전트): agents/managed-agents.md
                 - 워크플로우 에이전트:
                   - agents/workflow-agents/index.md
                   - 순차 에이전트: agents/workflow-agents/sequential-agents.md
@@ -477,6 +479,7 @@ plugins:
                 - Python: get-started/python.md
                 - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
+                - Google Cloud: get-started/google-cloud.md
                 - Java: get-started/java.md
                 - Kotlin: get-started/kotlin.md
               - エージェントを作成:
@@ -493,6 +496,7 @@ plugins:
               - エージェント:
                 - agents/index.md
                 - LLMエージェント: agents/llm-agents.md
+                - Managed agents (マネージドエージェント): agents/managed-agents.md
                 - ワークフローエージェント:
                   - agents/workflow-agents/index.md
                   - シーケンシャルエージェント: agents/workflow-agents/sequential-agents.md
