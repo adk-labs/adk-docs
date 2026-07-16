@@ -86,7 +86,7 @@
 
 **대안: ADK 내장 도구 사용 (Web UI / CLI / API Server)**
 
-ADK의 표준 도구를 사용하여 러너 및 세션 관리를 자동으로 처리하는 설정을 선호하는 경우, [여기](https://github.com/google/tree/main/examples/python/tutorial/agent_team/adk-tutorial)에서 해당 목적에 맞게 구성된 코드를 찾을 수 있습니다. 해당 버전은 `adk web`(웹 UI용), `adk run`(CLI 상호 작용용) 또는 `adk api_server`(API 노출용)와 같은 명령어로 직접 실행되도록 설계되었습니다. 해당 대체 리소스에 제공된 `README.md` 지침을 따르세요.
+ADK의 표준 도구를 사용하여 러너 및 세션 관리를 자동으로 처리하는 설정을 선호하는 경우, [여기](https://github.com/google/adk-docs/tree/main/examples/python/tutorial/agent_team/adk_tutorial)에서 해당 목적에 맞게 구성된 코드를 찾을 수 있습니다. 해당 버전은 `adk web`(웹 UI용), `adk run`(CLI 상호 작용용) 또는 `adk api_server`(API 노출용)와 같은 명령어로 직접 실행되도록 설계되었습니다. 해당 대체 리소스에 제공된 `README.md` 지침을 따르세요.
 
 ---
 

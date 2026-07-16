@@ -86,7 +86,7 @@
 
 **代替手段：ADKの組み込みツール（Web UI / CLI / API Server）を使用する場合**
 
-ADKの標準ツールを使用してランナーとセッション管理を自動的に処理する設定を希望する場合は、[こちら](https://github.com/google/tree/main/examples/python/tutorial/agent_team/adk-tutorial)にその目的に合わせて構成されたコードがあります。そのバージョンは、`adk web`（Web UI用）、`adk run`（CLI対話用）、または`adk api_server`（API公開用）のようなコマンドで直接実行するように設計されています。その代替リソースにある`README.md`の指示に従ってください。
+ADKの標準ツールを使用してランナーとセッション管理を自動的に処理する設定を希望する場合は、[こちら](https://github.com/google/adk-docs/tree/main/examples/python/tutorial/agent_team/adk_tutorial)にその目的に合わせて構成されたコードがあります。そのバージョンは、`adk web`（Web UI用）、`adk run`（CLI対話用）、または`adk api_server`（API公開用）のようなコマンドで直接実行するように設計されています。その代替リソースにある`README.md`の指示に従ってください。
 
 ---
 
