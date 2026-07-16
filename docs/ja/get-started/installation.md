@@ -103,13 +103,13 @@ hide:
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
-                <version>1.4.0</version>
+                <version>1.6.0</version>
             </dependency>
             <!-- エージェントをデバッグするためのADK開発Web UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
-                <version>1.4.0</version>
+                <version>1.6.0</version>
             </dependency>
         </dependencies>
 
@@ -122,8 +122,8 @@ hide:
 
     ```title="build.gradle"
     dependencies {
-        implementation 'com.google.adk:google-adk:1.4.0'
-        implementation 'com.google.adk:google-adk-dev:1.4.0'
+        implementation 'com.google.adk:google-adk:1.6.0'
+        implementation 'com.google.adk:google-adk-dev:1.6.0'
     }
     ```
 
@@ -142,8 +142,8 @@ hide:
     }
 
     dependencies {
-        implementation("com.google.adk:google-adk-kotlin-core:0.2.0")
-        ksp("com.google.adk:google-adk-kotlin-processor:0.2.0")
+        implementation("com.google.adk:google-adk-kotlin-core:0.5.0")
+        ksp("com.google.adk:google-adk-kotlin-processor:0.5.0")
     }
     ```
 
