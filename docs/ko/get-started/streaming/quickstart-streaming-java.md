@@ -188,7 +188,7 @@ mvn exec:java \
     <auto-value.version>1.11.0</auto-value.version>
     <!-- exec-maven-plugin용 메인 클래스 -->
     <exec.mainClass>samples.liveaudio.LiveAudioRun</exec.mainClass>
-    <google-adk.version>1.4.0</google-adk.version>
+    <google-adk.version>1.6.0</google-adk.version>
   </properties>
 
   <dependencyManagement>
