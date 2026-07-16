@@ -16,7 +16,7 @@
 `BaseMemoryService`（Goでは`Service`）は、この検索可能な長期的な知識ストアを管理するためのインターフェイスを定義します。次の4つの操作をサポートします。
 
 1. **セッションの取り込み（`add_session_to_memory`）：** （通常は完了した）`Session`のコンテンツを取得し、関連情報を長期的な知識ストアに追加します。
-2. **イベントの増分取り込み（`add_events_to_memory`）：** セッション全体を再取り込みせずに、イベントの差分（最新ターンなど）を追加します。長時間実行されるセッションの途中でメモリに書き込みたい場合に便利です。
+2. **イベントの増分取り込み（`add_events_to_memory`）：** セッション全体を再取り込みせずに、イベントの差分（最新ターンなど）を追加します。長時間実行されるセッション의 와중에 메모리에 쓰고 싶을 때 유용합니다. (view_file: `長時間実行されるセッションの途中でメモリに書き込みたい場合に便利です。`)
 3. **メモリ項目の直接書き込み（`add_memory`）：** イベントベースの抽出と並行して直接書き込みをサポートするサービス向けに、事前構築された`MemoryEntry`項目を挿入します。
 4. **検索（`search_memory`）：** エージェント（通常は`Tool`を介して）が知識ストアをクエリし、検索クエリに基づいて関連するスニペットを取得できるようにします。
 
@@ -113,7 +113,7 @@ Python ADKには3つの`MemoryService`実装が含まれています。以下の
     memory_recall_agent = LlmAgent(
         model=MODEL,
         name="MemoryRecallAgent",
-        instruction="ユーザーの質問に答えます。答えが過去の会話にある可能性がある場合は、「load_memory」ツールを使用してください。",
+        instruction="ユーザーの質問に答えます。答えが過去의 대화에 있을 가능성이 있는... (view_file: `答えが過去の会話にある可能性がある場合は、「load_memory」ツールを使用してください。`)",
         tools=[load_memory] # エージェントにツールを提供
     )
 
@@ -128,11 +128,11 @@ Python ADKには3つの`MemoryService`実装が含まれています。以下の
         # ターン1：セッションでいくつかの情報をキャプチャする
         print("--- ターン1：情報のキャプチャ ---")
         runner1 = Runner(
-            # 情報キャプチャエージェントから開始
+            # 정보 캐쳐 에이전트에서 시작
             agent=info_capture_agent,
             app_name=APP_NAME,
             session_service=session_service,
-            memory_service=memory_service # ランナーにメモリサービスを提供
+            memory_service=memory_service # Runner에 메모리 서비스 제공
         )
         session1_id = "session_info"
         await runner1.session_service.create_session(app_name=APP_NAME, user_id=USER_ID, session_id=session1_id)
@@ -371,7 +371,7 @@ Python ADKには3つの`MemoryService`実装が含まれています。以下の
 adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 ```
 
-または、`VertexAiMemoryBankService`を手動でインスタンス化し、それを`Runner`に渡すことで、メモリバンクを使用するようにエージェントを構成できます。
+또는, `VertexAiMemoryBankService`를 수동으로 인스턴스화하고 `Runner`에 전달하여 메모리 뱅크를 사용하도록 에이전트를 구성할 수 있습니다. (view_file: `または、`VertexAiMemoryBankService`を手動でインスタンス化し、それを`Runner`に渡すことで、メモリバンクを使用するようにエージェントを構成できます。`)
 
 === "Python"
   ```py
@@ -394,7 +394,7 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 
 ## RAG Memory { #rag-memory }
 
-`VertexAiRagMemoryService`は、会話を[Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)に保存し、ベクトル類似度で検索します。既存のRAGインフラがある場合、またはMemory Bankが生成するLLM抽出メモリではなく生の会話トランスクリプトを検索したい場合に使用します。Agent Platform SDKが必要です。
+`VertexAiRagMemoryService`는 대화를... (view_file: ``VertexAiRagMemoryService`は、会話を[Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)に保存し、ベクトル類似度で検索します。既存のRAGインフラがある場合、またはMemory Bankが生成するLLM抽出メモリではなく生の会話トランスクリプトを検索したい場合に使用します。Agent Platform SDKが必要です。`)
 
 === "Python"
 
@@ -412,8 +412,8 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 
 メモリサービスが構成されている場合、エージェントはツールまたはコールバックを使用してメモリを取得できます。ADKには、メモリを取得するための2つの組み込みツールが含まれています。
 
-* `PreloadMemory`: 各ターンの開始時に常にメモリを取得します（コールバックに似ています）。
-* `LoadMemory`: エージェントが役立つと判断したときにメモリを取得します。
+- **メモリの事前ロード(Preload memory)**: コールバックと同様に、各ターンの開始時にメモリを自動的に取得します。
+- **メモリのロード(Load memory)**: エージェントが役立つと判断したときにメモリを取得します。
 
 **例：**
 
@@ -486,7 +486,7 @@ LlmAgent agent = new LlmAgent.Builder()
     });
     ```
 
-セッションからメモリを抽出するには、`add_session_to_memory`を呼び出す必要があります。たとえば、コールバックを介してこれを自動化できます。
+セッションからメモリを抽出するには、`add_session_to_memory` を呼び出す必要があります。たとえば、コールバックを使用してこのステップを自動化できます。
 
 === "Python"
 ```python
@@ -559,25 +559,24 @@ LlmAgent agent = new LlmAgent.Builder()
 
 ## 高度な概念
 
-### メモリの実際の仕組み
+### 実務におけるメモリの仕組み
 
 メモリワークフローには、内部的に次の手順が含まれます。
 
-1. **セッションの対話：** ユーザーは`SessionService`によって管理される`Session`を介してエージェントと対話します。イベントが追加され、状態が更新される場合があります。
-2. **メモリへの取り込み：** ある時点で（多くの場合、セッションが完了したと見なされるか、重要な情報を生成した場合）、アプリケーションは`memory_service.add_session_to_memory(session)`を呼び出します。これにより、セッションのイベントから関連情報が抽出され、長期的な知識ストア（インメモリ辞書またはエージェントエンジンメモリバンク）に追加されます。
-3. **後のクエリ：** *異なる*（または同じ）セッションで、ユーザーは過去のコンテキストを必要とする質問をする場合があります（例：「先週、プロジェクトXについて何を話し合いましたか？」）。
-4. **エージェントがメモリツールを使用：** メモリ取得ツール（組み込みの`load_memory`ツールなど）を備えたエージェントは、過去のコンテキストの必要性を認識します。ツールを呼び出し、検索クエリ（例：「先週のプロジェクトXの議論」）を提供します。
-5. **検索の実行：** ツールは内部的に`memory_service.search_memory(app_name, user_id, query)`を呼び出します。
-6. **結果の返却：** `MemoryService`はストアを検索し（キーワードマッチングまたはセマンティック検索を使用）、関連するスニペットを`MemoryResult`オブジェクトのリストを含む`SearchMemoryResponse`として返します（それぞれが関連する過去のセッションのイベントを保持している可能性があります）。
-7. **エージェントが結果を使用：** ツールはこれらの結果をエージェントに返し、通常はコンテキストまたは関数応答の一部として返します。その後、エージェントはこの取得した情報を使用して、ユーザーへの最終的な回答を作成できます。
+1. **セッションの対話:** ユーザーは `SessionService` によって管理される `Session` を介してエージェントと対話します。この対話の間、イベントが記録され、セッション状態が更新される場合があります。
+2. **メモリへの取り込み:** セッションが終了するか、重要な情報が収集されると、アプリケーションは `memory_service.add_session_to_memory(session)` を呼び出します。このアクションにより、重要なデータが抽出され、Agent Runtime Memory Bank などの長期的な知識ストアに永続化されます。
+3. **後のクエリ:** 異なるセッション、または同じセッションで、過去のコンテキストを必要とする質問をする場合があります（例：「先週、プロジェクトXについて何を話し合いましたか？」）。
+4. **エージェントがメモリツールを使用:** 組み込みの `load_memory` ツールなど、メモリ取得ツールを備えたエージェントは、過去のコンテキストの必要性を認識します。ツールを呼び出し、検索クエリ（例：「先週のプロジェクトXの議論」）を提供します。
+5. **検索の実行:** ツールは内部的に `memory_service.search_memory(app_name=..., user_id=..., query=...)` を呼び出します。
+6. **結果の返却:** `MemoryService` は、キーワードマッチングまたはセマンティック検索を使用してストアを検索し、一致するスニペットを、`content` とすべてのオプション項目（`author`、`timestamp`、`custom_metadata`）を保持する `MemoryEntry` オブジェクトのリストを含む `SearchMemoryResponse` として返します。
+7. **エージェントが結果を使用:** ツールはこれらの結果をエージェントに返し、通常はコンテキストまたは関数応答の一部として返します。その後、エージェントはこの取得した情報を使用して、ユーザーへの最終的な回答を作成できます。
 
 ### エージェントは複数のメモリサービスにアクセスできますか？
 
-*   **標準構成を介して：いいえ。** フレームワーク（`adk web`、`adk api_server`）は、`--memory_service_uri`フラグを介して一度に1つのメモリサービスで構成するように設計されています。この単一のサービスは、エージェントに提供され、組み込みの`self.search_memory()`メソッドを介してアクセスされます。構成の観点からは、そのプロセスによって提供されるすべてのエージェントに対して1つのバックエンド（`InMemory`、`VertexAiMemoryBankService`）しか選択できません。
+- **標準構成を介して：いいえ。** フレームワーク（`adk web`、`adk api_server`）は、`--memory_service_uri` フラグを介して一度に1つのメモリサービスで構成するように設計されています。その単一のサービスはランナーに組み込まれ、`tool_context.search_memory()` および `callback_context.search_memory()` を介して公開されます。
+- **エージェントのコード内：はい。** 2番目の `BaseMemoryService` をインスタンス化し、フレームワークで構成されたサービス用の `ToolContext` をすでに持っているカスタムツールからそれを参照できます。
 
-*   **エージェントのコード内：はい、もちろんです。** エージェントのコード内で別のメモリサービスを直接手動でインポートしてインスタンス化することを妨げるものは何もありません。これにより、単一のエージェントターン内で複数のメモリソースにアクセスできます。
-
-たとえば、エージェントはフレームワークで構成された`InMemoryMemoryService`を使用して会話履歴を思い出し、`VertexAiMemoryBankService`を手動でインスタンス化して技術マニュアルの情報を検索できます。
+たとえば、エージェントは会話履歴用にフレームワークで構成された `InMemoryMemoryService` を使用し、別のナレッジベース用に `VertexAiMemoryBankService` や、ドキュメントコーパスに対する `VertexAiRagMemoryService`、またはその他の `BaseMemoryService` 実装などの2番目のサービスを手動でインスタンス化できます。
 
 #### 例：2つのメモリサービスの使用
 
@@ -604,7 +603,7 @@ class MultiMemoryAgent(Agent):
     async def run(self, request: types.Content, **kwargs) -> types.Content:
         user_query = request.parts[0].text
 
-        # 1. フレームワーク提供のメモリを使用して会話履歴を検索します
+        # 1.  フレームワーク提供のメモリを使用して会話履歴を検索します
         #    （構成されている場合はInMemoryMemoryServiceになります）
         conversation_context = await self.memory_service.search_memory(query=user_query)
 
