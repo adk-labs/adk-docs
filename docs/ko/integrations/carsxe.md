@@ -11,7 +11,7 @@ catalog_tags: ["mcp"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
-[CarsXE MCP 서버](https://github.com/carsxe/carsxe-mcp-server)는 ADK 에이전트를 [CarsXE](https://www.carsxe.com/) 차량 데이터 플랫폼에 연결합니다. 이 통합은 CarsXE의 API(VIN 디코딩 및 전체 사양, 번호판 디코딩, 시장 가치, 타이틀 및 소유권 이력, 안전 리콜, 유치권 및 도난 기록, OBD-II 코드 디코딩, 이미지 조회 등)를 에이전트가 자연어("차량 번호판/VIN 디코딩해 줘" 또는 "이 차에 진행 중인 리콜이 있어?")로 호출할 수 있는 MCP 도구로 제공합니다.
+[CarsXE MCP 서버](https://github.com/carsxe/carsxe-mcp-server)는 ADK 에이전트를 [CarsXE](https://carsxe.com/) 차량 데이터 플랫폼에 연결합니다. 이 통합은 CarsXE의 API(VIN 디코딩 및 전체 사양, 번호판 디코딩, 시장 가치, 타이틀 및 소유권 이력, 안전 리콜, 유치권 및 도난 기록, OBD-II 코드 디코딩, 이미지 조회 등)를 에이전트가 자연어("차량 번호판/VIN 디코딩해 줘" 또는 "이 차에 진행 중인 리콜이 있어?")로 호출할 수 있는 MCP 도구로 제공합니다.
 
 서버는 스트리밍 가능한 HTTP를 통해 `https://mcp.carsxe.com/mcp`에서 호스팅되므로 로컬 설치가 필요 없으며 에이전트가 원격 엔드포인트에 직접 연결합니다.
 
@@ -115,5 +115,5 @@ catalog_tags: ["mcp"]
 
 - [CarsXE MCP 서버 저장소](https://github.com/carsxe/carsxe-mcp-server)
 - [CarsXE API 문서](https://api.carsxe.com/docs)
-- [CarsXE 홈페이지](https://www.carsxe.com/)
+- [CarsXE 홈페이지](https://carsxe.com/)
 - [CarsXE API 키 받기](https://api.carsxe.com/dashboard/developer)

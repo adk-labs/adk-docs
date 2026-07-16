@@ -11,7 +11,7 @@ catalog_tags: ["mcp"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
-[CarsXE MCP サーバー](https://github.com/carsxe/carsxe-mcp-server) は、ADK エージェントを [CarsXE](https://www.carsxe.com/) 車両データプラットフォームに接続します。これは CarsXE の API（VIN デコードと詳細スペック、ナンバープレートのデコード、市場価値、タイトルおよび所有権履歴、安全リコール、先取特権および盗難記録、OBD-II コードデコード、画像ルックアップなど）を、エージェントが自然言語（「VIN 1HGBH41JXMN109186 をデコードして」や「この車に未解決のリコールはある？」など）で呼び出せる MCP ツールとして公開します。
+[CarsXE MCP サーバー](https://github.com/carsxe/carsxe-mcp-server) は、ADK エージェントを [CarsXE](https://carsxe.com/) 車両データプラットフォームに接続します。これは CarsXE の API（VIN デコードと詳細スペック、ナンバープレートのデコード、市場価値、タイトルおよび所有権履歴、安全リコール、先取特権および盗難記録、OBD-II コードデコード、画像ルックアップなど）を、エージェントが自然言語（「VIN 1HGBH41JXMN109186 をデコードして」や「この車に未解決のリコールはある？」など）で呼び出せる MCP ツールとして公開します。
 
 サーバーはストリーミング可能な HTTP 経由で `https://mcp.carsxe.com/mcp` にてホストされているため、ローカルへのインストールは不要で、エージェントはリモートエンドポイントに直接接続します。
 
@@ -115,5 +115,5 @@ catalog_tags: ["mcp"]
 
 - [CarsXE MCP サーバーリポジトリ](https://github.com/carsxe/carsxe-mcp-server)
 - [CarsXE API ドキュメント](https://api.carsxe.com/docs)
-- [CarsXE ホームページ](https://www.carsxe.com/)
+- [CarsXE ホームページ](https://carsxe.com/)
 - [CarsXE API キーの取得](https://api.carsxe.com/dashboard/developer)
