@@ -1,28 +1,29 @@
 ---
 catalog_title: Google Cloud Trace
-catalog_description: ADK エージェントのやり取りを監視・デバッグ・トレースします
+catalog_description: ADK エージェントの相互作用をモニター、デバッグ、追跡します
 catalog_icon: /integrations/assets/cloud-trace.svg
 catalog_tags: ["observability", "google"]
 ---
-# Cloud Traceによるエージェントの可観測性
+
+# ADK 用 Google Cloud Trace によるオブザーバビリティ
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span>
 </div>
 
-ADKを使用すると、[こちら](https://adk.dev/evaluate/#debugging-with-the-trace-view)で説明されている強力なWeb開発UIを利用して、エージェントのインタラクションをローカルで検査および監視できます。ただし、クラウドへのデプロイを目指す場合は、実際のトラフィックを監視するための一元化されたダッシュボードが必要になります。
+ローカル開発中は、[ADK Web UI のトレースビュー](/evaluate/#debugging-with-the-trace-view)を使用してエージェントの動作を検査できます。エージェントをデプロイした後は、実際のトラフィックから発生するトレースデータを一元的に監視する方法が必要になります。
 
-Cloud TraceはGoogle Cloud Observabilityのコンポーネントです。これは、特にトレース機能に重点を置くことで、アプリケーションのパフォーマンスを監視、デバッグ、改善するための強力なツールです。Agent Development Kit（ADK）アプリケーションの場合、Cloud Traceは包括的なトレースを可能にし、リクエストがエージェントのインタラクションをどのように通過するかを理解し、AIエージェント内のパフォーマンスのボトルネックやエラーを特定するのに役立ちます。
+[Cloud Trace](https://cloud.google.com/trace) は、Google Cloud Observability の分散トレースコンポーネントです。遅延を監視し、エラーをデバッグし、アプリケーション全体のパフォーマンスを向上させることができるように、トレースデータを収集して可視化します。ADK エージェントの場合、Cloud Trace は各リクエストがモデル呼び出し、ツール実行、エージェントステップを経て流れる過程を捕捉し、本番環境のボトルネックやエラーを特定できるようにします。
 
 ## 概要
 
-Cloud Traceは、トレースデータを生成するための多くの言語と取り込み方法をサポートするオープンソース標準である[OpenTelemetry](https://opentelemetry.io/)上に構築されています。これは、OpenTelemetry互換の計装も活用するADKアプリケーションの可観測性の実践と一致しており、次のことが可能になります。
+Cloud Trace は、トレースデータを生成するために複数の言語と収集方法をサポートするオープンソース標準である [OpenTelemetry](https://opentelemetry.io/) に基づいて構築されています。これは、OpenTelemetry 互換のインスツルメンテーションを利用する ADK アプリケーションのオブザーバビリティ手法と一致しており、以下を可能にします。
 
-- エージェントのインタラクションのトレース：Cloud Traceはプロジェクトからトレースデータを継続的に収集および分析し、ADKアプリケーション内のレイテンシの問題やエラーを迅速に診断できるようにします。この自動データ収集により、複雑なエージェントワークフローでの問題の特定プロセスが簡素化されます。
-- 問題のデバッグ：詳細なトレースを分析することで、レイテンシの問題やエラーを迅速に診断します。異なるサービス間での通信レイテンシの増加として現れる問題や、ツール呼び出しなどの特定のエージェントアクション中に現れる問題を理解するために重要です。
-- 詳細な分析と視覚化：Trace Explorerはトレースを分析するための主要なツールであり、スパン期間のヒートマップやリクエスト/エラー率の折れ線グラフなどの視覚的な補助機能を提供します。また、サービスや操作ごとにグループ化できるスパンテーブルも提供し、代表的なトレースへのワンクリックアクセスと、エージェントの実行パス内のボトルネックやエラーの原因を簡単に特定できるウォーターフォールビューを提供します。
+- **エージェント相互作用の追跡**: Cloud Trace はプロジェクトからトレースデータを継続的に収集して分析し、ADK アプリケーション内の遅延の問題やエラーを迅速に診断できるようにします。この自動データ収集は、複雑なエージェントワークフローで問題を特定するプロセスを簡素化します。
+- **問題のデバッグ**: 詳細なトレースを分析して、遅延の問題やエラーを迅速に診断します。これらのトレースは、複数のサービス間にわたる通信遅延の増加や、ツール呼び出しなどの特定のエージェントアクション中に発生する問題を理解するのに重要です。
+- **深い分析と視覚化**: Trace Explorer はトレースを分析するための主要なツールであり、スパン期間のヒートマップやスパンレートの折れ線グラフなどの視覚的な補助を提供します。また、サービスや操作ごとにグループ化できるスパンテーブルを提供し、代表的なトレースへのワンクリックアクセスと、エージェント実行パス内のボトルネックやエラーの原因を簡単に特定できるウォーターフォールビューを提供します。
 
-次の例では、次のエージェントディレクトリ構造を想定しています。
+以下の例では、次のエージェントディレクトリ構造を想定しています。
 
 ```
 working_dir/
@@ -34,236 +35,194 @@ working_dir/
 └── agent_runner.py
 ```
 
-```python
-# weather_agent/agent.py
+=== "Python"
+    ```python
+    # weather_agent/agent.py
 
-import os
-from google.adk.agents import Agent
+    import os
+    from google.adk.agents import Agent
 
-os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "{your-project-id}")
-os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
-os.environ.setdefault("GOOGLE_GENAI_USE_ENTERPRISE", "True")
-
-
-# ツール関数を定義する
-def get_weather(city: str) -> dict:
-    """指定された都市の現在の天気予報を取得します。
-
-    Args:
-        city (str): 天気予報を取得する都市の名前。
-
-    Returns:
-        dict: ステータスと結果、またはエラーメッセージ。
-    """
-    if city.lower() == "new york":
-        return {
-            "status": "success",
-            "report": (
-                "ニューヨークの天気は晴れで、気温は摂氏25度（華氏77度）です。"
-            ),
-        }
-    else:
-        return {
-            "status": "error",
-            "error_message": f"'{city}'の天気情報は利用できません。",
-        }
+    os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "{your-project-id}")
+    os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
+    os.environ.setdefault("GOOGLE_GENAI_USE_ENTERPRISE", "True")
 
 
-# ツールを持つエージェントを作成する
-root_agent = Agent(
-    name="weather_agent",
-    model="gemini-flash-latest",
-    description="天気ツールを使用して質問に答えるエージェント。",
-    instruction="答えを見つけるには、利用可能なツールを使用する必要があります。",
-    tools=[get_weather],
-)
-```
+    # ツール関数の定義
+    def get_weather(city: str) -> dict:
+        """指定された都市の現在の天気予報を取得します。
 
-## Cloud Traceのセットアップ
+        Args:
+            city (str): 天気予報を取得する都市の名前。
 
-### Agent Engineデプロイのセットアップ
-
-#### Agent Engineデプロイ - ADK CLIから
-
-`adk deploy agent_engine`コマンドを使用してエージェントをデプロイするときに`--trace_to_cloud`フラグを追加することで、クラウドトレースを有効にできます。
-
-```bash
-adk deploy agent_engine \
-    --project=$GOOGLE_CLOUD_PROJECT \
-    --region=$GOOGLE_CLOUD_LOCATION \
-    --staging_bucket=$STAGING_BUCKET \
-    --trace_to_cloud \
-    $AGENT_PATH
-```
-
-#### Agent Engineデプロイ - Python SDKから
-
-Python SDKを使用する場合は、`AdkApp`オブジェクトを初期化するときに`enable_tracing=True`を追加することで、クラウドトレースを有効にできます。
-
-```python
-# deploy_agent_engine.py
-
-from vertexai.preview import reasoning_engines
-from vertexai import agent_engines
-from weather_agent.agent import root_agent
-
-import vertexai
-
-PROJECT_ID = "{your-project-id}"
-LOCATION = "{your-preferred-location}"
-STAGING_BUCKET = "{your-staging-bucket}"
-
-vertexai.init(
-    project=PROJECT_ID,
-    location=LOCATION,
-    staging_bucket=STAGING_BUCKET,
-)
-
-adk_app = reasoning_engines.AdkApp(
-    agent=root_agent,
-    enable_tracing=True,
-)
+        Returns:
+            dict: ステータスと結果、またはエラーメッセージ。
+        """
+        if city.lower() == "new york":
+            return {
+                "status": "success",
+                "report": (
+                    "ニューヨークの天気は晴れで、気温は摂氏 25 度（華氏 77 度）です。"
+                ),
+            }
+        else:
+            return {
+                "status": "error",
+                "error_message": f"'{city}'の天気情報は利用できません。",
+            }
 
 
-remote_app = agent_engines.create(
-    agent_engine=adk_app,
-    extra_packages=[
-        "./weather_agent",
-    ],
-    requirements=[
-        "google-cloud-aiplatform[adk,agent_engines]",
-    ],
-)
-```
-
-### Cloud Runデプロイのセットアップ
-
-#### Cloud Runデプロイ - ADK CLIから
-
-`adk deploy cloud_run`コマンドを使用してエージェントをデプロイするときに`--trace_to_cloud`フラグを追加することで、クラウドトレースを有効にできます。
-
-```bash
-adk deploy cloud_run \
-    --project=$GOOGLE_CLOUD_PROJECT \
-    --region=$GOOGLE_CLOUD_LOCATION \
-    --trace_to_cloud \
-    $AGENT_PATH
-```
-
-クラウドトレースを有効にし、Cloud Runでカスタマイズされたエージェントサービスデプロイを使用する場合は、以下の[カスタマイズされたデプロイのセットアップ](#setup-for-customized-deployment)セクションを参照してください。
-
-### カスタマイズされたデプロイのセットアップ
-
-#### 組み込みの`get_fast_api_app`モジュールから
-
-独自のエージェントサービスをカスタマイズする場合は、組み込みの`get_fast_api_app`モジュールを使用してFastAPIアプリを初期化し、`trace_to_cloud=True`を設定することで、クラウドトレースを有効にできます。
-
-```python
-# deploy_fast_api_app.py
-
-import os
-from google.adk.cli.fast_api import get_fast_api_app
-from fastapi import FastAPI
-
-# クラウドトレースのためにGOOGLE_CLOUD_PROJECT環境変数を設定する
-os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "alvin-exploratory-2")
-
-# 現在の作業ディレクトリで`weather_agent`ディレクトリを検出する
-AGENT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# クラウドトレースを有効にしてFastAPIアプリを作成する
-app: FastAPI = get_fast_api_app(
-    agents_dir=AGENT_DIR,
-    web=True,
-    trace_to_cloud=True,
-)
-
-app.title = "weather-agent"
-app.description = "エージェントweather-agentと対話するためのAPI"
-
-
-# メインの実行
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8080)
-```
-
-
-#### カスタマイズされたエージェントランナーから
-
-ADKエージェントランタイムを完全にカスタマイズする場合は、Opentelemetryの`CloudTraceSpanExporter`モジュールを使用してクラウドトレースを有効にできます。
-
-```python
-# agent_runner.py
-
-from google.adk.runners import Runner
-from google.adk.sessions import InMemorySessionService
-from weather_agent.agent import root_agent as weather_agent
-from google.genai.types import Content, Part
-from opentelemetry import trace
-from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
-from opentelemetry.sdk.trace import export
-from opentelemetry.sdk.trace import TracerProvider
-
-APP_NAME = "weather_agent"
-USER_ID = "u_123"
-SESSION_ID = "s_123"
-
-provider = TracerProvider()
-processor = export.BatchSpanProcessor(
-    CloudTraceSpanExporter(project_id="{your-project-id}")
-)
-provider.add_span_processor(processor)
-trace.set_tracer_provider(provider)
-
-session_service = InMemorySessionService()
-runner = Runner(agent=weather_agent, app_name=APP_NAME, session_service=session_service)
-
-
-async def main():
-    session = await session_service.get_session(
-        app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
+    # ツールの入ったエージェントを作成
+    root_agent = Agent(
+        name="weather_agent",
+        model="gemini-flash-latest",
+        description="天気ツールを使用して質問に答えるエージェント。",
+        instruction="回答を見つけるには、利用可能なツールを使用する必要があります。",
+        tools=[get_weather],
     )
-    if session is None:
-        session = await session_service.create_session(
-            app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID
-        )
+    ```
 
-    user_content = Content(
-        role="user", parts=[Part(text="パリの天気はどうですか？")]
+## Cloud Trace 設定
+
+### ADK CLI の使用
+
+ADK CLI を使用してエージェントをデプロイまたは実行するときに、フラグを追加してクラウドトレースを有効にできます。
+
+=== "Python"
+
+    `adk deploy` コマンドを使用してエージェントをデプロイするとき：
+
+    ```bash
+    adk deploy agent_engine \
+        --project=$GOOGLE_CLOUD_PROJECT \
+        --region=$GOOGLE_CLOUD_LOCATION \
+        --trace_to_cloud \
+        $AGENT_PATH
+    ```
+
+=== "Go"
+
+    ADK Go ランチャーでビルドされたエージェントを実行するとき：
+
+    ```bash
+    adkgo web -otel_to_cloud
+    ```
+
+### プログラミングによる設定
+
+#### ADK アプリの抽象化を使用する
+
+=== "Python"
+
+    `AdkApp` 抽象化を使用している場合は、`enable_tracing=True` を追加することでクラウドトレースを有効にできます。
+
+    ```python
+    from google.adk.apps import AdkApp
+
+    adk_app = AdkApp(
+        agent=root_agent,
+        enable_tracing=True,
+    )
+    ```
+
+#### テレメトリ（telemetry）モジュールを使用する
+
+完全にカスタマイズされたエージェントランタイムの場合は、内蔵のテレメトリモジュールを使用してクラウドトレースを有効にできます。
+
+=== "Python"
+
+    ```python
+    from google.adk import telemetry
+    from google.adk.telemetry import google_cloud
+
+    # GCP エクスポーターの設定を取得
+    hooks = google_cloud.get_gcp_exporters(enable_cloud_tracing=True)
+
+    # グローバル OTel プロバイダーの初期化と設定
+    telemetry.maybe_set_otel_providers(otel_hooks_to_setup=[hooks])
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    import { getGcpExporters, maybeSetOtelProviders } from '@google/adk';
+
+    // GCP エクスポーターの設定を取得
+    const gcpExporters = await getGcpExporters({
+      enableTracing: true,
+    });
+
+    // グローバル OTel プロバイダーの初期化と設定
+    maybeSetOtelProviders([gcpExporters]);
+
+    // ... エージェントコード ...
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+    	"context"
+    	"log"
+    	"time"
+
+    	"google.golang.org/adk/v2/telemetry"
     )
 
-    final_response_content = "応答なし"
-    async for event in runner.run_async(
-        user_id=USER_ID, session_id=SESSION_ID, new_message=user_content
-    ):
-        if event.is_final_response() and event.content and event.content.parts:
-            final_response_content = event.content.parts[0].text
+    func main() {
+    	ctx := context.Background()
 
-    print(final_response_content)
+    	// クラウドエクスポートが有効化されたテレメトリを初期化。
+    	// デフォルトでは、GCP プロジェクト ID は GOOGLE_CLOUD_PROJECT 環境変数から読み取られます。
+    	// telemetry.WithGcpResourceProject("my-project") を使用して明示的に指定することもできます。
+    	telemetryProviders, err := telemetry.New(ctx,
+    		telemetry.WithOtelToCloud(true),
+    		// telemetry.WithGcpResourceProject("your-project-id"),
+    	)
+    	if err != nil {
+    		log.Fatalf("テレメトリの初期化に失敗しました: %v", err)
+    	}
+    	defer func() {
+    		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    		defer cancel()
+    		if err := telemetryProviders.Shutdown(shutdownCtx); err != nil {
+    			log.Printf("テレメトリのシャットダウンに失敗しました: %v", err)
+    		}
+    	}()
 
+    	// グローバル OTel プロバイダーとして登録
+    	telemetryProviders.SetGlobalOtelProviders()
 
-if __name__ == "__main__":
-    import asyncio
+    	// ... エージェントコード ...
+    }
+    ```
 
-    asyncio.run(main())
-```
+## Cloud Trace データの検査
 
-## Cloud Traceの検査
-
-セットアップが完了すると、エージェントと対話するたびにトレースデータが自動的にCloud Traceに送信されます。[console.cloud.google.com](https://console.cloud.google.com)にアクセスし、構成済みのGoogle CloudプロジェクトでTrace Explorerにアクセスしてトレースを検査できます。
+設定が完了すると、エージェントとやり取りするたびに、トレースデータが自動的に Cloud Trace に送信されます。[Google Cloud コンソール](https://console.cloud.google.com/traces/explorer)の **Trace Explorer** にアクセスして、トレースを検査できます。
 
 ![cloud-trace](../assets/cloud-trace1.png)
 
-すると、`invocation`、`agent_run`、`call_llm`、`execute_tool`などのいくつかのスパン名で構成されたADKエージェントによって生成されたすべての利用可能なトレースが表示されます。
+ADK エージェントによって生成されたすべての利用可能なトレースが表示され、`invoke_agent`、`generate_content`、`call_llm`、`execute_tool` といったスパン名を確認できます。
 
 ![cloud-trace](../assets/cloud-trace2.png)
 
-トレースの1つをクリックすると、`adk web`コマンドを使用してWeb開発UIで表示されるものと同様の詳細なプロセスのウォーターフォールビューが表示されます。
+トレースの 1 つをクリックすると、ローカル ADK Web UI のトレースビューと同様に、詳細なプロセスのウォーターフォールビューが表示されます。
 
 ![cloud-trace](../assets/cloud-trace3.png)
 
+### キャプチャされた属性（Attributes）
+
+ADK は、エージェントの動作のフィルタリングや分析に役立つよう、トレースに次の属性を自動的に追加します。
+
+- `gen_ai.agent.name`: 実行されているエージェントの名前。
+- `gcp.vertex.agent.invocation_id`: 呼び出しの一意の ID。
+- `gcp.vertex.agent.event_id`: 特定のイベントの ID。
+- `gen_ai.conversation.id`: セッション ID。
+
 ## リソース
 
-- [Google Cloud Traceドキュメント](https://cloud.google.com/trace)
+トレース、OpenTelemetry、Google Cloud 統合の詳細については、次のドキュメントを参照してください。
+
+- [Google Cloud Trace ドキュメント](https://cloud.google.com/trace)
+- [OpenTelemetry ドキュメント](https://opentelemetry.io/docs/)
+- [Google Cloud とエージェントプラットフォームへの接続](/ja/get-started/google-cloud/)
