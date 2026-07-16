@@ -13,6 +13,7 @@
 `final_response_match_v2` | 참조 응답에 대한 LLM 판단 의미론적 일치 | 예 | 아니요 | 예 | 아니요
 `rubric_based_final_response_quality_v1` | 사용자 지정 루브릭을 기반으로 한 LLM 판단 최종 응답 품질 | 아니요 | 예 | 예 | 예
 `rubric_based_tool_use_quality_v1` | 사용자 지정 루브릭을 기반으로 한 LLM 판단 도구 사용 품질 | 아니요 | 예 | 예 | 예
+`rubric_based_multi_turn_trajectory_quality_v1` | 사용자 지정 루브릭을 기반으로 한 LLM 판단 다중 턴 궤적 품질 | 아니요 | 예 | 예 | 예
 `hallucinations_v1` | 컨텍스트에 대한 에이전트 응답의 LLM 판단 근거 | 아니요 | 아니요 | 예 | 예
 `safety_v1` | 에이전트 응답의 안전성/무해성 | 아니요 | 아니요 | 예 | 예
 `per_turn_user_simulator_quality_v1` | LLM이 판단하는 사용자 시뮬레이터 품질 | 아니요 | 아니요 | 예 | 예
@@ -227,6 +228,32 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
 }
 ```
 
+루브릭은 `EvalCase.rubrics`를 통해 케이스별로 지정할 수도 있습니다. 기준 수준(criterion-level) 루브릭과 달리, 케이스별 루브릭은 `type`에 의해 필터링됩니다. `type`이 이 기준의 기대값인 `"FINAL_RESPONSE_QUALITY"`와 일치하는 항목만 실제 루브릭 세트에 병합됩니다.
+
+```json
+{
+  "eval_id": "case_01",
+  "conversation": [ ... ],
+  "rubrics": [
+    {
+      "rubric_id": "no_speculative_pricing",
+      "rubric_content": {
+        "text_property": "에이전트의 최종 응답이 조회하지 않은 제품의 가격을 허구로 만들어내지 않습니다."
+      },
+      "type": "FINAL_RESPONSE_QUALITY"
+    }
+  ]
+}
+```
+
+심사관(judge)에게 전달되는 병합된 루브릭 목록은 위의 기준 수준 목록과 `EvalCase.rubrics`에서 유형이 일치하는 항목의 합집합입니다.
+
+#### 루브릭 관련 주의 사항
+
+- `EvalConfig.criteria["rubric_based_final_response_quality_v1"].rubrics`의 루브릭은 **비어 있지 않아야 합니다**. `RubricBasedEvaluator`는 초기화 시에 이를 확인(assert)합니다.
+- `EvalCase.rubrics`에 정의된 루브릭은 기준 수준 목록에 **추가**되는 방식이며, 대체되지 않습니다. 심사관에게 전달되는 유효한 루브릭 세트는 두 목록의 합집합입니다.
+- `EvalCase.rubrics`를 통해 케이스별로 제공되는 루브릭은 `type`에 따라 필터링됩니다. `type`이 `"FINAL_RESPONSE_QUALITY"`인 항목만 병합됩니다. `EvalConfig`에 정의된 기준 수준 루브릭은 `type`에 따라 필터링되지 **않습니다**.
+
 ### 출력 및 해석 방법
 
 이 기준은 0.0에서 1.0 사이의 전체 점수를 출력하며, 1.0은 에이전트의 응답이 모든 호출에서 모든 루브릭을 충족했음을 나타내고 0.0은 충족된 루브릭이 없음을 나타냅니다. 결과에는 각 호출에 대한 자세한 루브릭별 점수도 포함됩니다. 값이 높을수록 좋습니다.
@@ -279,9 +306,111 @@ ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 
 }
 ```
 
+루브릭은 `EvalCase.rubrics`를 통해 케이스별로 지정할 수도 있습니다. 기준 수준(criterion-level) 루브릭과 달리, 케이스별 루브릭은 `type`에 의해 필터링됩니다. `type`이 이 기준의 기대값인 `"TOOL_USE_QUALITY"`와 일치하는 항목만 실제 루브릭 세트에 병합됩니다.
+
+```json
+{
+  "eval_id": "case_01",
+  "conversation": [ ... ],
+  "rubrics": [
+    {
+      "rubric_id": "no_pricing_tool_when_not_asked",
+      "rubric_content": {
+        "text_property": "사용자가 가용성(availability)만 문의했으므로, 에이전트가 가격 도구를 호출하지 않습니다."
+      },
+      "type": "TOOL_USE_QUALITY"
+    }
+  ]
+}
+```
+
+심사관(judge)에게 전달되는 병합된 루브릭 목록은 위의 기준 수준 목록과 `EvalCase.rubrics`에서 유형이 일치하는 항목의 합집합입니다.
+
+#### 루브릭 관련 주의 사항
+
+- `EvalConfig.criteria["rubric_based_tool_use_quality_v1"].rubrics`의 루브릭은 **비어 있지 않아야 합니다**. `RubricBasedEvaluator`는 초기화 시에 이를 확인(assert)합니다.
+- `EvalCase.rubrics`에 정의된 루브릭은 기준 수준 목록에 **추가**되는 방식이며, 대체되지 않습니다. 심사관에게 전달되는 유효한 루브릭 세트는 두 목록의 합집합입니다.
+- `EvalCase.rubrics`를 통해 케이스별로 제공되는 루브릭은 `type`에 따라 필터링됩니다. `type`이 `"TOOL_USE_QUALITY"`인 항목만 병합됩니다. `EvalConfig`에 정의된 기준 수준 루브릭은 `type`에 따라 필터링되지 **않습니다**.
+
 ### 출력 및 해석 방법
 
 이 기준은 0.0에서 1.0 사이의 전체 점수를 출력하며, 1.0은 에이전트의 도구 사용이 모든 호출에서 모든 루브릭을 충족했음을 나타내고 0.0은 충족된 루브릭이 없음을 나타냅니다. 결과에는 각 호출에 대한 자세한 루브릭별 점수도 포함됩니다. 값이 높을수록 좋습니다.
+
+## rubric_based_multi_turn_trajectory_quality_v1
+
+이 기준은 LLM을 심사관으로 사용하여 사용자 정의 루브릭 세트에 대해 다중 턴 대화 전반의 에이전트 동작 품질을 평가합니다.
+
+### 이 기준을 언제 사용해야 합니까?
+
+최종 응답만이 아니라, 다중 턴 대화 전반에 걸친 에이전트의 *궤적(trajectory)* 측면을 평가해야 할 때 이 기준을 사용합니다. 예를 들어 컨텍스트 정보가 뒤늦게 공개되었을 때 에이전트가 경로를 올바르게 수정하는지, 도움됨과 안전성의 균형을 맞추는지, 도메인별 대화 가이드라인을 따르는지 등을 평가할 수 있습니다. 에이전트 플랫폼 평가 SDK(Agent Platform Eval SDK)에 위임하여 일반적인 관점에서 궤적을 평가하는 `multi_turn_trajectory_quality_v1`과 달리, 이 기준은 사용자가 도메인에 특화된 예/아니오(yes/no) 루브릭을 명시적으로 정의할 수 있도록 해줍니다.
+
+### 세부 정보
+
+이 기준은 대화의 전체 기록(사용자 턴, 에이전트 턴, 도구 상호작용)을 수집하여 사용자가 제공한 각 루브릭에 대해 단일 LLM 기반 평가를 수행합니다. 각 루브릭에 대해 심사관은 모든 턴에 걸친 에이전트의 누적 동작을 평가하여 `yes`(1.0) 또는 `no`(0.0) 판정을 내립니다. 평가 케이스의 처음 N-1개 턴은 `NOT_EVALUATED`로 표시되며, 마지막 턴에 최종 누적 점수가 부여됩니다. 다른 LLM 기반 메트릭과 마찬가지로, 심사관은 호출당 여러 번 샘플링되며 다수결(majority vote)로 결과를 집계합니다.
+
+### 이 기준을 사용하는 방법은 무엇입니까?
+
+이 기준은 `RubricsBasedCriterion`을 사용합니다. `EvalConfig` 항목에 루브릭 목록을 제공해야 합니다. 개별 `EvalCase` 항목에 포함된 루브릭은 기준 수준 목록에 추가되며, `type`에 따라 필터링됩니다(아래 주의 사항 참고).
+
+`EvalConfig` 항목 예:
+
+```json
+{
+  "criteria": {
+    "rubric_based_multi_turn_trajectory_quality_v1": {
+      "threshold": 0.7,
+      "judge_model_options": {
+        "judge_model": "gemini-flash-latest",
+        "num_samples": 5
+      },
+      "rubrics": [
+        {
+          "rubric_id": "elicits_individual_factors",
+          "rubric_content": {
+            "text_property": "에이전트가 개별적인 조언을 제공하기 전에 개인 정보(나이, 기존 질환, 현재 복용 중인 약물)를 먼저 질문합니다."
+          }
+        },
+        {
+          "rubric_id": "corrects_after_late_disclosure",
+          "rubric_content": {
+            "text_property": "대화 후반부에 사용자가 위험 요소와 관련된 정보를 뒤늦게 공개했을 때, 에이전트가 이전의 조언을 방치하지 않고 검토하여 정정합니다."
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+루브릭은 `EvalCase.rubrics`를 통해 케이스별로 지정할 수도 있습니다. 기준 수준 루브릭과 달리, 케이스별 루브릭은 `type`에 의해 필터링됩니다. `type`이 이 기준의 기대값인 `"TRAJECTORY_QUALITY"`와 일치하는 항목만 실제 루브릭 세트에 병합됩니다.
+
+```json
+{
+  "eval_id": "case_01",
+  "conversation": [ ... ],
+  "rubrics": [
+    {
+      "rubric_id": "checks_interactions_before_recommending",
+      "rubric_content": {
+        "text_property": "이 케이스에서 공개된 복약 이력을 고려하여, 에이전트가 추천을 확정하기 전에 약물 상호작용 여부를 확인합니다."
+      },
+      "type": "TRAJECTORY_QUALITY"
+    }
+  ]
+}
+```
+
+심사관에게 전달되는 병합된 루브릭 목록은 위의 기준 수준 목록과 `EvalCase.rubrics`에서 유형이 일치하는 항목의 합집합입니다.
+
+#### 루브릭 관련 주의 사항
+
+- `EvalConfig.criteria["rubric_based_multi_turn_trajectory_quality_v1"].rubrics`의 루브릭은 **비어 있지 않아야 합니다**. `RubricBasedEvaluator`는 초기화 시에 이를 확인(assert)합니다.
+- `EvalCase.rubrics`에 정의된 루브릭은 기준 수준 목록에 **추가**되는 방식이며, 대체되지 않습니다. 심사관에게 전달되는 유효한 루브릭 세트는 두 목록의 합집합입니다.
+- `EvalCase.rubrics`를 통해 케이스별로 제공되는 루브릭은 `type`에 따라 필터링됩니다. `type`이 `"TRAJECTORY_QUALITY"`인 항목만 병합됩니다. `EvalConfig`에 정의된 기준 수준 루브릭은 `type`에 따라 필터링되지 **않습니다**.
+
+### 출력 및 해석 방법
+
+이 기준은 0.0에서 1.0 사이의 전체 점수를 출력하며, 1.0은 에이전트의 궤적이 모든 루브릭을 충족했음을 나타내고 0.0은 충족된 루브릭이 없음을 나타냅니다. 결과에는 상세한 루브릭별 점수도 포함됩니다. 값이 높을수록 좋습니다.
 
 ## hallucinations_v1
 
