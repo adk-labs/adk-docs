@@ -278,6 +278,36 @@ Anthropic과 같은 일부 제공업체는 다음을 통해 모델을 직접 제
     }
     ```
 
+### 적응형 추론 (Adaptive thinking)
+
+<div class="language-support-tag">
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.34.0</span>
+</div>
+
+최신 Claude 모델은 고정된 토큰 예산을 사용하는 대신 모델이 스스로 추론 깊이를 선택하는 *적응형(adaptive)* 확장 추론을 지원합니다. 네이티브 Claude 경로에서는 음수 `thinking_budget`이 적응형 추론에 매핑됩니다.
+
+추론 깊이를 제어하는 권장 방법은 `AnthropicGenerateContentConfig`의 `effort` 필드를 사용하는 것입니다.
+
+```python
+from google.adk.agents import LlmAgent
+from google.adk.models import AnthropicGenerateContentConfig
+from google.adk.models.anthropic_llm import Claude
+from google.adk.models.registry import LLMRegistry
+
+LLMRegistry.register(Claude)
+
+agent = LlmAgent(
+    model="claude-sonnet-4@20250514",  # Agent Platform Claude 모델 ID
+    name="claude_reasoning_agent",
+    instruction="You are a helpful assistant.",
+    generate_content_config=AnthropicGenerateContentConfig(
+        effort="high",  # "low", "medium", "high", "xhigh", "max" 중 하나
+    ),
+)
+```
+
+*   Claude에는 표준 `thinking_config.thinking_level`이 지원되지 않으며 무시됩니다(경고 표시). 대신 `effort`를 사용하세요.
+
 ## 에이전트 플랫폼의 개방형 모델 {#open-models}
 
 <div class="language-support-tag">

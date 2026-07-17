@@ -82,4 +82,14 @@ agent_claude_direct = LlmAgent(
     instruction="You are an assistant powered by Claude Haiku.",
     # ... other agent parameters
 )
+
+## Anthropic 思考ブロック (Anthropic thinking blocks)
+
+<div class="language-support-tag">
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.28.0</span>
+</div>
+
+`LiteLlm` コネクタを介して Anthropic Claude モデル（Claude 3.7 Sonnet など）を使用する場合、ADK は「思考ブロック（thinking blocks）」と呼ばれる Anthropic の構造化された推論機能をサポートします。ADK は自動的に `thinking_blocks` とその署名（signature）を抽出します。
+
+Anthropic は、マルチターン会話においてこれらの署名を送り返すことを要求します。そうしないと、最初のターン以降の思考がサイレントにドロップされます。ADK は各送信要求において署名付きの `thinking_blocks` を再構築するため、カスタムの状態管理を行わなくても、ツール呼び出しやマルチターン対話全体で Claude の推論が維持されます。
 ```
