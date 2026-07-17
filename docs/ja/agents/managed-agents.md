@@ -38,7 +38,7 @@ Managed agents と ADK エージェントは、それぞれ異なる問題を解
 
 - **認証:** Agent Platform には Google Cloud の認証情報が必要です。[Agent Platform のセットアップ手順](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/managed-agents/create-manage#before-you-begin)に従って、ローカル環境を認証します（例: `gcloud auth application-default login` を使用）。
 - **ロケーション:** Managed Agents API は `global` ロケーションからのみ提供されます。`ManagedAgent` は、Agent Platform バックエンドで `global` への接続を強制します。
-- **エージェント ID:** Gemini API と同様に `agent_id` が必要です。[Agent Platform Managed Agents ガイド](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/managed-agents)を介して作成するか、プロジェクトで利用可能な既製のエージェント ID を使用します。
+- **エージェント ID:** Gemini API と同様に `agent_id` が必要です。[エージェントの作成と管理ガイド](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/managed-agents/create-manage)を介して作成するか、プロジェクトで利用可能な既製のエージェント ID を使用します。
 
 ## 始める
 
