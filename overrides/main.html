@@ -48,9 +48,17 @@
 -->
 {% block announce %}
 <span class="announce-item">
-  <a href="/2.0/">
+  {% if config.theme.language == "ko" %}
+  <a href="{{ base_url }}/2.0/">ADK Go 2.0 GA</a>가 그래프 기반 워크플로와
+  협업 에이전트와 함께 정식 출시되었습니다! <a href="{{ base_url }}/get-started/go/">시작하기</a>
+  {% elif config.theme.language == "ja" %}
+  <a href="{{ base_url }}/2.0/">ADK Go 2.0 GA</a> が、グラフベースの
+  ワークフローと協調エージェントとともに正式リリースされました！<a href="{{ base_url }}/get-started/go/">はじめに</a>
+  {% else %}
+  <a href="{{ base_url }}/2.0/">
     ADK Go 2.0 GA
   </a>
-  is LIVE with graph workflows and collaborative agents! <a href="/get-started/go/">Get started.</a>
+  is LIVE with graph workflows and collaborative agents! <a href="{{ base_url }}/get-started/go/">Get started.</a>
+  {% endif %}
 </span>
 {% endblock %}
