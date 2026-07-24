@@ -2009,6 +2009,20 @@ SDK は次の用途に使えます。
 
 ### ダッシュボードを構築する
 
+組み込みの Looker ダッシュボードでエージェントのパフォーマンス データを可視化するか、サンプル ノートブックから独自に構築できます。
+
+#### Looker Block
+
+[BigQuery Agent Analytics Looker Block](https://marketplace.looker.com/marketplace/detail/agent_analytics) は、インタラクション、ツールの使用状況、LLM のパフォーマンス、およびコスト フットプリントのインサイトとともに、エージェントの監視、デバッグ、および最適化を行うためのすぐに使えるダッシュボードを提供します。以下を表示します。
+
+- **集計メトリクス**: トークン消費量、ユーザーのエンゲージメント、およびツールの実行ボリューム。
+- **システム ヘルス**: ボトルネックを特定するのに役立つ P50–P99 レイテンシ分布およびツールの失敗追跡。
+- **インタラクティブなドリルダウン**: メトリクスをクリックして、根本原因分析のためのコンテキスト対応ビジュアルを開きます。
+
+このブロックは、ログに記録された JSON ペイロードを直接解析するネイティブ派生テーブル (Native Derived Table) アーキテクチャを使用するため、追加のデータ パイプラインは不要です。開始するには、Looker マーケットプレイスから無料でインストールし、BigQuery のプロジェクト ID、データセット名、およびベース テーブル名を指定してください。
+
+#### ノートブックからのカスタム ダッシュボード
+
 BigQuery Agent Analytics SDK には、エージェント性能データをクエリして可視化する
 方法を示す [Jupyter notebook
 例](https://github.com/GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK/blob/main/examples/dashboard_v2.ipynb)

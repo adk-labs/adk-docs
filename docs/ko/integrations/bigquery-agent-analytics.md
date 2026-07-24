@@ -1996,6 +1996,20 @@ SDK는 다음에 사용할 수 있습니다.
 
 ### 대시보드 빌드
 
+기본 제공되는 Looker 대시보드로 에이전트 성능 데이터를 시각화하거나 예시 노트북에서 직접 구축할 수 있습니다.
+
+#### Looker Block
+
+[BigQuery Agent Analytics Looker Block](https://marketplace.looker.com/marketplace/detail/agent_analytics)은 상호작용, 도구 사용량, LLM 성능 및 비용 설치 공간에 대한 통찰력과 함께 에이전트를 모니터링, 디버깅 및 최적화하기 위한 즉시 사용 가능한 대시보드를 제공합니다. 다음을 보여줍니다.
+
+- **집계 메트릭**: 토큰 소비량, 사용자 참여도 및 도구 실행 볼륨.
+- **시스템 상태**: 병목 현상을 정확히 파악하는 데 도움이 되는 P50–P99 지연 시간 분포 및 도구 실패 추적.
+- **대화형 드릴다운**: 메트릭을 클릭하여 근본 원인 분석을 위한 컨텍스트 인식 시각화를 엽니다.
+
+이 블록은 기록된 JSON 페이로드를 직접 구문 분석하는 기본 파생 테이블(Native Derived Table) 아키텍처를 사용하므로 추가 데이터 파이프라인이 필요하지 않습니다. 시작하려면 Looker 마켓플레이스에서 무료로 설치하고 BigQuery 프로젝트 ID, 데이터세트 이름 및 기본 테이블 이름을 지정하세요.
+
+#### 노트북 기반 맞춤 대시보드
+
 BigQuery Agent Analytics SDK에는 에이전트 성능 데이터를 쿼리하고 시각화하는 방법을
 보여주는 [예시 Jupyter
 notebook](https://github.com/GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK/blob/main/examples/dashboard_v2.ipynb)이
