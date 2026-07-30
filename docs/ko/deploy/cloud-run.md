@@ -171,11 +171,15 @@ ADK 에이전트 워크플로를 Google Cloud Run에 배포할 때 다음 콘텐
     * `--region TEXT`: (필수) 배포를 위한 Google Cloud 위치(예: `$GOOGLE_CLOUD_LOCATION`, `us-central1`).
     * `--service_name TEXT`: (선택 사항) Cloud Run 서비스의 이름(예: `$SERVICE_NAME`). 기본값은 `adk-default-service-name`입니다.
     * `--app_name TEXT`: (선택 사항) ADK API 서버의 애플리케이션 이름(예: `$APP_NAME`). 기본값은 `AGENT_PATH`로 지정된 디렉토리의 이름(예: `AGENT_PATH`가 `./capital_agent`인 경우 `capital_agent`)입니다.
-    * `--agent_engine_id TEXT`: (선택 사항) Vertex AI 에이전트 엔진을 통해 관리형 세션 서비스를 사용하는 경우 여기에 리소스 ID를 제공합니다.
+    * `--session_service_uri TEXT`: (선택 사항) 세션 서비스의 URI입니다. Agent Runtime을 통해 관리형 세션 서비스를 사용하는 경우 `agentengine://<agent_engine>`을 전달하세요. 여기서 `<agent_engine>`은 리소스 ID 또는 전체 `projects/*/locations/*/reasoningEngines/*` 리소스 이름입니다. 기타 지원되는 형식은 `memory://` 및 SQLAlchemy 데이터베이스 URL(예: `sqlite://<path>`)입니다.
+    * `--artifact_service_uri TEXT`: (선택 사항) 아티팩트 서비스의 URI입니다(예: Cloud Storage의 경우 `gs://<bucket_name>`, `file://<path>`, 또는 `memory://`).
+    * `--memory_service_uri TEXT`: (선택 사항) 메모리 서비스의 URI입니다(예: `rag://<rag_corpus_id>`, `agentengine://<agent_engine>`, 또는 `memory://`).
     * `--port INTEGER`: (선택 사항) ADK API 서버가 컨테이너 내에서 수신 대기할 포트 번호입니다. 기본값은 8000입니다.
     * `--with_ui`: (선택 사항) 포함된 경우 ADK 개발 UI를 에이전트 API 서버와 함께 배포합니다. 기본적으로 API 서버만 배포됩니다.
     * `--temp_folder TEXT`: (선택 사항) 배포 프로세스 중에 생성된 중간 파일을 저장할 디렉토리를 지정합니다. 기본값은 시스템의 임시 디렉토리에 있는 타임스탬프가 지정된 폴더입니다. *(참고: 이 옵션은 일반적으로 문제 해결 시가 아니면 필요하지 않습니다.)*
     * `--help`: 도움말 메시지를 표시하고 종료합니다.
+
+    `--session_service_uri` 및 `--artifact_service_uri`가 설정되지 않은 경우 배포된 컨테이너는 인메모리 세션 및 아티팩트 서비스로 대체되며 Cloud Run 인스턴스가 재재생될 때 세션과 아티팩트가 손실됩니다. 이 데이터를 유지해야 하는 모든 배포에 두 옵션을 모두 설정하세요.
 
     ##### 인증된 액세스
 배포 프로세스 중에 다음 메시지가 표시될 수 있습니다. `[your-service-name]에 대한 비인증 호출을 허용하시겠습니까(y/N)?`.

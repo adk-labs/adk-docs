@@ -15,12 +15,7 @@ catalog_tags: ["data","google"]
 `vertex_ai_rag_retrieval` ツールを使用すると、エージェントはプライベート データを実行できます。
 ナレッジエンジンを使用した検索。
 
-Knowledge Engine でグラウンディングを使用する場合は、RAG コーパスを準備する必要があります
-事前に。 [RAG ADK agent
-sample](https://github.com/google/adk-samples/blob/main/python/agents/RAG/rag/shared_libraries/prepare_corpus_and_data.py)を参照してください。
-または [Knowledge Engine
-page](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-quickstart)
-それを設定するためです。
+Knowledge Engine でグラウンディングを使用する場合は、事前に RAG コーパスを準備する必要があります。設定方法については [Knowledge Engine ページ](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-quickstart) を参照してください。
 
 !!! warning "警告: エージェントごとに 1 つのツールの制限"
 

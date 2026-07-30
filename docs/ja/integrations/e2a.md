@@ -1,6 +1,6 @@
 ---
 catalog_title: e2a
-catalog_description: AI エージェント向けの認証済みメールゲートウェイと human-in-the-loop 承認
+catalog_description: 人間によるレビュー承認機能を備えた AI エージェント向け認証メール ゲートウェイ
 catalog_icon: /integrations/assets/e2a.png
 catalog_tags: ["mcp"]
 ---
@@ -11,77 +11,29 @@ catalog_tags: ["mcp"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
-[e2a MCP Server](https://github.com/Mnexa-AI/e2a/tree/main/mcp) は、ADK
-エージェントを AI エージェント向けに構築された認証済みメール
-ゲートウェイ [e2a](https://e2a.dev) に接続します。この統合により、
-エージェントは専用のメール受信箱を持ち、自然言語でメッセージの送信、
-受信、返信を行えます。また、SPF/DKIM で検証された受信メールと、
-送信メッセージに対する任意の human-in-the-loop 承認を利用できます。
+[e2a MCP Server](https://github.com/tokencanopy/e2a/tree/main/mcp) は、ADK エージェントを AI エージェント専用に構築された認証メール ゲートウェイである [e2a](https://e2a.dev) に接続します。この統合により、エージェントは同僚のように自然言語を使用してメッセージを送信、受信、返信できる専用のメール受信トレイを持つことができ、受信メールの SPF/DKIM/DMARC 検証および送信メッセージに対するオプションの人間によるレビュー保留機能を提供します。
+
+サーバーは `https://api.e2a.dev/mcp` でホストされており、Streamable HTTP で通信するため、ローカルにインストールしたり実行したりする必要はありません。
 
 ## ユースケース
 
-- **エージェントに専用の受信箱を持たせる**: `support-bot@your-domain.com`
-  のような専用メールアドレスをプロビジョニングし、チームメイトのように
-  メールを送受信させます。
-- **認証済みの受信メール**: すべての受信メッセージには SPF と DKIM の
-  検証結果が含まれるため、エージェントは送信者が本人であるかを判断
-  できます。
-- **Human-in-the-loop 承認**: 任意のエージェントで HITL を設定すると、
-  送信メッセージはレビュー担当者が承認するまで保留キューに保持されます。
-  承認前に件名、本文、宛先を編集することもできます。
-- **スレッド会話の自動化**: 受信メールへ返信するときに In-Reply-To と
-  References ヘッダーを保持するため、複数ターンにわたってスレッドが
-  維持されます。
+- **エージェントに専用の受信トレイを付与**: 専用のメール アドレス（例: `support-bot@your-domain.com`）をプロビジョニングし、エージェントがチームメンバーのようにメールを送受信できるようにします。
+
+- **認証された受信メール**: すべての受信メッセージには SPF、DKIM、DMARC の証拠が付与されているため、エージェントはコンテンツに基づいてアクションを実行する前に、送信者が主張する人物であるかどうかを確認できます。
+
+- **人間によるレビュー (Human-in-the-loop)**: レビュー保留機能を有効にすると、人間が承認するまで送信メッセージが `pending_review` として保留されます。必要に応じて、送信前に件名、本文、宛先を編集できます。
+
+- **スレッド会話の自動化**: `In-Reply-To` および `References` ヘッダーを保持して返信するため、受信者のメール クライアントで複数のターンにわたってスレッドが維持されます。
 
 ## 前提条件
 
-- 無料の [e2a アカウント](https://e2a.dev) とダッシュボードの API キー
-- Node.js 18 以降（ローカル MCP サーバーを使う場合のみ必要）
+- 無料の [e2a アカウント](https://e2a.dev) およびダッシュボードからの API キー
 
-## エージェントで使用する
+## エージェントでの使用
 
 === "Python"
 
-    === "Local MCP Server"
-
-        ```python
-        from google.adk.agents import Agent
-        from google.adk.tools.mcp_tool import McpToolset
-        from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-        from mcp import StdioServerParameters
-
-        E2A_API_KEY = "YOUR_E2A_API_KEY"
-        E2A_AGENT_EMAIL = "your-bot@your-domain.com"  # optional default inbox
-
-        root_agent = Agent(
-            model="gemini-flash-latest",
-            name="e2a_agent",
-            instruction=(
-                "You manage email through the e2a tools. Call whoami once "
-                "to find your inbox address. Use list_messages and "
-                "get_message to read; use reply_to_message (not "
-                "send_email) when replying to an existing thread so "
-                "threading headers are preserved."
-            ),
-            tools=[
-                McpToolset(
-                    connection_params=StdioConnectionParams(
-                        server_params=StdioServerParameters(
-                            command="npx",
-                            args=["-y", "@e2a/mcp-server"],
-                            env={
-                                "E2A_API_KEY": E2A_API_KEY,
-                                "E2A_AGENT_EMAIL": E2A_AGENT_EMAIL,
-                            },
-                        ),
-                        timeout=30,
-                    ),
-                )
-            ],
-        )
-        ```
-
-    === "Remote MCP Server"
+    === "リモート MCP サーバー"
 
         ```python
         from google.adk.agents import Agent
@@ -96,16 +48,18 @@ catalog_tags: ["mcp"]
             model="gemini-flash-latest",
             name="e2a_agent",
             instruction=(
-                "You manage email through the e2a tools. Call whoami once "
-                "to find your inbox address. Use list_messages and "
-                "get_message to read; use reply_to_message (not "
-                "send_email) when replying to an existing thread so "
-                "threading headers are preserved."
+                "You manage email through the e2a tools. Call whoami once to "
+                "learn your identity and inbox address. Use list_messages and "
+                "get_message to read; use reply_to_message when replying to an "
+                "existing thread (it preserves In-Reply-To and References), and "
+                "send_message only to start a new thread. Both 'accepted' and "
+                "'pending_review' are successful outcomes — never re-send after "
+                "either one."
             ),
             tools=[
                 McpToolset(
                     connection_params=StreamableHTTPConnectionParams(
-                        url="https://mcp.e2a.dev/mcp",
+                        url="https://api.e2a.dev/mcp",
                         headers={"Authorization": f"Bearer {E2A_API_KEY}"},
                         timeout=30,
                     ),
@@ -116,42 +70,7 @@ catalog_tags: ["mcp"]
 
 === "TypeScript"
 
-    === "Local MCP Server"
-
-        ```typescript
-        import { LlmAgent, MCPToolset } from "@google/adk";
-
-        const E2A_API_KEY = "YOUR_E2A_API_KEY";
-        const E2A_AGENT_EMAIL = "your-bot@your-domain.com"; // optional default inbox
-
-        const rootAgent = new LlmAgent({
-            model: "gemini-flash-latest",
-            name: "e2a_agent",
-            instruction:
-                "You manage email through the e2a tools. Call whoami once " +
-                "to find your inbox address. Use list_messages and " +
-                "get_message to read; use reply_to_message (not " +
-                "send_email) when replying to an existing thread so " +
-                "threading headers are preserved.",
-            tools: [
-                new MCPToolset({
-                    type: "StdioConnectionParams",
-                    serverParams: {
-                        command: "npx",
-                        args: ["-y", "@e2a/mcp-server"],
-                        env: {
-                            E2A_API_KEY: E2A_API_KEY,
-                            E2A_AGENT_EMAIL: E2A_AGENT_EMAIL,
-                        },
-                    },
-                }),
-            ],
-        });
-
-        export { rootAgent };
-        ```
-
-    === "Remote MCP Server"
+    === "リモート MCP サーバー"
 
         ```typescript
         import { LlmAgent, MCPToolset } from "@google/adk";
@@ -162,15 +81,17 @@ catalog_tags: ["mcp"]
             model: "gemini-flash-latest",
             name: "e2a_agent",
             instruction:
-                "You manage email through the e2a tools. Call whoami once " +
-                "to find your inbox address. Use list_messages and " +
-                "get_message to read; use reply_to_message (not " +
-                "send_email) when replying to an existing thread so " +
-                "threading headers are preserved.",
+                "You manage email through the e2a tools. Call whoami once to " +
+                "learn your identity and inbox address. Use list_messages and " +
+                "get_message to read; use reply_to_message when replying to an " +
+                "existing thread (it preserves In-Reply-To and References), and " +
+                "send_message only to start a new thread. Both 'accepted' and " +
+                "'pending_review' are successful outcomes — never re-send after " +
+                "either one.",
             tools: [
                 new MCPToolset({
                     type: "StreamableHTTPConnectionParams",
-                    url: "https://mcp.e2a.dev/mcp",
+                    url: "https://api.e2a.dev/mcp",
                     transportOptions: {
                         requestInit: {
                             headers: {
@@ -185,66 +106,53 @@ catalog_tags: ["mcp"]
         export { rootAgent };
         ```
 
+!!! tip "本番環境ではツールセットを e2a SDK と組み合わせて使用"
+
+    MCP ツールセットは受信トレイをモデルに渡します。ウェブフック署名の検証、少なくとも 1 回の配信 (at-least-once delivery) の処理、べき等な送信などの決定論的な部分は、[Python](https://pypi.org/project/e2a/) または [TypeScript](https://www.npmjs.com/package/@e2a/sdk) SDK を使用してアプリケーション コード内に保持します。以下の ADK Webhook の例は、その形式の完全な動作例です。
+
 ## 利用可能なツール
 
-### ID
+ホスト型サーバーは 60 以上のツールを露出します。決定的なセットについては、エンドポイントに対して `tools/list` を呼び出してください。表示されるツールはキーによって異なります。デプロイされたエージェントに推奨される **エージェント スコープ** キー（`e2a_agt_…`）はランタイム ツールのみを表示し、**アカウント スコープ** キー（`e2a_acct_…`）は以下の管理ツールも表示します。
+
+### ランタイム — 受信トレイ ツール
 
 ツール | 説明
 ---- | -----------
-`whoami` | デフォルトエージェントの完全なレコードを返します。アカウントに複数のエージェントがある場合は `E2A_AGENT_EMAIL` が必要です。
-`list_agents` | 認証済みユーザーが所有するすべてのエージェント受信箱を一覧表示します。
-`create_agent` | 共有ドメイン上の slug を使って新しい受信箱を登録します。デフォルトは `local` モードで、エージェントはポーリングでメールを受信し、webhook は不要です。
-`update_agent` | 既存エージェントの webhook URL、モード、HITL 設定を更新します。
-`delete_agent` | エージェントを完全に削除し、そのアドレスでのメール受信を停止します。`confirm: true` が必要です。
+`whoami` | 認証された ID（ユーザー、資格情報スコープ、プランと使用制限、エージェント スコープの資格情報の場合は `agent_email`）を返します。
+`get_agent` | 1 つのエージェントの完全なレコードを取得します。
+`list_messages` | `direction`、`read_status`、検索フィルター、カーソル ページネーションを使用して受信または送信メールを一覧表示します。
+`get_message` | 1 つのメッセージの完全な本文、ヘッダー、添付ファイル メタデータ、SPF/DKIM/DMARC 検証結果を取得します。
+`get_message_lifecycle` | 1 つのメッセージの再構築された配信履歴を取得します。
+`get_attachment` | 添付ファイルのメタデータ、または `inline: true` のバイトデータを取得します。
+`send_message` | 新しいメールを送信します。レビュー保留にヒットした場合は `accepted` または `pending_review` を返します。どちらも成功であり、再送信しないでください。
+`reply_to_message` | スレッド内で返信します。`In-Reply-To` および `References` を保持します。
+`forward_message` | メッセージを新しい受信者に転送します。
+`list_conversations` / `get_conversation` | 個々のメッセージではなくスレッドを参照します。
+`update_message_labels` | メッセージのラベルを追加または削除します。
+`delete_message` / `restore_message` | ゴミ箱へのソフト削除および復元を行います。
 
-!!! warning "Cloud モードのエージェントは webhook 署名を検証する必要があります"
-
-    `agent_mode: "cloud"` で作成されたエージェントは、ポーリングではなく
-    webhook でメールを受信します。webhook ハンドラーは、すべての配信で
-    HMAC 署名を検証する必要があります。署名検証を含む完全な設定は
-    [cloud-mode webhook の例](https://github.com/Mnexa-AI/e2a/tree/main/examples/adk-cloud-webhook)
-    を参照してください。
-
-### メッセージ
-
-ツール | 説明
----- | -----------
-`send_email` | 新しいメールを送信します。HITL が有効な場合は `sent` ではなく `status: pending_approval` を返します。
-`reply_to_message` | 受信メッセージに返信し、In-Reply-To と References ヘッダーを保持します。
-`list_messages` | `status` フィルター（unread / read / all）とページネーションで受信メールを一覧表示します。
-`get_message` | 1 件のメッセージの本文、ヘッダー、添付ファイルメタデータを取得します。
-`get_attachment_data` | メッセージ ID と 0 始まりの添付ファイルインデックスで添付ファイルのバイト列をダウンロードします（base64 で返されます）。
-
-### Human-in-the-loop 承認
+### 管理 — プロビジョニングとセットアップ
 
 ツール | 説明
 ---- | -----------
-`list_pending_messages` | human 承認待ちの送信メールを、有効期限が近い順に一覧表示します。
-`get_pending_message` | 保留中メッセージの完全な下書き（件名、宛先、本文）を取得します。
-`approve_pending_message` | レビュー担当者が任意で件名、本文、宛先を編集したうえで保留メッセージを送信します。
-`reject_pending_message` | 保留メッセージを破棄します。任意の `reason` は監査用に保存されます。
+`list_agents`, `create_agent`, `update_agent`, `delete_agent`, `restore_agent` | エージェントの受信トレイを管理します。
+`get_protection`, `update_protection` | エージェントごとのスクリーニングおよびレビュー保留構成を管理します。
+`list_domains`, `register_domain`, `get_domain`, `verify_domain`, `delete_domain` | カスタム ドメインの登録および DNS 検証を管理します。
+`list_reviews`, `get_review`, `approve_review`, `reject_review` | 人間によるレビュー キューを処理します。
+`list_webhooks`, `create_webhook`, `update_webhook`, `delete_webhook`, `rotate_webhook_secret`, `test_webhook`, `list_webhook_deliveries` | Webhook サブスクリプションおよび配信履歴を管理します。
+`list_events`, `get_event`, `redeliver_event` | イベント ログおよび再配信を管理します。
+`list_templates`, `create_template`, `update_template`, `delete_template`, `validate_template` | サーバーサイドのメール テンプレートを管理します（ベータ）。
+`list_api_keys`, `create_api_key`, `delete_api_key` | API キー管理を行います。
 
-### ドメイン
+## 構成
 
-ツール | 説明
----- | -----------
-`list_domains` | 認証済みユーザーに登録されたすべてのカスタムドメインと検証状態を一覧表示します。
-`register_domain` | カスタムドメインを追加し、所有権を証明するために必要な DNS レコードを返します。
-`verify_domain` | DNS レコードを設定した後、登録済みドメインの DNS 検証を再実行します。
-`delete_domain` | カスタムドメインを削除します。`confirm: true` が必要で、共有ドメイン上のエージェントには影響しません。
+ホスト型エンドポイントは、上記の `Authorization` ヘッダーに渡す API キー以外の環境変数は必要ありません。セルフホストの e2a デプロイメントを使用するには、`url` をそのデプロイメントの `/mcp` エンドポイントに変更します。
 
-## 設定
-
-変数 | 必須 | デフォルト | 説明
----- | ---- | ------ | -----------
-`E2A_API_KEY` | はい | — | e2a API キーです。
-`E2A_AGENT_EMAIL` | いいえ | — | デフォルトのエージェント受信箱です。ツールのスコープを制限するため、LLM が毎回指定する必要がありません。
-`E2A_BASE_URL` | いいえ | `https://e2a.dev` | セルフホストデプロイ URL です（ローカル MCP サーバーのみ）。
+インタラクティブな MCP クライアントは、キーを貼り付ける代わりに `https://api.e2a.dev/mcp` を OAuth 2.1 コネクタとして追加できます。メールを受信するには、`list_messages` をポーリングするか、SDK の `listen()` で WebSocket を開くか（公開 URL 不要）、`create_webhook` で HTTPS エンドポイントをサブスクライブします。
 
 ## 追加リソース
 
-- [e2a MCP Server ソース](https://github.com/Mnexa-AI/e2a/tree/main/mcp)
-- [実行可能な ADK サンプル](https://github.com/Mnexa-AI/e2a/tree/main/mcp/examples/adk)
-- [Cloud-mode webhook の例](https://github.com/Mnexa-AI/e2a/tree/main/examples/adk-cloud-webhook)
+- [e2a MCP Server ソース コード](https://github.com/tokencanopy/e2a/tree/main/mcp)
+- [実行可能な ADK サンプル](https://github.com/tokencanopy/e2a/tree/main/mcp/examples/adk)
+- [ADK Webhook サンプル](https://github.com/tokencanopy/e2a/tree/main/examples/adk-cloud-webhook)
 - [e2a ドキュメント](https://e2a.dev)
-- [npm パッケージ](https://www.npmjs.com/package/@e2a/mcp-server)

@@ -276,6 +276,29 @@ sample_toolset = OpenAPIToolset(
 
     항상 `use_id_token=True`와 `audience`를 함께 사용하세요. 하나만 제공하고 다른 하나는 제공하지 않으면 ADK는 우발적인 구성 오류를 방지하기 위해 오류를 발생시킵니다.
 
+#### 외부 액세스 토큰 사용
+
+`external_access_token_key` 기능을 사용하면 에이전트가 새로운 인증 흐름을 시작하는 대신 프론트엔드 애플리케이션에서 전달된 토큰과 같이 런타임 환경에서 제공하는 기존 액세스 토큰을 사용할 수 있습니다.
+구성되면 자격 증명 관리자는 표준 OAuth 흐름을 건너끕니다. 대신 에이전트의 `tool_context.state`에서 키를 검색하여 토큰을 직접 인증에 사용합니다.
+이 구성 매개변수의 사용은 상호 배타적이며, 동일한 구성 블록에 `credentials`, `client_id`, `client_secret` 또는 `scopes` 매개변수를 포함할 수 없습니다.
+
+다음 예시에 따라 키를 구성하세요.
+
+```python
+from google.adk.auth.auth_credential import AuthCredential
+from google.adk.auth.auth_credential import AuthCredentialTypes
+
+# 세션 상태에서 "get_my_frontend_token"을 찾도록 도구 구성
+credentials_config = AuthCredential(
+    auth_type=AuthCredentialTypes.GOOGLE_CREDENTIALS,
+    google_credentials_config={
+        # 프로덕션 코드에 인증 키를 하드코딩하지 마세요
+        "external_access_token_key": "get_my_frontend_token" 
+    }
+)
+
+```
+
 #### 인증 요청 흐름
 
 이 다이어그램은 초기 사용자 쿼리부터 ADK가 자격 증명 요청을 감지하고 리디렉션 흐름을 처리하며 권한 부여 시 도구 호출을 재시도하기까지의 엔드투엔드 인증 핸드셰이크 흐름을 보여줍니다.

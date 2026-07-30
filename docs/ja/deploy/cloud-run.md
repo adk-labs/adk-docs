@@ -172,11 +172,15 @@ ADKエージェントワークフローをGoogle Cloud Runにデプロイする�
     * `--region TEXT`: (必須) デプロイするGoogle Cloudのロケーション (例: `$GOOGLE_CLOUD_LOCATION`、`us-central1`)。
     * `--service_name TEXT`: (オプション) Cloud Runサービスの名前 (例: `$SERVICE_NAME`)。デフォルトは`adk-default-service-name`です。
     * `--app_name TEXT`: (オプション) ADK APIサーバーのアプリケーション名 (例: `$APP_NAME`)。デフォルトは`AGENT_PATH`で指定されたディレクトリの名前 (例: `AGENT_PATH`が`./capital_agent`の場合`capital_agent`) です。
-    * `--agent_engine_id TEXT`: (オプション) Vertex AI Agent Engineを介して管理セッションサービスを使用している場合、ここにそのリソースIDを指定します。
+    * `--session_service_uri TEXT`: (オプション) セッション サービスの URI。Agent Runtime を介して管理セッション サービスを使用している場合は `agentengine://<agent_engine>` を渡します。ここで `<agent_engine>` はリソース ID または完全な `projects/*/locations/*/reasoningEngines/*` リソース名です。その他のサポートされている形式は `memory://` および任意の SQLAlchemy データベース URL (例: `sqlite://<path>`) です。
+    * `--artifact_service_uri TEXT`: (オプション) アーティファクト サービスの URI (例: Cloud Storage の場合は `gs://<bucket_name>`、`file://<path>`、または `memory://`)。
+    * `--memory_service_uri TEXT`: (オプション) メモリ サービスの URI (例: `rag://<rag_corpus_id>`、`agentengine://<agent_engine>`、または `memory://`)。
     * `--port INTEGER`: (オプション) ADK APIサーバーがコンテナ内でリッスンするポート番号。デフォルトは8000です。
     * `--with_ui`: (オプション) 含めると、ADK開発UIがエージェントAPIサーバーとともにデプロイされます。デフォルトでは、APIサーバーのみがデプロイされます。
     * `--temp_folder TEXT`: (オプション) デプロイプロセス中に生成される中間ファイルを保存するディレクトリを指定します。デフォルトは、システムの一時ディレクトリ内のタイムスタンプ付きフォルダです。*(注: このオプションは、問題のトラブルシューティングが必要な場合を除き、通常は必要ありません。)*
     * `--help`: ヘルプメッセージを表示して終了します。
+
+    `--session_service_uri` および `--artifact_service_uri` が設定されていない場合、デプロイされたコンテナはインメモリのセッションおよびアーティファクト サービスにフォールバックし、Cloud Run インスタンスがリサイクルされるたびにセッションとアーティファクトが失われます。このデータを保持する必要があるデプロイメントでは、両方のオプションを設定してください。
 
     ##### 認証アクセス
     デプロイプロセス中に、「[your-service-name]への未認証呼び出しを許可しますか (y/N)?」というプロンプトが表示される場合があります。

@@ -276,6 +276,29 @@ sample_toolset = OpenAPIToolset(
 
     常に `use_id_token=True` と `audience` を組み合わせて使用してください。片方だけを提供し、もう片方を提供しない場合、ADK は誤った設定を防ぐためにエラーを発生させます。
 
+#### 外部アクセストークンの使用
+
+`external_access_token_key` 機能を使用すると、エージェントは新しい認証フローを開始する代わりに、フロントエンド アプリケーションから渡されたトークンなど、ランタイム環境から提供された既存のアクセストークンを使用できます。
+構成すると、認証情報マネージャーは標準の OAuth フローをスキップします。代わりに、エージェントの `tool_context.state` からキーを取得し、トークンを直接認証に使用します。
+この構成パラメータの使用は相互に排他的であり、同じ構成ブロックに `credentials`、`client_id`、`client_secret`、または `scopes` パラメータを含めることはできません。
+
+次の例に従ってキーを構成してください。
+
+```python
+from google.adk.auth.auth_credential import AuthCredential
+from google.adk.auth.auth_credential import AuthCredentialTypes
+
+# セッション状態から "get_my_frontend_token" を探すようにツールを構成
+credentials_config = AuthCredential(
+    auth_type=AuthCredentialTypes.GOOGLE_CREDENTIALS,
+    google_credentials_config={
+        # 本番コードに認証キーをハードコードしないでください
+        "external_access_token_key": "get_my_frontend_token" 
+    }
+)
+
+```
+
 #### 認証要求フロー
 
 この図は、ユーザーの初期クエリから、ADKによる認証要求の検出、リダイレクト処理、および認証時のツール呼び出しの自動再試行に至るまでのエンドツーエンドの認証ハンドシェイクフローを表しています。

@@ -713,7 +713,11 @@ ADK 에이전트(`web_reader_mcp_client_agent`)는 `MCPToolset`을 사용하여 
 
 Claude 데스크톱으로 시도하려면 [설명서](https://modelcontextprotocol.io/quickstart/server#core-mcp-concepts)를 참조하십시오.
 
-## adk web 외부의 에이전트에서 MCP 도구 사용
+## 고급 사용 사례
+
+다음 섹션에서는 에이전트에서 MCP 도구를 사용할 때의 고급 사용 사례를 설명합니다.
+
+### adk web 없이 MCP 도구 사용
 
 이 섹션은 다음과 같은 경우에 해당됩니다.
 
@@ -824,6 +828,19 @@ if __name__ == '__main__':
     print(f"오류 발생: {e}")
 ```
 
+### 진행 상황 업데이트 처리
+
+오래 걸리는 도구의 경우 `McpToolset`은 `progress_callback`을 지원합니다. 이 접근 방식을 사용하면 MCP 서버로부터 실시간 업데이트를 수신할 수 있습니다. 간단한 콜백 함수를 제공하거나 세션 상태 업데이트와 같이 런타임 컨텍스트에 액세스할 수 있는 콜백을 생성하는 팩토리를 제공할 수 있습니다.
+
+```python
+async def my_progress_callback(progress: float, total: float, message: str):
+    print(f"Progress: {progress}/{total} - {message}")
+
+toolset = McpToolset(
+    connection_params=...,
+    progress_callback=my_progress_callback
+)
+```
 
 ## MCP 도구를 사용한 에이전트 배포
 

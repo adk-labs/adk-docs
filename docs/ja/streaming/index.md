@@ -36,17 +36,6 @@ ADK Gemini Live API Toolkit を使うと、エンドユーザーに自然で人�
     - [LensMosaic デモ](https://lens-mosaic-nhhfh7g7iq-uc.a.run.app)
     - [ソースコード](https://github.com/kazunori279/lens-mosaic)
 
--   :material-microphone-outline: **ADK Gemini Live API Toolkit デモ**
-
-    ---
-
-    [![Bidi Demo のスクリーンショット](https://raw.githubusercontent.com/google/adk-samples/main/python/agents/bidi-demo/assets/bidi-demo-screen.png)](https://bidi-demo-761793285222.us-central1.run.app/)
-
-    テキスト、音声、画像をサポートする ADK Gemini Live API Toolkit の本番向けリファレンス実装です。この FastAPI ベースのデモは、リアルタイム WebSocket 通信、自動文字起こし、Google Search ツール呼び出し、ストリーミングライフサイクル全体の管理を示します。
-
-    - [Bidi デモ](https://bidi-demo-761793285222.us-central1.run.app/)
-    - [ソースコード](https://github.com/google/adk-samples/tree/main/python/agents/bidi-demo)
-
 </div>
 
 <div class="grid cards" markdown>
@@ -58,14 +47,6 @@ ADK Gemini Live API Toolkit を使うと、エンドユーザーに自然で人�
     このクイックスタートでは、シンプルなエージェントを構築し、ADKストリーミングを使って低遅延の双方向音声・映像通信を実装します。
 
     - [クイックスタート（Gemini Live API Toolkit）](../get-started/streaming/quickstart-streaming.md)
-
--   :material-console-line: **Gemini Live API Toolkit デモアプリケーション**
-
-    ---
-
-    テキスト・音声・画像をサポートする、ADK Gemini Live API Toolkit の本番向けリファレンス実装です。FastAPI ベースで、リアルタイム WebSocket 通信、自動文字起こし、Google Search ツール呼び出し、ストリーミングライフサイクル全体の管理を示し、開発ガイドシリーズ全体でこのデモを参照します。
-
-    - [ADK Gemini Live API Toolkit デモ](https://github.com/google/adk-samples/tree/main/python/agents/bidi-demo)
 
 -   :material-console-line: **ブログ記事: ADK Gemini Live API Toolkit ビジュアルガイド**
 

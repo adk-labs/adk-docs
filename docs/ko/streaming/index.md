@@ -36,17 +36,6 @@ ADK의 Gemini Live API Toolkit은 [Gemini Live API](https://ai.google.dev/gemini
     - [LensMosaic 데모](https://lens-mosaic-nhhfh7g7iq-uc.a.run.app)
     - [소스 코드](https://github.com/kazunori279/lens-mosaic)
 
--   :material-microphone-outline: **ADK Gemini Live API Toolkit 데모**
-
-    ---
-
-    [![Bidi Demo 스크린샷](https://raw.githubusercontent.com/google/adk-samples/main/python/agents/bidi-demo/assets/bidi-demo-screen.png)](https://bidi-demo-761793285222.us-central1.run.app/)
-
-    텍스트, 오디오, 이미지를 지원하는 ADK Gemini Live API Toolkit의 프로덕션 준비형 레퍼런스 구현입니다. 이 FastAPI 기반 데모는 실시간 WebSocket 통신, 자동 전사, Google Search 도구 호출, 전체 스트리밍 라이프사이클 관리를 보여 줍니다.
-
-    - [Bidi 데모](https://bidi-demo-761793285222.us-central1.run.app/)
-    - [소스 코드](https://github.com/google/adk-samples/tree/main/python/agents/bidi-demo)
-
 </div>
 
 <div class="grid cards" markdown>
@@ -58,14 +47,6 @@ ADK의 Gemini Live API Toolkit은 [Gemini Live API](https://ai.google.dev/gemini
     이 빠른 시작에서는 간단한 에이전트를 만들고 ADK 스트리밍을 사용해 저지연 양방향 음성/영상 통신을 구현합니다.
 
     - [빠른 시작 (Gemini Live API Toolkit)](../get-started/streaming/quickstart-streaming.md)
-
--   :material-console-line: **Gemini Live API Toolkit 데모 애플리케이션**
-
-    ---
-
-    텍스트, 오디오, 이미지를 지원하는 ADK Gemini Live API Toolkit의 프로덕션 준비형 레퍼런스 구현입니다. FastAPI 기반으로 실시간 WebSocket 통신, 자동 전사, Google Search 도구 호출, 전체 스트리밍 라이프사이클 관리를 보여주며, 개발 가이드 시리즈 전반에서 이 데모를 참조합니다.
-
-    - [ADK Gemini Live API Toolkit 데모](https://github.com/google/adk-samples/tree/main/python/agents/bidi-demo)
 
 -   :material-console-line: **블로그 게시물: ADK Gemini Live API Toolkit 비주얼 가이드**
 

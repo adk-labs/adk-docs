@@ -539,3 +539,38 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
 ```typescript
 --8<-- "examples/typescript/snippets/tools/function-tools/agent-as-a-tool-example.ts"
 ```
+
+#### プラグイン継承の制御
+
+エージェントを `AgentTool` でラップする場合、`include_plugins` パラメータを使用して親ランナーからプラグインを継承するかどうかを制御できます。
+
+* **`include_plugins=True` (デフォルト):** 子エージェントは親のすべてのプラグインを継承し、トレース スパンとイベント ストリーミングを保持します。
+* **`include_plugins=False`:** 子エージェントは親からプラグインを継承せず、隔離された環境で実行されます。エージェントの実行を自己完結型にし、親のプラグイン環境の影響を受けないようにするには、この設定を使用します。
+
+=== "Python"
+
+    ```python
+    from google.adk.tools import agent_tool
+
+    # MyImageAgent のプレースホルダー定義
+    class MyImageAgent:
+        def __init__(
+            self, name="My Agent", description="A simple image agent."
+        ):
+            self.name = name
+            # description 属性を追加
+            self.description = description 
+
+    # 例 1: MyImageAgent を親プラグインから隔離
+    my_isolated_tool = agent_tool.AgentTool(
+        agent=MyImageAgent(), # MyImageAgent をインスタンス化
+        include_plugins=False
+    )
+
+    # 例 2: プラグインを継承
+    my_observable_tool = agent_tool.AgentTool(
+        agent=MyImageAgent(), # MyImageAgent をインスタンス化
+        include_plugins=True
+    )
+    ```
+

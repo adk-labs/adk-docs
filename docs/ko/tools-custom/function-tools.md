@@ -538,3 +538,38 @@ Python에서는 함수를 `LongRunningFunctionTool`로 래핑합니다. Java에�
 ```typescript
 --8<-- "examples/typescript/snippets/tools/function-tools/agent-as-a-tool-example.ts"
 ```
+
+#### 플러그인 상속 제어
+
+에이전트를 `AgentTool`로 감쌀 때 `include_plugins` 파라미터를 사용하여 상위 러너로부터 플러그인을 상속받을지 여부를 제어할 수 있습니다.
+
+* **`include_plugins=True` (기본값):** 하위 에이전트는 상위 에이전트의 모든 플러그인을 상속받아 추적 스팬(trace spans) 및 이벤트 스트리밍을 유지합니다.
+* **`include_plugins=False`:** 하위 에이전트는 상위 에이전트의 플러그인 환경을 상속받지 않고 격리된 환경에서 실행됩니다. 에이전트의 실행을 자립적(self-contained)으로 유지하고 상위 에이전트의 플러그인 환경에 영향을 받지 않도록 하려면 이 설정을 사용하세요.
+
+=== "Python"
+
+    ```python
+    from google.adk.tools import agent_tool
+
+    # MyImageAgent를 위한 플레이스홀더 정의
+    class MyImageAgent:
+        def __init__(
+            self, name="My Agent", description="A simple image agent."
+        ):
+            self.name = name
+            # description 속성 추가
+            self.description = description 
+
+    # 예시 1: 상위 플러그인으로부터 MyImageAgent 격리
+    my_isolated_tool = agent_tool.AgentTool(
+        agent=MyImageAgent(), # MyImageAgent 인스턴스화
+        include_plugins=False
+    )
+
+    # 예시 2: 플러그인 상속
+    my_observable_tool = agent_tool.AgentTool(
+        agent=MyImageAgent(), # MyImageAgent 인스턴스화
+        include_plugins=True
+    )
+    ```
+
