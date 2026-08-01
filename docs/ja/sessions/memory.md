@@ -557,6 +557,49 @@ LlmAgent agent = new LlmAgent.Builder()
 --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:auto_save_callback"
 ```
 
+## メモリ機能の拡張
+
+`BaseMemoryService` を拡張したメモリ サービスは、カスタム メタデータを含め、エージェント メモリにセッションやイベントを追加することをサポートします。以下のコード例に示すように、`InMemoryMemoryService` などのメモリ サービスの `add_session_to_memory` および `add_events_to_memory` メソッドを使用してメモリ データを修正できます。
+
+```python
+import asyncio
+from google.adk.memory import InMemoryMemoryService
+
+# my_memory_service は InMemoryMemoryService のインスタンスであり、
+# my_latest_events は最新ターンからの新しい adk.Event オブジェクトのリストであると仮定します。
+my_latest_events = [...]
+
+async def update_incremental_memory(my_memory_service, my_latest_events):
+    # 例 1: 基本的な増分更新
+    await my_memory_service.add_events_to_memory(
+        app_name="my-app",
+        user_id="my-user",
+        events=my_latest_events,
+        session_id="my-optional-session-id"
+    )
+
+    # 例 2: カスタム メタデータを使用した増分更新
+    await my_memory_service.add_events_to_memory(
+        app_name="my-app",
+        user_id="my-user",
+        events=my_latest_events,
+        session_id="my-optional-session-id",
+        custom_metadata={
+            "my_custom_key": "my_custom_value"
+        }
+    )
+
+async def update_session_memory(my_memory_service, my_completed_session):
+    # 例 3: 完全なセッションへのカスタム メタデータの適用
+    await my_memory_service.add_session_to_memory(
+        session=my_completed_session,
+        custom_metadata={
+            "category": "user_preference"
+        }
+    )
+
+```
+
 ## 高度な概念
 
 ### 実務におけるメモリの仕組み

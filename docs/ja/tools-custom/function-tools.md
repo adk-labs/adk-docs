@@ -540,6 +540,45 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
 --8<-- "examples/typescript/snippets/tools/function-tools/agent-as-a-tool-example.ts"
 ```
 
+#### グラウンディング メタデータの伝播
+
+**`propagate_grounding_metadata`** (boolean、デフォルト: `False`)
+`True` に設定すると、サブエージェントによって生成された Google 検索の引用などのグラウンディング メタデータが親エージェントのセッション ステートに自動的に転送されます。このカスタマイズにより、専門の検索エージェントをツールとして使用する際に引用情報が保持されることが保証されます。
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import Agent
+    from google.adk.tools import AgentTool
+
+    search_specialist_agent = Agent(
+        # 生成モデルを指定
+        model="gemini-flash-latest",
+        name="search_specialist_agent",
+        instruction=(
+            "You are a search expert. Find and "
+            "compile citations on requested topics."
+        ),
+        # ここに検索ツールを追加
+    )
+
+    search_agent_tool = AgentTool(
+        agent=search_specialist_agent,
+        # 引用情報をルートエージェントまで保持
+        propagate_grounding_metadata=True
+    )
+
+    root_agent = Agent(
+        model="gemini-flash-latest",
+        name="root_agent",
+        description=(
+            "A central coordinator that delegates "
+            "to specialist agents."
+        ),
+        tools=[search_agent_tool]
+    )
+    ```
+
 #### プラグイン継承の制御
 
 エージェントを `AgentTool` でラップする場合、`include_plugins` パラメータを使用して親ランナーからプラグインを継承するかどうかを制御できます。

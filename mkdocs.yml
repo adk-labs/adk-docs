@@ -334,6 +334,7 @@ plugins:
                 - Gemini: agents/models/google-gemini.md
                 - Gemma: agents/models/google-gemma.md
                 - Claude: agents/models/anthropic.md
+                - OpenAI: agents/models/openai.md
                 - Agent Platform 호스팅: agents/models/agent-platform.md
                 - Apigee AI Gateway: agents/models/apigee.md
                 - 모델 라우팅: agents/models/routing.md
@@ -511,6 +512,7 @@ plugins:
                 - Gemini: agents/models/google-gemini.md
                 - Gemma: agents/models/google-gemma.md
                 - Claude: agents/models/anthropic.md
+                - OpenAI: agents/models/openai.md
                 - Agent Platform hosted: agents/models/agent-platform.md
                 - Apigee AI Gateway: agents/models/apigee.md
                 - モデルルーティング: agents/models/routing.md

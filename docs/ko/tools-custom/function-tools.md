@@ -539,6 +539,45 @@ Python에서는 함수를 `LongRunningFunctionTool`로 래핑합니다. Java에�
 --8<-- "examples/typescript/snippets/tools/function-tools/agent-as-a-tool-example.ts"
 ```
 
+#### 그라운딩 메타데이터 전파
+
+**`propagate_grounding_metadata`** (boolean, 기본값: `False`)
+`True`로 설정하면 하위 에이전트가 생성한 Google Search 출처(citation)와 같은 그라운딩 메타데이터를 상위 에이전트의 세션 상태로 자동 전달합니다. 이 사용자 지정을 통해 전문 검색 에이전트를 도구로 사용할 때 출처 정보가 보존되도록 보장합니다.
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import Agent
+    from google.adk.tools import AgentTool
+
+    search_specialist_agent = Agent(
+        # 제너레이티브 모델 지정
+        model="gemini-flash-latest",
+        name="search_specialist_agent",
+        instruction=(
+            "You are a search expert. Find and "
+            "compile citations on requested topics."
+        ),
+        # 여기에 검색 도구 추가
+    )
+
+    search_agent_tool = AgentTool(
+        agent=search_specialist_agent,
+        # 출처 정보를 루트 에이전트까지 온전히 유지
+        propagate_grounding_metadata=True
+    )
+
+    root_agent = Agent(
+        model="gemini-flash-latest",
+        name="root_agent",
+        description=(
+            "A central coordinator that delegates "
+            "to specialist agents."
+        ),
+        tools=[search_agent_tool]
+    )
+    ```
+
 #### 플러그인 상속 제어
 
 에이전트를 `AgentTool`로 감쌀 때 `include_plugins` 파라미터를 사용하여 상위 러너로부터 플러그인을 상속받을지 여부를 제어할 수 있습니다.
