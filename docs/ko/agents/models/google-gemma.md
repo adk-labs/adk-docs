@@ -13,6 +13,8 @@ Gemma 4는 [Gemini API](https://ai.google.dev/gemini-api/docs)를 통해 사용�
 [Google Kubernetes Engine](https://docs.cloud.google.com/kubernetes-engine/docs/tutorials/serve-gemma-gpu-vllm),
 [Cloud Run](https://docs.cloud.google.com/run/docs/run-gemma-on-cloud-run).
 
+Gemma 3는 아래의 Gemma 4 예시와 다른 모델 클래스가 필요합니다. 네이티브 함수 호출이나 시스템 지침을 지원하지 않으므로 ADK는 전용 클래스로 해결 방법을 제공합니다. Gemini API에는 `Gemma(model="gemma-3-27b-it")`를 사용하고 Ollama에는 `Gemma3Ollama()`를 사용합니다(둘 다 `google.adk.models`에서 제공). `Gemma3Ollama`는 [LiteLLM](/ko/agents/models/litellm/)이 설치되어 있는 경우에만 정의됩니다 (`litellm>=1.84`).
+
 ## Gemini API 예시
 
 [Google AI Studio](https://aistudio.google.com/app/apikey)에서 API 키를 생성합니다.

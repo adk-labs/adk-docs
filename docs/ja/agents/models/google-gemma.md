@@ -13,6 +13,8 @@ Google Cloud 上のさまざまなセルフホスティング विकल्प
 [Google Kubernetes Engine](https://docs.cloud.google.com/kubernetes-engine/docs/tutorials/serve-gemma-gpu-vllm)、
 [Cloud Run](https://docs.cloud.google.com/run/docs/run-gemma-on-cloud-run)。
 
+Gemma 3 は、以下の Gemma 4 の例とは異なるモデルクラスを必要とします。ネイティブの関数呼び出しやシステム指示のサポートがないため、ADK は専用クラスで回避策を提供します。Gemini API には `Gemma(model="gemma-3-27b-it")` を使用し、Ollama には `Gemma3Ollama()` を使用します（どちらも `google.adk.models` から提供）。`Gemma3Ollama` は [LiteLLM](/ja/agents/models/litellm/) がインストールされている場合（`litellm>=1.84`）にのみ定義されます。
+
 ## Gemini API の例
 
 [Google AI Studio](https://aistudio.google.com/app/apikey) で API キーを作成します。
