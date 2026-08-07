@@ -124,7 +124,9 @@
             .build();
     ```
 
-*（注：システムの*すべて*のエージェントに適用される指示については、ルートエージェントの`global_instruction`の使用を検討してください。詳細は[マルチエージェント](../workflows/patterns.md)セクションで説明します。）*
+!!! note "GlobalInstructionPlugin"
+
+    システム内の*すべて*のエージェントに共通のルールや一貫したペルソナを適用するには、非推奨となった `global_instruction` パラメータの代わりに `GlobalInstructionPlugin` を使用してください。
 
 ## エージェントの装備：ツール (`tools`)
 

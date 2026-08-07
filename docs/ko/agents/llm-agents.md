@@ -156,7 +156,9 @@
             .build();
     ```
 
-*(참고: 시스템의 *모든* 에이전트에 적용되는 명령의 경우, 루트 에이전트의 `global_instruction` 사용을 고려하세요. 자세한 내용은 [다중 에이전트](../workflows/patterns.md) 섹션에서 설명합니다.)*
+!!! note "GlobalInstructionPlugin"
+
+    시스템의 *모든* 에이전트에 공통 규칙이나 일관된 페르소나를 적용하려면 더 이상 사용되지 않는(deprecated) `global_instruction` 매개변수 대신 `GlobalInstructionPlugin`을 사용하세요.
 
 ## 에이전트 갖추기: 도구 (`tools`)
 
