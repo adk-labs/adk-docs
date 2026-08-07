@@ -53,6 +53,26 @@ ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 
 최근 녹화본은 아래에서 확인할 수 있고, 전체 [YouTube 재생 목록](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3)도 둘러볼 수 있습니다.
 
 <div class="resource-grid">
+  <a href="https://www.youtube.com/watch?v=-L8ys-nKCWc" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/-L8ys-nKCWc/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 7월">
+    </div>
+    <div class="card-content">
+      <div class="type">커뮤니티 콜</div>
+      <h3>📞 2026년 7월 녹화본</h3>
+      <p>ADK Go 2.0 릴리스, 자동화된 평가 기능을 갖춘 Agents CLI의 GA 전환, ADK를 활용한 PR 및 이슈 트리아지 자동화, 새로운 Managed Agents와 Antigravity 통합, AG-UI 및 A2UI 프로토콜을 사용한 CopilotKit 커뮤니티 스포트라이트에 대한 논의가 포함되어 있습니다.</p>
+    </div>
+  </a>
+  <a href="https://www.youtube.com/watch?v=XAvXSACGdEQ" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/XAvXSACGdEQ/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 6월">
+    </div>
+    <div class="card-content">
+      <div class="type">커뮤니티 콜</div>
+      <h3>📞 2026년 6월 녹화본</h3>
+      <p>ADK Java 2.0 GA 릴리스, Vertex AI RAG 엔진과의 깊은 통합, 세션 영속성을 위한 Firestore 릴레이션 스토어, 그리고 Aeneas 프로젝트에 대한 커뮤니티 스포트라이트를 다룹니다.</p>
+    </div>
+  </a>
   <a href="https://www.youtube.com/watch?v=vbqKmK0rArI" class="resource-card">
     <div class="card-image-wrapper">
       <img src="https://img.youtube.com/vi/vbqKmK0rArI/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 5월">
@@ -61,16 +81,6 @@ ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 
       <div class="type">커뮤니티 콜</div>
       <h3>📞 2026년 5월 녹화본</h3>
       <p>ADK Python 2.0 GA 출시, Kotlin 및 Android용 ADK 첫 출시, 동적 기능 로드를 위한 Agents CLI 및 Skills 데모, Beever Atlas에 대한 커뮤니티 스포트라이트를 다룹니다.</p>
-    </div>
-  </a>
-  <a href="https://www.youtube.com/watch?v=bPngDY7EuOQ" class="resource-card">
-    <div class="card-image-wrapper">
-      <img src="https://img.youtube.com/vi/bPngDY7EuOQ/maxresdefault.jpg" alt="ADK 커뮤니티 콜 2026년 3월">
-    </div>
-    <div class="card-content">
-      <div class="type">커뮤니티 콜</div>
-      <h3>📞 2026년 3월 녹화본</h3>
-      <p>ADK 2.0 알파 릴리스, 그래프 기반 에이전트 구성을 위한 Workflows, 구조화된 멀티 에이전트 조정을 위한 Agent Modes, 그리고 Restate 지속형 에이전트에 대한 커뮤니티 스포트라이트를 다룹니다.</p>
     </div>
   </a>
   <a href="https://www.youtube.com/watch?v=cXDr4RYJxK0" class="resource-card">

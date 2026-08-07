@@ -53,6 +53,26 @@ ADK Community Google Group に参加して、次回のコールに関する更�
 最近の録画は以下で確認でき、[YouTube プレイリスト](https://www.youtube.com/playlist?list=PLwi6PfxEP7zZbBPmWiZ8QbPcuKyAY5RR3) では過去のすべてのコールを確認できます。
 
 <div class="resource-grid">
+  <a href="https://www.youtube.com/watch?v=-L8ys-nKCWc" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/-L8ys-nKCWc/maxresdefault.jpg" alt="ADK コミュニティコール 2026年7月">
+    </div>
+    <div class="card-content">
+      <div class="type">コミュニティコール</div>
+      <h3>📞 2026年7月 録画</h3>
+      <p>ADK Go 2.0 リリース、自動評価機能を備えた Agents CLI の GA 化、ADK を活用した PR および Issue トリアージの自動化、新しい Managed Agents と Antigravity の統合、AG-UI および A2UI プロトコルを使用した CopilotKit コミュニティスポットライトに関する議論が含まれます。</p>
+    </div>
+  </a>
+  <a href="https://www.youtube.com/watch?v=XAvXSACGdEQ" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="https://img.youtube.com/vi/XAvXSACGdEQ/maxresdefault.jpg" alt="ADK コミュニティコール 2026年6月">
+    </div>
+    <div class="card-content">
+      <div class="type">コミュニティコール</div>
+      <h3>📞 2026年6月 録画</h3>
+      <p>ADK Java 2.0 GA リリース、Vertex AI RAG エンジンとの深い統合、セッション永続化のための Firestore リレーションストア、および Aeneas プロジェクトに関するコミュニティスポットライトを扱っています。</p>
+    </div>
+  </a>
   <a href="https://www.youtube.com/watch?v=vbqKmK0rArI" class="resource-card">
     <div class="card-image-wrapper">
       <img src="https://img.youtube.com/vi/vbqKmK0rArI/maxresdefault.jpg" alt="ADK Community Call May 2026">
@@ -61,16 +81,6 @@ ADK Community Google Group に参加して、次回のコールに関する更�
       <div class="type">コミュニティコール</div>
       <h3>📞 2026年5月 録画</h3>
       <p>ADK Python 2.0 GA リリース、Kotlin および Android 向け ADK の初回リリース、動的な機能ロードのための Agents CLI および Skills のデモ、Beever Atlas に関するコミュニティスポットライトを扱っています。</p>
-    </div>
-  </a>
-  <a href="https://www.youtube.com/watch?v=bPngDY7EuOQ" class="resource-card">
-    <div class="card-image-wrapper">
-      <img src="https://img.youtube.com/vi/bPngDY7EuOQ/maxresdefault.jpg" alt="ADK Community Call Mar 2026">
-    </div>
-    <div class="card-content">
-      <div class="type">コミュニティコール</div>
-      <h3>📞 2026年3月 録画</h3>
-      <p>ADK 2.0 アルファリリース、グラフベースのエージェント構成向け Workflows、構造化されたマルチエージェント連携のための Agent Modes、そして Restate の永続エージェントに関するコミュニティスポットライトを扱っています。</p>
     </div>
   </a>
   <a href="https://www.youtube.com/watch?v=cXDr4RYJxK0" class="resource-card">
