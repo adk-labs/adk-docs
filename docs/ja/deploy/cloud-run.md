@@ -513,7 +513,7 @@ google-adk
 
     UIが有効な状態でエージェントをデプロイした場合:
 
-    *   **adk CLI:** デプロイ時に該当するフラグ（Go では `--webui`、Python または Typescript では `--with_ui`）を含めました。
+    *   **adk CLI:** デプロイ時に該当するフラグ（Go では `--webui`、Python または TypeScript では `--with_ui`）を含めました。
     *   **gcloud CLI:** `main.py`で`SERVE_WEB_INTERFACE = True`を設定しました。
 
     デプロイ後に提供されたCloud RunサービスURLをウェブブラウザで開くだけで、エージェントをテストできます。
