@@ -1910,6 +1910,8 @@ config = BigQueryLoggerConfig(
 
     - **`plugin.close()`**: 플러그인을 정상적으로 종료하여 보류 중인 이벤트를 플러시하고 리소스(BigQuery 쓰기 클라이언트 및 실행기 포함)를 해제합니다.
     - **자동 닫기**: `InMemoryRunner`를 사용하는 경우 `runner.close()`를 호출하면 BigQuery Agent Analytics 플러그인을 포함하여 등록된 모든 플러그인이 자동으로 닫힙니다.
+    - **`plugin.getDropStats()`**: 드롭 원인별 드롭된 이벤트 수의 `ImmutableMap<String, Long>` 스냅샷을 반환합니다. 아래의 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참조하세요.
+    - **JVM 종료 후크(JVM shutdown hook)**: 플러그인은 생성 시 종료 후크를 등록하므로 `close()`가 호출되지 않더라도 JVM 종료 시 보류 중인 이벤트가 플러시(`shutdownTimeout`에 의해 제한됨)됩니다. 명시적 `close()`는 후크 등록을 해제합니다. 확정적인 플러시를 위해 `close()`를 호출하는 것이 권장됩니다.
 
     ```java
     // 수동 종료
@@ -1918,27 +1920,52 @@ config = BigQueryLoggerConfig(
 
 ### 드롭된 이벤트 관측 가능성 {#dropped-event-observability}
 
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-java">Java v1.7.0</span>
+</div>
+
 BigQuery 로깅은 베스트 에포트(best-effort) 방식입니다. 메모리 내 큐가 오버플로되거나 쓰기가 최종적으로 실패하면 이벤트가 드롭될 수 있습니다. 플러그인은 `drop_reason`별로 드롭된 행을 추적하고 폴링 API를 노출하여 호스트가 이를 감지하고 경고를 보낼 수 있으며 자체 모니터링 시스템에 수치를 보낼 수 있도록 합니다.
 
 **드롭 원인:**
 
-| 원인 (Reason) | 이유 (Cause) |
-|---|---|
-| `queue_full` | 메모리 내 배치 큐가 오버플로되었습니다(호스트가 드레이너가 전송할 수 있는 것보다 빠르게 이벤트를 생성함). `BigQueryLoggerConfig`에서 `queue_max_size`를 늘리거나, 더 큰 덩어리로 비우도록 `batch_size`를 늘리거나, 소비자 쪽을 확장하세요(더 많은 동시 호출이 더 빠르게 완료되도록 설정). |
-| `arrow_prep_failed` | 행을 Arrow 표현으로 변환할 수 없습니다(일반적으로 스키마/타입 불일치). 문제 필드에 대한 로그를 조사하세요. |
-| `retry_exhausted` | Storage Write API 호출이 재시도 임계값을 소진할 때까지 재시도 가능한 오류(예: 일시적인 gRPC 실패)를 계속 반환했습니다. |
-| `non_retryable` | Storage Write API가 재시도 불가능한 오류(권한, 할당량 부족, 스키마 거부)를 반환했습니다. 일반적으로 운영자의 개입이 필요합니다. |
-| `unexpected_error` | 배치를 준비하거나 쓰는 동안 포착된 기타 모든 예외 상황입니다. |
+| 원인 (Reason) | 언어 | 이유 (Cause) |
+|---|---|---|
+| `queue_full` | Python, Java | 메모리 내 배치 큐가 오버플로되었습니다(호스트가 드레이너가 전송할 수 있는 것보다 빠르게 이벤트를 생성함). `BigQueryLoggerConfig`에서 `queue_max_size` / `queueMaxSize`를 늘리거나, 더 큰 덩어리로 비우도록 `batch_size` / `batchSize`를 늘리거나, 소비자 쪽을 확장하세요. |
+| `arrow_prep_failed` | Python | 행을 Arrow 표현으로 변환할 수 없습니다(일반적으로 스키마/타입 불일치). |
+| `retry_exhausted` | Python | Storage Write API 호출이 재시도 임계값을 소진할 때까지 재시도 가능한 오류를 계속 반환했습니다. |
+| `non_retryable` | Python | Storage Write API가 재시도 불가능한 오류(권한, 할당량 부족, 스키마 거부)를 반환했습니다. |
+| `unexpected_error` | Python | 배치를 준비하거나 쓰는 동안 포착된 기타 모든 예외 상황입니다. |
+| `serialization_error` | Java | 쓰기 스트림을 위해 행을 직렬화할 수 없습니다(일반적으로 스키마/타입 불일치). |
+| `append_error` | Java | `AppendSerializationError` 이외의 원인(타임아웃, 소진 또는 재시도 불가능한 쓰기, 예상치 못한 변환 실패 포함)으로 배치 준비 또는 추가가 실패했습니다. |
+| `after_close` | Java | 행이 이미 닫힌 호출별 프로세서에 도달했습니다. |
+| `shutdown_timeout` | Java | 바운딩된 최종 비우기가 만료되었을 때 대기열에 들어 있는 행이 남아있었습니다. |
+| `writer_permit_exhausted` | Java | 실시간 라이터 안전 상한이 소진되었습니다(보통 Storage Write 중단 또는 지연된 정리 중에 발생). |
+| `writer_create_error` | Java | `StreamWriter` 생성 또는 프로세서 시작이 실패했습니다. |
+| `late_after_finalize` | Java | 비동기 작업이 호출이 확정된 후 또는 플러그인이 닫히는 중에 완료되었습니다. |
 
 **수치 확인하기:**
 
-```python
-# 플러그인 시작 이후 {drop_reason: count}의 스냅샷.
-stats = plugin.get_drop_stats()
-# 예: {"queue_full": 12, "retry_exhausted": 0, ...}
+=== "Python"
 
-total_dropped = sum(stats.values())
-```
+    ```python
+    # 플러그인 시작 이후 {drop_reason: count}의 스냅샷.
+    stats = plugin.get_drop_stats()
+    # 예: {"queue_full": 12, "retry_exhausted": 0, ...}
+
+    total_dropped = sum(stats.values())
+    ```
+
+=== "Java"
+
+    ```java
+    // 플러그인 시작 이후 {drop_reason: count}의 스냅샷.
+    ImmutableMap<String, Long> stats = plugin.getDropStats();
+    // 예: {queue_full=12, append_error=0, serialization_error=0,
+    //           after_close=0, shutdown_timeout=0, writer_permit_exhausted=0,
+    //           writer_create_error=0, late_after_finalize=0}
+
+    long totalDropped = stats.values().stream().mapToLong(Long::longValue).sum();
+    ```
 
 **모니터링 시스템으로 내보내기** — 주기적으로 폴링하고 차이를 전송합니다.
 

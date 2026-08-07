@@ -1934,13 +1934,20 @@ BigQuery へのロギングはベストエフォート（best-effort）方式で
 
 **ドロップ理由:**
 
-| 理由 (Reason) | 原因 (Cause) |
-|---|---|
-| `queue_full` | メモリ内バッチキューがオーバーフローしました（ホストがドレイナー（drainer）が送信できる速度よりも速くイベントを生成しています）。`BigQueryLoggerConfig` の `queue_max_size` を増やすか、より大きなチャンクでドレインするために `batch_size` を上げるか、コンシューマー側をスケール（より多くの同時呼び出しをより高速に完了）させてください。 |
-| `arrow_prep_failed` | 行を Arrow 表現に変換できませんでした（通常、スキーマ/タイプの不一致）。ログを調査して問題のあるフィールドを確認してください。 |
-| `retry_exhausted` | Storage Write API の呼び出しが、再試行バジェットを使い果たすまで再試行可能なエラー（例：一時的な gRPC エラー）を返し続けました。 |
-| `non_retryable` | Storage Write API が再試行不可能なエラー（権限、割り当て、スキーマ拒否）を返しました。通常、管理者の介入が必要です。 |
-| `unexpected_error` | バッチの準備または書き込み中に捕捉されたその他の例外です。 |
+| 理由 (Reason) | 言語 | 原因 (Cause) |
+|---|---|---|
+| `queue_full` | Python, Java | メモリ内バッチキューがオーバーフローしました（ホストがドレイナーが送信できる速度よりも速くイベントを生成しています）。`BigQueryLoggerConfig` の `queue_max_size` / `queueMaxSize` を増やすか、より大きなチャンクでドレインするために `batch_size` / `batchSize` を上げるか、コンシューマー側をスケールさせてください。 |
+| `arrow_prep_failed` | Python | 行を Arrow 表現に変換できませんでした（通常、スキーマ/タイプの不一致）。 |
+| `retry_exhausted` | Python | Storage Write API の呼び出しが、再試行バジェットを使い果たすまで再試行可能なエラーを返し続けました。 |
+| `non_retryable` | Python | Storage Write API が再試行不可能なエラー（権限、割り当て、スキーマ拒否）を返しました。 |
+| `unexpected_error` | Python | バッチの準備または書き込み中に捕捉されたその他の例外です。 |
+| `serialization_error` | Java | 書き込みストリーム向けに行をシリアライズできませんでした（通常、スキーマ/タイプの不一致）。 |
+| `append_error` | Java | `AppendSerializationError` 以外の原因（タイムアウト、消費または再試行不可能な書き込み、予期しない変換失敗を含む）により、バッチの準備または追加が失敗しました。 |
+| `after_close` | Java | 行がすでにクローズされた呼び出しごとのプロセッサに到達しました。 |
+| `shutdown_timeout` | Java | 制限された最終ドレインが期限切れになった時点で、キューにイベントが残っていました。 |
+| `writer_permit_exhausted` | Java | ライブライター安全上限が使い果たされました（通常、Storage Write 障害または遅延したクリンアップ中に発生）。 |
+| `writer_create_error` | Java | `StreamWriter` の構築またはプロセッサの起動に失敗しました。 |
+| `late_after_finalize` | Java | 呼び出しが確定した後、またはプラグインがクローズ中に非同期作業が完了しました。 |
 
 **カウントの読み取り:**
 
