@@ -1004,7 +1004,7 @@ else:
 
 이제 새로운 버전의 날씨 도구를 만듭니다. 주요 특징은 `tool_context: ToolContext`를 받아 `tool_context.state`에 액세스할 수 있다는 것입니다. `user_preference_temperature_unit`을 읽고 온도를 그에 맞게 포맷팅합니다.
 
-*   **핵심 개념: `ToolContext`** 이 객체는 도구 로직이 상태 변수를 읽고 쓰는 것을 포함하여 세션의 컨텍스트와 상호 작용할 수 있게 해주는 다리입니다. 도구 함수의 마지막 매개변수로 정의하면 ADK가 자동으로 주입합니다.
+*   **핵심 개념: `ToolContext`** 이 객체는 도구 로직이 상태 변수를 읽고 쓰는 것을 포함하여 세션의 컨텍스트와 상호 작용할 수 있게 해주는 다리입니다. ADK는 `ToolContext` 타입 어노테이션으로 매개변수를 찾아 자동으로 주입하므로 도구 함수의 어느 위치에나 배치할 수 있으며, 주입된 매개변수는 LLM에 노출되는 스키마에서 자동으로 숨겨집니다.
 
 *   **모범 사례:** 상태에서 읽을 때 `dictionary.get('key', default_value)`를 사용하여 키가 아직 존재하지 않을 수 있는 경우를 처리하여 도구가 중단되지 않도록 하세요.
 
@@ -1890,7 +1890,7 @@ else:
     *   `after_tool_callback`을 사용하여 도구에서 반환된 결과를 처리하거나 기록하세요.
     *   에이전트 수준의 진입/종료 로직을 위해 `before_agent_callback` 또는 `after_agent_callback`을 구현하세요.
 5.  **오류 처리:** 에이전트가 도구 오류나 예상치 못한 API 응답을 처리하는 방법을 개선하세요. 도구 내에 재시도 로직을 추가할 수도 있습니다.
-6.  **영구 세션 저장소:** 세션 상태를 영구적으로 저장하기 위해 `InMemorySessionService`의 대안을 탐색하세요(예: Firestore 또는 Cloud SQL과 같은 데이터베이스 사용 - 사용자 정의 구현 또는 향후 ADK 통합 필요).
+6.  **영구 세션 저장소:** `InMemorySessionService` 대신 `pip install google-adk[db]`로 설치 가능한 SQLAlchemy 기반의 `DatabaseSessionService` 또는 `VertexAiSessionService`와 같이 ADK에서 제공하는 영구 구현체로 변경해 보세요. 자세한 내용은 [세션](/ko/sessions/session/) 페이지를 참조하세요.
 7.  **스트리밍 UI:** 에이전트 팀을 웹 프레임워크(ADK 스트리밍 빠른 시작에서 보여지는 FastAPI 등)와 통합하여 실시간 채팅 인터페이스를 만드세요.
 
 Agent Development Kit는 정교한 LLM 기반 애플리케이션을 구축하기 위한 견고한 기반을 제공합니다. 도구, 상태, 위임 및 콜백과 같이 이 튜토리얼에서 다룬 개념을 마스터하면 점점 더 복잡해지는 에이전트 시스템을 다룰 준비가 된 것입니다.
