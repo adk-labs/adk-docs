@@ -123,3 +123,36 @@ adk run --session_service_uri "sqlite:///my_sessions.db" path/to/my_agent
 | `--session_service_uri` | 사용자 지정 세션 저장소 URI |
 | `--artifact_service_uri` | 사용자 지정 아티팩트 저장소 URI |
 | `--memory_service_uri` | 사용자 지정 메모리 서비스 URI |
+
+## 사용 원격 측정 (Usage telemetry)
+
+ADK CLI는 기능 채택을 이해하고 개발 우선순위를 안내하며 도구 성능을 개선하기 위해 익명의 사용 원격 측정(telemetry) 데이터를 수집합니다. 데이터 수집은 명시적으로 활성화하도록 선택할 때까지 기본적으로 비활성화(OFF)되어 있습니다.
+
+원격 측정 기본 설정은 시스템의 `~/.adk/config.json`에 로컬로 저장됩니다. 터미널을 통해 언제든지 원격 측정 데이터 수집을 관리할 수 있습니다.
+
+- **활성화**: `adk telemetry enable`
+- **비활성화**: `adk telemetry disable`
+- **상태 확인**: `adk telemetry status`
+
+`~/.adk/config.json` 파일을 직접 열고 `telemetry` 속성을 `false`로 설정하여 원격 측정 데이터 수집을 수동으로 비활성화할 수도 있습니다.
+
+```json
+{
+  "telemetry": false
+}
+```
+
+**수집되는 데이터**
+
+- **환경 속성**: 운영체제 정보, 런타임 언어 및 버전, 설치된 ADK CLI 버전.
+- **명령 실행 이벤트**: 일반적인 명령어 및 서브 커맨드 이름, 전달된 플래그, 실행 시간, 종료 코드 및 오류 발생 시 예외 유형. 또한 명령 실행 후 폐기되는 임시 세션 ID 및 시퀀스 번호를 기록합니다.
+
+**수집되지 않는 데이터**
+
+CLI는 민감하거나 비공개 또는 개인 데이터를 수집하지 않으며, 구체적으로 다음 항목은 수집되지 않습니다.
+
+- 에이전트 이름, 프롬프트 문자열, 파일 경로 등 명령어나 플래그에 전달된 인수 또는 매개변수 값.
+- 사용자 자격 증명, 사용자 이름, API 키, OAuth 토큰 또는 비밀 정보.
+- Google Cloud 프로젝트 ID 또는 Cloud 계정 세부정보.
+- 소스 코드 파일, 파일 내용 또는 디렉터리 경로.
+- 개인 식별 정보 (PII).
