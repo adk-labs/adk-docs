@@ -35,6 +35,12 @@ catalog_tags: ["google"]
         --logging-config=DEBUG
     ```
 
+4.  **必要な依存関係のインストール**: 必要な Google Cloud Eventarc クライアント ライブラリを含めるために `gcp` エクストラ パッケージをインストールします。
+
+    ```bash
+    pip install "google-adk[gcp]"
+    ```
+
 ## エージェントでの使用
 
 次の例は、CloudEvents を発行するために `EventarcToolset` を構成し、エージェントに装備する方法を示しています。

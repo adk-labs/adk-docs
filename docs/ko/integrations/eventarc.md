@@ -35,6 +35,12 @@ catalog_tags: ["google"]
         --logging-config=DEBUG
     ```
 
+4.  **필수 종속성 설치**: Google Cloud Eventarc 클라이언트 라이브러리가 포함되도록 `gcp` 추가 패키지를 설치합니다.
+
+    ```bash
+    pip install "google-adk[gcp]"
+    ```
+
 ## 에이전트와 함께 사용
 
 다음 예제는 CloudEvent를 게시하기 위해 `EventarcToolset`을 구성하고 에이전트에 장착하는 방법을 보여줍니다.
