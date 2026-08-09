@@ -38,13 +38,15 @@ ADK のメトリクスに対するアプローチは、軽量で標準化され�
 エージェントのライフサイクル、ワークフローステップ、ツール実行を自動的に計測します。
 次の主要なメトリクスが出力されます。
 
-| メトリクス名 | 種類 | 説明 | 主な属性（ディメンション） |
+| メトリクス名 | タイプ | 説明 | 主要な属性（次元） |
 | :--- | :--- | :--- | :--- |
-| **`gen_ai.agent.invocation.duration`** | Histogram | エージェントがプロンプトを処理してレスポンスを返すまでにかかった合計時間です。 | `gen_ai.agent.name`, `error.type` |
-| **`gen_ai.tool.execution.duration`** | Histogram | エージェントが呼び出した個別ツールの実行レイテンシです。遅い外部 API を見つけるのに役立ちます。 | `gen_ai.tool.name`, `error.type` |
-| **`gen_ai.agent.request.size`** | Histogram | エージェントに送信された入力リクエストのサイズまたは複雑さです。 | `gen_ai.agent.name` |
-| **`gen_ai.agent.response.size`** | Histogram | エージェントが生成した最終レスポンスのサイズまたは複雑さです。 | `gen_ai.agent.name` |
-| **`gen_ai.agent.workflow.steps`** | Histogram | エージェントがワークフローを完了するまでに要した反復ステップまたは推論ループ数を追跡します。 | `gen_ai.agent.name` |
+| **`gen_ai.invoke_agent.duration`** | Histogram (seconds) | エージェントがプロンプトを処理して応答を返すまでにかかった合計時間。 | `gen_ai.agent.name`, `error.type` |
+| **`gen_ai.invoke_workflow.duration`** | Histogram (seconds) | ワークフローの実行にかかった時間。 | `gen_ai.operation.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ), `error.type` |
+| **`gen_ai.execute_tool.duration`** | Histogram (seconds) | エージェントによって呼び出された個別ツールの実行レイテンシ。低速な外部 API の特定に役立ちます。 | `gen_ai.agent.name`, `gen_ai.tool.name`, `gen_ai.tool.type`, `error.type` |
+| **`gen_ai.invoke_agent.inference_calls`** | Histogram (count) | 1 回のエージェント呼び出し中に実行された推論（モデル）呼び出しの回数。 | `gen_ai.agent.name` |
+| **`gen_ai.invoke_agent.tool_calls`** | Histogram (count) | 1 回のエージェント呼び出し中に実行されたツール呼び出しの回数。 | `gen_ai.agent.name` |
+| **`gen_ai.client.operation.duration`** | Histogram (seconds) | 単一モデルの `generate_content` 呼び出しのレイテンシ。 | `gen_ai.agent.name`, `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`, `error.type` |
+| **`gen_ai.client.token.usage`** | Histogram (tokens) | モデル呼び出しごとのトークン消費量。`gen_ai.token.type` により入力と出力に分割されます。 | `gen_ai.agent.name`, `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`, `gen_ai.token.type` |
 
 ---
 

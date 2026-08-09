@@ -37,11 +37,13 @@ ADK의 메트릭 접근 방식은 가볍고 표준화되어 있으며, 선택한
 
 | 메트릭 이름 | 유형 | 설명 | 주요 속성(차원) |
 | :--- | :--- | :--- | :--- |
-| **`gen_ai.agent.invocation.duration`** | Histogram | 에이전트가 프롬프트를 처리하고 응답을 반환하는 데 걸린 총 시간입니다. | `gen_ai.agent.name`, `error.type` |
-| **`gen_ai.tool.execution.duration`** | Histogram | 에이전트가 호출한 개별 도구의 실행 지연 시간입니다. 느린 외부 API를 찾는 데 유용합니다. | `gen_ai.tool.name`, `error.type` |
-| **`gen_ai.agent.request.size`** | Histogram | 에이전트로 전송된 입력 요청의 크기 또는 복잡도입니다. | `gen_ai.agent.name` |
-| **`gen_ai.agent.response.size`** | Histogram | 에이전트가 생성한 최종 응답의 크기 또는 복잡도입니다. | `gen_ai.agent.name` |
-| **`gen_ai.agent.workflow.steps`** | Histogram | 에이전트가 워크플로를 완료하는 데 사용한 반복 단계 또는 추론 루프 수를 추적합니다. | `gen_ai.agent.name` |
+| **`gen_ai.invoke_agent.duration`** | Histogram (seconds) | 에이전트가 프롬프트를 처리하고 응답을 반환하는 데 걸린 총 시간입니다. | `gen_ai.agent.name`, `error.type` |
+| **`gen_ai.invoke_workflow.duration`** | Histogram (seconds) | 워크플로를 실행하는 데 걸린 시간입니다. | `gen_ai.operation.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당), `error.type` |
+| **`gen_ai.execute_tool.duration`** | Histogram (seconds) | 에이전트가 호출한 개별 도구의 실행 지연 시간입니다. 느린 외부 API를 파악하는 데 유용합니다. | `gen_ai.agent.name`, `gen_ai.tool.name`, `gen_ai.tool.type`, `error.type` |
+| **`gen_ai.invoke_agent.inference_calls`** | Histogram (count) | 단일 에이전트 호출 동안 수행된 추론(모델) 호출 횟수입니다. | `gen_ai.agent.name` |
+| **`gen_ai.invoke_agent.tool_calls`** | Histogram (count) | 단일 에이전트 호출 동안 수행된 도구 호출 횟수입니다. | `gen_ai.agent.name` |
+| **`gen_ai.client.operation.duration`** | Histogram (seconds) | 단일 모델 `generate_content` 호출의 지연 시간입니다. | `gen_ai.agent.name`, `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`, `error.type` |
+| **`gen_ai.client.token.usage`** | Histogram (tokens) | 모델 호출당 토큰 소비량으로, `gen_ai.token.type`에 의해 입력과 출력으로 나뉩니다. | `gen_ai.agent.name`, `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`, `gen_ai.token.type` |
 
 ---
 

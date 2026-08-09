@@ -21,12 +21,12 @@ ADK のトレースへのアプローチは、既存の可観測性スタック�
 
 トレースが有効な場合、ADK はエージェントの OpenTelemetry GenAI セマンティック規則に従ってキー操作を自動的に計測します。典型的なトレース ウォーターフォールには次のスパンが含まれます。
 
-|スパン名 |タイプ |説明 |主要な属性 |
+| スパン名 | タイプ | 説明 | 主要な属性 |
 | :--- | :--- | :--- | :--- |
-| **[`invoke_agent`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#invoke-agent-client-span)** |クライアント/内部スパン |リモート サービスまたはローカルでの GenAI エージェントの呼び出しについて説明します。エージェント対話のライフサイクルを表します。| `gen_ai.agent.name`、`gen_ai.system` |
-| **[`invoke_workflow`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#invoke-workflow-span)** |子スパン |複数ステップのエージェントワークフローの呼び出しについて説明します。 | `gen_ai.workflow.name`、`gen_ai.system`|
-| **[`execute_tool`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#execute-tool-span)** |子スパン | GenAI システムによって要求された特定のツールまたは関数呼び出しの実行を表します。 `gen_ai.tool.name`、`gen_ai.system`|
-| **[`generate_content {model.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-spans.md)** |内部スパン |コンテンツを生成するための、(GenAI SDK を介した) 基礎となる言語モデルの呼び出しを表します。リクエストパラメータ、レスポンスの詳細、使用状況メトリクスを追跡します。 | `gen_ai.operation.name`、`gen_ai.system`、`gen_ai.request.model`、`gen_ai.agent.name`、`gen_ai.conversation.id`、`user.id`、`gen_ai.request.top_p`、`gen_ai.request.max_tokens`、`gen_ai.response.finish_reasons`、 `gen_ai.usage.input_tokens`、`gen_ai.usage.output_tokens` |
+| **[`invoke_agent {agent.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#invoke-agent-client-span)** | クライアント/内部スパン | リモート サービスまたはローカルでの GenAI エージェントの呼び出しについて説明します。エージェント対話のライフサイクルを表します。| `gen_ai.operation.name`, `gen_ai.agent.name`, `gen_ai.agent.description`, `gen_ai.conversation.id` |
+| **[`invoke_workflow {workflow.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#invoke-workflow-span)** | 子スパン | 複数ステップのエージェントワークフローの呼び出しについて説明します。 | `gen_ai.operation.name`, `gen_ai.workflow.name`, `gen_ai.conversation.id`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+| **[`execute_tool {tool.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#execute-tool-span)** | 子スパン | GenAI システムによって要求された特定のツールまたは関数呼び出しの実行を表します。| `gen_ai.operation.name`, `gen_ai.tool.name`, `gen_ai.tool.description`, `gen_ai.tool.type`, `gen_ai.tool.call.id`, `error.type` |
+| **[`generate_content {model.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-spans.md)** | 内部スパン | コンテンツを生成するための、(GenAI SDK を介した) 基礎となる言語モデルの呼び出しを表します。リクエストパラメータ、レスポンスの詳細、使用状況メトリクスを追跡します。 | `gen_ai.operation.name`, `gen_ai.system`, `gen_ai.request.model`, `gen_ai.agent.name`, `gen_ai.conversation.id`, `gen_ai.response.finish_reasons`, `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens` |
 
 ---
 

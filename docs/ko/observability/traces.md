@@ -23,10 +23,10 @@ ADK(에이전트 개발 키트)는 에이전트 아키텍처를 통해 이동하
 
 | 스팬 이름 | 유형 | 설명 | 주요 속성 |
 | :--- | :--- | :--- | :--- |
-| **[`invoke_agent`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#invoke-agent-client-span)** | 클라이언트/내부 범위 | 원격 서비스 또는 로컬을 통한 GenAI 에이전트 호출을 설명합니다. 에이전트 상호작용의 수명주기를 나타냅니다.| `gen_ai.agent.name`, `gen_ai.system` |
-| **[`invoke_workflow`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#invoke-workflow-span)** | 하위 스팬 | 다단계 에이전트 워크플로 호출에 대해 설명합니다. | `gen_ai.workflow.name`, `gen_ai.system`|
-| **[`execute_tool`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#execute-tool-span)** | 하위 스팬 | GenAI 시스템에서 요청한 특정 도구 또는 기능 호출의 실행을 나타냅니다.| `gen_ai.tool.name`, `gen_ai.system`|
-| **[`generate_content {model.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-spans.md)** | 내부 스팬 | 콘텐츠를 생성하기 위해 GenAI SDK를 통해 기본 언어 모델을 호출하는 것을 나타냅니다. 요청 매개변수, 응답 세부정보 및 사용량 측정항목을 추적합니다. | `gen_ai.operation.name`, `gen_ai.system`, `gen_ai.request.model`, `gen_ai.agent.name`, `gen_ai.conversation.id`, `user.id`, `gen_ai.request.top_p`, `gen_ai.request.max_tokens`, `gen_ai.response.finish_reasons`, `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens` |
+| **[`invoke_agent {agent.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#invoke-agent-client-span)** | 클라이언트/내부 스팬 | 원격 서비스 또는 로컬을 통한 GenAI 에이전트 호출을 설명합니다. 에이전트 상호작용의 수명주기를 나타냅니다.| `gen_ai.operation.name`, `gen_ai.agent.name`, `gen_ai.agent.description`, `gen_ai.conversation.id` |
+| **[`invoke_workflow {workflow.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#invoke-workflow-span)** | 하위 스팬 | 다단계 에이전트 워크플로 호출에 대해 설명합니다. | `gen_ai.operation.name`, `gen_ai.workflow.name`, `gen_ai.conversation.id`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+| **[`execute_tool {tool.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md#execute-tool-span)** | 하위 스팬 | GenAI 시스템에서 요청한 특정 도구 또는 기능 호출의 실행을 나타냅니다.| `gen_ai.operation.name`, `gen_ai.tool.name`, `gen_ai.tool.description`, `gen_ai.tool.type`, `gen_ai.tool.call.id`, `error.type` |
+| **[`generate_content {model.name}`](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-spans.md)** | 내부 스팬 | 콘텐츠를 생성하기 위해 GenAI SDK를 통해 기본 언어 모델을 호출하는 것을 나타냅니다. 요청 매개변수, 응답 세부정보 및 사용량 측정항목을 추적합니다. | `gen_ai.operation.name`, `gen_ai.system`, `gen_ai.request.model`, `gen_ai.agent.name`, `gen_ai.conversation.id`, `gen_ai.response.finish_reasons`, `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens` |
 
 ---
 
