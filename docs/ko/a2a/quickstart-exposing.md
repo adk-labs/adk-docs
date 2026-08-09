@@ -107,10 +107,13 @@ a2a_app = to_a2a(root_agent, port=8001, agent_card="/path/to/your/agent-card.jso
 * **Starlette 앱 및 Agent Card:** Starlette 애플리케이션을 생성합니다. 애플리케이션 시작 단계에서 제공한 Agent Card를 로드하거나, `AgentCardBuilder`를 사용해 에이전트 구성으로부터 Agent Card를 자동 생성합니다. 이후 필요한 A2A API 라우트를 모두 마운트합니다.
 
 #### 매개변수
-* **`root_agent` (필수):** A2A 프로토콜을 통해 노출하고자 하는 주 ADK 에이전트 인스턴스입니다.
-* **`port` (선택 사항):** 애플리케이션이 실행될 포트 번호입니다.
+* **`agent` (필수):** A2A 프로토콜을 통해 노출하고자 하는 주 ADK 에이전트 인스턴스입니다.
+* **`host` (선택 사항):** 생성된 에이전트 카드에 광고되는 A2A RPC URL을 빌드하는 데 사용되는 호스트입니다. 기본값은 `"localhost"`입니다.
+* **`protocol` (선택 사항):** 동일한 URL에서 사용되는 프로토콜입니다. 기본값은 `"http"`입니다.
+* **`port` (선택 사항):** 동일한 URL에서 사용되는 포트입니다. 기본값은 `8000`입니다. `to_a2a()` 자체는 포트를 바인딩하지 않으므로, 이 값은 실제로 서비스를 제공하는 포트(`uvicorn --port` 플래그 참조)와 일치해야 합니다.
 * **`push_config_store` (선택 사항):** A2A 푸시 알림을 관리하기 위한 사용자 정의 저장소 구현입니다. 제공되지 않으면 시스템은 인메모리 저장소(`InMemoryPushNotificationConfigStore`)를 기본값으로 사용합니다.
-* **`agent_card` (선택 사항):** `AgentCard` 객체 또는 JSON 파일의 경로입니다. 생략할 경우 ADK는 에이전트 코드에서 에이전트 카드를 자동으로 생성합니다.
+* **`agent_card` (선택 사항):** `AgentCard` 객체 또는 JSON 파일 경로입니다. 생략할 경우 ADK는 에이전트 코드에서 에이전트 카드를 자동으로 생성합니다.
+* **`runner` (선택 사항):** 사전 구축된 `Runner`입니다. 생략할 경우 인메모리 서비스로 지원되는 기본 러너가 생성됩니다.
 
 이제 샘플 코드를 자세히 살펴보겠습니다.
 

@@ -188,7 +188,7 @@ async def check_for_profanity(
 }
 ```
 
-이 구성을 사용하면 `adk eval --config_file_path=<path_to_this_config>`를 실행할 때 ADK는 각 eval case에 대해 `check_final_response_exact_match`를 실행하고, 반환된 점수가 0.8 이상인지 확인해 `response_match` 기준을 통과 또는 실패로 표시합니다.
+이 구성을 사용하면 `adk eval --config_file_path=<path_to_this_config>`를 실행할 때 ADK는 각 eval case에 대해 `check_final_response_exact_match`를 실행하고, 반환된 점수가 0.8 이상인지 확인해 `my_check_final_response_exact_match` 기준을 통과 또는 실패로 표시합니다.
 
 ### 메트릭 정보 제공
 

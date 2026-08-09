@@ -188,7 +188,7 @@ async def check_for_profanity(
 }
 ```
 
-この設定で `adk eval --config_file_path=<path_to_this_config>` を実行すると、ADK は各 eval case に対して `check_final_response_exact_match` を実行し、返されたスコアが 0.8 以上かどうかを確認して `response_match` 基準を合格または不合格として扱います。
+この設定で `adk eval --config_file_path=<path_to_this_config>` を実行すると、ADK は各 eval case に対して `check_final_response_exact_match` を実行し、返されたスコアが 0.8 以上かどうかを確認して `my_check_final_response_exact_match` 基準を合格または不合格として扱います。
 
 ### メトリクス情報を提供する
 
