@@ -61,5 +61,5 @@ error_handling_plugin = CustomRetryPlugin(max_retries=5)
 
 リフレクトおよび再試行プラグインを使用した完全なコードサンプルについては、以下を参照してください。
 
-*   [基本](https://github.com/google/adk-python/tree/main/contributing/samples/plugin_reflect_tool_retry/basic)コードサンプル
-*   [幻覚関数名](https://github.com/google/adk-python/tree/main/contributing/samples/plugin_reflect_tool_retry/hallucinating_func_name)コードサンプル
+*   [基本](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_reflect_tool_retry/basic)コードサンプル
+*   [幻覚関数名](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_reflect_tool_retry/hallucinating_func_name)コードサンプル

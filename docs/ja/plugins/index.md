@@ -43,7 +43,7 @@ ADKには、エージェントワークフローにすぐに追加できるい�
 
 ## プラグインの定義と登録
 
-このセクションでは、プラグインクラスを定義し、エージェントワークフローの一部として登録する方法について説明します。完全なコード例については、リポジトリの[プラグインの基本](https://github.com/google/adk-python/tree/main/contributing/samples/plugin_basic)を参照してください。
+このセクションでは、プラグインクラスを定義し、エージェントワークフローの一部として登録する方法について説明します。完全なコード例については、リポジトリの[プラグインの基本](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_basic)を参照してください。
 
 ### プラグインクラスの作成
 

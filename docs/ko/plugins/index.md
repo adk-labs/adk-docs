@@ -43,7 +43,7 @@ ADK에는 에이전트 워크플로에 즉시 추가할 수 있는 여러 플러
 
 ## 플러그인 정의 및 등록
 
-이 섹션에서는 플러그인 클래스를 정의하고 에이전트 워크플로의 일부로 등록하는 방법을 설명합니다. 완전한 코드 예시는 저장소의 [플러그인 기본](https://github.com/google/adk-python/tree/main/contributing/samples/plugin_basic)을 참조하십시오.
+이 섹션에서는 플러그인 클래스를 정의하고 에이전트 워크플로의 일부로 등록하는 방법을 설명합니다. 완전한 코드 예시는 저장소의 [플러그인 기본](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_basic)을 참조하십시오.
 
 ### 플러그인 클래스 생성
 

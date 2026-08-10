@@ -61,5 +61,5 @@ error_handling_plugin = CustomRetryPlugin(max_retries=5)
 
 반영 및 재시도 플러그인을 사용하는 전체 코드 샘플은 다음을 참조하십시오.
 
-*   [기본](https://github.com/google/adk-python/tree/main/contributing/samples/plugin_reflect_tool_retry/basic) 코드 샘플
-*   [환각 함수 이름](https://github.com/google/adk-python/tree/main/contributing/samples/plugin_reflect_tool_retry/hallucinating_func_name) 코드 샘플
+*   [기본](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_reflect_tool_retry/basic) 코드 샘플
+*   [환각 함수 이름](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_reflect_tool_retry/hallucinating_func_name) 코드 샘플
