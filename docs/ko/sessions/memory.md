@@ -390,6 +390,12 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
   )
   ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:memory_bank"
+    ```
+
 ## RAG Memory { #rag-memory }
 
 `VertexAiRagMemoryService`는 대화를 [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)에 저장하고 벡터 유사도로 검색합니다. 이미 RAG 인프라가 있거나 Memory Bank에서 생성하는 LLM 추출 메모리 대신 원시 대화 기록을 검색하려는 경우 사용합니다. Agent Platform SDK가 필요합니다.
@@ -404,6 +410,12 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
         similarity_top_k=5,
         vector_distance_threshold=0.6,
     )
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:rag_memory"
     ```
 
 ## 에이전트에서 메모리 사용

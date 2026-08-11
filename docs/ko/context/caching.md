@@ -1,7 +1,7 @@
 # Gemini를 사용한 컨텍스트 캐싱
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.15.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.15.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 에이전트를 사용하여 작업을 완료할 때 생성 AI 모델에 대한 여러 에이전트 요청에 걸쳐 확장된 지침이나 대규모 데이터 세트를 재사용하고 싶을 수 있습니다. 각 에이전트 요청에 대해 이 데이터를 다시 보내는 것은 느리고 비효율적이며 비용이 많이 들 수 있습니다. 생성 AI 모델에서 컨텍스트 캐싱 기능을 사용하면 응답 속도를 크게 높이고 각 요청에 대해 모델로 전송되는 토큰 수를 줄일 수 있습니다.
@@ -53,6 +53,41 @@ ADK 컨텍스트 캐싱 기능을 사용하면 Gemini 2.0 이상 모델을 포�
                          Duration.ofMinutes(10), /* ttl */
                          2048 /* min_tokens */))
                  .build();
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    @file:OptIn(ExperimentalContextCachingFeature::class)
+
+    import com.google.adk.kt.agents.ContextCacheConfig
+    import com.google.adk.kt.agents.LlmAgent
+    import com.google.adk.kt.annotations.ExperimentalContextCachingFeature
+    import com.google.adk.kt.apps.App
+    import com.google.adk.kt.models.Gemini
+    import kotlin.time.Duration.Companion.minutes
+
+    val rootAgent =
+        LlmAgent(
+            name = "my_caching_agent",
+            // configure an agent using Gemini 2.0 or higher
+            model = Gemini(name = "gemini-flash-latest"),
+        )
+
+    // Create the app with context caching configuration
+    val app =
+        App(
+            appName = "my-caching-agent-app",
+            rootAgent = rootAgent,
+            contextCacheConfig =
+                ContextCacheConfig(
+                    // Gemini enforces a hard 4096-token floor of its own, so only a
+                    // value above that has any further effect.
+                    minTokens = 8192,
+                    ttl = 10.minutes, // Store for up to 10 minutes
+                    cacheIntervals = 5, // Refresh after 5 uses
+                ),
+        )
     ```
 
 ## 구성 설정

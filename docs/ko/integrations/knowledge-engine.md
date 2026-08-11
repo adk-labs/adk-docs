@@ -9,7 +9,7 @@ catalog_tags: ["data","google"]
 # ADK용 지식 엔진 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 `vertex_ai_rag_retrieval` 도구를 사용하면 에이전트가 개인 데이터를 수행할 수 있습니다.
@@ -27,4 +27,10 @@ Knowledge Engine으로 Grounding을 사용할 경우 미리 RAG Corpus를 준비
 
     ```py
     --8<-- "examples/python/snippets/tools/built-in-tools/rag_engine.py"
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/integrations/RagEngine.kt:full_code"
     ```

@@ -9,7 +9,7 @@ catalog_tags: ["data","google"]
 # ADK 用のナレッジ エンジン ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 `vertex_ai_rag_retrieval` ツールを使用すると、エージェントはプライベート データを実行できます。
@@ -27,4 +27,10 @@ Knowledge Engine でグラウンディングを使用する場合は、事前に
 
     ```py
     --8<-- "examples/python/snippets/tools/built-in-tools/rag_engine.py"
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/integrations/RagEngine.kt:full_code"
     ```
