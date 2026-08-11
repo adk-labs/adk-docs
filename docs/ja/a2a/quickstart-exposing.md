@@ -269,6 +269,14 @@ adk Webサーバーを開くには、[http://localhost:8000](http://localhost:80
 *   **`after_event`**: ADK イベントが A2A イベントへ変換された *後で* 実行されます。キューへ入る前の出力イベントを変更したり、`None` を返してイベントを除外したりできます。
 *   **`after_agent`**: エージェントの処理が終了し、最終イベントが準備された後に実行されます。送信前の終端ステータスイベント（例: `completed` や `failed`）を検査または変更する用途で使います。
 
+!!! tip "実験的機能の警告を抑制"
+
+    `ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS` 環境変数を `true` に設定すると、実験的な A2A 機能に関連する警告を抑制できます。これらの機能を意図して使用しており、ログをすっきりさせたい場合に役立ちます:
+
+    ```bash
+    export ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS=true
+    ```
+
 ## Agent Executor V2
 
 新しい [agent executor](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/a2a_agent_executor_impl.py) は、通常、クライアントが必要な [A2A 拡張](a2a-extension.md) を送信したときに有効になります。

@@ -253,6 +253,14 @@ adk 웹 서버를 열려면 [http://localhost:8000](http://localhost:8000)으로
 *   **`after_event`**: ADK 이벤트가 A2A 이벤트로 변환된 *뒤에* 실행됩니다. 큐에 넣기 전의 출력 이벤트를 수정하거나, `None`을 반환해 이벤트를 필터링하고 삭제할 수 있습니다.
 *   **`after_agent`**: 에이전트 실행이 끝나고 최종 이벤트가 준비된 뒤 실행됩니다. 전송되기 전에 최종 상태 이벤트(예: `completed`, `failed`)를 검사하거나 수정할 때 사용합니다.
 
+!!! tip "실험적 경고 비활성화"
+
+    `ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS` 환경 변수를 `true`로 설정하면 실험적 A2A 기능과 관련된 경고를 비활성화할 수 있습니다. 해당 기능을 인지하고 사용 중이며 로그를 깔끔하게 유지하려는 개발자에게 유용합니다:
+
+    ```bash
+    export ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS=true
+    ```
+
 ## Agent Executor V2
 
 새 버전의 [agent executor](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/a2a_agent_executor_impl.py)는 일반적으로 클라이언트가 필요한 [A2A 확장](a2a-extension.md)을 보낼 때 활성화됩니다.
