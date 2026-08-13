@@ -272,8 +272,6 @@ Integration Connectors용 Application Integration Toolset을 만들려면 다음
               integration="test-integration", #TODO: replace with integration name
               triggers=["api_trigger/test_trigger"],#TODO: replace with trigger id(s). Empty list would mean all api triggers in the integration to be considered.
               service_account_json='{...}', #optional. Stringified json for service account key
-              tool_name_prefix="tool_prefix1",
-              tool_instructions="..."
           )
       ```
 

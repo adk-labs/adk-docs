@@ -199,10 +199,12 @@ toolset_provider = TemporalMcpToolSetProvider(
 )
 
 # ツールセットプロバイダーを使ってクライアントを構成します。
-client = await Client.connect(
-    "localhost:7233",
-    plugins=[GoogleAdkPlugin(toolset_providers=[toolset_provider])]
-)
+async def main():
+    client = await Client.connect(
+        "localhost:7233",
+        plugins=[GoogleAdkPlugin(toolset_providers=[toolset_provider])]
+    )
+    # ... start a worker or execute a workflow with this client
 
 # Agent を宣言するとき( @workflow.run の内側)に、名前でツールセットを参照します。
 agent = Agent(

@@ -82,7 +82,7 @@ pip install google-adk
 ```python
 import os
 from google.adk import Agent
-from google.adk.integrations.gcp_skill_registry import GCPSkillRegistry
+from google.adk.integrations.skill_registry import GCPSkillRegistry
 from google.adk.tools.skill_toolset import SkillToolset
 
 # 1. Initialize the GCP Skill Registry
@@ -183,10 +183,10 @@ sequenceDiagram
 
 ### メソッド
 
-*   **`search_skills(query: str) -> List[Frontmatter]`**:
+*   **`async search_skills(*, query: str) -> list[Frontmatter]`**:
     registry カタログに対してセマンティックまたはキーワードクエリを実行し、
     skill frontmatter メタデータ（名前と説明）の一覧を返します。
-*   **`get_skill(name: str, version: Optional[str] = None) -> Skill`**:
+*   **`async get_skill(*, name: str) -> Skill`**:
     特定の skill 名と任意の revision/version について、Vertex AI Client SDK
     でリモート skill payload を取得し、展開して読み込まれた `Skill`
     オブジェクトを返します。

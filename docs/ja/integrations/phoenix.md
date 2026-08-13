@@ -67,6 +67,8 @@ tracer_provider = register(
 トレーシングの設定が完了したので、すべてのGoogle ADK SDKリクエストはオブザーバビリティと評価のためにPhoenixにストリーミングされます。
 
 ```python
+import asyncio
+
 import nest_asyncio
 nest_asyncio.apply()
 
@@ -112,22 +114,26 @@ session_id = "test_session"
 runner = InMemoryRunner(agent=agent, app_name=app_name)
 session_service = runner.session_service
 
-await session_service.create_session(
-    app_name=app_name,
-    user_id=user_id,
-    session_id=session_id
-)
-
-# エージェントを実行（すべての対話がトレースされます）
-async for event in runner.run_async(
-    user_id=user_id,
-    session_id=session_id,
-    new_message=types.Content(role="user", parts=[
-        types.Part(text="ニューヨークの天気は？")]
+async def main():
+    await session_service.create_session(
+        app_name=app_name,
+        user_id=user_id,
+        session_id=session_id
     )
-):
-    if event.is_final_response():
-        print(event.content.parts[0].text.strip())
+
+    # エージェントを実行（すべての対話がトレースされます）
+    async for event in runner.run_async(
+        user_id=user_id,
+        session_id=session_id,
+        new_message=types.Content(role="user", parts=[
+            types.Part(text="ニューヨークの天気は？")]
+        )
+    ):
+        if event.is_final_response() and event.content and event.content.parts:
+            print(event.content.parts[0].text.strip())
+
+
+asyncio.run(main())
 ```
 
 ## サポートとリソース

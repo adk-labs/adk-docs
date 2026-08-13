@@ -139,7 +139,7 @@ response_eval = ResponseEvaluation(
 hallucination = Hallucination(model="gemini-flash-latest", threshold=0.5)
 ```
 
-モデル名は、`gemini-flash-latest` や `gemini-pro-latest` のように ADK の `LlmRegistry` が解決できる名前である必要があります。ADK の評価器は Google のモデルレジストリに直接接続するため、`databricks` や `openai:/gpt-4o` などの MLflow モデル URI はここではサポートされません。
+モデル名は、`gemini-flash-latest` や `gemini-pro-latest` のように ADK の `LLMRegistry` が解決できる名前である必要があります。ADK の評価器は Google のモデルレジストリに直接接続するため、`databricks` や `openai:/gpt-4o` などの MLflow モデル URI はここではサポートされません。
 
 `Safety` は Vertex AI の管理された SAFETY メトリクスを介して実行されます。これには、`GOOGLE_CLOUD_PROJECT`、`GOOGLE_CLOUD_LOCATION`、および `gcloud auth application-default login`（またはサービスアカウント）が必要です:
 

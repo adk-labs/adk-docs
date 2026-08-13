@@ -73,7 +73,7 @@ example](#advanced-example) 또는 전체 내용을 참조하세요.
 
 ## 작동 방식
 
-`AgentEngineCodeExecutor` 도구는 전체 기간 동안 단일 샌드박스를 유지합니다.
+`AgentEngineSandboxCodeExecutor` 도구는 전체 기간 동안 단일 샌드박스를 유지합니다.
 에이전트의 작업, 즉 샌드박스의 상태가 에이전트 내의 모든 작업에서 지속됨을 의미합니다.
 ADK 워크플로 세션.
 
@@ -180,7 +180,7 @@ def base_system_instruction():
       인쇄(df.shape)
       ```
       The output will be presented to you as:
-      ```tool_outputs
+      ```tool_output
       (49, 7)
 
       ```
@@ -190,11 +190,11 @@ def base_system_instruction():
       인쇄(f'{{x=}}')
       ```
       The output will be presented to you as:
-      ```tool_outputs
+      ```tool_output
       x=999751168
 
       ```
-    - You **never** generate ```tool_outputs yourself.
+    - You **never** generate ```tool_output yourself.
     - You can then use this output to decide on next steps.
     - Print just variables (e.g., `print(f'{{variable=}}')`.
 

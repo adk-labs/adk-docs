@@ -42,7 +42,6 @@ catalog_tags: ["mcp", "data"]
     === "원격 MCP 서버"
 
         ```python
-        import os
         from google.adk.agents import Agent
         from google.adk.tools.mcp_tool import McpToolset
         from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPServerParams

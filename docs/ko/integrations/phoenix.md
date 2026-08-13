@@ -67,6 +67,8 @@ tracer_provider = register(
 이제 추적 설정이 완료되었으므로, 모든 Google ADK SDK 요청은 관측성 및 평가를 위해 Phoenix로 스트리밍됩니다.
 
 ```python
+import asyncio
+
 import nest_asyncio
 nest_asyncio.apply()
 
@@ -112,22 +114,26 @@ session_id = "test_session"
 runner = InMemoryRunner(agent=agent, app_name=app_name)
 session_service = runner.session_service
 
-await session_service.create_session(
-    app_name=app_name,
-    user_id=user_id,
-    session_id=session_id
-)
-
-# 에이전트 실행 (모든 상호작용이 추적됩니다)
-async for event in runner.run_async(
-    user_id=user_id,
-    session_id=session_id,
-    new_message=types.Content(role="user", parts=[
-        types.Part(text="뉴욕의 날씨는 어떤가요?")]
+async def main():
+    await session_service.create_session(
+        app_name=app_name,
+        user_id=user_id,
+        session_id=session_id
     )
-):
-    if event.is_final_response():
-        print(event.content.parts[0].text.strip())
+
+    # 에이전트 실행 (모든 상호작용이 추적됩니다)
+    async for event in runner.run_async(
+        user_id=user_id,
+        session_id=session_id,
+        new_message=types.Content(role="user", parts=[
+            types.Part(text="뉴욕의 날씨는 어떤가요?")]
+        )
+    ):
+        if event.is_final_response() and event.content and event.content.parts:
+            print(event.content.parts[0].text.strip())
+
+
+asyncio.run(main())
 ```
 
 ## 지원 및 리소스

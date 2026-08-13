@@ -61,7 +61,7 @@ FreeplayADK.initialize_observability()
 ```python
 from app.agent import root_agent
 from freeplay_python_adk.freeplay_observability_plugin import FreeplayObservabilityPlugin
-from google.adk.runners import App
+from google.adk.apps import App
 
 app = App(
     name="app",

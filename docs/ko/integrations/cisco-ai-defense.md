@@ -55,6 +55,8 @@ pip install cisco-aidefense-google-adk
 한 줄로 Cisco AI Defense를 ADK 에이전트에 추가합니다.
 
 ```python
+from google.adk.apps import App
+
 from aidefense_google_adk import defend
 
 agent = defend(agent, mode="enforce")
@@ -63,6 +65,8 @@ agent = defend(agent, mode="enforce")
 또는 전체 앱용 플러그인을 다운로드하세요.
 
 ```python
+from google.adk.apps import App
+
 from aidefense_google_adk import defend
 
 plugin = defend(mode="enforce")
@@ -157,6 +161,8 @@ CiscoAIDefensePlugin(
 구조화된 `Decision` 객체의 경우 `AgentsecPlugin` 변형을 사용합니다.
 
 ```python
+from google.adk.apps import App
+
 from aidefense_google_adk import AgentsecPlugin
 
 app = App(

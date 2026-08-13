@@ -73,7 +73,7 @@ example](#advanced-example) または完全版を参照してください。
 
 ## 仕組み
 
-`AgentEngineCodeExecutor` ツールは、システム全体にわたって単一のサンドボックスを維持します。
+`AgentEngineSandboxCodeExecutor` ツールは、システム全体にわたって単一のサンドボックスを維持します。
 エージェントのタスク。つまり、サンドボックスの状態はエージェント内のすべての操作にわたって持続します。
 ADK ワークフロー セッション。
 
@@ -180,7 +180,7 @@ def base_system_instruction():
       print(df.shape)
       ```
       The output will be presented to you as:
-      ```tool_outputs
+      ```tool_output
       (49, 7)
 
       ```
@@ -190,11 +190,11 @@ def base_system_instruction():
       print(f'{{x=}}')
       ```
       The output will be presented to you as:
-      ```tool_outputs
+      ```tool_output
       x=999751168
 
       ```
-    - You **never** generate ```tool_outputs yourself.
+    - You **never** generate ```tool_output yourself.
     - You can then use this output to decide on next steps.
     - Print just variables (e.g., `print(f'{{variable=}}')`.
 

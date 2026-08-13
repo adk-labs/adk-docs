@@ -131,14 +131,15 @@ ADK CLI を使用してエージェントをデプロイまたは実行すると
 === "Python"
 
     ```python
-    from google.adk import telemetry
+    from google.adk.telemetry import google_cloud
+    from google.adk.telemetry.setup import maybe_set_otel_providers
     from google.adk.telemetry import google_cloud
 
     # GCP エクスポーターの設定を取得
     hooks = google_cloud.get_gcp_exporters(enable_cloud_tracing=True)
 
     # グローバル OTel プロバイダーの初期化と設定
-    telemetry.maybe_set_otel_providers(otel_hooks_to_setup=[hooks])
+    maybe_set_otel_providers(otel_hooks_to_setup=[hooks])
     ```
 
 === "TypeScript"

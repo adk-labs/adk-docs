@@ -69,7 +69,7 @@ API Registry コネクターツールをエージェントで構成する際は�
 ```python
 import os
 from google.adk.agents.llm_agent import LlmAgent
-from google.adk.tools.api_registry import ApiRegistry
+from google.adk.integrations.api_registry import ApiRegistry
 
 # Configure with your Google Cloud Project ID and registered MCP server name
 PROJECT_ID = "your-google-cloud-project-id"

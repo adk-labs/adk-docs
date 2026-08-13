@@ -131,14 +131,15 @@ ADK CLI를 사용하여 에이전트를 배포하거나 실행할 때 플래그�
 === "Python"
 
     ```python
-    from google.adk import telemetry
+    from google.adk.telemetry import google_cloud
+    from google.adk.telemetry.setup import maybe_set_otel_providers
     from google.adk.telemetry import google_cloud
 
     # GCP 내보내기 구성 가져오기
     hooks = google_cloud.get_gcp_exporters(enable_cloud_tracing=True)
 
     # 전역 OTel 제공자 초기화 및 설정
-    telemetry.maybe_set_otel_providers(otel_hooks_to_setup=[hooks])
+    maybe_set_otel_providers(otel_hooks_to_setup=[hooks])
     ```
 
 === "TypeScript"
