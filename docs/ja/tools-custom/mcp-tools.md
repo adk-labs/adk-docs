@@ -1,7 +1,7 @@
 # モデルコンテキストプロトコルツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 このガイドでは、ADK と MCP (Model Context Protocol) を統合する 2 つの方法を案内します。
@@ -1061,15 +1061,62 @@ if __name__ == "__main__":
 ```
 
 **リモート MCP のエージェント構成:**
-```python
-# ADK エージェントはストリーミング可能な HTTP を通じてリモート MCP サービスに接続します
-McpToolset(
-    connection_params=StreamableHTTPConnectionParams(
-        url="https://your-mcp-server-url.run.app/mcp",
-        headers={"Authorization": "Bearer your-auth-token"}
-    ),
-)
-```
+
+=== "Python"
+
+    ```python
+    # ADK エージェントはストリーミング可能な HTTP を通じてリモート MCP サービスに接続します
+    McpToolset(
+        connection_params=StreamableHTTPConnectionParams(
+            url="https://your-mcp-server-url.run.app/mcp",
+            headers={"Authorization": "Bearer your-auth-token"}
+        ),
+    )
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // ADK エージェントはストリーミング可能な HTTP を通じてリモート MCP サービスに接続します
+    const toolset = new McpToolset({
+      url: "https://your-mcp-server-url.run.app/mcp",
+      headers: { Authorization: "Bearer your-auth-token" },
+    });
+    ```
+
+=== "Java"
+
+    ```java
+    import java.util.Map;
+    import com.google.adk.tools.mcp.StreamableHttpServerParameters;
+    import com.google.adk.tools.mcp.McpToolset;
+
+    // ADK エージェントはストリーミング可能な HTTP を通じてリモート MCP サービスに接続します
+    StreamableHttpServerParameters streamableParams = StreamableHttpServerParameters.builder()
+            .url("https://your-mcp-server-url.run.app/mcp")
+            .headers(Map.of("Authorization", "Bearer your-auth-token"))
+            .build();
+
+    McpToolset toolset = new McpToolset(streamableParams);
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.tools.mcp.McpConnectionParameters
+    import com.google.adk.kt.tools.mcp.McpToolset
+
+    // ADK エージェントはストリーミング可能な HTTP を通じてリモート MCP サービスに接続します
+    // headerProvider は suspend 関数のため、fetchToken() でリクエストごとに新しいトークンを await できます。
+    // セッションの再利用が無効化されるため、固定ヘッダーの場合は StreamableHttp(headers = ...) を使用してください。
+    val toolset =
+        McpToolset.McpToolsetConfig(
+            streamableHttpConnectionParams =
+                McpConnectionParameters.StreamableHttp(
+                    url = "https://your-mcp-server-url.run.app/mcp",
+                ),
+        ).toToolset(headerProvider = { mapOf("Authorization" to "Bearer ${fetchToken()}") })
+    ```
 
 #### パターン 3: サイドカー MCP サーバー（GKE）
 
