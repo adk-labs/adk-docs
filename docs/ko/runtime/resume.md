@@ -1,7 +1,7 @@
 # 중지된 에이전트 재개
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.16.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADK 에이전트의 실행은 네트워크 연결 끊김, 정전 또는 필요한 외부 시스템 오프라인과 같은 다양한 요인으로 인해 중단될 수 있습니다. ADK의 재개 기능을 사용하면 에이전트 워크플로가 중단된 지점부터 다시 시작하여 전체 워크플로를 다시 시작할 필요가 없습니다. ADK Python 1.16 이상에서는 ADK 워크플로를 재개 가능하도록 구성하여 워크플로 실행을 추적한 다음 예기치 않은 중단 후 재개할 수 있습니다.
@@ -131,12 +131,13 @@ async def _run_async_impl(
     스토리 워크플로에 대한 사용자 지정 오케스트레이션 논리를 구현합니다.
     Pydantic에서 할당한 인스턴스 속성(예: self.story_generator)을 사용합니다.
     """
-    agent_state = self._load_agent_state(ctx, WorkflowStep)
+    agent_state = self._load_agent_state(ctx, StoryFlowAgentState)
 
     if agent_state is None:
       # 에이전트 시작 기록
       agent_state = StoryFlowAgentState(step=WorkflowStep.INITIAL_STORY_GENERATION)
-      yield self._create_agent_state_event(ctx, agent_state)
+      ctx.set_agent_state(self.name, agent_state=agent_state)
+      yield self._create_agent_state_event(ctx)
 
     next_step = agent_state.step
     logger.info(f"[{self.name}] 스토리 생성 워크플로 시작.")
@@ -154,7 +155,8 @@ async def _run_async_impl(
           return  # 초기 스토리가 실패하면 처리 중지
 
     agent_state = StoryFlowAgentState(step=WorkflowStep.CRITIC_REVISER_LOOP)
-    yield self._create_agent_state_event(ctx, agent_state)
+    ctx.set_agent_state(self.name, agent_state=agent_state)
+      yield self._create_agent_state_event(ctx)
 
     # 2단계. 비평가-수정자 루프
     if next_step <= WorkflowStep.CRITIC_REVISER_LOOP:
@@ -167,7 +169,8 @@ async def _run_async_impl(
           yield event
 
     agent_state = StoryFlowAgentState(step=WorkflowStep.POST_PROCESSING)
-    yield self._create_agent_state_event(ctx, agent_state)
+    ctx.set_agent_state(self.name, agent_state=agent_state)
+      yield self._create_agent_state_event(ctx)
 
     # 3단계. 순차적 후처리(문법 및 어조 확인)
     if next_step <= WorkflowStep.POST_PROCESSING:
@@ -180,7 +183,8 @@ async def _run_async_impl(
           yield event
 
     agent_state = StoryFlowAgentState(step=WorkflowStep.CONDITIONAL_REGENERATION)
-    yield self._create_agent_state_event(ctx, agent_state)
+    ctx.set_agent_state(self.name, agent_state=agent_state)
+      yield self._create_agent_state_event(ctx)
 
     # 4단계. 어조 기반 조건부 논리
     if next_step <= WorkflowStep.CONDITIONAL_REGENERATION:
@@ -197,5 +201,6 @@ async def _run_async_impl(
           logger.info(f"[{self.name}] 어조가 부정적이지 않습니다. 현재 스토리 유지.")
 
     logger.info(f"[{self.name}] 워크플로 완료.")
-    yield self._create_agent_state_event(ctx, end_of_agent=True)
+    ctx.set_agent_state(self.name, end_of_agent=True)
+    yield self._create_agent_state_event(ctx)
 ```

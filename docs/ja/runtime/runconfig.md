@@ -77,6 +77,7 @@ Long-running session では、どれだけの history を load するか、conte
   event history 全体を load しないよう、`num_recent_events` または `after_timestamp` を使います。
 - `context_window_compression`: LLM input の context window compression を有効にします。
   session が model context limit に近づく場合に便利です。
+- `model_input_context`: 今回の呼び出しにのみ LLM リクエストに追加される `types.Content` のリスト。ランナーはこれをセッションに永続化しないため、会話履歴を変更せずにターンごとのコンテキストを提供できます。
 - `include_thoughts_from_other_agents`: 他のエージェントの思考（thought）パートを LLM コンテキストに含めるかどうかを制御します。デフォルトでは無効です。
 
 === "Python"
@@ -266,6 +267,8 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
 - `save_live_blob`: `True` の場合、live audio と video data を session と artifact service に保存します。
 - `tool_thread_pool_config`: event loop がユーザーの interruption に responsive であり続けるよう、
   tool execution を background thread pool で実行します。
+- `history_config`: クライアントとサーバー間の履歴交換を設定します。
+- `translation_config`: リアルタイムの音声間翻訳を設定します。翻訳モデルのみがサポートしています。
 - `explicit_vad_signal`: モデルからの明示的な音声活動検出（VAD）シグナルを有効にします。
 
 すべてのパラメータがすべての言語で利用できるわけではありません。言語別の詳細は

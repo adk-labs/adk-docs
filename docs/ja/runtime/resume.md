@@ -1,7 +1,7 @@
 # 停止したエージェントを再開する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.16.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADKエージェントの実行は、ネットワーク接続の切断、停電、または必要な外部システムのオフラインなど、さまざまな要因によって中断される可能性があります。ADKの再開機能を使用すると、エージェントワークフローが中断したところから再開できるため、ワークフロー全体を再起動する必要がありません。ADK Python 1.16以降では、ADKワークフローを再開可能に構成して、ワークフローの実行を追跡し、予期しない中断の後に再開できるようにすることができます。
@@ -131,12 +131,13 @@ async def _run_async_impl(
     ストーリーワークフローのカスタムオーケストレーションロジックを実装します。
     Pydanticによって割り当てられたインスタンス属性（例：self.story_generator）を使用します。
     """
-    agent_state = self._load_agent_state(ctx, WorkflowStep)
+    agent_state = self._load_agent_state(ctx, StoryFlowAgentState)
 
     if agent_state is None:
       # エージェントの開始を記録します
       agent_state = StoryFlowAgentState(step=WorkflowStep.INITIAL_STORY_GENERATION)
-      yield self._create_agent_state_event(ctx, agent_state)
+      ctx.set_agent_state(self.name, agent_state=agent_state)
+      yield self._create_agent_state_event(ctx)
 
     next_step = agent_state.step
     logger.info(f"[{self.name}] ストーリー生成ワークフローを開始しています。")
@@ -154,7 +155,8 @@ async def _run_async_impl(
           return  # 初期ストーリーが失敗した場合は処理を停止します
 
     agent_state = StoryFlowAgentState(step=WorkflowStep.CRITIC_REVISER_LOOP)
-    yield self._create_agent_state_event(ctx, agent_state)
+    ctx.set_agent_state(self.name, agent_state=agent_state)
+      yield self._create_agent_state_event(ctx)
 
     # ステップ2. 批評家-改訂者ループ
     if next_step <= WorkflowStep.CRITIC_REVISER_LOOP:
@@ -167,7 +169,8 @@ async def _run_async_impl(
           yield event
 
     agent_state = StoryFlowAgentState(step=WorkflowStep.POST_PROCESSING)
-    yield self._create_agent_state_event(ctx, agent_state)
+    ctx.set_agent_state(self.name, agent_state=agent_state)
+      yield self._create_agent_state_event(ctx)
 
     # ステップ3. シーケンシャル後処理（文法とトーンのチェック）
     if next_step <= WorkflowStep.POST_PROCESSING:
@@ -180,7 +183,8 @@ async def _run_async_impl(
           yield event
 
     agent_state = StoryFlowAgentState(step=WorkflowStep.CONDITIONAL_REGENERATION)
-    yield self._create_agent_state_event(ctx, agent_state)
+    ctx.set_agent_state(self.name, agent_state=agent_state)
+      yield self._create_agent_state_event(ctx)
 
     # ステップ4. トーンベースの条件付きロジック
     if next_step <= WorkflowStep.CONDITIONAL_REGENERATION:
@@ -197,4 +201,5 @@ async def _run_async_impl(
           logger.info(f"[{self.name}] トーンは否定的ではありません。現在のストーリーを維持します。")
 
     logger.info(f"[{self.name}] ワークフローが終了しました。")
-    yield self._create_agent_state_event(ctx, end_of_agent=True)
+    ctx.set_agent_state(self.name, end_of_agent=True)
+    yield self._create_agent_state_event(ctx)
