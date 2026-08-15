@@ -193,7 +193,8 @@ adk eval \
         "thinking_budget": 10240
       }
     },
-    "max_allowed_invocations": 20
+    "max_allowed_invocations": 20,
+    "include_function_calls": false
   }
 }
 ```
@@ -201,7 +202,8 @@ adk eval \
 *   `model`: ユーザーシミュレーターを支えるモデル
 *   `model_configuration`: モデルの振る舞いを制御する
     [`GenerateContentConfig`](https://github.com/googleapis/python-genai/blob/6196b1b4251007e33661bb5d7dc27bafee3feefe/google/genai/types.py#L4295)
-*   `max_allowed_invocations`: 会話が強制終了されるまでに許可される最大ユーザー-エージェント対話回数です。これは `EvalSet` 内で最も長い妥当なユーザー-エージェント対話より大きく設定する必要があります。
+*   `max_allowed_invocations`: 会話が強制終了されるまでに許可されるユーザーとエージェントの最大インタラクション数。これは、`EvalSet` 内の妥当な最長のユーザーとエージェントのインタラクションよりも大きく設定する必要があります。最初の固定プロンプトも 1 回の呼び出しとしてカウントされます。この値を `-1` に設定すると制限が解除されますが、推奨されません。
+*   `include_function_calls`: オプション。ユーザーシミュレータに提供される会話履歴プロンプトに関数呼び出しとレスポンスを含めるかどうか。デフォルトは `false` です。
 *   `custom_instructions`: 任意。ユーザーシミュレーターのデフォルト指示を上書きします。指示文字列には
     [Jinja](https://jinja.palletsprojects.com/en/stable/templates/#) 構文を使って次のプレースホルダーを含める必要があります
     （*値は事前に置換しないでください*）。

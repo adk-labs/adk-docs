@@ -146,7 +146,7 @@ Optimized root agent instructions:
 adk optimize [OPTIONS] AGENT_MODULE_FILE_PATH
 ```
 
-* `AGENT_MODULE_FILE_PATH`: `agent`라는 이름의 모듈을 포함하는 `__init__.py` 파일의 경로입니다.
+* `AGENT_MODULE_FILE_PATH`: 파일이 아닌 에이전트 디렉토리의 경로로, 해당 디렉토리의 `__init__.py`가 `agent`라는 이름의 모듈을 노출합니다.
 `agent` 모듈에는 반드시 `root_agent`가 있어야 합니다.
 올바른 설정 예시는 [`hello_world`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world) 에이전트를 참고하세요.
 * `--sampler_config_file_path PATH`: 샘플러 구성 파일 경로입니다.
@@ -228,7 +228,8 @@ ADK는 adk optimize 명령줄을 사용하여 실행할 수 있는 몇 가지 �
 구성이 정의되면 다음 코드로 최적화를 실행합니다.
 
 ```python
-from google.adk.optimization import SimplePromptOptimizer, SimplePromptOptimizerConfig
+from google.adk.optimization.simple_prompt_optimizer import SimplePromptOptimizer
+from google.adk.optimization.simple_prompt_optimizer import SimplePromptOptimizerConfig
 
 # 에이전트와 샘플러를 먼저 정의합니다...
 

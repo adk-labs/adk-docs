@@ -509,7 +509,7 @@ async def test_with_single_test_file():
 ```shell
 adk eval \
     <AGENT_MODULE_FILE_PATH> \
-    <EVAL_SET_FILE_PATH> \
+    <EVAL_SET_FILE_PATH_OR_ID>... \
     [--config_file_path=<PATH_TO_TEST_JSON_CONFIG_FILE>] \
     [--print_detailed_results]
 ```

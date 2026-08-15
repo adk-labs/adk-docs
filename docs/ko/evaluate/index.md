@@ -507,7 +507,7 @@ async def test_with_single_test_file():
 ```shell
 adk eval \
     <AGENT_MODULE_FILE_PATH> \
-    <EVAL_SET_FILE_PATH> \
+    <EVAL_SET_FILE_PATH_OR_ID>... \
     [--config_file_path=<PATH_TO_TEST_JSON_CONFIG_FILE>] \
     [--print_detailed_results]
 ```
@@ -522,8 +522,8 @@ adk eval \
 
 다음은 각 명령줄 인수에 대한 세부 정보입니다.
 
-* `AGENT_MODULE_FILE_PATH`: "agent"라는 이름의 모듈이 포함된 `__init__.py` 파일의 경로입니다. "agent" 모듈에는 `root_agent`가 포함되어 있습니다.
-* `EVAL_SET_FILE_PATH`: 평가 파일 경로입니다. 하나 이상의 평가 세트 파일 경로를 지정할 수 있습니다. 각 파일에 대해 기본적으로 모든 평가가 실행됩니다. 평가 세트에서 특정 평가만 실행하려면 먼저 쉼표로 구분된 평가 이름 목록을 만든 다음 콜론 `:`으로 구분하여 평가 세트 파일 이름에 접미사로 추가합니다.
+* `AGENT_MODULE_FILE_PATH`: 파일이 아닌 에이전트 디렉토리의 경로로, 해당 디렉토리의 `__init__.py`가 "agent"라는 이름의 모듈을 노출합니다. "agent" 모듈에는 `root_agent`가 포함되어 있습니다.
+* `EVAL_SET_FILE_PATH_OR_ID`: 평가 세트 파일의 경로 또는 `adk eval_set create`로 생성되어 ADK에서 관리하는 평가 세트의 ID입니다. 둘 중 하나 이상을 지정할 수 있지만, 동일한 명령에서 파일 경로와 평가 세트 ID를 혼합하여 사용할 수는 없습니다. 각 평가 세트에 대해 기본적으로 모든 평가가 실행됩니다. 평가 세트에서 특정 평가만 실행하려면 먼저 쉼표로 구분된 평가 이름 목록을 생성한 다음 콜론 `:`으로 구분하여 평가 세트 파일 이름 또는 ID 뒤에 접미사로 추가합니다.
 * 예: `sample_eval_set_file.json:eval_1,eval_2,eval_3`
   `이렇게 하면 sample_eval_set_file.json에서 eval_1, eval_2 및 eval_3만 실행됩니다.`
 * `CONFIG_FILE_PATH`: 구성 파일 경로입니다.

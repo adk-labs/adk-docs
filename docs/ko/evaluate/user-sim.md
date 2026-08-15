@@ -190,7 +190,8 @@ adk eval \
         "thinking_budget": 10240
       }
     },
-    "max_allowed_invocations": 20
+    "max_allowed_invocations": 20,
+    "include_function_calls": false
   }
 }
 ```
@@ -198,7 +199,8 @@ adk eval \
 *   `model`: 사용자 시뮬레이터를 구동하는 모델
 *   `model_configuration`: 모델 동작을 제어하는
     [`GenerateContentConfig`](https://github.com/googleapis/python-genai/blob/6196b1b4251007e33661bb5d7dc27bafee3feefe/google/genai/types.py#L4295)
-*   `max_allowed_invocations`: 대화가 강제로 종료되기 전까지 허용되는 최대 사용자-에이전트 상호작용 횟수입니다. 이는 `EvalSet`에 있는 가장 긴 합리적인 사용자-에이전트 상호작용보다 크게 설정해야 합니다.
+*   `max_allowed_invocations`: 대화가 강제 종료되기 전에 허용되는 최대 사용자-에이전트 상호작용 횟수입니다. 이는 `EvalSet`에서 합리적인 최장 사용자-에이전트 상호작용보다 큰 값으로 설정해야 합니다. 초기 고정 프롬프트도 1회의 호출로 계산됩니다. 이 값을 `-1`로 설정하면 호출 제한이 제거되지만 권장되지 않습니다.
+*   `include_function_calls`: 선택 사항. 사용자 시뮬레이터에 제공되는 대화 기록 프롬프트에 함수 호출 및 응답을 포함할지 여부입니다. 기본값은 `false`입니다.
 *   `custom_instructions`: 선택 사항. 사용자 시뮬레이터의 기본 지침을 재정의합니다. 지침 문자열에는
     [Jinja](https://jinja.palletsprojects.com/en/stable/templates/#) 구문을 사용하여 다음 형식의 플레이스홀더를 포함해야 합니다
     (*값을 미리 치환하지 마세요!*).
