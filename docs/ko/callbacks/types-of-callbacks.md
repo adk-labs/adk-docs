@@ -37,8 +37,26 @@
     | `after_agent_callback` | `callback_context` |
     | `before_model_callback` | `callback_context`, `llm_request` |
     | `after_model_callback` | `callback_context`, `llm_response` |
+    | `on_model_error_callback` | `callback_context`, `llm_request`, `error` |
     | `before_tool_callback` | `tool`, `args`, `tool_context` |
     | `after_tool_callback` | `tool`, `args`, `tool_context`, `tool_response` |
+    | `on_tool_error_callback` | `tool`, `args`, `tool_context`, `error` |
+
+??? note "Python: `async` 콜백 및 콜백 목록"
+
+    Python에서 콜백은 일반 `def` 또는 `async def`일 수 있습니다. ADK는 어느 쪽이든 결과를 await합니다.
+
+    모든 콜백 필드는 단일 함수 대신 함수 목록도 허용합니다. ADK는 나열된 순서대로 호출하고 결과를 반환하는 첫 번째 콜백에서 중지합니다. 해당 값이 콜백 결과가 되고 나머지 콜백은 건너뜁니다. 결과로 간주되는 항목은 제품군에 따라 다릅니다. 에이전트, 모델, 도구의 6개 `before_`/`after_` 훅은 *truthy*(참으로 평가되는) 값에서만 중지되므로 `None` 또는 빈 `dict`와 같은 기타 falsy 값을 반환하는 콜백은 다음 콜백이 실행되도록 합니다. `on_model_error_callback` 및 `on_tool_error_callback`은 `None`이 아닌 모든 값에서 중지되므로 `on_tool_error_callback`의 빈 `dict`는 체인을 종료하고 예외를 억제하며 도구 결과가 됩니다.
+
+    에이전트의 콜백 필드에 목록을 할당합니다:
+
+    ```python
+    root_agent = LlmAgent(
+        name="my_agent",
+        model="gemini-flash-latest",
+        before_model_callback=[check_policy, log_request],
+    )
+    ```
 
 ### Before Agent 콜백
 
@@ -262,6 +280,22 @@
 ## TypeScript 콜백 예제 보강
 
 영어 원문에 포함된 TypeScript 콜백 유형별 예제를 아래에 함께 제공합니다.
+
+??? note "Python: `async` 콜백 및 콜백 목록"
+
+    Python에서 콜백은 일반 `def` 또는 `async def`일 수 있습니다. ADK는 어느 쪽이든 결과를 await합니다.
+
+    모든 콜백 필드는 단일 함수 대신 함수 목록도 허용합니다. ADK는 나열된 순서대로 호출하고 결과를 반환하는 첫 번째 콜백에서 중지합니다. 해당 값이 콜백 결과가 되고 나머지 콜백은 건너뜁니다. 결과로 간주되는 항목은 제품군에 따라 다릅니다. 에이전트, 모델, 도구의 6개 `before_`/`after_` 훅은 *truthy*(참으로 평가되는) 값에서만 중지되므로 `None` 또는 빈 `dict`와 같은 기타 falsy 값을 반환하는 콜백은 다음 콜백이 실행되도록 합니다. `on_model_error_callback` 및 `on_tool_error_callback`은 `None`이 아닌 모든 값에서 중지되므로 `on_tool_error_callback`의 빈 `dict`는 체인을 종료하고 예외를 억제하며 도구 결과가 됩니다.
+
+    에이전트의 콜백 필드에 목록을 할당합니다:
+
+    ```python
+    root_agent = LlmAgent(
+        name="my_agent",
+        model="gemini-flash-latest",
+        before_model_callback=[check_policy, log_request],
+    )
+    ```
 
 ### Before Agent Callback
 

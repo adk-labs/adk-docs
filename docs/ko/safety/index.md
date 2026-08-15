@@ -348,7 +348,7 @@ Gemini 모델은 콘텐츠 및 브랜드 안전성을 향상시키는 데 활용
       print(f"콜백 트리거됨. 도구: {tool.name}, 인수: {args}")
 
       # 검증 예시: 상태에서 가져온 필수 사용자 ID가 인수와 일치하는지 확인
-      expected_user_id = callback_context.state.get("session_user_id")
+      expected_user_id = tool_context.state.get("session_user_id")
       actual_user_id_in_args = args.get("user_id_param") # 도구가 'user_id_param'을 받는다고 가정
 
       if actual_user_id_in_args != expected_user_id:

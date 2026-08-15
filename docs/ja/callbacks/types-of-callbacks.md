@@ -37,8 +37,26 @@
     | `after_agent_callback` | `callback_context` |
     | `before_model_callback` | `callback_context`, `llm_request` |
     | `after_model_callback` | `callback_context`, `llm_response` |
+    | `on_model_error_callback` | `callback_context`, `llm_request`, `error` |
     | `before_tool_callback` | `tool`, `args`, `tool_context` |
     | `after_tool_callback` | `tool`, `args`, `tool_context`, `tool_response` |
+    | `on_tool_error_callback` | `tool`, `args`, `tool_context`, `error` |
+
+??? note "Python: `async` コールバックとコールバックのリスト"
+
+    Python では、コールバックは通常の `def` または `async def` のいずれかになります。ADK はどちらの場合も結果を await します。
+
+    すべてのコールバック フィールドは、単一の関数ではなく関数のリストも受け入れます。ADK はリストされた順序で呼び出し、結果を返す最初のコールバックで停止します。その値がコールバック結果となり、残りのコールバックはスキップされます。何が結果としてカウントされるかはファミリーによって異なります。エージェント、モデル、ツールの 6 つの `before_`/`after_` フックは *truthy* な値でのみ停止するため、`None` や空の `dict` などの falsy な値を返すコールバックは次のコールバックを実行させます。`on_model_error_callback` および `on_tool_error_callback` は `None` 以外の任意の値で停止するため、`on_tool_error_callback` からの空の `dict` はチェーンを終了し、例外を抑制してツールの結果になります。
+
+    エージェントのコールバック フィールドにリストを割り当てます。
+
+    ```python
+    root_agent = LlmAgent(
+        name="my_agent",
+        model="gemini-flash-latest",
+        before_model_callback=[check_policy, log_request],
+    )
+    ```
 
 ### Before Agent コールバック
 
@@ -262,6 +280,22 @@
 ## TypeScript コールバック例の補足
 
 英語原文に含まれている TypeScript のコールバック種別ごとの例を以下にも掲載します。
+
+??? note "Python: `async` コールバックとコールバックのリスト"
+
+    Python では、コールバックは通常の `def` または `async def` のいずれかになります。ADK はどちらの場合も結果を await します。
+
+    すべてのコールバック フィールドは、単一の関数ではなく関数のリストも受け入れます。ADK はリストされた順序で呼び出し、結果を返す最初のコールバックで停止します。その値がコールバック結果となり、残りのコールバックはスキップされます。何が結果としてカウントされるかはファミリーによって異なります。エージェント、モデル、ツールの 6 つの `before_`/`after_` フックは *truthy* な値でのみ停止するため、`None` や空の `dict` などの falsy な値を返すコールバックは次のコールバックを実行させます。`on_model_error_callback` および `on_tool_error_callback` は `None` 以外の任意の値で停止するため、`on_tool_error_callback` からの空の `dict` はチェーンを終了し、例外を抑制してツールの結果になります。
+
+    エージェントのコールバック フィールドにリストを割り当てます。
+
+    ```python
+    root_agent = LlmAgent(
+        name="my_agent",
+        model="gemini-flash-latest",
+        before_model_callback=[check_policy, log_request],
+    )
+    ```
 
 ### Before Agent Callback
 

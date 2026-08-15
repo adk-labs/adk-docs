@@ -340,7 +340,6 @@ Geminiモデルには、コンテンツとブランドの安全性を向上さ�
     ```py
     # 仮のコールバック関数
     def validate_tool_params(
-        callback_context: CallbackContext, # 正しいコンテキストタイプ
         tool: BaseTool,
         args: Dict[str, Any],
         tool_context: ToolContext
@@ -349,7 +348,7 @@ Geminiモデルには、コンテンツとブランドの安全性を向上さ�
       print(f"コールバックがトリガーされました。ツール：{tool.name}, 引数：{args}")
 
       # 検証例：状態からの必須ユーザーIDが引数と一致するか確認
-      expected_user_id = callback_context.state.get("session_user_id")
+      expected_user_id = tool_context.state.get("session_user_id")
       actual_user_id_in_args = args.get("user_id_param") # ツールが'user_id_param'を受け取ると仮定
 
       if actual_user_id_in_args != expected_user_id:
