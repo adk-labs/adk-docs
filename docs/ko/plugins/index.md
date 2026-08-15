@@ -1,7 +1,7 @@
 # 플러그인
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.7.0</span><span class="lst-typescript">TypeScript v0.2.5</span><span class="lst-go">Go v0.4.0</span><span class="lst-java">Java v0.3.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.7.0</span><span class="lst-typescript">TypeScript v0.2.5</span><span class="lst-go">Go v0.4.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 ADK(Agent Development Kit)의 플러그인은 콜백 후크를 사용하여 에이전트 워크플로 수명 주기의 다양한 단계에서 실행될 수 있는 사용자 지정 코드 모듈입니다. 플러그인은 에이전트 워크플로 전반에 걸쳐 적용되는 기능에 사용합니다. 플러그인의 일반적인 애플리케이션은 다음과 같습니다.
@@ -152,6 +152,12 @@ public class CountInvocationPlugin extends BasePlugin {
   }
 }
 ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/plugins/CountInvocationPlugin.kt:create_plugin"
+    ```
 
 이 예시 코드는 에이전트 수명 주기 동안 이러한 작업의 실행 횟수를 계산하기 위해 `before_agent_callback` 및 `before_model_callback`에 대한 콜백을 구현합니다.
 
@@ -326,6 +332,12 @@ public class Main {
   }
 }
 ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/plugins/CountInvocationPlugin.kt:register_plugin"
+    ```
 
 ### 플러그인으로 에이전트 실행
 
