@@ -411,7 +411,7 @@
 
 **3. `CallbackContext` 또는 `ToolContext`를 통해 (콜백 및 도구에 권장)**
 
-*(참고: TypeScript에서는 이것이 통합된 `Context` 타입을 통해 수행됩니다.)*
+*(참고: Python 및 TypeScript에서는 `CallbackContext`와 `ToolContext`가 단일 `Context` 유형으로 통합되었으며, Python에서는 두 이름 모두 해당 유형의 별칭으로 계속 사용할 수 있습니다.)*
 
 에이전트 콜백(예: `on_before_agent_call`, `on_after_agent_call`)이나 도구 함수 내에서 상태를 수정하는 것은 함수에 제공된 `CallbackContext` 또는 `ToolContext`의 `state` 속성을 사용하는 것이 가장 좋습니다.
 
@@ -500,7 +500,7 @@
 * 이벤트의 `actions`에서 `state_delta`를 읽습니다.
 * 서비스 유형에 따라 접두사와 영속성을 올바르게 처리하면서 이러한 변경 사항을 `SessionService`가 관리하는 상태에 적용합니다.
 * 세션의 `last_update_time`을 업데이트합니다.
-* 동시 업데이트에 대한 스레드 안전성을 보장합니다.
+* 서비스가 지원하는 경우 동일한 세션에 대한 동시 업데이트를 직렬화합니다. `DatabaseSessionService`는 세션별 잠금을 사용하는 반면, `InMemorySessionService`는 다중 스레드 사용에 안전하지 않습니다.
 
 ### ⚠️ 직접적인 상태 수정에 대한 경고
 

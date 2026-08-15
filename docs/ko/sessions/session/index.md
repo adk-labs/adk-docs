@@ -220,7 +220,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
     === "Python"
 
            ```py
-           # 필요: pip install google-adk[vertexai]
+           # 필요: pip install google-adk[gcp]
            # 추가로 GCP 설정 및 인증 필요
            from google.adk.sessions import VertexAiSessionService
 
@@ -231,7 +231,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 
            session_service = VertexAiSessionService(project=PROJECT_ID, location=LOCATION)
            # 서비스 메서드 호출 시 REASONING_ENGINE_APP_NAME 사용, 예:
-           # session_service = await session_service.create_session(app_name=REASONING_ENGINE_APP_NAME, ...)
+           # session = await session_service.create_session(app_name=REASONING_ENGINE_APP_NAME, ...)
            ```
 
     === "Go"

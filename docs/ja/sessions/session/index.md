@@ -219,7 +219,7 @@ ADKは、ニーズに最も適したストレージバックエンドを選択�
     === "Python"
 
            ```py
-           # 要件: pip install google-adk[vertexai]
+           # 要件: pip install google-adk[gcp]
            # さらにGCPのセットアップと認証が必要
            from google.adk.sessions import VertexAiSessionService
 
@@ -230,7 +230,7 @@ ADKは、ニーズに最も適したストレージバックエンドを選択�
 
            session_service = VertexAiSessionService(project=PROJECT_ID, location=LOCATION)
            # サービスメソッドを呼び出す際にREASONING_ENGINE_APP_NAMEを使用します。例：
-           # session_service = await session_service.create_session(app_name=REASONING_ENGINE_APP_NAME, ...)
+           # session = await session_service.create_session(app_name=REASONING_ENGINE_APP_NAME, ...)
            ```
 
     === "Go"

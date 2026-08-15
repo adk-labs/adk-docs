@@ -54,6 +54,7 @@
     * **スコープ：** `user_id`に関連付けられ、そのユーザーの（同じ`app_name`内の）*すべての*セッションで共有されます。
     * **永続性：** `Database`または`VertexAI`で永続的です。（`InMemory`によって保存されますが、再起動時に失われます）。
     * **ユースケース：** ユーザーの好み（例：`'user:theme'`）、プロファイルの詳細（例：`'user:name'`）。
+    * **セッションなしでの読み取り:** Python では、`await session_service.get_user_state(app_name=..., user_id=...)` が `user:` プレフィックスを削除したユーザー スコープ キーを返すため、セッションが存在する前に読み取ることができます。`VertexAiSessionService` は例外で、Agent Runtime API がセッションから独立してユーザー状態を公開しないため、常に `NotImplementedError` を発生させます。そこでは代わりに `list_sessions` でセッションを列挙し、各結果に対して `get_session` を呼び出してください。
     * **例：** `session.state['user:preferred_language'] = 'fr'`
 
 * **`app:` プレフィックス（アプリ状態）：**

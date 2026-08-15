@@ -36,7 +36,7 @@ Python ADKには3つの`MemoryService`実装が含まれています。以下の
 | **依存関係** | なし。 | Google Cloudプロジェクト、Agent Platform API | Google Cloudプロジェクト、Knowledge Engine、Agent Platform SDK（任意インストール）。 |
 | **使用するタイミング** | プロトタイピングのために複数のセッションのチャット履歴を検索する場合。 | エージェントに過去のやり取りを記憶させ、学習させたい場合。 | 既存のRAGインフラがある場合、または生の会話トランスクリプトを検索したい場合。 |
 
-`VertexAiRagMemoryService`は、Agent Platform SDKがインストールされている場合にのみ`google.adk.memory`からエクスポートされます。Memory BankとRAGベースのメモリについては、以下の[Memory Bank](#memory-bank)と[RAG Memory](#rag-memory)で説明します。
+`google.adk.memory` から `VertexAiRagMemoryService` を常にインポートできますが、`pip install google-adk[gcp]` で Agent Platform SDK がインストールされていない限り、構築時に `ImportError` が発生します。Memory Bank と RAG バックアップメモリについては、以下の [Memory Bank](#memory-bank) と [RAG Memory](#rag-memory) で説明されています。
 
 ## インメモリメモリ
 
@@ -400,7 +400,7 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 
 ## RAG Memory { #rag-memory }
 
-`VertexAiRagMemoryService`는 대화를... (view_file: ``VertexAiRagMemoryService`は、会話を[Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)に保存し、ベクトル類似度で検索します。既存のRAGインフラがある場合、またはMemory Bankが生成するLLM抽出メモリではなく生の会話トランスクリプトを検索したい場合に使用します。Agent Platform SDKが必要です。`)
+`VertexAiRagMemoryService`는 대화를... (view_file: ``google.adk.memory` から `VertexAiRagMemoryService` を常にインポートできますが、`pip install google-adk[gcp]` で Agent Platform SDK がインストールされていない限り、構築時に `ImportError` が発生します。Memory Bank と RAG バックアップメモリについては、以下の [Memory Bank](#memory-bank) と [RAG Memory](#rag-memory) で説明されています。
 
 === "Python"
 
@@ -623,7 +623,7 @@ async def update_session_memory(my_memory_service, my_completed_session):
 3. **後のクエリ:** 異なるセッション、または同じセッションで、過去のコンテキストを必要とする質問をする場合があります（例：「先週、プロジェクトXについて何を話し合いましたか？」）。
 4. **エージェントがメモリツールを使用:** 組み込みの `load_memory` ツールなど、メモリ取得ツールを備えたエージェントは、過去のコンテキストの必要性を認識します。ツールを呼び出し、検索クエリ（例：「先週のプロジェクトXの議論」）を提供します。
 5. **検索の実行:** ツールは内部的に `memory_service.search_memory(app_name=..., user_id=..., query=...)` を呼び出します。
-6. **結果の返却:** `MemoryService` は、キーワードマッチングまたはセマンティック検索を使用してストアを検索し、一致するスニペットを、`content` とすべてのオプション項目（`author`、`timestamp`、`custom_metadata`）を保持する `MemoryEntry` オブジェクトのリストを含む `SearchMemoryResponse` として返します。
+6. **結果の返却:** `MemoryService` は、キーワードマッチングまたはセマンティック検索を使用してストアを検索し、一致するスニペットを、`content` とすべてのオプション項目（`id`、`author`、`timestamp`、`custom_metadata`）を保持する `MemoryEntry` オブジェクトのリストを含む `SearchMemoryResponse` として返します。
 7. **エージェントが結果を使用:** ツールはこれらの結果をエージェントに返し、通常はコンテキストまたは関数応答の一部として返します。その後、エージェントはこの取得した情報を使用して、ユーザーへの最終的な回答を作成できます。
 
 ### エージェントは複数のメモリサービスにアクセスできますか？

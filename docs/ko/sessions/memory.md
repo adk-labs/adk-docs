@@ -36,7 +36,7 @@ Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표�
 | **종속성** | 없음. | Google Cloud 프로젝트, Agent Platform API | Google Cloud 프로젝트, Knowledge Engine, Agent Platform SDK(선택 설치). |
 | **사용 시기** | 프로토타이핑을 위해 여러 세션의 채팅 기록을 검색하려는 경우. | 에이전트가 과거 상호 작용을 기억하고 학습하기를 원하는 경우. | 이미 RAG 인프라가 있거나 원시 대화 기록을 검색하려는 경우. |
 
-`VertexAiRagMemoryService`는 Agent Platform SDK가 설치된 경우에만 `google.adk.memory`에서 내보내집니다. Memory Bank와 RAG 기반 메모리는 아래의 [Memory Bank](#memory-bank) 및 [RAG Memory](#rag-memory)에 설명되어 있습니다.
+`google.adk.memory`에서 `VertexAiRagMemoryService`를 항상 가져올 수 있지만, `pip install google-adk[gcp]`를 통해 Agent Platform SDK가 설치되어 있지 않으면 생성 시 `ImportError`가 발생합니다. Memory Bank와 RAG 기반 메모리는 아래의 [Memory Bank](#memory-bank) 및 [RAG Memory](#rag-memory)에 설명되어 있습니다.
 
 ## 인메모리 메모리
 
@@ -398,7 +398,7 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 
 ## RAG Memory { #rag-memory }
 
-`VertexAiRagMemoryService`는 대화를 [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)에 저장하고 벡터 유사도로 검색합니다. 이미 RAG 인프라가 있거나 Memory Bank에서 생성하는 LLM 추출 메모리 대신 원시 대화 기록을 검색하려는 경우 사용합니다. Agent Platform SDK가 필요합니다.
+`google.adk.memory`에서 `VertexAiRagMemoryService`를 항상 가져올 수 있지만, `pip install google-adk[gcp]`를 통해 Agent Platform SDK가 설치되어 있지 않으면 생성 시 `ImportError`가 발생합니다. 메모리 뱅크 및 RAG 지원 메모리는 아래의 [메모리 뱅크](#memory-bank) 및 [RAG 메모리](#rag-memory)에 설명되어 있습니다.
 
 === "Python"
 
@@ -621,7 +621,7 @@ async def update_session_memory(my_memory_service, my_completed_session):
 3. **나중에 쿼리:** 다른 세션 또는 동일한 세션에서 과거 컨텍스트가 필요한 질문을 할 수 있습니다(예: "지난주에 X 프로젝트에 대해 무엇을 논의했습니까?").
 4. **에이전트가 메모리 도구 사용:** 기본 제공 `load_memory` 도구와 같이 메모리 검색 도구가 장착된 에이전트는 과거 컨텍스트의 필요성을 인식합니다. 도구를 호출하여 검색 쿼리(예: "지난주 X 프로젝트 논의")를 제공합니다.
 5. **검색 실행:** 도구는 내부적으로 `memory_service.search_memory(app_name=..., user_id=..., query=...)`를 호출합니다.
-6. **결과 반환:** `MemoryService`는 키워드 매칭 또는 의미론적 검색을 사용하여 저장소를 검색하고, 일치하는 스니펫을 `content` 및 선택적 필드(`author`, `timestamp`, `custom_metadata`)를 보유한 `MemoryEntry` 객체 목록이 포함된 `SearchMemoryResponse`로 반환합니다.
+6. **결과 반환:** `MemoryService`는 키워드 매칭 또는 의미론적 검색을 사용하여 저장소를 검색하고, 일치하는 스니펫을 `content` 및 선택적 필드(`id`, `author`, `timestamp`, `custom_metadata`)를 보유한 `MemoryEntry` 객체 목록이 포함된 `SearchMemoryResponse`로 반환합니다.
 7. **에이전트가 결과 사용:** 도구는 이러한 결과를 에이전트에 반환하며, 일반적으로 컨텍스트 또는 함수 응답의 일부입니다. 그런 다음 에이전트는 이 검색된 정보를 사용하여 사용자에 대한 최종 답변을 구성할 수 있습니다.
 
 ### 에이전트가 둘 이상의 메모리 서비스에 액세스할 수 있습니까?
