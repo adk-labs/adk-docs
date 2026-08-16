@@ -224,7 +224,7 @@ ADKは、ニーズに最も適したストレージバックエンドを選択�
 
 ## セッションのライフサイクル
 
-<img src="../../assets/session_lifecycle.png" alt="セッションのライフサイクル">
+<img src="../../assets/event-loop.png" alt="セッションのライフサイクル">
 
 会話の1ターン中に`Session`と`SessionService`がどのように連携して動作するかの単純化されたフローは以下の通りです。
 

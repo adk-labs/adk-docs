@@ -202,7 +202,7 @@
   </a>
   <a href="https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e" class="resource-card">
     <div class="card-image-wrapper">
-      <img src="../assets/community-adk-vertex-ai-live-api.png" alt="ADK + Vertex AI Live API">
+      <img src="../assets/community-adk-gemini-live-api.png" alt="ADK + Vertex AI Live API">
     </div>
     <div class="card-content">
       <div class="type">ブログ記事</div>

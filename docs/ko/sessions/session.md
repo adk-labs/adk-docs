@@ -224,7 +224,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 
 ## 세션 생명주기
 
-<img src="../../assets/session_lifecycle.png" alt="세션 생명주기">
+<img src="../../assets/event-loop.png" alt="세션 생명주기">
 
 대화의 한 턴(turn) 동안 `Session`과 `SessionService`가 함께 작동하는 단순화된 흐름은 다음과 같습니다.
 
