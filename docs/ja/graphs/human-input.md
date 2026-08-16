@@ -1,127 +1,207 @@
-# エージェントワークフローのための人間入力
+# Human input for agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-データ入力、意思決定の検証、またはアクション許可のために人間の入力を
-要求できることは、多くのエージェント駆動ワークフローで重要な要素です。
-ADK のグラフベースワークフローには、ワークフローの一部として人間から入力を
-得るために特別に設計された Human in the Loop (HITL) ノードを含めることが
-できます。これらのノードは実行に人工知能 (AI) モデルを必要としないため、
-入力プロセスをより予測可能で信頼性の高いものにできます。
-
-!!! example "Alpha リリース"
-
-    ADK 2.0 は Alpha リリースであり、以前の ADK バージョンと併用する際に
-    互換性を壊す変更が発生する可能性があります。プロダクション環境のように
-    後方互換性が必要な場合は ADK 2.0 を使用しないでください。このリリースを
-    ぜひ試していただき、
-    [フィードバック](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=v2)
-    をお寄せください。
+Being able to request human input for data input, decision verification, or
+action permission is an important part of many agent-powered workflows.
+Graph-based workflows in ADK can include human in the loop (HITL) nodes
+specifically built for obtaining input from humans as part of a workflow. These
+nodes do not require artificial intelligence (AI) models to run, which can make
+the input process more predictable and reliable.
 
 ## はじめに
 
-***RequestInput*** クラスと、ユーザーに提示するテキストプロンプトを使うと、
-グラフ内に人間入力ノードを実装できます。次のコード例は、Workflow グラフへ
-人間入力ノードを追加する方法を示します。
+=== "Python"
 
-```python
-from google.adk.events import RequestInput
-from google.adk import Workflow
+    You can implement a human input node in a graph using the ***RequestInput***
+    class and a text prompt for the user. The following code example shows how to
+    add a human input node to a Workflow graph:
 
-def step1(): # Human input step
-  yield RequestInput(message="Enter a number:")
+    ```python
+    from google.adk.events import RequestInput
+    from google.adk import Workflow
 
-def step2(node_input):
-  return node_input * 2
+    def step1(): # Human input step
+      yield RequestInput(message="Enter a number:")
 
-root_agent = Workflow(
-    name="root_agent",
-    edges=[('START', step1, step2)],
-)
-```
+    def step2(node_input):
+      return node_input * 2
 
-このコード例では、`step1` がユーザーからの入力をシステムが受け取るまで
-エージェントの実行を一時停止します。システムがユーザー入力を受け取ると、
-その入力は次のノードへ渡されます。
+    root_agent = Workflow(
+        name="root_agent",
+        edges=[('START', step1, step2)],
+    )
+    ```
 
-## 設定オプション
+    In this code example, `step1` pauses the execution of the agent until the
+    system receives an input from a user. Once the system receives input from the
+    user, that input is passed to the next node.
 
-人間入力ノードでは、***RequestInput*** クラスとともに次の設定オプションを
-使用できます。
+=== "Go"
 
-- **`message`:** 人間入力の要求内容を説明するためにユーザーへ提示される
-  テキストです。
-- **`payload`:** 人間入力リクエストの一部として利用する構造化データです。
-- **`response_schema`:** 人間の応答が従う必要のあるデータ構造です。
+    In ADK Go v2.0.0, a HITL graph node is built with
+    `workflow.NewEmittingFunctionNode` and `workflow.ResumeOrRequestInput`.
+    This is the direct equivalent of Python's `RequestInput` node:
 
-!!! note "注: response schema 入力の制限"
+    -   On the **first pass**, `workflow.ResumeOrRequestInput` emits a
+        `session.RequestInput` event (surfaced as `Event.RequestedInput`) and
+        returns `ErrNodeInterrupted`, pausing the workflow.
+    -   After the human replies, the node is **re-invoked from the top**
+        (`RerunOnResume: &true`) and `ResumeOrRequestInput` returns the reply
+        payload, which flows as typed input to the next node via `event.Output`.
 
-    **response_schema** 設定について、***RequestInput*** クラスは人間の応答を
-    指定されたデータ構造に自動で再整形しません。人間の応答は指定された形式で
-    直接提供される必要があります。より良いユーザー体験のためには、構造化
-    データを収集するユーザーインターフェースを提供するか、非構造化データを
-    必要な形式へ整える Agent ノードの利用を検討してください。
+    ```go
+    --8<-- "examples/go/snippets/graphs/human-input/main.go:graph-hitl-get-started"
+    ```
 
-## 人間入力の例
+## 構成オプション
 
-次のコード例は、***message***、***payload***、***response schema***
-パラメータを含む、より詳細な人間入力リクエストを示します。
+=== "Python"
 
-### response schema 付きで入力を要求する
+    Human input nodes can use the ***RequestInput*** class with the following
+    configuration options:
 
-次のコードサンプルは、ワークフローノード内で ***response schema*** を含む
-***RequestInput*** オブジェクトを構築する方法を示します。
+    -   **`message`:** Text provided to the user to explain the human input
+        request.
+    -   **`payload`:** Structured data to be used as part of the human input
+        request.
+    -   **`response_schema`:** A data structure the human response must conform to.
 
-```python
-async def initial_prompt(ctx: Context):
-   """Ask the user for itinerary information"""
-   input_message = """
-       This is an interactive concierge workflow tasked with making you a great
-       itinerary for you in your city of choice. If you give some details about
-       yourself or what you are generally looking for I can better personalize
-       your itinerary.
-       For example, input your:
-           City (Required),
-           Age,
-           Hobby,
-           Example of attraction you liked
-   """
-   resp = {"user_response": str}
+    !!! note "Note: Response schema input limitations"
 
-   yield RequestInput(message=input_message, response_schema=resp)
-```
+        For the **response_schema** setting, the ***RequestInput*** class does not
+        automatically reformat human responses to fit a specified data structure. The
+        human response must be provided in the specified format. For a better user
+        experience, consider providing a user interface to collect structured data
+        or use an Agent node to conform unstructured data to the format required.
 
-### データ payload 付きで入力を要求する
+=== "Go"
 
-次のコードサンプルは、ワークフローノード内で ***payload*** と
-***response schema*** を含む ***RequestInput*** オブジェクトを構築する方法を
-示します。この例では、`ActivitiesList` はアクティビティの一覧を構成する
-エージェントノードによって完成されることを想定しており、
-`get_user_feedback()` ノードがユーザーにフィードバックを求めます。
+    `session.RequestInput` carries the following fields, which map directly to
+    Python's `RequestInput` parameters:
 
-```python
-class ActivitiesList(BaseModel):
-   """Itinerary should be a list of dictionaries for each activity. Each
-   activity has a name and a description"""
-   itinerary: List[Dict[str, str]]
+    -   **`InterruptID`** (`string`): A unique identifier for this pause point.
+        Use a stable prefix plus a UUID to avoid collision across workflow runs.
+        Equivalent to the implicit interrupt ID in Python.
+    -   **`Message`** (`string`): Human-readable prompt displayed to the user.
+        Equivalent to Python's `message` parameter.
+    -   **`Payload`** (`any`): Optional structured data sent alongside the
+        prompt so the client can render additional context. Equivalent to
+        Python's `payload` parameter.
 
-async def get_user_feedback(node_input: ActivitiesList):
-   """
-   Retrieves the user's thoughts on the agents initial itinerary in order to
-   either expand on, change the list, or exit the loop
-   """
-   message = (
-       f"""
-       Here is your recommended base itinerary:\n{node_input}\n\n
-       Which of these items appeal to you (if any)?
+    `workflow.NodeConfig.RerunOnResume` controls what happens on resume:
+
+    -   **`&true`**: the node body is re-run from the top; `ResumeOrRequestInput`
+        returns the human's reply on the second pass. Required for nodes that
+        use `ResumeOrRequestInput`.
+    -   **`&false`** or **`nil`** (leaf default): the reply is routed to the
+        node's successor as input, bypassing the interrupted node.
+
+    !!! note "Note: Structured response from the client"
+
+        ADK Go does not automatically parse or validate the structure of the
+        human's reply payload. If your workflow needs structured feedback,
+        include a UI or a downstream agent node to validate the response before
+        acting on it.
+
+## 人間の入力 (Human Input) examples
+
+The following code examples demonstrate more detailed human input requests.
+
+### Request input with a message and payload
+
+=== "Python"
+
+    The following code sample shows how to construct a ***RequestInput*** object
+    in a workflow node, including a ***payload*** and ***response schema***. In
+    this example, the `ActivitiesList` is expected to be completed by an agent
+    node that composes a list of activities, and the `get_user_feedback()` node
+    requests feedback from the user.
+
+    ```python
+    class ActivitiesList(BaseModel):
+       """Itinerary should be a list of dictionaries for each activity. Each
+       activity has a name and a description"""
+       itinerary: List[Dict[str, str]]
+
+    class UserFeedback(BaseModel):
+       """Expected response structure from the user."""
+       user_response: str
+
+    async def get_user_feedback(node_input: ActivitiesList):
        """
-   )
+       Retrieves the user's thoughts on the agents initial itinerary in order to
+       either expand on, change the list, or exit the loop
+       """
+       message = (
+           f"""
+           Here is your recommended base itinerary:\n{node_input}\n\n
+           Which of these items appeal to you (if any)?
+           """
+       )
 
-   yield RequestInput(
-       message=message,
-       payload=node_input,
-       response_schema={"user":"response"}
-   )
-```
+       yield RequestInput(
+           message=message,
+           payload=node_input,
+            response_schema=UserFeedback,
+       )
+    ```
+
+=== "Go"
+
+    The following code sample shows a three-node graph: a builder node generates
+    a structured itinerary, a HITL node sends it as `Payload` alongside the
+    prompt, and a final node acts on the user's feedback. The `Payload` field
+    lets the client render the full itinerary for the user before they respond:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/human-input/main.go:graph-hitl-with-payload"
+    ```
+
+## ツール確認: LLM エージェントの承認プロンプト
+
+Tool-confirmation is a separate, LLM-agent–level mechanism for yes/no
+approval prompts. Unlike graph HITL nodes, tool-confirmation works inside an
+`llmagent` tool function rather than as a standalone graph node. It is useful
+when you want an LLM agent to pause and ask for approval before executing a
+specific tool call.
+
+=== "Python"
+
+    The following code sample shows how to construct a ***RequestInput*** object
+    in a workflow node, including a ***response schema***:
+
+    ```python
+    async def initial_prompt(ctx: Context):
+       """Ask the user for itinerary information"""
+       input_message = """
+           This is an interactive concierge workflow tasked with making you a great
+           itinerary for you in your city of choice. If you give some details about
+           yourself or what you are generally looking for I can better personalize
+           your itinerary.
+           For example, input your:
+               City (Required),
+               Age,
+               Hobby,
+               Example of attraction you liked
+       """
+       yield RequestInput(message=input_message, response_schema=str)
+    ```
+
+=== "Go"
+
+    Set `RequireConfirmation: true` in `functiontool.Config` for a static
+    yes/no approval before a tool executes, or call `ctx.RequestConfirmation`
+    from inside the tool for a custom hint message:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/human-input/main.go:simple-hitl"
+    ```
+
+    For a custom hint with manual re-entry handling:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/human-input/main.go:hitl-with-hint"
+    ```

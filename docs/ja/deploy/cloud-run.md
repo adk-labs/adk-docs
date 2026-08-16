@@ -170,6 +170,7 @@ ADKエージェントワークフローをGoogle Cloud Runにデプロイする�
 
     * `--project TEXT`: (必須) Google CloudプロジェクトID (例: `$GOOGLE_CLOUD_PROJECT`)。
     * `--region TEXT`: (必須) デプロイするGoogle Cloudのロケーション (例: `$GOOGLE_CLOUD_LOCATION`、`us-central1`)。
+    * `--allow_origins`: (オプション) CORS (Cross-Origin Resource Sharing) 用のオリジンのカンマ区切りリスト。正規表現パターンを許可するには、オリジンの先頭に `regex:` を付けます (例: `http://localhost:8000,regex:https://.*\.example\.com`)。
     * `--service_name TEXT`: (オプション) Cloud Runサービスの名前 (例: `$SERVICE_NAME`)。デフォルトは`adk-default-service-name`です。
     * `--app_name TEXT`: (オプション) ADK APIサーバーのアプリケーション名 (例: `$APP_NAME`)。デフォルトは`AGENT_PATH`で指定されたディレクトリの名前 (例: `AGENT_PATH`が`./capital_agent`の場合`capital_agent`) です。
     * `--session_service_uri TEXT`: (オプション) セッション サービスの URI。Agent Runtime を介して管理セッション サービスを使用している場合は `agentengine://<agent_engine>` を渡します。ここで `<agent_engine>` はリソース ID または完全な `projects/*/locations/*/reasoningEngines/*` リソース名です。その他のサポートされている形式は `memory://` および任意の SQLAlchemy データベース URL (例: `sqlite://<path>`) です。
@@ -182,8 +183,24 @@ ADKエージェントワークフローをGoogle Cloud Runにデプロイする�
 
     `--session_service_uri` および `--artifact_service_uri` が設定されていない場合、デプロイされたコンテナはインメモリのセッションおよびアーティファクト サービスにフォールバックし、Cloud Run インスタンスがリサイクルされるたびにセッションとアーティファクトが失われます。このデータを保持する必要があるデプロイメントでは、両方のオプションを設定してください。
 
+    ##### gcloud CLI 引数の受け渡し
+
+    `adk deploy cloud_run` コマンドを通じて特定の gcloud フラグを渡すには、ADK 引数の後にダブルダッシュ区切り記号 (`--`) を使用します。`--` の後に続くフラグ (ADK 管理フラグを除く) は、基盤となる gcloud コマンドに直接渡されます。
+
+    ###### 構文例:
+
+    ```bash
+    adk deploy cloud_run [ADK_FLAGS] -- [GCLOUD_FLAGS]
+    ```
+
+    ###### 例:
+
+    ```bash
+    adk deploy cloud_run --project=[PROJECT_ID] --region=[REGION] path/to/my_agent -- --no-allow-unauthenticated --min-instances=2
+    ```
+
     ##### 認証アクセス
-    デプロイプロセス中に、「[your-service-name]への未認証呼び出しを許可しますか (y/N)?」というプロンプトが表示される場合があります。
+    デプロイプロセス中に、「`Allow unauthenticated invocations to [your-service-name] (y/N)?`」というプロンプトが表示される場合があります。
 
     * 認証なしでエージェントのAPIエンドポイントへの公開アクセスを許可するには`y`を入力します。
     * 認証を要求するには`N`を入力します (またはデフォルトの場合はEnterを押します)。(例: 「エージェントのテスト」セクションで示すように、IDトークンを使用します)。

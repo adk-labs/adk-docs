@@ -40,7 +40,7 @@ LiteLLM ライブラリを使うことで、リモートまたはローカルで
 
 1. **LiteLLM のインストール:**
         ```shell
-        pip install litellm
+        pip install "litellm>=1.84"
         ```
 2. **プロバイダー API キーの設定:** 使用するプロバイダーの API キーを環境変数として設定します。
 

@@ -153,14 +153,14 @@ go run main.go web -otel_to_cloud a2a
 以下はログエントリのサンプルです。
 
 ```text
-2025-07-08 11:22:33,456 - DEBUG - google_adk.google.adk.models.google_llm - LLM Request: contents { ... }
+2025-07-08 11:22:33,456 - DEBUG - google_adk.google_adk.google.adk.models.google_llm - LLM Request: contents { ... }
 ```
 
 | ログセグメント                  | フォーマット指定子 | 意味                                           |
 | ------------------------------- | ---------------- | ---------------------------------------------- |
 | `2025-07-08 11:22:33,456`       | `%(asctime)s`    | タイムスタンプ                                 |
 | `DEBUG`                         | `%(levelname)s`  | 重要度レベル                                   |
-| `google_adk.models.google_llm`  | `%(name)s`       | ロガー名（ログを生成したモジュール）           |
+| `google_adk.google_adk.google.adk.models.google_llm`  | `%(name)s`       | ロガー名（ログを生成したモジュール）           |
 | `LLM Request: contents { ... }` | `%(message)s`    | 実際のログメッセージ                           |
 
 ロガー名を読めば、ログの発生源をすぐに特定し、エージェントのアーキテクチャ内でのコンテキストを理解できます。
@@ -182,12 +182,12 @@ go run main.go web -otel_to_cloud a2a
 
 2.  **エージェントの実行:** 通常通りにエージェントのタスクを実行します。
 
-3.  **ログの確認:** コンソール出力から`google.adk.models.google_llm`ロガーからの`LLM Request:`で始まるメッセージを探します。
+3.  **ログの確認:** コンソール出力から`google_adk.google.adk.models.google_llm`ロガーからの`LLM Request:`で始まるメッセージを探します。
 
     ```log
     ...
-    2025-07-10 15:26:13,778 - DEBUG - google_adk.google.adk.models.google_llm - Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: False
-    2025-07-10 15:26:13,778 - DEBUG - google_adk.google.adk.models.google_llm - 
+    2025-07-10 15:26:13,778 - DEBUG - google_adk.google_adk.google.adk.models.google_llm - Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: False
+    2025-07-10 15:26:13,778 - DEBUG - google_adk.google_adk.google.adk.models.google_llm - 
     LLM Request:
     -----------------------------------------------------------
     System Instruction:
@@ -212,7 +212,7 @@ go run main.go web -otel_to_cloud a2a
     -----------------------------------------------------------
 
     2025-07-10 15:26:13,779 - INFO - google_genai.models - AFC is enabled with max remote calls: 10.
-    2025-07-10 15:26:14,309 - INFO - google_adk.google.adk.models.google_llm - 
+    2025-07-10 15:26:14,309 - INFO - google_adk.google_adk.google.adk.models.google_llm - 
     LLM Response:
     -----------------------------------------------------------
     Text:

@@ -40,7 +40,7 @@ LiteLLM 라이브러리를 사용해 원격 또는 로컬로 호스팅된 AI 모
 
 1. **LiteLLM 설치:**
         ```shell
-        pip install litellm
+        pip install "litellm>=1.84"
         ```
 2. **공급자 API 키 설정:** 사용하려는 공급자별 API 키를 환경 변수로 구성합니다.
 

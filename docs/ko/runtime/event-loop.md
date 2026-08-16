@@ -1,306 +1,320 @@
-# Runtime Event Loop
+# ADK 실행 루프
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-kotlin">Kotlin v0.7.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-ADK Runtime은 사용자 상호작용 중 에이전트 애플리케이션을 구동하는 기반 엔진입니다.
-정의한 에이전트/도구/콜백을 오케스트레이션하고,
-입력에 따라 정보 흐름, 상태 변경, LLM/스토리지 같은 외부 서비스 연동을 관리합니다.
+ADK(Agent Development Kit)의 핵심에는 비동기 이벤트 기반 아키텍처가 있습니다. 상위 레벨에서 `Runner`는 에이전트와 도구로 구성된 실행 로직과 협력하여 대화를 한 턴씩 진행합니다. 이 흐름을 이해하면 상태 변경, 스트리밍 출력, 비동기 작업이 어떻게 원활하게 조율되는지 파악할 수 있습니다.
 
-Runtime을 에이전트 애플리케이션의 **엔진**으로 생각하면 됩니다.
-개발자는 부품(에이전트/도구)을 정의하고,
-Runtime이 이들을 연결해 사용자 요청을 처리합니다.
+## 핵심 개념: Yield-and-Resume 이벤트 루프
 
-## 핵심 개념: Event Loop
+ADK 실행 루프의 기본 메커니즘은 **협력적 생성자/스트림(cooperative generator/stream)** 모델입니다. 에이전트가 실행될 때 모든 것을 한 번에 실행하고 단일 결과를 반환하지 않습니다. 대신 일련의 `Event` 객체를 점진적으로 **생성(yield/emit)**합니다.
 
-ADK Runtime의 중심에는 **Event Loop**가 있습니다.
-이 루프는 `Runner`와 실행 로직(Agent, LLM 호출, Callback, Tool) 간의
-왕복 협력을 담당합니다.
+### 루프 작동 방식:
 
-![intro_components.png](../assets/event-loop.png)
+1. **`Runner`가 루프를 시작합니다:** `Runner`는 사용자의 질의를 받아 세션 히스토리에 기록한 다음, 에이전트의 메인 실행 메서드(`run_async`)를 호출하여 프로세스를 시작합니다.
+2. **에이전트가 이벤트를 생성(Yield)하고 일시 중지합니다:** 에이전트가 출력을 생성하거나(예: 생각, 텍스트 청크), 도구를 호출해야 하거나, 상태를 수정할 때마다 이러한 작업이 포함된 `Event` 객체를 생성(yield)합니다. **이벤트를 생성한 직후 에이전트의 실행은 일시 중지됩니다.**
+3. **`Runner`가 이벤트를 처리합니다:** `Runner`는 일시 중지된 에이전트로부터 생성된 이벤트를 받습니다. 다음 작업을 수행합니다:
+    * 이벤트를 세션의 `event history`에 기록합니다.
+    * 이벤트에 지정된 모든 작업(예: 세션 상태에 `state_delta` 적용, 아티팩트 저장 확인)을 커밋합니다.
+    * 처리된 이벤트를 상위 스트림(예: UI로 스트리밍)으로 전달합니다.
+4. **`Runner`가 에이전트를 재개(Resume)합니다:** 이벤트 처리가 완료되면 `Runner`는 에이전트의 실행을 재개하도록 신호를 보냅니다.
+5. **에이전트가 계속 진행합니다:** 에이전트는 중단된 지점부터 다시 실행되며, 이제 이전 이벤트에서 요청한 모든 상태 변경이나 작업이 `SessionService`에 의해 성공적으로 커밋되었음을 확신할 수 있습니다.
+6. **반복:** 이 생성, 일시 중지, 처리, 재개 주기는 에이전트가 현재 사용자 질의에 대한 작업을 완료할 때까지 계속됩니다.
 
-간단히 보면:
+### 개념적 코드 예시
 
-1. `Runner`가 사용자 질의를 받고 메인 `Agent` 실행을 시작
-2. `Agent`가 응답/도구 요청/상태 변경 등 보고할 내용이 생기면 `Event`를 `yield`(emit)
-3. `Runner`가 이벤트를 받아 처리(예: Services를 통한 상태 저장) 후 상위로 전달
-4. `Agent`는 `Runner`가 처리한 뒤에만 중단 지점에서 재개
-5. 현재 질의에 대해 더 이상 이벤트가 없을 때까지 반복
-
-이 이벤트 기반 루프가 ADK 실행 모델의 핵심 패턴입니다.
-
-## Event Loop 내부 동작
-
-!!! Note
-    메서드명/파라미터명은 SDK 언어별로 다를 수 있습니다.
-    (예: Python `agent.run_async(...)`, Go `agent.Run(...)`, Java/TS `agent.runAsync(...)`)
-
-### Runner의 역할(오케스트레이터)
-
-`Runner`는 단일 사용자 invocation의 중앙 조정자입니다.
-
-1. **시작**: 사용자 질의(`new_message`)를 수신해 SessionService에 기록
-2. **Kick-off**: 메인 에이전트 실행(`agent_to_run.run_async(...)`) 시작
-3. **수신/처리**: 에이전트가 `yield`한 `Event`를 즉시 처리
-   - `event.actions`의 `state_delta`, `artifact_delta` 등을 Services로 커밋
-4. **상위 전달**: 처리된 이벤트를 UI/호출자에게 전달
-5. **반복**: 에이전트가 다음 이벤트를 생성하도록 재개 신호 제공
-
-### 실행 로직의 역할(Agent/Tool/Callback)
-
-실제 의사결정/연산은 에이전트·도구·콜백 코드가 수행합니다.
-
-1. 현재 `InvocationContext` 기반 실행
-2. 결과/요청을 `Event`로 만들어 `yield`
-3. `yield` 직후 실행 일시중지
-4. `Runner` 처리 완료 후 재개
-5. 재개 시 이전 이벤트의 커밋된 상태를 신뢰 가능
-
-이 협력적 `yield/pause/resume` 사이클이 Runtime의 기본 동작입니다.
-
-## Runtime 주요 구성 요소
-
-1. ### `Runner`
-
-      * **역할:** 단일 사용자 질의 실행의 진입점/오케스트레이터 (`run_async`)
-      * **기능:** Event Loop 관리, 이벤트 처리/커밋, 상위 전달
-
-2. ### 실행 로직 구성요소
-
-      * `Agent` (`BaseAgent`, `LlmAgent` 등)
-      * `Tools` (`BaseTool`, `FunctionTool`, `AgentTool` 등)
-      * `Callbacks` (사용자 정의 훅 함수)
-      * **기능:** 실제 판단/연산/외부 호출 수행 후 `Event`를 `yield`
-
-3. ### `Event`
-
-      * **역할:** Runner와 실행 로직 사이 메시지
-      * **기능:** 내용 + 부작용 의도(`actions`, 예: `state_delta`)를 캡슐화
-
-4. ### `Services`
-
-      * `SessionService`: Session 저장/로드, state 적용, event history 관리
-      * `ArtifactService`: 바이너리 아티팩트 저장/조회
-      * `MemoryService`: (선택) 사용자 장기 의미 메모리
-      * **기능:** Runner가 이벤트 액션을 영속화하는 백엔드 계층
-
-5. ### `Session`
-
-      * **역할:** 한 대화의 상태/이력 컨테이너
-      * **기능:** `state`, `events`, 아티팩트 참조 보관
-
-6. ### `Invocation`
-
-      * **역할:** 단일 사용자 질의에 대한 전체 처리 단위
-      * **기능:** 여러 agent run/LLM call/tool 실행/callback을 하나의 `invocation_id`로 묶음
-
-## 단순 invocation 흐름
-
-![intro_components.png](../assets/invocation-flow.png)
-
-예시(도구 호출이 있는 질의):
-
-1. 사용자 입력 수신
-2. Runner가 Session 로드/사용자 이벤트 기록
-3. Runner가 root agent 실행
-4. LLM이 도구 호출 필요 판단
-5. Agent가 FunctionCall 이벤트 `yield`
-6. Agent 일시중지
-7. Runner가 이벤트 기록/전달
-8. Agent 재개
-9. Agent가 도구 실행
-10. 도구 결과 반환
-11. Agent가 FunctionResponse 이벤트 `yield`
-12. Agent 일시중지
-13. Runner가 상태/아티팩트 델타 커밋 및 전달
-14. Agent 재개
-15. LLM 최종 응답 생성
-16. Agent가 최종 텍스트 이벤트 `yield`
-17. Agent 일시중지
-18. Runner가 기록/전달
-19. Agent 종료
-20. Runner 루프 종료
-
-## 중요한 Runtime 동작
-
-### 상태 업데이트 커밋 타이밍
-
-코드에서 상태를 바꿔도,
-해당 `state_delta`를 담은 이벤트가 `yield`되고 Runner가 처리한 뒤에야
-영속 커밋이 보장됩니다.
-
-즉, `yield` 이후 재개된 코드에서는 이전 이벤트의 상태 커밋을 신뢰할 수 있습니다.
-
-### Session State의 "Dirty Read"
-
-같은 invocation 내부에서,
-커밋 전 로컬 변경 상태가 읽히는 경우가 있습니다(Dirty Read).
-
-- 장점: 같은 invocation 단계 내 구성요소 간 빠른 협업
-- 주의: 커밋 전 실패 시 변경 유실 가능
-
-중요 상태 전환은 반드시 Runner가 처리할 이벤트로 커밋되도록 설계하세요.
-
-### 스트리밍 vs 비스트리밍 (`partial=True`)
-
-- 스트리밍: 부분 이벤트(`partial=True`)를 즉시 전달
-  - 일반적으로 Runner는 부분 이벤트의 `actions`는 커밋하지 않음
-- 최종 이벤트(`partial=False` 또는 `turn_complete=True`)에서
-  상태/아티팩트 델타를 원자적으로 커밋
-- 비스트리밍: 단일 non-partial 이벤트를 처리
-
-이 방식은 UI의 점진 출력과 상태 일관성을 동시에 달성합니다.
-
-## Async 중심 설계 (`run_async`)
-
-ADK Runtime은 비동기 실행을 기본으로 설계되어,
-LLM 응답 대기/도구 실행 같은 동시 작업을 효율적으로 처리합니다.
-
-- 주요 진입점: `Runner.run_async`
-- 동기 `run`은 편의 래퍼로, 내부적으로 `run_async`를 호출하는 경우가 많음
-
-### 동기 콜백/툴 사용 시 주의
-
-- 블로킹 I/O는 이벤트 루프 지연 유발 가능
-  - Python: `asyncio.to_thread` 등으로 완화 가능
-  - TypeScript: Promise 기반 비동기 I/O 권장
-- CPU-bound 동기 작업은 실행 스레드를 점유
-
-이 동작들을 이해하면 상태 일관성, 스트리밍 업데이트, 비동기 실행 관련 문제를
-더 예측 가능하게 설계/디버깅할 수 있습니다.
-
-## Runtime 주요 구성 요소
-
-ADK Runtime 안에서 여러 구성 요소가 함께 동작하며 단일 invocation을 처리합니다.
-각 구성 요소의 역할을 이해하면 Event Loop가 어떻게 돌아가는지 더 명확해집니다.
-
-1. ### `Runner`
-
-      * **역할:** 단일 사용자 질의에 대한 진입점이자 오케스트레이터(`run_async`)
-      * **기능:** Event Loop를 관리하고, 실행 로직이 `yield`한 이벤트를 받아 처리하며, `Service`와 함께 상태/아티팩트 변경을 커밋하고, 처리된 이벤트를 상위로 전달합니다.
-
-2. ### 실행 로직 구성 요소
-
-      * `Agent` (`BaseAgent`, `LlmAgent` 등)
-      * `Tools` (`BaseTool`, `FunctionTool`, `AgentTool` 등)
-      * `Callbacks`(사용자 정의 훅 함수)
-      * **기능:** 실제 판단, 계산, 외부 상호작용을 수행하고 그 결과를 `Event`로 `yield`합니다.
-
-3. ### `Event`
-
-      * **역할:** `Runner`와 실행 로직 사이를 오가는 메시지
-      * **기능:** 입력, 에이전트 응답, 도구 호출/결과, 상태 변경 요청, 제어 신호와 그에 따른 부작용 의도를 담습니다.
-
-4. ### `Services`
-
-      * `SessionService`: `Session` 저장/로드, state 적용, event history 관리
-      * `ArtifactService`: 바이너리 아티팩트 저장/조회
-      * `MemoryService`: 선택적으로 사용자 장기 메모리 관리
-      * **기능:** `Runner`가 이벤트 액션을 영속화하는 백엔드 계층입니다.
-
-5. ### `Session`
-
-      * **역할:** 한 대화의 상태와 히스토리를 담는 컨테이너
-      * **기능:** `state`, `events`, 관련 아티팩트 참조를 보관합니다.
-
-6. ### `Invocation`
-
-      * **역할:** 단일 사용자 질의에 대한 전체 처리 단위
-      * **기능:** 하나의 `invocation_id` 아래에서 여러 agent run, LLM call, tool execution, callback execution을 묶습니다.
-
-## 단순 invocation 흐름
-
-![intro_components.png](../assets/invocation-flow.png)
-
-도구 호출이 있는 질의의 단순화된 흐름은 다음과 같습니다.
-
-1. 사용자 입력 수신
-2. `Runner`가 `Session`을 로드하고 사용자 이벤트를 기록
-3. `Runner`가 root agent 실행
-4. LLM이 도구 호출이 필요하다고 판단
-5. Agent가 `FunctionCall` 이벤트를 `yield`
-6. Agent 일시중지
-7. `Runner`가 이벤트를 기록하고 상위로 전달
-8. Agent 재개
-9. Agent가 도구 실행
-10. 도구 결과 반환
-11. Agent가 `FunctionResponse` 이벤트를 `yield`
-12. Agent 일시중지
-13. `Runner`가 상태/아티팩트 델타를 커밋하고 전달
-14. Agent 재개
-15. LLM이 최종 응답 생성
-16. Agent가 최종 텍스트 이벤트를 `yield`
-17. Agent 일시중지
-18. `Runner`가 기록하고 전달
-19. Agent 종료
-20. `Runner` 루프 종료
-
-## 중요한 Runtime 동작
-
-### 상태 업데이트 커밋 타이밍
-
-코드에서 상태를 변경해도, 해당 `state_delta`를 담은 이벤트가 `yield`되고 `Runner`가 처리한 뒤에야
-영속 커밋이 보장됩니다.
-
-즉, `yield` 이후 재개된 코드에서는 이전 이벤트에서 커밋된 상태를 신뢰할 수 있습니다.
+다음 단순화된 의사코드는 `Runner`와 에이전트의 실행 로직 간의 상호작용을 보여줍니다:
 
 === "Python"
 
     ```py
-    # 에이전트 로직 내부(개념 예시)
+    # Runner의 메인 루프 로직 단순화
+    async def run_async(new_query, ...) -> AsyncGenerator[Event, None]:
+        # 1. 새 질의를 세션 이벤트 히스토리에 추가 (SessionService를 통해)
+        await session_service.append_event(session, Event(author='user', content=new_query))
 
-    # 1. 상태 변경
+        # 2. 에이전트를 호출하여 이벤트 루프 시작
+        agent_event_generator = agent_to_run.run_async(context)
+
+        async for event in agent_event_generator:
+            # 3. 생성된 이벤트를 처리하고 변경사항 커밋
+            await session_service.append_event(session, event) # 상태/아티팩트 델타 등 커밋
+            # memory_service.update_memory(...) # 해당되는 경우
+            # artifact_service는 에이전트 실행 중 컨텍스트를 통해 이미 호출되었을 수 있음
+
+            # 4. 상위 스트림 처리(예: UI 렌더링)를 위해 이벤트 yield
+            yield event
+            # Runner는 yield 후 에이전트 제너레이터가 계속될 수 있음을 암시적으로 신호
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // Runner의 메인 루프 로직 단순화
+    async * runAsync(newQuery: Content, ...): AsyncGenerator<Event, void, void> {
+        // 1. 새 질의를 세션 이벤트 히스토리에 추가 (SessionService를 통해)
+        await sessionService.appendEvent({
+            session,
+            event: createEvent({author: 'user', content: newQuery})
+        });
+
+        // 2. 에이전트를 호출하여 이벤트 루프 시작
+        const agentEventGenerator = agentToRun.runAsync(context);
+
+        for await (const event of agentEventGenerator) {
+            // 3. 생성된 이벤트를 처리하고 변경사항 커밋
+            await sessionService.appendEvent({session, event}); // 상태/아티팩트 델타 등 커밋
+            // memoryService.updateMemory(...) # 해당되는 경우
+
+            // 4. 상위 스트림 처리를 위해 이벤트 yield
+            yield event;
+            // Runner는 yield 후 에이전트 제너레이터가 계속될 수 있음을 암시적으로 신호
+        }
+    }
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:conceptual_loop"
+    ```
+
+=== "Go"
+
+    ```go
+    // Go에서 에이전트 런타임은 채널이나 이터레이터를 활용합니다
+    // 개념적 Runner 루프 로직
+    func (r *Runner) RunAsync(ctx context.Context, session *session.Session, query *session.Content) iter.Seq2[*session.Event, error] {
+        return func(yield func(*session.Event, error) bool) {
+            // 1. 사용자 쿼리 이벤트 추가
+            userEvent := session.NewEvent(ctx, r.invocationID)
+            userEvent.Author = "user"
+            userEvent.Content = query
+            r.sessionService.AppendEvent(ctx, session, userEvent)
+
+            // 2. 에이전트 실행
+            for event, err := range r.agent.Run(ctx) {
+                if err != nil {
+                    yield(nil, err)
+                    return
+                }
+                // 3. 상태 커밋 및 히스토리 기록
+                r.sessionService.AppendEvent(ctx, session, event)
+
+                // 4. 상위 스트림으로 전달
+                if !yield(event, nil) {
+                    return
+                }
+            }
+        }
+    }
+    ```
+
+=== "Java"
+
+    ```java
+    // Java에서 Flowable/Observable 기반의 리액티브 런타임 루프 단순화
+    public Flowable<Event> runAsync(Session session, Content newQuery) {
+        Event userEvent = Event.builder().author("user").content(newQuery).build();
+        return sessionService.appendEvent(session, userEvent)
+            .andThen(Flowable.defer(() -> agentToRun.runAsync(context)))
+            .concatMap(event -> sessionService.appendEvent(session, event).andThen(Flowable.just(event)));
+    }
+    ```
+
+### 실행 로직 관점
+
+에이전트 구현 내부에서는 이벤트 스트림을 생성합니다:
+
+=== "Python"
+
+    ```py
+    # 에이전트 실행 로직 내부
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        # 중간 생각이나 부분 텍스트 yield
+        yield Event(author=self.name, content=Content(parts=[Part.from_text("생각 중...")]), partial=True)
+        # --- 일시 중지 --- Runner가 처리 후 재개 ---
+
+        # 상태 수정 준비
+        ctx.session.state['my_key'] = 'new_value'
+        # 상태 델타와 함께 이벤트 yield
+        yield Event(author=self.name, actions=EventActions(state_delta={'my_key': 'new_value'}))
+        # --- 일시 중지 --- Runner/SessionService가 'my_key' 커밋 후 재개 ---
+
+        # 이제 'my_key'는 확실하게 커밋됨
+        yield Event(author=self.name, content=Content(parts=[Part.from_text("완료!")]))
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // TypeScript 에이전트 실행 로직 내부
+    async * _runAsyncImpl(ctx: InvocationContext): AsyncGenerator<Event, void, void> {
+        yield createEvent({
+            author: this.name,
+            content: createContent({parts: [createPart({text: "생각 중..."})]}),
+            partial: true
+        });
+
+        ctx.state.set('my_key', 'new_value');
+        yield createEvent({
+            author: this.name,
+            actions: createEventActions({stateDelta: {'my_key': 'new_value'}})
+        });
+
+        yield createEvent({
+            author: this.name,
+            content: createContent({parts: [createPart({text: "완료!"})]})
+        });
+    }
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:execution_logic"
+    ```
+
+`Event` 객체를 매개로 `Runner`와 실행 로직 간에 이루어지는 협력적인 yield/일시 중지/재개 주기는 ADK 런타임의 핵심을 형성합니다.
+
+## 런타임의 핵심 구성요소
+
+ADK 런타임 내에서 에이전트 호출을 실행하기 위해 여러 구성요소가 함께 작동합니다:
+
+1. ### `Runner`
+
+      * **역할:** 단일 사용자 질의에 대한 메인 진입점이자 오케스트레이터(`run_async`).
+      * **기능:** 전반적인 이벤트 루프를 관리하고, 실행 로직에서 생성된 이벤트를 수신하며, 서비스와 협력하여 이벤트 작업(상태/아티팩트 변경)을 처리 및 커밋하고, 처리된 이벤트를 상위 스트림(예: UI)으로 전달합니다. 생성된 이벤트를 기반으로 대화를 턴별로 이끕니다(`google.adk.runners`에 정의됨).
+
+2. ### 실행 로직 구성요소 (Execution Logic Components)
+
+      * **역할:** 커스텀 코드와 핵심 에이전트 기능이 포함된 부분.
+      * **구성요소:**
+        * `Agent` (`BaseAgent`, `LlmAgent` 등): 정보를 처리하고 조치를 결정하는 기본 로직 단위. 이벤트를 생성하는 `_run_async_impl` 메서드를 구현합니다.
+        * `Tools` (`BaseTool`, `FunctionTool`, `AgentTool` 등): 에이전트(주로 `LlmAgent`)가 외부 세계와 상호작용하거나 특정 작업을 수행하기 위해 사용하는 외부 함수 또는 기능. 실행되어 결과를 반환하며, 이는 이벤트로 래핑됩니다.
+        * `Callbacks` (함수): 실행 흐름의 특정 지점에 연결되어 동작이나 상태를 잠재적으로 수정하는 에이전트에 연결된 사용자 정의 함수(예: `before_agent_callback`, `after_model_callback`). 그 효과는 이벤트에 캡처됩니다.
+      * **기능:** 실제 사고, 계산 또는 외부 상호작용을 수행합니다. **`Event` 객체를 생성(yield)**하고 Runner가 처리할 때까지 일시 중지하여 결과나 요구사항을 전달합니다.
+
+3. ### `Event`
+
+      * **역할:** `Runner`와 실행 로직 사이에서 주고받는 메시지.
+      * **기능:** 원자적 발생(사용자 입력, 에이전트 텍스트, 도구 호출/결과, 상태 변경 요청, 제어 신호)을 나타냅니다. 발생 내용과 의도된 부수 효과(`state_delta`와 같은 `actions`)를 모두 전달합니다.
+
+4. ### `Services`
+
+      * **역할:** 영구 리소스 또는 공유 리소스를 관리하는 백엔드 구성요소. 이벤트 처리 중 주로 `Runner`에 의해 사용됩니다.
+      * **구성요소:**
+        * `SessionService` (`BaseSessionService`, `InMemorySessionService` 등): `Session` 객체를 저장/로드하고, `state_delta`를 세션 상태에 적용하며, 이벤트를 `event history`에 추가하는 등 `Session`을 관리합니다.
+        * `ArtifactService` (`BaseArtifactService`, `InMemoryArtifactService`, `GcsArtifactService` 등): 바이너리 아티팩트 데이터의 저장 및 조회를 관리합니다. 실행 로직 중에 컨텍스트를 통해 `save_artifact`가 호출되지만 이벤트의 `artifact_delta`는 Runner/SessionService에 대한 작업을 확인합니다.
+        * `MemoryService` (`BaseMemoryService` 등): (선택사항) 사용자의 여러 세션에 걸친 장기 시맨틱 메모리를 관리합니다.
+      * **기능:** 영속성 계층을 제공합니다. `Runner`는 이들과 상호작용하여 실행 로직이 재개되기 *전에* `event.actions`로 표시된 변경사항이 안정적으로 저장되도록 합니다.
+
+5. ### `Session`
+
+      * **역할:** 사용자와 애플리케이션 간의 *특정 단일 대화*에 대한 상태와 기록을 보관하는 데이터 컨테이너.
+      * **기능:** 현재 `state` 딕셔너리, 모든 과거 `events` 목록(`event history`), 관련 아티팩트에 대한 참조를 저장합니다. `SessionService`에서 관리하는 상호작용의 기본 레코드입니다.
+
+6. ### `Invocation`
+
+      * **역할:** `Runner`가 사용자 질의를 수신한 순간부터 에이전트 로직이 해당 질의에 대한 이벤트 생성을 마칠 때까지 *단일* 질의에 대한 응답으로 발생하는 모든 것을 나타내는 개념적 용어.
+      * **기능:** 호출에는 단일 `InvocationContext` 내의 `invocation_id`로 연결된 여러 에이전트 실행(에이전트 이전 또는 `AgentTool` 사용 시), 여러 LLM 호출, 도구 실행 및 콜백 실행이 포함될 수 있습니다. `temp:` 접두사가 붙은 상태 변수는 엄격하게 단일 호출로 범위가 지정되며 이후 삭제됩니다.
+
+## 작동 방식: 단순화된 호출 흐름
+
+LLM 에이전트가 도구를 호출하는 일반적인 사용자 질의에 대한 단순화된 흐름을 추적해 보겠습니다:
+
+![intro_components.png](../assets/invocation-flow.png)
+
+### 단계별 분석
+
+1. **사용자 입력:** 사용자가 질의를 전송합니다(예: "프랑스의 수도는 어디인가요?").
+2. **Runner 시작:** `Runner.run_async`가 시작됩니다. `SessionService`와 상호작용하여 관련 `Session`을 로드하고 사용자 질의를 세션 히스토리에 첫 번째 `Event`로 추가합니다. `InvocationContext`(`ctx`)가 준비됩니다.
+3. **에이전트 실행:** `Runner`는 지정된 루트 에이전트(예: `LlmAgent`)에서 `agent.run_async(ctx)`를 호출합니다.
+4. **LLM 호출 (예시):** `Agent_Llm`은 정보를 얻기 위해 도구를 호출해야 한다고 결정합니다. `LLM`에 대한 요청을 준비합니다. LLM이 `MyTool`을 호출하기로 결정했다고 가정합니다.
+5. **FunctionCall 이벤트 Yield:** `Agent_Llm`은 LLM으로부터 `FunctionCall` 응답을 수신하고, 이를 `Event(author='Agent_Llm', content=Content(parts=[Part(function_call=...)]))`로 래핑하여 이 이벤트를 `yield` 또는 `emit`합니다.
+6. **에이전트 일시 중지:** `Agent_Llm`의 실행은 `yield` 직후 일시 중지됩니다.
+7. **Runner 처리:** `Runner`는 FunctionCall 이벤트를 수신합니다. 이를 `SessionService`에 전달하여 히스토리에 기록합니다. 그런 다음 `Runner`는 이벤트를 상위 스트림(`User` 또는 애플리케이션)으로 yield합니다.
+8. **에이전트 재개:** `Runner`는 이벤트가 처리되었음을 신호하고 `Agent_Llm`은 실행을 재개합니다.
+9. **도구 실행:** 이제 `Agent_Llm`의 내부 흐름은 요청된 `MyTool` 실행을 진행합니다. `tool.run_async(...)`를 호출합니다.
+10. **도구 결과 반환:** `MyTool`이 실행되고 결과를 반환합니다(예: `{'result': 'Paris'}`).
+11. **FunctionResponse 이벤트 Yield:** 에이전트(`Agent_Llm`)는 도구 결과를 `FunctionResponse` 파트가 포함된 `Event`로 래핑합니다. 도구가 상태를 수정(`state_delta`)하거나 아티팩트를 저장(`artifact_delta`)한 경우 이 이벤트에 `actions`가 포함될 수도 있습니다. 에이전트는 이 이벤트를 `yield`합니다.
+12. **에이전트 일시 중지:** `Agent_Llm`이 다시 일시 중지됩니다.
+13. **Runner 처리:** `Runner`는 FunctionResponse 이벤트를 수신합니다. 모든 `state_delta`/`artifact_delta`를 적용하고 이벤트를 히스토리에 추가하는 `SessionService`에 전달합니다. `Runner`는 이벤트를 상위 스트림으로 yield합니다.
+14. **에이전트 재개:** `Agent_Llm`이 재개되며, 이제 도구 결과와 모든 상태 변경사항이 커밋되었음을 알 수 있습니다.
+15. **최종 LLM 호출 (예시):** `Agent_Llm`은 자연어 응답을 생성하기 위해 도구 결과를 `LLM`으로 다시 보냅니다.
+16. **최종 텍스트 이벤트 Yield:** `Agent_Llm`은 LLM으로부터 최종 텍스트를 받아 `Event(author='Agent_Llm', content=Content(parts=[Part(text=...)]))`로 래핑하여 `yield`합니다.
+17. **에이전트 일시 중지:** `Agent_Llm`이 일시 중지됩니다.
+18. **Runner 처리:** `Runner`는 최종 텍스트 이벤트를 수신하고 히스토리를 위해 `SessionService`에 전달한 후 `User`에게 상위 스트림으로 yield합니다. 이는 `is_final_response()`로 표시될 가능성이 높습니다.
+19. **에이전트 재개 및 완료:** `Agent_Llm`이 재개됩니다. 이번 호출에 대한 작업을 완료했으므로 `run_async` 제너레이터가 종료됩니다.
+20. **Runner 완료:** `Runner`는 에이전트의 제너레이터가 소진되었음을 확인하고 이번 호출에 대한 루프를 완료합니다.
+
+## 중요한 런타임 동작
+
+### 상태 업데이트 및 커밋 시점 (State Updates & Commitment Timing)
+
+* **규칙:** 코드(에이전트, 도구 또는 콜백)가 세션 상태를 수정할 때(예: `context.state['my_key'] = 'new_value'`), 이 변경사항은 처음에 현재 `InvocationContext` 내에 로컬로 기록됩니다. 변경사항은 해당 `state_delta`를 포함하는 `Event`가 코드에 의해 `yield`되고 이후 `Runner`에 의해 처리된 *후에만* **영구 저장되는 것(SessionService에 의해 저장됨)이 보장**됩니다.
+* **의미:** `yield`에서 재개된 후 실행되는 코드는 *생성된 이벤트*에 표시된 상태 변경사항이 커밋되었다고 안심하고 가정할 수 있습니다.
+
+=== "Python"
+
+    ```py
+    # 에이전트 로직 내부 (개념적)
+
+    # 1. 상태 수정
     ctx.session.state['status'] = 'processing'
     event1 = Event(..., actions=EventActions(state_delta={'status': 'processing'}))
 
-    # 2. 델타가 포함된 이벤트를 yield
+    # 2. 델타와 함께 이벤트 yield
     yield event1
-    # --- 일시중지 --- Runner가 event1을 처리하고 SessionService가 'status' = 'processing'을 커밋
+    # --- 일시 중지 --- Runner가 event1을 처리하고 SessionService가 'status' = 'processing'을 커밋 ---
 
     # 3. 실행 재개
-    # 이제 커밋된 상태를 안전하게 신뢰할 수 있습니다.
-    current_status = ctx.session.state['status']  # 'processing'으로 보장
+    # 이제 커밋된 상태에 의존해도 안전합니다
+    current_status = ctx.session.state['status'] # 'processing'임이 보장됨
     print(f"Status after resuming: {current_status}")
     ```
 
 === "TypeScript"
 
     ```typescript
-    // 에이전트 로직 내부(개념 예시)
+    // 에이전트 로직 내부 (개념적)
 
-    // 1. 상태 변경
+    // 1. 상태 수정
     ctx.state.set('status', 'processing');
     const event1 = createEvent({
         actions: createEventActions({stateDelta: {'status': 'processing'}}),
-        // ... other event fields
+        // ... 기타 이벤트 필드
     });
 
-    // 2. 델타가 포함된 이벤트를 yield
+    // 2. 델타와 함께 이벤트 yield
     yield event1;
-    // --- 일시중지 --- Runner가 event1을 처리하고 SessionService가 'status' = 'processing'을 커밋
+    // --- 일시 중지 --- Runner가 event1을 처리하고 SessionService가 'status' = 'processing'을 커밋 ---
 
     // 3. 실행 재개
-    const currentStatus = ctx.session.state['status']; // 'processing'으로 보장
+    const currentStatus = ctx.session.state['status']; // 'processing'임이 보장됨
     console.log(`Status after resuming: ${currentStatus}`);
     ```
 
 === "Go"
 
     ```go
-    // 에이전트 로직 내부(개념 예시)
-
+    // Go 에이전트 로직 내부 (개념적)
     func (a *Agent) RunConceptual(ctx agent.InvocationContext) iter.Seq2[*session.Event, error] {
       return func(yield func(*session.Event, error) bool) {
           updateData := map[string]interface{}{"field_1": "value_2"}
-          eventWithStateChange := session.NewEvent(ctx.InvocationID())
+          eventWithStateChange := session.NewEvent(ctx, ctx.InvocationID())
           eventWithStateChange.Author = a.Name()
           eventWithStateChange.Actions = &session.EventActions{StateDelta: updateData}
 
-          yield(eventWithStateChange, nil)
+          if !yield(eventWithStateChange, nil) {
+              return
+          }
 
-          val := ctx.State().Get("field_1")
-          fmt.Printf("Resumed execution. Value of field_1 is now: %v\n", val)
+          // Runner가 이벤트를 처리하고 커밋합니다
+          finalEvent := session.NewEvent(ctx, ctx.InvocationID())
+          finalEvent.Author = a.Name()
+          yield(finalEvent, nil)
       }
     }
     ```
@@ -308,164 +322,94 @@ ADK Runtime 안에서 여러 구성 요소가 함께 동작하며 단일 invocat
 === "Java"
 
     ```java
-    // 에이전트 로직 내부(개념 예시)
-    ConcurrentMap<String, Object> updateData = new ConcurrentHashMap<>();
-    updateData.put("field_1", "value_2");
+    ConcurrentHashMap<String, Object> stateChanges = new ConcurrentHashMap<>();
+    stateChanges.put("status", "processing");
 
-    EventActions actions = EventActions.builder().stateDelta(updateData).build();
-    Content eventContent = Content.builder().parts(Part.fromText("State updated.")).build();
+    EventActions actions = EventActions.builder().stateDelta(stateChanges).build();
+    Event event1 = Event.builder().actions(actions).build();
 
-    Event eventWithStateChange = Event.builder()
-        .author(self.name())
-        .actions(actions)
-        .content(Optional.of(eventContent))
-        .build();
-
-    // 이벤트를 yield/emmit한 뒤 Runner가 커밋을 완료해야 다음 단계가 안전합니다.
-    Object val = ctx.session().state().get("field_1");
-    System.out.println("Resumed execution. Value of field_1 is now: " + val);
+    return Flowable.just(event1)
+        .map(emittedEvent -> {
+            String currentStatus = (String) ctx.session().state().get("status");
+            System.out.println("Status after resuming: " + currentStatus);
+            return emittedEvent;
+        });
     ```
 
-### Session State의 "Dirty Read"
+=== "Kotlin"
 
-같은 invocation 내부에서는 커밋 전 로컬 변경 상태를 읽는 경우가 있습니다.
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:state_update_timing"
+    ```
 
-- 장점: 같은 invocation 단계 내 구성요소 간 빠른 협업
-- 주의: 커밋 전에 실패하면 변경이 유실될 수 있음
+### 세션 상태의 "더티 리드 (Dirty Reads)"
 
-중요 상태 전환은 반드시 `Runner`가 처리할 이벤트로 커밋되도록 설계하세요.
-
-### 스트리밍 vs 비스트리밍 (`partial=True`)
-
-- 스트리밍: 부분 이벤트(`partial=True`)를 즉시 전달
-  - 일반적으로 `Runner`는 부분 이벤트의 `actions`를 커밋하지 않습니다.
-- 최종 이벤트(`partial=False` 또는 `turn_complete=True`)에서 상태/아티팩트 델타를 원자적으로 커밋
-- 비스트리밍: 단일 non-partial 이벤트를 처리
-
-이 방식은 UI의 점진 출력과 상태 일관성을 동시에 달성합니다.
-
-## Async 중심 설계 (`run_async`)
-
-ADK Runtime은 비동기 실행을 기본으로 설계되어 LLM 응답 대기와 도구 실행 같은 동시 작업을 효율적으로 처리합니다.
-
-- 주요 진입점: `Runner.run_async`
-- 동기 `run`은 편의 래퍼인 경우가 많고, 내부적으로 `run_async`를 호출합니다.
-
-### 동기 콜백/툴 사용 시 주의
-
-- 블로킹 I/O는 이벤트 루프 지연을 유발할 수 있습니다.
-  - Python: `asyncio.to_thread` 등으로 완화 가능
-  - TypeScript: Promise 기반 비동기 I/O 권장
-- CPU-bound 동기 작업은 실행 스레드를 점유할 수 있습니다.
-
-이 동작을 이해하면 상태 일관성, 스트리밍 업데이트, 비동기 실행 관련 문제를 더 예측 가능하게 설계하고 디버깅할 수 있습니다.
-
-## 언어별 핵심 예제
-
-아래 예제는 상태 커밋 타이밍과 `dirty read`를 언어별로 다시 보여줍니다. 영어 원문의 탭 구조와 맞추기 위한 보강 블록입니다.
-
-### 상태 업데이트 커밋 타이밍
+* **정의:** 커밋은 yield *후에* 발생하지만, *동일한 호출 내에서 나중에* 실행되지만 상태 변경 이벤트가 실제로 생성되고 처리되기 *전에* 실행되는 코드는 **로컬의 커밋되지 않은 변경사항을 볼 수 있는 경우가 많습니다**. 이를 "더티 리드(dirty read)"라고 합니다.
 
 === "Python"
 
-    ```python
-    async def run_agent(ctx):
-        ctx.session.state["status"] = "processing"
-        yield Event(actions=EventActions(state_delta={"status": "processing"}))
-        print("Committed status:", ctx.session.state["status"])
+    ```py
+    # before_agent_callback의 코드
+    callback_context.state['field_1'] = 'value_1'
+    # 상태는 로컬에서 'value_1'로 설정되었지만 아직 Runner에 의해 커밋되지 않음
+
+    # ... 에이전트 실행 ...
+
+    # 동일한 호출 내에서 나중에 호출된 도구의 코드
+    # 읽기 가능(더티 리드)하지만 'value_1'이 아직 영구적으로 저장되지는 않음
+    val = tool_context.state['field_1'] # 여기서 'val'은 'value_1'일 가능성이 높음
+    print(f"Dirty read value in tool: {val}")
     ```
 
 === "TypeScript"
 
     ```typescript
-    async function runAgent(ctx: InvocationContext) {
-      ctx.session.state["status"] = "processing";
-      yield new Event({ actions: { stateDelta: { status: "processing" } } });
-      console.log("Committed status:", ctx.session.state["status"]);
-    }
+    // beforeAgentCallback의 코드
+    callbackContext.state.set('field_1', 'value_1');
+
+    // --- 에이전트 실행 ... ---
+
+    // 동일한 호출 내에서 나중에 호출된 도구의 코드
+    const val = toolContext.state.get('field_1');
+    console.log(`Dirty read value in tool: ${val}`);
     ```
 
 === "Go"
 
     ```go
-    func runAgent(ctx *InvocationContext) {
-      ctx.Session.State["status"] = "processing"
-      yield(Event{Actions: EventActions{StateDelta: map[string]any{"status": "processing"}}})
-      fmt.Println("Committed status:", ctx.Session.State["status"])
-    }
+    // before_agent_callback의 코드
+    ctx.State.Set("field_1", "value_1")
+
+    // ... 에이전트 실행 ...
+
+    val := ctx.State.Get("field_1")
+    fmt.Printf("Dirty read value in tool: %v\n", val)
     ```
 
 === "Java"
 
     ```java
-    void runAgent(InvocationContext ctx) {
-        ctx.session().state().put("status", "processing");
-        yield(new Event(new EventActions().setStateDelta(Map.of("status", "processing"))));
-        System.out.println("Committed status: " + ctx.session().state().get("status"));
-    }
+    callbackContext.state().put("field_1", "value_1");
+    Object val = toolContext.state().get("field_1");
+    System.out.println("Dirty read value in tool: " + val);
     ```
 
-### Session State의 Dirty Read 재확인
+=== "Kotlin"
 
-=== "Python"
-
-    ```python
-    async def inspect(ctx):
-        value = ctx.session.state.get("field_1")
-        print("dirty read:", value)
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:dirty_read"
     ```
 
-=== "TypeScript"
+### 스트리밍 vs 비스트리밍 출력 (`partial=True`)
 
-    ```typescript
-    async function inspect(ctx: InvocationContext) {
-      const value = ctx.session.state.get("field_1");
-      console.log("dirty read:", value);
-    }
-    ```
+* **스트리밍:** LLM은 토큰별로 또는 작은 청크로 응답을 생성합니다. 프레임워크는 단일 응답에 대해 여러 `Event` 객체를 생성하며 대부분 `partial=True`를 가집니다. `Runner`는 `partial=True`인 이벤트를 받으면 즉시 상위 스트림으로 전달하지만 `state_delta`와 같은 `actions` 처리는 건너뜁니다. 마지막 완료 이벤트(`partial=False`)에서만 `actions`를 완전히 처리하여 상태를 커밋합니다.
+* **비스트리밍:** LLM이 전체 응답을 한 번에 생성합니다. `partial=False`인 단일 이벤트를 생성하고 `Runner`가 이를 완전히 처리합니다.
 
-=== "Go"
+## 비동기 기본 원칙 (`run_async`)
 
-    ```go
-    func inspect(ctx *InvocationContext) {
-      value := ctx.Session.State["field_1"]
-      fmt.Println("dirty read:", value)
-    }
-    ```
-
-=== "Java"
-
-    ```java
-    void inspect(InvocationContext ctx) {
-        Object value = ctx.session().state().get("field_1");
-        System.out.println("dirty read: " + value);
-    }
-    ```
-
-## Kotlin 실행 루프 예제
-
-영어 원문에 추가된 Kotlin 실행 루프 예제를 아래에 함께 제공합니다.
-
-### 개념적 루프
-
-```kotlin
---8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:conceptual_loop"
-```
-
-### 실행 로직
-
-```kotlin
---8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:execution_logic"
-```
-
-### 상태 업데이트 타이밍
-
-```kotlin
---8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:state_update_timing"
-```
-
-### Dirty Read 예제
-
-```kotlin
---8<-- "examples/kotlin/snippets/runtime/RunnerLoop.kt:dirty_read"
-```
+* **핵심 설계:** ADK 런타임은 비동기 패턴 및 라이브러리(Python의 `asyncio`, Java의 `RxJava`, TypeScript의 네이티브 `Promise` 및 `AsyncGenerator`)를 기반으로 구축되어 차단 없이 동시 작업을 효율적으로 처리합니다.
+* **메인 진입점:** `Runner.run_async`가 에이전트 호출을 실행하는 기본 메서드입니다.
+* **동기 편의 메서드 (`run`):** 동기식 `Runner.run` 메서드는 주로 편의를 위해 존재합니다(예: 간단한 스크립트 또는 테스트). 내부적으로 `Runner.run`은 `Runner.run_async`를 호출하고 비동기 이벤트 루프 실행을 대신 관리합니다.
+* **동기 콜백/도구:**
+    * **블로킹 I/O:** 장시간 실행되는 동기 I/O 작업의 경우, 프레임워크가 항상 지연(stall)을 방지할 수 있는 것은 아닙니다. Python ADK는 asyncio 이벤트 루프에서 동기 도구 함수를 인라인으로 호출하므로 내부의 블로킹 입출력은 루프를 멈추게 합니다. 라이브 모드에서는 `RunConfig.tool_thread_pool_config`를 설정하여 백그라운드 스레드 풀에서 도구 실행을 대신 실행할 수 있습니다. Java ADK는 종종 블로킹 호출에 적절한 RxJava 스케줄러나 래퍼를 활용합니다. TypeScript에서 프레임워크는 단순히 함수를 await하며, 동기 함수가 블로킹 I/O를 수행하면 이벤트 루프가 멈춥니다. 가능한 한 항상 비동기 I/O API(Promise 반환)를 사용해야 합니다.
+    * **CPU 바운드 작업:** 순수 CPU 집약적인 동기 작업은 두 환경 모두에서 실행 스레드를 차단합니다.

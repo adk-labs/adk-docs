@@ -1,25 +1,25 @@
-# ADK エージェント用の Claude モデル
+# ADK エージェント用 Claude モデル
 
 <div class="language-support-tag">
    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
-Python と Java の両方で、ADK と共に Anthropic の Claude モデルを使用できます。以下から、使用する言語とバックエンドに対応するパスを選択してください。
+Python と Java の両方で ADK とともに Anthropic の Claude モデルを使用できます。以下の言語とバックエンドに一致するパスを選択してください。
 
 ## Python
 
-Python から Claude モデルを使用する方法は以下の通りです：
+Python からは次の方法で Claude モデルを使用できます。
 
-- **ネイティブ、Agent Platform 上:** `Claude` ラッパーを登録し、Claude モデル文字列を使用します。[Agent Platform 上の Anthropic Claude](/ja/agents/models/agent-platform/#anthropic-claude) セクションを参照してください。
-- **直接の Anthropic API、LiteLLM 経由:** Anthropic API キーと共に `LiteLlm` コネクタを使用します。[LiteLLM](/ja/agents/models/litellm/#anthropic-thinking-blocks) セクションを参照してください。
+- **Agent Platform ネイティブ:** Claude モデル文字列を直接渡します。ADK のレジストリがそれを `Claude` ラッパーにルーティングします。詳細については、[Agent Platform 上の Anthropic Claude](/agents/models/agent-platform/#anthropic-claude) を参照してください。
+- **LiteLLM を介した直接 Anthropic API:** Anthropic API キーとともに `LiteLlm` コネクタを使用します。詳細については、[LiteLLM](/agents/models/litellm/#anthropic-thinking-blocks) を参照してください。
 
 ## Java
 
-Java では、ADK の `Claude` ラッパークラスを使用して、Anthropic API キーまたは Agent Platform バックエンド経由で Java ADK アプリケーションに Anthropic の Claude モデルを直接統合できます。また、Google Cloud Agent Platform サービス経由で Claude にアクセスすることもできます。詳細は [Agent Platform のサードパーティモデル](/ja/agents/models/agent-platform/#anthropic-claude) セクションを参照してください。
+Java では、ADK の `Claude` ラッパー クラスを使用して、Anthropic API キーまたは Agent Platform バックエンドで Claude モデルを直接統合できます。Google Cloud Agent Platform サービスを通じて Claude にアクセスすることもできます。[Agent Platform 上のサードパーティ モデル](/agents/models/agent-platform/#anthropic-claude) を参照してください。
 
 ### はじめに
 
-以下のコード例は、エージェントで Claude モデルを使用する基本実装を示します：
+次のコード例は、エージェントで Claude モデルを使用するための基本的な実装を示しています。
 
 ```java
 public static LlmAgent createAgent() {
@@ -40,28 +40,28 @@ public static LlmAgent createAgent() {
 }
 ```
 
-### 事前準備
+### 前提条件
 
-- **依存関係:** Java ADK の `com.google.adk.models.Claude` ラッパーは、Anthropic 公式の Java SDK のクラスに依存しています。これらは通常、*トランジティブ依存関係*として含まれます。詳細は [Anthropic Java SDK](https://github.com/anthropics/anthropic-sdk-java) を参照してください。
-- **Anthropic API キー:** Anthropic から API キーを取得し、シークレットマネージャー等で安全に管理してください。
+- **依存関係:** Java ADK の `com.google.adk.models.Claude` ラッパーは Anthropic の公式 Java SDK のクラスに依存しており、通常は*推移的依存関係*として含まれます。詳細については、[Anthropic Java SDK](https://github.com/anthropics/anthropic-sdk-java) を参照してください。
+- **Anthropic API キー:** Anthropic から API キーを取得し、シークレット マネージャーを使用して安全に管理します。
 
 ### 実装例
 
-希望する Claude モデル名と、API キーを設定した `AnthropicOkHttpClient` を用いて `com.google.adk.models.Claude` をインスタンス化します。次に、以下の例のように `Claude` インスタンスを `LlmAgent` に渡します：
+`com.google.adk.models.Claude` をインスタンス化し、目的の Claude モデル名と API キーで構成された `AnthropicOkHttpClient` を提供します。次に、以下の例に示すように、`Claude` インスタンスを `LlmAgent` に渡します。
 
 ```java
 import com.anthropic.client.AnthropicClient;
 import com.google.adk.agents.LlmAgent;
 import com.google.adk.models.Claude;
-import com.anthropic.client.okhttp.AnthropicOkHttpClient; // Anthropic SDKから提供
+import com.anthropic.client.okhttp.AnthropicOkHttpClient; // Anthropic SDK より
 
 public class DirectAnthropicAgent {
 
-  private static final String CLAUDE_MODEL_ID = "claude-sonnet-4-6"; // お好みの Claude モデル名
+  private static final String CLAUDE_MODEL_ID = "claude-sonnet-4-6"; // または好みの Claude モデル
 
   public static LlmAgent createAgent() {
 
-    // 機密キーは安全な設定から読み込むことを推奨します
+    // 機密キーは安全な構成からロードすることをお勧めします
     AnthropicClient anthropicClient = AnthropicOkHttpClient.builder()
         .apiKey("ANTHROPIC_API_KEY")
         .build();
@@ -75,7 +75,7 @@ public class DirectAnthropicAgent {
         .name("claude_direct_agent")
         .model(claudeModel)
         .instruction("You are a helpful AI assistant powered by Anthropic Claude.")
-        // ... other LlmAgent configurations
+        // ... その他の LlmAgent 構成
         .build();
   }
 

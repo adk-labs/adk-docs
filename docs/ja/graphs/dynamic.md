@@ -1,394 +1,557 @@
-# 動的ワークフロー
+# Dynamic agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-ADK フレームワークは、[グラフベースワークフロー](/ja/workflows/)の
-より柔軟で強力な代替手段として、ワークフローをプログラム的に定義する方法を
-提供します。グラフベースのアプローチは、ワークフローノードを使って複数
-ステップの静的なプロセス構造を組み立てるのに便利です。しかし、ワークフローの
-ロジックパスが反復ループや複雑な分岐ロジックを含むようになると、グラフ
-ベースのアプローチは要件に適さなくなったり、管理が煩雑になりすぎたりする
-ことがあります。
+The ADK framework provides a programmatic way to define workflows as a more
+flexible and powerful alternative to [graph-based workflows](/graphs/).
+Using a graph-based approach provides a convenient way to compose multi-step,
+static process structures with workflow nodes. However, if the logic path for
+your workflow is more complex, with iterative loops or complex branching logic,
+a graph-based approach may not suit your needs, or may become too unwieldy to
+manage.
 
-ADK の動的ワークフローでは、グラフベースのパス構造を脇に置き、選択した
-プログラミング言語の力を全面的に使ってワークフローを構築できます。動的
-ワークフローでは、シンプルなデコレータでワークフローを作り、ワークフロー
-ノードを関数として呼び出し、複雑なルーティングロジックを構築できます。
-ADK の動的ワークフローには次の利点があります。
+Dynamic workflows in ADK allow you to put aside graph-based path structures and
+use the full power of your chosen programming language to build workflows. With
+dynamic workflows, you can create workflows with simple decorators (Python) or
+constructor functions (Go), invoke workflow nodes as functions, and build
+complex routing logic. Here are some of the benefits of dynamic workflows in ADK:
 
-- **柔軟な制御フロー:** 静的グラフでは表現が難しい、または不可能なループ、
-  条件分岐、再帰を使って実行順序を動的に定義できます。
-- **プログラミング中心の体験:** グラフベースのルーティングの代わりに、
-  `while` ループや `async/await` のような馴染み深い構文を使えます。
-- **自動チェックポイント:** 動的ワークフローは各ノード実行を追跡します。
-  ワークフロー再開時には成功済みのサブノードを自動的にスキップするため、
-  複雑なロジックでも既定で耐障害性と再開可能性を持ちます。
-- **カプセル化:** 低レベルノードを内部で組み合わせる *parent* ノードに
-  ビジネスロジックを包み込み、ワークフロー全体のグラフをきれいで管理しやすい
-  状態に保てます。
-
-!!! example "Alpha リリース"
-
-    ADK 2.0 は Alpha リリースであり、以前の ADK バージョンと併用する際に
-    互換性を壊す変更が発生する可能性があります。プロダクション環境のように
-    後方互換性が必要な場合は ADK 2.0 を使用しないでください。このリリースを
-    ぜひ試していただき、
-    [フィードバック](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=v2)
-    をお寄せください。
-
-この機能を試すための ADK 2.0 のインストール方法については、
-[ADK 2.0 Alpha へようこそ](/ja/2.0/) を参照してください。
+-   **Flexible Control Flow:** Define execution order dynamically using
+    loops, conditionals, and recursion which are difficult or impossible to
+    represent in static graphs.
+-   **Programmatic Experience:** Use familiar constructs like `while` loops
+    and `async/await` (Python) or `for` loops and `workflow.RunNode` (Go)
+    instead of graph-based routing.
+-   **Automatic Checkpointing:** Dynamic workflows track each node
+    execution. Successful sub-nodes are automatically skipped when resuming the
+    workflow, making complex logic durable and resumable by default.
+-   **Encapsulation:** Wrap business logic into *parent* nodes that
+    internally compose lower-level nodes, keeping the overall workflow
+    clean and manageable.
 
 ## はじめに
 
-次の動的ワークフローのコード例は、1 つの関数ノードを含む基本的なワークフロー
-の定義方法を示します。
+The following dynamic workflow code example shows how to define a basic
+workflow containing a single node with a function:
 
-```python
-from google.adk import Workflow
-from google.adk import Event
-from google.adk import Context
-from typing import Any
+=== "Python"
 
-@node(name="hello_node")
-def my_node(node_input: Any):
-    return "Hello World"
+    ```python
+    from google.adk import Context
+    from google.adk import Workflow
+    from google.adk.workflow import node
+    from typing import Any
 
-# define a dynamic workflow node
-@node(rerun_on_resume=True)
-async def my_workflow(ctx: Context, node_input: str) -> str:
-    # run_node executes a node and returns its output
-    result = await ctx.run_node(my_node, input_data="hello")
-    return result
+    @node(name="hello_node")
+    def my_node(node_input: Any):
+        return "Hello World"
 
-# Run the workflow
-root_agent = Workflow(
-    name="root_agent",
-    edges=[("START", my_workflow)],
-)
-```
+    # define a dynamic workflow node
+    @node(rerun_on_resume=True)
+    async def my_workflow(ctx: Context, node_input: str) -> str:
+        # run_node executes a node and returns its output
+        result = await ctx.run_node(my_node, node_input="hello")
+        return result
 
-この例では、便宜上 [***@node***](#node) アノテーションを使用し、記述コードを
-できるだけシンプルに保っています。このアノテーションは、コードを ADK
-動的ワークフローのコンテキストで実行できるようにするラッパーを生成します。
+    # Run the workflow
+    root_agent = Workflow(
+        name="root_agent",
+        edges=[("START", my_workflow)],
+    )
+    ```
 
-## 構成要素: ノードとワークフロー
+    This example uses the [***@node***](#node) annotation for convenience and to
+    keep the written code as simple as possible. This annotation generates wrappers
+    that allow the code to be run in the context of an ADK dynamic workflow.
 
-ノードとワークフローは、ADK の動的ワークフローを構成する基本要素です。
-これらのクラスは、ADK のコードベースワークフローへ統合できるように、コードを
-ラップするために必要な機能を提供します。
+=== "Go"
 
-### ノードと @node {#node}
+    In Go, `workflow.NewFunctionNode` replaces the `@node` decorator and
+    `workflow.NewDynamicNode` replaces the `@node(rerun_on_resume=True)` async
+    orchestrator. `workflow.RunNode` is the direct equivalent of
+    `ctx.run_node()`. `workflowagent.New` with `workflow.Chain` replaces
+    `Workflow(edges=[...])`.
 
-ADK の動的ワークフローは、***BaseNode*** から派生したクラスである *nodes* で
-構成されます。利用しやすいワークフローノードの単純な形として
-***FunctionNode*** があり、***Workflow*** の中で実行するために必要な機能で
-コードをラップできます。利便性のため、ADK フレームワークは ***@node***
-アノテーションを提供しており、ノードラッパーを生成して、ボイラープレート
-となるラッパーコードを最小限に抑えます。
+    Resume behaviour after a human-in-the-loop pause is controlled by
+    `NodeConfig.RerunOnResume` — see [Nodes](#node) below for details.
 
-```python
-@node(name="hello_node")
-def my_function_node(node_input: Any):
-    return "Hello World"
-```
+    ```go
+    --8<-- "examples/go/snippets/graphs/dynamic/main.go:get-started"
+    ```
 
-次のコードスニペットは、***@node*** アノテーションを *使わない* 場合の
-等価なコードを示します。
+## ビルディング ブロック: ノードとワークフロー
 
-```python
-# base function
-def my_function_node(node_input: Any):
-    return "Hello World"
+Nodes and workflows represent the basic building blocks of ADK's dynamic
+workflows. These types and functions provide the functionality required to
+wrap your code so it can be integrated into code-based workflows in ADK.
 
-# FunctionNode wrapper with options
-success_node = FunctionNode(
-    my_function_node,
-    name="hello",
-    rerun_on_resume=True,
-)
-```
+### ノード {#node}
 
-外部ライブラリの関数をラップする必要がある場合、同じ関数から異なる設定で
-複数のノードを作成する必要がある場合、または高度なオーケストレーションのために
-レジストリでノード参照を管理している場合には、自分でノードラッパーコードを
-作成すると便利です。
+A dynamic workflow in ADK is composed of *nodes*. A simple version of a
+usable workflow node wraps a plain function with the metadata required to
+run within a workflow.
+
+=== "Python"
+
+    In Python, the ***@node*** annotation generates the node wrapper, keeping
+    boilerplate to a minimum:
+
+    ```python
+    @node(name="hello_node")
+    def my_function_node(node_input: Any):
+        return "Hello World"
+    ```
+
+    The following code snippet shows the equivalent code *without* the
+    ***@node*** annotation:
+
+    ```python
+    # base function
+    def my_function_node(node_input: Any):
+        return "Hello World"
+
+    # FunctionNode wrapper with options
+    success_node = FunctionNode(
+        my_function_node,
+        name="hello",
+        rerun_on_resume=True,
+    )
+    ```
+
+    Creating the node wrapper code yourself can be useful if you are wrapping
+    functions from an external library, need to create multiple nodes from the
+    same function with different configurations, or if you are managing node
+    references in a registry for advanced orchestration.
+
+=== "Go"
+
+    In Go, `workflow.NewFunctionNode[IN, OUT]` wraps a plain function as a
+    workflow node, inferring input and output types from the generic parameters.
+    There is no decorator syntax; the node is a value that you pass as a child
+    to `workflow.RunNode` inside a dynamic orchestrator:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/dynamic/main.go:building-blocks-nodes"
+    ```
+
+    `NodeConfig` holds the same options as Python's `@node` arguments.
+    The most important field is `RerunOnResume *bool`, which controls what
+    happens when a workflow resumes after a human-in-the-loop pause:
+
+    -   **`&true` (re-entry mode)**: the interrupted node is re-run from the
+        beginning on resume. Use this for dynamic orchestrator nodes that call
+        `workflow.RunNode` in a loop — the body re-executes and already-completed
+        child activations are skipped automatically (checkpointing). This mirrors
+        Python's `@node(rerun_on_resume=True)`.
+    -   **`&false` (handoff mode)**: the resume payload is routed directly to
+        the node's successor as input, bypassing the interrupted node entirely.
+        Use this for leaf nodes that simply emit a pause event and expect the
+        human response to flow to the next step.
+    -   **`nil`**: the default depends on node type. `workflow.NewDynamicNode`
+        automatically sets `nil → &true` (re-entry mode), because an
+        orchestrator body must be re-entered on resume to deliver cached child
+        results. `workflow.NewFunctionNode` and other leaf node constructors
+        leave `nil` as-is, which the engine treats as handoff (`&false`).
+        Explicit `&false` is always respected on any node type.
+
+    ```go
+    // NewDynamicNode: nil RerunOnResume is automatically set to &true.
+    // Passing &rerun explicitly is equivalent and makes the intent clear.
+    rerun := true
+    orchestratorNode := workflow.NewDynamicNode[string, string]("my_workflow",
+        myOrchestratorfn,
+        workflow.NodeConfig{RerunOnResume: &rerun}, // re-entry: node body re-runs on resume
+    )
+
+    // NewFunctionNode: nil RerunOnResume stays nil → engine treats as handoff.
+    handoffNode := workflow.NewFunctionNode("leaf_node",
+        myLeafFn,
+        workflow.NodeConfig{}, // nil RerunOnResume → handoff for FunctionNode
+    )
+    ```
+
 
 ### ワークフロー
 
-ADK の動的ワークフローでは、***Workflow*** クラスをノードの
-オーケストレーションを担う主要コンテナとして使います。ノードを使って、
-ノードの実行と、そのノード群の実行ロジック（順序やパス）を管理するコードで
-動的ワークフローを定義します。次のコードサンプルを参照してください。
+In an ADK dynamic workflow, you use a dynamic node as the primary
+orchestrator for nodes. A dynamic node manages running child nodes and the
+execution logic (order and paths) for those nodes.
 
-```python
-@node(rerun_on_resume=True)
-async def my_workflow(ctx):
-    # run_node executes a node and returns its output
-    result = await ctx.run_node(my_function_node, input_data="Hello")
-    result_formatted = await ctx.run_node(my_formatting_node, input_data=result)
-    return result_formatted
+=== "Python"
 
-# Run the workflow
-root_agent = Workflow(
-    name="root_agent",
-    edges=[("START", my_workflow)],
-)
-```
+    ```python
+    @node(rerun_on_resume=True)
+    async def my_workflow(ctx):
+        # run_node executes a node and returns its output
+        result = await ctx.run_node(my_function_node, node_input="Hello")
+        result_formatted = await ctx.run_node(my_formatting_node, node_input=result)
+        return result_formatted
+
+    # Run the workflow
+    root_agent = Workflow(
+        name="root_agent",
+        edges=[("START", my_workflow)],
+    )
+    ```
+
+=== "Go"
+
+    `workflow.NewDynamicNode` creates an orchestrator whose body calls
+    `workflow.RunNode` for each child step. `workflowagent.New` with
+    `workflow.Chain(workflow.Start, myWorkflow)` is the equivalent of
+    `Workflow(edges=[("START", my_workflow)])`:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/dynamic/main.go:building-blocks-workflow"
+    ```
 
 ## データ処理
 
-ADK で動的ワークフローを使う場合、
-[グラフベースワークフロー](/ja/workflows/)よりもデータ受け渡しは
-簡単です。ワークフローでは ***Context*** クラスの ***run_node()*** メソッドが
-ノードの出力を直接返すためです。これにより、データ転送のためにセッション
-状態や複雑なルーティング出力を直接扱う必要がなくなります。次のコード例は、
-エージェントノードと関数ノードの間で文字列データを受け渡す方法を示します。
+When using dynamic workflows with ADK, passing data is simpler than
+[graph-based workflows](/graphs/) because `workflow.RunNode` returns the
+child node's output directly as a typed Go value — eliminating the need to
+manually read and write session state keys for data transfer.
 
-```python
-from google.adk import Context
+=== "Python"
 
-@node(rerun_on_resume=True)
-async def editorial_workflow(ctx: Context, user_request: str):
-    # Agent Node generates output
-    raw_draft = await ctx.run_node(draft_agent, user_request)
+    ```python
+    from google.adk import Context
+    from google.adk.workflow import node
 
-    # Function Node formats text
-    formatted_text = await ctx.run_node(format_function_node, raw_draft)
+    @node(rerun_on_resume=True)
+    async def editorial_workflow(ctx: Context, user_request: str):
+        # Agent Node generates output
+        raw_draft = await ctx.run_node(draft_agent, user_request)
 
-    return formatted_text
-```
+        # Function Node formats text
+        formatted_text = await ctx.run_node(format_function_node, raw_draft)
 
-定義済みクラスを使って特定のデータスキーマを受け渡し、グラフベース
-ワークフローノードと同様に入力および出力スキーマを構成することもできます。
-次のコード例を参照してください。
+        return formatted_text
+    ```
 
-```python
-from google.adk import Agent
-from google.adk import Context
-from pydantic import BaseModel
+    You can also pass specific data schemas using a defined class and configure
+    input and output schemas, similar to graph-based workflow nodes:
 
-class CityTime(BaseModel):
-    time_info: str  # time information
-    city: str       # city name
+    ```python
+    from google.adk import Agent
+    from google.adk import Context
+    from google.adk.workflow import node
+    from pydantic import BaseModel
 
-@node
-def city_time_function(city: str):
-    """Simulate returning the current time in a specified city."""
-    return CityTime(time_info="10:10 AM", city=city)
+    class CityTime(BaseModel):
+        time_info: str  # time information
+        city: str       # city name
 
-city_report_agent = Agent(
-    name="city_report_agent",
-    model="gemini-flash-latest",
-    input_schema=CityTime,
-    instruction="""output the data provided by the previous node.""",
-)
+    @node
+    def city_time_function(city: str):
+        """Simulate returning the current time in a specified city."""
+        return CityTime(time_info="10:10 AM", city=city)
 
-@node # workflow node
-async def city_workflow(ctx: Context):
-    city_time = await ctx.run_node(city_time_function, "Paris")
-    report_text = await ctx.run_node(city_report_agent, city_time)
+    city_report_agent = Agent(
+        name="city_report_agent",
+        model="gemini-flash-latest",
+        input_schema=CityTime,
+        instruction="""output the data provided by the previous node.""",
+    )
 
-    return report_text
-```
+    @node # workflow node
+    async def city_workflow(ctx: Context):
+        city_time = await ctx.run_node(city_time_function, "Paris")
+        report_text = await ctx.run_node(city_report_agent, city_time)
 
-ワークフローノード間のデータ処理の詳細は、
-[エージェントワークフローのデータ処理](/ja/graphs/data-handling/)
-を参照してください。
+        return report_text
+    ```
 
-## ワークフロールート
+=== "Go"
 
-ADK の動的ワークフローは、
-[グラフベースワークフロー](/ja/workflows/)と比べてルーティング
-ロジックの柔軟性が高く、反復ループやより複雑な分岐ロジックも扱えます。
-このセクションでは、ルーティングに使えるいくつかのテクニックを説明します。
+    In Go, `workflow.NewAgentNode` wraps an `agent.Agent` so it can be
+    invoked via `workflow.RunNode` inside a dynamic orchestrator. The output
+    of each `RunNode` call is returned as a typed value — no session state
+    reads are required:
 
-### シーケンスルート
+    ```go
+    --8<-- "examples/go/snippets/graphs/dynamic/main.go:data-handling"
+    ```
 
-ADK の動的ワークフローでは、グラフベースワークフローと同様に、順次的な
-タスク処理を構築できます。次のコードスニペットは、エージェント、関数ノード、
-2 つ目のエージェントで構成される動的ワークフローを示します。
+For more information on data handling between workflow nodes, see
+[Data handling for agent workflows](/graphs/data-handling/).
 
-```python
-@node # workflow node
-async def city_workflow(ctx: Context):
-    city = await ctx.run_node(city_generator_agent)
-    city_time = await ctx.run_node(city_time_function, city)
-    report_text = await ctx.run_node(city_report_agent, city_time)
+## ワークフロー ルート
 
-    return report_text
-```
+Dynamic workflows in ADK provide more flexibility in terms of routing logic
+compared to [graph-based workflows](/graphs/), including
+iterative loops or more complex branching logic. This section describes some of
+the techniques that you can use for routing.
 
-### ループルート
+### Sequence route
 
-タスクに反復ループを使いたいワークフローでは、動的ワークフローのほうが必要な
-ルーティングロジックをはるかに柔軟に定義できます。次のコード例は、コードの
-生成、レビュー、更新を行うワークフローループを、動的ワークフローで構成する
-方法を示します。
+You can create sequential task processing with dynamic workflows in ADK, just
+as you can with graph-based workflows.
 
-```python
-coder_agent = LlmAgent(
-    name="generator_agent",
-    model="gemini-flash-latest",
-    instruction="Write python code for user request.",
-    output_schema=str,
-)
+=== "Python"
 
-@node(name="lint_reviewer")
-compile_lint_check = ApiNode()
+    The following code snippet shows a dynamic workflow with an agent, a
+    function node, and a second agent:
 
-fixer_agent = LlmAgent(
-    name="generator_agent",
-    model="gemini-flash-latest",
-    instruction="""Refactor current code {code}.
-        Based on compile & lint review: {findings}""",
-    output_schema=str,
-)
+    ```python
+    @node # workflow node
+    async def city_workflow(ctx: Context):
+        city = await ctx.run_node(city_generator_agent)
+        city_time = await ctx.run_node(city_time_function, city)
+        report_text = await ctx.run_node(city_report_agent, city_time)
 
-@node # workflow node
-async def code_workflow(ctx):
-  code = await ctx.run_node(coder_agent)
-  check_resp = await ctx.run_node(compile_lint_check, code)
+        return report_text
+    ```
 
-  while check_resp.findings:
-    yield Event(state={"code": code, "findings": check_resp.findings})
-    code = await ctx.run_node(fixer_agent)
+=== "Go"
 
-    check_resp = await ctx.run_node(compile_lint_check, code)
+    Call `workflow.RunNode` sequentially inside a `NewDynamicNode` body —
+    each call awaits the child before the next one starts. The
+    [data handling example above](#data-handling) demonstrates exactly this
+    pattern: `cityWorkflow` calls `workflow.RunNode` for `cityTimeNode` and
+    then `cityReportNode` in order, passing each node's typed output to the
+    next.
 
-  return code
-```
+### Loop route
 
-### 並列実行ルート
+For workflows where you want to use an iterative loop for a task, dynamic
+workflows offer much more flexibility to define the routing logic you need.
 
-ADK の動的ワークフローは並列実行もサポートでき、その実現には `asyncio`
-などの標準的な非同期ライブラリを使用できます。次のコード例は、並列実行を
-サポートするワークフローノードの構築方法と、それをより大きなワークフローへ
-統合する方法を示します。
+=== "Python"
 
-```python
-from google.adk.workflow import BaseNode
-from google.adk import Context
-from typing import Any
-import asyncio
+    The following code example shows how to use dynamic workflows to construct
+    a workflow loop for generating, reviewing, and updating code:
 
-class ParallelNode(BaseNode):
-    """A supervisor node that runs a worker node in parallel."""
-    real_node: BaseNode
+    ```python
+    from google.adk import Context
+    from google.adk import Event
+    from google.adk.agents import LlmAgent
+    from google.adk.workflow import node
 
-    async def run(self, ctx: Context, node_input: list[Any]):
+    coder_agent = LlmAgent(
+        name="generator_agent",
+        model="gemini-flash-latest",
+        instruction="Write python code for user request.",
+        output_schema=str,
+    )
+
+    @node(name="lint_reviewer")
+    async def compile_lint_check(ctx: Context, code: str):
+        # Simulate API call or lint check
+        class Response:
+            findings = ""
+        return Response()
+
+    fixer_agent = LlmAgent(
+        name="fixer_agent",
+        model="gemini-flash-latest",
+        instruction="""Refactor current code {code}.
+            Based on compile & lint review: {findings}""",
+        output_schema=str,
+    )
+
+    @node # workflow node
+    async def code_workflow(ctx: Context, user_request: str):
+      code = await ctx.run_node(coder_agent, user_request)
+      check_resp = await ctx.run_node(compile_lint_check, code)
+
+      while check_resp.findings:
+        yield Event(state={"code": code, "findings": check_resp.findings})
+        code = await ctx.run_node(fixer_agent, {"code": code, "findings": check_resp.findings})
+
+        check_resp = await ctx.run_node(compile_lint_check, code)
+
+      return code
+    ```
+
+=== "Go"
+
+    In Go, the loop is a plain `for` loop inside the dynamic node body. The
+    lint check node returns an empty string when there are no findings,
+    which signals the loop to exit:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/dynamic/main.go:loop-route"
+    ```
+
+### Parallel execution routes
+
+Dynamic workflows in ADK can support parallel execution.
+
+=== "Python"
+
+    In Python, you can use `asyncio.gather` to build parallel execution:
+
+    ```python
+    import asyncio
+    from typing import Any
+    from google.adk import Context
+    from google.adk.workflow import BaseNode, node
+
+
+    @node(rerun_on_resume=True)
+    async def parallel_supervisor(
+        ctx: Context, node_input: list[Any], real_node: BaseNode
+    ):
+        """Runs a worker node in parallel for each item in the input list."""
         tasks = []
-
-        # Dynamically schedule worker nodes for each item in the input list
         for item in node_input:
-            # ctx.run_node returns an awaitable future for the ephemeral node
-            tasks.append(ctx.run_node(self.real_node, item))
+            # ctx.run_node returns a future. Append instead of awaiting immediately.
+            tasks.append(ctx.run_node(real_node, item))
 
-        # Use asyncio to gather results in parallel
+        # Collect all results in parallel
         results = await asyncio.gather(*tasks)
-
         return results
-```
+    ```
 
-!!! tip "ヒント: 並列ノードの再開"
+    !!! tip "Tip: Resuming parallel nodes"
 
-    ワークフローフレームワークは、動的ワークフローが再開された場合、並列
-    ワーカーノードを含め、失敗した、または中断されたワーカーノードのみが
-    再実行されることを保証します。
+        The workflow framework ensures that if a dynamic workflow is resumed,
+        only failed or interrupted worker nodes are re-executed, including
+        parallel worker nodes.
 
-## 人間入力
+=== "Go"
 
-ADK の動的ワークフローには、Human in the Loop (HITL) ステップを含めることも
-できます。ワークフローに人間入力を組み込むには、ワークフローを中断する
-***BaseNode*** サブクラスを作成し、ユーザーへのリクエストと応答取得に使う
-***RequestInput*** インスタンスを組み合わせます。次のコード例は、人間入力
-ノードを構築してワークフローに含める方法を示します。
+    In Go, `workflow.NewParallelWorker` wraps a child node and runs it
+    concurrently for each element of a list input, collecting results into a
+    single output slice. The `maxConcurrency` parameter caps how many
+    concurrent activations may run simultaneously; `0` means unlimited:
 
-```python
-from google.adk.workflow import BaseNode
-from google.adk import Context
-from google.adk.events import RequestInput
-from typing import Any, AsyncGenerator
+    ```go
+    --8<-- "examples/go/snippets/graphs/dynamic/main.go:parallel-route"
+    ```
 
-class GetInput(BaseNode):
-    """A node that pauses execution and waits for human input."""
-    rerun_on_resume = False  # Ensure the response is yielded as output on resume
+    !!! tip "Tip: Resuming parallel nodes"
 
-    def __init__(self, request: RequestInput, name: str):
-        self.request = request
-        self.name = name
+        The workflow framework ensures that if a dynamic workflow is resumed,
+        only failed or interrupted worker nodes are re-executed, including
+        parallel worker nodes managed by `NewParallelWorker`.
 
-    def get_name(self) -> str:
-        return self.name
+## 人間の入力 (Human Input)
 
-    async def run(self) -> AsyncGenerator[Any, None]:
-        # Yielding the request tells the workflow to pause and wait for input
-        yield self.request
+Dynamic workflows in ADK can also include human input or human in the loop
+(HITL) steps.
 
-async def approval_process_node(ctx: Context, node_input: Any):
-    """A parent node that coordinates a human approval step."""
+=== "Python"
 
-    # Define the request for the user
-    request = RequestInput(message="Please approve this request (Yes/No)")
+    You build human input into workflows by yielding a ***RequestInput*** from
+    a node, which pauses the workflow and waits for user input. The following
+    code example shows how to build a human input node and include it in a
+    workflow:
 
-    # Invoke the HITL node dynamically. The workflow pauses here.
-    user_response = await ctx.run_node(GetInput(request, name="approval_step"))
+    ```python
+    from typing import Any
+    from google.adk import Context
+    from google.adk.events import RequestInput
+    from google.adk.workflow import node
 
-    if user_response.lower() == "yes":
-        return "Request Approved"
-    else:
-        return "Request Denied"
-```
+
+    @node(rerun_on_resume=False)
+    async def get_user_approval(ctx: Context, node_input: Any):
+        """Yields a RequestInput to pause the workflow and wait for user input."""
+        yield RequestInput(message="Please approve this request (Yes/No)")
+
+
+    @node(rerun_on_resume=True)
+    async def handle_process(ctx: Context, node_input: Any):
+        """The orchestrator calling the interactive step."""
+        user_response = await ctx.run_node(get_user_approval)
+
+        if user_response.lower() == "yes":
+            return "Approved"
+        return "Denied"
+    ```
+
+    !!! important "Important: Parent nodes with `ctx.run_node`"
+
+        Parent nodes in dynamic workflows that call `ctx.run_node` must set
+        `rerun_on_resume=True` to handle interruptions properly.
+
+=== "Go"
+
+    In Go, use `workflow.NewEmittingFunctionNode` with
+    `workflow.ResumeOrRequestInput` to implement the re-entry HITL pattern.
+    On the first pass `ResumeOrRequestInput` emits a `session.RequestInput`
+    event and returns `ErrNodeInterrupted`, pausing the workflow. After the
+    human replies, the node is re-run from the top (`RerunOnResume: &true`)
+    and `ResumeOrRequestInput` returns the human's reply directly:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/dynamic/main.go:human-input"
+    ```
 
 ## 高度な機能
 
-動的ワークフローには、より複雑な開発シナリオを扱うための高度な機能が
-いくつか用意されています。これらの機能により、実行に対するより細かな制御と、
-既存の技術インフラとのより良い統合が可能になります。
+Dynamic workflows offer some advanced features designed to handle more complex
+development scenarios. These capabilities allow for finer control over execution
+and better integration with existing technical infrastructure.
 
-### 実行 ID
+### Execution IDs
 
-ADK フレームワークは、親 ID とカウンタに基づいて、子ノード実行の決定論的な
-識別子 (ID) を生成します。ADK ワークフローは、各スケジュール済みノードの
-以前の結果を識別するために、決定論的 ID を使用します。これらの ID は動的
-ノードのスケジュール順序に基づいて生成され、チェックポイントや、ワークフロー
-再開時または再実行時に正しい順序でタスクを再実行するために使われます。
+The ADK framework generates a deterministic identifier (ID) for child node
+executions based on the parent ID and a counter. ADK workflows use deterministic
+IDs for each scheduled node to identify previous results. These IDs are
+generated based on the order of dynamic node schedules, and are used for
+checkpointing and to re-run tasks in the correct order in the case of a resumed
+or re-run workflow.
 
-#### カスタム実行 ID
+#### Custom execution IDs
 
-並べ替え可能なリストを処理する場合など、ごく稀に安定した識別子が必要になる
-ことがあり、その場合はノード実行時にカスタム ID を指定できます。一般には、
-ワークフロータスクのリトライやプロセス再開への影響があるため、これを避ける
-べきです。具体的には、これらの ID はノード状態を確認し、すでに実行済みの
-ノードをスキップするために使われます。カスタム ID を与える場合は、
-ワークフロー再実行時にも決定論的であり、入力に対して論理的に同一であり続ける
-必要があります。次のコード例は、ワークフローでノードを実行する際にこのような
-識別子を追加する方法を示します。
+In some rare cases, you may need to have stable identifiers, such as when
+processing a reorderable list. In general, you should avoid this due to the
+impacts to workflow task retries and process resumes. Specifically, these IDs
+are used to check node states and skip execution if a node was already run. If
+you provide custom IDs, make sure they are deterministic for workflow re-runs
+and logically remain the same for the input.
 
-!!! warning "警告: カスタム実行 ID"
+!!! warning "Warning: Custom execution IDs"
 
-    カスタム実行 ID は作成しないでください。実行 ID はノードの実行順序を
-    決定するために使われるため、カスタム実行 ID はワークフロー内のノードを
-    再実行しようとするときに問題を引き起こす可能性があります。
+    Avoid creating custom execution IDs. Since execution IDs are used to
+    determine the execution order of nodes, custom execution IDs can cause
+    problems when the system attempts to re-run those nodes in your workflow.
 
-```python
-class Order(BaseModel):
-  order_id: str
-  cart_items: list[Product]
+=== "Python"
 
-def shorten_link(ctx, node_input: str):
+    ```python
+    from google.adk import Context
+    from google.adk.workflow import node
+    from pydantic import BaseModel
+    from typing import Any
+    import asyncio
 
-  orders = await get_orders()
+    class Order(BaseModel):
+      order_id: str
+      cart_items: list[Product]
 
-  process_tasks = []
-  for i, order in enumerate(orders):
-    task = ctx.run_node(process_order, order, name=order.order_id))
+    @node(rerun_on_resume=True)
+    async def process_all_orders(ctx: Context, node_input: Any):
+      orders = await get_orders()
 
-    process_tasks.append(task)
+      process_tasks = []
+      for order in orders:
+        # Use run_id to provide a custom identifier.
+        # Custom run_ids must contain at least one non-numeric character
+        # to avoid collision with auto-generated sequential numeric IDs.
+        task = ctx.run_node(process_order, order, run_id=f"order-{order.order_id}")
+        process_tasks.append(task)
 
-  result = asyncio.gather(*process_tasks)
+      results = await asyncio.gather(*process_tasks)
+      return results
+    ```
 
-  yield result
-```
+    By default, auto-generated run IDs are sequential integers starting from
+    `"1"` (represented as strings). Custom `run_id` values must contain at
+    least one non-numeric character to avoid collisions with these
+    auto-generated IDs.
+
+=== "Go"
+
+    In Go, pass `workflow.WithRunID("order-x")` as a trailing option to
+    `workflow.RunNode`. The ID must contain at least one non-numeric character
+    to avoid collision with the auto-generated sequential counter IDs:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/dynamic/main.go:custom-execution-ids"
+    ```

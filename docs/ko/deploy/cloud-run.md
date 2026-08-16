@@ -169,6 +169,7 @@ ADK 에이전트 워크플로를 Google Cloud Run에 배포할 때 다음 콘텐
 
     * `--project TEXT`: (필수) Google Cloud 프로젝트 ID(예: `$GOOGLE_CLOUD_PROJECT`).
     * `--region TEXT`: (필수) 배포를 위한 Google Cloud 위치(예: `$GOOGLE_CLOUD_LOCATION`, `us-central1`).
+    * `--allow_origins`: (선택 사항) CORS(Cross-Origin Resource Sharing)를 위한 허용 출처 목록(쉼표로 구분)입니다. 정규식 패턴을 허용하려면 출처 앞에 `regex:` 접두사를 추가합니다. 예: `http://localhost:8000,regex:https://.*\.example\.com`.
     * `--service_name TEXT`: (선택 사항) Cloud Run 서비스의 이름(예: `$SERVICE_NAME`). 기본값은 `adk-default-service-name`입니다.
     * `--app_name TEXT`: (선택 사항) ADK API 서버의 애플리케이션 이름(예: `$APP_NAME`). 기본값은 `AGENT_PATH`로 지정된 디렉토리의 이름(예: `AGENT_PATH`가 `./capital_agent`인 경우 `capital_agent`)입니다.
     * `--session_service_uri TEXT`: (선택 사항) 세션 서비스의 URI입니다. Agent Runtime을 통해 관리형 세션 서비스를 사용하는 경우 `agentengine://<agent_engine>`을 전달하세요. 여기서 `<agent_engine>`은 리소스 ID 또는 전체 `projects/*/locations/*/reasoningEngines/*` 리소스 이름입니다. 기타 지원되는 형식은 `memory://` 및 SQLAlchemy 데이터베이스 URL(예: `sqlite://<path>`)입니다.
@@ -181,8 +182,24 @@ ADK 에이전트 워크플로를 Google Cloud Run에 배포할 때 다음 콘텐
 
     `--session_service_uri` 및 `--artifact_service_uri`가 설정되지 않은 경우 배포된 컨테이너는 인메모리 세션 및 아티팩트 서비스로 대체되며 Cloud Run 인스턴스가 재재생될 때 세션과 아티팩트가 손실됩니다. 이 데이터를 유지해야 하는 모든 배포에 두 옵션을 모두 설정하세요.
 
+    ##### gcloud CLI 인수 전달
+
+    `adk deploy cloud_run` 명령을 통해 특정 gcloud 플래그를 전달하려면 ADK 인수 뒤에 더블 대시 구분 기호(`--`)를 사용합니다. `--` 뒤에 오는 모든 플래그(ADK 관리 플래그 제외)는 기본 gcloud 명령에 직접 전달됩니다.
+
+    ###### 구문 예시:
+
+    ```bash
+    adk deploy cloud_run [ADK_FLAGS] -- [GCLOUD_FLAGS]
+    ```
+
+    ###### 예시:
+
+    ```bash
+    adk deploy cloud_run --project=[PROJECT_ID] --region=[REGION] path/to/my_agent -- --no-allow-unauthenticated --min-instances=2
+    ```
+
     ##### 인증된 액세스
-배포 프로세스 중에 다음 메시지가 표시될 수 있습니다. `[your-service-name]에 대한 비인증 호출을 허용하시겠습니까(y/N)?`.
+    배포 프로세스 중에 다음 메시지가 표시될 수 있습니다: `Allow unauthenticated invocations to [your-service-name] (y/N)?`.
 
     * 인증 없이 에이전트의 API 엔드포인트에 대한 공개 액세스를 허용하려면 `y`를 입력합니다.
     * 인증을 요구하려면 `N`을 입력합니다(또는 기본값에 대해 Enter 키를 누름). (예: "에이전트 테스트" 섹션에 표시된 대로 ID 토큰 사용).

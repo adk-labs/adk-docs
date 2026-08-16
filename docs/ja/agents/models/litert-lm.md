@@ -11,7 +11,7 @@
 
 LiteRT-LM は `Gemini` クラスで動作します。設定するのは `base_url` と `model` パラメータだけです。
 
-1. `base_url` を LiteRT-LM サーバーの URL に設定します。例: `localhost:8001`
+1. `base_url` を LiteRT-LM サーバーの URL に設定します。例: `http://localhost:8001`
 2. `model` を LiteRT-LM のモデル名に設定します。例: `gemma3n-e2b`
 
 ```py
@@ -21,7 +21,7 @@ from google.adk.models import Gemini
 root_agent = Agent(
     model=Gemini(
         model="gemma3n-e2b",
-        base_url="http://localhost:8001",
+        base_url="http://http://localhost:8001",
     ),
     name="dice_agent",
     description=(

@@ -28,7 +28,7 @@
 
     ストリーミングコンテンツを処理するエージェントを作成します。
 
-    [:octicons-arrow-right-24: ストリーミングエージェントを構築する](../get-started/streaming/index.md)
+    [:octicons-arrow-right-24: ストリーミングエージェントを構築する](../get-started/live/index.md)
 
 -   :material-rocket-launch-outline: **サンプルエージェントを探す**
 

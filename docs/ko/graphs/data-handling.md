@@ -1,249 +1,386 @@
-# 에이전트 워크플로의 데이터 처리
+# Data handling for agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-에이전트와 그래프 기반 노트 사이에서 데이터를 구조화하고 관리하는 일은 ADK로
-신뢰성 높은 프로세스를 구축하는 데 매우 중요합니다. 이 가이드는 그래프 기반
-워크플로와 협업 에이전트에서의 데이터 처리를 설명하며, 그래프 노드 사이에서
-***Events*** 를 사용해 정보가 어떻게 전달되고 수신되는지를 다룹니다. 이벤트,
-데이터, 콘텐츠, 상태에 대한 핵심 매개변수를 설명하고, 데이터 형식 스키마와
-특정 instruction 구문을 사용해 함수 노드와 에이전트 노드 모두에서 구조화된
-데이터 전송을 구현하는 방법을 설명합니다.
+Structuring and managing data between agents and graph-based nodes is critical
+for building reliable processes with ADK. This guide explains data handling
+within graph-based workflows and collaboration agents, including how information
+is transmitted and received between graph nodes. It covers the essential
+parameters for passing data, content, and state, and explains how to implement
+structured data transfer for both function and agent nodes using data format
+schemas and specific instruction syntax.
 
-!!! example "Alpha 릴리스"
+## Workflow data flow
 
-    ADK 2.0은 Alpha 릴리스이며, 이전 버전의 ADK와 함께 사용할 때 호환성이
-    깨지는 변경이 발생할 수 있습니다. 프로덕션 환경처럼 하위 호환성이 필요한
-    경우에는 ADK 2.0을 사용하지 마세요. 이 릴리스를 테스트해 보시고
-    [피드백](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=v2)을
-    보내주시기 바랍니다.
+Within a graph-based workflow, nodes pass data to downstream steps through
+events. A step writes its output to a named event field, and the next step
+receives it as its typed input.
 
-!!! danger "경고: ADK 2.0과 ADK 1.0 데이터 저장 시스템을 혼용하지 마세요"
+=== "Python"
 
-    ADK 2.0 프로젝트에 영구 저장소를 사용하는 경우, **세션 저장소, 메모리 시스템,
-    평가 데이터 등을 포함하되 이에 한정되지 않는 모든 저장소를 ADK 1.0
-    프로젝트와 ADK 2.0 프로젝트가 공유하지 않도록 하세요.** 그렇게 하면 데이터가
-    손실되거나, ADK 1.0 프로젝트에서 사용할 수 없게 될 수 있습니다.
+    In Python, data is exchanged between graph nodes using ***Events***. The key
+    parameters for node data handling are:
 
-## 워크플로 그래프 Events
+    -   **`output`**: Parameter for passing information between *nodes*.
+    -   **`message`**: Data intended as a response to a user.
+    -   **`state`**: Data automatically persisted across nodes via ***Events***
+        throughout an ADK session.
 
-그래프 기반 워크플로 내부에서는 ***Events*** 를 사용해 데이터를 전달합니다.
-워크플로 그래프의 모든 실행 *노드*는 Events 를 소비하고 방출합니다. 이 섹션은
-***Workflow*** 안에서 노드 사이에 데이터를 전송하고 수신하는 기본 사항을
-다룹니다. Events 는 노드 사이에서 서로 다른 종류의 데이터를 전송하기 위한
-특정 매개변수를 가집니다. 노드 데이터 처리의 핵심 매개변수는 다음과 같습니다.
+=== "Go"
 
-- **`output`**: *노드* 사이에 정보를 전달하기 위한 매개변수
-- **`message`**: 사용자에게 응답으로 전달할 데이터
-- **`state`**: ADK 세션 전체에서 ***Events*** 를 통해 노드 사이에 자동으로
-  영속화되는 데이터
+    In ADK Go v2.0.0, the data-passing mechanism depends on which agent style
+    you use:
 
-Events 는 이 외에도 Event 의 소스 노드 등 워크플로에 대한 추가 정보를 함께
-전달합니다.
+    **workflow package** (`FunctionNode`, `AgentNode`, `DynamicNode`): nodes
+    communicate through `session.Event` fields, mirroring Python closely:
 
-### Events 를 통한 노드 입력과 출력
+    -   **`Event.Output`**: the node's return value, set automatically by the
+        framework when a `FunctionNode` returns a non-`*genai.Content` value.
+        The successor node receives this as its typed `input` parameter.
+    -   **`Event.Routes`**: routing keys set explicitly by an emitting node to
+        select which conditional edge to follow — the Go equivalent of
+        Python's `Event(route=...)`.
+    -   **`Event.NodeInfo`**: scheduler metadata (`path`, `MessageAsOutput`,
+        `OutputFor`). Set by the workflow engine; nodes do not set this
+        directly.
 
-그래프의 각 노드는 ***Event*** 클래스를 통해 데이터를 수신하고 전송합니다.
-다음 코드 스니펫처럼 ***yield*** 구문을 사용해 데이터를 다음 노드로 넘길 수
-있습니다.
+    **Prebuilt workflow agents** (`sequentialagent`, `parallelagent`,
+    `loopagent`): these agents communicate through session state:
 
-```python
-from google.adk import Event
+    -   **`OutputKey`** on `llmagent.Config`: the framework writes the agent's
+        final text response to `state[OutputKey]` after each turn.
+    -   **`ctx.Session().State().Set` / `.Get`**: write or read arbitrary
+        values from state inside custom code.
+    -   **`{key}` in `Instruction`**: the framework substitutes `state["key"]`
+        into the prompt before calling the model.
 
-def my_function_node(node_input: str):
-    output_value = node_input.upper()
-    return Event(output=output_value) # "THE RESULT"
-```
+    State keys may carry a prefix that controls their lifetime and scope:
 
-추가 처리가 필요하지 않은 ***Event*** 데이터를 출력할 때는 ***return*** 구문을
-사용합니다. 추가 처리가 필요한 데이터를 내보내거나, 두 개 이상의 데이터 항목을
-생성하는 경우에는 둘 이상의 ***yield*** 명령을 사용할 수 있습니다. 각
-***yield*** 호출은 그래프의 다음 노드로 전달되는 Event 의 데이터 객체 목록에
-추가됩니다. 매개변수 없이 사용하는 ***return*** 또는 ***yield*** 는 다음
-노드로 `None` 값을 전달합니다.
+    | Prefix constant | Prefix string | Scope |
+    |---|---|---|
+    | `session.KeyPrefixApp` | `"app:"` | Shared across all users and sessions for the app |
+    | `session.KeyPrefixUser` | `"user:"` | Tied to the user, shared across their sessions |
+    | `session.KeyPrefixTemp` | `"temp:"` | Discarded after the current invocation ends |
+    | *(none)* | — | Persists for the lifetime of the session |
 
-### Event `output` 매개변수
+### Node output
 
-***Event*** 의 ***output*** 매개변수는 그래프의 다음 노드로 데이터를 전달하는
-표준 방식입니다. 다음 노드는 다음 코드 샘플처럼 해당 데이터를 담은 ***node input***
-객체를 받게 됩니다.
+Each step in a workflow produces output for its successor.
 
-```python
-def my_function_node_1():
-    return Event(output="The Result")
+=== "Python"
 
-def my_function_node_2(node_input: Content):
-    output_value = node_input.parts[0].text.lower()
-    return Event(output=output_value) # "the result"
-```
+    Use the ***return*** or ***yield*** syntax to hand off data to the next node:
 
-다음 코드 샘플처럼, 직렬화 가능한 형식의 더 길고 구조화된 데이터도 전달할 수
-있습니다.
+    ```python
+    from google.adk import Event
 
-```python
-def my_function_node_3():
-    yield Event(
-        output={
-            "city_name": "Paris",
-            "city_time": "10:10 AM",
-        },
+    def my_function_node(node_input: str):
+        output_value = node_input.upper()
+        return Event(output=output_value) # "THE RESULT"
+    ```
+
+    Use the ***return*** syntax when outputting ***Event*** data that does not
+    require additional processing. When emitting data that requires additional
+    processing, or if you are generating more than one data item, you can use
+    more than one ***yield*** command. Each ***yield*** call adds to a list of
+    data objects on the Event which is passed to the next node of a graph. A
+    ***return*** or ***yield*** command without a parameter passes a `None` value
+    to the next node.
+
+=== "Go"
+
+    **workflow package**: a `FunctionNode` simply returns a typed Go value.
+    The framework automatically wraps the return value in a `session.Event`
+    and sets `Event.Output`. The successor node receives this value as its
+    typed `input` parameter — no manual event construction needed:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/data-handling/main.go:event-output"
+    ```
+
+    **Prebuilt workflow agents**: use `OutputKey` on `llmagent.Config` to
+    save an agent's text response to session state, then reference it with
+    `{key}` in downstream agents' `Instruction` templates:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/data-handling/main.go:output-key"
+    ```
+
+### Node output: passing structured data
+
+=== "Python"
+
+    You can pass longer, structured data in a serializable format:
+
+    ```python
+    def my_function_node_3():
+        yield Event(
+            output={
+                "city_name": "Paris",
+                "city_time": "10:10 AM",
+            },
+        )
+    ```
+
+    !!! warning "Caution: Event.output limitation"
+
+        Nodes are only allowed to emit a single ***Event.output*** data payload
+        per execution. This limitation means that while you can use more than
+        one ***yield*** in a node, having two or more ***yield*** commands with
+        an ***Event.output*** results in a runtime error.
+
+=== "Go"
+
+    **workflow package**: a `FunctionNode` can return any JSON-serializable
+    Go struct. The framework serializes it into `Event.Output` and
+    deserializes it back into the successor node's typed `input` parameter.
+    There is no single-payload restriction — each node has exactly one typed
+    return value:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/data-handling/main.go:structured-output"
+    ```
+
+    **Prebuilt workflow agents**: use multiple `OutputKey` values, one per
+    agent, to store individual fields in session state. Downstream agents
+    read each field independently via `{key}` in their `Instruction`.
+
+### Routing output
+
+=== "Python"
+
+    Use the `route` parameter of an ***Event*** to drive conditional edge
+    dispatch:
+
+    ```python
+    def router(node_input: str):
+        return Event(route="BUG")
+    ```
+
+=== "Go"
+
+    **workflow package**: an emitting `FunctionNode` constructs a
+    `session.Event` directly, sets `Event.Routes` to the desired route keys,
+    and sets `Event.Output` to forward the payload to the successor. The
+    workflow engine reads `Event.Routes` at dispatch time to select the
+    matching edge:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/data-handling/main.go:routing-output"
+    ```
+
+### User-facing messages
+
+=== "Python"
+
+    Use the ***message*** parameter of an ***Event*** to send a response to a
+    user rather than pass data to the next node:
+
+    ```python
+    async def user_message(node_input: str):
+      """Tell user research process is starting."""
+      yield Event(message="Beginning research process...")
+    ```
+
+=== "Go"
+
+    **workflow package**: to emit a user-visible message without advancing
+    the node's typed output, set `Event.Content` on an intermediate event
+    emitted via the `emit` callback in an `EmittingFunctionNode`. The
+    terminal return value (or `nil`) controls `Event.Output`.
+
+    **Prebuilt workflow agents**: any `llmagent` step automatically emits its
+    model response as a user-facing event. For non-LLM steps, write a custom
+    `Run` function on an `agent.Agent` that yields events whose
+    `LLMResponse.Content` contains the text.
+
+### Session state and state scopes
+
+Session state persists data across turns within a session. It is the primary
+data-sharing mechanism for the prebuilt workflow agents, and is also available
+inside tools and callbacks regardless of which agent style you use.
+
+=== "Python"
+
+    Use the ***state*** parameter of an ***Event*** to maintain values across
+    nodes. Nodes can modify state values, and the modified state values are
+    available to downstream nodes:
+
+    ```python
+    async def init_state_node(attempts: int = 0):
+      yield Event(
+          state={
+              "attempts": attempts,
+          },
+      )
+
+    async def task_attempt_node(node_input: Content, attempts: int):
+      yield Event(
+          state={
+              "attempts": attempts + 1,
+          },
+      )
+
+    async def read_state_node(ctx: Context):
+      print(f"attempts state: {ctx.state}") # attempts state: attempts: 1
+
+    root_agent = Workflow(
+        name="root_agent",
+        edges=[("START", init_state_node, task_attempt_node, read_state_node)],
     )
-```
+    ```
 
-!!! warning "주의: Event.output 제한"
+    !!! warning "Caution: `state` property data limitations"
 
-    노드는 한 번 실행될 때 ***Event.output*** 데이터 페이로드를 하나만 내보낼 수
-    있습니다. 즉, 노드 안에서 ***yield*** 를 여러 번 사용할 수는 있지만,
-    ***Event.output*** 을 가진 ***yield*** 를 두 번 이상 실행하면 런타임 오류가
-    발생합니다.
+        The state parameter *should not be used to persist large amounts of
+        data* between nodes. Use artifacts or other data persistence mechanisms,
+        such as database Tools, to persist large data resources during the life
+        cycle of a Workflow.
 
-### Event `message` 매개변수
+=== "Go"
 
-***Event*** 의 ***message*** 매개변수는 사용자 응답용 데이터를 전달할 때
-사용합니다. 일반적으로는 사용자에게 정보를 제공하거나 사용자로부터 정보를
-요청하는 경우가 아니라면, 에이전트 코드에서 ***message*** 매개변수를 사용하지
-않아야 합니다. 다음 코드는 워크플로 실행 도중 사용자에게 정보를 제공하는 예시를
-보여줍니다.
+    State is written with `ctx.Session().State().Set(key, value)` and read
+    with `.Get(key)`. The `session` package defines prefix constants that map
+    to the same lifetime scopes as Python's state parameter. This pattern
+    applies to prebuilt workflow agents and to tools and callbacks in any
+    agent style:
 
-```python
-async def user_message(node_input: str):
-  """Tell user research process is starting."""
-  yield Event(message="Beginning research process...")
-```
+    ```go
+    --8<-- "examples/go/snippets/graphs/data-handling/main.go:state-scopes"
+    ```
 
-### Event `state` 매개변수
+    !!! warning "Caution: state data limitations"
 
-***Event*** 의 ***state*** 매개변수는 ADK 세션 전체 동안 유지해야 하는 소량의
-데이터 값을 저장하는 데 사용합니다. state 매개변수의 값은 노드 사이에서 자동으로
-영속화되며, 더 복잡한 워크플로의 실행을 안내하기 위한 용도로 설계되었습니다.
-노드는 state 값을 수정할 수 있으며, 수정된 state 값은 다운스트림 노드에서
-사용할 수 있습니다. 다음 코드 예시는 state 가 노드 사이에서 어떻게 유지되는지
-보여줍니다.
+        Session state is a lightweight key-value store. Do not use it to persist
+        large payloads such as file contents or binary data. Use ADK artifacts
+        or external storage tools instead.
 
-```python
-async def init_state_node(attempts: int = 0):
-  yield Event(
-      state={
-          "attempts": attempts,
-      },
-  )
+    !!! tip "workflow package: prefer Event.Output over state"
 
-async def task_attempt_node(node_input: Content, attempts: int):
-  yield Event(
-      state={
-          "attempts": attempts + 1,
-      },
-  )
+        For the `workflow` package (`FunctionNode`, `AgentNode`, `DynamicNode`),
+        pass data between nodes by returning typed values — the framework sets
+        `Event.Output` automatically. Only use `State().Set` when you need to
+        share values with tools, callbacks, or agent `Instruction` templates.
 
-async def read_state_node(ctx: WorkflowContext):
-  print(f"attempts state: {ctx.state}") # attempts state: attempts: 1
+## Constrain node data with schemas
 
-root_agent = Workflow(
-    name="root_agent",
-    edges=[("START", init_state_node, task_attempt_node, read_state_node)],
-)
-```
+You can set input and output data schemas to constrain the data formats
+accepted and produced by any agent node.
 
-!!! warning "주의: `state` 속성 데이터 제한"
+=== "Python"
 
-    state 매개변수는 노드 간에 *대량의 데이터를 영속화하는 용도*로 사용하면 안
-    됩니다. 대용량 데이터 리소스는 Workflow 수명 주기 동안 artifacts 나 데이터베이스
-    Tool 같은 다른 데이터 영속화 메커니즘을 사용하세요.
+    Use `input_schema` and `output_schema` with a class that extends
+    ***BaseModel*** to constrain any agent's input and output:
 
-## 스키마로 노드 입력과 출력 데이터 제한하기
+    ```python
+    from google.adk import Agent
+    from pydantic import BaseModel
 
-입력 및 출력 데이터 스키마를 설정해 ***FunctionNodes*** 와 **Agents** 를
-포함한 모든 노드의 입력 및 출력 데이터 형식을 제한할 수 있습니다. 다음
-매개변수는 모든 노드에서 선택적으로 설정할 수 있습니다. 에이전트 프로젝트의
-요구사항에 따라 이 매개변수들을 둘 다 또는 하나만 설정할 수 있습니다.
+    class FlightSearchInput(BaseModel):
+        origin: str           # Airport code "SFO"
+        destination: str      # Airport code "CDG"
+        departure_date: date  # date(2026, 3, 15)
+        passengers: int = 1   # Number of passengers
 
-- **`input_schema`**: ***BaseModel*** 을 확장한 클래스를 사용해 기대하는 입력
-  스키마를 설정합니다.
-- **`output_schema`**: ***BaseModel*** 을 확장한 클래스를 사용해 필요한 출력
-  스키마를 설정합니다.
+    class FlightSearchOutput(BaseModel):
+        flights: list[Flight]
+        cheapest_price: float
 
-아래 코드 예시는 서브에이전트에 입력 및 출력 스키마를 모두 설정하는 방법을
-보여줍니다.
+    flight_searcher = Agent(
+        name="flight_searcher",
+        instruction="Search for available flights.",
+        input_schema=FlightSearchInput,
+        output_schema=FlightSearchOutput,
+        tools=[search_flights_api],
+        mode="single_turn",
+        ...
+    )
 
-```python
-from google.adk import Agent
-from pydantic import BaseModel
+    assistant = Agent(
+        name="assistant",
+        instruction="You help users plan trips.",
+        sub_agents=[flight_searcher],
+        ...
+    )
+    ```
 
-class FlightSearchInput(BaseModel):
-    origin: str           # Airport code "SFO"
-    destination: str      # Airport code "CDG"
-    departure_date: date  # date(2026, 3, 15)
-    passengers: int = 1   # Number of passengers
+=== "Go"
 
-class FlightSearchOutput(BaseModel):
-    flights: list[Flight]
-    cheapest_price: float
+    **workflow package**: use `workflow.NewAgentNodeTyped[Input, Output]` to
+    attach schemas to an agent node. The generic type parameters are reflected
+    into `*jsonschema.Schema` automatically — no hand-built schema construction
+    needed. The node's `Event.Output` carries the structured result to the
+    successor — no `OutputKey` or state write is needed:
 
-flight_searcher = Agent(
-    name="flight_searcher",
-    instruction="Search for available flights.",
-    input_schema=FlightSearchInput,
-    output_schema=FlightSearchOutput,
-    tools=[search_flights_api],
-    mode="single-turn",
-    ...
-)
+    ```go
+    --8<-- "examples/go/snippets/graphs/data-handling/main.go:input-output-schema"
+    ```
 
-assistant = Agent(
-    name="assistant",
-    instruction="You help users plan trips.",
-    sub_agents=[flight_searcher],
-    ...
-)
-```
+    **Prebuilt workflow agents**: set `InputSchema` and `OutputSchema` on
+    `llmagent.Config`. `OutputSchema` forces the model to reply with a JSON
+    object matching the schema (the agent cannot use tools when `OutputSchema`
+    is set). Use `OutputKey` to save the JSON string to state for downstream
+    agents to reference via `{key}` in their `Instruction`.
 
-## 에이전트에서 구조화된 데이터 접근
+## Access structured data in agents
 
-서브에이전트나 함수 노드 같은 워크플로 노드로부터 구조화된 데이터를 에이전트에
-전달할 때, 해당 데이터를 에이전트의 instructions 에 넣기 위한 특정 구문을
-사용할 수 있습니다. 구체적으로는 중괄호 `{ }` 를 사용해 입력 스키마 속성을
-선택하거나, `< >` 를 사용해 입력 스키마 속성, `from` 키워드, 그리고 해당
-데이터를 제공하는 노드 이름을 지정할 수 있습니다. 다음 코드 스니펫은 에이전트
-***input schema*** 를 통해 전달된 데이터를 포함하는 두 가지 방법을 보여줍니다.
+=== "Python"
 
-```python
-class CityTime(BaseModel):
-    time_info: str  # time information
-    city: str       # city name
+    Use the curly-brace `{ }` syntax to select properties from the input
+    schema, or `< >` to select a property and also qualify it by the name
+    of the source node:
 
-def lookup_time_function(city: str):
-    """Simulate returning the current time in the specified city."""
-    return Event(output=CityTime(time_info='10:10 AM', city=city))
+    ```python
+    class CityTime(BaseModel):
+        time_info: str  # time information
+        city: str       # city name
 
-city_report_agent = Agent(
-    name="city_report_agent",
-    model="gemini-flash-latest",
-    input_schema=CityTime,
+    def lookup_time_function(city: str):
+        """Simulate returning the current time in the specified city."""
+        return Event(output=CityTime(time_info='10:10 AM', city=city))
 
-    # data selection based on class and parameter
-    # instruction="""
-    #     Return a sentence in the following format:
-    #     It is {CityTime.time_info} in {CityTime.city} right now.
-    # """,
+    city_report_agent = Agent(
+        name="city_report_agent",
+        model="gemini-flash-latest",
+        input_schema=CityTime,
 
-    # more restrictive data selection based on source node name
-    instruction="""
-        Return a sentence in the following format:
-        It is <CityTime.time_info from lookup_time_function> in
-        <CityTime.city from lookup_time_function> right now.
-    """,
-)
+        # data selection based on class and parameter
+        # instruction="""
+        #     Return a sentence in the following format:
+        #     It is {CityTime.time_info} in {CityTime.city} right now.
+        # """,
 
-root_agent = Workflow(
-    name="root_agent",
-    edges=[
-        (START, city_generator_agent, lookup_time_function, city_report_agent)
-    ],
-)
-```
+        # more restrictive data selection based on source node name
+        instruction="""
+            Return a sentence in the following format:
+            It is <CityTime.time_info from lookup_time_function> in
+            <CityTime.city from lookup_time_function> right now.
+        """,
+    )
 
-이 워크플로의 완전하지만 단순화된 버전은
-[그래프 기반 에이전트 워크플로](/ko/workflows/#시작하기)를
-참조하세요.
+    root_agent = Workflow(
+        name="root_agent",
+        edges=[
+            (START, city_generator_agent, lookup_time_function, city_report_agent)
+        ],
+    )
+    ```
+
+=== "Go"
+
+    In ADK Go v2.0.0, a `FunctionNode` returns a typed struct and the
+    framework serializes it into `Event.Output`. The successor `AgentNode`
+    receives the struct as its user content — the fields are available to the
+    agent's `Instruction` without any `{key}` template syntax. This is the
+    direct equivalent of Python's `input_schema=CityTime` with
+    `{CityTime.time_info}` template placeholders: the struct fields are
+    delivered as typed input rather than looked up by name from state.
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/data-handling/main.go:structured-output"
+    ```
+
+For a complete example of this workflow, see
+[Graph-based agent workflows](/graphs/#get-started).

@@ -1,71 +1,75 @@
-# 메모리: `MemoryService`를 사용한 장기 지식
+# Memory: Long-term knowledge with `MemoryService`
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-`Session`이 *단일, 진행 중인 대화*에 대한 기록(`events`) 및 임시 데이터(`state`)를 추적하는 방법을 살펴보았습니다. 하지만 에이전트가 *과거* 대화의 정보를 기억해야 하는 경우는 어떻게 해야 할까요? 이것이 바로 **장기 지식**과 **`MemoryService`**의 개념이 필요한 부분입니다.
+While a `Session` tracks the history (`events`) and temporary data (`state`) of
+a single conversation, an agent may need to recall information from past
+interactions. This is where the concept of **Long-Term Knowledge** and the
+**`MemoryService`** come into play. Think of it this way:
 
-다음과 같이 생각할 수 있습니다.
+- **`Session` / `State`:** It's your short-term memory during one specific chat.
+- **Long-Term Knowledge (`MemoryService`)**: It's a searchable archive or
+  knowledge library the agent can consult, potentially containing information
+  from many past chats or other sources.
 
-* **`Session` / `State`:** 특정 채팅 중 단기 기억과 같습니다.
-* **장기 지식(`MemoryService`)**: 에이전트가 참조할 수 있는 검색 가능한 아카이브 또는 지식 라이브러리와 같으며, 잠재적으로 많은 과거 채팅 또는 기타 소스의 정보를 포함합니다.
+## The `MemoryService` role
 
-## `MemoryService` 역할
+The `BaseMemoryService` (or `Service` in Go) defines the interface for managing
+this searchable, long-term knowledge store. It supports these operations:
 
-`BaseMemoryService`(Go에서는 `Service`)는 이 검색 가능한 장기 지식 저장소를 관리하기 위한 인터페이스를 정의합니다. 다음 네 가지 작업을 지원합니다.
+- **Ingesting Information:**
+    - **`add_session_to_memory`**: Takes a completed `Session` and adds relevant
+      information to the long-term knowledge store. This approach is ideal for
+      automatically capturing the essence of a conversation.
+    - **`add_events_to_memory`**: Appends a delta of events (for example, the
+      latest turn) without re-ingesting the full session. Useful when you want
+      to write to memory partway through a long-running session.
+    - **`add_memory`**: Adds explicit `MemoryEntry` objects directly to the
+      memory. This method gives you fine-grained control and is useful for
+      injecting specific facts from other sources.
+- **Searching Information (`search_memory`):** Lets an agent (typically via a
+  `Tool`) query the knowledge store and retrieve relevant snippets or context
+  based on a search query.
 
-1. **세션 수집(`add_session_to_memory`):** (일반적으로 완료된) `Session`의 내용을 가져와 관련 정보를 장기 지식 저장소에 추가합니다.
-2. **이벤트 증분 수집(`add_events_to_memory`):** 전체 세션을 다시 수집하지 않고 이벤트 델타(예: 최신 턴)를 추가합니다. 장기 실행 세션 도중 메모리에 쓰고 싶을 때 유용합니다.
-3. **메모리 항목 직접 쓰기(`add_memory`):** 이벤트 기반 추출과 함께 직접 쓰기를 지원하는 서비스에 미리 구성된 `MemoryEntry` 항목을 삽입합니다.
-4. **검색(`search_memory`):** 에이전트(일반적으로 `Tool`을 통해)가 지식 저장소를 쿼리하고 검색 쿼리를 기반으로 관련 스니펫을 가져올 수 있도록 합니다.
+`add_events_to_memory` and `add_memory` are optional and are not implemented by
+every service, so confirm that your chosen service supports them before relying
+on them.
 
-작업 2와 3은 선택 사항입니다. 기본 클래스의 `add_events_to_memory`와 `add_memory` 구현은 `NotImplementedError`를 발생시키므로, 사용하기 전에 구체적인 서비스가 이를 지원하는지 확인하십시오.
+## Choose the right memory service
 
-## 올바른 메모리 서비스 선택
+The Python ADK ships three `MemoryService` implementations. Use the table below
+to decide which is the best fit for your agent.
 
-Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표를 사용하여 에이전트에 가장 적합한 것을 결정하십시오.
-
-| **기능** | **InMemoryMemoryService** | **VertexAiMemoryBankService** | **VertexAiRagMemoryService** |
+| **Feature** | **InMemoryMemoryService** | **VertexAiMemoryBankService** | **VertexAiRagMemoryService** |
 | :--- | :--- | :--- | :--- |
-| **지속성** | 없음(다시 시작하면 데이터가 손실됨) | 예(Agent Platform에서 관리) | 예(Knowledge Engine에 저장) |
-| **주요 사용 사례** | 프로토타이핑, 로컬 개발 및 간단한 테스트. | 사용자 대화에서 의미 있고 진화하는 메모리를 구축합니다. | 전체 대화 말뭉치 또는 다른 RAG 색인 콘텐츠와 함께 벡터 검색 검색을 수행합니다. |
-| **메모리 추출** | 전체 대화 저장 | 대화에서 [의미 있는 정보](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/generate-memories)를 추출하고 기존 메모리와 통합합니다(LLM 기반). | [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)으로 색인된 전체 대화를 저장합니다. |
-| **검색 기능** | 기본 키워드 일치. | 고급 의미 검색. | Knowledge Engine 기반 벡터 유사도 검색. |
-| **설정 복잡성** | 없음. 기본값입니다. | 낮음. Agent Platform의 [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview) 인스턴스가 필요합니다. | 중간. [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/manage-your-rag-corpus)이 필요합니다. |
-| **종속성** | 없음. | Google Cloud 프로젝트, Agent Platform API | Google Cloud 프로젝트, Knowledge Engine, Agent Platform SDK(선택 설치). |
-| **사용 시기** | 프로토타이핑을 위해 여러 세션의 채팅 기록을 검색하려는 경우. | 에이전트가 과거 상호 작용을 기억하고 학습하기를 원하는 경우. | 이미 RAG 인프라가 있거나 원시 대화 기록을 검색하려는 경우. |
+| **Persistence** | None, data is lost on restart | Yes, managed by the Agent Platform | Yes, stored in Knowledge Engine |
+| **Primary Use Case** | Prototyping, local development, and simple testing. | Building meaningful, evolving memories from user conversations. | Vector-search retrieval over the full conversation corpus, or alongside other RAG-indexed content. |
+| **Memory Extraction** | Stores full conversation | Extracts [meaningful information](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/generate-memories) from conversations and consolidates it with existing memories powered by LLM | Stores full conversation, indexed by [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview). |
+| **Search Capability** | Basic keyword matching. | Advanced semantic search. | Vector similarity search over Knowledge Engine. |
+| **Setup Complexity** | None. It's the default. | Low. Requires an [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview) instance on Agent Platform. | Medium. Requires [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/manage-your-rag-corpus). |
+| **Dependencies** | None. | Google Cloud Project, Agent Platform API | Google Cloud Project, Knowledge Engine, the Agent Platform SDK (optional install). |
+| **When to use it** | When you want to search across multiple sessions’ chat histories for prototyping. | When you want your agent to remember and learn from past interactions. | When you already have RAG infrastructure or want to retrieve over raw conversation transcripts. |
 
-`google.adk.memory`에서 `VertexAiRagMemoryService`를 항상 가져올 수 있지만, `pip install google-adk[gcp]`를 통해 Agent Platform SDK가 설치되어 있지 않으면 생성 시 `ImportError`가 발생합니다. Memory Bank와 RAG 기반 메모리는 아래의 [Memory Bank](#memory-bank) 및 [RAG Memory](#rag-memory)에 설명되어 있습니다.
+You can always import `VertexAiRagMemoryService` from `google.adk.memory`, but
+constructing it raises `ImportError` unless the Agent Platform SDK is installed
+with `pip install google-adk[gcp]`. Memory Bank and RAG-backed memory are
+documented in [Memory Bank](#memory-bank) and [RAG Memory](#rag-memory) below.
 
-## 인메모리 메모리
 
-`InMemoryMemoryService`는 애플리케이션의 메모리에 세션 정보를 저장하고 검색을 위해 기본 키워드 일치를 수행합니다. 설정이 필요 없으며 지속성이 필요하지 않은 프로토타이핑 및 간단한 테스트 시나리오에 가장 적합합니다.
+## `InMemoryMemoryService`
+
+The `InMemoryMemoryService` stores session information in the application's
+memory and performs basic keyword matching for searches. It requires no setup
+and is best for prototyping and simple testing scenarios where persistence isn't
+required.
 
 === "Python"
 
     ```py
     from google.adk.memory import InMemoryMemoryService
     memory_service = InMemoryMemoryService()
-    ```
-
-=== "Go"
-    ```go
-    import (
-      "google.golang.org/adk/v2/memory"
-      "google.golang.org/adk/v2/session"
-    )
-
-    // 상태와 메모리를 공유하려면 실행기 간에 서비스를 공유해야 합니다.
-    sessionService := session.InMemoryService()
-    memoryService := memory.InMemoryService()
-    ```
-
-=== "Java"
-    ```java
-    import com.google.adk.memory.InMemoryMemoryService;
-
-    InMemoryMemoryService memoryService = new InMemoryMemoryService();
     ```
 
 === "TypeScript"
@@ -75,15 +79,37 @@ Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표�
     const memoryService = new InMemoryMemoryService();
     ```
 
+=== "Go"
+
+    ```go
+    import (
+      "google.golang.org/adk/v2/memory"
+      "google.golang.org/adk/v2/session"
+    )
+
+    // Services must be shared across runners to share state and memory.
+    sessionService := session.InMemoryService()
+    memoryService := memory.InMemoryService()
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.memory.InMemoryMemoryService;
+
+    InMemoryMemoryService memoryService = new InMemoryMemoryService();
+    ```
+
 === "Kotlin"
+
     ```kotlin
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:instantiate_service"
     ```
 
+**Example: Add and search memory**
 
-**예: 메모리 추가 및 검색**
-
-이 예는 단순성을 위해 `InMemoryMemoryService`를 사용하는 기본 흐름을 보여줍니다.
+This example demonstrates the basic flow using the `InMemoryMemoryService` for
+simplicity.
 
 === "Python"
 
@@ -91,98 +117,93 @@ Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표�
     import asyncio
     from google.adk.agents import LlmAgent
     from google.adk.sessions import InMemorySessionService, Session
-    from google.adk.memory import InMemoryMemoryService # MemoryService 가져오기
+    from google.adk.memory import InMemoryMemoryService # Import MemoryService
     from google.adk.runners import Runner
-    from google.adk.tools import load_memory # 메모리 쿼리 도구
+    from google.adk.tools import load_memory # Tool to query memory
     from google.genai.types import Content, Part
 
-    # --- 상수 ---
+    # --- Constants ---
     APP_NAME = "memory_example_app"
     USER_ID = "mem_user"
-    MODEL = "gemini-flash-latest" # 유효한 모델 사용
+    MODEL = "gemini-flash-latest" # Use a valid model
 
-    # --- 에이전트 정의 ---
-    # 에이전트 1: 정보 캡처를 위한 간단한 에이전트
+    # --- Agent Definitions ---
+    # Agent 1: Simple agent to capture information
     info_capture_agent = LlmAgent(
         model=MODEL,
         name="InfoCaptureAgent",
-        instruction="사용자의 진술을 인정합니다.",
+        instruction="Acknowledge the user's statement.",
     )
 
-    # 에이전트 2: 메모리를 사용할 수 있는 에이전트
+    # Agent 2: Agent that can use memory
     memory_recall_agent = LlmAgent(
         model=MODEL,
         name="MemoryRecallAgent",
-        instruction="사용자의 질문에 답합니다. 답변이 과거 대화에 있을 수 있는 경우 'load_memory' 도구를 사용하십시오.",
-        tools=[load_memory] # 에이전트에 도구 제공
+        instruction="Answer the user's question. Use the 'load_memory' tool "
+                    "if the answer might be in past conversations.",
+        tools=[load_memory] # Give the agent the tool
     )
 
-    # --- 서비스 ---
-    # 상태와 메모리를 공유하려면 실행기 간에 서비스를 공유해야 합니다.
+    # --- Services ---
+    # Services must be shared across runners to share state and memory
     session_service = InMemorySessionService()
-    memory_service = InMemoryMemoryService() # 데모용 인메모리 사용
+    memory_service = InMemoryMemoryService() # Use in-memory for demo
 
     async def run_scenario():
-        # --- 시나리오 ---
+        # --- Scenario ---
 
-        # 1단계: 세션에서 일부 정보 캡처
-        print("--- 1단계: 정보 캡처 ---")
+        # Turn 1: Capture some information in a session
+        print("--- Turn 1: Capturing Information ---")
         runner1 = Runner(
-            # 정보 캡처 에이전트로 시작
+            # Start with the info capture agent
             agent=info_capture_agent,
             app_name=APP_NAME,
             session_service=session_service,
-            memory_service=memory_service # 실행기에 메모리 서비스 제공
+            memory_service=memory_service # Provide the memory service to the Runner
         )
         session1_id = "session_info"
         await runner1.session_service.create_session(app_name=APP_NAME, user_id=USER_ID, session_id=session1_id)
-        user_input1 = Content(parts=[Part(text="제가 가장 좋아하는 프로젝트는 알파 프로젝트입니다.")], role="user")
+        user_input1 = Content(parts=[Part(text="My favorite project is Project Alpha.")], role="user")
 
-        # 에이전트 실행
-        final_response_text = "(최종 응답 없음)"
+        # Run the agent
+        final_response_text = "(No final response)"
         async for event in runner1.run_async(user_id=USER_ID, session_id=session1_id, new_message=user_input1):
             if event.is_final_response() and event.content and event.content.parts:
                 final_response_text = event.content.parts[0].text
-        print(f"에이전트 1 응답: {final_response_text}")
+        print(f"Agent 1 Response: {final_response_text}")
 
-        # 완료된 세션 가져오기
+        # Get the completed session
         completed_session1 = await runner1.session_service.get_session(app_name=APP_NAME, user_id=USER_ID, session_id=session1_id)
 
-        # 이 세션의 내용을 메모리 서비스에 추가
-        print("\n--- 세션 1을 메모리에 추가 ---")
+        # Add this session's content to the Memory Service
+        print("\n--- Adding Session 1 to Memory ---")
         await memory_service.add_session_to_memory(completed_session1)
-        print("세션이 메모리에 추가되었습니다.")
+        print("Session added to memory.")
 
-        # 2단계: 새 세션에서 정보 회상
-        print("\n--- 2단계: 정보 회상 ---")
+        # Turn 2: Recall the information in a new session
+        print("\n--- Turn 2: Recalling Information ---")
         runner2 = Runner(
-            # 메모리 도구가 있는 두 번째 에이전트 사용
+            # Use the second agent, which has the memory tool
             agent=memory_recall_agent,
             app_name=APP_NAME,
-            session_service=session_service, # 동일한 서비스 재사용
-            memory_service=memory_service   # 동일한 서비스 재사용
+            session_service=session_service, # Reuse the same service
+            memory_service=memory_service   # Reuse the same service
         )
         session2_id = "session_recall"
         await runner2.session_service.create_session(app_name=APP_NAME, user_id=USER_ID, session_id=session2_id)
-        user_input2 = Content(parts=[Part(text="제가 가장 좋아하는 프로젝트는 무엇입니까?")], role="user")
+        user_input2 = Content(parts=[Part(text="What is my favorite project?")], role="user")
 
-        # 두 번째 에이전트 실행
-        final_response_text_2 = "(최종 응답 없음)"
+        # Run the second agent
+        final_response_text_2 = "(No final response)"
         async for event in runner2.run_async(user_id=USER_ID, session_id=session2_id, new_message=user_input2):
             if event.is_final_response() and event.content and event.content.parts:
                 final_response_text_2 = event.content.parts[0].text
-        print(f"에이전트 2 응답: {final_response_text_2}")
+        print(f"Agent 2 Response: {final_response_text_2}")
 
-    # 이 예제를 실행하려면 다음 스니펫을 사용할 수 있습니다.
+    # To run this example, you can use the following snippet:
     # asyncio.run(run_scenario())
 
     # await run_scenario()
-    ```
-
-=== "Go"
-
-    ```go
-    --8<-- "examples/go/snippets/sessions/memory_example/memory_example.go:full_example"
     ```
 
 === "TypeScript"
@@ -191,97 +212,16 @@ Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표�
     --8<-- "examples/typescript/snippets/sessions/memory_example.ts:full_example"
     ```
 
+=== "Go"
+
+    ```go
+    --8<-- "examples/go/snippets/sessions/memory_example/memory_example.go:full_example"
+    ```
+
 === "Java"
 
     ```java
-    package com.google.adk.examples.sessions;
-
-    import com.google.adk.agents.LlmAgent;
-    import com.google.adk.memory.InMemoryMemoryService;
-    import com.google.adk.runner.Runner;
-    import com.google.adk.sessions.InMemorySessionService;
-    import com.google.adk.sessions.Session;
-    import com.google.adk.tools.LoadMemoryTool;
-    import com.google.genai.types.Content;
-    import com.google.genai.types.Part;
-    import java.util.Optional;
-
-    public class MemoryExample {
-
-      private static final String APP_NAME = "memory_example_app";
-      private static final String USER_ID = "mem_user";
-      private static final String MODEL = "gemini-flash-latest";
-
-      public static void main(String[] args) {
-        // 서비스
-        InMemorySessionService sessionService = new InMemorySessionService();
-        InMemoryMemoryService memoryService = new InMemoryMemoryService();
-
-        // 에이전트 1: 정보 캡처
-        LlmAgent infoCaptureAgent = new LlmAgent.Builder()
-            .model(MODEL)
-            .name("InfoCaptureAgent")
-            .instruction("사용자의 진술을 인정합니다.")
-            .build();
-
-        // 에이전트 2: 정보 회상
-        LlmAgent memoryRecallAgent = new LlmAgent.Builder()
-            .model(MODEL)
-            .name("MemoryRecallAgent")
-            .instruction("사용자의 질문에 답합니다. 답이 과거 대화에 있을 수 있다면 'load_memory' 도구를 사용하세요.")
-            .tools(new LoadMemoryTool())
-            .build();
-
-        // 1단계
-        System.out.println("--- 1단계: 정보 캡처 ---");
-        Runner runner1 = new Runner.Builder()
-            .agent(infoCaptureAgent)
-            .appName(APP_NAME)
-            .sessionService(sessionService)
-            .memoryService(memoryService)
-            .build();
-
-        String session1Id = "session_info";
-        sessionService.createSession(APP_NAME, USER_ID, null, session1Id).blockingGet();
-
-        Content userInput1 = Content.fromParts(Part.fromText("제가 가장 좋아하는 프로젝트는 Project Alpha입니다."));
-
-        runner1.runAsync(USER_ID, session1Id, userInput1)
-            .blockingForEach(event -> {
-              if (event.finalResponse() && event.content().isPresent()) {
-                System.out.println("에이전트 1 응답: " + event.content().get().parts().get(0).text().get());
-              }
-            });
-
-        // 메모리에 추가
-        System.out.println("\n--- 세션 1을 메모리에 추가 ---");
-        Session completedSession1 =
-            sessionService.getSession(APP_NAME, USER_ID, session1Id, Optional.empty()).blockingGet();
-        memoryService.addSessionToMemory(completedSession1).blockingAwait();
-        System.out.println("세션이 메모리에 추가되었습니다.");
-
-        // 2단계
-        System.out.println("\n--- 2단계: 정보 회상 ---");
-        Runner runner2 = new Runner.Builder()
-            .agent(memoryRecallAgent)
-            .appName(APP_NAME)
-            .sessionService(sessionService)
-            .memoryService(memoryService)
-            .build();
-
-        String session2Id = "session_recall";
-        sessionService.createSession(APP_NAME, USER_ID, null, session2Id).blockingGet();
-
-        Content userInput2 = Content.fromParts(Part.fromText("제가 가장 좋아하는 프로젝트는 무엇인가요?"));
-
-        runner2.runAsync(USER_ID, session2Id, userInput2)
-            .blockingForEach(event -> {
-              if (event.finalResponse() && event.content().isPresent()) {
-                System.out.println("에이전트 2 응답: " + event.content().get().parts().get(0).text().get());
-              }
-            });
-      }
-    }
+    --8<-- "examples/java/snippets/src/main/java/sessions/MemoryExample.java:full_example"
     ```
 
 === "Kotlin"
@@ -290,10 +230,42 @@ Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표�
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:full_example"
     ```
 
+### Search memory within a tool
 
-### 도구 내에서 메모리 검색
+You can also search memory from within a custom tool by using the tool context.
 
-`tool.Context`를 사용하여 사용자 지정 도구 내에서 메모리를 검색할 수도 있습니다.
+=== "Python"
+
+    ```python
+    from google.adk.tools import ToolContext
+
+    async def search_past_conversations(
+        query: str, tool_context: ToolContext
+    ) -> dict:
+        response = await tool_context.search_memory(query)
+        return {
+            "results": [
+                part.text
+                for entry in response.memories
+                for part in (entry.content.parts or [])
+                if part.text
+            ]
+        }
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // Within a tool implementation
+    async runAsync({ args, toolContext }: RunAsyncToolRequest) {
+      const query = args['query'] as string;
+      const response = await toolContext.searchMemory(query);
+      // process response
+      return {
+        memories: response.memories.map(m => m.content.parts?.map(p => p.text).join(' ')).join('\n')
+      };
+    }
+    ```
 
 === "Go"
 
@@ -304,28 +276,15 @@ Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표�
 === "Java"
 
     ```java
-    // 도구 구현 내부
+    // Within a tool implementation
     public Single<ToolOutput> execute(ToolContext context) {
-      String query = ...; // 인수에서 쿼리 추출
+      String query = ...; // get query from arguments
       return context.searchMemory(query)
           .map(response -> {
-            // 응답 처리
-            return new ToolOutput(response.memories().toString());
+              // process response
+              return new ToolOutput(response.memories().toString());
           });
     }
-    ```
-
-=== "TypeScript"
-
-    ```typescript
-    import { LlmAgent, PRELOAD_MEMORY } from '@google/adk';
-
-    const agent = new LlmAgent({
-        model: MODEL_ID,
-        name: 'weather_sentiment_agent',
-        instruction: "...",
-        tools: [PRELOAD_MEMORY]
-    });
     ```
 
 === "Kotlin"
@@ -334,61 +293,126 @@ Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표�
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:search_within_tool"
     ```
 
-## Memory Bank { #memory-bank }
+## Memory Bank
 
-`VertexAiMemoryBankService`는 에이전트를 [Memory Bank](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview)에 연결합니다. Memory Bank는 대화형 에이전트를 위한 정교하고 지속적인 메모리 기능을 제공하는 완전 관리형 Google Cloud 서비스입니다.
+The `VertexAiMemoryBankService` connects your agent to [Memory
+Bank](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview),
+a fully managed Google Cloud service that provides sophisticated, persistent
+memory capabilities for conversational agents.
 
-### 작동 방식
+### How it works
 
-이 서비스는 두 가지 주요 작업을 처리합니다.
+The service handles two key operations:
 
-*   **메모리 생성:** 대화가 끝나면 세션의 이벤트를 메모리 뱅크로 보낼 수 있으며, 메모리 뱅크는 정보를 지능적으로 처리하고 "메모리"로 저장합니다.
-*   **메모리 검색:** 에이전트 코드는 메모리 뱅크에 대해 검색 쿼리를 실행하여 과거 대화에서 관련 메모리를 검색할 수 있습니다.
+- **Generating Memories:** At the end of a conversation, you can send the
+  session's events to the Memory Bank, which intelligently processes and stores
+  the information as "memories."
+- **Retrieving Memories:** Your agent code can issue a search query against the
+  Memory Bank to retrieve relevant memories from past conversations.
 
-### 전제 조건
+### Direct memory ingestion with `add_memory`
 
-이 기능을 사용하려면 다음이 있어야 합니다.
+Besides generating memories from session history, `VertexAiMemoryBankService`
+also supports direct memory ingestion via the `add_memory` method. This method
+gives you precise control over the facts stored in the Memory Bank.
 
-1.  **Google Cloud 프로젝트:** Agent Platform API가 활성화되어 있어야 합니다.
-2.  **Agent Runtime:** Agent Platform에서 Agent Runtime을 만들어야 합니다. Memory Bank를 사용하기 위해 에이전트를 Agent Runtime에 배포할 필요는 없습니다. 이렇게 하면 구성에 필요한 **Agent Runtime ID**가 제공됩니다.
-3.  **인증:** 로컬 환경이 Google Cloud 서비스에 액세스하도록 인증되었는지 확인합니다. 가장 간단한 방법은 다음을 실행하는 것입니다.
+How it works depends on the `enable_consolidation` option:
+
+- **Direct Creation (Default):** By default, `add_memory` calls the underlying
+  `memories.create` API. Each `MemoryEntry` you provide is added as a distinct,
+  separate memory item.
+
+    ```python
+    from google.adk.memory import VertexAiMemoryBankService
+    from google.adk.memory.memory_entry import MemoryEntry
+    from google.genai.types import Content, Part
+
+    memory_service = VertexAiMemoryBankService(...)
+
+    await memory_service.add_memory(
+        app_name="my-app",
+        user_id="user-123",
+        memories=[
+            MemoryEntry(content=Content(parts=[Part(text="The user's favorite color is blue.")]))
+        ]
+    )
+    ```
+
+- **Creation with Consolidation:** If you set `enable_consolidation` to `True`
+  in the `custom_metadata`, the service uses the `memories.generate` API. This
+  setting allows the Memory Bank to intelligently consolidate the new memory
+  items with existing related memories, preventing redundancy and building a
+  more coherent knowledge base.
+
+    ```python
+    await memory_service.add_memory(
+        app_name="my-app",
+        user_id="user-123",
+        memories=[
+            MemoryEntry(content=Content(parts=[Part(text="The user's favorite color is light blue.")]))
+        ],
+        custom_metadata={"enable_consolidation": True}
+    )
+    ```
+
+### Prerequisites
+
+Before you can use this feature, you must have:
+
+1. **A Google Cloud Project:** With the Agent Platform API enabled.
+2. **An Agent Runtime:** You need to create an Agent Runtime on Agent Platform.
+   You do not need to deploy your agent to Agent Runtime to use Memory Bank.
+   This setup will provide you with the **Agent Runtime ID** required for
+   configuration.
+3. **Authentication:** Ensure your local environment is authenticated to access
+   Google Cloud services. The simplest way is to run:
+
     ```bash
     gcloud auth application-default login
     ```
-4.  **환경 변수:** 이 서비스에는 Google Cloud 프로젝트 ID와 위치가 필요합니다. 환경 변수로 설정하십시오.
+
+4. **Environment Variables:** The service requires your Google Cloud Project ID
+   and Location. Set them as environment variables:
+
     ```bash
     export GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
     export GOOGLE_CLOUD_LOCATION="your-gcp-location"
     ```
 
-### 구성
+For more information on connecting to Google Cloud from ADK agents, see [Connect
+to Google Cloud and Agent Platform](/get-started/google-cloud/).
 
-에이전트를 메모리 뱅크에 연결하려면 ADK 서버(`adk web` 또는 `adk api_server`)를 시작할 때 `--memory_service_uri` 플래그를 사용합니다. URI는 `agentengine://<agent_engine_id>` 형식이어야 합니다.
+### Configuration
+
+To connect your agent to the Memory Bank, you use the `--memory_service_uri`
+flag when starting the ADK server (`adk web` or `adk api_server`). The Uniform
+Resource Identifier (URI) must be in the format
+`agentengine://<agent_engine_id>`.
 
 ```bash title="bash"
 adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 ```
 
-또는 `VertexAiMemoryBankService`를 수동으로 인스턴스화하고 `Runner`에 전달하여 메모리 뱅크를 사용하도록 에이전트를 구성할 수 있습니다.
+Or, you can configure your agent to use the Memory Bank by manually
+instantiating the `VertexAiMemoryBankService` and passing it to the `Runner`.
 
 === "Python"
-  ```py
-  from google import adk
-  from google.adk.memory import VertexAiMemoryBankService
 
-  agent_engine_id = agent_engine.api_resource.name.split("/")[-1]
+    ```py
+    from google import adk
+    from google.adk.memory import VertexAiMemoryBankService
 
-  memory_service = VertexAiMemoryBankService(
-      project="PROJECT_ID",
-      location="LOCATION",
-      agent_engine_id=agent_engine_id
-  )
+    memory_service = VertexAiMemoryBankService(
+        project="PROJECT_ID",
+        location="LOCATION",
+        agent_engine_id="AGENT_ENGINE_ID"
+    )
 
-  runner = adk.Runner(
-      ...
-      memory_service=memory_service
-  )
-  ```
+    runner = adk.Runner(
+        ...
+        memory_service=memory_service
+    )
+    ```
 
 === "Kotlin"
 
@@ -396,9 +420,13 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:memory_bank"
     ```
 
-## RAG Memory { #rag-memory }
+## RAG memory
 
-`google.adk.memory`에서 `VertexAiRagMemoryService`를 항상 가져올 수 있지만, `pip install google-adk[gcp]`를 통해 Agent Platform SDK가 설치되어 있지 않으면 생성 시 `ImportError`가 발생합니다. 메모리 뱅크 및 RAG 지원 메모리는 아래의 [메모리 뱅크](#memory-bank) 및 [RAG 메모리](#rag-memory)에 설명되어 있습니다.
+The `VertexAiRagMemoryService` stores conversations in [Knowledge
+Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)
+and retrieves them by vector similarity. Use it when you already have RAG
+infrastructure or want raw transcript retrieval rather than the LLM-extracted
+memories produced by Memory Bank. Requires the Agent Platform SDK.
 
 === "Python"
 
@@ -418,61 +446,101 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:rag_memory"
     ```
 
-## 에이전트에서 메모리 사용
+## Use memory in your agent
 
-메모리 서비스가 구성되면 에이전트는 도구 또는 콜백을 사용하여 메모리를 검색할 수 있습니다. ADK에는 메모리 검색을 위한 두 가지 기본 제공 도구가 포함되어 있습니다.
+When a memory service is configured, your agent can use a tool or callback to
+retrieve memories. ADK includes two pre-built tools for retrieving memories:
 
-- **메모리 미리 로드(Preload memory)**: 콜백과 유사하게 각 턴이 시작될 때 메모리를 자동으로 검색합니다.
-- **메모리 로드(Load memory)**: 에이전트가 도움이 될 것이라고 판단할 때 메모리를 검색합니다.
+- **Preload memory**: Automatically retrieves memory at the beginning of each
+  turn, similar to a callback.
+- **Load memory**: Retrieves memory when your agent decides it would be helpful.
 
-**예:**
+**Example:**
 
 === "Python"
-```python
-from google.adk.agents import Agent
-from google.adk.tools.preload_memory_tool import PreloadMemoryTool
 
-agent = Agent(
-    model=MODEL_ID,
-    name='weather_sentiment_agent',
-    instruction="...",
-    tools=[PreloadMemoryTool()]
-)
-```
+    ```python
+    from google.adk.agents import Agent
+    from google.adk.tools import preload_memory
+
+    agent = Agent(
+        model=MODEL_ID,
+        name='weather_sentiment_agent',
+        instruction="...",
+        tools=[preload_memory]
+    )
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    import { LlmAgent, PRELOAD_MEMORY } from '@google/adk';
+
+    const agent = new LlmAgent({
+        model: MODEL_ID,
+        name: 'weather_sentiment_agent',
+        instruction: "...",
+        tools: [PRELOAD_MEMORY]
+    });
+    ```
 
 === "Go"
-```go
-import (
-    "google.golang.org/adk/v2/agent/llmagent"
-    "google.golang.org/adk/v2/tool"
-    "google.golang.org/adk/v2/tool/preloadmemorytool"
-)
 
-agent, _ := llmagent.New(llmagent.Config{
-    Model:       model,
-    Name:        "weather_sentiment_agent",
-    Instruction: "...",
-    Tools:       []tool.Tool{preloadmemorytool.New()},
-})
-```
+    ```go
+    import (
+        "google.golang.org/adk/v2/agent/llmagent"
+        "google.golang.org/adk/v2/tool"
+        "google.golang.org/adk/v2/tool/preloadmemorytool"
+    )
+
+    agent, _ := llmagent.New(llmagent.Config{
+        Model:       model,
+        Name:        "weather_sentiment_agent",
+        Instruction: "...",
+        Tools:       []tool.Tool{preloadmemorytool.New()},
+    })
+    ```
 
 === "Java"
-```java
-import com.google.adk.agents.LlmAgent;
-import com.google.adk.tools.LoadMemoryTool;
 
-LlmAgent agent = new LlmAgent.Builder()
-    .model(MODEL_ID)
-    .name("weather_sentiment_agent")
-    .instruction("...")
-    .tools(new LoadMemoryTool())
-    .build();
-```
+    ```java
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.tools.LoadMemoryTool;
+
+    LlmAgent agent = new LlmAgent.Builder()
+        .model(MODEL_ID)
+        .name("weather_sentiment_agent")
+        .instruction("...")
+        .tools(new LoadMemoryTool())
+        .build();
+    ```
 
 === "Kotlin"
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:preload_memory_agent"
-```
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:preload_memory_agent"
+    ```
+
+To extract memories from your session, you need to call `add_session_to_memory`.
+For example, you can automate this step with a callback:
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import Agent
+    from google.adk.tools import preload_memory
+
+    async def auto_save_session_to_memory_callback(callback_context):
+        await callback_context.add_session_to_memory()
+
+    agent = Agent(
+        model=MODEL,
+        name="Generic_QA_Agent",
+        instruction="Answer the user's questions",
+        tools=[preload_memory],
+        after_agent_callback=auto_save_session_to_memory_callback,
+    )
+    ```
 
 === "TypeScript"
 
@@ -496,91 +564,58 @@ LlmAgent agent = new LlmAgent.Builder()
     });
     ```
 
-세션에서 메모리를 추출하려면 `add_session_to_memory`를 호출해야 합니다. 예를 들어 콜백을 사용하여 이 단계를 자동화할 수 있습니다.
-
-=== "Python"
-```python
-from google.adk.agents import Agent
-from google import adk
-
-async def auto_save_session_to_memory_callback(callback_context):
-    await callback_context._invocation_context.memory_service.add_session_to_memory(
-        callback_context._invocation_context.session)
-
-agent = Agent(
-    model=MODEL,
-    name="Generic_QA_Agent",
-    instruction="사용자의 질문에 답합니다.",
-    tools=[adk.tools.preload_memory_tool.PreloadMemoryTool()],
-    after_agent_callback=auto_save_session_to_memory_callback,
-)
-```
-
 === "Go"
-```go
-import (
-    "context"
-    "google.golang.org/adk/v2/agent"
-    "google.golang.org/adk/v2/agent/llmagent"
-    "google.golang.org/adk/v2/session"
-    "google.golang.org/adk/v2/tool"
-    "google.golang.org/adk/v2/tool/loadmemorytool"
-)
 
-func autoSaveSessionToMemoryCallback(ctx agent.CallbackContext, s session.Session) (*genai.Content, error) {
-    if err := ctx.Memory().AddSessionToMemory(context.Background(), s); err != nil {
-        return nil, err
+    ```go
+    import (
+        "context"
+        "google.golang.org/adk/v2/agent"
+        "google.golang.org/adk/v2/agent/llmagent"
+        "google.golang.org/adk/v2/session"
+        "google.golang.org/adk/v2/tool"
+        "google.golang.org/adk/v2/tool/loadmemorytool"
+    )
+
+    func autoSaveSessionToMemoryCallback(ctx agent.CallbackContext, s session.Session) (*genai.Content, error) {
+        if err := ctx.Memory().AddSessionToMemory(context.Background(), s); err != nil {
+            return nil, err
+        }
+        return nil, nil
     }
-    return nil, nil
-}
 
-agent, _ := llmagent.New(llmagent.Config{
-    Model:               model,
-    Name:                "Generic_QA_Agent",
-    Instruction:         "사용자의 질문에 답합니다.",
-    Tools:               []tool.Tool{loadmemorytool.New()},
-    AfterAgentCallbacks: []agent.AfterAgentCallback{autoSaveSessionToMemoryCallback},
-})
-```
-
-=== "Java"
-```java
-import com.google.adk.agents.LlmAgent;
-import com.google.adk.tools.LoadMemoryTool;
-import io.reactivex.rxjava3.core.Maybe;
-
-LlmAgent agent = new LlmAgent.Builder()
-    .model(MODEL)
-    .name("Generic_QA_Agent")
-    .instruction("사용자의 질문에 답합니다.")
-    .tools(new LoadMemoryTool())
-    .afterAgentCallback((context) -> {
-      return context.invocationContext().memoryService()
-          .addSessionToMemory(context.invocationContext().session())
-          .andThen(Maybe.empty());
+    agent, _ := llmagent.New(llmagent.Config{
+        Model:               model,
+        Name:                "Generic_QA_Agent",
+        Instruction:         "Answer the user's questions",
+        Tools:               []tool.Tool{loadmemorytool.New()},
+        AfterAgentCallbacks: []agent.AfterAgentCallback{autoSaveSessionToMemoryCallback},
     })
-    .build();
-```
+    ```
 
 === "Kotlin"
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:auto_save_callback"
-```
 
-## 메모리 기능 확장
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:auto_save_callback"
+    ```
 
-`BaseMemoryService`를 확장한 메모리 서비스는 커스텀 메타데이터를 포함하여 에이전트 메모리에 세션 및 이벤트를 추가하는 기능을 지원합니다. 다음 코드 예시와 같이 `InMemoryMemoryService`와 같은 메모리 서비스의 `add_session_to_memory` 및 `add_events_to_memory` 메서드를 사용하여 메모리 데이터를 수정할 수 있습니다.
+## Extend memory capabilities
+
+Memory services extended from `BaseMemoryService` support adding sessions and
+events to agent memory, including custom metadata. Use the
+`add_session_to_memory` and `add_events_to_memory` methods of memory services
+such as `InMemoryMemoryService` to amend memory data, as shown in the
+following code example:
 
 ```python
 import asyncio
 from google.adk.memory import InMemoryMemoryService
 
-# my_memory_service는 InMemoryMemoryService의 인스턴스이고
-# my_latest_events는 최근 턴에서 발생한 새 adk.Event 객체의 리스트라고 가정합니다.
+# Assume my_memory_service is an instance of InMemoryMemoryService
+# and my_latest_events is a list of new adk.Event objects from the latest turn.
 my_latest_events = [...]
 
 async def update_incremental_memory(my_memory_service, my_latest_events):
-    # 예시 1: 기본 증분 업데이트
+    # Example 1: Basic incremental update
     await my_memory_service.add_events_to_memory(
         app_name="my-app",
         user_id="my-user",
@@ -588,7 +623,7 @@ async def update_incremental_memory(my_memory_service, my_latest_events):
         session_id="my-optional-session-id"
     )
 
-    # 예시 2: 커스텀 메타데이터를 포함한 증분 업데이트
+    # Example 2: Incremental update with Custom Metadata
     await my_memory_service.add_events_to_memory(
         app_name="my-app",
         user_id="my-user",
@@ -600,7 +635,7 @@ async def update_incremental_memory(my_memory_service, my_latest_events):
     )
 
 async def update_session_memory(my_memory_service, my_completed_session):
-    # 예시 3: 전체 세션에 커스텀 메타데이터 적용
+    # Example 3: Applying custom metadata to a full session
     await my_memory_service.add_session_to_memory(
         session=my_completed_session,
         custom_metadata={
@@ -610,68 +645,99 @@ async def update_session_memory(my_memory_service, my_completed_session):
 
 ```
 
-## 고급 개념
+## Advanced concepts
 
-### 실무에서의 메모리 작동 방식
+### How memory works in practice
 
-메모리 워크플로는 내부적으로 다음 단계를 포함합니다.
+The memory workflow includes the following steps:
 
-1. **세션 상호 작용:** 사용자는 `SessionService`에서 관리하는 `Session`을 통해 에이전트와 상호 작용합니다. 이 상호 작용 동안 이벤트가 기록되고 세션 상태가 업데이트될 수 있습니다.
-2. **메모리에 수집:** 세션이 종료되거나 중요한 정보가 캡처되면 애플리케이션에서 `memory_service.add_session_to_memory(session)`를 호출합니다. 이 작업은 핵심 데이터를 추출하여 Agent Runtime Memory Bank와 같은 장기 지식 저장소에 영구 저장합니다.
-3. **나중에 쿼리:** 다른 세션 또는 동일한 세션에서 과거 컨텍스트가 필요한 질문을 할 수 있습니다(예: "지난주에 X 프로젝트에 대해 무엇을 논의했습니까?").
-4. **에이전트가 메모리 도구 사용:** 기본 제공 `load_memory` 도구와 같이 메모리 검색 도구가 장착된 에이전트는 과거 컨텍스트의 필요성을 인식합니다. 도구를 호출하여 검색 쿼리(예: "지난주 X 프로젝트 논의")를 제공합니다.
-5. **검색 실행:** 도구는 내부적으로 `memory_service.search_memory(app_name=..., user_id=..., query=...)`를 호출합니다.
-6. **결과 반환:** `MemoryService`는 키워드 매칭 또는 의미론적 검색을 사용하여 저장소를 검색하고, 일치하는 스니펫을 `content` 및 선택적 필드(`id`, `author`, `timestamp`, `custom_metadata`)를 보유한 `MemoryEntry` 객체 목록이 포함된 `SearchMemoryResponse`로 반환합니다.
-7. **에이전트가 결과 사용:** 도구는 이러한 결과를 에이전트에 반환하며, 일반적으로 컨텍스트 또는 함수 응답의 일부입니다. 그런 다음 에이전트는 이 검색된 정보를 사용하여 사용자에 대한 최종 답변을 구성할 수 있습니다.
+1. **Session Interaction:** A user interacts with an agent via a `Session`,
+   managed by a `SessionService`. During this interaction, events are recorded
+   and session state may be updated.
+2. **Ingestion into Memory:** When a session concludes or captures significant
+   information, your application calls
+   `memory_service.add_session_to_memory(session)`. This action extracts key
+   data and persists it to your long-term knowledge store, such as the Agent
+   Runtime Memory Bank.
+3. **Later Query:** In a different, or in the same session, you might ask a
+   question requiring past context, for example, "What did we discuss about
+   project X last week?".
+4. **Agent Uses Memory Tool:** An agent equipped with a memory-retrieval tool,
+   such as the built-in `load_memory` tool, recognizes the need for past
+   context. It calls the tool, providing a search query (e.g., "discussion
+   project X last week").
+5. **Search Execution:** The tool internally calls
+   `memory_service.search_memory(app_name=..., user_id=..., query=...)`.
+6. **Results Returned:** The `MemoryService` searches its store, using keyword
+   matching or semantic search, and returns matching snippets as a
+   `SearchMemoryResponse` containing a list of `MemoryEntry` objects, each
+   holding `content`, and all optional: `id`, `author`, `timestamp`, and
+   `custom_metadata`.
+7. **Agent Uses Results:** The tool returns these results to the agent, usually
+   as part of the context or function response. The agent can then use this
+   retrieved information to formulate its final answer to the user.
 
-### 에이전트가 둘 이상의 메모리 서비스에 액세스할 수 있습니까?
+### Can an agent have access to more than one memory service?
 
-- **표준 구성을 통해: 아니요.** 프레임워크(`adk web`, `adk api_server`)는 `--memory_service_uri` 플래그를 통해 한 번에 하나의 메모리 서비스로 구성되도록 설계되었습니다. 이 단일 서비스는 러너에 연결되며 `tool_context.search_memory()` 및 `callback_context.search_memory()`를 통해 노출됩니다.
-- **에이전트 코드 내에서: 예.** 두 번째 `BaseMemoryService`를 인스턴스화하고 프레임워크에 구성된 서비스를 위한 `ToolContext`를 이미 가지고 있는 사용자 정의 도구에서 이를 참조할 수 있습니다.
+- **Through Standard Configuration: No.** The framework (`adk web`, `adk
+  api_server`) is designed to be configured with one memory service at a time
+  via the `--memory_service_uri` flag. That single service is wired into the
+  runner and exposed through `tool_context.search_memory()` and
+  `callback_context.search_memory()`.
+- **Within Your Agent's Code: Yes.** You can instantiate a second
+  `BaseMemoryService` and consult it from a custom tool, which already has a
+  `ToolContext` for the framework-configured service.
 
-예를 들어, 에이전트는 대화 기록을 위해 프레임워크에 구성된 `InMemoryMemoryService`를 사용하고, 별도의 지식 베이스를 위해 `VertexAiMemoryBankService`, 문서 코퍼스에 대한 `VertexAiRagMemoryService` 또는 기타 `BaseMemoryService` 구현체와 같은 두 번째 서비스를 수동으로 인스턴스화할 수 있습니다.
+For example, your agent can use the framework-configured `InMemoryMemoryService`
+for conversation history and manually instantiate a second service, a
+`VertexAiMemoryBankService`, a `VertexAiRagMemoryService` over a docs corpus, or
+any other `BaseMemoryService` implementation, for a separate knowledge base.
 
-#### 예: 두 개의 메모리 서비스 사용
-
-다음은 에이전트 코드에서 이를 구현하는 방법입니다.
+#### Example: Use two memory services
 
 === "Python"
-```python
-from google.adk.agents import Agent
-from google.adk.memory import InMemoryMemoryService, VertexAiMemoryBankService
-from google.genai import types
 
-class MultiMemoryAgent(Agent):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    ```python
+    from google.adk.agents import Agent
+    from google.adk.memory import InMemoryMemoryService
+    from google.adk.tools import ToolContext
 
-        self.memory_service = InMemoryMemoryService()
-        # 문서 조회를 위해 두 번째 메모리 서비스를 수동으로 인스턴스화합니다.
-        self.vertexai_memorybank_service = VertexAiMemoryBankService(
-            project="PROJECT_ID",
-            location="LOCATION",
-            agent_engine_id="AGENT_ENGINE_ID"
+    # Second memory service for docs lookup; could be any BaseMemoryService.
+    docs_memory = InMemoryMemoryService()
+
+
+    async def search_all_memory(query: str, tool_context: ToolContext) -> dict:
+        """Search both the conversational memory and the docs corpus."""
+        conversational = await tool_context.search_memory(query)
+        docs = await docs_memory.search_memory(
+            app_name="docs", user_id="shared", query=query
         )
+        return {
+            "from_conversations": [
+                part.text
+                for entry in conversational.memories
+                for part in (entry.content.parts or [])
+                if part.text
+            ],
+            "from_docs": [
+                part.text
+                for entry in docs.memories
+                for part in (entry.content.parts or [])
+                if part.text
+            ],
+        }
 
-    async def run(self, request: types.Content, **kwargs) -> types.Content:
-        user_query = request.parts[0].text
 
-        # 1. 프레임워크에서 제공하는 메모리를 사용하여 대화 기록 검색
-        #    (구성된 경우 InMemoryMemoryService가 됩니다)
-        conversation_context = await self.memory_service.search_memory(query=user_query)
-
-        # 2. 수동으로 만든 서비스를 사용하여 문서 지식 기반 검색
-        document_context = await self.vertexai_memorybank_service.search_memory(query=user_query)
-
-        # 두 소스의 컨텍스트를 결합하여 더 나은 응답 생성
-        prompt = "과거 대화에서 기억나는 것은 다음과 같습니다.\n"
-        prompt += f"{conversation_context.memories}\n\n"
-        prompt += "기술 설명서에서 찾은 내용은 다음과 같습니다.\n"
-        prompt += f"{document_context.memories}\n\n"
-        prompt += f"이 모든 것을 바탕으로 '{user_query}'에 대한 제 답변은 다음과 같습니다."
-
-        return await self.llm.generate_content_async(prompt)
-```
+    agent = Agent(
+        model="gemini-flash-latest",
+        name="multi_memory_agent",
+        instruction=(
+            "Answer questions using both your conversation history and the "
+            "docs knowledge base. Use the search_all_memory tool."
+        ),
+        tools=[search_all_memory],
+    )
+    ```
 
 === "Kotlin"
 

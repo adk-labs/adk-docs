@@ -14,7 +14,7 @@ macOS, Windows)에서는 ADK가 LiteRT-LM CLI `lit`으로 실행한 LiteRT-LM �
 LiteRT-LM은 `Gemini` 클래스와 함께 사용합니다. `base_url`과 `model`
 매개변수만 설정하면 됩니다.
 
-1. `base_url`을 LiteRT-LM 서버 URL로 설정합니다. 예: `localhost:8001`
+1. `base_url`을 LiteRT-LM 서버 URL로 설정합니다. 예: `http://localhost:8001`
 2. `model`을 LiteRT-LM 모델 이름으로 설정합니다. 예: `gemma3n-e2b`
 
 ```py
@@ -24,7 +24,7 @@ from google.adk.models import Gemini
 root_agent = Agent(
     model=Gemini(
         model="gemma3n-e2b",
-        base_url="http://localhost:8001",
+        base_url="http://http://localhost:8001",
     ),
     name="dice_agent",
     description=(

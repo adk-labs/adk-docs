@@ -1,223 +1,446 @@
-# 에이전트 워크플로용 그래프 경로 구축
+# Build graph routes for agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 엣지의 그래프로
-정의하여, 인공지능(AI) 추론과 코드 로직을 결합한 더 신뢰성 높은 프로세스를
-구축할 수 있게 합니다. 이러한 워크플로를 사용하면 코드 함수, AI 기반 에이전트,
-도구, 인간 입력을 캡슐화하는 실행 노드의 논리적 경로를 만들 수 있습니다.
-라우팅 로직을 명시적으로 설계함으로써, 이 접근 방식은 코드 안에서 구체적이고
-단계적인 프로세스 워크플로를 정의할 수 있게 하며, 프롬프트 기반 에이전트만
-사용하는 방식보다 더 높은 정밀도와 신뢰성을 제공합니다.
+Graph-based workflows in ADK define agent logic as a graph of execution nodes
+and edges, allowing you to build more reliable processes that combine artificial
+intelligence (AI) reasoning and code logic. These workflows allow you to create
+logical routes of execution nodes that can encapsulate code functions,
+AI-powered agents, Tools, and human input. By explicitly mapping out routing
+logic, this approach allows you to define a specific, step-wise process workflow
+in code, providing improved precision and reliability over purely prompt-based
+agents.
 
-![Graph-based flight upgrade agent](../../assets/graph-workflow-router.svg)
+![Task graph with conditional routing between nodes](../assets/graph-workflow-router.svg)
 
-```python
-root_agent = Workflow(
-  name="routing_workflow",
-  edges=[
-    ("START", process_message, router),
-    (router,
-      {
-        "output-1": response_1,
-        "output-2": response_2,
-        "output-3": response_3,
-      },
-    ),
-  ],
-)
-```
+**Figure 1.** Visualization of a task graph and the routing code to implement it.
 
-**그림 1.** 작업 그래프의 시각화와 이를 구현하는 ***Workflow*** 코드입니다.
+=== "Python"
 
-그래프 기반 에이전트 워크플로를 사용할 때의 장점은 프롬프트 기반 에이전트보다
-제어성, 예측 가능성, 신뢰성이 크게 높아진다는 점입니다. 전체 프로세스
-워크플로를 코드로 정의함으로써, 작업이 어떻게 라우팅되고 실행되는지를 더 많이
-제어할 수 있습니다. 이러한 구조화된 노드 정의는 에이전트의 예측 가능성을 높이고,
-정의된 단계와 프로세스 관리가 필요한 복잡한 작업의 신뢰성을 강화합니다.
-
-!!! example "Alpha 릴리스"
-
-    ADK 2.0은 Alpha 릴리스이며, 이전 버전의 ADK와 함께 사용할 때 호환성이
-    깨지는 변경이 발생할 수 있습니다. 프로덕션 환경처럼 하위 호환성이 필요한
-    경우에는 ADK 2.0을 사용하지 마세요. 이 릴리스를 테스트해 보시고
-    [피드백](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=v2)을
-    보내주시기 바랍니다.
-
-[그래프 기반 에이전트 워크플로](/ko/workflows/)를 확인하여 ADK의
-그래프 기반 워크플로를 시작해 보세요.
-
-## 노드
-
-그래프는 실행 노드로 구성됩니다. 이러한 *노드*는 ***Agents***, ADK
-***Tools***, 인간 입력 작업, 또는 직접 작성한 코드 함수가 될 수 있습니다.
-노드는 이전에 실행된 노드로부터 입력을 받을 수 있고, ***Event*** 객체를 통해
-데이터를 내보낼 수 있습니다. 다음 예시는 텍스트 입력을 처리하고 텍스트 출력을
-보내는 간단한 ***FunctionNode*** 를 보여줍니다.
-
-```python
-from google.adk import Event
-
-def my_function_node(node_input: str):
-    input_text_modified = node_input.upper()
-    return Event(output=input_text_modified)
-```
-
-노드 사이에서 데이터를 전달하는 방법에 대한 자세한 내용은
-[에이전트 워크플로의 데이터 처리](/ko/graphs/data-handling/)를
-참조하세요.
-
-## 워크플로 그래프 구문
-
-그래프는 논리적 실행 경로와 따라야 할 *노드* 및 조건을 정의하는 ***edges***
-배열을 만들어 정의합니다. 이 섹션은 ***edges*** 배열에서 사용하는 그래프 구문의
-개요를 제공합니다. 다음 코드 예시는 순서대로 실행되는 두 개의 노드를 가진
-기본 워크플로를 보여줍니다.
-
-```python
-from google.adk import Workflow
-
-root_agent = Workflow(
-    name="sequential_workflow",
-    edges=[("START", task_A_node, task_B_node)],
-)
-```
-
-!!! caution "주의: 워크플로와 에이전트 제한"
-
-    그래프 기반 워크플로에 ***Agents*** 또는 ***LlmAgents*** 를 추가할 수
-    있지만, 이들은 task 또는 single-turn 모드로 설정되어야 합니다. 에이전트
-    모드에 대한 자세한 내용은
-    [협업 에이전트 팀 구축하기](/ko/workflows/collaboration/#모드-구성과-동작)을
-    참조하세요.
-
-### 순차 경로
-
-***edges*** 배열은 배열에 제시된 노드 순서에 따라 실행되며, 첫 번째 행에서
-시작해 이후 행으로 진행하면서 실행을 완료합니다. ***edges*** 배열의 첫 번째
-행은 ***START*** 키워드를 사용하여 그래프 실행의 시작을 나타내며, 나열된 각
-노드가 순서대로 실행됩니다. 다음 코드 스니펫을 참고하세요.
-
-```python
-edges=[("START", task_A_node)]  # single node run
-edges=[("START",
-        task_A_node,
-        task_B_node,
-        task_C_node)]           # 3 nodes run in order
-```
-
-다음 코드 스니펫처럼, 워크플로 그래프 시작 시 병렬 작업을 시작하기 위해
-***START*** 를 두 번 이상 사용할 수도 있습니다.
-
-```python
-edges=[
-    ("START", parallel_task_A),
-    ("START", parallel_task_B),
-    ("START", parallel_task_C),
-]
-```
-
-!!! warning "주의: 병렬 노드 제한"
-
-    모든 워크플로 노드나 서브에이전트를 병렬로 실행할 수 있는 것은 아닙니다.
-    특히 동일한 에이전트 세션 안에서 여러 개의 상호작용형 채팅 세션을 실행할 수는
-    없습니다.
-
-### 분기 경로
-
-START 키워드 뒤에 오는 ***edges*** 배열의 이후 행은 노드를 위한 추가 실행
-로직을 정의합니다. 분기 경로를 만들려면, 하나 이상의 경로 값을 출력하는 노드,
-보통 ***FunctionNode*** 를 정의합니다. 엣지 그래프에서는 다음 코드 예시처럼
-경로 값과 대상 노드를 사용해 실행 로직을 정의합니다.
-
-```python
-def router(node_input: str):
-    """Simulate a routing decision"""
-    return Event(route="RUN_TASK_C")
-
-root_agent = Workflow(
-    name="routing_workflow",
-    edges=[
-        ("START", task_A_node, router),
+    ```python
+    root_agent = Workflow(
+      name="routing_workflow",
+      edges=[
+        ("START", process_message, router),
         (router,
           {
-            # "route value": node_to_run
-            "RUN_TASK_B": task_B_node,
-            "RUN_TASK_C": task_C_node,
+            "output-1": response_1,
+            "output-2": response_2,
+            "output-3": response_3,
           },
         ),
-    ],
-)
-```
+      ],
+    )
+    ```
 
-## 병렬 작업: fan out 및 join 경로
+=== "Go"
 
-여러 병렬 노드로 실행을 분기시키는 그래프를 만들 수 있으며, 일반적으로는 각 노드의 출력을 모아 후속 처리를 해야 합니다. 이 작업 실행 패턴은 두 단계로 구성됩니다. 워크플로는 여러 병렬 작업을 시작할 때 먼저 팬아웃(fan out)하고, 다음 단계로 진행하기 전에 이러한 작업들이 완료되면 해당 경로들을 다시 조인(join)합니다.
+    ADK Go v2.0.0 provides the following approach to graph-based
+    workflows:
 
-조인 단계는 각 병렬 작업이 완료될 때까지 기다렸다가 이 노드들의 출력 컬렉션을 다음 노드로 전달하는 ***JoinNode*** 객체를 사용하여 수행합니다.
+    **Graph engine** (`workflowagent` + `workflow.Edge`): A node-and-edges
+    graph API that maps directly to Python's `Workflow(edges=[...])`.
+    Nodes are defined with `workflow.NewFunctionNode`, `workflow.NewAgentNode`,
+    or `workflow.NewDynamicNode`, edges are declared as `[]workflow.Edge`, and
+    the whole graph is wrapped in a `workflowagent.New` call:
 
-![Tasks connecting to a JoinNode](../../assets/graph-joinnode.svg)
+    ```go
+    edges := workflow.Concat(
+        workflow.Chain(workflow.Start, classifyNode),
+        []workflow.Edge{
+            {From: classifyNode, To: responseA, Route: workflow.StringRoute("output-1")},
+            {From: classifyNode, To: responseB, Route: workflow.StringRoute("output-2")},
+            {From: classifyNode, To: responseC, Route: workflow.StringRoute("output-3")},
+        },
+    )
+    rootAgent, _ := workflowagent.New(workflowagent.Config{
+        Name:  "routing_workflow",
+        Edges: edges,
+    })
+    ```
 
-**그림 2.** 병렬 작업 노드의 출력은 JoinNode 객체를 사용해 합칠 수 있습니다.
+The advantage of using a graph-based agent workflow is the significant increase
+in control, predictability, and reliability over prompt-based agents. By
+defining the overall process workflow in code, you gain more control over how
+tasks are routed and executed. This structured node definition improves the
+predictability of agents and enhances reliability for complex tasks that require
+defined steps and process management.
 
-다음 코드 스니펫은 ***START***에서 세 개의 병렬 작업을 시작하고, 기본적인 ***JoinNode*** 객체를 사용하여 최종 작업을 실행하기 전에 그 출력을 조인하는 방법을 보여줍니다.
+Get started with graph-based workflows in ADK by checking out
+[Graph-based agent workflows](/graphs/).
 
-```python
-from google.adk.workflow import JoinNode
+## Nodes
 
-my_join_node = JoinNode(name="my_join_node")
+A graph is composed of execution nodes. These *nodes* can be ***Agents***, ADK
+***Tools***, human input tasks, or code functions you write. Nodes can take
+inputs from previously executed nodes, and emit data through ***Event***
+objects.
 
-edges=[
-    ("START", parallel_task_A, my_join_node),
-    ("START", parallel_task_B, my_join_node),
-    ("START", parallel_task_C, my_join_node),
-    (my_join_node, final_task_D),
-]
-```
+=== "Python"
 
-!!! warning "주의: 미완료 노드로 인해 멈추는 JoinNode"
+    The following shows a simple ***FunctionNode*** that handles text inputs
+    and sends a text output:
 
-    ***JoinNode*** 객체는 상류의 모든 노드가 Event 출력을 제공한 이후에만
-    진행합니다. 상류 노드 중 하나라도 출력을 제공하지 못하면 JoinNode 는 멈추고
-    워크플로 실행도 중단됩니다. ***JoinNode*** 로 출력을 보내는 모든 노드에는
-    반드시 실패 대비용 출력 경로를 포함하세요.
+    ```python
+    from google.adk import Event
+
+    def my_function_node(node_input: str):
+        input_text_modified = node_input.upper()
+        return Event(output=input_text_modified)
+    ```
+
+=== "Go"
+
+    In ADK Go v2.0.0, the primary node type is `workflow.NewFunctionNode`.
+    A `FunctionNode` wraps a plain Go function: the function returns a typed
+    value, and the framework automatically wraps it in a `session.Event`,
+    setting `event.Output`. The successor node receives this value as its
+    typed `input` parameter — no manual state writes or event construction
+    needed:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/routes/main.go:function-node"
+    ```
+
+For more information about transferring data between nodes, see
+[Data handling for agent workflows](/graphs/data-handling/).
+
+## Workflow graphs syntax
+
+You define a graph by composing workflow agents. This section provides an
+overview of the common routing patterns.
+
+!!! caution "Caution: Workflow agent limitations"
+
+    You can add ***LlmAgents*** to graph-based workflows. However, they must
+    be configured for single-turn or task mode. For more information about
+    agent modes, see
+    [Build collaborative agent teams](/workflows/collaboration/#mode-configuration-and-behaviors).
+
+### Route sequences
+
+A sequential route runs each node once, in the listed order.
+
+=== "Python"
+
+    The `edges` array uses the `START` keyword to indicate the beginning of a
+    graph execution, with each listed node executed in sequence:
+
+    ```python
+    edges=[("START", task_A_node)]  # single node run
+    edges=[("START",
+            task_A_node,
+            task_B_node,
+            task_C_node)]           # 3 nodes run in order
+    ```
+
+=== "Go"
+
+    `workflow.Chain(workflow.Start, nodeA, nodeB, nodeC)` wires nodes into a
+    sequential edge slice. Each node's typed return value is forwarded to the
+    next node via `event.Output` — no session state writes needed:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/routes/main.go:sequential-nodes"
+    ```
+
+### Route branches and conditional execution
+
+=== "Python"
+
+    In Python, branching is handled by a `FunctionNode` that returns an
+    `Event(route=...)` value, which the `edges` dict dispatches to different nodes.
+
+    ```python
+    from google.adk import Event, Workflow
+    from google.adk.agents import Agent
+
+
+    def router(node_input: str):
+        """Route to task B or C based on node_input."""
+        if condition(node_input):
+            return Event(route="RUN_TASK_C")
+        return Event(route="RUN_TASK_B")
+
+    task_B_node = Agent(name="task_B_agent") # An agent to execute node B
+
+    def task_C_node(node_input: str):
+        """A FunctionNode to execute node C."""
+        return Event(output="Task C completed")
+
+    root_agent = Workflow(
+        name="routing_workflow",
+        edges=[
+            ("START", task_A_node, router),
+            (router,
+              {
+                # "route value": node_to_run
+                "RUN_TASK_B": task_B_node,
+                "RUN_TASK_C": task_C_node,
+              },
+            ),
+        ],
+    )
+    ```
+
+=== "Go"
+
+    In ADK Go v2.0.0, conditional dispatch uses the `workflow` graph engine.
+    A node sets `Event.Routes` to one or more string route keys, and each
+    `workflow.Edge` selects its successor using a `workflow.Route` matcher:
+
+    -   `workflow.StringRoute("category")` — matches a single string value
+    -   `workflow.IntRoute(n)` or `workflow.MultiRoute[int]{1, 2, 3}` — matches
+        integer values
+    -   `workflow.BoolRoute(true)` — matches a boolean value
+    -   `workflow.Default` — matches when no other route on the same source
+        node matches
+
+    The following pattern is the Go equivalent of the Python router:
+
+    ```go
+    // classifyNode emits an Event with Routes=[]string{"BUG"},
+    // ["CUSTOMER_SUPPORT"], or ["LOGISTICS"] based on the message.
+    edges := workflow.Concat(
+        workflow.Chain(workflow.Start, processMessage, classifyNode),
+        []workflow.Edge{
+            {From: classifyNode, To: bugHandler,       Route: workflow.StringRoute("BUG")},
+            {From: classifyNode, To: supportHandler,   Route: workflow.StringRoute("CUSTOMER_SUPPORT")},
+            {From: classifyNode, To: logisticsHandler, Route: workflow.StringRoute("LOGISTICS")},
+        },
+    )
+    rootAgent, _ := workflowagent.New(workflowagent.Config{
+        Name:  "routing_workflow",
+        Edges: edges,
+    })
+    ```
+
+    `workflow.EdgeBuilder` provides a fluent alternative to assembling the
+    `[]workflow.Edge` slice by hand. The builder's `Add`, `AddFanOut`, and
+    `AddFanIn` methods express the same topology with less repetition:
+
+    ```go
+    eb := workflow.NewEdgeBuilder()
+    eb.Add(workflow.Start, processMessage)
+    eb.Add(processMessage, classifyNode)
+    eb.AddRoute(classifyNode, bugHandler,       workflow.StringRoute("BUG"))
+    eb.AddRoute(classifyNode, supportHandler,   workflow.StringRoute("CUSTOMER_SUPPORT"))
+    eb.AddRoute(classifyNode, logisticsHandler, workflow.StringRoute("LOGISTICS"))
+
+    rootAgent, _ := workflowagent.New(workflowagent.Config{
+        Name:  "routing_workflow",
+        Edges: eb.Build(),
+    })
+    ```
+
+    For complete, runnable routing examples see:
+    [string routing](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/string),
+    [int / multi-value routing](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/int),
+    and [LLM-driven routing](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/llm).
+
+    !!! note "Prebuilt agents: encoding routing in state"
+
+        When using `sequentialagent` / `parallelagent` / `loopagent` instead
+        of the graph engine, there is no `Event.Routes` dispatch. Encode the
+        routing decision in session state via `OutputKey` and let downstream
+        agents inspect it in their `Instruction` template, or use a `loopagent`
+        with an `Escalate`-based exit — see the
+        [loop and escalation example](#loop-and-escalation-exit) below.
+
+## 병렬 작업: Fan-out 및 Join 경로
+
+You can create graphs that split execution across multiple, parallel nodes, and
+typically you need to assemble the output of each node for further processing.
+This task execution pattern has two stages. The workflow first fans out when it
+starts multiple parallel tasks, and then it re-joins those paths when those
+tasks are completed before proceeding to the next step.
+
+![Tasks connecting to a JoinNode](../assets/graph-joinnode.svg)
+
+**Figure 2.** The output of parallel task nodes can be assembled and joined
+before passing results to the next step.
+
+=== "Python"
+
+    You accomplish the join step by using a ***JoinNode*** object, which waits
+    for each parallel task to complete and then passes the collection of outputs
+    from these nodes to the next node.
+
+    ```python
+    from google.adk.workflow import JoinNode
+
+    my_join_node = JoinNode(name="my_join_node")
+
+    edges=[
+        ("START", parallel_task_A, my_join_node),
+        ("START", parallel_task_B, my_join_node),
+        ("START", parallel_task_C, my_join_node),
+        (my_join_node, final_task_D),
+    ]
+    ```
+
+    !!! warning "Caution: Stuck JoinNode from incomplete nodes"
+
+        The ***JoinNode*** object proceeds only after all its upstream nodes
+        have provided an Event output. If one of the upstream nodes fails to
+        provide output, the JoinNode is stuck and workflow execution stops.
+        Make sure to include failsafe output from any node that outputs to a
+        ***JoinNode***.
+
+=== "Go"
+
+    ADK Go v2.0.0 provides `workflow.NewJoinNode` for true fan-in in the
+    graph engine: fan-out edges from `workflow.Start` (or any shared source
+    node) feed in parallel to the join node, which waits for all of them to
+    complete before emitting a `map[string]any` keyed by predecessor node name
+    to the next node.
+
+    `workflow.EdgeBuilder` makes the fan-out / fan-in wiring concise with its
+    dedicated `AddFanOut` and `AddFanIn` helpers (as shown in the
+    [complex workflow example](https://github.com/google/adk-go/tree/v2/examples/workflow/complex)):
+
+    ```go
+    gatherNode := workflow.NewJoinNode("gather")
+
+    eb := workflow.NewEdgeBuilder()
+    eb.AddFanOut(workflow.Start, researchNodeA, researchNodeB, researchNodeC)
+    eb.AddFanIn(gatherNode, researchNodeA, researchNodeB, researchNodeC)
+    eb.Add(gatherNode, formatNode)
+    eb.Add(formatNode, synthesisNode)
+
+    rootAgent, _ := workflowagent.New(workflowagent.Config{
+        Name:  "research_pipeline",
+        Edges: eb.Build(),
+    })
+    ```
+
+    The following snippet shows the complete fan-out / join pattern using
+    `workflow.NewJoinNode` and `EdgeBuilder.AddFanOut` / `AddFanIn`:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/routes/main.go:parallel-fan-out"
+    ```
+
+    !!! warning "Caution: Stuck JoinNode from incomplete nodes"
+
+        `workflow.NewJoinNode` proceeds only after every predecessor node has
+        emitted an `event.Output`. If a predecessor fails without emitting
+        output, the JoinNode is stuck and workflow execution stops. Attach a
+        `RetryConfig` to flaky predecessor nodes to guard against transient
+        failures.
 
 ## 중첩 워크플로
 
-더 복잡한 워크플로를 구축할 때는 특정 작업의 기능을 재사용 가능한 워크플로로
-캡슐화하고 싶을 수 있습니다. 이 목적을 위해 하나 이상의 ***Workflow*** 객체를
-다른 워크플로 에이전트 그래프 내부의 노드로 사용할 수 있습니다.
+When building more complex workflows, you may want to encapsulate the
+functionality for specific tasks into reusable workflows. One or more
+workflow agents can be used as a sub-agent within another workflow agent to
+accomplish this goal.
 
-![Nested Workflows inside a parent Workflow](../../assets/graph-workflow-nodes.svg)
+![Nested Workflows inside a parent Workflow](../assets/graph-workflow-nodes.svg)
 
-**그림 3.** 부모 ***Workflow*** 내부 노드로 사용되는 중첩 ***Workflows***.
+**Figure 3.** Nested workflow agents as sub-agents inside a parent workflow.
 
-다음 코드 스니펫은 두 개의 중첩 ***Workflow*** 객체(`workflow_B`,
-`workflow_C`)를 그래프 노드로 사용하는 워크플로 에이전트를 구현하는 방법을
-보여줍니다.
+=== "Python"
 
-```python
-from google.adk import Workflow
+    ```python
+    from google.adk import Workflow
 
-root_agent = Workflow(
-    name="parent_workflow",
-    edges=[
-       ("START", task_A1, router),
-       (router, {
-            "RUN_WORKFLOW_B": workflow_B,
-            "RUN_WORKFLOW_C": workflow_C,
-            },
-       ),
-    ],
-)
-```
+    root_agent = Workflow(
+        name="parent_workflow",
+        edges=[
+           ("START", task_A1, router),
+           (router, {
+                "RUN_WORKFLOW_B": workflow_B,
+                "RUN_WORKFLOW_C": workflow_C,
+                },
+           ),
+        ],
+    )
+    ```
 
-### 중첩 워크플로 데이터 출력
+    #### Nested workflow data output
 
-중첩된 Workflow 객체의 출력은 개별 노드와는 약간 다르게 동작합니다. 중첩
-워크플로가 내부 노드 하나를 완료하면, 그 데이터는 중첩 워크플로 그래프의 다음
-노드로 전달되는 동시에, 프로세스 추적성을 위해 해당 노드의 Event 가 부모
-워크플로로 버블업됩니다. 중첩 워크플로가 마지막 노드를 완료하면, 부모 노드는
-최종 리프 노드에서 데이터를 추출하여 이를 중첩 워크플로의 출력으로 내보냅니다.
+    Output for nested Workflow objects works slightly differently from
+    individual nodes. When the nested workflow completes one of its nodes, it
+    transmits data to the next node in the nested workflow's graph *and* the
+    system bubbles up the Event for that node to the parent workflow for
+    process traceability. When the nested workflow completes the last node in
+    its process, the parent node extracts data from the final leaf nodes and
+    emits it as the output of the nested workflow.
+
+=== "Go"
+
+    ADK Go v2.0.0 supports nested workflows in two complementary ways:
+
+    **Graph engine** (`workflowagent` + `workflow.Edge`): A `workflowagent`
+    created with `workflowagent.New` is itself an `agent.Agent`, so it can
+    be wrapped with `workflow.NewAgentNode` and used as a node inside another
+    workflow's `edges` slice. The inner workflow runs to completion as a single
+    node from the outer graph's perspective, and its terminal output is emitted
+    as the node output on the outer graph's edge:
+
+    ```go
+    innerNode, _ := workflow.NewAgentNode(innerWorkflowAgent, workflow.NodeConfig{})
+
+    outerEdges := workflow.Chain(workflow.Start, outerStepNode, innerNode, finalNode)
+    rootAgent, _ := workflowagent.New(workflowagent.Config{
+        Name:  "parent_workflow",
+        Edges: outerEdges,
+    })
+    ```
+
+    The following snippet shows both the inner and outer graph construction.
+    `workflow.NewAgentNode` wraps the inner `workflowagent` so it can be
+    placed in the outer graph's `workflow.Chain`:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/routes/main.go:nested-workflows"
+    ```
+
+## 루프 및 에스컬레이션 종료
+
+A loop repeats a set of steps until a termination condition is met. In Python
+this is expressed as a back-edge in the `edges` graph that routes back to an
+earlier node. In ADK Go v2.0.0, the graph engine supports the same pattern
+directly: add an edge from a downstream node back to an earlier node with a
+route condition, and the engine re-activates the target node with a fresh
+lifecycle on each iteration.
+
+=== "Python"
+
+    ```python
+    from google.adk import Event, Workflow
+
+
+    def router(node_input: str):
+        """Route to task B or C based on node_input."""
+        if condition(node_input):
+            return Event(route="RUN_TASK_C")
+        return Event(route="RUN_TASK_B")
+
+    root_agent = Workflow(
+        name="routing_workflow",
+        edges=[
+            ("START", task_A_node, router),
+            (router,
+              {
+                "RUN_TASK_B": task_B_node,
+                "RUN_TASK_C": task_C_node,
+              },
+            ),
+        ],
+    )
+    ```
+
+=== "Go"
+
+    The following example uses the graph engine with `workflow.EdgeBuilder`.
+    The critic node returns a verdict, a router node sets `Event.Routes`, and
+    a back-edge from the refiner to the critic creates the loop. When the
+    critic is satisfied it routes to the terminal `done` node instead:
+
+    ```go
+    --8<-- "examples/go/snippets/graphs/routes/main.go:loop-escalate"
+    ```

@@ -1,133 +1,156 @@
-# Part 4: RunConfig を理解する
+# パート 4: Understanding RunConfig
 
-Part 3 では `run_live()` から届くイベントを処理し、モデル応答・ツール呼び出し・
-ストリーミング更新を扱う方法を学びました。
-このパートでは `RunConfig` を使って、
-応答形式の制御、セッションライフサイクル管理、本番制約の適用を行う方法を説明します。
+In Part 3, you learned how to handle events from `run_live()` to process model responses, tool calls, and streaming updates. This part shows you how to configure those streaming sessions through `RunConfig`—controlling response formats, managing session lifecycles, and enforcing production constraints.
 
-**このパートで学ぶこと**:
-レスポンスモダリティの制約、BIDI と SSE の違い、
-ADK Session と Live API Session の関係、
-session resumption と context window compression による長時間運用、
-同時セッションクォータ対策、`max_llm_calls` と音声保存によるコスト管理を扱います。
+**What you'll learn**: This part covers response modalities and their constraints, explores the differences between BIDI and SSE streaming modes, examines the relationship between ADK Sessions and Live API sessions, and shows how to manage session duration with session resumption and context window compression. You'll understand how to handle concurrent session quotas, implement architectural patterns for quota management, and configure cost controls through `max_llm_calls` and audio persistence options. With RunConfig mastery, you can build production-ready streaming applications that balance feature richness with operational constraints.
 
 !!! note "Learn More"
 
-    音声/動画関連の詳細設定は
-    [Part 5: Audio, Image and Video in Live API](part5.md) を参照してください。
+    For detailed information about audio/video related `RunConfig` configurations, see [Part 5: Audio, Image and Video in Live API](part5.md).
 
-## RunConfig パラメータ早見表
+## RunConfig Parameter Quick Reference
+
+This table provides a quick reference for all RunConfig parameters covered in this part:
 
 | Parameter | Type | Purpose | Platform Support | Reference |
 |-----------|------|---------|------------------|-----------|
-| **response_modalities** | list[str] | 出力形式制御（TEXT/AUDIO） | Both | [Details](#response-modalities) |
-| **streaming_mode** | StreamingMode | BIDI または SSE を選択 | Both | [Details](#streamingmode-bidi-or-sse) |
-| **session_resumption** | SessionResumptionConfig | 自動再接続を有効化 | Both | [Details](#live-api-session-resumption) |
-| **context_window_compression** | ContextWindowCompressionConfig | セッション長を事実上無制限化 | Both | [Details](#live-api-context-window-compression) |
-| **max_llm_calls** | int | セッション内 LLM 呼び出し数上限 | Both | [Details](#max_llm_calls) |
-| **save_live_blob** | bool | 音声/動画ストリームを永続化 | Both | [Details](#save_live_blob) |
-| **custom_metadata** | dict[str, Any] | invocation イベントにメタデータ付与 | Both | [Details](#custom_metadata) |
-| **support_cfc** | bool | compositional function calling を有効化 | Gemini (2.x models only) | [Details](#support_cfc-experimental) |
-| **speech_config** | SpeechConfig | 音声/言語設定 | Both | [Part 5: Voice Configuration](part5.md#voice-configuration-speech-config) |
-| **input_audio_transcription** | AudioTranscriptionConfig | ユーザー音声の文字起こし | Both | [Part 5: Audio Transcription](part5.md#audio-transcription) |
-| **output_audio_transcription** | AudioTranscriptionConfig | モデル音声の文字起こし | Both | [Part 5: Audio Transcription](part5.md#audio-transcription) |
-| **realtime_input_config** | RealtimeInputConfig | VAD 設定 | Both | [Part 5: Voice Activity Detection](part5.md#voice-activity-detection-vad) |
-| **proactivity** | ProactivityConfig | proactive audio を有効化 | Gemini (native audio only) | [Part 5: Proactivity and Affective Dialog](part5.md#proactivity-and-affective-dialog) |
-| **enable_affective_dialog** | bool | 感情適応応答を有効化 | Gemini (native audio only) | [Part 5: Proactivity and Affective Dialog](part5.md#proactivity-and-affective-dialog) |
+| **response_modalities** | list[str] | Control output format (TEXT or AUDIO) | Both | [Details](#response-modalities) |
+| **streaming_mode** | StreamingMode | Choose BIDI or SSE mode | Both | [Details](#streamingmode-bidi-or-sse) |
+| **session_resumption** | SessionResumptionConfig | Enable automatic reconnection | Both | [Details](#live-api-session-resumption) |
+| **context_window_compression** | ContextWindowCompressionConfig | Unlimited session duration | Both | [Details](#live-api-context-window-compression) |
+| **max_llm_calls** | int | Limit total LLM calls per session | Both | [Details](#max_llm_calls) |
+| **save_live_blob** | bool | Persist audio/video streams | Both | [Details](#save_live_blob) |
+| **custom_metadata** | dict[str, Any] | Attach metadata to invocation events | Both | [Details](#custom_metadata) |
+| **support_cfc** | bool | Enable compositional function calling | Gemini (2.x models only) | [Details](#support_cfc-experimental) |
+| **speech_config** | SpeechConfig | Voice and language configuration | Both | [Part 5: Voice Configuration](part5.md#voice-configuration-speech-config) |
+| **input_audio_transcription** | AudioTranscriptionConfig | Transcribe user speech | Both | [Part 5: Audio Transcription](part5.md#audio-transcription) |
+| **output_audio_transcription** | AudioTranscriptionConfig | Transcribe model speech | Both | [Part 5: Audio Transcription](part5.md#audio-transcription) |
+| **realtime_input_config** | RealtimeInputConfig | VAD configuration | Both | [Part 5: Voice Activity Detection](part5.md#voice-activity-detection-vad) |
+| **proactivity** | ProactivityConfig | Enable proactive audio | Gemini (native audio only) | [Part 5: Proactivity and Affective Dialog](part5.md#proactivity-and-affective-dialog) |
+| **enable_affective_dialog** | bool | Emotional adaptation | Gemini (native audio only) | [Part 5: Proactivity and Affective Dialog](part5.md#proactivity-and-affective-dialog) |
 
-!!! note "Source Reference"
+!!! note "ソース参照"
 
     [`run_config.py`](https://github.com/google/adk-python/blob/427a983b18088bdc22272d02714393b0a779ecdf/src/google/adk/agents/run_config.py)
 
-**サポート凡例:**
+**Platform Support Legend:**
 
-- **Both**: Gemini Live API / Vertex AI Live API の両方で利用可能
-- **Gemini**: Gemini Live API のみ
-- **Model-specific**: 特定モデルアーキテクチャが必要
+- **Both**: Supported on both Gemini Live API and Gemini Live API (Agent Platform)
+- **Gemini**: Only supported on Gemini Live API
+- **Model-specific**: Requires specific model architecture (e.g., native audio)
+
+**Import Paths:**
+
+All configuration type classes referenced in the table above are imported from `google.genai.types`:
 
 ```python
 from google.genai import types
 from google.adk.agents.run_config import RunConfig, StreamingMode
 
+# Configuration types are accessed via types module
 run_config = RunConfig(
     session_resumption=types.SessionResumptionConfig(),
     context_window_compression=types.ContextWindowCompressionConfig(...),
     speech_config=types.SpeechConfig(...),
+    # etc.
 )
 ```
+
+The `RunConfig` class itself and `StreamingMode` enum are imported from `google.adk.agents.run_config`.
 
 ## Response Modalities
 
-レスポンスモダリティはモデル出力を TEXT または AUDIO に制御します。
-Gemini Live API / Vertex AI Live API ともに、1 セッションで 1 モダリティのみです。
+Response modalities control how the model generates output—as text or audio. Both Gemini Live API and Gemini Live API (Agent Platform) have the same restriction: only one response modality per session.
+
+**Configuration:**
 
 ```python
+# Phase 2: Session initialization - RunConfig determines streaming behavior
+
+# Default behavior: ADK automatically sets response_modalities to ["AUDIO"]
+# when not specified (required by native audio models)
 run_config = RunConfig(
-    streaming_mode=StreamingMode.BIDI
+    streaming_mode=StreamingMode.BIDI  # Bidirectional WebSocket communication
 )
 
-# 上記は実質以下と同等（未指定時は ADK が AUDIO を設定）
+# The above is equivalent to:
 run_config = RunConfig(
-    response_modalities=["AUDIO"],
-    streaming_mode=StreamingMode.BIDI
+    response_modalities=["AUDIO"],  # Automatically set by ADK in run_live()
+    streaming_mode=StreamingMode.BIDI  # Bidirectional WebSocket communication
 )
 
-# TEXT 専用
+# ✅ CORRECT: Text-only responses
 run_config = RunConfig(
-    response_modalities=["TEXT"],
-    streaming_mode=StreamingMode.BIDI
+    response_modalities=["TEXT"],  # Model responds with text only
+    streaming_mode=StreamingMode.BIDI  # Still uses bidirectional streaming
 )
 
-# AUDIO 専用
+# ✅ CORRECT: Audio-only responses (explicit)
 run_config = RunConfig(
-    response_modalities=["AUDIO"],
-    streaming_mode=StreamingMode.BIDI
+    response_modalities=["AUDIO"],  # Model responds with audio only
+    streaming_mode=StreamingMode.BIDI  # Bidirectional WebSocket communication
 )
 ```
 
+Both Gemini Live API and Gemini Live API (Agent Platform) restrict sessions to a single response modality. Attempting to use both will result in an API error:
+
 ```python
-# ❌ 不可: 両方同時
+# ❌ INCORRECT: Both modalities not supported
 run_config = RunConfig(
-    response_modalities=["TEXT", "AUDIO"],
+    response_modalities=["TEXT", "AUDIO"],  # ERROR: Cannot use both
     streaming_mode=StreamingMode.BIDI
 )
-# Error: "Only one response modality is supported per session"
+# Error from Live API: "Only one response modality is supported per session"
 ```
 
-**重要制約:**
+**Default Behavior:**
 
-- セッション開始時に TEXT か AUDIO を選択（途中切替不可）
-- Native Audio モデルは AUDIO 必須
-- モダリティは出力のみを制御。入力はモデル対応範囲でテキスト/音声/動画可
+When `response_modalities` is not specified, ADK's `run_live()` method automatically sets it to `["AUDIO"]` because native audio models require an explicit response modality. You can override this by explicitly setting `response_modalities=["TEXT"]` if needed.
 
-## StreamingMode: BIDI または SSE
+**Key constraints:**
 
-- `StreamingMode.BIDI`: ADK は WebSocket で Live API (`live.connect()`) に接続
-- `StreamingMode.SSE`: ADK は HTTP ストリーミングで標準 Gemini API (`generate_content_async()`) に接続
+- You must choose either `TEXT` or `AUDIO` at session start. **Cannot switch between modalities mid-session**
+- You must choose `AUDIO` for [Native Audio models](part5.md#understanding-audio-model-architectures). If you want to receive both audio and text responses from native audio models, use the Audio Transcript feature which provides text transcripts of the audio output. See [Audio Transcription](part5.md#audio-transcription) for details
+- Response modality only affects model output—**you can always send text, voice, or video input (if the model supports those input modalities)** regardless of the chosen response modality
 
-ここでいうモードは ADK↔Gemini API の通信方式です。
-クライアント向けのアプリ構成（WebSocket/REST/SSE サーバー等）とは別概念です。
+## StreamingMode: BIDI or SSE
+
+ADK supports two distinct streaming modes that use different API endpoints and protocols:
+
+- `StreamingMode.BIDI`: ADK uses WebSocket to connect to the **Live API** (the bidirectional streaming endpoint via `live.connect()`)
+- `StreamingMode.SSE`: ADK uses HTTP streaming to connect to the **standard Gemini API** (the unary/streaming endpoint via `generate_content_async()`)
+
+"Live API" refers specifically to the bidirectional WebSocket endpoint (`live.connect()`), while "Gemini API" or "standard Gemini API" refers to the traditional HTTP-based endpoint (`generate_content()` / `generate_content_async()`). Both are part of the broader Gemini API platform but use different protocols and capabilities.
+
+**Note:** These modes refer to the **ADK-to-Gemini API communication protocol**, not your application's client-facing architecture. You can build WebSocket servers, REST APIs, SSE endpoints, or any other architecture for your clients with either mode.
+
+This guide focuses on `StreamingMode.BIDI`, which is required for real-time audio/video interactions and Live API features. However, it's worth understanding the differences between BIDI and SSE modes to choose the right approach for your use case.
+
+**Configuration:**
 
 ```python
 from google.adk.agents.run_config import RunConfig, StreamingMode
 
+# BIDI streaming for real-time audio/video
 run_config = RunConfig(
     streaming_mode=StreamingMode.BIDI,
-    response_modalities=["AUDIO"]
+    response_modalities=["AUDIO"]  # Supports audio/video modalities
 )
 
+# SSE streaming for text-based interactions
 run_config = RunConfig(
     streaming_mode=StreamingMode.SSE,
-    response_modalities=["TEXT"]
+    response_modalities=["TEXT"]  # Text-only modality
 )
 ```
 
-### プロトコル差
+### Protocol and Implementation Differences
 
-BIDI は送受信同時で、割り込み・リアルタイム音声・自然なターン交代に向きます。
-SSE は request → stream response の順方向パターンです。
+The two streaming modes differ fundamentally in their communication patterns and capabilities. BIDI mode enables true bidirectional communication where you can send new input while receiving model responses, while SSE mode follows a traditional request-then-response pattern where you send a complete request and stream back the response.
 
-**BIDI:**
+**StreamingMode.BIDI - Bidirectional WebSocket Communication:**
+
+BIDI mode establishes a persistent WebSocket connection that allows simultaneous sending and receiving. This enables real-time features like interruptions, live audio streaming, and immediate turn-taking:
 
 ```mermaid
 sequenceDiagram
@@ -142,13 +165,17 @@ sequenceDiagram
     ADK->>Gemini: live.connect() - WebSocket
     activate Gemini
 
+    Note over ADK,Queue: Can send while receiving
+
     App->>Queue: send_content(text)
-    Queue->>Gemini: → Content
+    Queue->>Gemini: → Content (via WebSocket)
     App->>Queue: send_realtime(audio)
-    Queue->>Gemini: → Audio blob
+    Queue->>Gemini: → Audio blob (via WebSocket)
 
     Gemini-->>ADK: ← Partial response (partial=True)
-    ADK-->>App: ← Event
+    ADK-->>App: ← Event: partial text/audio
+    Gemini-->>ADK: ← Partial response (partial=True)
+    ADK-->>App: ← Event: partial text/audio
 
     App->>Queue: send_content(interrupt)
     Queue->>Gemini: → New content
@@ -157,9 +184,13 @@ sequenceDiagram
     ADK-->>App: ← Event: turn complete
 
     deactivate Gemini
+
+    Note over ADK,Gemini: Turn Detection: turn_complete flag
 ```
 
-**SSE:**
+**StreamingMode.SSE - Unidirectional HTTP Streaming:**
+
+SSE (Server-Sent Events) mode uses HTTP streaming where you send a complete request upfront, then receive the response as a stream of chunks. This is a simpler, more traditional pattern suitable for text-based chat applications:
 
 ```mermaid
 sequenceDiagram
@@ -173,6 +204,12 @@ sequenceDiagram
     ADK->>Gemini: generate_content_stream() - HTTP
     activate Gemini
 
+    Note over ADK,Gemini: Request sent completely, then stream response
+
+    Gemini-->>ADK: ← Partial chunk (partial=True)
+    ADK-->>App: ← Event: partial text
+    Gemini-->>ADK: ← Partial chunk (partial=True)
+    ADK-->>App: ← Event: partial text
     Gemini-->>ADK: ← Partial chunk (partial=True)
     ADK-->>App: ← Event: partial text
 
@@ -180,50 +217,63 @@ sequenceDiagram
     ADK-->>App: ← Event: complete response
 
     deactivate Gemini
+
+    Note over ADK,Gemini: Turn Detection: finish_reason
 ```
 
 ### Progressive SSE Streaming
 
-Progressive SSE streaming は、SSE モードでの応答集約を改善する実験的機能です。有効化すると次の利点があります。
+**Progressive SSE streaming** is an experimental feature that enhances how SSE mode delivers streaming responses. When enabled, this feature improves response aggregation by:
 
-- 混在コンテンツでも元の順序を保持
-- 同種テキストのみを賢くマージ
-- 中間チャンクは `partial=True`、最後に集約済み応答を 1 回だけ返す
-- 関数実行は最終イベントまで遅延させ、重複実行を防ぐ
+- **Content ordering preservation**: Maintains the original order of mixed content types (text, function calls, inline data)
+- **Intelligent text merging**: Only merges consecutive text parts of the same type (regular text vs thought text)
+- **Progressive delivery**: Marks all intermediate chunks as `partial=True`, with a single final aggregated response at the end
+- **Deferred function execution**: Skips executing function calls in partial events, only executing them in the final aggregated event to avoid duplicate executions
 
-**有効化方法:**
+**Enabling the feature:**
 
-この機能は実験段階（WIP）のため、デフォルトでは無効です。環境変数で有効化します。
+This is an experimental (WIP stage) feature disabled by default. Enable it via environment variable:
 
 ```bash
 export ADK_ENABLE_PROGRESSIVE_SSE_STREAMING=1
 ```
 
-**有効にするとよいケース:**
+**When to use:**
 
-- `StreamingMode.SSE` でテキストと関数呼び出しが混在する応答を扱う場合
-- thought text と通常テキストが混ざる場合
-- 応答全体の集約後に関数呼び出しを 1 回だけ実行したい場合
+- You're using `StreamingMode.SSE` and need better handling of mixed content types (text + function calls)
+- Your responses include thought text (extended thinking) mixed with regular text
+- You want to ensure function calls execute only once after complete response aggregation
 
-**注意:** この機能は `StreamingMode.SSE` のみが対象であり、このガイドの中心である `StreamingMode.BIDI` には適用されません。
+**Note:** This feature only affects `StreamingMode.SSE`. It does not apply to `StreamingMode.BIDI` (the focus of this guide), which uses the Live API's native bidirectional protocol.
 
-### 使い分け
+### When to Use Each Mode
 
-**BIDI を使うとよいケース:**
+Your choice between BIDI and SSE depends on your application requirements and the interaction patterns you need to support. Here's a practical guide to help you choose:
 
-- リアルタイム音声/動画
-- 受信中に追加入力を送りたい
-- Live API 機能（transcription/VAD/proactivity/affective dialog）が必要
-- 割り込みや自然なターン制御が重要
+**Use BIDI when:**
 
-**SSE を使うとよいケース:**
+- Building voice/video applications with real-time interaction
+- Need bidirectional communication (send while receiving)
+- Require Live API features (audio transcription, VAD, proactivity, affective dialog)
+- Supporting interruptions and natural turn-taking (see [Part 3: Handling Interrupted Flag](part3.md#handling-interrupted-flag))
+- Implementing live streaming tools or real-time data feeds
+- Can plan for concurrent session quotas (50-1,000 sessions depending on platform/tier)
 
-- テキスト中心チャット
-- シンプルな request/response
-- Live API 非対応モデル（Gemini 1.5 系）
-- WebSocket を使わない簡易構成
+**Use SSE when:**
 
-### SSE で使う Gemini 1.5 系
+- Building text-based chat applications
+- Standard request/response interaction pattern
+- Using models without Live API support (e.g., Gemini 1.5 Pro, Gemini 1.5 Flash)
+- Simpler deployment without WebSocket requirements
+- Need larger context windows (Gemini 1.5 supports up to 2M tokens)
+- Prefer standard API rate limits (RPM/TPM) over concurrent session quotas
+
+!!! note "Streaming Mode and Model Compatibility"
+    SSE mode uses the standard Gemini API (`generate_content_async`) via HTTP streaming, while BIDI mode uses the Live API (`live.connect()`) via WebSocket. Gemini 1.5 models (Pro, Flash) don't support the Live API protocol and therefore must be used with SSE mode. Gemini 2.0/2.5 Live models support both protocols but are typically used with BIDI mode to access real-time audio/video features.
+
+### Standard Gemini Models (1.5 Series) Accessed via SSE
+
+While this guide focuses on Bidi-streaming with Gemini 2.0 Live models, ADK also supports the Gemini 1.5 model family through SSE streaming. These models offer different trade-offs—larger context windows and proven stability, but without real-time audio/video features. Here's what the 1.5 series supports when accessed via SSE:
 
 **Models:**
 
@@ -232,33 +282,52 @@ export ADK_ENABLE_PROGRESSIVE_SSE_STREAMING=1
 
 **Supported:**
 
-- ✅ TEXT 入出力
-- ✅ SSE ストリーミング
-- ✅ 自動関数呼び出し
-- ✅ 大規模コンテキスト（1.5-pro 最大 2M）
+- ✅ Text input/output (`response_modalities=["TEXT"]`)
+- ✅ SSE streaming (`StreamingMode.SSE`)
+- ✅ Function calling with automatic execution
+- ✅ Large context windows (up to 2M tokens for 1.5-pro)
 
 **Not Supported:**
 
-- ❌ Live 音声機能（音声 I/O、転写、VAD）
-- ❌ `run_live()` Bidi-streaming
-- ❌ proactivity / affective dialog
-- ❌ 動画入力
+- ❌ Live audio features (audio I/O, transcription, VAD)
+- ❌ Bidi-streaming via `run_live()`
+- ❌ Proactivity and affective dialog
+- ❌ Video input
 
-## Live API の Connection と Session
+## Understanding Live API Connections and Sessions
 
-### ADK Session と Live API Session の違い
+When building ADK Gemini Live API Toolkit applications, it's essential to understand how ADK manages the communication layer between itself and the  Live API backend. This section explores the fundamental distinction between **connections** (the WebSocket transport links that ADK establishes to Live API) and **sessions** (the logical conversation contexts maintained by Live API). Unlike traditional request-response APIs, the Bidi-streaming architecture introduces unique constraints: connection timeouts, session duration limits that vary by modality (audio-only vs audio+video), finite context windows, and concurrent session quotas that differ between Gemini Live API and Gemini Live API (Agent Platform).
 
-**ADK `Session`**（SessionService 管理）:
+### ADK `Session` vs Live API Session
 
-- 会話履歴・state を永続保存
-- in-memory / DB / Vertex AI を選択可能
-- 複数 `run_live()` や再起動をまたいで保持
+Understanding the distinction between **ADK `Session`** and **Live API session** is crucial for building reliable streaming applications with ADK Gemini Live API Toolkit.
 
-**Live API session**（Live API 管理）:
+**ADK `Session`** (managed by SessionService):
+- Persistent conversation storage for conversation history, events, and state, created via `SessionService.create_session()`
+- Storage options: in-memory, database (PostgreSQL/MySQL/SQLite), or Agent Platform
+- Survives across multiple `run_live()` calls and application restarts (with the persistent `SessionService`)
 
-- `run_live()` 実行中のみ維持される論理会話コンテキスト
-- `LiveRequestQueue.close()` で終了
-- duration 制約の対象。resumption handle により再開可能
+**Live API session** (managed by Live API backend):
+- Maintained by the Live API during the `run_live()` event loop is running, and destroyed when streaming ends by calling `LiveRequestQueue.close()`
+- Subject to platform duration limits, and can be resumed across multiple connections using session resumption handles (see [How ADK Manages Session Resumption](#how-adk-manages-session-resumption) below)
+
+**How they work together:**
+
+1. **When `run_live()` is called:**
+   - Retrieves the ADK `Session` from `SessionService`
+   - Initializes the Live API session with conversation history from `session.events`
+   - Streams events bidirectionally with the Live API backend
+   - Updates the ADK `Session` with new events as they occur
+2. **When `run_live()` ends**
+   - The Live API session terminates
+   - The ADK `Session` persists
+3. **When `run_live()` is called again** or **the application is restarted**:
+    - ADK loads the history from the ADK `Session`
+    - Creates a new Live API session with that context
+
+In short, ADK `Session` provides persistent, long-term conversation storage, while Live API sessions are ephemeral streaming contexts. This separation enables production applications to maintain conversation continuity across network interruptions, application restarts, and multiple streaming sessions.
+
+The following diagram illustrates the relationship between ADK Session persistence and ephemeral Live API session contexts, showing how conversation history is maintained across multiple `run_live()` calls:
 
 ```mermaid
 sequenceDiagram
@@ -268,40 +337,100 @@ sequenceDiagram
     participant ADK as ADK (run_live)
     participant LiveSession as Live API Session<br/>(Ephemeral)
 
+    Note over App,LiveSession: First run_live() call
+
     App->>SS: get_session(user_id, session_id)
     SS->>ADK_Session: Load session data
+    ADK_Session-->>SS: Session with events history
     SS-->>App: Session object
 
     App->>ADK: runner.run_live(...)
-    ADK->>LiveSession: Initialize with history
+    ADK->>LiveSession: Initialize with history from ADK Session
     activate LiveSession
+
+    Note over ADK,LiveSession: Bidirectional streaming...
+
     ADK->>ADK_Session: Update with new events
 
     App->>ADK: queue.close()
     ADK->>LiveSession: Terminate
     deactivate LiveSession
+    Note over LiveSession: Live API session destroyed
+    Note over ADK_Session: ADK Session persists
 
-    Note over ADK_Session: Session persists
+    Note over App,LiveSession: Second run_live() call (or after restart)
+
+    App->>SS: get_session(user_id, session_id)
+    SS->>ADK_Session: Load session data
+    ADK_Session-->>SS: Session with events history
+    SS-->>App: Session object (with previous history)
+
+    App->>ADK: runner.run_live(...)
+    ADK->>LiveSession: Initialize new session with full history
+    activate LiveSession
+
+    Note over ADK,LiveSession: Bidirectional streaming continues...
 ```
 
-### Connection / Session 制約
+**Key insights:**
+- ADK Session survives across multiple `run_live()` calls and app restarts
+- Live API session is ephemeral - created and destroyed per streaming session
+- Conversation continuity is maintained through ADK Session's persistent storage
+- SessionService manages the persistence layer (in-memory, database, or Agent Platform)
 
-| Constraint Type | Gemini Live API<br>(Google AI Studio) | Vertex AI Live API<br>(Google Cloud) | Notes |
+Now that we understand the difference between ADK `Session` objects and Live API sessions, let's focus on Live API connections and sessions—the backend infrastructure that powers real-time bidirectional streaming.
+
+### Live API Connections and Sessions
+
+Understanding the distinction between **connections** and **sessions** at the Live API level is crucial for building reliable ADK Gemini Live API Toolkit applications.
+
+**Connection**: The physical WebSocket link between ADK and the Live API server. This is the network transport layer that carries bidirectional streaming data.
+
+**Session**: The logical conversation context maintained by the Live API, including conversation history, tool call state, and model context. A session can span multiple connections.
+
+| **Aspect** | **Connection** | **Session** |
+|--------|-----------|---------|
+| **What is it?** | WebSocket network connection | Logical conversation context |
+| **Scope** | Transport layer | Application layer |
+| **Can span?** | Single network link | Multiple connections via resumption |
+| **Failure impact** | Network error or timeout | Lost conversation history |
+
+#### Live API Connection and Session Limits by Platform
+
+Understanding the constraints of each platform is critical for production planning. Gemini Live API and Gemini Live API (Agent Platform) have different limits that affect how long conversations can run and how many users can connect simultaneously. The most important distinction is between **connection duration** (how long a single WebSocket connection stays open) and **session duration** (how long a logical conversation can continue).
+
+| Constraint Type | Gemini Live API<br>(Google AI Studio) | Gemini Live API<br>(Agent Platform) | Notes |
 |----------------|---------------------------------------|--------------------------------------|-------|
-| **Connection duration** | ~10 minutes | Not documented separately | Gemini は接続が自動終了。ADK が再接続 |
-| **Session Duration (Audio-only)** | 15 minutes | 10 minutes | 圧縮なし基準。圧縮有効時は無制限 |
-| **Session Duration (Audio + video)** | 2 minutes | 10 minutes | Gemini は動画で短い。圧縮有効時は無制限 |
-| **Concurrent sessions** | 50 (Tier 1)<br>1,000 (Tier 2+) | Up to 1,000 | Gemini は tier 依存、Vertex は project 依存 |
+| **Connection duration** | ~10 minutes | Not documented separately | Each Gemini WebSocket connection auto-terminates; ADK reconnects transparently with session resumption |
+| **Session Duration (Audio-only)** | 15 minutes | 10 minutes | Maximum session duration without context window compression. Both platforms: unlimited with context window compression enabled |
+| **Session Duration (Audio + video)** | 2 minutes | 10 minutes | Gemini has shorter limit for video; Agent Platform treats all sessions equally. Both platforms: unlimited with context window compression enabled |
+| **Concurrent sessions** | 50 (Tier 1)<br>1,000 (Tier 2+) | Up to 1,000 | Gemini limits vary by API tier; Agent Platform limit is per Google Cloud project |
+
+!!! note "Source References"
+
+    - [Gemini Live API Capabilities Guide](https://ai.google.dev/gemini-api/docs/live-guide)
+    - [Gemini API Quotas](https://ai.google.dev/gemini-api/docs/quota)
+    - [Gemini Live API (Agent Platform)](https://cloud.google.com/vertex-ai/generative-ai/docs/live-api)
 
 ## Live API Session Resumption
 
-デフォルトでは接続は約 10 分で閉じます。
-Session Resumption を有効化すると、resumption handle を使って
-同じセッション文脈を新しい接続へ引き継げます。
+By default, the Live API limits connection duration to approximately 10 minutes—each WebSocket connection automatically closes after this duration. To overcome this limit and enable longer conversations, the **Live API provides [Session Resumption](https://ai.google.dev/gemini-api/docs/live#session-resumption)**, a feature that transparently migrates a session across multiple connections. When enabled, the Live API generates resumption handles that allow reconnecting to the same session context, preserving the full conversation history and state.
 
-ADK ではこれを自動化できます。
-`RunConfig(session_resumption=...)` を設定すると、
-接続終了検知・handle キャッシュ・再接続を内部で処理します。
+**ADK automates this entirely**: When you enable session resumption in RunConfig, ADK automatically handles all reconnection logic—detecting connection closures, caching resumption handles, and reconnecting seamlessly in the background. You don't need to write any reconnection code. Sessions continue seamlessly beyond the 10-minute connection limit, handling connection timeouts, network disruptions, and planned reconnections automatically.
+
+### Scope of ADK's Reconnection Management
+
+ADK manages the **ADK-to-Live API connection** (the WebSocket between ADK and the Gemini Live API backend). This is transparent to your application code.
+
+**Your application remains responsible for**:
+
+- Managing client connections to your application (e.g., user's WebSocket to your FastAPI server)
+- Implementing client-side reconnection logic if needed
+- Handling network failures between clients and your application
+
+When ADK reconnects to the Live API, your application's event loop continues normally—you keep receiving events from `run_live()` without interruption. From your application's perspective, the Live API session continues seamlessly.
+
+**Configuration:**
 
 ```python
 from google.genai import types
@@ -311,74 +440,262 @@ run_config = RunConfig(
 )
 ```
 
-### ADK が面倒を見る範囲
+**When NOT to Enable Session Resumption:**
 
-ADK は ADK↔Live API 間の WebSocket を管理します。
-クライアント↔あなたのアプリ間接続の再接続や障害処理は
-アプリ側で管理する必要があります。
+While session resumption is recommended for most production applications, consider these scenarios where you might not need it:
 
-### 自動再接続フロー
+- **Short sessions (<10 minutes)**: If your sessions typically complete within the ~10 minute connection timeout, resumption adds unnecessary overhead
+- **Stateless interactions**: Request-response style interactions where each turn is independent don't benefit from session continuity
+- **Development/testing**: Simpler debugging when each session starts fresh without carrying over state
+- **Cost-sensitive deployments**: Session resumption may incur additional platform costs or resource usage (verify with your platform)
 
-1. 初回 WebSocket 接続
-2. `session_resumption_update` から最新 handle をキャッシュ
-3. 接続制限到達で graceful close
-4. ADK が cached handle で再接続
-5. 同一セッションでストリーミング継続
+**Best practice**: Enable session resumption by default for production, disable only when you have a specific reason not to use it.
+
+### How ADK Manages Session Resumption
+
+While session resumption is supported by both Gemini Live API and Gemini Live API (Agent Platform), using it directly requires managing resumption handles, detecting connection closures, and implementing reconnection logic. ADK takes full responsibility for this complexity, automatically utilizing session resumption behind the scenes so developers don't need to write any reconnection code. You simply enable it in RunConfig, and ADK handles everything transparently.
+
+**ADK's automatic management:**
+
+1. **Initial Connection**: ADK establishes a WebSocket connection to Live API
+2. **Handle Updates**: Throughout the session, the Live API sends `session_resumption_update` messages containing updated handles. ADK automatically caches the latest handle in `InvocationContext.live_session_resumption_handle`
+3. **Graceful Connection Close**: When the ~10 minute connection limit is reached, the WebSocket closes gracefully (no exception)
+4. **Automatic Reconnection**: ADK's internal loop detects the close and automatically reconnects using the most recent cached handle
+5. **Session Continuation**: The same session continues seamlessly with full context preserved
+
+!!! note "Implementation Detail"
+
+    During reconnection, ADK retrieves the cached handle from `InvocationContext.live_session_resumption_handle` and includes it in the new `LiveConnectConfig` for the `live.connect()` call. This is handled entirely by ADK's internal reconnection loop—developers never need to access or manage these handles directly.
+
+### Sequence Diagram: Automatic Reconnection
+
+The following sequence diagram illustrates how ADK automatically manages Live API session resumption when the ~10 minute connection timeout is reached. ADK detects the graceful close, retrieves the cached resumption handle, and reconnects transparently without application code changes:
+
+```mermaid
+sequenceDiagram
+    participant App as Your Application
+    participant ADK as ADK (run_live)
+    participant WS as WebSocket Connection
+    participant API as Live API (Gemini/Agent Platform)
+    participant LiveSession as Live Session Context
+
+    Note over App,LiveSession: Initial Connection (with session resumption enabled)
+
+    App->>ADK: runner.run_live(run_config=RunConfig(session_resumption=...))
+    ADK->>API: WebSocket connect()
+    activate WS
+    API->>LiveSession: Create new session
+    activate LiveSession
+
+    Note over ADK,API: Bidirectional Streaming (0-10 minutes)
+
+    App->>ADK: send_content(text) / send_realtime(audio)
+    ADK->>API: → Content via WebSocket
+    API->>LiveSession: Update conversation history
+    API-->>ADK: ← Streaming response
+    ADK-->>App: ← yield event
+
+    Note over API,LiveSession: Live API sends resumption handle updates
+    API-->>ADK: session_resumption_update { new_handle: "abc123" }
+    ADK->>ADK: Cache handle in InvocationContext
+
+    Note over WS,API: ~10 minutes elapsed - Connection timeout
+
+    API->>WS: Close WebSocket (graceful close)
+    deactivate WS
+    Note over LiveSession: Session context preserved
+
+    Note over ADK: Graceful close detected - No exception raised
+    ADK->>ADK: while True loop continues
+
+    Note over ADK,API: Automatic Reconnection
+
+    ADK->>API: WebSocket connect(session_resumption.handle="abc123")
+    activate WS
+    API->>LiveSession: Attach to existing session
+    API-->>ADK: Session resumed with full context
+
+    Note over ADK,API: Bidirectional Streaming Continues
+
+    App->>ADK: send_content(text) / send_realtime(audio)
+    ADK->>API: → Content via WebSocket
+    API->>LiveSession: Update conversation history
+    API-->>ADK: ← Streaming response
+    ADK-->>App: ← yield event
+
+    Note over App,LiveSession: Session continues until duration limit or explicit close
+
+    deactivate WS
+    deactivate LiveSession
+```
+
+!!! note "Events and Session Persistence"
+
+    For details on which events are saved to the ADK `Session` versus which are only yielded during streaming, see [Part 3: Events Saved to ADK Session](part3.md#events-saved-to-adk-session).
 
 ## Live API Context Window Compression
 
-**課題:** 長時間会話では時間制限とトークン制限に達します。
+**Problem:** Live API sessions face two critical constraints that limit conversation duration. First, **session duration limits** impose hard time caps: without compression, Gemini Live API limits audio-only sessions to 15 minutes and audio+video sessions to just 2 minutes, while Agent Platform limits all sessions to 10 minutes. Second, **context window limits** restrict conversation length: models have finite token capacities (128k tokens for `gemini-2.5-flash-native-audio-preview-12-2025`, 32k-128k for Agent Platform models). Long conversations—especially extended customer support sessions, tutoring interactions, or multi-hour voice dialogues—will hit either the time limit or the token limit, causing the session to terminate or lose critical conversation history.
 
-**解決:**
-context window compression で古い会話を要約し、
-最近の会話を保持しつつセッションを継続します。
-有効化すると実運用上のセッション継続時間を伸ばせます。
+**Solution:** [Context window compression](https://ai.google.dev/gemini-api/docs/live-session#context-window-compression) solves both constraints simultaneously. It uses a sliding-window approach to automatically compress or summarize earlier conversation history when the token count reaches a configured threshold. The Live API preserves recent context in full detail while compressing older portions. **Critically, enabling context window compression extends session duration to unlimited time**, removing the session duration limits (15 minutes for audio-only / 2 minutes for audio+video on Gemini Live API; 10 minutes for all sessions on Agent Platform) while also preventing token limit exhaustion. However, there is a trade-off: as the feature summarizes earlier conversation history rather than retaining it all, the detail of past context will be gradually lost over time. The model will have access to compressed summaries of older exchanges, not the full verbatim history.
+
+### Platform Behavior and Official Limits
+
+Session duration management and context window compression are **Live API platform features**. ADK configures these features via RunConfig and passes the configuration to the Live API, but the actual enforcement and implementation are handled by the Gemini Live API backends.
+
+**Important**: The duration limits and "unlimited" session behavior mentioned in this guide are based on current Live API behavior. These limits are subject to change by Google. Always verify current session duration limits and compression behavior in the official documentation:
+
+- [Gemini Live API Documentation](https://ai.google.dev/gemini-api/docs/live)
+- [Gemini Live API (Agent Platform) Documentation](https://cloud.google.com/vertex-ai/generative-ai/docs/live-api)
+
+ADK provides an easy way to configure context window compression through RunConfig. However, developers are responsible for appropriately configuring the compression parameters (`trigger_tokens` and `target_tokens`) based on their specific requirements—model context window size, expected conversation patterns, and quality needs:
+
+```python
+from google.genai import types
+from google.adk.agents.run_config import RunConfig
+
+# For gemini-2.5-flash-native-audio-preview-12-2025 (128k context window)
+run_config = RunConfig(
+    context_window_compression=types.ContextWindowCompressionConfig(
+        trigger_tokens=100000,  # Start compression at ~78% of 128k context
+        sliding_window=types.SlidingWindow(
+            target_tokens=80000  # Compress to ~62% of context, preserving recent turns
+        )
+    )
+)
+```
+
+**How it works:**
+
+When context window compression is enabled:
+
+1. The Live API monitors the total token count of the conversation context
+2. When the context reaches the `trigger_tokens` threshold, compression activates
+3. Earlier conversation history is compressed or summarized using a sliding window approach
+4. Recent context (last `target_tokens` worth) is preserved in full detail
+5. **Two critical effects occur simultaneously:**
+   - Session duration limits are removed (no more 15-minute/2-minute caps on Gemini Live API or 10-minute caps on Agent Platform)
+   - Token limits are managed (sessions can continue indefinitely regardless of conversation length)
+
+**Choosing appropriate thresholds:**
+
+- Set `trigger_tokens` to 70-80% of your model's context window to allow headroom
+- Set `target_tokens` to 60-70% to provide sufficient compression
+- Test with your actual conversation patterns to optimize these values
+
+**Parameter Selection Strategy:**
+
+The examples above use 78% for `trigger_tokens` and 62% for `target_tokens`. Here's the reasoning:
+
+1. **trigger_tokens at 78%**: Provides a buffer before hitting the hard limit
+   - Allows room for the current turn to complete
+   - Prevents mid-response compression interruptions
+   - Typical conversations can continue for several more turns
+
+2. **target_tokens at 62%**: Leaves substantial room after compression
+   - 16 percentage points (78% - 62%) freed up per compression
+   - Allows for multiple turns before next compression
+   - Balances preservation of context with compression frequency
+
+3. **Adjusting for your use case**:
+   - **Long turns** (detailed technical discussions): Increase buffer → 70% trigger, 50% target
+   - **Short turns** (quick Q&A): Tighter margins → 85% trigger, 70% target
+   - **Context-critical** (requires historical detail): Higher target → 80% trigger, 70% target
+   - **Performance-sensitive** (minimize compression overhead): Lower trigger → 70% trigger, 50% target
+
+Always test with your actual conversation patterns to find optimal values.
+
+### When NOT to Use Context Window Compression
+
+While compression enables unlimited session duration, consider these trade-offs:
+
+**Context Window Compression Trade-offs:**
+
+| Aspect | With Compression | Without Compression | Best For |
+|--------|------------------|---------------------|----------|
+| **Session Duration** | Unlimited | 15 min (audio)<br>2 min (video) Gemini<br>10 min Agent Platform | Compression: Long sessions<br>No compression: Short sessions |
+| **Context Quality** | Older context summarized | Full verbatim history | Compression: General conversation<br>No compression: Precision-critical |
+| **Latency** | Compression overhead | No overhead | Compression: Async scenarios<br>No compression: Real-time |
+| **Memory Usage** | Bounded | Grows with session | Compression: Long sessions<br>No compression: Short sessions |
+| **Implementation** | Configure thresholds | No configuration | Compression: Production<br>No compression: Prototypes |
+
+**Common Use Cases:**
+
+✅ **Enable compression when:**
+- Sessions need to exceed platform duration limits (15/2/10 minutes)
+- Extended conversations may hit token limits (128k for 2.5-flash)
+- Customer support sessions that can last hours
+- Educational tutoring with long interactions
+
+❌ **Disable compression when:**
+- All sessions complete within duration limits
+- Precision recall of early conversation is critical
+- Development/testing phase (full history aids debugging)
+- Quality degradation from summarization is unacceptable
+
+**Best practice**: Enable compression only when you need sessions longer than platform duration limits OR when conversations may exceed context window token limits.
+
+## Best Practices for Live API Connection and Session Management
+
+### Essential: Enable Session Resumption
+
+- ✅ **Always enable session resumption** in RunConfig for production applications
+- ✅ This enables ADK to automatically handle Gemini's ~10 minute connection timeouts transparently
+- ✅ Sessions continue seamlessly across multiple WebSocket connections without user interruption
+- ✅ Session resumption handle caching and management
+
+```python
+from google.genai import types
+
+run_config = RunConfig(
+    response_modalities=["AUDIO"],
+    session_resumption=types.SessionResumptionConfig()
+)
+```
+
+### Recommended: Enable Context Window Compression for Unlimited Sessions
+
+- ✅ **Enable context window compression** if you need sessions longer than 15 minutes (audio-only) or 2 minutes (audio+video)
+- ✅ Once enabled, session duration becomes unlimited—no need to monitor time-based limits
+- ✅ Configure `trigger_tokens` and `target_tokens` based on your model's context window
+- ✅ Test compression settings with realistic conversation patterns
+- ⚠️ **Use judiciously**: Compression adds latency during summarization and may lose conversational nuance—only enable when extended sessions are truly necessary for your use case
 
 ```python
 from google.genai import types
 from google.adk.agents.run_config import RunConfig
 
 run_config = RunConfig(
+    response_modalities=["AUDIO"],
+    session_resumption=types.SessionResumptionConfig(),
     context_window_compression=types.ContextWindowCompressionConfig(
         trigger_tokens=100000,
-        sliding_window=types.SlidingWindow(
-            target_tokens=80000
-        )
+        sliding_window=types.SlidingWindow(target_tokens=80000)
     )
 )
 ```
 
-**推奨目安:**
+### Optional: Monitor Session Duration
 
-- `trigger_tokens`: コンテキスト上限の 70〜80%
-- `target_tokens`: 60〜70%
+**Only applies if NOT using context window compression:**
 
-## Live API 接続/セッション運用のベストプラクティス
-
-### 必須: session resumption
-
-- ✅ 本番では原則有効化
-- ✅ 接続タイムアウトを透過処理
-- ✅ セッション継続性を維持
-
-### 推奨: 長時間会話なら compression
-
-- ✅ 15分（音声）/2分（音声+動画）を超える可能性がある場合に有効
-- ⚠️ 要約時に遅延や文脈ニュアンス損失が起こり得る
-
-### 補助: duration 監視（compression 無効時）
-
-- ✅ Gemini: 15分/2分、Vertex: 10分 を監視
-- ✅ 上限の 1〜2 分前にユーザー通知
+- ✅ Focus on **session duration limits**, not connection timeouts (ADK handles those automatically)
+- ✅ **Gemini Live API**: Monitor for 15-minute limit (audio-only) or 2-minute limit (audio+video)
+- ✅ **Gemini Live API (Agent Platform)**: Monitor for 10-minute session limit
+- ✅ Warn users 1-2 minutes before session duration limits
+- ✅ Implement graceful session transitions for conversations exceeding session limits
 
 ## Concurrent Live API Sessions and Quota Management
 
-複数同時ユーザーでは、同時セッション上限がボトルネックになります。
-アプリ側でセッション運用戦略を設計してください。
+**Problem:** Production voice applications typically serve multiple users simultaneously, each requiring their own Live API session. However, both Gemini Live API and Gemini Live API (Agent Platform) impose strict concurrent session limits that vary by platform and pricing tier. Without proper quota planning and session management, applications can hit these limits quickly, causing connection failures for new users or degraded service quality during peak usage.
 
-### クォータの理解
+**Solution:** Understand platform-specific quotas, design your architecture to stay within concurrent session limits, implement session pooling or queueing strategies when needed, and monitor quota usage proactively. ADK handles individual session lifecycle automatically, but developers must architect their applications to manage multiple concurrent users within quota constraints.
 
-**Gemini Live API（tier ベース）:**
+### Understanding Concurrent Live API Session Quotas
+
+Both platforms limit how many Live API sessions can run simultaneously, but the limits and mechanisms differ significantly:
+
+**Gemini Live API (Google AI Studio) - Tier-based quotas:**
 
 | **Tier** | **Concurrent Sessions** | **TPM (Tokens Per Minute)** | **Access** |
 |----------|------------------------:|----------------------------:|------------|
@@ -387,7 +704,13 @@ run_config = RunConfig(
 | **Tier 2** | 1,000 | 10,000,000 | Higher usage tier |
 | **Tier 3** | 1,000 | 10,000,000 | Higher usage tier |
 
-**Vertex AI Live API（project ベース）:**
+*Free tier concurrent session limits are not explicitly documented but are significantly lower than paid tiers.
+
+!!! note "Source"
+
+    [Gemini API Quotas](https://ai.google.dev/gemini-api/docs/quota)
+
+**Gemini Live API (Agent Platform) - Project-based quotas:**
 
 | **Resource Type** | **Limit** | **Scope** |
 |---------------|------:|-------|
@@ -395,121 +718,165 @@ run_config = RunConfig(
 | **Maximum concurrent sessions** | Up to 1,000 | Per project |
 | **Session creation/deletion/update** | 100 per minute | Per project, per region |
 
-![Quota value on Cloud Console](../../../streaming/dev-guide/assets/adk-streaming-guide-quota-console.png)
+!!! note "Source"
 
-### 推奨アーキテクチャ
+    [Gemini Live API (Agent Platform)](https://cloud.google.com/vertex-ai/generative-ai/docs/live-api) | [Agent Platform Quotas](https://cloud.google.com/vertex-ai/generative-ai/docs/quotas)
 
-#### Pattern 1: Direct Mapping
+**Requesting a quota increase:**
 
-- 接続ユーザーごとに即 `run_live()` セッション作成
-- 小規模・制御可能な負荷向け
+To request an increase for Live API concurrent sessions, navigate to the [Quotas page](https://console.cloud.google.com/iam-admin/quotas) in the Google Cloud Console. Filter for the quota named **"Bidi generate content concurrent requests"** to find quota values for each project, region and base model, and submit a quota increase request. You'll need the Quota Administrator role (`roles/servicemanagement.quotaAdmin`) to make the request. See [View and manage quotas](https://cloud.google.com/docs/quotas/view-manage) for detailed instructions.
 
-#### Pattern 2: Session Pooling + Queueing
+![Quota value on Cloud Console](assets/adk-streaming-guide-quota-console.png)
 
-- 空きスロット時のみ開始
-- 上限超過時は待機キューへ
-- セッション終了時に次ユーザーを昇格
+**Key differences:**
 
-### ADK Session と Live API Session
+1. **Gemini Live API**: Concurrent session limits scale dramatically with API tier (50 → 1,000 sessions). Best for applications with unpredictable or rapidly scaling user bases willing to pay for higher tiers.
 
-ADK の `Session` は永続状態、Live API session はストリーミング接続中の論理会話です。
+2. **Gemini Live API (Agent Platform)**: Rate-limited by connection establishment rate (10/min) but supports up to 1,000 total concurrent sessions. Best for enterprise applications with gradual scaling patterns and existing Google Cloud infrastructure. Additionally, you can request quota increases to prepare for production deployments with higher concurrency requirements.
 
-### Live API 接続とセッション
+### Architectural Patterns for Managing Quotas
 
-接続方式と会話状態の寿命は別概念として扱います。
+Once you understand your concurrent session quotas, the next challenge is architecting your application to operate effectively within those limits. The right approach depends on your expected user concurrency, scaling requirements, and tolerance for queueing. This section presents two architectural patterns—from simple direct mapping for low-concurrency applications to session pooling with queueing for applications that may exceed quota limits during peak usage. Choose the pattern that matches your current scale and design it to evolve as your user base grows.
 
-#### プラットフォーム別の接続/セッション制限
+**Choosing the Right Architecture:**
 
-各プラットフォームで同時接続数やセッション上限が異なります。
+```text
+                Start: Designing Quota Management
+                              |
+                              v
+                   Expected Concurrent Users?
+                     /                    \
+            < Quota Limit           > Quota Limit or Unpredictable
+                   |                              |
+                   v                              v
+          Pattern 1: Direct Mapping    Pattern 2: Session Pooling
+          - Simple 1:1 mapping         - Queue waiting users
+          - No quota logic             - Graceful degradation
+          - Fast development           - Peak handling
+                   |                              |
+                   v                              v
+              Good for:                      Good for:
+              - Prototypes                   - Production at scale
+              - Small teams                  - Unpredictable load
+              - Controlled users             - Public applications
+```
 
-### ADK の再接続管理の範囲
+**Quick Decision Guide:**
 
-ADK はセッション再開を補助しますが、アプリケーション側の状態設計も必要です。
-
-### ADK がセッション再開をどう管理するか
-
-再接続時に同じ `session_id` を使い、会話継続を透過的に扱います。
-
-### 自動再接続シーケンス図
-
-再接続の流れは、クライアント・ADK・Live API の 3 層で整理すると分かりやすくなります。
-
-### Platform Behavior and Official Limits
-
-公式の制限値に合わせて、`quota` と `duration` を監視してください。
-
-### When NOT to Use Context Window Compression
-
-短時間セッションや小さなコンテキストでは、圧縮を入れない方がシンプルです。
-
-## Live API 接続・セッション管理のベストプラクティス
-
-### 必須: session resumption を有効化する
-
-長時間会話では再接続を前提に設計します。
-
-### 推奨: 長時間会話には context window compression
-
-会話が長くなるならコンテキスト圧縮で継続性を確保します。
-
-### 補助: セッション時間を監視する
-
-制限に近づいたら UI で通知するのが安全です。
-
-### 同時 Live API セッションクォータの理解
-
-アプリの接続数とモデル側の制限を両方見ます。
-
-### クォータ管理のアーキテクチャ
+| Factor | Direct Mapping | Session Pooling |
+|--------|----------------|-----------------|
+| **Expected users** | Always < quota | May exceed quota |
+| **User experience** | Always instant | May wait during peaks |
+| **Implementation complexity** | Low | Medium |
+| **Operational overhead** | None | Monitor queue depth |
+| **Best for** | Prototypes, internal tools | Production, public apps |
 
 #### Pattern 1: Direct Mapping (Simple Applications)
 
-接続数が少ない小規模アプリ向けです。
+For small-scale applications where concurrent users will never exceed quota limits, create a dedicated Live API session for each connected user with a simple 1:1 mapping:
+
+1. **When a user connects:** Immediately start a `run_live()` session for them
+2. **When they disconnect:** The session ends
+3. **No quota management logic:** Assumes your total concurrent users will always stay below your quota limits
+
+This is the simplest possible architecture and works well for prototypes, development environments, and small-scale applications with predictable user loads.
 
 #### Pattern 2: Session Pooling with Queueing
 
-セッションプールで待機列を管理し、上限を越えないようにします。
+For applications that may exceed concurrent session limits during peak usage, track the number of active Live API sessions and enforce your quota limit at the application level:
 
-### この invocation の全イベントにメタデータを付与する
+1. **When a new user connects:** Check if you have available session slots
+2. **If slots are available:** Start a session immediately
+3. **If you've reached your quota limit:**
+   - Place the user in a waiting queue
+   - Notify them they're waiting for an available slot
+4. **As sessions end:** Automatically process the queue to start sessions for waiting users
 
-`custom_metadata` はイベントの追跡や分析に使えます。
-
-### A2A request metadata は custom_metadata に自動マッピングされる
-
-A2A 互換のリクエスト情報は RunConfig の metadata に反映されます。
+This provides graceful degradation—users wait briefly during peak times rather than experiencing hard connection failures.
 
 ## Miscellaneous Controls
 
+ADK provides additional RunConfig options to control session behavior, manage costs, and persist audio data for debugging and compliance purposes.
+
 ```python
 run_config = RunConfig(
-    max_llm_calls=500,
-    save_live_blob=True,
-    custom_metadata={"user_tier": "premium", "session_type": "support"},
-    support_cfc=True
+    # Limit total LLM calls per invocation
+    max_llm_calls=500,  # Default: 500 (prevents runaway loops)
+                        # 0 or negative = unlimited (use with caution)
+
+    # Save audio/video artifacts for debugging/compliance
+    save_live_blob=True,  # Default: False
+
+    # Attach custom metadata to events
+    custom_metadata={"user_tier": "premium", "session_type": "support"},  # Default: None
+
+    # Enable compositional function calling (experimental)
+    support_cfc=True  # Default: False (Gemini 2.x models only)
 )
 ```
 
 ### max_llm_calls
 
-`max_llm_calls` は invocation ごとの LLM 呼び出し上限です。
-ただし **BIDI `run_live()` には適用されません**。
-BIDI では duration 制限や token usage 監視などを別途実装してください。
+This parameter caps the total number of LLM invocations allowed per invocation context, providing protection against runaway costs and infinite agent loops.
+
+**Limitation for BIDI Streaming:**
+
+**The `max_llm_calls` limit does NOT apply to `run_live()` with `StreamingMode.BIDI`.** This parameter only protects SSE streaming mode and `run_async()` flows. If you're building bidirectional streaming applications (the focus of this guide), you will NOT get automatic cost protection from this parameter.
+
+**For Live streaming sessions**, implement your own safeguards:
+
+- Session duration limits
+- Turn count tracking
+- Custom cost monitoring by tracking token usage in model turn events (see [Part 3: Event Types and Handling](part3.md#event-types-and-handling))
+- Application-level circuit breakers
 
 ### save_live_blob
 
-音声/動画の永続化制御です。
-現状 ADK 実装で実際に保存されるのは主に音声です。
+This parameter controls whether audio and video streams are persisted to ADK's session and artifact services for debugging, compliance, and quality assurance purposes.
 
-!!! warning "Migration Note"
+!!! warning "Migration Note: save_live_audio Deprecated"
 
-    `save_live_audio` は非推奨で、`save_live_blob` へ移行してください。
+    **If you're using `save_live_audio`:** This parameter has been deprecated in favor of `save_live_blob`. ADK will automatically migrate `save_live_audio=True` to `save_live_blob=True` with a deprecation warning, but this compatibility layer will be removed in a future release. Update your code to use `save_live_blob` instead.
+
+Currently, **only audio is persisted** by ADK's implementation. When enabled, ADK persists audio streams to:
+
+- **[Session service](/sessions/)**: Conversation history includes audio references
+- **[Artifact service](/artifacts/)**: Audio files stored with unique IDs
+
+**Use cases:**
+
+- **Debugging**: Voice interaction issues, assistant behavior analysis
+- **Compliance**: Audit trails for regulated industries (healthcare, financial services)
+- **Quality Assurance**: Monitoring conversation quality, identifying issues
+- **Training Data**: Collecting data for model improvement
+- **Development/Testing**: Testing environments and cost-sensitive deployments
+
+**Storage considerations:**
+
+Enabling `save_live_blob=True` has significant storage implications:
+
+- **Audio file sizes**: At 16kHz PCM, audio input generates ~1.92 MB per minute
+- **Session storage**: Audio is stored in both session service and artifact service
+- **Retention policy**: Check your artifact service configuration for retention periods
+- **Cost impact**: Storage costs can accumulate quickly for high-volume voice applications
+
+**Best practices:**
+
+- Enable only when needed (debugging, compliance, training)
+- Implement retention policies to auto-delete old audio artifacts
+- Consider sampling (e.g., save 10% of sessions for quality monitoring)
+- Use compression if supported by your artifact service
 
 ### custom_metadata
 
-任意の key-value を `Event.custom_metadata` に付与し、
-セッションへ保存できます。
+This parameter allows you to attach arbitrary key-value metadata to events generated during the current invocation. The metadata is stored in the `Event.custom_metadata` field and persisted to session storage, enabling you to tag events with application-specific context for analytics, debugging, routing, or compliance tracking.
+
+**Configuration:**
 
 ```python
+from google.adk.agents.run_config import RunConfig
+
+# Attach metadata to all events in this invocation
 run_config = RunConfig(
     custom_metadata={
         "user_tier": "premium",
@@ -520,52 +887,123 @@ run_config = RunConfig(
 )
 ```
 
-### support_cfc (Experimental)
+**How it works:**
 
-`support_cfc=True` では、設定上 SSE を選んでも内部的に Live API(WebSocket) を使用します。
-`gemini-2.x` 系が必要で、`gemini-1.5-x` は非対応です。
+When you provide `custom_metadata` in RunConfig:
 
-### 追加の制御ポイント
+1. **Metadata attachment**: The dictionary is attached to every `Event` generated during the invocation
+2. **Session persistence**: Events with metadata are stored in the session service (database, Agent Platform, or in-memory)
+3. **Event access**: Retrieve metadata from any event via `event.custom_metadata`
+4. **A2A integration**: For Agent-to-Agent (A2A) communication, ADK automatically propagates A2A request metadata to this field
 
-| 項目 | 説明 |
-|---|---|
-| `max_llm_calls` | 1 invocation 内の LLM 呼び出し上限 |
-| `save_live_blob` | 音声/動画の永続化設定 |
-| `custom_metadata` | 追加メタデータ |
-| `support_cfc` | compositional function calling |
-
-### 運用上のチェックリスト
-
-- `response_modalities` は 1 セッション 1 種類にする
-- 長時間会話では session resumption を有効化する
-- 高負荷環境では context window compression を検討する
-- クォータ監視はアプリ側でも行う
-
-### Example: metadata と blob 保存を併用する
+**Type specification:**
 
 ```python
+custom_metadata: Optional[dict[str, Any]] = None
+```
+
+The metadata is a flexible dictionary accepting any JSON-serializable values (strings, numbers, booleans, nested objects, arrays).
+
+**Use cases:**
+
+- **User segmentation**: Tag events with user tier, subscription level, or cohort information
+- **Session classification**: Label sessions by type (support, sales, onboarding) for analytics
+- **Campaign tracking**: Associate events with marketing campaigns or experiments
+- **A/B testing**: Track which variant of your application generated the event
+- **Compliance**: Attach jurisdiction, consent flags, or data retention policies
+- **Debugging**: Add trace IDs, feature flags, or environment identifiers
+- **Analytics**: Store custom dimensions for downstream analysis
+
+**Example - Retrieving metadata from events:**
+
+```python
+async for event in runner.run_live(
+    session=session,
+    live_request_queue=queue,
+    run_config=RunConfig(
+        custom_metadata={"user_id": "user_123", "experiment": "new_ui"}
+    )
+):
+    if event.custom_metadata:
+        print(f"User: {event.custom_metadata.get('user_id')}")
+        print(f"Experiment: {event.custom_metadata.get('experiment')}")
+```
+
+**Agent-to-Agent (A2A) integration:**
+
+When using `RemoteA2AAgent`, ADK automatically extracts metadata from A2A requests and populates `custom_metadata`:
+
+```python
+# A2A request metadata is automatically mapped to custom_metadata
+# Source: a2a/converters/request_converter.py
+custom_metadata = {
+    "a2a_metadata": {
+        # Original A2A request metadata appears here
+    }
+}
+```
+
+This enables seamless metadata propagation across agent boundaries in multi-agent architectures.
+
+**Best practices:**
+
+- Use consistent key naming conventions across your application
+- Avoid storing sensitive data (PII, credentials) in metadata—use encryption if necessary
+- Keep metadata size reasonable to minimize storage overhead
+- Document your metadata schema for team consistency
+- Consider using metadata for session filtering and search in production debugging
+
+### support_cfc (Experimental)
+
+This parameter enables Compositional Function Calling (CFC), allowing the model to orchestrate multiple tools in sophisticated patterns—calling tools in parallel, chaining outputs as inputs to other tools, or conditionally executing tools based on intermediate results.
+
+**⚠️ Experimental Feature:** CFC support is experimental and subject to change.
+
+**Critical behavior:** When `support_cfc=True`, ADK **always uses the Live API** (WebSocket) internally, regardless of the `streaming_mode` setting. This is because only the Live API backend supports CFC capabilities.
+
+```python
+# Even with SSE mode, ADK routes through Live API when CFC is enabled
 run_config = RunConfig(
-    max_llm_calls=500,
-    save_live_blob=True,
-    custom_metadata={"user_tier": "premium", "session_type": "support"},
     support_cfc=True,
+    streaming_mode=StreamingMode.SSE  # ADK uses Live API internally
 )
 ```
 
-### Example: TEXT / AUDIO 切り替えの意図
+**Model requirements:**
 
-- TEXT はチャット中心の UI に向く
-- AUDIO は音声対話に向く
-- 両方の同時指定は不可
+ADK validates CFC compatibility at session initialization and will raise an error if the model is unsupported:
+
+- ✅ **Supported**: `gemini-2.x` models (e.g., `gemini-2.5-flash-native-audio-preview-12-2025`)
+- ❌ **Not supported**: `gemini-1.5-x` models
+- **Validation**: ADK checks that the model name starts with `gemini-2` when `support_cfc=True` ([`runners.py:1354-1360`](https://github.com/google/adk-python/blob/427a983b18088bdc22272d02714393b0a779ecdf/src/google/adk/runners.py#L1354-L1360))
+- **Code executor**: ADK automatically injects `BuiltInCodeExecutor` when CFC is enabled for safe parallel tool execution
+
+**CFC capabilities:**
+
+- **Parallel execution**: Call multiple independent tools simultaneously (e.g., fetch weather for multiple cities at once)
+- **Function chaining**: Use one tool's output as input to another (e.g., `get_location()` → `get_weather(location)`)
+- **Conditional execution**: Execute tools based on intermediate results from prior tool calls
+
+**Use cases:**
+
+CFC is designed for complex, multi-step workflows that benefit from intelligent tool orchestration:
+
+- Data aggregation from multiple APIs simultaneously
+- Multi-step analysis pipelines where tools feed into each other
+- Complex research tasks requiring conditional exploration
+- Any scenario needing sophisticated tool coordination beyond sequential execution
+
+**For bidirectional streaming applications:** While CFC works with BIDI mode, it's primarily optimized for text-based tool orchestration. For real-time audio/video interactions (the focus of this guide), standard function calling typically provides better performance and simpler implementation.
+
+**Learn more:**
+
+- [Gemini Function Calling Guide](https://ai.google.dev/gemini-api/docs/function-calling) - Official documentation on compositional and parallel function calling
+- [ADK Parallel Functions Example](https://github.com/google/adk-python/blob/427a983b18088bdc22272d02714393b0a779ecdf/contributing/samples/parallel_functions/agent.py) - Working example with async tools
+- [ADK Performance Guide](/tools-custom/performance/) - Best practices for parallel-ready tools
 
 ## まとめ
 
-このパートでは、RunConfig によって ADK Gemini Live API Toolkit セッションを
-宣言的に制御する方法を学びました。
-レスポンスモダリティ、BIDI/SSE 差、Session 関係、
-session resumption/context compression、
-同時セッションクォータ対策、コスト/保存設定を理解し、
-本番運用に耐えるストリーミング設計が可能になります。
+In this part, you learned how RunConfig enables sophisticated control over ADK Gemini Live API Toolkit sessions through declarative configuration. We covered response modalities and their constraints, explored the differences between BIDI and SSE streaming modes, examined the relationship between ADK Sessions and Live API sessions, and learned how to manage session duration with session resumption and context window compression. You now understand how to handle concurrent session quotas, implement architectural patterns for quota management, configure cost controls through `max_llm_calls` and audio persistence options. With RunConfig mastery, you can build production-ready streaming applications that balance feature richness with operational constraints—enabling extended conversations, managing platform limits, controlling costs effectively, and monitoring resource consumption.
 
 ---
 
