@@ -120,9 +120,13 @@ markdown_extensions:
   - toc:
       permalink: true
 
+
+# Hooks
+hooks:
+  - hooks/pagefind.py
+
 # Plugins
 plugins:
-  - search
   - macros:
       module_name: scripts/integrations
       # Set custom delimiters for J2 templates to avoid conflicts with Markdown
@@ -673,6 +677,7 @@ nav:
       - Go: get-started/go.md
       - Java: get-started/java.md
       - Kotlin: get-started/kotlin.md
+      - Agents CLI: get-started/agents-cli.md
       - Installation: get-started/installation.md
       - Google Cloud: get-started/google-cloud.md
     - Build your Agent:
@@ -801,6 +806,7 @@ nav:
         - Python: a2a/quickstart-consuming.md
         - Go: a2a/quickstart-consuming-go.md
         - Java: a2a/quickstart-consuming-java.md
+        - Kotlin: a2a/quickstart-consuming-kotlin.md
       - A2A Extension: a2a/a2a-extension.md
     - Live and Voice Agents:
       - live/index.md
