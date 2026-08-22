@@ -1,7 +1,7 @@
 # ADK用カスタムツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADKエージェントワークフローでは、ツールはADKエージェントがアクションを実行するために呼び出すことができる、構造化された入力と出力を持つプログラミング関数です。ADKツールは、Geminiやその他の生成AIモデルで[関数呼び出し](https://ai.google.dev/gemini-api/docs/function-calling)を使用する方法と同様に機能します。ADKツールを使用して、次のようなさまざまなアクションやプログラミング関数を実行できます。
@@ -96,6 +96,12 @@ ADKは、いくつかのタイプのツールをサポートすることで柔�
     --8<-- "examples/java/snippets/src/main/java/tools/WeatherSentimentAgentApp.java:full_code"
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/WeatherSentiment.kt:full_code"
+    ```
+
 ## ツールコンテキスト
 
 より高度なシナリオでは、ADKを使用すると、特別なパラメーター`tool_context: ToolContext`を含めることで、ツール関数内から追加のコンテキスト情報にアクセスできます。これを関数シグネチャに含めることで、ADKはエージェントの実行中にツールが呼び出されたときに**自動的に****ToolContext**クラスの**インスタンス**を提供します。
@@ -179,6 +185,12 @@ ADKは、いくつかのタイプのツールをサポートすることで柔�
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/UserPreferenceTools.kt:example"
+    ```
+
 ### **エージェントフローの制御**
 
 `tool_context.actions`属性（Javaでは`ToolContext.actions()`、Goでは`tool.Context.Actions()`）は、**EventActions**オブジェクトを保持します。このオブジェクトの属性を変更すると、ツールが実行を完了した後にエージェントまたはフレームワークが何をするかに影響を与えることができます。
@@ -213,6 +225,12 @@ ADKは、いくつかのタイプのツールをサポートすることで柔�
 
     ```java
     --8<-- "examples/java/snippets/src/main/java/tools/CustomerSupportAgentApp.java:full_code"
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/CustomerSupport.kt:full_code"
     ```
 
 ##### 説明
@@ -329,6 +347,12 @@ ToolContextは、認証済みAPIと対話するツールにメカニズムを提
     // LlmAgent agent = LlmAgent().builder().tools(processDocumentTool).build();
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/DocAnalysisTools.kt:full_code"
+    ```
+
 **ToolContext**を活用することで、開発者はADKのアーキテクチャとシームレスに統合し、エージェントの全体的な機能を強化する、より高度でコンテキストを意識したカスタムツールを作成できます。
 
 ## 効果的なツール関数の定義
@@ -434,6 +458,12 @@ ToolContextは、認証済みAPIと対話するツールにメカニズムを提
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/OrderTools.kt:snippet"
+    ```
+
 * **シンプルさと焦点：**
     * **ツールを集中させる：** 各ツールは、理想的には1つの明確に定義されたタスクを実行する必要があります。
     * **パラメーターが少ない方が良い：** モデルは一般的に、多くのオプションまたは複雑なパラメーターを持つツールよりも、明確に定義されたパラメーターが少ないツールをより確実に処理します。
@@ -444,8 +474,8 @@ ToolContextは、認証済みAPIと対話するツールにメカニズムを提
 
 ## ツールセット：ツールのグループ化と動的な提供
 
-<div class="language-support-tag" title="この機能は現在Pythonで利用可能です。">
-   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.5.0</span>
+<div class="language-support-tag">
+   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.5.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 個々のツールを超えて、ADKは`BaseToolset`インターフェイス（`google.adk.tools.base_toolset`で定義）を介して**ツールセット**の概念を導入します。ツールセットを使用すると、`BaseTool`インスタンスのコレクションを管理し、多くの場合動的にエージェントに提供できます。
@@ -499,12 +529,33 @@ ADKでツールセットとして機能するクラスは、`BaseToolset`抽象�
     --8<-- "examples/java/snippets/src/main/java/tools/SimpleMathToolsetApp.java:init"
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/ToolsetExample.kt:init"
+    ```
+
 この例では：
 
 *   `SimpleMathToolset`は`BaseToolset`を実装し、その`get_tools()`メソッドは`add_numbers`と`subtract_numbers`の`FunctionTool`インスタンスを返します。また、プレフィックスを使用して名前をカスタマイズします。
 *   `calculator_agent`は、個々の`greet_tool`と`SimpleMathToolset`のインスタンスの両方で構成されます。
-*   `calculator_agent`が実行されると、ADKは`math_toolset_instance.get_tools()`を呼び出します。エージェントのLLMは、ユーザーリクエストを処理するために`greet_user`、`calculator_add_numbers`、および`calculator_subtract_numbers`にアクセスできるようになります。
+*   `calculator_agent`が実行されると、ADKは`math_toolset_instance.get_tools()`を呼び出します。エージェントのLLMは、ユーザーリクエストを処理するために`greet_user`, `calculator_add_numbers`, および `calculator_subtract_numbers` にアクセスできるようになります。
 *   `add_numbers`ツールは`tool_context.state`への書き込みを示し、エージェントの指示はこの状態の読み取りに言及しています。
 *   `close()`メソッドは、ツールセットが保持するリソースが解放されるように呼び出されます。
+*   Kotlin の例では、プレフィックス メカニズムがなく `BaseTool.name` が読み取り専用であるため、ツール名にプレフィックスを付けません。ツールは `greetUser`、`addNumbers`、`subtractNumbers` のままです。また、Kotlin では 2 種類のツールを分離して管理します。個々のツールは `tools` に、ツールセットは `toolsets` に配置します。
+
+### ツールセット内のツールのフィルタリング
+
+<div class="language-support-tag" title="このバージョンバッジは、ここに示されている Kotlin ToolFilter API に適用されます。Python、Java、TypeScript は独自の BaseToolset API を通じてツールをフィルタリングします。">
+   <span class="lst-supported">ADKでサポート</span><span class="lst-kotlin">Kotlin v0.7.0</span>
+</div>
+
+すべての SDK では、名前または現在のコンテキストを参照する述語 (predicate) によって、ツールセットがモデルに渡す対象を絞り込むことができます。Python、Java、TypeScript では `BaseToolset` でそのフィルターを受け取ります。ここに示す例は Kotlin の形式です。
+
+`getTools()` 内にリストをハードコードする代わりに、上記の Kotlin の例で `SimpleMathToolset` が行っているように、ツールセットは `ToolFilter` を受け取り、`isToolSelected` でそれを適用できます。`ToolFilter.allowList` は名前でツールを選択し、`ToolFilter.Predicate` は `ReadonlyContext` を受け取るため、ツールリストをセッション ステートや現在のユーザーに依存させることができます。null フィルターはすべてを選択するため、同じクラスがフィルターなしでも機能します。
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/overview/ToolsetExample.kt:filter"
+```
 
 ツールセットは、ADKエージェントにツールのコレクションを整理、管理、動的に提供するための強力な方法を提供し、よりモジュール式で保守性が高く、適応性のあるエージェントアプリケーションにつながります。

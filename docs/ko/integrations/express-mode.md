@@ -65,7 +65,7 @@ GOOGLE_API_KEY=여기에_실제_익스프레스_모드_API_키를_붙여넣으�
 [`VertexAiSessionService`](../sessions/session/index.md)는 Vertex AI 익스프레스 모드 API 키와 호환됩니다. 프로젝트나 위치 정보 없이 세션 객체를 초기화할 수 있습니다.
 
 ```py
-# 필요: pip install google-adk[vertexai]
+# 필요: pip install google-adk[gcp]
 # 추가 환경 변수 설정:
 # GOOGLE_GENAI_USE_ENTERPRISE=TRUE
 # GOOGLE_API_KEY=여기에_실제_익스프레스_모드_API_키를_붙여넣으세요
@@ -92,7 +92,7 @@ session_service = VertexAiSessionService(agent_engine_id=APP_ID)
 [`VertexAiMemoryBankService`](../sessions/memory.md)는 Vertex AI 익스프레스 모드 API 키와 호환됩니다. 프로젝트나 위치 정보 없이 메모리 객체를 초기화할 수 있습니다.
 
 ```py
-# 필요: pip install google-adk[vertexai]
+# 필요: pip install google-adk[gcp]
 # 추가 환경 변수 설정:
 # GOOGLE_GENAI_USE_ENTERPRISE=TRUE
 # GOOGLE_API_KEY=여기에_실제_익스프레스_모드_API_키를_붙여넣으세요

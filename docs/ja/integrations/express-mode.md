@@ -65,7 +65,7 @@ GOOGLE_API_KEY=ここに実際のEXPRESSモードのAPIキーを貼り付けて�
 [`VertexAiSessionService`](../sessions/session/index.md) は Vertex AI ExpressモードのAPIキーと互換性があります。プロジェクトやロケーションを指定せずにセッションオブジェクトを初期化できます。
 
 ```py
-# 必要なライブラリ: pip install google-adk[vertexai]
+# 必要なライブラリ: pip install google-adk[gcp]
 # 加えて環境変数の設定:
 # GOOGLE_GENAI_USE_ENTERPRISE=TRUE
 # GOOGLE_API_KEY=ここに実際のEXPRESSモードのAPIキーを貼り付けてください
@@ -92,7 +92,7 @@ session_service = VertexAiSessionService(agent_engine_id=APP_ID)
 [`VertexAiMemoryBankService`](../sessions/memory.md) は Vertex AI ExpressモードのAPIキーと互換性があります。プロジェクトやロケーションを指定せずにメモリオブジェクトを初期化できます。
 
 ```py
-# 必要なライブラリ: pip install google-adk[vertexai]
+# 必要なライブラリ: pip install google-adk[gcp]
 # 加えて環境変数の設定:
 # GOOGLE_GENAI_USE_ENTERPRISE=TRUE
 # GOOGLE_API_KEY=ここに実際のEXPRESSモードのAPIキーを貼り付けてください

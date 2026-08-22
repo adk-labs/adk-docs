@@ -107,8 +107,8 @@ ADK Kotlin 에이전트 프로젝트는 `build.gradle.kts` 프로젝트 파일�
 
 ```kotlin title="my_agent/build.gradle.kts (partial)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.5.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.5.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
 }
 ```
 
@@ -127,9 +127,9 @@ dependencies {
     }
 
     dependencies {
-        implementation("com.google.adk:google-adk-kotlin-core:0.5.0")
-        implementation("com.google.adk:google-adk-kotlin-webserver:0.5.0")
-        ksp("com.google.adk:google-adk-kotlin-processor:0.5.0")
+        implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
+        implementation("com.google.adk:google-adk-kotlin-webserver:0.8.0")
+        ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
     }
 
     kotlin {
@@ -234,9 +234,9 @@ ADK 웹 인터페이스로 에이전트를 실행하려면 `build.gradle.kts`에
 
 ```kotlin title="my_agent/build.gradle.kts (add to dependencies)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.5.0")
-    implementation("com.google.adk:google-adk-kotlin-webserver:0.5.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.5.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
+    implementation("com.google.adk:google-adk-kotlin-webserver:0.8.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
 }
 ```
 

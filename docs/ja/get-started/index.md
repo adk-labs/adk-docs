@@ -39,6 +39,12 @@ Agent Development Kit（ADK）は、開発者がAI搭載エージェントを迅
 
     [:octicons-arrow-right-24: Kotlinで始める](kotlin.md) <br>
 
+-   :material-console:{ .lg .middle } **Agents CLI クイックスタート**
+
+    ---
+    コーディング エージェントで最初の ADK エージェントを作成します。
+
+    [:octicons-arrow-right-24: Agents CLI で始める](agents-cli.md) <br>
 </div>
 
 技術概要から始めるには、この[リンク](about.md)を確認してください。

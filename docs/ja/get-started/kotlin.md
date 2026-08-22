@@ -111,8 +111,8 @@ ADK Kotlin エージェントプロジェクトでは、`build.gradle.kts` プ�
 
 ```kotlin title="my_agent/build.gradle.kts (partial)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.5.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.5.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
 }
 ```
 
@@ -132,9 +132,9 @@ dependencies {
     }
 
     dependencies {
-        implementation("com.google.adk:google-adk-kotlin-core:0.5.0")
-        implementation("com.google.adk:google-adk-kotlin-webserver:0.5.0")
-        ksp("com.google.adk:google-adk-kotlin-processor:0.5.0")
+        implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
+        implementation("com.google.adk:google-adk-kotlin-webserver:0.8.0")
+        ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
     }
 
     kotlin {

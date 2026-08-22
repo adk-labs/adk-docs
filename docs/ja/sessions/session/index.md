@@ -207,6 +207,10 @@ ADKは、ニーズに最も適したストレージバックエンドを選択�
 
 2.  **`VertexAiSessionService`**
 
+    <div class="language-support-tag">
+      <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
+    </div>
+
     *   **仕組み:** API呼び出しを介してGoogle Cloud Vertex AIインフラストラクチャをセッション管理に使用します。
     *   **永続性:** あり。データは[Vertex AI Agent Engine](https://adk.dev/deploy/agent-runtime/)を介して信頼性が高く、スケーラブルに管理されます。
     *   **要件:**
@@ -276,6 +280,34 @@ ADKは、ニーズに最も適したストレージバックエンドを選択�
                    .createSession(reasoningEngineAppName, userId, initialState, Optional.of(sessionId))
                    .blockingGet();
            ```
+
+    === "Kotlin"
+
+        `VertexAiSessionService` は ADK Kotlin では JVM 専用です。Android では使用できません。サーバー側エージェントから使用してください。
+
+        ```kotlin
+        import com.google.adk.kt.sessions.SessionKey
+        import com.google.adk.kt.sessions.VertexAiSessionService
+        import kotlinx.coroutines.runBlocking
+
+        // 推論エンジン (Reasoning Engine) は作成時にここで固定されます。他のタブでは
+        // `app_name` を介して呼び出しごとにエンジンが選択されますが、Kotlin では `appName` は
+        // その解析には使用されず、セッション上のラベルにすぎません。
+        val sessionService =
+            VertexAiSessionService(
+                project = "your-gcp-project-id",
+                location = "us-central1",
+                // 単純な数値のエンジン ID です。完全な "projects/.../reasoningEngines/..."
+                // リソース名は拒否されます。project と location は個別の引数です。
+                reasoningEngineId = "1234567890",
+            )
+
+        // セッション メソッドは suspend 関数です。ここでの `runBlocking` は Java タブの `.blockingGet()` に相当します。
+        val mySession = runBlocking {
+            // null id を渡すと、サービスが自動的に ID を割り当てます。
+            sessionService.createSession(SessionKey("example-app", "u_123", id = null))
+        }
+        ```
 
 ADK エージェントから Google Cloud への接続に関する詳細については、[Google Cloud および Agent Platform への接続](/ja/get-started/google-cloud/) を参照してください。
 

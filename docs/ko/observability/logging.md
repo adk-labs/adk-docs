@@ -249,3 +249,18 @@ Kotlin에서 ADK는 표준 JVM 로깅 기능(기본적으로 Flogger)과 OpenTel
 ```kotlin
 --8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:logging_plugin"
 ```
+
+#### 파일로 전체 디버그 캡처
+
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-kotlin">Kotlin v0.6.0</span>
+</div>
+
+축약된 콘솔 출력 대신 동일한 활동을 전체적으로 `adk_debug.yaml`에 추가되는 YAML 형식으로 기록하려면 `DebugLoggingPlugin`을 사용합니다.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:debug_logging_plugin"
+```
+
+!!! warning "경고"
+    출력 파일에는 원시 프롬프트, 도구 인수 및 세션 상태가 포함됩니다. 민감한 정보로 취급하세요.

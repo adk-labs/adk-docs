@@ -39,6 +39,12 @@
 
     [:octicons-arrow-right-24: Kotlin으로 시작](kotlin.md) <br>
 
+-   :material-console:{ .lg .middle } **Agents CLI 빠른 시작**
+
+    ---
+    코딩 에이전트와 함께 첫 번째 ADK 에이전트를 만듭니다.
+
+    [:octicons-arrow-right-24: Agents CLI로 시작](agents-cli.md) <br>
 </div>
 
 기술 개요부터 시작하려면 이 [링크](about.md)를 확인하세요.

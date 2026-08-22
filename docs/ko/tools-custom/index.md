@@ -1,7 +1,7 @@
 # ADK용 사용자 지정 도구
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 ADK 에이전트 워크플로에서 도구는 ADK 에이전트가 작업을 수행하기 위해 호출할 수 있는 구조화된 입력 및 출력이 있는 프로그래밍 함수입니다. ADK 도구는 Gemini 또는 기타 생성 AI 모델과 함께 [함수 호출](https://ai.google.dev/gemini-api/docs/function-calling)을 사용하는 방식과 유사하게 작동합니다. ADK 도구를 사용하여 다음과 같은 다양한 작업 및 프로그래밍 함수를 수행할 수 있습니다.
@@ -95,6 +95,12 @@ ADK는 여러 유형의 도구를 지원하여 유연성을 제공합니다.
     --8<-- "examples/java/snippets/src/main/java/tools/WeatherSentimentAgentApp.java:full_code"
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/WeatherSentiment.kt:full_code"
+    ```
+
 ## 도구 컨텍스트
 
 더 고급 시나리오의 경우 ADK를 사용하면 특수 매개변수 `tool_context: ToolContext`를 포함하여 도구 함수 내에서 추가 컨텍스트 정보에 액세스할 수 있습니다. 함수 서명에 이를 포함하면 ADK는 에이전트 실행 중에 도구가 호출될 때 **자동으로** **ToolContext** 클래스의 **인스턴스**를 제공합니다.
@@ -178,6 +184,12 @@ ADK는 여러 유형의 도구를 지원하여 유연성을 제공합니다.
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/UserPreferenceTools.kt:example"
+    ```
+
 ### **에이전트 흐름 제어**
 
 `tool_context.actions` 속성(Java에서는 `ToolContext.actions()`, Go에서는 `tool.Context.Actions()`)은 **EventActions** 개체를 보유합니다. 이 개체의 속성을 수정하면 도구가 완료된 후 에이전트 또는 프레임워크가 수행하는 작업에 영향을 줄 수 있습니다.
@@ -212,6 +224,12 @@ ADK는 여러 유형의 도구를 지원하여 유연성을 제공합니다.
 
     ```java
     --8<-- "examples/java/snippets/src/main/java/tools/CustomerSupportAgentApp.java:full_code"
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/CustomerSupport.kt:full_code"
     ```
 
 ##### 설명
@@ -328,6 +346,12 @@ ToolContext는 인증된 API와 상호 작용하는 도구에 대한 메커니�
     // LlmAgent agent = LlmAgent().builder().tools(processDocumentTool).build();
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/DocAnalysisTools.kt:full_code"
+    ```
+
 **ToolContext**를 활용하여 개발자는 ADK의 아키텍처와 원활하게 통합되고 에이전트의 전반적인 기능을 향상시키는 보다 정교하고 컨텍스트를 인식하는 사용자 지정 도구를 만들 수 있습니다.
 
 ## 효과적인 도구 함수 정의
@@ -433,6 +457,12 @@ ToolContext는 인증된 API와 상호 작용하는 도구에 대한 메커니�
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/OrderTools.kt:snippet"
+    ```
+
 * **단순성 및 집중:**
     * **도구를 집중적으로 유지:** 각 도구는 이상적으로 하나의 잘 정의된 작업을 수행해야 합니다.
     * **매개변수가 적을수록 좋습니다:** 모델은 일반적으로 많거나 복잡한 선택적 매개변수가 있는 도구보다 명확하게 정의된 매개변수가 적은 도구를 더 안정적으로 처리합니다.
@@ -443,8 +473,8 @@ ToolContext는 인증된 API와 상호 작용하는 도구에 대한 메커니�
 
 ## 도구 세트: 도구 그룹화 및 동적 제공
 
-<div class="language-support-tag" title="이 기능은 현재 Python에서 사용할 수 있습니다.">
-   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span>
+<div class="language-support-tag">
+   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 개별 도구를 넘어 ADK는 `BaseToolset` 인터페이스(`google.adk.tools.base_toolset`에 정의됨)를 통해 **도구 세트** 개념을 도입합니다. 도구 세트를 사용하면 종종 동적으로 에이전트에 `BaseTool` 인스턴스 모음을 관리하고 제공할 수 있습니다.
@@ -498,6 +528,12 @@ ADK에서 도구 세트 역할을 하는 모든 클래스는 `BaseToolset` 추�
     --8<-- "examples/java/snippets/src/main/java/tools/SimpleMathToolsetApp.java:init"
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/overview/ToolsetExample.kt:init"
+    ```
+
 이 예에서:
 
 *   `SimpleMathToolset`은 `BaseToolset`을 구현하고 해당 `get_tools()` 메서드는 `add_numbers` 및 `subtract_numbers`에 대한 `FunctionTool` 인스턴스를 반환합니다. 또한 접두사를 사용하여 이름을 사용자 지정합니다.
@@ -505,5 +541,20 @@ ADK에서 도구 세트 역할을 하는 모든 클래스는 `BaseToolset` 추�
 *   `calculator_agent`가 실행되면 ADK는 `math_toolset_instance.get_tools()`를 호출합니다. 그러면 에이전트의 LLM은 사용자 요청을 처리하기 위해 `greet_user`, `calculator_add_numbers` 및 `calculator_subtract_numbers`에 액세스할 수 있습니다.
 *   `add_numbers` 도구는 `tool_context.state`에 쓰는 것을 보여주고 에이전트의 지침은 이 상태를 읽는 것을 언급합니다.
 *   `close()` 메서드는 도구 세트에서 보유한 모든 리소스가 해제되도록 호출됩니다.
+*   Kotlin 예제는 접두사 메커니즘이 없고 `BaseTool.name`이 읽기 전용이기 때문에 도구 이름에 접두사를 붙이지 않습니다. 도구는 `greetUser`, `addNumbers`, `subtractNumbers`로 유지됩니다. 또한 Kotlin은 두 종류의 도구를 구분하여 유지합니다. 개별 도구는 `tools`에, 도구 세트는 `toolsets`에 들어갑니다.
+
+### 도구 세트의 도구 필터링
+
+<div class="language-support-tag" title="이 버전 배지는 여기에 표시된 Kotlin ToolFilter API에 적용됩니다. Python, Java 및 TypeScript는 자체 BaseToolset API를 통해 도구를 필터링합니다.">
+   <span class="lst-supported">ADK에서 지원</span><span class="lst-kotlin">Kotlin v0.7.0</span>
+</div>
+
+모든 SDK는 이름 또는 현재 컨텍스트를 확인하는 조건자(predicate)를 통해 도구 세트가 모델에 전달하는 항목을 좁힐 수 있습니다. Python, Java 및 TypeScript는 `BaseToolset`에서 이 필터를 사용합니다. 여기에 표시된 예제는 Kotlin 형식입니다.
+
+`getTools()` 내에 목록을 하드코딩하는 대신, 도구 세트는 위의 Kotlin 예제에서 `SimpleMathToolset`이 하는 것처럼 `ToolFilter`를 허용하고 `isToolSelected`로 이를 적용할 수 있습니다. `ToolFilter.allowList`는 이름으로 도구를 선택하고, `ToolFilter.Predicate`는 `ReadonlyContext`를 받으므로 도구 목록이 세션 상태나 현재 사용자에 따라 달라질 수 있습니다. null 필터는 모든 항목을 선택하므로 동일한 클래스가 필터링 없이도 작동합니다.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/tools/overview/ToolsetExample.kt:filter"
+```
 
 도구 세트는 ADK 에이전트에 도구 모음을 구성, 관리 및 동적으로 제공하는 강력한 방법을 제공하여 보다 모듈식이고 유지 관리 가능하며 적응 가능한 에이전트 애플리케이션을 만듭니다.

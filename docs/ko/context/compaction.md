@@ -1,7 +1,7 @@
 # 성능 향상을 위한 에이전트 컨텍스트 압축
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.16.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span>
+  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.16.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 ADK 에이전트는 실행되면서 사용자 지침, 검색된 데이터, 도구 응답 및 생성된 콘텐츠를 포함한 *컨텍스트* 정보를 수집합니다. 이 컨텍스트 데이터의 크기가 커질수록 에이전트 처리 시간도 일반적으로 증가합니다. 점점 더 많은 데이터가 에이전트가 사용하는 생성형 AI 모델로 전송되어 처리 시간이 길어지고 응답이 느려집니다. ADK 컨텍스트 압축 기능은 지침, 입력 및 모델 응답을 포함하여 이전 세션 기록을 요약함으로써 에이전트가 실행되는 동안 컨텍스트 크기를 줄이도록 설계되었습니다. 이 프로세스는 컴팩트한 컨텍스트 창을 유지함으로써 필수적인 최근 상호 작용에 대한 에이전트의 접근 권한을 보장하는 동시에 **대기 시간을 최적화하고 비용을 절감**합니다.
@@ -68,7 +68,7 @@ compaction_config = EventsCompactionConfig(
 
 ## 컨텍스트 압축 구성
 
-워크플로의 App 객체(Python/Java)에 이벤트 압축 구성 설정을 추가하거나, `LlmAgent`(TypeScript)에 `contextCompactors`를 설정하여 에이전트 워크플로에 컨텍스트 압축을 추가합니다. 구성의 일부로 다음 샘플 코드에 표시된 대로 압축 간격과 오버랩 크기(Python/Java) 또는 토큰 임계값과 이벤트 유지 크기(TypeScript)를 지정해야 합니다.
+워크플로의 App 객체(Python/Java/Kotlin)에 이벤트 압축 구성 설정을 추가하거나, `LlmAgent`(TypeScript)에 `contextCompactors`를 설정하여 에이전트 워크플로에 컨텍스트 압축을 추가합니다. 구성의 일부로 다음 샘플 코드에 표시된 대로 압축 간격과 오버랩 크기(Python/Java) 또는 토큰 임계값과 이벤트 유지 크기(TypeScript/Kotlin)를 지정해야 합니다.
 
 === "Python"
 
@@ -120,6 +120,26 @@ compaction_config = EventsCompactionConfig(
         }),
       ],
     });
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.apps.App
+    import com.google.adk.kt.summarizer.EventsCompactionConfig
+
+    // tokenThreshold와 eventRetentionSize는 반드시 함께 설정해야 하며, 둘 중 하나만 설정하면 예외가 발생합니다.
+    // Kotlin은 다른 탭에서 사용된 compactionInterval/overlapSize 쌍도 허용합니다.
+    val app =
+        App(
+            appName = "my-agent",
+            rootAgent = rootAgent,
+            eventsCompactionConfig =
+                EventsCompactionConfig(
+                    tokenThreshold = 1000, // 마지막 프롬프트가 1000 토큰을 초과할 때 압축합니다.
+                    eventRetentionSize = 1, // 최소 1개의 원시 이벤트를 유지합니다.
+                ),
+        )
     ```
 
 일단 구성되면 ADK `Runner`는 세션이 간격에 도달할 때마다 백그라운드에서 압축 프로세스를 처리합니다.

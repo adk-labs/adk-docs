@@ -314,6 +314,7 @@ plugins:
             - 에이전트 빌드:
               - 시작하기:
                 - get-started/index.md
+                - Agents CLI: get-started/agents-cli.md
                 - Python: get-started/python.md
                 - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
@@ -445,6 +446,7 @@ plugins:
                   - Python: a2a/quickstart-consuming.md
                   - Go: a2a/quickstart-consuming-go.md
                   - Java: a2a/quickstart-consuming-java.md
+                  - Kotlin: a2a/quickstart-consuming-kotlin.md
                 - A2A 확장: a2a/a2a-extension.md
               - 라이브 및 음성 에이전트:
                 - live/index.md
@@ -494,6 +496,7 @@ plugins:
             - エージェントのビルド:
               - はじめに:
                 - get-started/index.md
+                - Agents CLI: get-started/agents-cli.md
                 - Python: get-started/python.md
                 - TypeScript: get-started/typescript.md
                 - Go: get-started/go.md
@@ -625,6 +628,7 @@ plugins:
                   - Python: a2a/quickstart-consuming.md
                   - Go: a2a/quickstart-consuming-go.md
                   - Java: a2a/quickstart-consuming-java.md
+                  - Kotlin: a2a/quickstart-consuming-kotlin.md
                 - A2A拡張: a2a/a2a-extension.md
               - ライブおよび音声エージェント:
                 - live/index.md

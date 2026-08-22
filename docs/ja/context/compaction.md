@@ -1,7 +1,7 @@
 # パフォーマンスのためのエージェントコンテキストの圧縮
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.16.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.16.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 ADK エージェントは実行されながら、ユーザーの指示、取得されたデータ、ツールの応答、生成されたコンテンツを含む*コンテキスト*情報を収集します。このコンテキストデータのサイズが大きくなるにつれて、エージェントの処理時間も通常は増加します。より多くのデータがエージェントの使用する生成 AI モデルに送信されるため、処理時間が長くなり応答が遅くなります。ADK のコンテキスト圧縮機能は、指示、入力、モデルの応答を含む古いセッション履歴を要約することで、エージェントの実行中にコンテキストのサイズを削減するように設計されています。このプロセスは、コンパクトなコンテキストウィンドウを維持することにより、重要な最近のやり取りへのエージェントのアクセスを確保しつつ、**レイテンシを最適化しコストを削減**します。
@@ -68,7 +68,7 @@ compaction_config = EventsCompactionConfig(
 
 ## コンテキスト圧縮の設定
 
-ワークフローの App オブジェクト（Python/Java）にイベント圧縮設定を追加するか、`LlmAgent`（TypeScript）で `contextCompactors` を構成することで、エージェントワークフローにコンテキスト圧縮を追加できます。設定の一部として、次のサンプルコードのように圧縮間隔と重複サイズ（Python/Java）またはトークンしきい値とイベント保持サイズ（TypeScript）を指定する必要があります。
+ワークフローの App オブジェクト（Python/Java/Kotlin）にイベント圧縮設定を追加するか、`LlmAgent`（TypeScript）で `contextCompactors` を構成することで、エージェントワークフローにコンテキスト圧縮を追加できます。設定の一部として、次のサンプルコードのように圧縮間隔と重複サイズ（Python/Java）またはトークンしきい値とイベント保持サイズ（TypeScript/Kotlin）を指定する必要があります。
 
 === "Python"
 
@@ -120,6 +120,26 @@ compaction_config = EventsCompactionConfig(
         }),
       ],
     });
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.apps.App
+    import com.google.adk.kt.summarizer.EventsCompactionConfig
+
+    // tokenThreshold と eventRetentionSize は一緒に設定する必要があります。片方だけ指定すると例外が発生します。
+    // Kotlin は他のタブで使用されている compactionInterval/overlapSize のペアも受け入れます。
+    val app =
+        App(
+            appName = "my-agent",
+            rootAgent = rootAgent,
+            eventsCompactionConfig =
+                EventsCompactionConfig(
+                    tokenThreshold = 1000, // 最後のプロンプトが 1000 トークンを超えたときに圧縮します。
+                    eventRetentionSize = 1, // 生イベントを少なくとも 1 件保持します。
+                ),
+        )
     ```
 
 構成されると、ADK `Runner`はセッションが間隔に達するたびにバックグラウンドで圧縮プロセスを処理します。

@@ -598,13 +598,23 @@ For example, you can automate this step with a callback:
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:auto_save_callback"
     ```
 
-## Extend memory capabilities
+### 콜백에서 특정 이벤트 또는 팩트 쓰기
 
-Memory services extended from `BaseMemoryService` support adding sessions and
-events to agent memory, including custom metadata. Use the
-`add_session_to_memory` and `add_events_to_memory` methods of memory services
-such as `InMemoryMemoryService` to amend memory data, as shown in the
-following code example:
+<div class="language-support-tag">
+   <span class="lst-supported">ADK에서 지원</span><span class="lst-kotlin">Kotlin v0.7.0</span>
+</div>
+
+`CallbackContext.addSessionToMemory` 메서드는 메모리의 기본 동작이며 에이전트의 전체 세션을 저장합니다. 더 세밀한 제어가 필요한 경우 `CallbackContext`는 선택한 이벤트의 하위 집합을 위한 `addEventsToMemory`와 직접 구성한 팩트를 위한 `addMemory`의 두 가지 메서드를 추가로 제공합니다. 둘 다 선택적 `customMetadata`를 허용하며, 현재 호출에서 앱, 사용자 및 세션을 자동으로 채웁니다.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:callback_memory_writes"
+```
+
+세 가지 메서드 모두 러너에 메모리 서비스가 구성되어 있지 않은 경우 `IllegalStateException`을 발생시키므로 컴파일 시점이 아닌 런타임에 실패합니다.
+
+## 메모리 기능 확장
+
+`BaseMemoryService`를 확장한 메모리 서비스는 커스텀 메타데이터를 포함하여 에이전트 메모리에 세션 및 이벤트를 추가하는 기능을 지원합니다. 다음 코드 예시와 같이 `InMemoryMemoryService`와 같은 메모리 서비스의 `add_session_to_memory` 및 `add_events_to_memory` 메서드를 사용하여 메모리 데이터를 수정할 수 있습니다.
 
 ```python
 import asyncio

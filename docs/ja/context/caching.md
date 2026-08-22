@@ -75,17 +75,19 @@ ADKコンテキストキャッシュ機能を使用すると、Gemini 2.0以降�
         )
 
     // Create the app with context caching configuration
+    @OptIn(ExperimentalContextCachingFeature::class)
     val app =
         App(
             appName = "my-caching-agent-app",
             rootAgent = rootAgent,
             contextCacheConfig =
                 ContextCacheConfig(
-                    // Gemini enforces a hard 4096-token floor of its own, so only a
-                    // value above that has any further effect.
+                    // Gemini はモデルごとに固有の最小キャッシュ可能サイズを適用します
                     minTokens = 8192,
-                    ttl = 10.minutes, // Store for up to 10 minutes
-                    cacheIntervals = 5, // Refresh after 5 uses
+                    ttl = 10.minutes, // 最大 10 分間保存
+                    cacheIntervals = 5, // 5 回使用後に更新
+                    // タイムアウト時には作成が失敗し、リクエストはキャッシュなしで進行します
+                    createHttpOptions = HttpOptions(timeout = 10.seconds),
                 ),
         )
     ```
@@ -97,6 +99,23 @@ ADKコンテキストキャッシュ機能を使用すると、Gemini 2.0以降�
 -   **`min_tokens`**（int）：キャッシュを有効にするためにリクエストで必要な最小トークン数。この設定により、パフォーマンス上の利点がごくわずかである非常に小さなリクエストのキャッシュのオーバーヘッドを回避できます。デフォルトは`0`です。
 -   **`ttl_seconds`**（int）：キャッシュの存続時間（TTL）（秒）。この設定は、キャッシュされたコンテンツが更新される前に保存される期間を決定します。デフォルトは`1800`（30分）です。
 -   **`cache_intervals`**（int）：同じキャッシュされたコンテンツが期限切れになる前に使用できる最大回数。この設定により、TTLが期限切れになっていなくても、キャッシュが更新される頻度を制御できます。デフォルトは`10`です。
+-   **`create_http_options`** (HttpOptions): キャッシュ作成呼び出しの HTTP オプション。タイムアウトを設定できます。呼び出しがタイムアウトした場合、作成は失敗し、リクエストはキャッシュなしで進行します。Python および Kotlin で利用可能。デフォルトはなしです。
+
+## キャッシュが使用されているかの確認
+
+<div class="language-support-tag">
+   <span class="lst-supported">ADKでサポート</span><span class="lst-kotlin">Kotlin v0.6.0</span>
+</div>
+
+キャッシュが有効になっている場合、LLM レスポンスに基づくイベントには、その呼び出しに対してキャッシュが何を行ったかを報告する `CacheMetadata` を含めることができます。キャッシュが無効になっている場合や、呼び出しでキャッシュ情報が生成されなかった場合は null になるため、読み取る前に確認してください。存在する場合、2 つの状態があります。`cacheName`、`expireTime`、`invocationsUsed` がすべて設定されている **アクティブ キャッシュ (active cache)** 状態と、3 つすべてが null の **フィンガープリントのみ (fingerprint-only)** 状態です。
+
+```kotlin
+--8<-- "examples/kotlin/snippets/context/CacheMetadataExample.kt:cache_metadata"
+```
+
+`expireSoon` は、キャッシュが約 2 分以内に期限切れになるか、すでに期限切れになっていることを意味します。これは自身のコードへのシグナルであり、ADK がこれに対してアクションを実行するわけではありません。ADK は、実際に `expireTime` を過ぎるか、`cacheIntervals` を超過するか、キャッシュされたプレフィックスが変更されるまで、キャッシュを再利用し続けます。
+
+トークン数は `CacheMetadata` には含まれません。`LlmResponse.usageMetadata` から読み取ってください。
 
 ## 次のステップ
 
@@ -107,5 +126,5 @@ ADKコンテキストキャッシュ機能を使用すると、Gemini 2.0以降�
 
 ユースケースでセッション全体で使用される指示を提供する必要がある場合は、エージェントの`static_instruction`パラメータの使用を検討してください。これにより、生成モデルのシステム指示を修正できます。詳細については、次のサンプルコードを参照してください。
 
--   [`static_instruction`](https://github.com/google/adk-python/tree/main/contributing/samples/static_instruction)：
+-   [`static_instruction`](https://github.com/google/adk-python/tree/main/contributing/samples/context_management/static_instruction)：
     静的な指示を使用したデジタルペットエージェントの実装。

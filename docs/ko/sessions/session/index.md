@@ -208,6 +208,10 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 
 2.  **`VertexAiSessionService`**
 
+    <div class="language-support-tag">
+      <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
+    </div>
+
     *   **작동 방식:** 세션 관리를 위해 API 호출을 통해 Google Cloud Vertex AI 인프라를 사용합니다.
     *   **영속성:** 있음. 데이터는 [Vertex AI Agent Engine](https://adk.dev/deploy/agent-runtime/)을 통해 안정적이고 확장 가능하게 관리됩니다.
     *   **필요 사항:**
@@ -277,6 +281,33 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
                    .createSession(reasoningEngineAppName, userId, initialState, Optional.of(sessionId))
                    .blockingGet();
            ```
+
+    === "Kotlin"
+
+        `VertexAiSessionService`는 ADK Kotlin에서 JVM 전용입니다. Android에서는 사용할 수 없으며 서버 측 에이전트에서 사용하세요.
+
+        ```kotlin
+        import com.google.adk.kt.sessions.SessionKey
+        import com.google.adk.kt.sessions.VertexAiSessionService
+        import kotlinx.coroutines.runBlocking
+
+        // 추론 엔진(reasoning engine)은 생성 시 여기에 고정됩니다. 다른 탭에서는 `app_name`을 통해
+        // 호출별로 엔진이 선택되지만, Kotlin에서 `appName`은 엔진 파싱에 사용되지 않으며 세션의 라벨일 뿐입니다.
+        val sessionService =
+            VertexAiSessionService(
+                project = "your-gcp-project-id",
+                location = "us-central1",
+                // 순수 숫자 엔진 ID입니다. 전체 "projects/.../reasoningEngines/..." 리소스 이름은
+                // 거부되며, project와 location은 별도의 인수입니다.
+                reasoningEngineId = "1234567890",
+            )
+
+        // 세션 메서드는 suspend 함수입니다. 여기서 `runBlocking`은 Java 탭의 `.blockingGet()`에 해당합니다.
+        val mySession = runBlocking {
+            // null id를 전달하면 서비스가 자동으로 ID를 할당합니다.
+            sessionService.createSession(SessionKey("example-app", "u_123", id = null))
+        }
+        ```
 
 ADK 에이전트에서 Google Cloud에 연결하는 방법에 대한 자세한 내용은 [Google Cloud 및 Agent Platform 연결하기](/ko/get-started/google-cloud/)를 참고하세요.
 

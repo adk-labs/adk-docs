@@ -22,7 +22,7 @@ catalog_tags: ["data", "google"]
 ## 前提条件
 
 - 対象の Google Cloud プロジェクトで **Google Cloud Storage API を有効化**します。
-- **IAM 権限**: 認証されたプリンシパル（アプリケーションのデフォルト認証情報, サービスアカウント, またはユーザー）は, GCS バケットおよびオブジェクトの操作を実行するために, `roles/storage.objectAdmin` および `roles/storage.admin` を含む正しい権限を持っている必要があります。
+- **IAM 権限**: 認証されたプリンシパル（アプリケーションのデフォルト認証情報, サービスアカウント, またはユーザー）は, GCS バケットおよびオブジェクトの操作を実行するために, `roles/storage.admin` を含む正しい権限を持っている必要があります。
 - Google Cloud プロジェクト ID が構成されている必要があります。
 
 ## 認証
@@ -172,6 +172,7 @@ GCS 連携は, 機能を大きく2つのツールセットに分けます:
 ツール | 説明
 ---- | -----------
 `gcs_list_buckets` | Google Cloud プロジェクト内の GCS バケット名を一覧表示します。
+`gcs_get_bucket` | GCS バケットに関するメタデータ情報を取得します。
 `gcs_create_bucket` | 特定のロケーションに新しい GCS バケットを作成します。
 `gcs_update_bucket` | GCS バケットのプロパティ（バージョン管理や一様なバケットレベルのアクセスなど）を更新します。
 `gcs_delete_bucket` | GCS バケットを削除します（バケットは事前に空である必要があります）。

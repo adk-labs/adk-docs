@@ -75,17 +75,19 @@ ADK 컨텍스트 캐싱 기능을 사용하면 Gemini 2.0 이상 모델을 포�
         )
 
     // Create the app with context caching configuration
+    @OptIn(ExperimentalContextCachingFeature::class)
     val app =
         App(
             appName = "my-caching-agent-app",
             rootAgent = rootAgent,
             contextCacheConfig =
                 ContextCacheConfig(
-                    // Gemini enforces a hard 4096-token floor of its own, so only a
-                    // value above that has any further effect.
+                    // Gemini는 모델에 따라 고유한 최소 캐시 가능 크기를 적용합니다.
                     minTokens = 8192,
-                    ttl = 10.minutes, // Store for up to 10 minutes
-                    cacheIntervals = 5, // Refresh after 5 uses
+                    ttl = 10.minutes, // 최대 10분 동안 저장
+                    cacheIntervals = 5, // 5회 사용 후 새로고침
+                    // 타임아웃 시 생성이 실패하고 요청은 캐시되지 않은 상태로 진행됩니다.
+                    createHttpOptions = HttpOptions(timeout = 10.seconds),
                 ),
         )
     ```
@@ -97,6 +99,23 @@ ADK 컨텍스트 캐싱 기능을 사용하면 Gemini 2.0 이상 모델을 포�
 -   **`min_tokens`** (int): 캐싱을 활성화하는 데 필요한 요청의 최소 토큰 수입니다. 이 설정을 사용하면 성능 이점이 미미한 매우 작은 요청에 대한 캐싱 오버헤드를 피할 수 있습니다. 기본값은 `0`입니다.
 -   **`ttl_seconds`** (int): 캐시의 TTL(Time-To-Live) (초)입니다. 이 설정은 캐시된 콘텐츠가 새로 고쳐지기 전에 저장되는 기간을 결정합니다. 기본값은 `1800`(30분)입니다.
 -   **`cache_intervals`** (int): 동일한 캐시된 콘텐츠가 만료되기 전에 사용할 수 있는 최대 횟수입니다. 이 설정을 사용하면 TTL이 만료되지 않았더라도 캐시가 업데이트되는 빈도를 제어할 수 있습니다. 기본값은 `10`입니다.
+-   **`create_http_options`** (HttpOptions): 캐시 생성 호출에 대한 HTTP 옵션으로, 타임아웃을 설정할 수 있습니다. 호출 시간이 초과되면 실패하고 요청은 캐싱 없이 진행됩니다. Python 및 Kotlin에서 사용 가능하며 기본값은 없음(none)입니다.
+
+## 캐시 사용 여부 확인
+
+<div class="language-support-tag">
+   <span class="lst-supported">ADK에서 지원</span><span class="lst-kotlin">Kotlin v0.6.0</span>
+</div>
+
+캐싱이 활성화되면 LLM 응답을 기반으로 하는 이벤트는 해당 호출에 대해 캐시가 수행한 작업을 보고하는 `CacheMetadata`를 포함할 수 있습니다. 캐싱이 비활성화되었거나 호출에서 캐시 정보를 생성하지 않은 경우 null이므로 읽기 전에 확인하세요. 존재하는 경우 두 가지 상태가 있습니다. `cacheName`, `expireTime`, `invocationsUsed`가 모두 설정된 **활성 캐시(active cache)** 상태와 세 가지가 모두 null인 **지문 전용(fingerprint-only)** 상태입니다.
+
+```kotlin
+--8<-- "examples/kotlin/snippets/context/CacheMetadataExample.kt:cache_metadata"
+```
+
+`expireSoon`은 캐시가 약 2분 이내에 만료되거나 이미 만료되었음을 의미합니다. 이는 사용자 코드에 대한 신호일 뿐 ADK가 직접 조치를 취하는 것은 아닙니다. ADK는 실제로 `expireTime`이 지나거나 `cacheIntervals`를 초과하거나 캐시된 접두사가 변경될 때까지 캐시를 계속 재사용합니다.
+
+토큰 수는 `CacheMetadata`에 포함되지 않으므로 `LlmResponse.usageMetadata`에서 읽으세요.
 
 ## 다음 단계
 
@@ -107,5 +126,5 @@ ADK 컨텍스트 캐싱 기능을 사용하면 Gemini 2.0 이상 모델을 포�
 
 사용 사례에서 세션 전체에서 사용되는 지침을 제공해야 하는 경우 에이전트에 대한 `static_instruction` 매개변수를 사용하는 것을 고려하십시오. 이 매개변수를 사용하면 생성 모델에 대한 시스템 지침을 수정할 수 있습니다. 자세한 내용은 다음 샘플 코드를 참조하십시오.
 
--   [`static_instruction`](https://github.com/google/adk-python/tree/main/contributing/samples/static_instruction):
+-   [`static_instruction`](https://github.com/google/adk-python/tree/main/contributing/samples/context_management/static_instruction):
     정적 지침을 사용하는 디지털 펫 에이전트의 구현입니다.

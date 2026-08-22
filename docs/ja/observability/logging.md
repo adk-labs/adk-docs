@@ -249,3 +249,18 @@ Kotlinでは、ADKは標準のJVMロギング機能（デフォルトではFlogg
 ```kotlin
 --8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:logging_plugin"
 ```
+
+#### ファイルへの完全なデバッグ キャプチャ
+
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-kotlin">Kotlin v0.6.0</span>
+</div>
+
+省略されたコンソール出力ではなく、同じアクティビティを完全な形で `adk_debug.yaml` に追記される YAML として記録するには、`DebugLoggingPlugin` を使用します。
+
+```kotlin
+--8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:debug_logging_plugin"
+```
+
+!!! warning "警告"
+    出力ファイルには生のプロンプト、ツール引数、セッション ステートが含まれます。機密情報として扱ってください。
