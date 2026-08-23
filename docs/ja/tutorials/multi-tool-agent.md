@@ -4,7 +4,7 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-このクイックスタートでは、Agent Development Kit (ADK) をインストールし、複数のツールを備えた基本的なエージェントを設定し、ターミナルまたは対話型のブラウザベースの開発UIでローカルで実行する方法を説明します。
+このクイックスタートでは、Agent Development Kit (ADK) をインストールし、複数のツールを備えた基本的なエージェントを設定し、ターミナルまたは対話型のブラウザーベースの開発UIでローカルで実行する方法を説明します。
 
 <!-- <img src="../../assets/quickstart.png" alt="クイックスタートのセットアップ"> -->
 
@@ -102,7 +102,7 @@
             .env
     ```
 
-    `multi_tool_agent`フォルダを作成します。
+    `multi_tool_agent`フォルダーを作成します。
 
     ```bash
     mkdir multi_tool_agent/
@@ -114,7 +114,7 @@
 
     ### `__init__.py`
 
-    次に、フォルダに`__init__.py`ファイルを作成します。
+    次に、フォルダーに`__init__.py`ファイルを作成します。
 
     ```shell
     echo "from . import agent" > multi_tool_agent/__init__.py
@@ -128,7 +128,7 @@
 
     ### `agent.py`
 
-    同じフォルダに`agent.py`ファイルを作成します。
+    同じフォルダーに`agent.py`ファイルを作成します。
 
     === "OS X &amp; Linux"
         ```shell
@@ -148,7 +148,7 @@
 
     ### `.env`
 
-    同じフォルダに`.env`ファイルを作成します。
+    同じフォルダーに`.env`ファイルを作成します。
 
     === "OS X &amp; Linux"
         ```shell
@@ -176,7 +176,7 @@
 
     ### `agent.ts`
 
-    プロジェクトフォルダに `agent.ts` ファイルを作成します:
+    プロジェクトフォルダーに `agent.ts` ファイルを作成します:
 
     === "OS X &amp; Linux"
         ```shell
@@ -196,7 +196,7 @@
 
     ### `.env`
 
-    同じフォルダに `.env` ファイルを作成します:
+    同じフォルダーに `.env` ファイルを作成します:
 
     === "OS X &amp; Linux"
         ```shell
@@ -272,7 +272,7 @@
 
     ### `agent.go`
 
-    プロジェクトフォルダに`agent.go`ファイルを作成します。
+    プロジェクトフォルダーに`agent.go`ファイルを作成します。
 
     === "OS X &amp; Linux"
         ```bash
@@ -292,7 +292,7 @@
 
     ### `.env`
 
-    同じフォルダに`.env`ファイルを作成します。
+    同じフォルダーに`.env`ファイルを作成します。
 
     === "OS X &amp; Linux"
         ```bash
@@ -453,13 +453,13 @@
             `_make_subprocess_transport NotImplementedError`が発生した場合は、代わりに`adk web --no-reload`を使用することを検討してください。
 
 
-        **ステップ1:** 提供されたURL (通常は`http://localhost:8000`または`http://127.0.0.1:8000`) をブラウザで直接開きます。
+        **ステップ1:** 提供されたURL (通常は`http://localhost:8000`または`http://127.0.0.1:8000`) をブラウザーで直接開きます。
 
         **ステップ2.** UIの左上隅にあるドロップダウンでエージェントを選択できます。「multi_tool_agent」を選択します。
 
         !!!note "トラブルシューティング"
 
-            ドロップダウンメニューに「multi_tool_agent」が表示されない場合は、エージェントフォルダの**親フォルダ** (つまり、multi_tool_agentの親フォルダ) で`adk web`を実行していることを確認してください。
+            ドロップダウンメニューに「multi_tool_agent」が表示されない場合は、エージェントフォルダーの**親フォルダー** (つまり、multi_tool_agentの親フォルダー) で`adk web`を実行していることを確認してください。
 
         **ステップ3.** 次に、テキストボックスを使用してエージェントとチャットできます。
 
@@ -544,7 +544,7 @@
         npx adk web
         ```
 
-        **ステップ1:** 提供されたURL (通常は `http://localhost:8000` または `http://127.0.0.1:8000`) をブラウザで直接開きます。
+        **ステップ1:** 提供されたURL (通常は `http://localhost:8000` または `http://127.0.0.1:8000`) をブラウザーで直接開きます。
 
         **ステップ2.** UI 左上のドロップダウンでエージェントを選択します。エージェントはファイル名で表示されるため、`"agent"` を選択してください。
 
@@ -605,7 +605,7 @@
         go run agent.go web webui api
         ```
 
-        **ステップ1:** 提供されたURL (通常は`http://localhost:8080`) をブラウザで直接開きます。
+        **ステップ1:** 提供されたURL (通常は`http://localhost:8080`) をブラウザーで直接開きます。
 
         **ステップ2.** UIの左上隅にあるドロップダウンでエージェントを選択できます。「weather_time_agent」を選択します。
 
@@ -652,7 +652,7 @@
             -Dexec.classpathScope="compile"
         ```
 
-        **ステップ1:** 提供されたURL (通常は`http://localhost:8080`または`http://127.0.0.1:8080`) をブラウザで直接開きます。
+        **ステップ1:** 提供されたURL (通常は`http://localhost:8080`または`http://127.0.0.1:8080`) をブラウザーで直接開きます。
 
         **ステップ2.** UIの左上隅にあるドロップダウンでエージェントを選択できます。「multi_tool_agent」を選択します。
 

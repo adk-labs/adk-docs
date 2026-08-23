@@ -350,7 +350,7 @@ Integration Connectors用のApplication Integration Toolsetを作成するには
     ```
 
 上記の手順を完了したら、[http://localhost:8000](http://localhost:8000)にアクセスし、
-   `my_agent`エージェント（エージェントフォルダ名と同じ）を選択します。
+   `my_agent`エージェント（エージェントフォルダー名と同じ）を選択します。
 
 
 ### App Integrationワークフローの使用
@@ -498,7 +498,7 @@ Integration Connectors用のApplication Integration Toolsetを作成するには
           # `adk web` は project_root_folder から実行してください
           adk web
       ```
-    上記の手順を完了したら、[http://localhost:8000](http://localhost:8000)にアクセスし、`my_agent`エージェント（エージェントフォルダ名と同じ）を選択します。
+    上記の手順を完了したら、[http://localhost:8000](http://localhost:8000)にアクセスし、`my_agent`エージェント（エージェントフォルダー名と同じ）を選択します。
 
 === "Java"
 
@@ -513,4 +513,4 @@ Integration Connectors用のApplication Integration Toolsetを作成するには
               -Dexec.classpathScope="compile"
       ```
 
-    上記の手順を完了したら、[http://localhost:8000](http://localhost:8000)にアクセスし、`my_agent`エージェント（エージェントフォルダ名と同じ）を選択します。
+    上記の手順を完了したら、[http://localhost:8000](http://localhost:8000)にアクセスし、`my_agent`エージェント（エージェントフォルダー名と同じ）を選択します。

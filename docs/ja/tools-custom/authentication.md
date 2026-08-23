@@ -395,7 +395,7 @@ def get_auth_config(auth_request_function_call: types.FunctionCall) -> AuthConfi
 
 * 前のステップで抽出した`auth_config`から承認URL（`auth_uri`）を取得します。
 * **重要なことに、アプリケーションの**`redirect_uri`をこの`auth_uri`にクエリパラメータとして追加します。この`redirect_uri`は、OAuthプロバイダー（例：[Google Cloud Console](https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred)、[Okta管理コンソール](https://developer.okta.com/docs/guides/sign-into-web-app-redirect/spring-boot/main/#create-an-app-integration-in-the-admin-console)）に事前に登録されている必要があります。
-* ユーザーをこの完全なURLに誘導します（例：ブラウザで開きます）。
+* ユーザーをこの完全なURLに誘導します（例：ブラウザーで開きます）。
 
 ```py
 # （認証が必要と検出された後も続行）

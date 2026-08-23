@@ -4,7 +4,7 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-ADK Web インターフェースを使用すると、ブラウザからエージェントを直接テストできます。このツールは、エージェントを対話型で開発およびデバッグするための簡単な方法を提供します。
+ADK Web インターフェースを使用すると、ブラウザーからエージェントを直接テストできます。このツールは、エージェントを対話型で開発およびデバッグするための簡単な方法を提供します。
 
 ![ADK Web Interface](../../assets/adk-web-dev-ui-chat.png)
 
@@ -133,7 +133,7 @@ ADK Web インターフェースの主な機能:
     | `--artifact_service_uri` | カスタム アーティファクト ストレージ URI | `<agents_dir>/<agent>/.adk/artifacts` のエージェントごとのディレクトリ |
     | `--reload/--no-reload` | コード変更時の自動リロードを有効化 | `true` |
 
-    ローカルの `.adk` フォルダの代わりにインメモリのセッションおよびアーティファクト サービスにフォールバックするには、`--no_use_local_storage` を渡します。
+    ローカルの `.adk` フォルダーの代わりにインメモリのセッションおよびアーティファクト サービスにフォールバックするには、`--no_use_local_storage` を渡します。
 
     例:
 
@@ -191,7 +191,7 @@ ADK Web インターフェースの主な機能:
 
     | フラグ | 説明 | デフォルト |
     |------|-------------|---------|
-    | `-api_server_address` | ブラウザから見た REST API URL | `http://localhost:8080/api` |
+    | `-api_server_address` | ブラウザーから見た REST API URL | `http://localhost:8080/api` |
 
     たとえば、カスタム API プレフィックスを使用してポート 9090 で実行するには:
 

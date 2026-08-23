@@ -10,7 +10,7 @@ catalog_tags: ["google"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
-コンピュータ使用ツールセットを使用すると、エージェントはブラウザなどのコンピュータのユーザーインターフェイスを操作してタスクを完了できます。このツールは、特定のGeminiモデルと[Playwright](https://playwright.dev/)テストツールを使用してChromiumブラウザを制御し、スクリーンショットの撮影、クリック、入力、ナビゲーションによってWebページと対話できます。
+コンピュータ使用ツールセットを使用すると、エージェントはブラウザーなどのコンピュータのユーザーインターフェイスを操作してタスクを完了できます。このツールは、特定のGeminiモデルと[Playwright](https://playwright.dev/)テストツールを使用してChromiumブラウザーを制御し、スクリーンショットの撮影、クリック、入力、ナビゲーションによってWebページと対話できます。
 
 コンピュータ使用モデルの詳細については、Gemini API [コンピュータ使用](https://ai.google.dev/gemini-api/docs/computer-use)またはGoogle Cloud Vertex AI API [コンピュータ使用](https://cloud.google.com/vertex-ai/generative-ai/docs/computer-use)を参照してください。
 
@@ -58,7 +58,7 @@ catalog_tags: ["google"]
     pip install browserbase==1.3.0
     pip install rich
     ```
-2.  Chromiumブラウザを含むPlaywrightの依存関係をインストールします。
+2.  Chromiumブラウザーを含むPlaywrightの依存関係をインストールします。
     ```console
     playwright install-deps chromium
     playwright install chromium

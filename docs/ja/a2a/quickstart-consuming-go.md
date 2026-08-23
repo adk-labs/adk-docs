@@ -84,7 +84,7 @@ go run remote_a2a/check_prime_agent/main.go
   
 ### 3. リモートエージェントの必須エージェントカードに注意してください { #look-out-for-the-required-agent-card-of-the-remote-agent }
 
-A2Aプロトコルでは、各エージェントが何をするかを記述したエージェントカードを持っている必要があります。
+A2Aプロトコルでは、各エージェントが何をするかを記述したエージェントカードが必要です。
 
 Go ADKでは、A2Aランチャーを使用してエージェントを公開すると、エージェントカードが動的に生成されます。`http://localhost:8001/.well-known/agent-card.json`にアクセスして、生成されたカードを確認できます。
 

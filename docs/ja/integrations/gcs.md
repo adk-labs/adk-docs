@@ -22,7 +22,7 @@ catalog_tags: ["data", "google"]
 ## 前提条件
 
 - 対象の Google Cloud プロジェクトで **Google Cloud Storage API を有効化**します。
-- **IAM 権限**: 認証されたプリンシパル（アプリケーションのデフォルト認証情報, サービスアカウント, またはユーザー）は, GCS バケットおよびオブジェクトの操作を実行するために, `roles/storage.admin` を含む正しい権限を持っている必要があります。
+- **IAM 権限**: 認証されたプリンシパル（アプリケーションのデフォルト認証情報, サービスアカウント, またはユーザー）は, GCS バケットおよびオブジェクトの操作を実行するために, `roles/storage.admin` を含む正しい権限が必要です。
 - Google Cloud プロジェクト ID が構成されている必要があります。
 
 ## 認証
@@ -65,7 +65,7 @@ gcs_toolset = GCSToolset(credentials_config=credentials_config)
 
 ### 外部アクセストークン (External Access Token)
 
-OAuth2 フローや外部 ID プロバイダなどを通じて, エンドユーザーの代わりに行動する場合に使用します。
+OAuth2 フローや外部 ID プロバイダーなどを通じて, エンドユーザーの代わりに行動する場合に使用します。
 
 ```python
 from google.oauth2.credentials import Credentials
@@ -80,7 +80,7 @@ credentials_config = GCSCredentialsConfig(credentials=credentials)
 gcs_toolset = GCSToolset(credentials_config=credentials_config)
 ```
 
-### 外部認証プロバイダ (External Auth Providers)
+### 外部認証プロバイダー (External Auth Providers)
 
 Gemini Enterprise のように, トークンが環境やプラットフォームによって外部で管理されるプラットフォーム向けです。
 

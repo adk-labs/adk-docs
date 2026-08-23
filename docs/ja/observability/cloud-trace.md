@@ -246,7 +246,7 @@ if __name__ == "__main__":
 
 ![cloud-trace](../assets/cloud-trace1.png)
 
-すると、`invocation`、`agent_run`、`call_llm`、`execute_tool`などのいくつかのスパン名で構成されたADKエージェントによって生成されたすべての利用可能なトレースが表示されます。
+すると、`invocation`、`agent_run`、`call_llm`、`execute_tool`などのいくつかのスパン名で構成されたADKエージェントが生成したすべての利用可能なトレースが表示されます。
 
 ![cloud-trace](../assets/cloud-trace2.png)
 

@@ -22,7 +22,7 @@ catalog_tags: ["data"]
 ## 前提条件
 
 - [Synap](https://synap.maximem.ai) アカウントと API キー
-- [Gemini API キー](https://aistudio.google.com/app/api-keys)（または ADK で構成されている他のモデルプロバイダ）
+- [Gemini API キー](https://aistudio.google.com/app/api-keys)（または ADK で構成されている他のモデルプロバイダー）
 
 ## インストール
 

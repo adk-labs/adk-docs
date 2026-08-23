@@ -336,11 +336,11 @@ ADK エージェントから Google Cloud への接続に関する詳細につ�
 * **プロセス内ロック (In-Process locking):** 同一セッションに対する `append_event` 呼び出しをシリアライズするために、内部のプロセス内ロックを使用します。これにより、同一プロセス内で複数のリクエストが同時に同一セッションを更新しようとしたときの競合状態（race condition）を防ぎます。
 * **行レベルロック (Row-Level locking):** PostgreSQL、MySQL、MariaDB の場合、行レベルロック（`SELECT ... FOR UPDATE` 経由）を使用して、複数のプロセスやレプリカが同時に同一セッションを更新しようとしたときの競合状態を防ぎます。
 
-!!! warning "注意: `DatabaseSessionService` には非同期DBドライバが必要"
+!!! warning "注意: `DatabaseSessionService` には非同期DBドライバーが必要"
 
-    `DatabaseSessionService` を使う場合は、非同期対応のデータベースドライバが必要です。
+    `DatabaseSessionService` を使う場合は、非同期対応のデータベースドライバーが必要です。
     SQLite を使うときは、接続文字列に `sqlite` ではなく `sqlite+aiosqlite` を指定してください。
-    PostgreSQL や MySQL でも、`asyncpg` や `aiomysql` のような非同期互換ドライバを使う必要があります。
+    PostgreSQL や MySQL でも、`asyncpg` や `aiomysql` のような非同期互換ドライバーを使う必要があります。
 
 !!! note "注意: ADK Python v1.22.0 でセッションDBスキーマが変更されています"
 

@@ -187,7 +187,7 @@ adk run --session_service_uri "sqlite:///my_sessions.db" path/to/my_agent
     | `--session_service_uri` | カスタム セッション ストレージ URI |
     | `--artifact_service_uri` | カスタム アーティファクト ストレージ URI |
     | `--memory_service_uri` | カスタム メモリ サービス URI |
-    | `--use_local_storage/--no_use_local_storage` | サービス URI が設定されていない場合にローカルの `.adk` フォルダを使用するかどうか |
+    | `--use_local_storage/--no_use_local_storage` | サービス URI が設定されていない場合にローカルの `.adk` フォルダーを使用するかどうか |
     | `--state` | 実行の初期状態 (JSON 文字列) |
     | `--timeout` | 単一のターンまたはクエリのタイムアウト (例: `30s`、`5m`) |
     | `--in_memory` | セッション データを永続化しない |

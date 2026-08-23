@@ -102,7 +102,7 @@ INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
   
 ### 3. リモートエージェントの必須エージェントカード（`agent-card.json`）に注意してください { #look-out-for-the-required-agent-card-agent-json-of-the-remote-agent }
 
-A2Aプロトコルでは、各エージェントが何をするかを記述したエージェントカードを持っている必要があります。
+A2Aプロトコルでは、各エージェントが何をするかを記述したエージェントカードが必要です。
 
 他の誰かがすでにエージェントで利用しようとしているリモートA2Aエージェントを構築している場合は、エージェントカード（`agent-card.json`）があることを確認する必要があります。
 

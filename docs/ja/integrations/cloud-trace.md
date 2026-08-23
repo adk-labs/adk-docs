@@ -203,7 +203,7 @@ ADK CLI を使用してエージェントをデプロイまたは実行すると
 
 ![cloud-trace](../assets/cloud-trace1.png)
 
-ADK エージェントによって生成されたすべての利用可能なトレースが表示され、`invoke_agent`、`generate_content`、`call_llm`、`execute_tool` といったスパン名を確認できます。
+ADK エージェントが生成したすべての利用可能なトレースが表示され、`invoke_agent`、`generate_content`、`call_llm`、`execute_tool` といったスパン名を確認できます。
 
 ![cloud-trace](../assets/cloud-trace2.png)
 

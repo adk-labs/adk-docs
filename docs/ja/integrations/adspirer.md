@@ -26,7 +26,7 @@ Adspirer は ADK エージェントと広告プラットフォームの間を橋
 
 一般的なワークフローは次のとおりです。
 
-1. **接続**: ADK エージェントが `https://mcp.adspirer.com/mcp` に接続し、OAuth 2.1 で認証します。初回実行時にはブラウザが開き、ログインして広告アカウントへのアクセスを承認します。
+1. **接続**: ADK エージェントが `https://mcp.adspirer.com/mcp` に接続し、OAuth 2.1 で認証します。初回実行時にはブラウザーが開き、ログインして広告アカウントへのアクセスを承認します。
 2. **発見**: 接続済みの広告プラットフォーム (Google Ads、Meta Ads、LinkedIn Ads、TikTok Ads) に応じて、利用可能なツールをエージェントが検出します。
 3. **実行**: これでエージェントは、キーワード調査、オーディエンス設計、キャンペーン作成、成果分析、予算最適化、広告管理まで、キャンペーンのライフサイクル全体を自然言語で実行できます。
 
@@ -54,7 +54,7 @@ Adspirer は OAuth トークン管理、広告プラットフォーム API 呼�
 
     === "Local MCP Server"
 
-        エージェントを初めて実行すると、OAuth アクセスを求めるブラウザウィンドウが自動的に開きます。ブラウザで承認すると、接続済みの広告アカウントにエージェントがアクセスできるようになります。
+        エージェントを初めて実行すると、OAuth アクセスを求めるブラウザーウィンドウが自動的に開きます。ブラウザーで承認すると、接続済みの広告アカウントにエージェントがアクセスできるようになります。
 
         ```python
         from google.adk.agents import Agent
@@ -90,7 +90,7 @@ Adspirer は OAuth トークン管理、広告プラットフォーム API 呼�
 
     === "Remote MCP Server"
 
-        すでに Adspirer のアクセストークンがある場合は、OAuth のブラウザフローなしで Streamable HTTP を使って直接接続できます。
+        すでに Adspirer のアクセストークンがある場合は、OAuth のブラウザーフローなしで Streamable HTTP を使って直接接続できます。
 
         ```python
         from google.adk.agents import Agent
@@ -123,7 +123,7 @@ Adspirer は OAuth トークン管理、広告プラットフォーム API 呼�
 
     === "Local MCP Server"
 
-        エージェントを初めて実行すると、OAuth アクセスを求めるブラウザウィンドウが自動的に開きます。ブラウザで承認すると、接続済みの広告アカウントにエージェントがアクセスできるようになります。
+        エージェントを初めて実行すると、OAuth アクセスを求めるブラウザーウィンドウが自動的に開きます。ブラウザーで承認すると、接続済みの広告アカウントにエージェントがアクセスできるようになります。
 
         ```typescript
         import { LlmAgent, MCPToolset } from "@google/adk";
@@ -155,7 +155,7 @@ Adspirer は OAuth トークン管理、広告プラットフォーム API 呼�
 
     === "Remote MCP Server"
 
-        すでに Adspirer のアクセストークンがある場合は、OAuth のブラウザフローなしで Streamable HTTP を使って直接接続できます。
+        すでに Adspirer のアクセストークンがある場合は、OAuth のブラウザーフローなしで Streamable HTTP を使って直接接続できます。
 
         ```typescript
         import { LlmAgent, MCPToolset } from "@google/adk";

@@ -51,7 +51,7 @@ Google Agent Development Kitライブラリをインストールし、Gemini API
 
         adk create --type=config my_agent
 
-    このコマンドは、`root_agent.yaml`ファイルと`.env`ファイルを含む`my_agent/`フォルダを生成します。
+    このコマンドは、`root_agent.yaml`ファイルと`.env`ファイルを含む`my_agent/`フォルダーを生成します。
 
 1.  `my_agent/.env`ファイルで、エージェントが生成AIモデルやその他のサービスにアクセスできるように環境変数を設定します。
 

@@ -201,7 +201,7 @@ ADK Community Google Group に参加して、次回のコールに関する更�
     </div>
     <div class="card-content">
       <div class="type">動画チュートリアル</div>
-      <h3>📖 ADK と Selenium を使ったブラウザ利用エージェントの構築</h3>
+      <h3>📖 ADK と Selenium を使ったブラウザー利用エージェントの構築</h3>
       <p>不足している情報を補って小売サイトの商品データを強化するエージェントの作り方を学びます。</p>
     </div>
   </a>

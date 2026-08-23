@@ -44,7 +44,7 @@ ADKエージェントをA2A経由で公開するには、主に2つの方法が�
 
 ## `to_a2a(root_agent)`関数でリモートエージェントを公開する
 
-ADKを使用して構築された既存のエージェントを取得し、`to_a2a()`関数を使用してラップするだけでA2A互換にすることができます。たとえば、`root_agent`に次のように定義されたエージェントがある場合：
+ADKを使用して構築された既存のエージェントを取得し、`to_a2a()`関数を使用してラップするだけでA2A互換にできます。たとえば、`root_agent`に次のように定義されたエージェントがある場合：
 
 ```python
 # ここにエージェントコード
@@ -56,7 +56,7 @@ root_agent = Agent(
 )
 ```
 
-次に、`to_a2a(root_agent)`を使用するだけで簡単にA2A互換にすることができます。
+次に、`to_a2a(root_agent)`を使用するだけで簡単にA2A互換にできます。
 
 ```python
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
@@ -67,7 +67,7 @@ a2a_app = to_a2a(root_agent, port=8001)
 
 `to_a2a()`関数は、[ADKエージェントからスキル、機能、メタデータを抽出する](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/utils/agent_card_builder.py)ことで、舞台裏でメモリ内にエージェントカードを自動生成するため、`uvicorn`を使用してエージェントエンドポイントが提供されるときに、既知のエージェントカードが利用可能になります。
 
-`agent_card`パラメータを使用して独自のエージェントカードを提供することもできます。値は`AgentCard`オブジェクトまたはエージェントカードJSONファイルへのパスにすることができます。
+`agent_card`パラメータを使用して独自のエージェントカードを提供することもできます。値は`AgentCard`オブジェクトまたはエージェントカードJSONファイルへのパスにできます。
 
 **`AgentCard`オブジェクトの例：**
 ```python

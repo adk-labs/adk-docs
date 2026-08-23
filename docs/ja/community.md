@@ -186,7 +186,7 @@
     </div>
     <div class="card-content">
       <div class="type">動画チュートリアル</div>
-      <h3>📖 ADKとSeleniumを使用したブラウザ操作エージェントの構築</h3>
+      <h3>📖 ADKとSeleniumを使用したブラウザー操作エージェントの構築</h3>
       <p>小売Webサイトの不足している情報を補完して製品データを強化するエージェントの構築方法を学びます。</p>
     </div>
   </a>

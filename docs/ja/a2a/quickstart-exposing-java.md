@@ -25,7 +25,7 @@ Quarkus を使うと、受信する HTTP JSON-RPC ペイロードやセッショ
 
 ### 1. サンプルコードを取得する { #getting-the-sample-code }
 
-最も早い開始方法は、[**`adk-java`** リポジトリ](https://github.com/google/adk-java) 内の `contrib/samples/a2a_server` フォルダにあるスタンドアロンの Quarkus アプリを確認することです。
+最も早い開始方法は、[**`adk-java`** リポジトリ](https://github.com/google/adk-java) 内の `contrib/samples/a2a_server` フォルダーにあるスタンドアロンの Quarkus アプリを確認することです。
 
 ```bash
 cd contrib/samples/a2a_server

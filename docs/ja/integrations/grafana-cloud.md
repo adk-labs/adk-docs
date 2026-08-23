@@ -106,7 +106,7 @@ redirect できるため推奨されます。
 
 !!! note
 
-    エージェントが初めて接続すると、ブラウザで connection authorization を求められます。
+    エージェントが初めて接続すると、ブラウザーで connection authorization を求められます。
     OAuth token は 1 時間有効で、30 日間自動的に refresh されます。
 
 ## 設定

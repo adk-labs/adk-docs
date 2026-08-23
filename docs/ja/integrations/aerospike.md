@@ -43,7 +43,7 @@ catalog_tags: ["data"]
 docker run --rm -d --name aerospike -p 3000-3003:3000-3003 aerospike/aerospike-server:latest
 ```
 
-実行可能な例におけるモデル呼び出しのために、`GOOGLE_API_KEY`（またはモデルプロバイダの資格情報）を設定します。
+実行可能な例におけるモデル呼び出しのために、`GOOGLE_API_KEY`（またはモデルプロバイダーの資格情報）を設定します。
 
 ## インストール
 

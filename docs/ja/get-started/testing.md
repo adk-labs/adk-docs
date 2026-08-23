@@ -67,7 +67,7 @@ curl -X POST http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_1
 
 何が起きているか分解してみましょう：
 
-*   `http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_123`: これは、エージェントフォルダの名前である`my_sample_agent`エージェントに対して、ユーザーID（`u_123`）とセッションID（`s_123`）で新しいセッションを作成します。`my_sample_agent`をあなたのエージェントフォルダの名前に置き換えることができます。`u_123`を特定のユーザーIDに、`s_123`を特定のセッションIDに置き換えることができます。
+*   `http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_123`: これは、エージェントフォルダーの名前である`my_sample_agent`エージェントに対して、ユーザーID（`u_123`）とセッションID（`s_123`）で新しいセッションを作成します。`my_sample_agent`をあなたのエージェントフォルダーの名前に置き換えることができます。`u_123`を特定のユーザーIDに、`s_123`を特定のセッションIDに置き換えることができます。
 *   `{"state": {"key1": "value1", "key2": 42}}`: これはオプションです。これを使用して、セッション作成時にエージェントの既存の状態（dict）をカスタマイズできます。
 
 これが正常に作成された場合、セッション情報が返されます。出力は次のようになります：

@@ -64,7 +64,7 @@ Visual Builderツールは、エージェントを構築するためのドラッ
 
 ## プロジェクトコードの出力 (Project code output)
 
-Visual Builderツールは、[Agent Config](/ja/agents/config/)形式を使用してコードを生成します。エージェントには `.yaml` 設定ファイルを使用し、カスタムツールにはPythonコードを使用します。これらのファイルは、ADK Webインターフェースを実行したディレクトリのサブフォルダに生成されます。以下のリストは、`DiceAgent` プロジェクトのレイアウト例を示しています：
+Visual Builderツールは、[Agent Config](/ja/agents/config/)形式を使用してコードを生成します。エージェントには `.yaml` 設定ファイルを使用し、カスタムツールにはPythonコードを使用します。これらのファイルは、ADK Webインターフェースを実行したディレクトリのサブフォルダーに生成されます。以下のリストは、`DiceAgent` プロジェクトのレイアウト例を示しています：
 
 ```none
 DiceAgent/

@@ -49,13 +49,13 @@ pip install --upgrade google-adk==1.17.0
 export SSL_CERT_FILE=$(python -m certifi)
 ```
 
-appフォルダに移動します。
+appフォルダーに移動します。
 
 ```bash
 cd app
 ```
 
-このサンプルコードには、以下のファイルとフォルダが含まれています。
+このサンプルコードには、以下のファイルとフォルダーが含まれています。
 
 ```console
 adk-streaming-ws/
@@ -106,7 +106,7 @@ adk-streaming-ws/
 
 ### agent.py
 
-`google_search_agent`フォルダにあるエージェント定義コード`agent.py`は、エージェントのロジックが記述される場所です。
+`google_search_agent`フォルダーにあるエージェント定義コード`agent.py`は、エージェントのロジックが記述される場所です。
 
 
 ```py
@@ -138,7 +138,7 @@ root_agent = Agent(
 
 1.  **正しいディレクトリに移動：**
 
-    エージェントを効果的に実行するために、**appフォルダ（`adk-streaming-ws/app`）**にいることを確認してください。
+    エージェントを効果的に実行するために、**appフォルダー（`adk-streaming-ws/app`）**にいることを確認してください。
 
 2.  **FastAPIの起動**: 次のコマンドを実行してCLIインターフェースを起動します。
 
@@ -146,7 +146,7 @@ root_agent = Agent(
 uvicorn main:app --reload
 ```
 
-3.  **テキストモードでアプリにアクセス：** アプリが起動すると、ターミナルにローカルURL（例：[http://localhost:8000](http://localhost:8000)）が表示されます。このリンクをクリックしてブラウザでUIを開きます。
+3.  **テキストモードでアプリにアクセス：** アプリが起動すると、ターミナルにローカルURL（例：[http://localhost:8000](http://localhost:8000)）が表示されます。このリンクをクリックしてブラウザーでUIを開きます。
 
 次のようなUIが表示されるはずです。
 
@@ -158,7 +158,7 @@ uvicorn main:app --reload
 
 ![ADK Streaming app](../assets/adk-streaming-audio-dialog.png)
 
-`Allow while visiting the site`（サイト訪問中に許可）をクリックすると、ブラウザの上部にマイクアイコンが表示されます。
+`Allow while visiting the site`（サイト訪問中に許可）をクリックすると、ブラウザーの上部にマイクアイコンが表示されます。
 
 ![ADK Streaming app](../assets/adk-streaming-mic.png)
 
@@ -166,7 +166,7 @@ uvicorn main:app --reload
 
 5.  **コンソールログの確認**
 
-Chromeブラウザを使用している場合、右クリックして`Inspect`（検証）を選択し、DevToolsを開きます。`Console`タブで、`[CLIENT TO AGENT]`や`[AGENT TO CLIENT]`のような、ブラウザとサーバー間でストリーミングされる音声データを表す送受信データを確認できます。
+Chromeブラウザーを使用している場合、右クリックして`Inspect`（検証）を選択し、DevToolsを開きます。`Console`タブで、`[CLIENT TO AGENT]`や`[AGENT TO CLIENT]`のような、ブラウザーとサーバー間でストリーミングされる音声データを表す送受信データを確認できます。
 
 同時に、アプリのサーバーコンソールには次のような内容が表示されるはずです。
 
@@ -182,11 +182,11 @@ INFO:     127.0.0.1:50082 - "GET /favicon.ico HTTP/1.1" 404 Not Found
 [AGENT TO CLIENT]: audio/pcm: 11520 bytes.
 ```
 
-これらのコンソールログは、独自のストリーミングアプリケーションを開発する場合に重要です。多くの場合、ブラウザとサーバー間の通信障害がストリーミングアプリケーションのバグの主な原因となります。
+これらのコンソールログは、独自のストリーミングアプリケーションを開発する場合に重要です。多くの場合、ブラウザーとサーバー間の通信障害がストリーミングアプリケーションのバグの主な原因となります。
 
 6.  **トラブルシューティングのヒント**
 
-- **`ws://`が機能しない場合：** Chrome DevToolsで`ws://`接続に関するエラーが表示された場合は、`app/static/js/app.js`の28行目にある`ws://`を`wss://`に置き換えてみてください。これは、クラウド環境でサンプルを実行し、プロキシ接続を使用してブラウザから接続している場合に発生することがあります。
+- **`ws://`が機能しない場合：** Chrome DevToolsで`ws://`接続に関するエラーが表示された場合は、`app/static/js/app.js`の28行目にある`ws://`を`wss://`に置き換えてみてください。これは、クラウド環境でサンプルを実行し、プロキシ接続を使用してブラウザーから接続している場合に発生することがあります。
 - **モデルが機能しない場合：** アプリのサーバーコンソールでモデルの可用性に関するエラーが表示された場合は、`.env`ファイルで`#DEMO_AGENT_MODEL=gemini-2.0-flash-exp`行のコメントを解除し、現在の`DEMO_AGENT_MODEL`行をコメントアウトして代替モデルを使用してみてください。
 
 ## 4. サーバーコードの概要 {#4-server-side-code-overview}

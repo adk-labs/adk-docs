@@ -4,7 +4,7 @@ hide:
 ---
 # Browserbase
 
-[Browserbase MCP Server](https://github.com/browserbase/mcp-server-browserbase)は、[Browserbase](https://www.browserbase.com/)と[Stagehand](https://github.com/browserbase/stagehand)を使用して、クラウドブラウザの自動化機能に接続します。これにより、ADKエージェントはWebページと対話し、スクリーンショットを撮り、情報を抽出し、自動化されたアクションを実行できます。
+[Browserbase MCP Server](https://github.com/browserbase/mcp-server-browserbase)は、[Browserbase](https://www.browserbase.com/)と[Stagehand](https://github.com/browserbase/stagehand)を使用して、クラウドブラウザーの自動化機能に接続します。これにより、ADKエージェントはWebページと対話し、スクリーンショットを撮り、情報を抽出し、自動化されたアクションを実行できます。
 
 ## ユースケース
 
@@ -62,14 +62,14 @@ hide:
 
 ツール <img width="200px"/> | 説明
 ---- | -----------
-`browserbase_stagehand_navigate` | ブラウザで任意のURLに移動します
+`browserbase_stagehand_navigate` | ブラウザーで任意のURLに移動します
 `browserbase_stagehand_act` | 自然言語を使用してWebページでアクションを実行します
 `browserbase_stagehand_extract` | 現在のページからすべてのテキストコンテンツを抽出します（CSSとJavaScriptを除外）
 `browserbase_stagehand_observe` | Webページ上の実行可能な要素を監視して見つけます
 `browserbase_screenshot` | 現在のページのPNGスクリーンショットをキャプチャします
-`browserbase_stagehand_get_url` | ブラウザページの現在のURLを取得します
-`browserbase_session_create` | 完全に初期化されたStagehandを使用してBrowserbaseでクラウドブラウザセッションを作成または再利用します
-`browserbase_session_close` | 現在のBrowserbaseセッションを閉じ、ブラウザを切断し、Stagehandインスタンスをクリーンアップします
+`browserbase_stagehand_get_url` | ブラウザーページの現在のURLを取得します
+`browserbase_session_create` | 完全に初期化されたStagehandを使用してBrowserbaseでクラウドブラウザーセッションを作成または再利用します
+`browserbase_session_close` | 現在のBrowserbaseセッションを閉じ、ブラウザーを切断し、Stagehandインスタンスをクリーンアップします
 
 ## 構成
 
@@ -84,9 +84,9 @@ Browserbase MCPサーバーは、次のコマンドラインフラグを受け�
 `--persist` | Browserbaseコンテキストを永続化するかどうか（デフォルト：true）
 `--port <port>` | HTTP/SHTTPトランスポートをリッスンするポート
 `--host <host>` | サーバーをバインドするホスト（デフォルト：localhost、すべてのインターフェイスに0.0.0.0を使用）
-`--cookies [json]` | ブラウザに挿入するCookieのJSON配列
-`--browserWidth <width>` | ブラウザのビューポート幅（デフォルト：1024）
-`--browserHeight <height>` | ブラウザのビューポートの高さ（デフォルト：768）
+`--cookies [json]` | ブラウザーに挿入するCookieのJSON配列
+`--browserWidth <width>` | ブラウザーのビューポート幅（デフォルト：1024）
+`--browserHeight <height>` | ブラウザーのビューポートの高さ（デフォルト：768）
 `--modelName <model>` | Stagehandに使用するモデル（デフォルト：gemini-2.0-flash）
 `--modelApiKey <key>` | カスタムモデルプロバイダーのAPIキー（カスタムモデルを使用する場合に必要）
 `--experimental` | 実験的な機能を有効にします（デフォルト：false）

@@ -47,7 +47,7 @@ export GOOGLE_API_KEY="your-gemini-api-key"
 
 ## エージェントでの使用
 
-Latitude SDK の `google_adk` 計測キーの下に `google.adk` モジュールを渡します。Latitude は OpenTelemetry トレーサープロバイダを登録し、ADK を計測します。ADK の呼び出しは現在とまったく同じままで機能します.
+Latitude SDK の `google_adk` 計測キーの下に `google.adk` モジュールを渡します。Latitude は OpenTelemetry トレーサープロバイダーを登録し、ADK を計測します。ADK の呼び出しは現在とまったく同じままで機能します.
 
 ```python
 import asyncio

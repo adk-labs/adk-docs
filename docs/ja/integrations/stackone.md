@@ -1,6 +1,6 @@
 ---
 catalog_title: StackOne
-catalog_description: エージェントを 200 以上の SaaS プロバイダに接続します
+catalog_description: エージェントを 200 以上の SaaS プロバイダーに接続します
 catalog_icon: /integrations/assets/stackone.png
 catalog_tags: ["connectors"]
 ---
@@ -13,8 +13,8 @@ catalog_tags: ["connectors"]
 
 [StackOne ADK Plugin](https://github.com/StackOneHQ/stackone-adk-plugin) は、
 ADK エージェントを [StackOne](https://stackone.com) の統合 AI 連携ゲートウェイを
-通じて数百のプロバイダに接続します。各 API ごとにツール関数を手作業で定義する
-代わりに、このプラグインは接続済みプロバイダから利用可能なツールを動的に検出し、
+通じて数百のプロバイダーに接続します。各 API ごとにツール関数を手作業で定義する
+代わりに、このプラグインは接続済みプロバイダーから利用可能なツールを動的に検出し、
 ADK のネイティブツールとして公開します。HRIS、ATS、CRM、生産性ツール、
 スケジューリングツールなど、さらに多くの
 [統合](https://www.stackone.com/connectors) をサポートします。
@@ -45,7 +45,7 @@ ADK のネイティブツールとして公開します。HRIS、ATS、CRM、生
 
 ## 前提条件
 
-- 少なくとも 1 つのプロバイダが接続された [StackOne アカウント](https://app.stackone.com)
+- 少なくとも 1 つのプロバイダーが接続された [StackOne アカウント](https://app.stackone.com)
 - [StackOne Dashboard](https://app.stackone.com) で取得した StackOne API キー
 - [Gemini API キー](https://aistudio.google.com/apikey)
 
@@ -193,7 +193,7 @@ uv add stackone-adk
 
 - **トークンのオーバーヘッド:** ツールスキーマがプロンプトトークンを消費し、
   推論に使えるトークンを減らします。
-- **ペイロード制限:** 大きなカタログはプロバイダのペイロード制限を超える
+- **ペイロード制限:** 大きなカタログはプロバイダーのペイロード制限を超える
   可能性があります。たとえば Gemini は、リクエストごとの関数宣言のサイズと
   数にハードリミットを設けています。
 - **選択精度:** ツール候補が増えるほど、似た候補を区別する必要があるため、
@@ -267,8 +267,8 @@ uv add stackone-adk
 ## 利用可能なツール
 
 固定のツールセットを持つ統合とは異なり、StackOne のツールは StackOne API を通じて
-接続済みプロバイダから **動的に検出** されます。利用できるツールは
-[StackOne Dashboard](https://app.stackone.com) に接続した SaaS プロバイダに
+接続済みプロバイダーから **動的に検出** されます。利用できるツールは
+[StackOne Dashboard](https://app.stackone.com) に接続した SaaS プロバイダーに
 応じて変わります。
 
 検出されたツールを一覧表示するには:
@@ -294,7 +294,7 @@ LMS & Learning | 360Learning, Docebo, Go1, Cornerstone, LinkedIn Learning
 Commerce | Shopify, BigCommerce, WooCommerce, Etsy
 Developer Tools | GitHub, GitLab, Twilio
 
-200 以上のサポート対象プロバイダの完全な一覧は
+200 以上のサポート対象プロバイダーの完全な一覧は
 [StackOne integrations page](https://www.stackone.com/connectors) を参照してください。
 
 ## 構成
@@ -307,7 +307,7 @@ Parameter | Type | Default | Description
 `account_id` | `str | None` | `None` | すべてのツールに適用する既定のアカウント ID です。
 `base_url` | `str | None` | `None` | API URL を上書きします（デフォルト: `https://api.stackone.com`）。
 `plugin_name` | `str` | `"stackone_plugin"` | ADK 用のプラグイン識別子です。
-`providers` | `list[str] | None` | `None` | プロバイダ名でフィルタリングします（例: `["calendly", "hibob"]`）。
+`providers` | `list[str] | None` | `None` | プロバイダー名でフィルタリングします（例: `["calendly", "hibob"]`）。
 `actions` | `list[str] | None` | `None` | glob 構文を使ったアクションパターンでフィルタリングします。
 `account_ids` | `list[str] | None` | `None` | 特定の接続済みアカウント ID にツールを限定します。
 `mode` | `Literal["search_and_execute"] | None` | `None` | ツール登録戦略です。`None` の場合、検出されたすべてのツールをエージェントに登録します。`"search_and_execute"` の場合、プラグインは 2 つのツール（`tool_search` と `tool_execute`）を登録し、モデルが実行時にツールを選択して呼び出します。
@@ -317,7 +317,7 @@ Parameter | Type | Default | Description
 
 ### ツールフィルタリング
 
-プロバイダ、アクションパターン、アカウント ID、またはその組み合わせで
+プロバイダー、アクションパターン、アカウント ID、またはその組み合わせで
 ツールをフィルタリングできます。
 
 ```python

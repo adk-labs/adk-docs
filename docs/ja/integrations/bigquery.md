@@ -79,9 +79,9 @@ credentials_config = BigQueryCredentialsConfig(credentials=credentials)
 bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 ```
 
-### 外部認証プロバイダ (External Auth Providers)
+### 外部認証プロバイダー (External Auth Providers)
 
-Gemini Enterprise など、トークンがプラットフォームによって管理される外部認証プロバイダと統合する場合は、`external_access_token_key` を使用します。
+Gemini Enterprise など、トークンがプラットフォームによって管理される外部認証プロバイダーと統合する場合は、`external_access_token_key` を使用します。
 
 ```python
 from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig

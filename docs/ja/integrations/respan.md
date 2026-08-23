@@ -147,7 +147,7 @@ agent = Agent(
 
 ## Respan ゲートウェイの使用
 
-ADK は、LiteLLM アダプタを使用して Respan ゲートウェイを介してモデル呼び出しをルーティングできます。これは、複数のモデルプロバイダに対して1つの OpenAI 互換エンドポイントが必要な場合に便利です。
+ADK は、LiteLLM アダプタを使用して Respan ゲートウェイを介してモデル呼び出しをルーティングできます。これは、複数のモデルプロバイダーに対して1つの OpenAI 互換エンドポイントが必要な場合に便利です。
 
 ```bash
 export RESPAN_API_KEY="YOUR_RESPAN_API_KEY"
