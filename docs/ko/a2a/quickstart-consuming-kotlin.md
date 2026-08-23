@@ -102,7 +102,7 @@ curl http://localhost:8001/a2a/check_prime_agent/.well-known/agent-card.json
 
 ## 다음 단계
 
-Kotlin 에이전트를 A2A를 통해 노출하는 기능은 아직 지원되지 않습니다. adk-kotlin은 현재 소비(consuming) 측만 제공합니다. 에이전트를 노출하려면 다른 언어용 빠른 시작 가이드를 참조하세요.
+Kotlin 에이전트를 A2A를 통해 노출하는 기능은 아직 지원되지 않습니다. adk-kotlin은 현재 소비(consuming) 측만 제공합니다. 에이전트를 노출하려면 다른 언어용 빠른 시작 가이드를 참고하세요.
 
 - [**Python용 A2A 빠른 시작 (에이전트 노출)**](./quickstart-exposing.md)
 - [**Java용 A2A 빠른 시작 (에이전트 노출)**](./quickstart-exposing-java.md)

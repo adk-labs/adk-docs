@@ -34,7 +34,7 @@ Meta Ads, GA4, TikTok Ads, Shopify를 포함한 20개 이상의 플랫폼에서 
 - [Markifact](https://www.markifact.com) 계정(무료 티어 사용 가능)
 - Markifact 대시보드에서 연결된 플랫폼이 하나 이상 있어야 함(Google Ads, Meta, GA4,
   Shopify 등)
-- 연결 설정은 [Markifact 문서](https://docs.markifact.com)를 참조하세요.
+- 연결 설정은 [Markifact 문서](https://docs.markifact.com)를 참고하세요.
 
 ## 에이전트에서 사용하기
 

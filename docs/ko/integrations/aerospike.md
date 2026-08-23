@@ -358,7 +358,7 @@ aerospike://user:pass@node1:3000,node2:3000/prod?set_prefix=prod_&tls=true
 | `adk_memory` | `app:user:session:event_id` | 메모리 행 |
 | `adk_memory` | `app:user:kw:token` | 어휘 검색을 위한 게시 목록 |
 
-인덱스, 청크 인바리언트(chunking invariants) 및 운영 참고사항은 저장소의 [데이터 모델](https://github.com/aerospike-community/adk-aerospike/blob/main/docs/data-model.md)을 참조하세요.
+인덱스, 청크 인바리언트(chunking invariants) 및 운영 참고사항은 저장소의 [데이터 모델](https://github.com/aerospike-community/adk-aerospike/blob/main/docs/data-model.md)을 참고하세요.
 
 ## 추가 자료
 

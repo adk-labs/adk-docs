@@ -16,7 +16,7 @@ hide:
 
 ## 전제 조건
 
-- Exa에서 [API 키](https://dashboard.exa.ai/api-keys)를 만듭니다. 자세한 내용은 [설명서](https://docs.exa.ai/reference/quickstart)를 참조하세요.
+- Exa에서 [API 키](https://dashboard.exa.ai/api-keys)를 만듭니다. 자세한 내용은 [설명서](https://docs.exa.ai/reference/quickstart)를 참고하세요.
 
 ## 에이전트와 함께 사용
 

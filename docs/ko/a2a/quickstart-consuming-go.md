@@ -31,7 +31,7 @@ A2A 기본 샘플은 다음으로 구성됩니다.
 
 ### 1. 샘플 코드 가져오기 { #getting-the-sample-code }
 
-먼저 Go가 설치되어 있고 환경이 설정되어 있는지 확인하십시오.
+먼저 Go가 설치되어 있고 환경이 설정되어 있는지 확인하세요.
 
 여기에서 [**`a2a_basic`** 샘플](https://github.com/google/tree/main/examples/go/a2a_basic)로 복제하고 이동할 수 있습니다.
 

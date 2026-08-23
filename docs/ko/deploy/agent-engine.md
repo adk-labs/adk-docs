@@ -7,7 +7,7 @@
 [Agent Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)은 개발자가 프로덕션 환경에서 AI 에이전트를 배포, 관리, 확장할 수 있게 해주는 완전 관리형 Google Cloud 서비스입니다. Agent Engine은 프로덕션 환경에서 에이전트를 확장하기 위한 인프라를 처리하므로, 여러분은 지능적이고 영향력 있는 애플리케이션을 만드는 데 집중할 수 있습니다. 이 가이드는 ADK 프로젝트를 신속하게 배포하고자 할 때를 위한 빠른 배포 절차와, 에이전트를 Agent Engine에 신중하게 배포하고자 할 때를 위한 표준 단계별 절차를 제공합니다.
 
 !!! example "미리보기: Vertex AI Express 모드"
-    Google Cloud 프로젝트가 없더라도 [Vertex AI Express 모드](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 사용하여 Agent Engine을 무료로 사용해 볼 수 있습니다. 이 기능 사용에 대한 자세한 내용은 [표준 배포](#standard-deployment) 섹션을 참조하세요.
+    Google Cloud 프로젝트가 없더라도 [Vertex AI Express 모드](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 사용하여 Agent Engine을 무료로 사용해 볼 수 있습니다. 이 기능 사용에 대한 자세한 내용은 [표준 배포](#standard-deployment) 섹션을 참고하세요.
 
 ## 신속 배포
 
@@ -18,18 +18,18 @@
 -   [Google Cloud 프로젝트에 연결](#connect-ad): 개발 환경을 Google Cloud 및 Google Cloud 프로젝트에 연결.
 -   [ADK 프로젝트 배포](#deploy-ad): Google Cloud 프로젝트에 필요한 서비스를 프로비저닝하고 ADK 프로젝트 코드 업로드.
 
-배포된 에이전트 테스트에 대한 정보는 [배포된 에이전트 테스트](#test-deployment)를 참조하세요. Agent Starter Pack과 그 명령줄 도구 사용에 대한 자세한 정보는 [CLI 참조](https://googlecloudplatform.github.io/agent-starter-pack/cli/enhance.html)와 [개발 가이드](https://googlecloudplatform.github.io/agent-starter-pack/guide/development-guide.html)를 참조하세요.
+배포된 에이전트 테스트에 대한 정보는 [배포된 에이전트 테스트](#test-deployment)를 참고하세요. Agent Starter Pack과 그 명령줄 도구 사용에 대한 자세한 정보는 [CLI 참조](https://googlecloudplatform.github.io/agent-starter-pack/cli/enhance.html)와 [개발 가이드](https://googlecloudplatform.github.io/agent-starter-pack/guide/development-guide.html)를 참고하세요.
 
 ### 사전 요구사항 {#prerequisites-ad}
 
 이 배포 경로를 사용하려면 다음 리소스가 구성되어 있어야 합니다.
 
 -   **Google Cloud 계정**: 다음 리소스에 대한 관리자 접근 권한 필요.
--   **Google Cloud 프로젝트**: [결제가 활성화된](https://cloud.google.com/billing/docs/how-to/modify-project) 비어 있는 Google Cloud 프로젝트. 프로젝트 생성 정보는 [프로젝트 생성 및 관리](https://cloud.google.com/resource-manager/docs/creating-managing-projects)를 참조하세요.
+-   **Google Cloud 프로젝트**: [결제가 활성화된](https://cloud.google.com/billing/docs/how-to/modify-project) 비어 있는 Google Cloud 프로젝트. 프로젝트 생성 정보는 [프로젝트 생성 및 관리](https://cloud.google.com/resource-manager/docs/creating-managing-projects)를 참고하세요.
 -   **Python 환경**: 3.9에서 3.13 사이의 Python 버전.
--   **UV 도구**: Python 개발 환경 관리 및 ASP 도구 실행. 설치 정보는 [UV 설치](https://docs.astral.sh/uv/getting-started/installation/)를 참조하세요.
--   **Google Cloud CLI 도구**: gcloud 명령줄 인터페이스. 설치 정보는 [Google Cloud 명령줄 인터페이스](https://cloud.google.com/sdk/docs/install)를 참조하세요.
--   **Make 도구**: 빌드 자동화 도구. 대부분의 Unix 기반 시스템에 포함되어 있으며, 설치 정보는 [Make 도구](https://www.gnu.org/software/make/) 문서를 참조하세요.
+-   **UV 도구**: Python 개발 환경 관리 및 ASP 도구 실행. 설치 정보는 [UV 설치](https://docs.astral.sh/uv/getting-started/installation/)를 참고하세요.
+-   **Google Cloud CLI 도구**: gcloud 명령줄 인터페이스. 설치 정보는 [Google Cloud 명령줄 인터페이스](https://cloud.google.com/sdk/docs/install)를 참고하세요.
+-   **Make 도구**: 빌드 자동화 도구. 대부분의 Unix 기반 시스템에 포함되어 있으며, 설치 정보는 [Make 도구](https://www.gnu.org/software/make/) 문서를 참고하세요.
 
 ### ADK 프로젝트 준비 {#prepare-ad}
 
@@ -68,7 +68,7 @@ ADK 프로젝트를 Agent Engine에 배포하기 위해 준비하려면:
 !!! tip "참고"
     실행 중에 ASP 도구가 Google Cloud 연결을 상기시키는 메시지를 표시할 수 있지만, 이 단계에서는 연결이 *필수*가 아닙니다.
 
-ASP가 ADK 프로젝트에 적용하는 변경 사항에 대한 자세한 내용은 [ADK 프로젝트 변경 사항](#adk-asp-changes)을 참조하세요.
+ASP가 ADK 프로젝트에 적용하는 변경 사항에 대한 자세한 내용은 [ADK 프로젝트 변경 사항](#adk-asp-changes)을 참고하세요.
 
 ### Google Cloud 프로젝트에 연결 {#connect-ad}
 
@@ -101,7 +101,7 @@ Google Cloud에 성공적으로 연결하고 Cloud 프로젝트 ID를 설정했�
 ASP 도구를 사용할 때, 배포는 단계적으로 이루어집니다. 첫 번째 단계에서는 `make` 명령어를 실행하여 Agent Engine에서 ADK 워크플로를 실행하는 데 필요한 서비스를 프로비저닝합니다. 두 번째 단계에서는 프로젝트 코드가 Agent Engine 서비스에 업로드되고 에이전트 프로젝트가 실행됩니다.
 
 !!! warning "중요"
-    *이 단계를 수행하기 전에 Google Cloud 배포 대상 프로젝트가 ***현재 프로젝트***로 설정되어 있는지 확인하세요.* `make backend` 명령어는 배포를 수행할 때 현재 설정된 Google Cloud 프로젝트를 사용합니다. 현재 프로젝트 설정 및 확인에 대한 정보는 [Google Cloud 프로젝트에 연결](#connect-ad)을 참조하세요.
+    *이 단계를 수행하기 전에 Google Cloud 배포 대상 프로젝트가 ***현재 프로젝트***로 설정되어 있는지 확인하세요.* `make backend` 명령어는 배포를 수행할 때 현재 설정된 Google Cloud 프로젝트를 사용합니다. 현재 프로젝트 설정 및 확인에 대한 정보는 [Google Cloud 프로젝트에 연결](#connect-ad)을 참고하세요.
 
 Google Cloud 프로젝트의 Agent Engine에 ADK 프로젝트를 배포하려면:
 
@@ -113,9 +113,9 @@ Google Cloud 프로젝트의 Agent Engine에 ADK 프로젝트를 배포하려면
     make backend
     ```
 
-이 과정이 성공적으로 완료되면, Google Cloud Agent Engine에서 실행 중인 에이전트와 상호 작용할 수 있습니다. 배포된 에이전트 테스트에 대한 자세한 내용은 다음 섹션을 참조하세요.
+이 과정이 성공적으로 완료되면, Google Cloud Agent Engine에서 실행 중인 에이전트와 상호 작용할 수 있습니다. 배포된 에이전트 테스트에 대한 자세한 내용은 다음 섹션을 참고하세요.
 
-이 과정이 성공적으로 완료되면, Google Cloud Agent Engine에서 실행 중인 에이전트와 상호 작용할 수 있습니다. 배포된 에이전트 테스트에 대한 자세한 내용은 [배포된 에이전트 테스트](#test-deployment)를 참조하세요.
+이 과정이 성공적으로 완료되면, Google Cloud Agent Engine에서 실행 중인 에이전트와 상호 작용할 수 있습니다. 배포된 에이전트 테스트에 대한 자세한 내용은 [배포된 에이전트 테스트](#test-deployment)를 참고하세요.
 
 ### ADK 프로젝트 변경 사항 {#adk-asp-changes}
 
@@ -145,7 +145,7 @@ multi-tool-agent/
 └─ pyproject.toml       # 프로젝트 의존성 및 구성
 ```
 
-자세한 내용은 업데이트된 ADK 프로젝트 폴더의 README.md 파일을 참조하세요. Agent Starter Pack 사용에 대한 자세한 정보는 [개발 가이드](https://googlecloudplatform.github.io/agent-starter-pack/guide/development-guide.html)를 참조하세요.
+자세한 내용은 업데이트된 ADK 프로젝트 폴더의 README.md 파일을 참고하세요. Agent Starter Pack 사용에 대한 자세한 정보는 [개발 가이드](https://googlecloudplatform.github.io/agent-starter-pack/guide/development-guide.html)를 참고하세요.
 
 ## 표준 배포
 
@@ -153,7 +153,7 @@ multi-tool-agent/
 
 ### 사전 요구사항
 
-이 지침은 이미 ADK 프로젝트와 GCP 프로젝트가 정의되어 있다고 가정합니다. ADK 프로젝트가 없다면, [에이전트 정의](#define-your-agent)에서 테스트 프로젝트 생성 지침을 참조하세요.
+이 지침은 이미 ADK 프로젝트와 GCP 프로젝트가 정의되어 있다고 가정합니다. ADK 프로젝트가 없다면, [에이전트 정의](#define-your-agent)에서 테스트 프로젝트 생성 지침을 참고하세요.
 
 !!! example "미리보기: Vertex AI Express 모드"
     기존 GCP 프로젝트가 없는 경우, [Vertex AI Express 모드](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 사용하여 Agent Engine을 무료로 체험할 수 있습니다.
@@ -339,7 +339,7 @@ if final_text_responses:
         /multi_tool_agent
     ```
 
-    사용 가능한 스토리지 버킷의 이름은 Google Cloud 콘솔의 배포 프로젝트 내 [Cloud Storage 버킷](https://pantheon.corp.google.com/storage/browser) 섹션에서 찾을 수 있습니다. `adk deploy` 명령어 사용에 대한 자세한 내용은 [ADK CLI 참조](/ko/api-reference/cli/cli.html#adk-deploy)를 참조하세요.
+    사용 가능한 스토리지 버킷의 이름은 Google Cloud 콘솔의 배포 프로젝트 내 [Cloud Storage 버킷](https://pantheon.corp.google.com/storage/browser) 섹션에서 찾을 수 있습니다. `adk deploy` 명령어 사용에 대한 자세한 내용은 [ADK CLI 참조](/ko/api-reference/cli/cli.html#adk-deploy)를 참고하세요.
 
     !!! tip
         ADK 프로젝트를 배포할 때 주 ADK 에이전트 정의(`root_agent`)를 찾을 수 있도록 하세요.
@@ -413,7 +413,7 @@ Cloud 콘솔에서 배포된 에이전트를 보려면:
 -   Google Cloud 콘솔의 Agent Engine 페이지로 이동합니다:
     [https://console.cloud.google.com/vertex-ai/agents/agent-engines](https://console.cloud.google.com/vertex-ai/agents/agent-engines)
 
-이 페이지에는 현재 선택된 Google Cloud 프로젝트에 배포된 모든 에이전트가 나열됩니다. 에이전트가 보이지 않는 경우, Google Cloud 콘솔에서 대상 프로젝트를 선택했는지 확인하세요. 기존 Google Cloud 프로젝트 선택에 대한 자세한 내용은 [프로젝트 생성 및 관리](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)를 참조하세요.
+이 페이지에는 현재 선택된 Google Cloud 프로젝트에 배포된 모든 에이전트가 나열됩니다. 에이전트가 보이지 않는 경우, Google Cloud 콘솔에서 대상 프로젝트를 선택했는지 확인하세요. 기존 Google Cloud 프로젝트 선택에 대한 자세한 내용은 [프로젝트 생성 및 관리](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)를 참고하세요.
 
 ### Google Cloud 프로젝트 정보 찾기
 
@@ -558,7 +558,7 @@ REST를 통해 배포된 에이전트와의 상호 작용을 테스트하려면:
         }'
         ```
 
-이 요청은 배포된 에이전트 코드로부터 JSON 형식의 응답을 생성해야 합니다. REST 호출을 사용하여 Agent Engine에 배포된 ADK 에이전트와 상호 작용하는 방법에 대한 자세한 내용은 Agent Engine 문서의 [배포된 에이전트 관리](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/manage/overview#console)와 [Agent Development Kit 에이전트 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/use/adk)을 참조하세요.
+이 요청은 배포된 에이전트 코드로부터 JSON 형식의 응답을 생성해야 합니다. REST 호출을 사용하여 Agent Engine에 배포된 ADK 에이전트와 상호 작용하는 방법에 대한 자세한 내용은 Agent Engine 문서의 [배포된 에이전트 관리](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/manage/overview#console)와 [Agent Development Kit 에이전트 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/use/adk)을 참고하세요.
 
 ### Python을 사용한 테스트
 
@@ -607,7 +607,7 @@ async for event in remote_app.async_stream_query(
 {'parts': [{'text': 'The weather in New York is sunny with a temperature of 25 degrees Celsius (41 degrees Fahrenheit).'}], 'role': 'model'}
 ```
 
-Agent Engine에 배포된 ADK 에이전트와의 상호 작용에 대한 자세한 내용은 Agent Engine 문서의 [배포된 에이전트 관리](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/manage/overview)와 [Agent Development Kit 에이전트 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/use/adk)을 참조하세요.
+Agent Engine에 배포된 ADK 에이전트와의 상호 작용에 대한 자세한 내용은 Agent Engine 문서의 [배포된 에이전트 관리](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/manage/overview)와 [Agent Development Kit 에이전트 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/use/adk)을 참고하세요.
 
 #### 멀티모달 쿼리 보내기
 

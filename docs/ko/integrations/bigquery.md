@@ -118,6 +118,6 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 
 ## 샘플 에이전트
 
-상세한 인증 예제가 포함된 BigQuery 기반 에이전트의 완전한 실행 가능한 샘플은 GitHub의 [BigQuery Sample Agent](https://github.com/google/adk-python/tree/main/contributing/samples/integrations/bigquery)를 참조하세요.
+상세한 인증 예제가 포함된 BigQuery 기반 에이전트의 완전한 실행 가능한 샘플은 GitHub의 [BigQuery Sample Agent](https://github.com/google/adk-python/tree/main/contributing/samples/integrations/bigquery)를 참고하세요.
 
-참고: BigQuery 데이터 에이전트를 도구로 사용하려면 [ADK용 Data Agents 도구](data-agent.md)를 참조하세요.
+참고: BigQuery 데이터 에이전트를 도구로 사용하려면 [ADK용 Data Agents 도구](data-agent.md)를 참고하세요.

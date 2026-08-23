@@ -28,7 +28,7 @@ AI 생성 코드를 실행하는 효율적인 방법
 이 코드 실행 도구는 Agent Runtime 제품군의 일부이지만
 이를 사용하려면 에이전트를 Agent Runtime에 배포해야 합니다. 에이전트를 실행할 수 있습니다
 로컬로 또는 다른 서비스와 함께 이 도구를 사용하세요. 에 대한 자세한 내용은
-에이전트 런타임의 코드 실행 기능은 다음을 참조하세요.
+에이전트 런타임의 코드 실행 기능은 다음을 참고하세요.
 [Agent Runtime Code Execution](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/overview)
 문서.
 
@@ -66,9 +66,9 @@ root_agent = Agent(
 
 `sandbox_resource_name` 값의 예상 형식에 대한 자세한 내용과
 대체 `agent_engine_resource_name` 매개변수는 [Configuration
-parameters](#config-parameters)를 참조하세요. 다음을 포함한 좀 더 고급 예를 들어보면
+parameters](#config-parameters)를 참고하세요. 다음을 포함한 좀 더 고급 예를 들어보면
 도구에 권장되는 시스템 지침은 [Advanced
-example](#advanced-example) 또는 전체 내용을 참조하세요.
+example](#advanced-example) 또는 전체 내용을 참고하세요.
 [agent code example](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution).
 
 ## 작동 방식
@@ -237,5 +237,5 @@ When plotting trends, you should make sure to sort and order the data by the x-a
 )
 ```
 
-이 예제 코드를 사용하는 ADK 에이전트의 전체 버전은 다음을 참조하세요.
+이 예제 코드를 사용하는 ADK 에이전트의 전체 버전은 다음을 참고하세요.
 [agent_engine_code_execution sample](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution).

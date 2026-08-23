@@ -21,7 +21,7 @@ Cloud Console에서 배포된 에이전트를 보려면 다음 안내를 따르�
     [https://console.cloud.google.com/vertex-ai/agents/agent-engines](https://console.cloud.google.com/vertex-ai/agents/agent-engines)
 
 이 페이지에는 현재 선택한 Google Cloud에 배포된 모든 에이전트가 나열되어 있습니다.
-프로젝트. 귀하의 대리인이 목록에 표시되지 않으면 귀하의 대리인이 있는지 확인하십시오.
+프로젝트. 귀하의 대리인이 목록에 표시되지 않으면 귀하의 대리인이 있는지 확인하세요.
 Google Cloud Console에서 선택된 대상 프로젝트입니다. 자세한 내용은
 기존 Google Cloud 프로젝트 선택, 참조
 [Creating and managing projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects).
@@ -81,7 +81,7 @@ Cloud Console의 에이전트 런타임 섹션에서 사용할 수 있습니다.
 REST 호출을 보내고 배포된 에이전트로부터 응답을 받으려면 다음 안내를 따르세요.
 
 - 개발 환경의 터미널 창에서 요청을 작성합니다.
-    그리고 그것을 실행하세요:
+    그리고 이를 실행하세요:
 
     === "Google Cloud Project"
 
@@ -196,7 +196,7 @@ REST를 통해 배포된 에이전트와의 상호 작용을 테스트하려면 
 
 이 요청은 배포된 에이전트 코드에서 JSON으로 응답을 생성해야 합니다.
 형식. 배포된 ADK 에이전트와의 상호작용에 대한 자세한 내용은
-REST 호출을 사용하는 에이전트 런타임은 다음을 참조하세요.
+REST 호출을 사용하는 에이전트 런타임은 다음을 참고하세요.
 [Manage deployed agents](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/manage/overview#console)
 그리고
 [Use an Agent Development Kit agent](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/use/adk)

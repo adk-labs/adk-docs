@@ -8,7 +8,7 @@ ADK(에이전트 개발 키트)는 에이전트 아키텍처를 통해 이동하
 
 ## 철학의 흔적
 
-추적에 대한 ADK의 접근 방식은 기존 관찰 가능성 스택과의 원활한 통합을 보장하기 위해 표준 프로토콜을 기반으로 구축되었습니다.
+추적에 대한 ADK의 접근 방식은 기존 관측 가능성 스택과의 원활한 통합을 보장하기 위해 표준 프로토콜을 기반으로 구축되었습니다.
 
 * **OpenTelemetry 의미 규칙:** ADK는 OpenTelemetry(OTel) [Semantic Conventions for GenAI](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-agent-spans.md)를 구현합니다. 이렇게 하면 추적 범위와 속성이 예측 가능한 표준 이름으로 기록됩니다.
 * **OTLP Wire 형식:** ADK는 표준 OTLP 형식을 사용하여 데이터를 내보내므로 추적이 모든 OTel 호환 백엔드(예: Google Cloud Trace, Jaeger, Grafana Tempo, Datadog)에 원활하게 통합됩니다.

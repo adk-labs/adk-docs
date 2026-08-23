@@ -5,7 +5,7 @@ catalog_icon: /integrations/assets/cloud-trace.svg
 catalog_tags: ["observability", "google"]
 ---
 
-# ADK용 Google Cloud Trace 관찰 가능성
+# ADK용 Google Cloud Trace 관측 가능성
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span>
@@ -17,7 +17,7 @@ catalog_tags: ["observability", "google"]
 
 ## 개요
 
-Cloud Trace는 추적 데이터를 생성하기 위해 여러 언어와 수집 방법을 지원하는 오픈 소스 표준인 [OpenTelemetry](https://opentelemetry.io/)를 기반으로 구축되었습니다. 이는 OpenTelemetry 호환 계측을 활용하는 ADK 애플리케이션의 관찰 가능성 관행과 일치하며 다음을 가능하게 합니다.
+Cloud Trace는 추적 데이터를 생성하기 위해 여러 언어와 수집 방법을 지원하는 오픈 소스 표준인 [OpenTelemetry](https://opentelemetry.io/)를 기반으로 구축되었습니다. 이는 OpenTelemetry 호환 계측을 활용하는 ADK 애플리케이션의 관측 가능성 관행과 일치하며 다음을 가능하게 합니다.
 
 - **에이전트 상호작용 추적**: Cloud Trace는 프로젝트에서 추적 데이터를 지속적으로 수집하고 분석하여 ADK 애플리케이션 내의 지연 시간 문제와 오류를 신속하게 진단할 수 있도록 합니다. 이 자동 데이터 수집은 복잡한 에이전트 워크플로에서 문제를 식별하는 프로세스를 단순화합니다.
 - **문제 디버깅**: 상세한 추적을 분석하여 지연 시간 문제와 오류를 신속하게 진단합니다. 이러한 추적은 여러 서비스 간의 통신 지연 시간이 증가하거나 도구 호출과 같은 특정 에이전트 작업 중에 나타나는 문제를 이해하는 데 중요합니다.
@@ -222,7 +222,7 @@ ADK는 에이전트의 동작을 필터링하고 분석하는 데 도움이 되�
 
 ## 리소스
 
-추적, OpenTelemetry 및 Google Cloud 통합에 대해 자세히 알아보려면 다음 문서를 살펴보십시오.
+추적, OpenTelemetry 및 Google Cloud 통합에 대해 자세히 알아보려면 다음 문서를 살펴보세요.
 
 - [Google Cloud Trace 문서](https://cloud.google.com/trace)
 - [OpenTelemetry 문서](https://opentelemetry.io/docs/)

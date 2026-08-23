@@ -2,7 +2,7 @@
 
 이 페이지는 ADK 웹 서버가 제공하는 REST API에 대한 레퍼런스를 제공합니다.
 ADK REST API의 실제 사용법에 대한 자세한 내용은
-[API 서버 사용하기](/ko/runtime/api-server/)를 참조하세요.
+[API 서버 사용하기](/ko/runtime/api-server/)를 참고하세요.
 
 !!! tip
     실행 중인 ADK 웹 서버의 `/docs` 경로(예: `http://localhost:8000/docs`)로 접속하면 업데이트된 API 레퍼런스를 확인할 수 있습니다.
@@ -20,7 +20,7 @@ ADK REST API의 실제 사용법에 대한 자세한 내용은
 - `app_name` (string, 필수): 실행할 에이전트의 이름입니다.
 - `user_id` (string, 필수): 사용자의 ID입니다.
 - `session_id` (string, 필수): 세션의 ID입니다.
-- `new_message` (Content, 필수): 에이전트에게 보낼 새 메시지입니다. 자세한 내용은 [Content 객체](#content-object) 섹션을 참조하세요.
+- `new_message` (Content, 필수): 에이전트에게 보낼 새 메시지입니다. 자세한 내용은 [Content 객체](#content-object) 섹션을 참고하세요.
 - `streaming` (boolean, 선택): 스트리밍 사용 여부입니다. 기본값은 `false`입니다.
 - `state_delta` (object, 선택): 실행 전에 적용할 상태(state)의 변경분(delta)입니다.
 

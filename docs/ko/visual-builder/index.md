@@ -60,7 +60,7 @@ Visual Builder 도구는 에이전트를 구축하기 위한 드래그 앤 드�
 *   **구성 요소 (Components)**
     *   [**콜백 (Callbacks)**](/ko/callbacks/) 에이전트 워크플로 이벤트의 시작과 끝에서 에이전트의 동작을 수정할 수 있는 흐름 제어 구성 요소입니다.
 
-일부 고급 ADK 기능은 에이전트 구성(Agent Config) 기능의 제한으로 인해 Visual Builder에서 지원되지 않습니다. 자세한 내용은 에이전트 구성 [알려진 제한 사항](/ko/agents/config/#known-limitations)을 참조하세요.
+일부 고급 ADK 기능은 에이전트 구성(Agent Config) 기능의 제한으로 인해 Visual Builder에서 지원되지 않습니다. 자세한 내용은 에이전트 구성 [알려진 제한 사항](/ko/agents/config/#known-limitations)을 참고하세요.
 
 ## 프로젝트 코드 출력 (Project code output)
 

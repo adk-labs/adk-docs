@@ -10,7 +10,7 @@
 
 ## 전제 조건
 
-- AgentQL에서 [API 키](https://dev.agentql.com/sign-in)를 만듭니다. 자세한 내용은 [설명서](https://docs.agentql.com/quick-start)를 참조하세요.
+- AgentQL에서 [API 키](https://dev.agentql.com/sign-in)를 만듭니다. 자세한 내용은 [설명서](https://docs.agentql.com/quick-start)를 참고하세요.
 
 ## 에이전트와 함께 사용
 

@@ -28,7 +28,7 @@ App 객체에 `EventsCompactionConfig` 설정을 추가하여 에이전트 워�
 - **`token_threshold`**: 도달 시 테일 유지(tail-retention) 압축을 자동으로 트리거하는 토큰의 안전 한도입니다.
 - **`event_retention_size`**: 압축이 트리거될 때 요약되지 않은 "원시" 형식으로 유지되는 최근 이벤트/상호 작용의 수입니다. 이는 즉각적인 대화 컨텍스트 및 대명사 해상도를 유지합니다.
 
-프로젝트에서 이를 구현하려면 다음 구성을 사용하십시오.
+프로젝트에서 이를 구현하려면 다음 구성을 사용하세요.
 
 ```python
 # 1. google.adk 네임스페이스를 사용하도록 가져오기 경로 수정
@@ -163,7 +163,7 @@ compaction_config = EventsCompactionConfig(
 
 *   **`compaction_interval`**: 이전 이벤트 데이터의 압축을 트리거하는 완료된 이벤트 수를 설정합니다.
 *   **`overlap_size`**: 새로 압축된 컨텍스트 세트에 포함되는 이전에 압축된 이벤트 수를 설정합니다.
-*   **`summarizer`**: (선택 사항) 요약에 사용할 특정 AI 모델을 포함하는 요약기 객체를 정의합니다. 자세한 내용은 [요약기 정의](#define-summarizer)를 참조하세요.
+*   **`summarizer`**: (선택 사항) 요약에 사용할 특정 AI 모델을 포함하는 요약기 객체를 정의합니다. 자세한 내용은 [요약기 정의](#define-summarizer)를 참고하세요.
 
 ### 요약기 정의 {#define-summarizer}
 요약기를 정의하여 컨텍스트 압축 프로세스를 사용자 지정할 수 있습니다. `LlmEventSummarizer`(Python/Java) 또는 `LlmSummarizer`(TypeScript) 클래스를 사용하면 요약에 특정 모델을 지정할 수 있습니다. 다음 코드 예시는 사용자 지정 요약기를 정의하고 구성하는 방법을 보여줍니다.
@@ -246,4 +246,4 @@ compaction_config = EventsCompactionConfig(
     });
     ```
 
-요약기를 조정해 압축기의 동작을 더 세밀하게 제어할 수도 있습니다. Python과 Java에서는 `LlmEventSummarizer`의 `prompt_template`을, TypeScript에서는 `LlmSummarizer`의 `prompt`를 사용자 지정할 수 있습니다. 자세한 내용은 [`LlmEventSummarizer` 코드](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) 또는 [`LlmSummarizer` 코드](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts)를 참조하세요.
+요약기를 조정해 압축기의 동작을 더 세밀하게 제어할 수도 있습니다. Python과 Java에서는 `LlmEventSummarizer`의 `prompt_template`을, TypeScript에서는 `LlmSummarizer`의 `prompt`를 사용자 지정할 수 있습니다. 자세한 내용은 [`LlmEventSummarizer` 코드](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) 또는 [`LlmSummarizer` 코드](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts)를 참고하세요.

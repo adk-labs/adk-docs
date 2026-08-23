@@ -27,4 +27,4 @@ Kotlin에서는 트레이스를 위한 OpenTelemetry를 구성하고 자세한 �
 
 !!! tip "관측 가능성을 위한 ADK 통합"
     ADK용 사전 구축된 관측 가능성 라이브러리 목록은
-    [도구 및 통합](/ko/integrations/?topic=observability)을 참조하세요.
+    [도구 및 통합](/ko/integrations/?topic=observability)을 참고하세요.

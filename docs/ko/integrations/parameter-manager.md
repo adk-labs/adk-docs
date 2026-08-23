@@ -37,7 +37,7 @@ Parameter Manager 연동은 다음과 같은 작업을 지원합니다:
 1.  [ADK로 에이전트를 설정합니다](/get-started/).
 2.  [매개변수를 생성합니다](https://docs.cloud.google.com/secret-manager/parameter-manager/docs/create-parameter).
 3.  에이전트 ID에 [Parameter Manager Parameter Accessor](https://docs.cloud.google.com/iam/docs/roles-permissions/parametermanager#parametermanager.parameterAccessor) IAM 역할(`roles/parametermanager.parameterAccessor`)을 부여합니다. 이 역할은 에이전트가 런타임에 매개변수 구성을 렌더링할 수 있도록 지원합니다.
-4.  매개변수에 임베디드 비밀번호가 포함된 경우, 매개변수 리소스에 [Secret Manager Secret Accessor](https://docs.cloud.google.com/iam/docs/roles-permissions/secretmanager#secretmanager.secretAccessor) 역할(`roles/secretmanager.secretAccessor`)을 부여합니다. 이 교차 서비스 권한을 통해 Parameter Manager가 에이전트를 대리하여 참조된 비밀번호를 확인(resolve)할 수 있습니다. 자세한 내용은 [매개변수에 Secret Manager Secret Accessor 역할 부여](https://docs.cloud.google.com/secret-manager/parameter-manager/docs/reference-secrets-in-parameter#grant_the_secret_manager_secret_accessor_role_to_the_parameter)를 참조하세요.
+4.  매개변수에 임베디드 비밀번호가 포함된 경우, 매개변수 리소스에 [Secret Manager Secret Accessor](https://docs.cloud.google.com/iam/docs/roles-permissions/secretmanager#secretmanager.secretAccessor) 역할(`roles/secretmanager.secretAccessor`)을 부여합니다. 이 교차 서비스 권한을 통해 Parameter Manager가 에이전트를 대리하여 참조된 비밀번호를 확인(resolve)할 수 있습니다. 자세한 내용은 [매개변수에 Secret Manager Secret Accessor 역할 부여](https://docs.cloud.google.com/secret-manager/parameter-manager/docs/reference-secrets-in-parameter#grant_the_secret_manager_secret_accessor_role_to_the_parameter)를 참고하세요.
 
 ## 설치
 

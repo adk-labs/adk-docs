@@ -12,18 +12,18 @@ BigQuery 에이전트 분석 플러그인은 심층적인 에이전트 동작 �
 
 !!! example "미리보기 릴리스"
 
-    BigQuery 에이전트 분석 플러그인은 미리보기 릴리스입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참조하세요.
+    BigQuery 에이전트 분석 플러그인은 미리보기 릴리스입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참고하세요.
 
 !!! warning "BigQuery Storage Write API"
 
-    이 기능은 유료 서비스인 **BigQuery Storage Write API**를 사용합니다. 비용에 대한 정보는 [BigQuery 설명서](https://cloud.google.com/bigquery/pricing?e=48754805&hl=en#data-ingestion-pricing)를 참조하세요.
+    이 기능은 유료 서비스인 **BigQuery Storage Write API**를 사용합니다. 비용에 대한 정보는 [BigQuery 설명서](https://cloud.google.com/bigquery/pricing?e=48754805&hl=en#data-ingestion-pricing)를 참고하세요.
 
 ## 사용 사례
 
 -   **에이전트 워크플로 디버깅 및 분석:** 잘 정의된 스키마에 광범위한 *플러그인 수명 주기 이벤트*(LLM 호출, 도구 사용) 및 *에이전트 생성 이벤트*(사용자 입력, 모델 응답)를 캡처합니다.
 -   **대용량 분석 및 디버깅:** 로깅 작업은 기본 에이전트 실행을 차단하지 않도록 별도의 스레드에서 비동기적으로 수행됩니다. 높은 이벤트 볼륨을 처리하도록 설계된 이 플러그인은 타임스탬프를 통해 이벤트 순서를 유지합니다.
 
-기록된 에이전트 이벤트 데이터는 ADK 이벤트 유형에 따라 다릅니다. 자세한 내용은 [이벤트 유형 및 페이로드](#event-types)를 참조하세요.
+기록된 에이전트 이벤트 데이터는 ADK 이벤트 유형에 따라 다릅니다. 자세한 내용은 [이벤트 유형 및 페이로드](#event-types)를 참고하세요.
 
 ## 전제 조건
 
@@ -119,8 +119,8 @@ LIMIT 20;
 `BigQueryLoggerConfig`를 사용하여 플러그인을 사용자 지정할 수 있습니다.
 
 -   **`enabled`** (`bool`, 기본값: `True`): 플러그인이 에이전트 데이터를 BigQuery 테이블에 로깅하지 못하도록 하려면 이 매개변수를 False로 설정합니다.
--   **`event_allowlist`** (`Optional[List[str]]`, 기본값: `None`): 로깅할 이벤트 유형 목록입니다. `None`이면 `event_denylist`에 있는 이벤트를 제외한 모든 이벤트가 로깅됩니다. 지원되는 이벤트 유형의 전체 목록은 [이벤트 유형 및 페이로드](#event-types) 섹션을 참조하세요.
--   **`event_denylist`** (`Optional[List[str]]`, 기본값: `None`): 로깅을 건너뛸 이벤트 유형 목록입니다. 지원되는 이벤트 유형의 전체 목록은 [이벤트 유형 및 페이로드](#event-types) 섹션을 참조하세요.
+-   **`event_allowlist`** (`Optional[List[str]]`, 기본값: `None`): 로깅할 이벤트 유형 목록입니다. `None`이면 `event_denylist`에 있는 이벤트를 제외한 모든 이벤트가 로깅됩니다. 지원되는 이벤트 유형의 전체 목록은 [이벤트 유형 및 페이로드](#event-types) 섹션을 참고하세요.
+-   **`event_denylist`** (`Optional[List[str]]`, 기본값: `None`): 로깅을 건너뛸 이벤트 유형 목록입니다. 지원되는 이벤트 유형의 전체 목록은 [이벤트 유형 및 페이로드](#event-types) 섹션을 참고하세요.
 -   **`content_formatter`** (`Optional[Callable[[Any], str]]`, 기본값: `None`): 로깅 전에 이벤트 콘텐츠를 형식화하는 선택적 함수입니다. 다음 코드는 콘텐츠 포맷터를 구현하는 방법을 보여줍니다.
 -   **`shutdown_timeout`** (`float`, 기본값: `5.0`): 종료 중에 로그가 플러시될 때까지 기다리는 시간(초)입니다.
 -   **`client_close_timeout`** (`float`, 기본값: `2.0`): BigQuery 클라이언트가 닫힐 때까지 기다리는 시간(초)입니다.

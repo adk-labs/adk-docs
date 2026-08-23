@@ -1890,7 +1890,7 @@ else:
     *   `after_tool_callback`을 사용하여 도구에서 반환된 결과를 처리하거나 기록하세요.
     *   에이전트 수준의 진입/종료 로직을 위해 `before_agent_callback` 또는 `after_agent_callback`을 구현하세요.
 5.  **오류 처리:** 에이전트가 도구 오류나 예상치 못한 API 응답을 처리하는 방법을 개선하세요. 도구 내에 재시도 로직을 추가할 수도 있습니다.
-6.  **영구 세션 저장소:** `InMemorySessionService` 대신 `pip install google-adk[db]`로 설치 가능한 SQLAlchemy 기반의 `DatabaseSessionService` 또는 `VertexAiSessionService`와 같이 ADK에서 제공하는 영구 구현체로 변경해 보세요. 자세한 내용은 [세션](/ko/sessions/session/) 페이지를 참조하세요.
+6.  **영구 세션 저장소:** `InMemorySessionService` 대신 `pip install google-adk[db]`로 설치 가능한 SQLAlchemy 기반의 `DatabaseSessionService` 또는 `VertexAiSessionService`와 같이 ADK에서 제공하는 영구 구현체로 변경해 보세요. 자세한 내용은 [세션](/ko/sessions/session/) 페이지를 참고하세요.
 7.  **스트리밍 UI:** 에이전트 팀을 웹 프레임워크(ADK 스트리밍 빠른 시작에서 보여지는 FastAPI 등)와 통합하여 실시간 채팅 인터페이스를 만드세요.
 
 Agent Development Kit는 정교한 LLM 기반 애플리케이션을 구축하기 위한 견고한 기반을 제공합니다. 도구, 상태, 위임 및 콜백과 같이 이 튜토리얼에서 다룬 개념을 마스터하면 점점 더 복잡해지는 에이전트 시스템을 다룰 준비가 된 것입니다.

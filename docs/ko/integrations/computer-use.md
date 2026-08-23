@@ -12,10 +12,10 @@ catalog_tags: ["google"]
 
 컴퓨터 사용 도구 세트를 사용하면 에이전트가 브라우저와 같은 컴퓨터의 사용자 인터페이스를 조작하여 작업을 완료할 수 있습니다. 이 도구는 특정 Gemini 모델과 [Playwright](https://playwright.dev/) 테스트 도구를 사용하여 Chromium 브라우저를 제어하고 스크린샷 찍기, 클릭, 입력 및 탐색을 통해 웹 페이지와 상호 작용할 수 있습니다.
 
-컴퓨터 사용 모델에 대한 자세한 내용은 Gemini API [컴퓨터 사용](https://ai.google.dev/gemini-api/docs/computer-use) 또는 Google Cloud Vertex AI API [컴퓨터 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/computer-use)을 참조하세요.
+컴퓨터 사용 모델에 대한 자세한 내용은 Gemini API [컴퓨터 사용](https://ai.google.dev/gemini-api/docs/computer-use) 또는 Google Cloud Vertex AI API [컴퓨터 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/computer-use)을 참고하세요.
 
 !!! example "미리보기 출시"
-    컴퓨터 사용 모델 및 도구는 미리보기 출시입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참조하세요.
+    컴퓨터 사용 모델 및 도구는 미리보기 출시입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참고하세요.
 
 ## 설정
 
@@ -87,4 +87,4 @@ root_agent = Agent(
 )
 ```
 
-전체 코드 예제는 [computer_use](https://github.com/google/adk-python/tree/main/contributing/samples/computer_use) 에이전트 샘플 프로젝트를 참조하세요.
+전체 코드 예제는 [computer_use](https://github.com/google/adk-python/tree/main/contributing/samples/computer_use) 에이전트 샘플 프로젝트를 참고하세요.

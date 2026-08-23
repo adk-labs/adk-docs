@@ -145,7 +145,7 @@ my_project/
     
     !!!info "Windows 사용자 참고 사항"
 
-        `_make_subprocess_transport NotImplementedError`가 발생하는 경우 대신 `adk web --no-reload`를 사용하는 것을 고려하십시오.
+        `_make_subprocess_transport NotImplementedError`가 발생하는 경우 대신 `adk web --no-reload`를 사용하는 것을 고려하세요.
 
 
     **1단계:** 제공된 URL(일반적으로 `http://localhost:8000` 또는 `http://127.0.0.1:8000`)을 브라우저에서 직접 엽니다.
@@ -154,18 +154,18 @@ my_project/
 
     !!!note "문제 해결"
 
-        드롭다운 메뉴에 "google_search_agent"가 표시되지 않으면 에이전트 폴더의 **상위 폴더**(즉, google_search_agent의 상위 폴더)에서 `adk web`을 실행하고 있는지 확인하십시오.
+        드롭다운 메뉴에 "google_search_agent"가 표시되지 않으면 에이전트 폴더의 **상위 폴더**(즉, google_search_agent의 상위 폴더)에서 `adk web`을 실행하고 있는지 확인하세요.
 
     **3단계.** 이제 텍스트 상자를 사용하여 에이전트와 대화할 수 있습니다.
 
 === "터미널 (adk run)"
 
-    날씨 에이전트와 채팅하려면 다음 명령을 실행하십시오.
+    날씨 에이전트와 채팅하려면 다음 명령을 실행하세요.
 
     ```
     adk run google_search_agent
     ```
-    종료하려면 Cmd/Ctrl+C를 사용하십시오.
+    종료하려면 Cmd/Ctrl+C를 사용하세요.
 
 ### 📝 시도할 예시 프롬프트
 
@@ -277,7 +277,7 @@ ADK를 사용하여 Google 검색 에이전트를 성공적으로 만들고 상�
 
 **searchEntryPoint에서 렌더링된 HTML:** 메타데이터는 Google 로고 및 "다음 FIFA 클럽 월드컵은 언제인가" 및 "인터 마이애미 FIFA 클럽 월드컵 역사"와 같은 관련 쿼리용 칩을 포함하는 검색 제안 바를 렌더링하는 데 필요한 HTML 및 CSS를 제공합니다. 이 HTML을 애플리케이션의 프런트 엔드에 직접 통합하면 제안이 의도한 대로 표시됩니다.
 
-자세한 내용은 Vertex AI 문서의 [Google 검색 제안 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/grounding/grounding-search-suggestions)을 참조하십시오.
+자세한 내용은 Vertex AI 문서의 [Google 검색 제안 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/grounding/grounding-search-suggestions)을 참고하세요.
 
 ## 요약
 

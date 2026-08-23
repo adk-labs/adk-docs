@@ -19,7 +19,7 @@ catalog_tags: ["code", "google"]
 
     이 도구는 하나의 에이전트 인스턴스 내에서 ***단독으로만*** 사용할 수 있습니다.
     이 제한과 우회 방법에 대한 자세한 내용은
-    [ADK 도구 제한 사항](/tools/limitations/#one-tool-one-agent)을 참조하세요.
+    [ADK 도구 제한 사항](/tools/limitations/#one-tool-one-agent)을 참고하세요.
 
 === "Python"
 

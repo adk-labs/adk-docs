@@ -1,14 +1,14 @@
-# AgentOps를 사용한 에이전트 관찰 가능성
+# AgentOps를 사용한 에이전트 관측 가능성
 
 **단 두 줄의 코드**만으로 [AgentOps](https://www.agentops.ai)는 에이전트에 대한 세션 재생, 메트릭 및 모니터링을 제공합니다.
 
 ## ADK에 AgentOps를 사용하는 이유는 무엇인가요?
 
-관찰 가능성은 대화형 AI 에이전트를 개발하고 배포하는 데 있어 핵심적인 측면입니다. 이를 통해 개발자는 에이전트의 성능, 사용자와의 상호 작용 방식, 외부 도구 및 API 사용 방식을 이해할 수 있습니다.
+관측 가능성은 대화형 AI 에이전트를 개발하고 배포하는 데 있어 핵심적인 측면입니다. 이를 통해 개발자는 에이전트의 성능, 사용자와의 상호 작용 방식, 외부 도구 및 API 사용 방식을 이해할 수 있습니다.
 
 AgentOps를 통합함으로써 개발자는 ADK 에이전트의 동작, LLM 상호 작용 및 도구 사용에 대한 깊은 통찰력을 얻을 수 있습니다.
 
-Google ADK에는 자체 OpenTelemetry 기반 추적 시스템이 포함되어 있으며, 이는 주로 개발자에게 에이전트 내의 기본 실행 흐름을 추적할 수 있는 방법을 제공하는 것을 목표로 합니다. AgentOps는 다음과 같은 기능을 갖춘 전용의 보다 포괄적인 관찰 가능성 플랫폼을 제공하여 이를 향상시킵니다.
+Google ADK에는 자체 OpenTelemetry 기반 추적 시스템이 포함되어 있으며, 이는 주로 개발자에게 에이전트 내의 기본 실행 흐름을 추적할 수 있는 방법을 제공하는 것을 목표로 합니다. AgentOps는 다음과 같은 기능을 갖춘 전용의 보다 포괄적인 관측 가능성 플랫폼을 제공하여 이를 향상시킵니다.
 
 *   **통합 추적 및 재생 분석:** ADK 및 AI 스택의 다른 구성 요소에서 추적을 통합합니다.
 *   **풍부한 시각화:** 에이전트 실행 흐름, LLM 호출 및 도구 성능을 시각화하는 직관적인 대시보드.
@@ -16,7 +16,7 @@ Google ADK에는 자체 OpenTelemetry 기반 추적 시스템이 포함되어 �
 *   **LLM 비용 및 지연 시간 추적:** 지연 시간, 비용(토큰 사용량 기준)을 추적하고 병목 현상을 식별합니다.
 *   **간소화된 설정:** 단 몇 줄의 코드로 시작할 수 있습니다.
 
-![AgentOps 에이전트 관찰 가능성 대시보드](https://raw.githubusercontent.com/AgentOps-AI/agentops/refs/heads/main/docs/images/external/app_screenshots/overview.png)
+![AgentOps 에이전트 관측 가능성 대시보드](https://raw.githubusercontent.com/AgentOps-AI/agentops/refs/heads/main/docs/images/external/app_screenshots/overview.png)
 
 ![중첩된 에이전트, LLM 및 도구 스팬이 있는 ADK 추적을 보여주는 AgentOps 대시보드.](../assets/agentops-adk-trace-example.jpg)
 
@@ -75,10 +75,10 @@ AgentOps를 ADK 애플리케이션에 통합하는 것은 간단합니다.
 
 ## AgentOps가 ADK를 계측하는 방법
 
-AgentOps는 ADK의 기본 원격 측정과 충돌하지 않고 원활한 관찰 가능성을 제공하기 위해 정교한 전략을 사용합니다.
+AgentOps는 ADK의 기본 원격 측정과 충돌하지 않고 원활한 관측 가능성을 제공하기 위해 정교한 전략을 사용합니다.
 
 1.  **ADK의 기본 원격 측정 무력화:**
-    AgentOps는 ADK를 감지하고 ADK의 내부 OpenTelemetry 추적기(일반적으로 `trace.get_tracer('gcp.vertex.agent')`)를 지능적으로 패치합니다. 이를 `NoOpTracer`로 교체하여 원격 측정 스팬을 생성하려는 ADK 자체의 시도를 효과적으로 무력화합니다. 이렇게 하면 중복 추적을 방지하고 AgentOps가 관찰 가능성 데이터의 신뢰할 수 있는 소스가 될 수 있습니다.
+    AgentOps는 ADK를 감지하고 ADK의 내부 OpenTelemetry 추적기(일반적으로 `trace.get_tracer('gcp.vertex.agent')`)를 지능적으로 패치합니다. 이를 `NoOpTracer`로 교체하여 원격 측정 스팬을 생성하려는 ADK 자체의 시도를 효과적으로 무력화합니다. 이렇게 하면 중복 추적을 방지하고 AgentOps가 관측 가능성 데이터의 신뢰할 수 있는 소스가 될 수 있습니다.
 
 2.  **AgentOps 제어 스팬 생성:**
     AgentOps는 주요 ADK 메서드를 래핑하여 논리적 스팬 계층을 생성함으로써 제어권을 갖습니다.

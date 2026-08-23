@@ -536,7 +536,7 @@ Google과 ADK는 안전한 코드 실행을 위한 여러 옵션을 제공합니
 
 ### 평가
 
-[에이전트 평가](../evaluate/index.md)를 참조하세요.
+[에이전트 평가](../evaluate/index.md)를 참고하세요.
 
 ### VPC-SC 경계 및 네트워크 제어
 

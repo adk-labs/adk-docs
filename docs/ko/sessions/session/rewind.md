@@ -54,7 +54,7 @@ await runner.rewind_async(
 상태 및 아티팩트 같은 전역 리소스는 복원되지 않습니다. 전체 예시는
 [rewind_session](https://github.com/google/adk-python/tree/main/contributing/samples/rewind_session)
 샘플 코드를 참고하세요. Rewind 기능 제한 사항에 대한 자세한 내용은
-[제한 사항](#limitations)을 참조하세요.
+[제한 사항](#limitations)을 참고하세요.
 
 ## 동작 방식
 

@@ -127,7 +127,7 @@ hide:
     }
     ```
 
-    Gradle이 `-parameters`를 `javac`에 전달하도록 구성해야 합니다. (또는 `@Schema(name = "...")`를 사용하십시오.)
+    Gradle이 `-parameters`를 `javac`에 전달하도록 구성해야 합니다. (또는 `@Schema(name = "...")`를 사용하세요.)
 
 === "Kotlin"
 

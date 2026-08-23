@@ -55,7 +55,7 @@ export MILVUS_URI="https://your-endpoint.api.gcp-us-west1.zillizcloud.com"
 export MILVUS_TOKEN="your-token"
 ```
 
-`MILVUS_TOKEN`은 Zilliz Cloud와 같이 인증이 필요한 배포에만 필요합니다. 기본값이 아닌 다른 Milvus 데이터베이스를 사용하는 경우 `MILVUS_DB_NAME`을 설정하십시오.
+`MILVUS_TOKEN`은 Zilliz Cloud와 같이 인증이 필요한 배포에만 필요합니다. 기본값이 아닌 다른 Milvus 데이터베이스를 사용하는 경우 `MILVUS_DB_NAME`을 설정하세요.
 
 ## 에이전트와 함께 사용
 

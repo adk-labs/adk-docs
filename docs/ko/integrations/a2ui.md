@@ -54,7 +54,7 @@ schema_manager = A2uiSchemaManager(
     이 카탈로그에는 Text, Card, Button, Image 같은 공통 컴포넌트가 포함되어 있습니다.
     [사용자 지정 카탈로그](#custom-catalogs)를 만들어 도메인별 컴포넌트를 추가하거나,
     기본 카탈로그와 자체 카탈로그를 함께 섞어 사용할 수도 있습니다.
-    자세한 내용은 아래 [고급 패턴](#advanced-patterns)을 참조하세요.
+    자세한 내용은 아래 [고급 패턴](#advanced-patterns)을 참고하세요.
 
 ### 2. 시스템 프롬프트 생성
 

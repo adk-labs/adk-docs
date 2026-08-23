@@ -13,10 +13,10 @@ hide:
 -   **코드 개발 및 디버깅:** 여러 요청에 걸쳐 코드 버전을 테스트하고 반복하는 에이전트 작업을 만듭니다.
 -   **데이터 분석을 통한 코드:** 최대 100MB의 데이터 파일을 업로드하고 각 코드 실행에 대해 데이터를 다시 로드할 필요 없이 여러 코드 기반 분석을 실행합니다.
 
-이 코드 실행 도구는 에이전트 엔진 제품군의 일부이지만 에이전트를 에이전트 엔진에 배포하여 사용할 필요는 없습니다. 에이전트를 로컬 또는 다른 서비스에서 실행하고 이 도구를 사용할 수 있습니다. 에이전트 엔진의 코드 실행 기능에 대한 자세한 내용은 [에이전트 엔진 코드 실행](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/overview) 설명서를 참조하세요.
+이 코드 실행 도구는 에이전트 엔진 제품군의 일부이지만 에이전트를 에이전트 엔진에 배포하여 사용할 필요는 없습니다. 에이전트를 로컬 또는 다른 서비스에서 실행하고 이 도구를 사용할 수 있습니다. 에이전트 엔진의 코드 실행 기능에 대한 자세한 내용은 [에이전트 엔진 코드 실행](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/overview) 설명서를 참고하세요.
 
 !!! example "미리보기 출시"
-    에이전트 엔진 코드 실행 기능은 미리보기 출시입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참조하세요.
+    에이전트 엔진 코드 실행 기능은 미리보기 출시입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참고하세요.
 
 ## 도구 사용
 
@@ -42,7 +42,7 @@ root_agent = Agent(
 )
 ```
 
-`sandbox_resource_name` 값의 예상 형식과 대체 `agent_engine_resource_name` 매개변수에 대한 자세한 내용은 [구성 매개변수](#config-parameters)를 참조하세요. 도구에 대한 권장 시스템 지침을 포함한 고급 예제는 [고급 예제](#advanced-example) 또는 전체 [에이전트 코드 예제](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution)를 참조하세요.
+`sandbox_resource_name` 값의 예상 형식과 대체 `agent_engine_resource_name` 매개변수에 대한 자세한 내용은 [구성 매개변수](#config-parameters)를 참고하세요. 도구에 대한 권장 시스템 지침을 포함한 고급 예제는 [고급 예제](#advanced-example) 또는 전체 [에이전트 코드 예제](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution)를 참고하세요.
 
 ## 작동 방식
 
@@ -94,7 +94,7 @@ Google Cloud 에이전트 엔진의 API를 사용하여 다음 설정을 포함�
 -   Python 및 JavaScript를 포함한 **프로그래밍 언어**
 -   CPU 및 메모리 크기를 포함한 **컴퓨팅 환경**
 
-Google Cloud 에이전트 엔진에 연결하고 샌드박스 환경을 구성하는 방법에 대한 자세한 내용은 에이전트 엔진 [코드 실행 빠른 시작](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/quickstart#create_a_sandbox)을 참조하세요.
+Google Cloud 에이전트 엔진에 연결하고 샌드박스 환경을 구성하는 방법에 대한 자세한 내용은 에이전트 엔진 [코드 실행 빠른 시작](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/quickstart#create_a_sandbox)을 참고하세요.
 
 ## 고급 예제 {#advanced-example}
 
@@ -178,4 +178,4 @@ root_agent = Agent(
 )
 ```
 
-이 예제 코드를 사용하는 ADK 에이전트의 전체 버전은 [agent_engine_code_execution 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution)을 참조하세요.
+이 예제 코드를 사용하는 ADK 에이전트의 전체 버전은 [agent_engine_code_execution 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution)을 참고하세요.

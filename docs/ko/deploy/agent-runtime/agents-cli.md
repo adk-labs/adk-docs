@@ -6,7 +6,7 @@
 
 이 배포 절차에서는 다음을 사용하여 배포를 수행하는 방법을 설명합니다.
 [Agents CLI in Agent Platform](https://google.github.io/agents-cli/)
-그리고 ADK. 에이전트 CLI를 통해 에이전트 런타임에 배포하면 프로덕션 준비 환경에 대한 가속화된 경로가 제공됩니다. Agents CLI는 전체 개발 수명 주기를 지원하도록 Google Cloud 리소스, CI/CD 파이프라인, 코드형 인프라(Terraform)를 자동으로 구성합니다. 모범 사례로서 프로덕션 배포 전에 항상 생성된 구성을 검토하여 조직의 보안 및 규정 준수 표준에 부합하는지 확인하십시오.
+그리고 ADK. 에이전트 CLI를 통해 에이전트 런타임에 배포하면 프로덕션 준비 환경에 대한 가속화된 경로가 제공됩니다. Agents CLI는 전체 개발 수명 주기를 지원하도록 Google Cloud 리소스, CI/CD 파이프라인, 코드형 인프라(Terraform)를 자동으로 구성합니다. 모범 사례로서 프로덕션 배포 전에 항상 생성된 구성을 검토하여 조직의 보안 및 규정 준수 표준에 부합하는지 확인하세요.
 
 이 배포 가이드에서는 Agents CLI를 사용하여 프로젝트 템플릿을
 기존 프로젝트, 배포 아티팩트 추가 및 에이전트 프로젝트 준비
@@ -23,8 +23,8 @@ ADK 프로젝트를 배포하는 데 필요한 서비스가 포함된 클라우�
 - [Deploy your ADK project](#deploy-ad): 제공
     Google Cloud 프로젝트에 필요한 서비스를 만들고 ADK 프로젝트 코드를 업로드하세요.
 
-배포된 에이전트 테스트에 대한 자세한 내용은 [Test deployed agent](test.md)를 참조하세요.
-Agents CLI 및 해당 명령줄 도구 사용에 대한 자세한 내용은 다음을 참조하세요.
+배포된 에이전트 테스트에 대한 자세한 내용은 [Test deployed agent](test.md)를 참고하세요.
+Agents CLI 및 해당 명령줄 도구 사용에 대한 자세한 내용은 다음을 참고하세요.
 참조
 [CLI reference](https://google.github.io/agents-cli/cli/)
 그리고
@@ -41,18 +41,18 @@ Agents CLI 및 해당 명령줄 도구 사용에 대한 자세한 내용은 다�
 
 !!! tip "메모"
     기존 리소스와의 충돌을 피하기 위해 빈 프로젝트를 권장합니다.
-    새로운 프로젝트에 대해서는 [Creating and managing projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects)를 참조하세요.
+    새로운 프로젝트에 대해서는 [Creating and managing projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects)를 참고하세요.
 
 - **Python 환경**: Python 버전이 지원됩니다.
     [Agents CLI](https://google.github.io/agents-cli/guide/getting-started/).
 - **uv 도구:** Python 개발 환경 및 Agent-cli 실행 관리
-    도구. 설치에 대한 자세한 내용은 다음을 참조하세요.
+    도구. 설치에 대한 자세한 내용은 다음을 참고하세요.
     [Install uv](https://docs.astral.sh/uv/getting-started/installation/).
 - **Google Cloud CLI 도구**: gcloud 명령줄 인터페이스입니다. 에 대한
     설치 세부사항, 참조
     [Google Cloud Command Line Interface](https://cloud.google.com/sdk/docs/install).
 - **Make tool**: 자동화 도구를 빌드합니다. 이 도구는 대부분의 일부입니다.
-    Unix 기반 시스템의 설치 세부사항은 다음을 참조하십시오.
+    Unix 기반 시스템의 설치 세부사항은 다음을 참고하세요.
     [Make tool](https://www.gnu.org/software/make/) 문서.
 
 ### ADK 프로젝트 준비 {#prepare-ad}
@@ -106,7 +106,7 @@ ADK 프로젝트를 Agent Runtime에 배포할 때 몇 가지 추가 파일이 �
     Agents CLI 도구는 동시에 Google Cloud에 연결하라는 알림을 표시할 수 있습니다.
     실행 중이지만 이 단계에서는 해당 연결이 *필요하지 않습니다*.
 
-Agents CLI가 ADK 프로젝트에 적용한 변경 사항에 대한 자세한 내용은 다음을 참조하세요.
+Agents CLI가 ADK 프로젝트에 적용한 변경 사항에 대한 자세한 내용은 다음을 참고하세요.
 [Changes to your ADK project](#adk-agents-cli-changes).
 
 ### Google Cloud 프로젝트 {#connect-ad}에 연결
@@ -150,7 +150,7 @@ Agents CLI를 사용하는 경우 `agents-cli deploy` 명령을 사용하여 배
     *Google Cloud 대상 배포 프로젝트가 ***현재로 설정되어 있는지 확인하세요.
     프로젝트*** 이 단계를 수행하기 전에*. `agents-cli deploy` 명령은 다음을 사용합니다.
     배포를 수행할 때 현재 설정된 Google Cloud 프로젝트입니다. 에 대한
-    현재 프로젝트 설정 및 확인에 대한 정보는 다음을 참조하세요.
+    현재 프로젝트 설정 및 확인에 대한 정보는 다음을 참고하세요.
     [Connect to your Google Cloud project](#connect-ad).
 
 Google Cloud 프로젝트의 에이전트 런타임에 ADK 프로젝트를 배포하려면 다음 안내를 따르세요.
@@ -174,7 +174,7 @@ Google Cloud 프로젝트의 에이전트 런타임에 ADK 프로젝트를 배�
     agents-cli infra single-project
     ```
 
-    자세한 내용은 다음을 참조하세요.
+    자세한 내용은 다음을 참고하세요.
     [Observability Guide](https://google.github.io/agents-cli/guide/observability/).
 
 이 프로세스가 성공적으로 완료되면 다음과 상호작용할 수 있습니다.
@@ -216,8 +216,8 @@ my-agent/
 └─ pyproject.toml       # Project dependencies and configuration
 ```
 
-자세한 내용은 업데이트된 ADK 프로젝트 폴더의 *README.md* 파일을 참조하세요.
-에이전트 CLI 사용에 대한 자세한 내용은 다음을 참조하세요.
+자세한 내용은 업데이트된 ADK 프로젝트 폴더의 *README.md* 파일을 참고하세요.
+에이전트 CLI 사용에 대한 자세한 내용은 다음을 참고하세요.
 [Agents CLI documentation](https://google.github.io/agents-cli/).
 
 ## 배포된 에이전트 테스트

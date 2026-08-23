@@ -1,6 +1,6 @@
 # ADK용 Agents CLI 빠른 시작
 
-이 가이드는 Agents CLI를 사용하여 Agent Development Kit (ADK)를 빠르게 시작하고 실행하는 방법을 보여줍니다. Antigravity, Claude Code, Codex와 같은 코딩 에이전트와 함께 Agents CLI 도구 세트를 사용하여 ADK 에이전트를 빌드, 평가 및 배포할 수 있습니다. 자세한 내용은 [Agents CLI](https://google.github.io/agents-cli/) 문서를 참조하세요.
+이 가이드는 Agents CLI를 사용하여 Agent Development Kit (ADK)를 빠르게 시작하고 실행하는 방법을 보여줍니다. Antigravity, Claude Code, Codex와 같은 코딩 에이전트와 함께 Agents CLI 도구 세트를 사용하여 ADK 에이전트를 빌드, 평가 및 배포할 수 있습니다. 자세한 내용은 [Agents CLI](https://google.github.io/agents-cli/) 문서를 참고하세요.
 시작하기 전에 다음이 설치되어 있는지 확인하세요.
 
 *   Python 3.11 이상: Agents CLI는 Python 기반 ADK 에이전트를 지원합니다.

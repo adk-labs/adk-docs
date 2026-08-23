@@ -42,11 +42,11 @@ MCP는 클라이언트-서버 아키텍처를 따르며 **데이터**(리소스)
 
 ## 전제 조건
 
-시작하기 전에 다음이 설정되어 있는지 확인하십시오.
+시작하기 전에 다음이 설정되어 있는지 확인하세요.
 
 * **ADK 설정:** 빠른 시작의 표준 ADK [설정 지침](../get-started/quickstart.md/#venv-install)을 따릅니다.
 * **Python/Java 설치/업데이트:** MCP에는 Python의 경우 Python 버전 3.9 이상 또는 Java 17 이상이 필요합니다.
-* **Node.js 및 npx 설정:** **(Python만 해당)** 많은 커뮤니티 MCP 서버가 Node.js 패키지로 배포되고 `npx`를 사용하여 실행됩니다. 아직 설치하지 않은 경우 Node.js(npx 포함)를 설치합니다. 자세한 내용은 [https://nodejs.org/en](https://nodejs.org/en)을 참조하십시오.
+* **Node.js 및 npx 설정:** **(Python만 해당)** 많은 커뮤니티 MCP 서버가 Node.js 패키지로 배포되고 `npx`를 사용하여 실행됩니다. 아직 설치하지 않은 경우 Node.js(npx 포함)를 설치합니다. 자세한 내용은 [https://nodejs.org/en](https://nodejs.org/en)을 참고하세요.
 * **설치 확인:** **(Python만 해당)** 활성화된 가상 환경 내에서 `adk` 및 `npx`가 PATH에 있는지 확인합니다.
 
 ```shell
@@ -69,7 +69,7 @@ which npx
 4.  **도구 호출 프록시:** `LlmAgent`가 이러한 도구 중 하나를 사용하기로 결정하면 `MCPToolset`은 호출(MCP `call_tool` 메서드 사용)을 MCP 서버로 투명하게 프록시하고 필요한 인수를 보내고 서버의 응답을 에이전트로 다시 반환합니다.
 5.  **필터링(선택 사항):** `MCPToolset`을 만들 때 `tool_filter` 매개변수를 사용하여 MCP 서버의 모든 도구를 에이전트에 노출하는 대신 특정 도구 하위 집합을 선택할 수 있습니다.
 
-다음 예에서는 `adk web` 개발 환경 내에서 `MCPToolset`을 사용하는 방법을 보여줍니다. MCP 연결 수명 주기를 보다 세밀하게 제어해야 하거나 `adk web`을 사용하지 않는 시나리오의 경우 이 페이지 뒷부분의 "`adk web` 외부에서 자신의 에이전트에서 MCP 도구 사용" 섹션을 참조하십시오.
+다음 예에서는 `adk web` 개발 환경 내에서 `MCPToolset`을 사용하는 방법을 보여줍니다. MCP 연결 수명 주기를 보다 세밀하게 제어해야 하거나 `adk web`을 사용하지 않는 시나리오의 경우 이 페이지 뒷부분의 "`adk web` 외부에서 자신의 에이전트에서 MCP 도구 사용" 섹션을 참고하세요.
 
 ### 예 1: 파일 시스템 MCP 서버
 
@@ -163,7 +163,7 @@ adk web
 
 
 
-Java의 경우 다음 샘플을 참조하여 `MCPToolset`을 초기화하는 에이전트를 정의하십시오.
+Java의 경우 다음 샘플을 참조하여 `MCPToolset`을 초기화하는 에이전트를 정의하세요.
 
 ```java
 package agents;
@@ -364,7 +364,7 @@ from . import agent
 <img src="../assets/adk-tool-maps-lite-mcp-adk-web-demo.png" alt="ADK 웹을 사용한 Google Maps Grounding Lite MCP 예시">
 
 
-Java에서는 `McpToolset`을 초기화하는 에이전트를 정의하려면 다음 샘플을 참조하세요.
+Java에서는 `McpToolset`을 초기화하는 에이전트를 정의하려면 다음 샘플을 참고하세요.
 
 ```java
 package agents;
@@ -452,7 +452,7 @@ public class MapsAgentCreator {
 }
 ```
 
-TypeScript에서는 `MCPToolset`을 초기화하는 에이전트를 정의하려면 다음 샘플을 참조하세요.
+TypeScript에서는 `MCPToolset`을 초기화하는 에이전트를 정의하려면 다음 샘플을 참고하세요.
 
 ```typescript
 import 'dotenv/config';
@@ -711,7 +711,7 @@ ADK 에이전트(`web_reader_mcp_client_agent`)는 `MCPToolset`을 사용하여 
 
 이 예는 ADK 도구를 MCP 서버 내에 캡슐화하여 ADK 에이전트뿐만 아니라 더 광범위한 MCP 호환 클라이언트에서 액세스할 수 있도록 하는 방법을 보여줍니다.
 
-Claude 데스크톱으로 시도하려면 [설명서](https://modelcontextprotocol.io/quickstart/server#core-mcp-concepts)를 참조하십시오.
+Claude 데스크톱으로 시도하려면 [설명서](https://modelcontextprotocol.io/quickstart/server#core-mcp-concepts)를 참고하세요.
 
 ## 고급 사용 사례
 
@@ -1179,7 +1179,7 @@ MCP 도구를 사용하여 에이전트를 프로덕션에 배포할 때:
 - 파일 시스템 MCP 서버에 제한적인 파일 경로 사용(예: `os.path.dirname(os.path.abspath(__file__))`)
 - 프로덕션 환경에 대한 읽기 전용 도구 필터 고려
 
-**✅ 모니터링 및 관찰 가능성**
+**✅ 모니터링 및 관측 가능성**
 - MCP 연결 설정 및 해제 이벤트 기록
 - MCP 도구 실행 시간 및 성공률 모니터링
 - MCP 연결 실패에 대한 경고 설정

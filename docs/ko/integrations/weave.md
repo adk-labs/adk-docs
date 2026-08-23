@@ -4,7 +4,7 @@ catalog_description: 모델 호출과 에이전트 성능을 로깅하고 시각
 catalog_icon: /integrations/assets/weave.png
 catalog_tags: ["observability"]
 ---
-# WandB의 Weave를 사용한 에이전트 관찰 가능성
+# WandB의 Weave를 사용한 에이전트 관측 가능성
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>

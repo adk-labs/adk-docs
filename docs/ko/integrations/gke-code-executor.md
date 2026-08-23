@@ -94,7 +94,7 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
       **Pods** 목록 조회 및 **logs** 읽기 권한이 필요합니다. Job Mode용 완전한
       즉시 사용 가능한 설정은
       [deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/gke_agent_sandbox/deployment_rbac.yaml)
-      샘플을 참조하세요.
+      샘플을 참고하세요.
     - **Sandbox Mode:** Agent Sandbox가 배포된 네임스페이스 안에서 **SandboxClaim**
       및 **Sandbox** 리소스를 생성, 조회, 감시, 삭제할 수 있는 권한이 필요합니다.
 - 적절한 extras를 포함해 클라이언트 라이브러리를 설치하세요:

@@ -22,7 +22,7 @@ ADK 에이전트에서 인증과 자격 증명을 관리하는 방법은 여러 
 
 ADK 헬퍼 함수와 자체 코드로 인증을 직접 관리하려면 다음 권장 사항을 따르세요.
 
-*   **API 키와 클라이언트 시크릿:** ADK 코드 안에서 사용하는 API 키와 클라이언트 시크릿은 로컬 컴퓨팅 환경에서는 버전 관리에서 제외된 `.env` 파일을 사용하세요. 에이전트가 호스팅되거나 프로덕션 환경에 있다면 비밀 관리자 사용을 권장합니다. 자세한 내용은 [다음 섹션](#secrets-manager)을 참조하세요.
+*   **API 키와 클라이언트 시크릿:** ADK 코드 안에서 사용하는 API 키와 클라이언트 시크릿은 로컬 컴퓨팅 환경에서는 버전 관리에서 제외된 `.env` 파일을 사용하세요. 에이전트가 호스팅되거나 프로덕션 환경에 있다면 비밀 관리자 사용을 권장합니다. 자세한 내용은 [다음 섹션](#secrets-manager)을 참고하세요.
 *   **대화형 인증:** 도구 인증에 3LO OAuth 또는 OIDC 같은 대화형 3단계 인증을 사용할 때는, 클라이언트 애플리케이션에 토큰을 획득하고 관리하며 갱신하는 서비스를 작성하세요. 이 토큰은 반드시 암호화된 데이터베이스에 인증된 사용자 식별자와 함께 저장해야 합니다.
 
 ### 비밀 관리자 서비스 {#secrets-manager}
@@ -41,7 +41,7 @@ ADK 헬퍼 함수와 자체 코드로 인증을 직접 관리하려면 다음 �
 
 ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 처리하고 자격 증명 데이터를 관리하는 핵심 구성 요소입니다.
 
-*   `AuthScheme`: 헤더의 API 키나 OAuth 2.0 Bearer 토큰처럼 API가 어떤 방식의 인증 자격 증명을 기대하는지를 정의합니다. ADK는 OpenAPI 3.0과 같은 인증 스킴을 지원하며, `APIKey`, `HTTPBearer`, `OAuth2`, `OpenIdConnectWithConfig` 같은 구체적 클래스를 사용합니다. 각 OpenAPI 자격 증명 유형에 대한 자세한 내용은 [OpenAPI 문서: 인증](https://swagger.io/docs/specification/v3_0/authentication/)을 참조하세요.
+*   `AuthScheme`: 헤더의 API 키나 OAuth 2.0 Bearer 토큰처럼 API가 어떤 방식의 인증 자격 증명을 기대하는지를 정의합니다. ADK는 OpenAPI 3.0과 같은 인증 스킴을 지원하며, `APIKey`, `HTTPBearer`, `OAuth2`, `OpenIdConnectWithConfig` 같은 구체적 클래스를 사용합니다. 각 OpenAPI 자격 증명 유형에 대한 자세한 내용은 [OpenAPI 문서: 인증](https://swagger.io/docs/specification/v3_0/authentication/)을 참고하세요.
 *   `AuthCredential`: 애플리케이션의 OAuth 클라이언트 ID나 시크릿, API 키 값처럼 인증 절차를 *시작*하는 데 필요한 *초기* 정보를 담습니다. 이 클래스의 인스턴스에는 자격 증명 유형을 지정하는 `auth_type`이 포함되며, 예를 들어 `API_KEY`, `OAUTH2`, `SERVICE_ACCOUNT`가 있습니다.
 
 일반적인 인증 흐름은 도구를 구성할 때 이런 세부 정보를 제공하는 것으로 시작됩니다. 그러면 ADK는 도구가 API를 호출하기 전에 초기 자격 증명, 예를 들어 액세스 토큰을 자동으로 교환하려고 시도합니다. OAuth 동의처럼 사용자 상호작용이 필요한 흐름에서는 ADK가 `에이전트 클라이언트` 애플리케이션과 함께 특정 대화형 절차를 시작합니다.
@@ -196,7 +196,7 @@ ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 �
 
 이러한 도구 세트에는 종종 전용 구성 메서드가 있습니다.
 
-팁: Google OAuth 클라이언트 ID 및 시크릿을 만드는 방법에 대한 자세한 내용은 다음 가이드를 참조하십시오. [Google API 클라이언트 ID 가져오기](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid#get_your_google_api_client_id)
+팁: Google OAuth 클라이언트 ID 및 시크릿을 만드는 방법에 대한 자세한 내용은 다음 가이드를 참고하세요. [Google API 클라이언트 ID 가져오기](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid#get_your_google_api_client_id)
 
 ```py
 # 예: Google 캘린더 도구 구성
@@ -250,7 +250,7 @@ sample_toolset = OpenAPIToolset(
 
 !!! tip "인증 오류 문제 해결"
 
-    인증 오류가 발생하면 서비스 계정이 대상 서비스에 대해 'Cloud Run Invoker' 또는 이와 동등한 역할을 가지고 있는지 확인하세요.
+    인증 오류가 발생하면 서비스 계정이 대상 서비스에 대해 'Cloud Run Invoker' 또는 이와 동등한 역할이 있는지 확인하세요.
 
 ##### 핵심 요약
 
@@ -491,9 +491,9 @@ if auth_request_function_call_id and auth_config:
     제공하는 호출 ID는 인증 요청을 생성한 것과 동일한 
     호출이어야 합니다. 그렇지 않으면 시스템이 인증 응답으로 새 호출을 시작합니다. 
     에이전트가 재개 기능을 사용하는 경우 인증 응답에 포함될 수 있도록 
-    인증 요청과 함께 호출 ID를 매개변수로 포함하는 것을 고려하십시오. 
+    인증 요청과 함께 호출 ID를 매개변수로 포함하는 것을 고려하세요. 
     재개 기능 사용에 대한 자세한 내용은 
-    [중지된 에이전트 재개](/ko/runtime/resume/)를 참조하십시오.
+    [중지된 에이전트 재개](/ko/runtime/resume/)를 참고하세요.
 
 **5단계: ADK가 토큰 교환 및 도구 재시도를 처리하고 도구 결과를 가져옵니다.**
 
@@ -636,7 +636,7 @@ print(f"DEBUG: 키 아래에 캐시/업데이트된 토큰: {TOKEN_CACHE_KEY}")
 **6단계: 인증된 API 호출하기**
 
 * 유효한 `Credentials` 객체(`creds` 1단계 또는 4단계)가 있으면 적절한 클라이언트 라이브러리(예: `googleapiclient`, `requests`)를 사용하여 보호된 API에 대한 실제 호출을 수행합니다. `credentials=creds` 인수를 전달합니다.
-* 특히 `HttpError` 401/403에 대한 오류 처리를 포함합니다. 이는 토큰이 만료되었거나 호출 사이에 해지되었음을 의미할 수 있습니다. 이러한 오류가 발생하면 캐시된 토큰(`tool_context.state.pop(...)`)을 지우고 잠재적으로 `auth_required` 상태를 다시 반환하여 재인증을 강제하는 것을 고려하십시오.
+* 특히 `HttpError` 401/403에 대한 오류 처리를 포함합니다. 이는 토큰이 만료되었거나 호출 사이에 해지되었음을 의미할 수 있습니다. 이러한 오류가 발생하면 캐시된 토큰(`tool_context.state.pop(...)`)을 지우고 잠재적으로 `auth_required` 상태를 다시 반환하여 재인증을 강제하는 것을 고려하세요.
 
 ```py
 # 도구 함수 내부, 유효한 'creds' 객체 사용

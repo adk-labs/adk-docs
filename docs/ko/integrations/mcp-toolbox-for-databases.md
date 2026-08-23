@@ -12,7 +12,7 @@ catalog_tags: ["mcp","data","google"]
 
 [데이터베이스용 MCP 도구 상자](https://github.com/googleapis/genai-toolbox)는 데이터베이스용 오픈 소스 MCP 서버입니다. 엔터프라이즈급 및 프로덕션 품질을 염두에 두고 설계되었습니다. 연결 풀링, 인증 등과 같은 복잡성을 처리하여 도구를 더 쉽고 빠르고 안전하게 개발할 수 있습니다.
 
-Google의 에이전트 개발 키트(ADK)는 도구 상자를 기본적으로 지원합니다. 도구 상자 [시작하기](https://googleapis.github.io/genai-toolbox/getting-started/) 또는 [구성하기](https://googleapis.github.io/genai-toolbox/getting-started/configure/)에 대한 자세한 내용은 [설명서](https://googleapis.github.io/genai-toolbox/getting-started/introduction/)를 참조하세요.
+Google의 에이전트 개발 키트(ADK)는 도구 상자를 기본적으로 지원합니다. 도구 상자 [시작하기](https://googleapis.github.io/genai-toolbox/getting-started/) 또는 [구성하기](https://googleapis.github.io/genai-toolbox/getting-started/configure/)에 대한 자세한 내용은 [설명서](https://googleapis.github.io/genai-toolbox/getting-started/introduction/)를 참고하세요.
 
 ![GenAI 도구 상자](../assets/mcp_db_toolbox.png)
 
@@ -69,7 +69,7 @@ MCP 도구 상자는 다음 데이터베이스 및 데이터 플랫폼에 대한
 
 ## 구성 및 배포
 
-도구 상자는 직접 배포하고 관리하는 오픈 소스 서버입니다. 배포 및 구성에 대한 자세한 내용은 공식 도구 상자 설명서를 참조하세요.
+도구 상자는 직접 배포하고 관리하는 오픈 소스 서버입니다. 배포 및 구성에 대한 자세한 내용은 공식 도구 상자 설명서를 참고하세요.
 
 * [서버 설치](https://googleapis.github.io/genai-toolbox/getting-started/introduction/#installing-the-server)
 * [도구 상자 구성](https://googleapis.github.io/genai-toolbox/getting-started/configure/)

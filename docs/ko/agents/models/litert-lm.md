@@ -121,7 +121,7 @@ CLI를 설치하려면 다음을 실행합니다.
 pip install --upgrade litert-lm
 ```
 
-uv 사용과 같은 추가 설치 방법은 [LiteRT-LM CLI 설치 가이드](https://developers.google.com/edge/litert-lm/cli/installation)를 참조하세요.
+uv 사용과 같은 추가 설치 방법은 [LiteRT-LM CLI 설치 가이드](https://developers.google.com/edge/litert-lm/cli/installation)를 참고하세요.
 
 #### 모델 다운로드
 
@@ -139,7 +139,7 @@ litert-lm import \
 ~/.litert-lm/models/gemma-4-E2B-it.litertlm/model.litertlm
 ```
 
-`litert-lm`에 대한 자세한 내용은 [LiteRT-LM CLI 사용 가이드](https://developers.google.com/edge/litert-lm/cli/usage)를 참조하세요.
+`litert-lm`에 대한 자세한 내용은 [LiteRT-LM CLI 사용 가이드](https://developers.google.com/edge/litert-lm/cli/usage)를 참고하세요.
 
 ### 종속 항목 추가
 

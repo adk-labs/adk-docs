@@ -247,11 +247,11 @@ https://$(LOCATION_ID)-aiplatform.googleapis.com/v1/projects/$(PROJECT_ID)/locat
 ```
 
 이 URL 구조를 사용하여 에이전트로부터 요청할 수 있습니다. 자세한 내용은
-요청 방법은 에이전트 런타임 문서의 지침을 참조하세요.
+요청 방법은 에이전트 런타임 문서의 지침을 참고하세요.
 [Use an Agent Development Kit agent](https://docs.cloud.google.com/agent-builder/agent-engine/use/adk#rest-api).
 또한 에이전트 런타임 문서를 확인하여 관리 방법을 알아볼 수도 있습니다.
 [deployed agent](https://docs.cloud.google.com/agent-builder/agent-engine/manage/overview).
-배포된 에이전트 테스트 및 상호 작용에 대한 자세한 내용은 다음을 참조하세요.
+배포된 에이전트 테스트 및 상호 작용에 대한 자세한 내용은 다음을 참고하세요.
 [Test deployed agents in Agent Runtime](/deploy/agent-runtime/test/).
 
 ### 모니터링 및 검증
@@ -259,7 +259,7 @@ https://$(LOCATION_ID)-aiplatform.googleapis.com/v1/projects/$(PROJECT_ID)/locat
 * 배포 상태를 모니터링할 수 있습니다.
     [Agent Runtime UI](https://console.cloud.google.com/vertex-ai/agents/agent-engines)
     Google Cloud Console에서.
-* 자세한 내용은 에이전트 런타임 설명서를 참조하세요.
+* 자세한 내용은 에이전트 런타임 설명서를 참고하세요.
     [deploying an agent](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/deploy)
     그리고
     [managing deployed agents](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/manage/overview).

@@ -22,7 +22,7 @@ catalog_tags: ["data", "google"]
 ## 사전 요구사항
 
 - 대상 Google Cloud 프로젝트에서 **Google Cloud Storage API를 활성화**해야 합니다.
-- **IAM 권한**: 인증된 주체(애플리케이션 기본 자격 증명, 서비스 계정 또는 사용자)는 GCS 버킷 및 객체 작업을 수행하는 데 필요한 `roles/storage.admin`을 포함한 올바른 권한을 가지고 있어야 합니다.
+- **IAM 권한**: 인증된 주체(애플리케이션 기본 자격 증명, 서비스 계정 또는 사용자)는 GCS 버킷 및 객체 작업을 수행하는 데 필요한 `roles/storage.admin`을 포함한 올바른 권한이 있어야 합니다.
 - Google Cloud 프로젝트 ID가 구성되어 있어야 합니다.
 
 ## 인증
@@ -179,7 +179,7 @@ GCS 연동은 크게 두 가지 툴셋으로 기능을 나눕니다:
 
 ## 샘플 에이전트
 
-상세한 인증 구성이 포함된 GCS 기반 에이전트의 즉시 실행 가능한 전체 예시는 다음을 참조하세요:
+상세한 인증 구성이 포함된 GCS 기반 에이전트의 즉시 실행 가능한 전체 예시는 다음을 참고하세요:
 
 - [GCS 스토리지 샘플 에이전트](https://github.com/google/adk-python/tree/main/contributing/samples/integrations/gcs)
 - [GCS 관리 샘플 에이전트](https://github.com/google/adk-python/tree/main/contributing/samples/integrations/gcs_admin)

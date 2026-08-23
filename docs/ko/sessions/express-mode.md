@@ -4,7 +4,7 @@
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-`VertexAiSessionService` 또는 `VertexAiMemoryBankService` 사용에 관심이 있지만 Google Cloud 프로젝트가 없는 경우, Vertex AI 익스프레스 모드에 가입하여 무료로 액세스 권한을 얻고 이러한 서비스를 사용해 볼 수 있습니다! 자격 요건을 충족하는 ***gmail*** 계정으로 [여기](https://console.cloud.google.com/expressmode)에서 가입할 수 있습니다. Vertex AI 익스프레스 모드에 대한 자세한 내용은 [개요 페이지](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 참조하세요.
+`VertexAiSessionService` 또는 `VertexAiMemoryBankService` 사용에 관심이 있지만 Google Cloud 프로젝트가 없는 경우, Vertex AI 익스프레스 모드에 가입하여 무료로 액세스 권한을 얻고 이러한 서비스를 사용해 볼 수 있습니다! 자격 요건을 충족하는 ***gmail*** 계정으로 [여기](https://console.cloud.google.com/expressmode)에서 가입할 수 있습니다. Vertex AI 익스프레스 모드에 대한 자세한 내용은 [개요 페이지](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 참고하세요.
 가입 후 [API 키](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview#api-keys)를 발급받으면, 로컬 ADK 에이전트에서 Vertex AI 세션 및 메모리 서비스를 바로 사용할 수 있습니다!
 
 !!! info Vertex AI 익스프레스 모드 제한 사항

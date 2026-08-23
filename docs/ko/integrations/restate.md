@@ -101,7 +101,7 @@ pip install "restate-sdk[serde]"
         새 버전을 배포하면, 진행 중인 실행은 원래 deployment에서 완료되고
         새 요청은 최신 버전으로 라우팅됩니다.
         자세한 내용은
-        [version-aware routing](https://docs.restate.dev/services/versioning)을 참조하세요.
+        [version-aware routing](https://docs.restate.dev/services/versioning)을 참고하세요.
 
 6. **에이전트에 요청 전송**
 

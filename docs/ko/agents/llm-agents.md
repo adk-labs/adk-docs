@@ -18,7 +18,7 @@
 
 *   **`description` (선택 사항, 다중 에이전트에 권장):** 에이전트의 기능에 대한 간결한 요약을 제공합니다. 이 설명은 주로 *다른* LLM 에이전트가 이 에이전트에게 작업을 라우팅해야 할지 결정하는 데 사용됩니다. 동료 에이전트와 구별될 수 있도록 구체적으로 작성하세요(예: "결제 에이전트"가 아닌 "현재 청구서에 대한 문의 처리").
 
-*   **`model` (필수):** 이 에이전트의 추론을 구동할 기본 LLM을 지정합니다. 이는 `"gemini-flash-latest"`와 같은 문자열 식별자입니다. 모델 선택은 에이전트의 능력, 비용, 성능에 영향을 미칩니다. 사용 가능한 옵션과 고려 사항은 [모델](/ko/agents/models/) 페이지를 참조하세요.
+*   **`model` (필수):** 이 에이전트의 추론을 구동할 기본 LLM을 지정합니다. 이는 `"gemini-flash-latest"`와 같은 문자열 식별자입니다. 모델 선택은 에이전트의 능력, 비용, 성능에 영향을 미칩니다. 사용 가능한 옵션과 고려 사항은 [모델](/ko/agents/models/) 페이지를 참고하세요.
 
 === "Python"
 
@@ -499,7 +499,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 
 **`planner` (선택 사항):** `BasePlanner` 인스턴스를 할당하여 실행 전에 다단계 추론 및 계획을 활성화합니다. 두 가지 주요 플래너가 있습니다:
 
-*   **`BuiltInPlanner`:** 모델의 내장 계획 기능(예: Gemini의 사고 기능)을 활용합니다. 자세한 내용과 예시는 [Gemini Thinking](https://ai.google.dev/gemini-api/docs/thinking)을 참조하세요.
+*   **`BuiltInPlanner`:** 모델의 내장 계획 기능(예: Gemini의 사고 기능)을 활용합니다. 자세한 내용과 예시는 [Gemini Thinking](https://ai.google.dev/gemini-api/docs/thinking)을 참고하세요.
 
     여기서 `thinking_budget` 매개변수는 응답 생성 시 사용할 사고 토큰 수를 모델에 안내합니다. `include_thoughts` 매개변수는 모델이 원시적인 생각과 내부 추론 과정을 응답에 포함할지 여부를 제어합니다.
 

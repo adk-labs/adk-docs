@@ -340,7 +340,7 @@ Gemini [Interactions API](https://ai.google.dev/gemini-api/docs/interactions)
     ```
 
 전체 샘플 코드는
-[Interactions API 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/interactions_api)을 참조하세요.
+[Interactions API 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/interactions_api)을 참고하세요.
 
 ### 알려진 제한
 

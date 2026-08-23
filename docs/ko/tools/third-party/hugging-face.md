@@ -14,7 +14,7 @@ hide:
 
 ## 전제 조건
 
-- 허깅 페이스에서 [사용자 액세스 토큰](https://huggingface.co/settings/tokens)을 만듭니다. 자세한 내용은 [설명서](https://huggingface.co/docs/hub/en/security-tokens)를 참조하세요.
+- 허깅 페이스에서 [사용자 액세스 토큰](https://huggingface.co/settings/tokens)을 만듭니다. 자세한 내용은 [설명서](https://huggingface.co/docs/hub/en/security-tokens)를 참고하세요.
 
 ## 에이전트와 함께 사용
 

@@ -47,7 +47,7 @@
     )
     ```
 
-    파일 기반 및 인라인 스킬 정의가 모두 포함된 ADK 에이전트의 완전한 코드 예제는 [skills_agent](https://github.com/google/adk-python/tree/main/contributing/samples/environment_and_skills/skills_agent) 샘플을 참조하세요.
+    파일 기반 및 인라인 스킬 정의가 모두 포함된 ADK 에이전트의 완전한 코드 예제는 [skills_agent](https://github.com/google/adk-python/tree/main/contributing/samples/environment_and_skills/skills_agent) 샘플을 참고하세요.
 
 === "TypeScript"
 
@@ -87,7 +87,7 @@
     }
     ```
 
-    완전한 예제는 [skills](https://github.com/google/adk-go/tree/main/examples/skills)의 코드 샘플을 참조하세요.
+    완전한 예제는 [skills](https://github.com/google/adk-go/tree/main/examples/skills)의 코드 샘플을 참고하세요.
 
 !!! note "작업 디렉터리 확인"
 

@@ -119,12 +119,12 @@ ADK 컨텍스트 캐싱 기능을 사용하면 Gemini 2.0 이상 모델을 포�
 
 ## 다음 단계
 
-컨텍스트 캐싱 기능을 사용하고 테스트하는 방법에 대한 전체 구현은 다음 샘플을 참조하십시오.
+컨텍스트 캐싱 기능을 사용하고 테스트하는 방법에 대한 전체 구현은 다음 샘플을 참고하세요.
 
 -   [`cache_analysis`](https://github.com/google/adk-python/tree/main/contributing/samples/cache_analysis):
     컨텍스트 캐싱의 성능을 분석하는 방법을 보여주는 코드 샘플입니다.
 
-사용 사례에서 세션 전체에서 사용되는 지침을 제공해야 하는 경우 에이전트에 대한 `static_instruction` 매개변수를 사용하는 것을 고려하십시오. 이 매개변수를 사용하면 생성 모델에 대한 시스템 지침을 수정할 수 있습니다. 자세한 내용은 다음 샘플 코드를 참조하십시오.
+사용 사례에서 세션 전체에서 사용되는 지침을 제공해야 하는 경우 에이전트에 대한 `static_instruction` 매개변수를 사용하는 것을 고려하세요. 이 매개변수를 사용하면 생성 모델에 대한 시스템 지침을 수정할 수 있습니다. 자세한 내용은 다음 샘플 코드를 참고하세요.
 
 -   [`static_instruction`](https://github.com/google/adk-python/tree/main/contributing/samples/context_management/static_instruction):
     정적 지침을 사용하는 디지털 펫 에이전트의 구현입니다.

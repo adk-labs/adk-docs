@@ -20,7 +20,7 @@ ADK 에이전트를 Tavily의 AI 중심 검색, 추출 및 크롤링 플랫폼�
 ## 필수 조건 (Prerequisites)
 
 - [Tavily 계정](https://app.tavily.com/)에 가입하여 API 키를 발급받으세요.
-  자세한 내용은 [문서](https://docs.tavily.com/documentation/quickstart)를 참조하세요.
+  자세한 내용은 [문서](https://docs.tavily.com/documentation/quickstart)를 참고하세요.
 
 ## 에이전트와 함께 사용하기 (Use with agent)
 

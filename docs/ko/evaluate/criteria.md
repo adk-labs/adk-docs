@@ -121,7 +121,7 @@
 
 ### 세부 정보
 
-ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 유니그램(단일 단어) 중복을 구체적으로 측정합니다. 기본적으로 참조 텍스트의 개별 단어 중 몇 개가 후보 텍스트에 있는지 확인합니다. 자세한 내용은 [ROUGE-1](https://github.com/google-research/google-research/tree/master/rouge)에 대한 세부 정보를 참조하십시오.
+ROUGE-1은 시스템 생성 텍스트(후보 요약)와 참조 텍스트 간의 유니그램(단일 단어) 중복을 구체적으로 측정합니다. 기본적으로 참조 텍스트의 개별 단어 중 몇 개가 후보 텍스트에 있는지 확인합니다. 자세한 내용은 [ROUGE-1](https://github.com/google-research/google-research/tree/master/rouge)에 대한 세부 정보를 참고하세요.
 
 ### 이 기준을 사용하는 방법은 무엇입니까?
 

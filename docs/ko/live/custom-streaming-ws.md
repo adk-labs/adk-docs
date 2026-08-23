@@ -956,7 +956,7 @@ Python FastAPI 서버 코드는 텍스트 또는 오디오 응답을 위해 구�
 
 ### 추가 리소스
 
-ADK 양방향 스트리밍 모범 사례, 아키텍처 패턴 및 고급 기능에 대한 포괄적인 지침은 다음을 참조하세요.
+ADK 양방향 스트리밍 모범 사례, 아키텍처 패턴 및 고급 기능에 대한 포괄적인 지침은 다음을 참고하세요.
 
 - **[ADK 문서](https://adk.dev/)**: Agent, 도구, 세션 관리를 포함한 전체 ADK 문서
 - **[Gemini Live API 문서](https://ai.google.dev/gemini-api/docs/live)**: Google AI Studio용 Live API 참조

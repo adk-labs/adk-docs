@@ -311,7 +311,7 @@
 에이전트가 사용자 요청을 이해하고 응답을 생성하는 기능은 LLM(대규모 언어 모델)에 의해 구동됩니다. 에이전트는 이 외부 LLM 서비스에 보안 호출을 수행해야 하며, 이는 **인증 자격 증명**이 필요합니다. 유효한 인증 없이는 LLM 서비스가 에이전트의 요청을 거부하고 에이전트는 작동할 수 없습니다.
 
 !!! tip "모델 인증 가이드"
-    다양한 모델에 대한 인증에 대한 자세한 가이드는 [인증 가이드](/ko/agents/models/google-gemini#google-ai-studio)를 참조하십시오.
+    다양한 모델에 대한 인증에 대한 자세한 가이드는 [인증 가이드](/ko/agents/models/google-gemini#google-ai-studio)를 참고하세요.
     이것은 에이전트가 LLM 서비스에 호출을 할 수 있도록 하는 중요한 단계입니다.
 
 === "Gemini - Google AI Studio"
@@ -450,7 +450,7 @@
 
         !!!info "Windows 사용자 참고 사항"
 
-            `_make_subprocess_transport NotImplementedError`가 발생하는 경우 대신 `adk web --no-reload`를 사용하는 것을 고려하십시오.
+            `_make_subprocess_transport NotImplementedError`가 발생하는 경우 대신 `adk web --no-reload`를 사용하는 것을 고려하세요.
 
 
         **1단계:** 제공된 URL(일반적으로 `http://localhost:8000` 또는 `http://127.0.0.1:8000`)을 브라우저에서 직접 엽니다.
@@ -459,7 +459,7 @@
 
         !!!note "문제 해결"
 
-            드롭다운 메뉴에 "multi_tool_agent"가 표시되지 않으면 에이전트 폴더의 **상위 폴더**(즉, multi_tool_agent의 상위 폴더)에서 `adk web`을 실행하고 있는지 확인하십시오.
+            드롭다운 메뉴에 "multi_tool_agent"가 표시되지 않으면 에이전트 폴더의 **상위 폴더**(즉, multi_tool_agent의 상위 폴더)에서 `adk web`을 실행하고 있는지 확인하세요.
 
         **3단계.** 이제 텍스트 상자를 사용하여 에이전트와 대화할 수 있습니다.
 
@@ -504,7 +504,7 @@
             echo "파일 목록을 나열하여 시작하십시오." | adk run file_listing_agent
             ```
 
-            날씨 에이전트와 채팅하려면 다음 명령을 실행하십시오.
+            날씨 에이전트와 채팅하려면 다음 명령을 실행하세요.
 
             ```
             adk run multi_tool_agent
@@ -512,7 +512,7 @@
 
             ![adk-run.png](../assets/adk-run.png)
 
-            종료하려면 Cmd/Ctrl+C를 사용하십시오.
+            종료하려면 Cmd/Ctrl+C를 사용하세요.
 
     === "API 서버 (adk api_server)"
 
@@ -520,7 +520,7 @@
 
         ![adk-api-server.png](../assets/adk-api-server.png)
 
-        `adk api_server`를 테스트에 사용하는 방법을 배우려면 [API 서버 사용에 대한 문서](/ko/runtime/api-server/)를 참조하십시오.
+        `adk api_server`를 테스트에 사용하는 방법을 배우려면 [API 서버 사용에 대한 문서](/ko/runtime/api-server/)를 참고하세요.
 
 === "TypeScript"
 
@@ -582,7 +582,7 @@
 
         ![adk-api-server.png](../assets/adk-api-server.png)
 
-        `api_server`를 테스트에 사용하는 방법은 [테스트 문서](/ko/runtime/api-server/)를 참조하세요.
+        `api_server`를 테스트에 사용하는 방법은 [테스트 문서](/ko/runtime/api-server/)를 참고하세요.
 
 === "Go"
 
@@ -658,7 +658,7 @@
 
         !!!note "문제 해결"
 
-            드롭다운 메뉴에 "multi_tool_agent"가 표시되지 않으면 Java 소스 코드가 있는 위치(일반적으로 `src/main/java`)에서 `mvn` 명령을 실행하고 있는지 확인하십시오.
+            드롭다운 메뉴에 "multi_tool_agent"가 표시되지 않으면 Java 소스 코드가 있는 위치(일반적으로 `src/main/java`)에서 `mvn` 명령을 실행하고 있는지 확인하세요.
 
         **3단계.** 이제 텍스트 상자를 사용하여 에이전트와 대화할 수 있습니다.
 
@@ -746,5 +746,5 @@ ADK를 사용하여 첫 번째 에이전트를 성공적으로 만들고 상호 
 
 * **튜토리얼로 이동**: 에이전트에 메모리, 세션, 상태를 추가하는 방법을 알아보세요.
   [튜토리얼](/ko/tutorials/).
-* **고급 구성 자세히 알아보기:** 프로젝트 구조, 구성 및 기타 인터페이스에 대한 자세한 내용은 [설정](/ko/get-started/installation/) 섹션을 참조하십시오.
+* **고급 구성 자세히 알아보기:** 프로젝트 구조, 구성 및 기타 인터페이스에 대한 자세한 내용은 [설정](/ko/get-started/installation/) 섹션을 참고하세요.
 * **핵심 개념 이해:** [에이전트 개념](/ko/agents/)에 대해 알아보세요.

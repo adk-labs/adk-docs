@@ -59,7 +59,7 @@
 
 !!! tip "고급 사용법 및 디버깅"
 
-    사용 가능한 모든 엔드포인트, 요청/응답 형식, 디버깅 팁(대화형 API 문서 사용 방법 포함)에 대한 전체 참조는 아래 **ADK API 서버 가이드**를 참조하세요.
+    사용 가능한 모든 엔드포인트, 요청/응답 형식, 디버깅 팁(대화형 API 문서 사용 방법 포함)에 대한 전체 참조는 아래 **ADK API 서버 가이드**를 참고하세요.
 
 ## 로컬 테스트
 
@@ -214,9 +214,9 @@ curl -X POST http://localhost:8000/run \
 
 ## 통합
 
-ADK는 [콜백](../callbacks/index.md)을 사용하여 서드파티 관찰 가능성 도구와 통합됩니다. 이러한 통합은 에이전트 호출 및 상호 작용의 상세한 추적을 캡처하며, 이는 동작을 이해하고 문제를 디버깅하며 성능을 평가하는 데 중요합니다.
+ADK는 [콜백](../callbacks/index.md)을 사용하여 서드파티 관측 가능성 도구와 통합됩니다. 이러한 통합은 에이전트 호출 및 상호 작용의 상세한 추적을 캡처하며, 이는 동작을 이해하고 문제를 디버깅하며 성능을 평가하는 데 중요합니다.
 
-* [Comet Opik](https://github.com/comet-ml/opik)은 오픈소스 LLM 관찰 가능성 및 평가 플랫폼으로, [ADK를 기본적으로 지원](https://www.comet.com/docs/opik/tracing/integrations/adk)합니다.
+* [Comet Opik](https://github.com/comet-ml/opik)은 오픈소스 LLM 관측 가능성 및 평가 플랫폼으로, [ADK를 기본적으로 지원](https://www.comet.com/docs/opik/tracing/integrations/adk)합니다.
 
 ## 에이전트 배포하기
 

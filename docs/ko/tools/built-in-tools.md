@@ -21,11 +21,11 @@
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
-`google_search` 도구는 에이전트가 Google 검색을 사용하여 웹 검색을 수행할 수 있도록 합니다. `google_search` 도구는 Gemini 2 모델과만 호환됩니다. 도구에 대한 자세한 내용은 [Google 검색 그라운딩 이해](../grounding/google_search_grounding.md)를 참조하세요.
+`google_search` 도구는 에이전트가 Google 검색을 사용하여 웹 검색을 수행할 수 있도록 합니다. `google_search` 도구는 Gemini 2 모델과만 호환됩니다. 도구에 대한 자세한 내용은 [Google 검색 그라운딩 이해](../grounding/google_search_grounding.md)를 참고하세요.
 
 !!! warning "`google_search` 도구 사용 시 추가 요구 사항"
     Google 검색으로 그라운딩을 사용하고 응답에서 검색 제안을 받는 경우, 프로덕션 및 애플리케이션에 검색 제안을 표시해야 합니다.
-    Google 검색으로 그라운딩에 대한 자세한 내용은 [Google AI Studio](https://ai.google.dev/gemini-api/docs/grounding/search-suggestions) 또는 [Vertex AI](https://cloud.google.com/vertex-ai/generative-ai/docs/grounding/grounding-search-suggestions)의 Google 검색으로 그라운딩 설명서를 참조하세요. UI 코드(HTML)는 Gemini 응답에서 `renderedContent`로 반환되며, 정책에 따라 앱에 HTML을 표시해야 합니다.
+    Google 검색으로 그라운딩에 대한 자세한 내용은 [Google AI Studio](https://ai.google.dev/gemini-api/docs/grounding/search-suggestions) 또는 [Vertex AI](https://cloud.google.com/vertex-ai/generative-ai/docs/grounding/grounding-search-suggestions)의 Google 검색으로 그라운딩 설명서를 참고하세요. UI 코드(HTML)는 Gemini 응답에서 `renderedContent`로 반환되며, 정책에 따라 앱에 HTML을 표시해야 합니다.
 
 === "Python"
 
@@ -104,8 +104,8 @@ GKE 코드 실행기 도구를 사용하여 ADK 프로젝트를 성공적으로 
 
 완전하고 즉시 사용 가능한 구성은
 [deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/gke_agent_sandbox/deployment_rbac.yaml)
-샘플을 참조하세요. ADK 워크플로를 GKE에 배포하는 방법에 대한 자세한 내용은
-[Google Kubernetes Engine(GKE)에 배포](/ko/deploy/gke/)를 참조하세요.
+샘플을 참고하세요. ADK 워크플로를 GKE에 배포하는 방법에 대한 자세한 내용은
+[Google Kubernetes Engine(GKE)에 배포](/ko/deploy/gke/)를 참고하세요.
 
 === "Python"
 
@@ -157,7 +157,7 @@ GKE 코드 실행기 도구를 사용하여 ADK 프로젝트를 성공적으로 
 AI RAG 엔진을 사용하여 개인 데이터 검색을 수행할 수 있도록 합니다.
 
 Vertex AI RAG 엔진으로 그라운딩을 사용하는 경우 사전에 RAG 코퍼스를 준비해야 합니다.
-설정 방법은 [RAG ADK 에이전트 샘플](https://github.com/google/adk-samples/blob/main/python/agents/RAG/rag/shared_libraries/prepare_corpus_and_data.py) 또는 [Vertex AI RAG 엔진 페이지](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-quickstart)를 참조하세요.
+설정 방법은 [RAG ADK 에이전트 샘플](https://github.com/google/adk-samples/blob/main/python/agents/RAG/rag/shared_libraries/prepare_corpus_and_data.py) 또는 [Vertex AI RAG 엔진 페이지](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-quickstart)를 참고하세요.
 
 === "Python"
 
@@ -172,7 +172,7 @@ Vertex AI RAG 엔진으로 그라운딩을 사용하는 경우 사전에 RAG 코
 </div>
 
 `vertex_ai_search_tool`은 Google Cloud Vertex AI Search를 사용하여 에이전트가
-비공개로 구성된 데이터 저장소(예: 내부 문서, 회사 정책, 지식 기반)를 검색할 수 있도록 합니다. 이 내장 도구는 구성 중에 특정 데이터 저장소 ID를 제공해야 합니다. 도구에 대한 자세한 내용은 [Vertex AI 검색 그라운딩 이해](../grounding/grounding_with_search.md)를 참조하세요.
+비공개로 구성된 데이터 저장소(예: 내부 문서, 회사 정책, 지식 기반)를 검색할 수 있도록 합니다. 이 내장 도구는 구성 중에 특정 데이터 저장소 ID를 제공해야 합니다. 도구에 대한 자세한 내용은 [Vertex AI 검색 그라운딩 이해](../grounding/grounding_with_search.md)를 참고하세요.
 
 
 ```py

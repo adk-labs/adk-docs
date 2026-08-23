@@ -21,7 +21,7 @@ Model Context Protocol(MCP) 서버로 사용할 수 있습니다.
 !!! example "Preview 릴리스"
     Google Cloud API Registry 기능은 Preview 릴리스입니다.
     자세한 내용은
-    [launch stage descriptions](https://cloud.google.com/products#product-launch-stages)를 참조하세요.
+    [launch stage descriptions](https://cloud.google.com/products#product-launch-stages)를 참고하세요.
 
 ## 사전 준비 사항
 
@@ -48,7 +48,7 @@ Model Context Protocol(MCP) 서버로 사용할 수 있습니다.
     접근 권한이 있어야 합니다. 예를 들어 BigQuery 도구를 사용하려면
     서비스 계정에 `bigquery.dataViewer`, `bigquery.jobUser` 같은
     BigQuery IAM 역할이 필요합니다. 필요한 권한에 대한 자세한 내용은
-    [Authentication and access](#auth)를 참조하세요.
+    [Authentication and access](#auth)를 참고하세요.
 
 다음 gcloud 명령으로 API Registry에서 어떤 MCP 서버가 활성화됐는지 확인할 수 있습니다:
 
@@ -103,10 +103,10 @@ Help user access their BigQuery data using the available tools.
 
 이 예제의 전체 코드는
 [api_registry_agent](https://github.com/google/adk-python/tree/main/contributing/samples/api_registry_agent/)
-샘플을 참조하세요. 구성 옵션은
+샘플을 참고하세요. 구성 옵션은
 [Configuration](#configuration),
 인증 관련 내용은
-[Authentication and access](#auth)를 참조하세요.
+[Authentication and access](#auth)를 참고하세요.
 
 ## 인증 및 접근 {#auth}
 

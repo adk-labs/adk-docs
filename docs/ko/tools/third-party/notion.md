@@ -18,7 +18,7 @@ hide:
 
 ## 전제 조건
 
-- 프로필의 [Notion 통합](https://www.notion.so/profile/integrations)으로 이동하여 Notion 통합 토큰을 얻습니다. 자세한 내용은 [인증 설명서](https://developers.notion.com/docs/authorization)를 참조하세요.
+- 프로필의 [Notion 통합](https://www.notion.so/profile/integrations)으로 이동하여 Notion 통합 토큰을 얻습니다. 자세한 내용은 [인증 설명서](https://developers.notion.com/docs/authorization)를 참고하세요.
 - 관련 페이지 및 데이터베이스에 통합이 액세스할 수 있는지 확인합니다. [Notion 통합](https://www.notion.so/profile/integrations) 설정의 액세스 탭을 방문한 다음 사용하려는 페이지를 선택하여 액세스 권한을 부여합니다.
 
 ## 에이전트와 함께 사용

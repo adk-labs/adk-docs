@@ -1407,7 +1407,7 @@ config = BigQueryLoggerConfig(
 
 !!! info "플러그인이 OTel 내보내기 도구로 데이터를 공급하도록 의존했던 경우"
 
-    일부 오래된 구성에서는 OpenTelemetry span을 내보내기 위해 BQAA 플러그인을 보조 채널로 사용했으나, 이 경로는 의도적으로 제거되었습니다. 대신 호스트 애플리케이션에 OTel 계측(instrumentation)을 구성하세요. (Agent Engine은 이를 자동으로 연결합니다. 로컬 배포의 경우 ADK 자체의 프레임워크 계측이나 명시적인 `TracerProvider`를 사용하십시오.) 플러그인의 BigQuery 행은 계속해서 `trace_id`를 통해 트레이스에 연결됩니다.
+    일부 오래된 구성에서는 OpenTelemetry span을 내보내기 위해 BQAA 플러그인을 보조 채널로 사용했으나, 이 경로는 의도적으로 제거되었습니다. 대신 호스트 애플리케이션에 OTel 계측(instrumentation)을 구성하세요. (Agent Engine은 이를 자동으로 연결합니다. 로컬 배포의 경우 ADK 자체의 프레임워크 계측이나 명시적인 `TracerProvider`를 사용하세요.) 플러그인의 BigQuery 행은 계속해서 `trace_id`를 통해 트레이스에 연결됩니다.
 
 ### 공개 메서드
 
@@ -1418,7 +1418,7 @@ config = BigQueryLoggerConfig(
     - **`await plugin.flush()`**: 보류 중인 모든 이벤트를 BigQuery로 flush합니다. 데이터 손실을 피하려면 종료 전에 호출하세요.
     - **`await plugin.shutdown(timeout=None)`**: 플러그인을 정상 종료하고 보류 중인 이벤트를 flush하며 리소스를 해제합니다. 선택적 `timeout` 파라미터는 config의 `shutdown_timeout`을 재정의합니다.
     - **`await plugin.create_analytics_views()`**: 이벤트 유형별 analytics view를 모두 수동으로 다시 생성합니다. 스키마 업그레이드 후 또는 뷰를 새로 고쳐야 할 때 유용합니다.
-    - **`plugin.get_drop_stats()`**: `drop_reason`별로 드롭된 이벤트 횟수의 스냅샷을 반환합니다. 아래 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참조하십시오.
+    - **`plugin.get_drop_stats()`**: `drop_reason`별로 드롭된 이벤트 횟수의 스냅샷을 반환합니다. 아래 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참고하세요.
     - **비동기 context manager**: 플러그인은 자동 시작 및 종료를 위해 `async with`를 지원합니다.
 
         ```python
@@ -1547,7 +1547,7 @@ BigQuery Agent Analytics 플러그인이 포함된 에이전트를 [Agent Runtim
 1. **Agent Platform API** 및 **Cloud Resource Manager API**가 활성화된 Google Cloud 프로젝트.
 2. 대상 프로젝트의 **BigQuery 데이터 세트** (또는 올바른 권한이 있는 크로스 프로젝트 데이터 세트).
 3. 배포 아티팩트를 위한 **Cloud Storage 스테이징 버킷**.
-4. 배포 서비스 계정이 [IAM 권한](#iam-permissions)에 나열된 IAM 역할을 가지고 있는지 확인.
+4. 배포 서비스 계정이 [IAM 권한](#iam-permissions)에 나열된 IAM 역할이 있는지 확인.
 5. 개발 환경이 `gcloud auth login` 및 `gcloud auth application-default login`을 통해 [인증](/deploy/agent-runtime/deploy/#prerequisites-coding-env)되었는지 확인.
 
 ### 단계 1: 에이전트 및 플러그인 정의
@@ -1747,7 +1747,7 @@ print(f"Deployed agent: {remote_app.api_resource.name}")
     logging.getLogger("google_adk").setLevel(logging.DEBUG)
     ```
 
-3. **IAM 권한 확인**: Agent Runtime 서비스 계정은 대상 테이블에 대해 `roles/bigquery.dataEditor` 권한이 필요하고, 프로젝트에 대해 `roles/bigquery.jobUser` 권한이 필요합니다. **크로스 프로젝트** 로깅의 경우, 소스 프로젝트에서 BigQuery API가 활성화되어 있고 서비스 계정이 대상 테이블에 대해 `bigquery.tables.updateData` 권한을 가지고 있는지 확인하세요.
+3. **IAM 권한 확인**: Agent Runtime 서비스 계정은 대상 테이블에 대해 `roles/bigquery.dataEditor` 권한이 필요하고, 프로젝트에 대해 `roles/bigquery.jobUser` 권한이 필요합니다. **크로스 프로젝트** 로깅의 경우, 소스 프로젝트에서 BigQuery API가 활성화되어 있고 서비스 계정이 대상 테이블에 대해 `bigquery.tables.updateData` 권한이 있는지 확인하세요.
 4. **플러그인 초기화 검증**: Cloud Logging에서 `resource.type="reasoning_engine"`으로 필터링하여 플러그인 시작 메시지 또는 오류 로그를 찾습니다.
 5. **디버깅을 위해 즉시 플러시 사용**: 버퍼링 문제를 배제하기 위해 `BigQueryLoggerConfig`에서 `batch_size=1` 및 `batch_flush_interval=0.1`로 설정합니다.
 
@@ -1892,7 +1892,7 @@ config = BigQueryLoggerConfig(
     - **`await plugin.flush()`**: 보류 중인 모든 이벤트를 BigQuery에 플러시합니다. 데이터 손실을 방지하려면 종료 전에 이를 호출하세요.
     - **`await plugin.shutdown(timeout=None)`**: 플러그인을 정상적으로 종료하여 보류 중인 이벤트를 플러시하고 리소스를 해제합니다. 선택적 `timeout` 매개변수는 설정의 `shutdown_timeout`을 재정의합니다.
     - **`await plugin.create_analytics_views()`**: 이벤트 유형별 분석 뷰를 수동으로 (재)생성합니다. 스키마 업그레이드 후 또는 뷰를 새로 고쳐야 할 때 유용합니다.
-    - **`plugin.get_drop_stats()`**: `drop_reason`별 드롭된 이벤트 수의 스냅샷을 반환합니다. 아래의 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참조하세요.
+    - **`plugin.get_drop_stats()`**: `drop_reason`별 드롭된 이벤트 수의 스냅샷을 반환합니다. 아래의 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참고하세요.
     - **비동기 컨텍스트 관리자**: 플러그인은 자동 시작 및 종료를 위한 `async with`를 지원합니다.
 
         ```python
@@ -1910,7 +1910,7 @@ config = BigQueryLoggerConfig(
 
     - **`plugin.close()`**: 플러그인을 정상적으로 종료하여 보류 중인 이벤트를 플러시하고 리소스(BigQuery 쓰기 클라이언트 및 실행기 포함)를 해제합니다.
     - **자동 닫기**: `InMemoryRunner`를 사용하는 경우 `runner.close()`를 호출하면 BigQuery Agent Analytics 플러그인을 포함하여 등록된 모든 플러그인이 자동으로 닫힙니다.
-    - **`plugin.getDropStats()`**: 드롭 원인별 드롭된 이벤트 수의 `ImmutableMap<String, Long>` 스냅샷을 반환합니다. 아래의 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참조하세요.
+    - **`plugin.getDropStats()`**: 드롭 원인별 드롭된 이벤트 수의 `ImmutableMap<String, Long>` 스냅샷을 반환합니다. 아래의 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참고하세요.
     - **JVM 종료 후크(JVM shutdown hook)**: 플러그인은 생성 시 종료 후크를 등록하므로 `close()`가 호출되지 않더라도 JVM 종료 시 보류 중인 이벤트가 플러시(`shutdownTimeout`에 의해 제한됨)됩니다. 명시적 `close()`는 후크 등록을 해제합니다. 확정적인 플러시를 위해 `close()`를 호출하는 것이 권장됩니다.
 
     ```java

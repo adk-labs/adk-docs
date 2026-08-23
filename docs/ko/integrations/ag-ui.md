@@ -89,7 +89,7 @@ npm install && npm run dev
 
 ## 리소스
 
-AG-UI를 사용하여 UI에 빌드할 수 있는 다른 기능을 보려면 CopilotKit 문서를 참조하세요.
+AG-UI를 사용하여 UI에 빌드할 수 있는 다른 기능을 보려면 CopilotKit 문서를 참고하세요.
 
 - [에이전트 생성 UI](https://docs.copilotkit.ai/adk/generative-ui/agentic)
 - [Human in the Loop](https://docs.copilotkit.ai/adk/human-in-the-loop/agent)

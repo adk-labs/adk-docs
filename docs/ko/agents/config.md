@@ -13,7 +13,7 @@ description: 사용자의 질문에 답변할 수 있는 도우미 에이전트�
 instruction: 사용자의 다양한 질문에 답변하는 에이전트입니다.
 ```
 
-에이전트 구성 파일을 사용하여 함수, 도구, 하위 에이전트 등을 통합할 수 있는 더 복잡한 에이전트를 빌드할 수 있습니다. 이 페이지에서는 에이전트 구성 기능을 사용하여 ADK 워크플로를 빌드하고 실행하는 방법을 설명합니다. 에이전트 구성 형식에서 지원하는 구문 및 설정에 대한 자세한 내용은 [에이전트 구성 구문 참조](/ko/api-reference/agentconfig/)를 참조하세요.
+에이전트 구성 파일을 사용하여 함수, 도구, 하위 에이전트 등을 통합할 수 있는 더 복잡한 에이전트를 빌드할 수 있습니다. 이 페이지에서는 에이전트 구성 기능을 사용하여 ADK 워크플로를 빌드하고 실행하는 방법을 설명합니다. 에이전트 구성 형식에서 지원하는 구문 및 설정에 대한 자세한 내용은 [에이전트 구성 구문 참조](/ko/api-reference/agentconfig/)를 참고하세요.
 
 !!! example "실험용"
     에이전트 구성 기능은 실험용이며 [알려진 제한 사항](#known-limitations)이 있습니다. [피드백](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=agent%20config)을 환영합니다!
@@ -27,11 +27,11 @@ instruction: 사용자의 다양한 질문에 답변하는 에이전트입니다
 Google Agent Development Kit 라이브러리를 설치하고 Gemini API와 같은 생성형 AI 모델에 대한 액세스 키를 제공해야 합니다. 이 섹션에서는 에이전트 구성 파일로 에이전트를 실행하기 전에 설치하고 구성해야 하는 사항에 대한 세부 정보를 제공합니다.
 
 !!! note
-    에이전트 구성 기능은 현재 Gemini 모델만 지원합니다. 추가 기능 제한에 대한 자세한 내용은 [알려진 제한 사항](#known-limitations)을 참조하세요.
+    에이전트 구성 기능은 현재 Gemini 모델만 지원합니다. 추가 기능 제한에 대한 자세한 내용은 [알려진 제한 사항](#known-limitations)을 참고하세요.
 
 에이전트 구성과 함께 사용하도록 ADK를 설정하려면:
 
-1.  [설치](/ko/get-started/installation/#python) 지침에 따라 ADK Python 라이브러리를 설치합니다. *현재 Python이 필요합니다.* 자세한 내용은 [알려진 제한 사항](#known-limitations)을 참조하세요.
+1.  [설치](/ko/get-started/installation/#python) 지침에 따라 ADK Python 라이브러리를 설치합니다. *현재 Python이 필요합니다.* 자세한 내용은 [알려진 제한 사항](#known-limitations)을 참고하세요.
 1.  터미널에서 다음 명령어를 실행하여 ADK가 설치되었는지 확인합니다.
 
         adk --version
@@ -39,7 +39,7 @@ Google Agent Development Kit 라이브러리를 설치하고 Gemini API와 같�
     이 명령어는 설치된 ADK 버전을 보여줍니다.
 
 !!! Tip
-    `adk` 명령어가 실행되지 않고 2단계에서 버전이 나열되지 않으면 Python 환경이 활성화되어 있는지 확인하세요. Mac 및 Linux 터미널에서 `source .venv/bin/activate`를 실행합니다. 다른 플랫폼 명령어는 [설치](/ko/get-started/installation/#python) 페이지를 참조하세요.
+    `adk` 명령어가 실행되지 않고 2단계에서 버전이 나열되지 않으면 Python 환경이 활성화되어 있는지 확인하세요. Mac 및 Linux 터미널에서 `source .venv/bin/activate`를 실행합니다. 다른 플랫폼 명령어는 [설치](/ko/get-started/installation/#python) 페이지를 참고하세요.
 
 ### 에이전트 빌드
 
@@ -68,7 +68,7 @@ Google Agent Development Kit 라이브러리를 설치하고 Gemini API와 같�
             GOOGLE_CLOUD_PROJECT=<your_gcp_project>
             GOOGLE_CLOUD_LOCATION=us-central1
 
-        Cloud 프로젝트 생성에 대한 자세한 내용은 Google Cloud 문서의 [프로젝트 생성 및 관리](https://cloud.google.com/resource-manager/docs/creating-managing-projects)를 참조하세요.
+        Cloud 프로젝트 생성에 대한 자세한 내용은 Google Cloud 문서의 [프로젝트 생성 및 관리](https://cloud.google.com/resource-manager/docs/creating-managing-projects)를 참고하세요.
 
 1.  텍스트 편집기를 사용하여 아래와 같이 에이전트 구성 파일 `my_agent/root_agent.yaml`을 편집합니다.
 
@@ -94,7 +94,7 @@ ADK [샘플 저장소](https://github.com/search?q=repo%3Agoogle%2Fadk-python+pa
     -   `adk run` - 사용자 인터페이스 없이 터미널에서 에이전트를 실행합니다.
     -   `adk api_server` - 다른 애플리케이션에서 사용할 수 있는 서비스로 에이전트를 실행합니다.
 
-에이전트 실행 방법에 대한 자세한 내용은 [에이전트 런타임](/ko/runtime/#ways-to-run-agents)을 참조하세요. ADK 명령줄 옵션에 대한 자세한 내용은 [ADK CLI 참조](/ko/api-reference/cli/)를 참조하세요.
+에이전트 실행 방법에 대한 자세한 내용은 [에이전트 런타임](/ko/runtime/#ways-to-run-agents)을 참고하세요. ADK 명령줄 옵션에 대한 자세한 내용은 [ADK CLI 참조](/ko/api-reference/cli/)를 참고하세요.
 
 ### 프로그래밍 방식으로 실행하기
 
@@ -133,7 +133,7 @@ CLI를 거치지 않고 코드에서 구성 기반 에이전트를 직접 동적
 
 ## 예시 구성
 
-이 섹션에서는 에이전트 빌드를 시작하는 데 도움이 되는 에이전트 구성 파일의 예시를 보여줍니다. 추가적이고 더 완전한 예시는 ADK [샘플 저장소](https://github.com/search?q=repo%3Agoogle%2Fadk-python+path%3A%2F%5Econtributing%5C%2Fsamples%5C%2F%2F+root_agent.yaml&type=code)를 참조하세요.
+이 섹션에서는 에이전트 빌드를 시작하는 데 도움이 되는 에이전트 구성 파일의 예시를 보여줍니다. 추가적이고 더 완전한 예시는 ADK [샘플 저장소](https://github.com/search?q=repo%3Agoogle%2Fadk-python+path%3A%2F%5Econtributing%5C%2Fsamples%5C%2F%2F+root_agent.yaml&type=code)를 참고하세요.
 
 ### 내장 도구 예시
 
@@ -149,7 +149,7 @@ tools:
   - name: google_search
 ```
 
-자세한 내용은 [ADK 샘플 저장소](https://github.com/google/adk-python/blob/main/contributing/samples/tool_builtin_config/root_agent.yaml)에서 이 샘플의 전체 코드를 참조하세요.
+자세한 내용은 [ADK 샘플 저장소](https://github.com/google/adk-python/blob/main/contributing/samples/tool_builtin_config/root_agent.yaml)에서 이 샘플의 전체 코드를 참고하세요.
 
 ### 커스텀 도구 예시
 
@@ -170,7 +170,7 @@ tools:
   - name: ma_llm.check_prime
 ```
 
-자세한 내용은 [ADK 샘플 저장소](https://github.com/google/adk-python/blob/main/contributing/samples/multi_agent_llm_config/prime_agent.yaml)에서 이 샘플의 전체 코드를 참조하세요.
+자세한 내용은 [ADK 샘플 저장소](https://github.com/google/adk-python/blob/main/contributing/samples/multi_agent_llm_config/prime_agent.yaml)에서 이 샘플의 전체 코드를 참고하세요.
 
 ### 하위 에이전트 예시
 
@@ -196,11 +196,11 @@ sub_agents:
   - config_path: math_tutor_agent.yaml
 ```
 
-자세한 내용은 [ADK 샘플 저장소](https://github.com/google/adk-python/blob/main/contributing/samples/multi_agent_basic_config/root_agent.yaml)에서 이 샘플의 전체 코드를 참조하세요.
+자세한 내용은 [ADK 샘플 저장소](https://github.com/google/adk-python/blob/main/contributing/samples/multi_agent_basic_config/root_agent.yaml)에서 이 샘플의 전체 코드를 참고하세요.
 
 ## 에이전트 구성 배포
 
-코드 기반 에이전트와 동일한 절차를 사용하여 [Cloud Run](/ko/deploy/cloud-run/) 및 [Agent Runtime](/ko/deploy/agent-runtime/)에 에이전트 구성 기반 에이전트를 배포할 수 있습니다. 에이전트 구성 기반 에이전트를 준비하고 배포하는 방법에 대한 자세한 내용은 [Cloud Run](/ko/deploy/cloud-run/) 및 [Agent Runtime](/ko/deploy/agent-runtime/) 배포 가이드를 참조하세요.
+코드 기반 에이전트와 동일한 절차를 사용하여 [Cloud Run](/ko/deploy/cloud-run/) 및 [Agent Runtime](/ko/deploy/agent-runtime/)에 에이전트 구성 기반 에이전트를 배포할 수 있습니다. 에이전트 구성 기반 에이전트를 준비하고 배포하는 방법에 대한 자세한 내용은 [Cloud Run](/ko/deploy/cloud-run/) 및 [Agent Runtime](/ko/deploy/agent-runtime/) 배포 가이드를 참고하세요.
 
 ## 알려진 제한 사항 {#known-limitations}
 
@@ -226,4 +226,4 @@ sub_agents:
 
 ## 다음 단계
 
-ADK 에이전트 구성으로 무엇을 어떻게 빌드할지에 대한 아이디어는 ADK [adk-samples](https://github.com/search?q=repo:google/adk-python+path:/%5Econtributing%5C/samples%5C//+root_agent.yaml&type=code) 저장소의 YAML 기반 에이전트 정의를 참조하세요. 에이전트 구성 형식에서 지원하는 구문 및 설정에 대한 자세한 내용은 [에이전트 구성 구문 참조](/ko/api-reference/agentconfig/)를 참조하세요.
+ADK 에이전트 구성으로 무엇을 어떻게 빌드할지에 대한 아이디어는 ADK [adk-samples](https://github.com/search?q=repo:google/adk-python+path:/%5Econtributing%5C/samples%5C//+root_agent.yaml&type=code) 저장소의 YAML 기반 에이전트 정의를 참고하세요. 에이전트 구성 형식에서 지원하는 구문 및 설정에 대한 자세한 내용은 [에이전트 구성 구문 참조](/ko/api-reference/agentconfig/)를 참고하세요.

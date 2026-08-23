@@ -275,7 +275,7 @@ Integration Connectors용 Application Integration Toolset을 만들려면 다음
           )
       ```
 
-      **참고:** 기본 자격 증명 대신 서비스 계정을 사용하려면 [Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고, 서비스 계정에 올바른 [Application Integration and Integration Connector IAM roles](#prerequisites)를 부여하세요. IAM 역할 상세는 [Prerequisites](#prerequisites) 섹션을 참조하세요.
+      **참고:** 기본 자격 증명 대신 서비스 계정을 사용하려면 [Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고, 서비스 계정에 올바른 [Application Integration and Integration Connector IAM roles](#prerequisites)를 부여하세요. IAM 역할 상세는 [Prerequisites](#prerequisites) 섹션을 참고하세요.
 
 === "Java"
 
@@ -318,7 +318,7 @@ Integration Connectors용 Application Integration Toolset을 만들려면 다음
           }
       ```
 
-      **참고:** 기본 자격 증명 대신 서비스 계정을 사용하려면 [Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고, 서비스 계정에 올바른 [Application Integration and Integration Connector IAM roles](#prerequisites)를 부여하세요. IAM 역할 상세는 [Prerequisites](#prerequisites) 섹션을 참조하세요.
+      **참고:** 기본 자격 증명 대신 서비스 계정을 사용하려면 [Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고, 서비스 계정에 올바른 [Application Integration and Integration Connector IAM roles](#prerequisites)를 부여하세요. IAM 역할 상세는 [Prerequisites](#prerequisites) 섹션을 참고하세요.
 
 ### 2. 에이전트에 도구 추가
 

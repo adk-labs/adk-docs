@@ -10,12 +10,12 @@ Python과 Java 모두에서 ADK와 함께 Anthropic의 Claude 모델을 사용�
 
 Python에서 다음과 같은 방법으로 Claude 모델을 사용할 수 있습니다:
 
-- **Agent Platform 네이티브:** Claude 모델 문자열을 직접 전달하면 ADK의 레지스트리가 이를 `Claude` 래퍼로 라우팅합니다. 자세한 내용은 [Agent Platform의 Anthropic Claude](/agents/models/agent-platform/#anthropic-claude)를 참조하세요.
-- **LiteLLM을 통한 직접 Anthropic API:** Anthropic API 키와 함께 `LiteLlm` 커넥터를 사용합니다. 자세한 내용은 [LiteLLM](/agents/models/litellm/#anthropic-thinking-blocks)을 참조하세요.
+- **Agent Platform 네이티브:** Claude 모델 문자열을 직접 전달하면 ADK의 레지스트리가 이를 `Claude` 래퍼로 라우팅합니다. 자세한 내용은 [Agent Platform의 Anthropic Claude](/agents/models/agent-platform/#anthropic-claude)를 참고하세요.
+- **LiteLLM을 통한 직접 Anthropic API:** Anthropic API 키와 함께 `LiteLlm` 커넥터를 사용합니다. 자세한 내용은 [LiteLLM](/agents/models/litellm/#anthropic-thinking-blocks)을 참고하세요.
 
 ## Java
 
-Java에서는 ADK의 `Claude` 래퍼 클래스를 사용하여 Anthropic API 키 또는 Agent Platform 백엔드를 통해 Claude 모델을 직접 통합할 수 있습니다. Google Cloud Agent Platform 서비스를 통해서도 Claude에 액세스할 수 있습니다. 자세한 내용은 [Agent Platform의 타사 모델](/agents/models/agent-platform/#anthropic-claude)을 참조하세요.
+Java에서는 ADK의 `Claude` 래퍼 클래스를 사용하여 Anthropic API 키 또는 Agent Platform 백엔드를 통해 Claude 모델을 직접 통합할 수 있습니다. Google Cloud Agent Platform 서비스를 통해서도 Claude에 액세스할 수 있습니다. 자세한 내용은 [Agent Platform의 타사 모델](/agents/models/agent-platform/#anthropic-claude)을 참고하세요.
 
 ### 시작하기
 
@@ -42,7 +42,7 @@ public static LlmAgent createAgent() {
 
 ### 사전 요구사항
 
-- **종속성:** Java ADK의 `com.google.adk.models.Claude` 래퍼는 Anthropic의 공식 Java SDK 클래스에 의존하며, 일반적으로 *전이 종속성*으로 포함됩니다. 자세한 내용은 [Anthropic Java SDK](https://github.com/anthropics/anthropic-sdk-java)를 참조하세요.
+- **종속성:** Java ADK의 `com.google.adk.models.Claude` 래퍼는 Anthropic의 공식 Java SDK 클래스에 의존하며, 일반적으로 *전이 종속성*으로 포함됩니다. 자세한 내용은 [Anthropic Java SDK](https://github.com/anthropics/anthropic-sdk-java)를 참고하세요.
 - **Anthropic API 키:** Anthropic에서 API 키를 발급받고 비밀 관리자(Secret Manager)를 사용하여 안전하게 관리하세요.
 
 ### 구현 예시

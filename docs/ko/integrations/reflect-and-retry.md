@@ -65,7 +65,7 @@ error_handling_plugin = CustomRetryPlugin(max_retries=5)
 
 ## 다음 단계
 
-반영 및 재시도 플러그인을 사용하는 전체 코드 샘플은 다음을 참조하십시오.
+반영 및 재시도 플러그인을 사용하는 전체 코드 샘플은 다음을 참고하세요.
 
 *   [기본](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_reflect_tool_retry/basic)
     코드 샘플

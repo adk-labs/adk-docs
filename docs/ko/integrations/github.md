@@ -31,7 +31,7 @@ GitHub 플랫폼에 직접 연결합니다. 이를 통해 ADK 에이전트는 �
   [Personal Access Token](https://github.com/settings/personal-access-tokens/new)을
   생성하세요. 자세한 내용은
   [문서](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)를
-  참조하세요.
+  참고하세요.
 
 ## 에이전트와 함께 사용
 

@@ -268,7 +268,7 @@ Base64 값은 `{"order_id": "1234", "status": "new"}`로 디코딩됩니다.
 ### 게시/구독
 
 Pub/Sub 트리거 엔드포인트는 다음의 메시지를 처리합니다.
-[Pub/Sub push subscription](https://cloud.google.com/pubsub/docs/push). 그것을 사용
+[Pub/Sub push subscription](https://cloud.google.com/pubsub/docs/push). 이를 사용
 애플리케이션이나 서비스가 주제에 메시지를 게시할 때, 예를 들면 다음과 같습니다.
 
 - 지원 포털은 분류 및 라우팅을 위해 들어오는 티켓을 게시합니다.
@@ -493,7 +493,7 @@ ADK가 아닌 서비스:
     다른 ADK 엔드포인트와 동일합니다. 인증이 활성화된 상태로 배포된 경우
     (권장) 모든 엔드포인트에는 유효한 자격 증명이 필요합니다. GCP 서비스
     [service account](https://cloud.google.com/iam/docs/service-accounts)를 사용하여 인증
-    정체성. 자세한 내용은 각 서비스의 설명서를 참조하세요.
+    정체성. 자세한 내용은 각 서비스의 설명서를 참고하세요.
 
 === "Python"
 
@@ -533,7 +533,7 @@ ADK가 아닌 서비스:
 - **클라우드 스케줄러**: [scheduler job](https://cloud.google.com/scheduler/docs/creating) 생성
   크론 일정에 따라 Pub/Sub 주제에 게시됩니다.
 
-전체 배포는 [Deploy to Cloud Run](../deploy/cloud-run.md)를 참조하세요.
+전체 배포는 [Deploy to Cloud Run](../deploy/cloud-run.md)를 참고하세요.
 지침.
 
 ## 다음은 무엇입니까?

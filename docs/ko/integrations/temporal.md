@@ -23,7 +23,7 @@ Temporal 플러그인은 에이전트에 다음 기능을 제공합니다.
 - **내장 재시도 및 속도 제한**: 백오프가 포함된 구성 가능한 [재시도 정책](https://docs.temporal.io/encyclopedia/retry-policies)과 LLM 제공업체의 백프레셔를 처리하는 메커니즘을 제공합니다.
 - **장기 실행 및 상시 실행 에이전트**: 블로킹 await를 사용해 몇 시간, 며칠 또는 무기한 실행되는 에이전트와 도구를 지원합니다.
 - **Human-in-the-loop**: 사람이 승인할 때까지 실행을 일시 중지한 뒤 중단한 지점에서 다시 시작합니다. Temporal의 [작업 라우팅](https://docs.temporal.io/task-routing)은 들어오는 신호(예: 사용자 채팅이나 승인)를 올바른 워크플로로 확장성 있게 전달합니다.
-- **관찰 가능성 및 디버깅**: 에이전트 실행의 모든 단계를 검사하고, 워크플로를 결정론적으로 재생하며, [Temporal UI](https://docs.temporal.io/web-ui)를 사용해 실패 지점을 정확히 찾아낼 수 있습니다.
+- **관측 가능성 및 디버깅**: 에이전트 실행의 모든 단계를 검사하고, 워크플로를 결정론적으로 재생하며, [Temporal UI](https://docs.temporal.io/web-ui)를 사용해 실패 지점을 정확히 찾아낼 수 있습니다.
 
 ## 사전 요구 사항
 
@@ -232,7 +232,7 @@ agent = Agent(
 | Human-in-the-loop | Agent Workflow는 [Signals](https://docs.temporal.io/signals)와 [Updates](https://docs.temporal.io/messages#updates)를 기다렸다가 사람 입력을 받을 수 있으며, 클라이언트는 이를 보내 에이전트를 재개할 수 있습니다 |
 | 결정론적 런타임 | `GoogleAdkPlugin`은 비결정적 호출을 Temporal-safe 대체 함수로 바꿉니다 |
 | 디버깅 용이성 | 모든 LLM 호출과 도구 실행이 Temporal UI에서 Activity로 보이므로 오류를 쉽게 디버깅할 수 있습니다 |
-| 관찰 가능성 | OpenTelemetry를 사용해 즐겨 쓰는 관찰 가능성 솔루션과 연동할 수 있으며, 프로세스 간 span은 충돌에도 복원력을 가집니다 |
+| 관측 가능성 | OpenTelemetry를 사용해 즐겨 쓰는 관측 가능성 솔루션과 연동할 수 있으며, 프로세스 간 span은 충돌에도 복원력을 가집니다 |
 | 안전한 버전 관리 | 진행 중인 실행을 방해하지 않고 [Temporal Worker Versioning](https://docs.temporal.io/production-deployment/worker-deployments/worker-versioning)을 사용해 새 에이전트 버전을 배포할 수 있습니다 |
 | 다중 에이전트 오케스트레이션 | Workflow 안에서 여러 에이전트를 구성하거나, [Child Workflows](https://docs.temporal.io/child-workflows) 또는 [Nexus](https://docs.temporal.io/nexus)를 사용해 더 복잡한 사용 사례로 확장할 수 있습니다 |
 

@@ -287,7 +287,7 @@ Commerce | Shopify, BigCommerce, WooCommerce, Etsy
 Developer Tools | GitHub, GitLab, Twilio
 
 200개 이상의 지원 제공업체 전체 목록은
-[StackOne integrations page](https://www.stackone.com/connectors)를 참조하세요.
+[StackOne integrations page](https://www.stackone.com/connectors)를 참고하세요.
 
 ## 구성
 

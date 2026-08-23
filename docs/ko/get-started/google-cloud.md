@@ -105,7 +105,7 @@ Google Cloud Agent Platform은 Gemini 모델, 서드파티 AI 모델, 오픈 가
 
 ## 추가 Google Cloud 서비스 연결
 
-많은 Google Cloud 서비스가 ADK 에이전트로 GCP API 또는 리소스에 액세스하기 위한 인증 헬퍼와 함께 ADK 통합을 제공합니다. 자세한 내용은 다음 페이지를 참조하세요.
+많은 Google Cloud 서비스가 ADK 에이전트로 GCP API 또는 리소스에 액세스하기 위한 인증 헬퍼와 함께 ADK 통합을 제공합니다. 자세한 내용은 다음 페이지를 참고하세요.
 
 * [Google Cloud Application Integration](/ko/integrations/application-integration/)
 * [BigQuery Toolset](/ko/integrations/bigquery/)

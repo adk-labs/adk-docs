@@ -6,7 +6,7 @@ catalog_tags: ["observability", "evaluation"]
 ---
 
 
-# ADK에 대한 Datadog 관찰 가능성
+# ADK에 대한 Datadog 관측 가능성
 
 <div class="language-support-tag">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>

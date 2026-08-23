@@ -21,7 +21,7 @@ ADK에서 다중 에이전트 시스템은 종종 계층 구조를 형성하는 
 ADK는 다중 에이전트 시스템 내에서 상호작용을 구조화하고 관리할 수 있도록 하는 핵심 구성 요소인 기본 요소(primitives)를 제공합니다.
 
 !!! Note
-    기본 요소에 대한 특정 매개변수나 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Python의 `sub_agents`, Java의 `subAgents`). 자세한 내용은 언어별 API 문서를 참조하세요.
+    기본 요소에 대한 특정 매개변수나 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Python의 `sub_agents`, Java의 `subAgents`). 자세한 내용은 언어별 API 문서를 참고하세요.
 
 ### 1.1. 에이전트 계층 구조 (부모 에이전트, 하위 에이전트) { #agent-hierarchy-parent-agent-sub-agents }
 

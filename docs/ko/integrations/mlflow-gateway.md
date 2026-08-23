@@ -99,7 +99,7 @@ ADK에서 코드를 변경할 필요 없이 MLflow UI의 게이트웨이 엔드�
 - 프록시 뒤나 원격 호스트에서 `localhost:5000`를 서버로 교체하세요.
   주소.
 - 엔드 투 엔드를 위해 [MLflow Tracing](/integrations/mlflow-tracing/)와 결합
-  ADK 에이전트의 관찰 가능성.
+  ADK 에이전트의 관측 가능성.
 
 ## 리소스
 
@@ -107,7 +107,7 @@ ADK에서 코드를 변경할 필요 없이 MLflow UI의 게이트웨이 엔드�
   Documentation](https://mlflow.org/docs/latest/genai/governance/ai-gateway/):
   엔드포인트 관리를 다루는 MLflow AI Gateway 공식 문서
   쿼리 API 및 게이트웨이 기능.
-- [MLflow Tracing for ADK](/integrations/mlflow-tracing/): 관찰 가능성 설정
+- [MLflow Tracing for ADK](/integrations/mlflow-tracing/): 관측 가능성 설정
   MLflow Tracing을 사용하는 ADK 에이전트용.
 - [LiteLLM model connector](/agents/models/litellm/): 문서
   ADK 에이전트를 호환되는 엔드포인트에 연결하는 데 사용되는 LiteLLM 래퍼입니다.

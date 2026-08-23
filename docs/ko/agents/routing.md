@@ -22,7 +22,7 @@
 결정하는 [LLM 기반 위임](../workflows/patterns.md#b-llm-driven-delegation-agent-transfer)과도
 다릅니다. `RoutedAgent`에서는 개발자가 명시적인 라우팅 함수를 작성해 호출마다
 **하나의** 에이전트를 선택합니다. 모델 수준 라우팅은
-[모델 라우팅](models/routing.md)을 참조하세요.
+[모델 라우팅](models/routing.md)을 참고하세요.
 
 ## 라우팅 작동 방식 {#how-routing-works}
 
@@ -92,7 +92,7 @@
 읽기 전용 접근으로 제한되며 분석을 위해 더 강력한 모델을 사용할 수 있습니다.
 
 다음 예시는 다른 `RoutedAgent` 구성을 보여줍니다. 전체 runner 설정은
-[기본 사용법](#basic-usage)을 참조하세요.
+[기본 사용법](#basic-usage)을 참고하세요.
 
 === "TypeScript"
 
@@ -110,7 +110,7 @@
 LLM 호출을 수행할 수 있습니다.
 
 다음 예시는 다른 `RoutedAgent` 구성을 보여줍니다. 전체 runner 설정은
-[기본 사용법](#basic-usage)을 참조하세요.
+[기본 사용법](#basic-usage)을 참고하세요.
 
 === "TypeScript"
 

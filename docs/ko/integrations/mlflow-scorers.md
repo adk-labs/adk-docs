@@ -13,7 +13,7 @@ catalog_tags: ["evaluation"]
 
 [MLflow](https://mlflow.org/docs/latest/genai/eval-monitor/)는 5개의 ADK 평가기(evaluator)를 타사 스코어러(third-party scorer)로 래핑하여, 모든 `mlflow.genai.evaluate()` 실행 내에서 ADK의 궤적 일치(trajectory matching), ROUGE 응답 유사도 및 LLM 판단(LLM-judge) 메트릭을 사용할 수 있도록 지원합니다. 이 연동은 ADK의 `TrajectoryEvaluator`, `RougeEvaluator`, `FinalResponseMatchV2Evaluator`, `SafetyEvaluatorV1`, `HallucinationsV1Evaluator`를 포함합니다.
 
-ADK 에이전트를 트레이싱하고 있다면, 한 줄의 코드로 OTel 자동 트레이싱을 설정하는 [MLflow Tracing 연동](/integrations/mlflow-tracing/)을 참조하세요. 아래의 결정론적 스코어러는 이러한 트레이스로부터 직접 도구 호출 기록을 읽어옵니다.
+ADK 에이전트를 트레이싱하고 있다면, 한 줄의 코드로 OTel 자동 트레이싱을 설정하는 [MLflow Tracing 연동](/integrations/mlflow-tracing/)을 참고하세요. 아래의 결정론적 스코어러는 이러한 트레이스로부터 직접 도구 호출 기록을 읽어옵니다.
 
 ## 주요 사용 사례
 

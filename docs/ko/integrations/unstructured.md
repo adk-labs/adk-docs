@@ -23,7 +23,7 @@ catalog_tags: ["mcp"]
 
 ## 사전 준비 사항
 
-- [Unstructured 계정](https://transform.unstructured.io) 및 API 키. [API 키 받기](https://docs.unstructured.io/transform/code#get-your-unstructured-api-key-and-url)를 참조하십시오.
+- [Unstructured 계정](https://transform.unstructured.io) 및 API 키. [API 키 받기](https://docs.unstructured.io/transform/code#get-your-unstructured-api-key-and-url)를 참고하세요.
 - 에이전트 모델용 [Gemini API 키](https://aistudio.google.com/apikey).
 - Python 3.10 이상.
 

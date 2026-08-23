@@ -17,7 +17,7 @@
 커스텀 에이전트는 본질적으로 `google.adk.agents.BaseAgent`를 상속하고 `_run_async_impl` 비동기 메서드 내에 핵심 실행 로직을 구현하여 생성하는 모든 클래스입니다. 이 메서드가 다른 에이전트(하위 에이전트)를 호출하고, 상태를 관리하며, 이벤트를 처리하는 방식을 완벽하게 제어할 수 있습니다.
 
 !!! Note
-    에이전트의 핵심 비동기 로직을 구현하는 특정 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Java의 `runAsyncImpl`, Python의 `_run_async_impl`). 자세한 내용은 언어별 API 문서를 참조하세요.
+    에이전트의 핵심 비동기 로직을 구현하는 특정 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Java의 `runAsyncImpl`, Python의 `_run_async_impl`). 자세한 내용은 언어별 API 문서를 참고하세요.
 
 ### 왜 사용해야 하는가?
 
@@ -273,7 +273,7 @@
 이것들은 특정 작업을 책임지는 표준 `LlmAgent` 정의입니다. 그들의 `output key` 매개변수는 결과를 `session.state`에 배치하여 다른 에이전트나 커스텀 오케스트레이터가 접근할 수 있도록 하는 데 중요합니다.
 
 !!! tip "지시문에 상태 직접 주입"
-    `story_generator`의 지시문을 주목하세요. `{var}` 구문은 플레이스홀더입니다. 지시문이 LLM으로 전송되기 전에, ADK 프레임워크는 (예: `{topic}`)을 `session.state['topic']`의 값으로 자동으로 대체합니다. 이것은 지시문에서 템플릿을 사용하여 에이전트에 컨텍스트를 제공하는 권장 방법입니다. 자세한 내용은 [상태 문서](../sessions/state.md#accessing-session-state-in-agent-instructions)를 참조하세요.
+    `story_generator`의 지시문을 주목하세요. `{var}` 구문은 플레이스홀더입니다. 지시문이 LLM으로 전송되기 전에, ADK 프레임워크는 (예: `{topic}`)을 `session.state['topic']`의 값으로 자동으로 대체합니다. 이것은 지시문에서 템플릿을 사용하여 에이전트에 컨텍스트를 제공하는 권장 방법입니다. 자세한 내용은 [상태 문서](../sessions/state.md#accessing-session-state-in-agent-instructions)를 참고하세요.
 
 === "Python"
 

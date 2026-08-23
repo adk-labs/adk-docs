@@ -376,7 +376,7 @@ gcloud auth application-default set-quota-project <project-id>
           )
       ```
 
-      **참고:** 기본 자격 증명을 사용하는 대신 사용할 서비스 계정을 제공할 수 있습니다. 이렇게 하려면 [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 [애플리케이션 통합 및 통합 커넥터 IAM 역할](#prerequisites)을 제공하세요. IAM 역할에 대한 자세한 내용은 [전제 조건](#prerequisites) 섹션을 참조하세요.
+      **참고:** 기본 자격 증명을 사용하는 대신 사용할 서비스 계정을 제공할 수 있습니다. 이렇게 하려면 [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 [애플리케이션 통합 및 통합 커넥터 IAM 역할](#prerequisites)을 제공하세요. IAM 역할에 대한 자세한 내용은 [전제 조건](#prerequisites) 섹션을 참고하세요.
 
 === "Java"
 
@@ -419,7 +419,7 @@ gcloud auth application-default set-quota-project <project-id>
           }
       ```
 
-      **참고:** 기본 자격 증명을 사용하는 대신 사용할 서비스 계정을 제공할 수 있습니다. 이렇게 하려면 [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 [애플리케이션 통합 및 통합 커넥터 IAM 역할](#prerequisites)을 제공하세요. IAM 역할에 대한 자세한 내용은 [전제 조건](#prerequisites) 섹션을 참조하세요.
+      **참고:** 기본 자격 증명을 사용하는 대신 사용할 서비스 계정을 제공할 수 있습니다. 이렇게 하려면 [서비스 계정 키](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고 서비스 계정에 올바른 [애플리케이션 통합 및 통합 커넥터 IAM 역할](#prerequisites)을 제공하세요. IAM 역할에 대한 자세한 내용은 [전제 조건](#prerequisites) 섹션을 참고하세요.
 
 #### 2. 에이전트에 도구 추가
 

@@ -26,7 +26,7 @@ catalog_tags: ["google"]
     gcloud services enable eventarc.googleapis.com eventarcpublishing.googleapis.com
     ```
 
-2.  **인증 및 권한 부여**: 에이전트를 실행하는 주체(Principal)에게 Eventarc 메시지 버스에 메시지를 게시할 수 있는 필요한 IAM 권한(예: `roles/eventarc.publisher` 역할)이 있는지 확인합니다. Eventarc IAM 역할에 대한 자세한 내용은 [Eventarc 액세스 제어 문서](https://cloud.google.com/eventarc/docs/access-control)를 참조하세요. 로컬 개발 자격 증명을 설정하려면 [애플리케이션 기본 자격 증명(ADC) 제공](https://cloud.google.com/docs/authentication/provide-credentials-adc)을 참조하세요.
+2.  **인증 및 권한 부여**: 에이전트를 실행하는 주체(Principal)에게 Eventarc 메시지 버스에 메시지를 게시할 수 있는 필요한 IAM 권한(예: `roles/eventarc.publisher` 역할)이 있는지 확인합니다. Eventarc IAM 역할에 대한 자세한 내용은 [Eventarc 액세스 제어 문서](https://cloud.google.com/eventarc/docs/access-control)를 참고하세요. 로컬 개발 자격 증명을 설정하려면 [애플리케이션 기본 자격 증명(ADC) 제공](https://cloud.google.com/docs/authentication/provide-credentials-adc)을 참고하세요.
 3.  **메시지 버스 생성**: 게시된 이벤트를 수신할 대상 Eventarc Advanced 메시지 버스를 Google Cloud 프로젝트에 생성합니다.
 
     ```bash

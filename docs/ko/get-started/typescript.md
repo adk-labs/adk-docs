@@ -106,7 +106,7 @@ Google AI Studio를 통해 키를 생성하세요.
 
 ??? tip "ADK에서 다른 AI 모델 사용"
     ADK는 여러 생성형 AI 모델을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법은
-    [Models & Authentication](/ko/agents/models/)을 참조하세요.
+    [Models & Authentication](/ko/agents/models/)을 참고하세요.
 
 ## 에이전트 실행
 

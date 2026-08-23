@@ -42,7 +42,7 @@ async def query_database(query: str) -> list:
 
 ### 긴 루프에 대한 양보 동작 예
 
-도구가 여러 요청 또는 수많은 장기 실행 요청을 처리하는 경우 다음 코드 샘플과 같이 다른 도구가 실행되도록 양보 코드를 추가하는 것을 고려하십시오.
+도구가 여러 요청 또는 수많은 장기 실행 요청을 처리하는 경우 다음 코드 샘플과 같이 다른 도구가 실행되도록 양보 코드를 추가하는 것을 고려하세요.
 
 ```python
 async def process_data(data: list) -> dict:
@@ -58,11 +58,11 @@ async def process_data(data: list) -> dict:
 ```
 
 !!! tip "중요"
-    다른 함수의 실행을 차단하지 않으려면 일시 중지에 `asyncio.sleep()` 함수를 사용하십시오.
+    다른 함수의 실행을 차단하지 않으려면 일시 중지에 `asyncio.sleep()` 함수를 사용하세요.
 
 ### 집약적인 작업을 위한 스레드 풀 예
 
-처리 집약적인 함수를 수행할 때 다음 예와 같이 사용 가능한 컴퓨팅 리소스를 더 잘 관리하기 위해 스레드 풀을 만드는 것을 고려하십시오.
+처리 집약적인 함수를 수행할 때 다음 예와 같이 사용 가능한 컴퓨팅 리소스를 더 잘 관리하기 위해 스레드 풀을 만드는 것을 고려하세요.
 
 ```python
 async def cpu_intensive_tool(data: list) -> dict:
@@ -80,7 +80,7 @@ async def cpu_intensive_tool(data: list) -> dict:
 
 ### 프로세스 청킹 예
 
-긴 목록이나 많은 양의 데이터에 대한 프로세스를 수행할 때 다음 예와 같이 스레드 풀 기술과 데이터 청크로 처리를 나누고 청크 간에 처리 시간을 양보하는 것을 결합하는 것을 고려하십시오.
+긴 목록이나 많은 양의 데이터에 대한 프로세스를 수행할 때 다음 예와 같이 스레드 풀 기술과 데이터 청크로 처리를 나누고 청크 간에 처리 시간을 양보하는 것을 결합하는 것을 고려하세요.
 
 ```python
  async def process_large_dataset(dataset: list) -> dict:
@@ -107,7 +107,7 @@ async def cpu_intensive_tool(data: list) -> dict:
 
 ## 병렬 처리 준비 프롬프트 및 도구 설명 작성
 
-AI 모델에 대한 프롬프트를 빌드할 때 함수 호출을 병렬로 수행하도록 명시적으로 지정하거나 힌트를 주는 것을 고려하십시오. 다음 AI 프롬프트 예는 모델이 도구를 병렬로 사용하도록 지시합니다.
+AI 모델에 대한 프롬프트를 빌드할 때 함수 호출을 병렬로 수행하도록 명시적으로 지정하거나 힌트를 주는 것을 고려하세요. 다음 AI 프롬프트 예는 모델이 도구를 병렬로 사용하도록 지시합니다.
 
 ```none
 사용자가 여러 정보를 요청할 때 항상 함수를 병렬로 호출하십시오.
@@ -140,4 +140,4 @@ AI 모델에 대한 프롬프트를 빌드할 때 함수 호출을 병렬로 수
 
 ## 다음 단계
 
-에이전트 및 함수 호출용 도구 빌드에 대한 자세한 내용은 [함수 도구](/ko/tools-custom/function-tools/)를 참조하십시오. 병렬 처리를 활용하는 도구의 자세한 예는 [adk-python](https://github.com/google/adk-python/tree/main/contributing/samples/parallel_functions) 리포지토리의 샘플을 참조하십시오.
+에이전트 및 함수 호출용 도구 빌드에 대한 자세한 내용은 [함수 도구](/ko/tools-custom/function-tools/)를 참고하세요. 병렬 처리를 활용하는 도구의 자세한 예는 [adk-python](https://github.com/google/adk-python/tree/main/contributing/samples/parallel_functions) 리포지토리의 샘플을 참고하세요.

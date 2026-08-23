@@ -11,7 +11,7 @@ catalog_tags: ["connectors"]
   <span class="lst-supported">ADK 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
-[ADK Connector](https://github.com/Harshk133/adk-connector)는 플러그 앤 플레이 방식의 툴킷으로, 모든 ADK 에이전트를 래핑하여 텔레그램(Telegram) 및 디스코드(Discord)와 같은 인기 메시징 채널에 챗봇으로 노출할 수 있도록 지원합니다. 현재 지원되는 채널의 전체 목록은 프로젝트 저장소(Repository)를 참조하세요.
+[ADK Connector](https://github.com/Harshk133/adk-connector)는 플러그 앤 플레이 방식의 툴킷으로, 모든 ADK 에이전트를 래핑하여 텔레그램(Telegram) 및 디스코드(Discord)와 같은 인기 메시징 채널에 챗봇으로 노출할 수 있도록 지원합니다. 현재 지원되는 채널의 전체 목록은 프로젝트 저장소(Repository)를 참고하세요.
 
 몇 줄의 코드만 추가하면 로컬 개발, 테스트 단계와 실제 프로덕션 메시징 플랫폼 간의 격차를 메울 수 있으며, 데이터베이스 기반의 기기 간 세션 동기화(cross-device session synchronization)를 기본적으로 지원합니다.
 

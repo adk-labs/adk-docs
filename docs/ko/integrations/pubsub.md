@@ -20,7 +20,7 @@ catalog_tags: ["google"]
 `PubSubToolset`을 사용하기 전에 다음이 필요합니다:
 
 1.  Google Cloud 프로젝트에서 **Pub/Sub API를 활성화**합니다.
-2.  **인증 및 권한 부여**: 에이전트를 실행하는 주체(예: 사용자, 서비스 계정)가 Pub/Sub 작업 수행에 필요한 IAM 권한을 가지고 있어야 합니다. Pub/Sub 역할에 대한 자세한 내용은 [Pub/Sub 액세스 제어 문서](https://cloud.google.com/pubsub/docs/access-control)를 참조하세요.
+2.  **인증 및 권한 부여**: 에이전트를 실행하는 주체(예: 사용자, 서비스 계정)가 Pub/Sub 작업 수행에 필요한 IAM 권한이 있어야 합니다. Pub/Sub 역할에 대한 자세한 내용은 [Pub/Sub 액세스 제어 문서](https://cloud.google.com/pubsub/docs/access-control)를 참고하세요.
 3.  **토픽 또는 구독 생성**: 메시지 게시를 위한 [토픽 생성](https://cloud.google.com/pubsub/docs/create-topic)과 메시지 수신을 위한 [구독 생성](https://cloud.google.com/pubsub/docs/create-subscription)이 필요합니다.
 
 

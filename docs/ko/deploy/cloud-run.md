@@ -12,7 +12,7 @@
 
 각 명령에 대해 [LLM 에이전트](../agents/llm-agents.md) 페이지에 정의된 `Capital Agent` 샘플을 참조합니다. 이 샘플이 디렉토리(예: `capital_agent`)에 있다고 가정합니다.
 
-진행하려면 에이전트 코드가 다음과 같이 구성되었는지 확인하십시오.
+진행하려면 에이전트 코드가 다음과 같이 구성되었는지 확인하세요.
 
 === "Python"
 
@@ -27,7 +27,7 @@
     2. 에이전트 인스턴스는 런처 구성에 전달되며, 일반적으로 agent.NewSingleLoader(yourAgent)를 사용합니다. adkgo 도구는 이 런처를 사용하여 올바른 서비스로 에이전트를 시작합니다.
     3. go.mod 및 go.sum 파일은 종속성을 관리하기 위해 프로젝트 디렉토리에 있습니다.
 
-    자세한 내용은 다음 섹션을 참조하십시오. Github 저장소에서 [샘플 앱](https://github.com/google/tree/main/examples/go/cloud-run)도 찾을 수 있습니다.
+    자세한 내용은 다음 섹션을 참고하세요. Github 저장소에서 [샘플 앱](https://github.com/google/tree/main/examples/go/cloud-run)도 찾을 수 있습니다.
 
 === "Java"
 
@@ -35,7 +35,7 @@
     2. 에이전트 변수는 전역이며 `public static final BaseAgent ROOT_AGENT` 형식을 따릅니다.
     3. 에이전트 정의는 정적 클래스 메서드에 있습니다.
 
-    자세한 내용은 다음 섹션을 참조하십시오. Github 저장소에서 [샘플 앱](https://github.com/google/tree/main/examples/java/cloud-run)도 찾을 수 있습니다.
+    자세한 내용은 다음 섹션을 참고하세요. Github 저장소에서 [샘플 앱](https://github.com/google/tree/main/examples/java/cloud-run)도 찾을 수 있습니다.
 
 
 ## 환경 변수
@@ -70,7 +70,7 @@ export GOOGLE_API_KEY=your-api-key
 
 ## 비밀
 
-서비스 계정으로 읽을 수 있는 비밀을 만들었는지 확인하십시오.
+서비스 계정으로 읽을 수 있는 비밀을 만들었는지 확인하세요.
 
 ### Cloud Build 권한
 
@@ -115,7 +115,7 @@ ADK 에이전트 워크플로를 Google Cloud Run에 배포할 때 다음 콘텐
 
     `adk deploy cloud_run` 명령어는 에이전트 코드를 Google Cloud Run에 배포합니다.
 
-    Google Cloud로 인증했는지 확인하십시오(`gcloud auth login` 및 `gcloud config set project <your-project-id>`).
+    Google Cloud로 인증했는지 확인하세요(`gcloud auth login` 및 `gcloud config set project <your-project-id>`).
 
     #### 환경 변수 설정
 
@@ -212,7 +212,7 @@ ADK 에이전트 워크플로를 Google Cloud Run에 배포할 때 다음 콘텐
 
     또는 `Dockerfile`과 함께 표준 `gcloud run deploy` 명령을 사용하여 배포할 수 있습니다. 이 방법은 `adk` 명령에 비해 더 많은 수동 설정이 필요하지만, 특히 사용자 지정 [FastAPI](https://fastapi.tiangolo.com/) 애플리케이션 내에 에이전트를 포함하려는 경우 유연성을 제공합니다.
 
-    Google Cloud로 인증했는지 확인하십시오(`gcloud auth login` 및 `gcloud config set project <your-project-id>`).
+    Google Cloud로 인증했는지 확인하세요(`gcloud auth login` 및 `gcloud config set project <your-project-id>`).
 
     #### 프로젝트 구조
 
@@ -340,7 +340,7 @@ google-adk
 
     `gcloud`는 Docker 이미지를 빌드하고 Google Artifact Registry에 푸시한 다음 Cloud Run에 배포합니다. 완료 시 배포된 서비스의 URL을 출력합니다.
 
-    전체 배포 옵션 목록은 [`gcloud run deploy` 참조 문서](https://cloud.google.com/sdk/gcloud/reference/run/deploy)를 참조하십시오.
+    전체 배포 옵션 목록은 [`gcloud run deploy` 참조 문서](https://cloud.google.com/sdk/gcloud/reference/run/deploy)를 참고하세요.
 
 === "Go - adkgo CLI"
 
@@ -368,7 +368,7 @@ google-adk
     3. gcloud를 사용하여 이 컨테이너를 빌드하고 Cloud Run에 배포합니다.
     4. 배포 후 새 서비스에 안전하게 연결되는 로컬 프록시를 시작합니다.
 
-    Google Cloud로 인증했는지 확인하십시오(`gcloud auth login` 및 `gcloud config set project <your-project-id>`).
+    Google Cloud로 인증했는지 확인하세요(`gcloud auth login` 및 `gcloud config set project <your-project-id>`).
 
     #### 환경 변수 설정
 
@@ -430,8 +430,8 @@ google-adk
 
     표준 `gcloud run deploy` 명령과 `Dockerfile`을 사용하여 Java 에이전트를 배포할 수 있습니다. 이것이 현재 Google Cloud Run에 Java 에이전트를 배포하는 권장 방법입니다.
 
-    Google Cloud로 [인증](https://cloud.google.com/docs/authentication/gcloud)되었는지 확인하십시오.
-    특히 터미널에서 `gcloud auth login` 및 `gcloud config set project <your-project-id>` 명령을 실행하십시오.
+    Google Cloud로 [인증](https://cloud.google.com/docs/authentication/gcloud)되었는지 확인하세요.
+    특히 터미널에서 `gcloud auth login` 및 `gcloud config set project <your-project-id>` 명령을 실행하세요.
 
     #### 프로젝트 구조
 
@@ -459,9 +459,9 @@ google-adk
 
            * 에이전트의 정의는 정적 메서드로 노출되거나 선언 중에 인라인될 수 있습니다.
 
-        `CapitalAgent` 예제의 코드는 [예제](https://github.com/google/blob/main/examples/java/cloud-run/src/main/java/agents/capitalagent/CapitalAgent.java) 저장소에서 참조하십시오.
+        `CapitalAgent` 예제의 코드는 [예제](https://github.com/google/blob/main/examples/java/cloud-run/src/main/java/agents/capitalagent/CapitalAgent.java) 저장소에서 참고하세요.
 
-    2. pom.xml 파일에 다음 종속성과 플러그인을 추가하십시오.
+    2. pom.xml 파일에 다음 종속성과 플러그인을 추가하세요.
 
         ```xml title="pom.xml"
         <dependencies>
@@ -517,7 +517,7 @@ google-adk
 
     `gcloud`는 Docker 이미지를 빌드하고 Google Artifact Registry에 푸시한 다음 Cloud Run에 배포합니다. 완료 시 배포된 서비스의 URL을 출력합니다.
 
-    전체 배포 옵션 목록은 [`gcloud run deploy` 참조 문서](https://cloud.google.com/sdk/gcloud/reference/run/deploy)를 참조하십시오.
+    전체 배포 옵션 목록은 [`gcloud run deploy` 참조 문서](https://cloud.google.com/sdk/gcloud/reference/run/deploy)를 참고하세요.
 
 ## 에이전트 테스트
 
@@ -546,7 +546,7 @@ google-adk
     1. 드롭다운 메뉴에서 에이전트를 선택합니다.
     2. 메시지를 입력하고 에이전트로부터 예상되는 응답을 받는지 확인합니다.
 
-    예상치 못한 동작이 발생하면 [Cloud Run](https://console.cloud.google.com/run) 콘솔 로그를 확인하십시오.
+    예상치 못한 동작이 발생하면 [Cloud Run](https://console.cloud.google.com/run) 콘솔 로그를 확인하세요.
 
 === "API 테스트 (curl)"
 

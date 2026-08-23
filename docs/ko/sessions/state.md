@@ -21,7 +21,7 @@
 
     * 데이터는 `key: value`로 저장됩니다.
     * **키(Keys):** 항상 문자열(`str`)입니다. 명확한 이름을 사용하세요 (예: `'departure_city'`, `'user:language_preference'`).
-    * **값(Values):** **직렬화 가능**해야 합니다. 이는 `SessionService`에 의해 쉽게 저장되고 로드될 수 있음을 의미합니다. 문자열, 숫자, 불리언, 그리고 *오직* 이러한 기본 타입만 포함하는 단순한 리스트나 딕셔너리와 같은 특정 언어(Python/Go/Java)의 기본 타입을 사용하세요. (정확한 세부 정보는 API 문서를 참조하세요).
+    * **값(Values):** **직렬화 가능**해야 합니다. 이는 `SessionService`에 의해 쉽게 저장되고 로드될 수 있음을 의미합니다. 문자열, 숫자, 불리언, 그리고 *오직* 이러한 기본 타입만 포함하는 단순한 리스트나 딕셔너리와 같은 특정 언어(Python/Go/Java)의 기본 타입을 사용하세요. (정확한 세부 정보는 API 문서를 참고하세요).
     * **⚠️ 복잡한 객체 사용 피하기:** **직렬화 불가능한 객체**(사용자 정의 클래스 인스턴스, 함수, 연결 등)를 상태에 직접 저장하지 마세요. 필요한 경우 단순 식별자를 저장하고, 복잡한 객체는 다른 곳에서 검색하세요.
 
 2. **가변성: 변경 가능함**
@@ -36,7 +36,7 @@
       * `DatabaseSessionService` / `VertexAiSessionService`: **영속성 있음.** 상태가 안정적으로 저장됩니다.
 
 !!! 참고
-    기본 요소에 대한 특정 매개변수나 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Python의 `session.state['current_intent'] = 'book_flight'`, Go의 `context.State().Set("current_intent", "book_flight")`, Java의 `session.state().put("current_intent", "book_flight)`). 자세한 내용은 언어별 API 문서를 참조하세요.
+    기본 요소에 대한 특정 매개변수나 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Python의 `session.state['current_intent'] = 'book_flight'`, Go의 `context.State().Set("current_intent", "book_flight")`, Java의 `session.state().put("current_intent", "book_flight)`). 자세한 내용은 언어별 API 문서를 참고하세요.
 
 ### 접두사를 사용한 상태 구성: 범위의 중요성
 
@@ -267,7 +267,7 @@
 
 **다른 상태 접근 방법과의 관계**
 
-이 직접 주입 방법은 LlmAgent 지침에만 해당됩니다. 다른 상태 접근 방법에 대한 자세한 내용은 다음 섹션을 참조하세요.
+이 직접 주입 방법은 LlmAgent 지침에만 해당됩니다. 다른 상태 접근 방법에 대한 자세한 내용은 다음 섹션을 참고하세요.
 
 ### 상태 업데이트 방법: 권장 방법
 
@@ -422,7 +422,7 @@
 
 이 방법은 콜백 및 도구 내에서 가장 일반적인 상태 업데이트 시나리오에 대해 `EventActions`와 `state_delta`의 수동 생성을 추상화하여 코드를 더 깨끗하고 오류 발생 가능성을 줄여줍니다.
 
-컨텍스트 객체에 대한 더 포괄적인 세부 정보는 [컨텍스트 문서](../context/index.md)를 참조하세요.
+컨텍스트 객체에 대한 더 포괄적인 세부 정보는 [컨텍스트 문서](../context/index.md)를 참고하세요.
 
 === "Python"
 

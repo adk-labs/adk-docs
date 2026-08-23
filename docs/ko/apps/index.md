@@ -134,7 +134,7 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
 
 !!! note "`Runner.run_debug()`에 대한 버전 요구 사항"
 
-    `Runner.run_debug()` 명령에는 ADK Python v1.18.0 이상이 필요합니다. 더 많은 설정 코드가 필요한 `Runner.run()`을 사용할 수도 있습니다. 자세한 내용은 다음을 참조하십시오.
+    `Runner.run_debug()` 명령에는 ADK Python v1.18.0 이상이 필요합니다. 더 많은 설정 코드가 필요한 `Runner.run()`을 사용할 수도 있습니다. 자세한 내용은 다음을 참고하세요.
 
 === "Python"
 
@@ -154,4 +154,4 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
 
 ## 다음 단계
 
-더 완전한 샘플 코드 구현은 [Hello World 앱](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world_app) 코드 예제를 참조하십시오.
+더 완전한 샘플 코드 구현은 [Hello World 앱](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world_app) 코드 예제를 참고하세요.

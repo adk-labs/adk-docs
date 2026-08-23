@@ -19,7 +19,7 @@
 
 **그림 1.** 고급 도구 응답 구현을 사용한 확인 응답 요청 대화 상자 예시.
 
-다음 섹션에서는 확인 시나리오에 이 기능을 사용하는 방법을 설명합니다. 완전한 코드 샘플은 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 예제를 참조하세요. 에이전트 워크플로에 사람의 입력을 통합하는 추가적인 방법은 [Human-in-the-loop](../workflows/patterns.md#human-in-the-loop) 에이전트 패턴을 참조하세요.
+다음 섹션에서는 확인 시나리오에 이 기능을 사용하는 방법을 설명합니다. 완전한 코드 샘플은 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 예제를 참고하세요. 에이전트 워크플로에 사람의 입력을 통합하는 추가적인 방법은 [Human-in-the-loop](../workflows/patterns.md#human-in-the-loop) 에이전트 패턴을 참고하세요.
 
 ## 불리언 확인 (Boolean confirmation) {#boolean-confirmation}
 
@@ -175,7 +175,7 @@
 -   `hint`: 사용자에게 필요한 내용을 설명하는 설명 메시지.
 -   `payload`: 반환될 것으로 예상하는 데이터의 구조. 이는 JSON 형식의 문자열로 직렬화될 수 있어야 합니다.
 
-이 접근 방식에 대한 완전한 예제는 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 코드 샘플을 참조하세요. 확인을 받는 동안 에이전트 워크플로 도구 실행이 일시 중지됩니다. 확인을 받은 후 `tool_confirmation.payload` 객체에서 확인 응답에 액세스한 다음 워크플로 실행을 진행할 수 있습니다.
+이 접근 방식에 대한 완전한 예제는 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 코드 샘플을 참고하세요. 확인을 받는 동안 에이전트 워크플로 도구 실행이 일시 중지됩니다. 확인을 받은 후 `tool_confirmation.payload` 객체에서 확인 응답에 액세스한 다음 워크플로 실행을 진행할 수 있습니다.
 
 다음 코드는 직원의 휴가 요청을 처리하는 도구의 구현 예시를 보여줍니다:
 
@@ -323,7 +323,7 @@ ADK API 서버의 `/run` 또는 `/run_sse` 엔드포인트로 요청을 보내�
 
     !!! note "참고: 재개(Resume) 기능과 함께 확인 사용"
 
-        ADK 에이전트 워크플로가 [Resume](/runtime/resume/) 기능으로 구성된 경우 확인 응답과 함께 호출 ID(`invocation_id`) 매개변수도 포함해야 합니다. 제공하는 호출 ID는 확인 요청을 생성한 것과 동일한 호출이어야 하며, 그렇지 않으면 시스템이 확인 응답으로 새 호출을 시작합니다. 에이전트가 재개 기능을 사용하는 경우 응답에 포함될 수 있도록 확인 요청에 호출 ID를 매개변수로 포함하는 것을 고려하세요. 재개 기능 사용에 대한 자세한 내용은 [중단된 에이전트 재개](/runtime/resume/)를 참조하세요.
+        ADK 에이전트 워크플로가 [Resume](/runtime/resume/) 기능으로 구성된 경우 확인 응답과 함께 호출 ID(`invocation_id`) 매개변수도 포함해야 합니다. 제공하는 호출 ID는 확인 요청을 생성한 것과 동일한 호출이어야 하며, 그렇지 않으면 시스템이 확인 응답으로 새 호출을 시작합니다. 에이전트가 재개 기능을 사용하는 경우 응답에 포함될 수 있도록 확인 요청에 호출 ID를 매개변수로 포함하는 것을 고려하세요. 재개 기능 사용에 대한 자세한 내용은 [중단된 에이전트 재개](/runtime/resume/)를 참고하세요.
 
 ## 알려진 제한사항 {#known-limitations}
 
@@ -334,4 +334,4 @@ ADK API 서버의 `/run` 또는 `/run_sse` 엔드포인트로 요청을 보내�
 
 ## 다음 단계
 
-에이전트 워크플로용 ADK 도구 빌드에 대한 자세한 내용은 [함수 도구](/tools-custom/function-tools/)를 참조하세요.
+에이전트 워크플로용 ADK 도구 빌드에 대한 자세한 내용은 [함수 도구](/tools-custom/function-tools/)를 참고하세요.

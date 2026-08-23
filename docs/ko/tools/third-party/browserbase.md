@@ -16,7 +16,7 @@ hide:
 
 ## 전제 조건
 
-- API 키와 프로젝트 ID를 얻으려면 [브라우저베이스 계정](https://www.browserbase.com/sign-up)에 가입하세요. 자세한 내용은 [설명서](https://docs.browserbase.com/introduction/getting-started)를 참조하세요.
+- API 키와 프로젝트 ID를 얻으려면 [브라우저베이스 계정](https://www.browserbase.com/sign-up)에 가입하세요. 자세한 내용은 [설명서](https://docs.browserbase.com/introduction/getting-started)를 참고하세요.
 
 ## 에이전트와 함께 사용
 

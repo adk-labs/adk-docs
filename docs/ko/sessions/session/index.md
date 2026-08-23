@@ -218,7 +218,7 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
         *   Google Cloud 프로젝트 (`pip install vertexai`)
         *   이 [단계](https://cloud.google.com/vertex-ai/docs/pipelines/configure-project#storage)에 따라 구성할 수 있는 Google Cloud Storage 버킷.
         *   이 [튜토리얼](https://adk.dev/deploy/agent-runtime/)에 따라 설정할 수 있는 Reasoning Engine 리소스 이름/ID.
-        *   Google Cloud 프로젝트가 없고 VertexAiSessionService를 무료로 사용해보고 싶다면, [세션 및 메모리 무료로 사용해보기](../express-mode.md)를 참조하세요.
+        *   Google Cloud 프로젝트가 없고 VertexAiSessionService를 무료로 사용해보고 싶다면, [세션 및 메모리 무료로 사용해보기](../express-mode.md)를 참고하세요.
     *   **적합한 경우:** Google Cloud에 배포된 확장 가능한 프로덕션 애플리케이션, 특히 다른 Vertex AI 기능과 통합할 때.
 
     === "Python"
@@ -346,7 +346,7 @@ ADK 에이전트에서 Google Cloud에 연결하는 방법에 대한 자세한 �
 !!! note "ADK Python v1.22.0에서 세션 데이터베이스 스키마 변경"
 
     ADK Python v1.22.0에서 세션 데이터베이스 스키마가 변경되었으며, 세션 데이터베이스 마이그레이션이 필요합니다.
-    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/ko/sessions/session/migrate/)을 참조하세요.
+    자세한 내용은 [세션 데이터베이스 스키마 마이그레이션](/ko/sessions/session/migrate/)을 참고하세요.
 
 올바른 `SessionService`를 선택하는 것은 에이전트의 대화 기록과 임시 데이터가 어떻게 저장되고 유지되는지를 정의하는 핵심입니다.
 

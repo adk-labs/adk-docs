@@ -146,9 +146,9 @@ data: {"content":{"parts":[{"text":"OK. The weather in New York is sunny with a 
 
 ## 통합
 
-ADK는 [콜백](../callbacks/index.md)을 사용하여 타사 관찰 가능성 도구와 통합합니다. 이러한 통합은 에이전트 호출 및 상호 작용의 상세한 추적을 캡처하며, 이는 동작을 이해하고 문제를 디버깅하며 성능을 평가하는 데 중요합니다.
+ADK는 [콜백](../callbacks/index.md)을 사용하여 타사 관측 가능성 도구와 통합합니다. 이러한 통합은 에이전트 호출 및 상호 작용의 상세한 추적을 캡처하며, 이는 동작을 이해하고 문제를 디버깅하며 성능을 평가하는 데 중요합니다.
 
-*   [Comet Opik](https://github.com/comet-ml/opik)은 [ADK를 기본적으로 지원](https://www.comet.com/docs/opik/tracing/integrations/adk)하는 오픈 소스 LLM 관찰 가능성 및 평가 플랫폼입니다.
+*   [Comet Opik](https://github.com/comet-ml/opik)은 [ADK를 기본적으로 지원](https://www.comet.com/docs/opik/tracing/integrations/adk)하는 오픈 소스 LLM 관측 가능성 및 평가 플랫폼입니다.
 
 ## 에이전트 배포
 

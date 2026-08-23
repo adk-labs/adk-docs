@@ -314,7 +314,7 @@ agent = LlmAgent(
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-Agent Platform은 MaaS(Model-as-a-Service)를 통해 Meta Llama와 같은 엄선된 오픈 소스 모델을 제공합니다. 이러한 모델은 관리형 API를 통해 액세스할 수 있으므로 기본 인프라를 관리하지 않고도 배포하고 확장할 수 있습니다. 사용 가능한 옵션의 전체 목록은 [Agent Platform open models for MaaS](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/maas/use-open-models#open-models) 설명서를 참조하세요.
+Agent Platform은 MaaS(Model-as-a-Service)를 통해 Meta Llama와 같은 엄선된 오픈 소스 모델을 제공합니다. 이러한 모델은 관리형 API를 통해 액세스할 수 있으므로 기본 인프라를 관리하지 않고도 배포하고 확장할 수 있습니다. 사용 가능한 옵션의 전체 목록은 [Agent Platform open models for MaaS](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/maas/use-open-models#open-models) 설명서를 참고하세요.
 
 === "Python"
 

@@ -21,7 +21,7 @@ JSON 또는 Markdown으로 변환할 수 있습니다.
 ## 필수 조건 (Prerequisites)
 
 - ScrapeGraphAI에서 [API 키](https://dashboard.scrapegraphai.com/register/)를 생성하세요.
-  자세한 내용은 [문서](https://docs.scrapegraphai.com/api-reference/introduction)를 참조하세요.
+  자세한 내용은 [문서](https://docs.scrapegraphai.com/api-reference/introduction)를 참고하세요.
 - [ScrapeGraphAI MCP 서버 패키지](https://pypi.org/project/scrapegraph-mcp/)를 설치하세요
   (Python 3.13 이상 필요):
 

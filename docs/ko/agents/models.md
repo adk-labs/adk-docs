@@ -52,7 +52,7 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
 
 ### Google Cloud Vertex AI
 
-확장 가능하고 프로덕션 지향적인 사용 사례의 경우 Vertex AI가 권장되는 플랫폼입니다. Vertex AI의 Gemini는 엔터프라이즈급 기능, 보안 및 규정 준수 제어를 지원합니다. 개발 환경 및 사용 사례에 따라 *아래 인증 방법 중 하나를 선택하십시오*.
+확장 가능하고 프로덕션 지향적인 사용 사례의 경우 Vertex AI가 권장되는 플랫폼입니다. Vertex AI의 Gemini는 엔터프라이즈급 기능, 보안 및 규정 준수 제어를 지원합니다. 개발 환경 및 사용 사례에 따라 *아래 인증 방법 중 하나를 선택하세요*.
 
 **필수 조건:** [Vertex AI가 활성화된](https://console.cloud.google.com/apis/enableflow;apiid=aiplatform.googleapis.com) Google Cloud 프로젝트.
 
@@ -236,7 +236,7 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
 
 ADK의 `Claude` 래퍼 클래스를 사용하여 Anthropic의 Claude 모델을 API 키를 통해 직접 통합하거나 Vertex AI 백엔드에서 Java ADK 애플리케이션에 통합할 수 있습니다.
 
-Vertex AI 백엔드에 대해서는 [Vertex AI의 타사 모델(예: Anthropic Claude)](#third-party-models-on-vertex-ai-eg-anthropic-claude) 섹션을 참조하십시오.
+Vertex AI 백엔드에 대해서는 [Vertex AI의 타사 모델(예: Anthropic Claude)](#third-party-models-on-vertex-ai-eg-anthropic-claude) 섹션을 참고하세요.
 
 **전제 조건:**
 
@@ -342,7 +342,7 @@ agent = LlmAgent(
 
 이 구성을 사용하면 에이전트의 모든 API 호출은 Apigee를 통해 먼저 라우팅되며, 여기서 필요한 모든 정책(보안, 속도 제한, 로깅)이 실행된 후 요청이 기본 AI 모델 엔드포인트로 안전하게 전달됩니다.
 
-Apigee 프록시를 사용하는 전체 코드 예시는 [Hello World Apigee LLM](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world_apigeellm)을 참조하세요.
+Apigee 프록시를 사용하는 전체 코드 예시는 [Hello World Apigee LLM](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world_apigeellm)을 참고하세요.
 
 ## LiteLLM을 통한 클라우드 및 독점 모델 사용
 
@@ -376,7 +376,7 @@ ADK는 LiteLLM 라이브러리를 통해 OpenAI, Anthropic(비-Vertex AI), Coher
         export ANTHROPIC_API_KEY="YOUR_ANTHROPIC_API_KEY"
         ```
 
-    * *다른 제공업체의 올바른 환경 변수 이름은 [LiteLLM 제공업체 문서](https://docs.litellm.ai/docs/providers)를 참조하세요.* 
+    * *다른 제공업체의 올바른 환경 변수 이름은 [LiteLLM 제공업체 문서](https://docs.litellm.ai/docs/providers)를 참고하세요.* 
 
         **예시:**
 
@@ -577,7 +577,7 @@ http://localhost:11434/api/chat \
 **설정:**
 
 1. **모델 배포:** vLLM(또는 유사한 도구)을 사용하여 선택한 모델을 배포합니다. API 기본 URL을 기록해 둡니다(예: `https://your-vllm-endpoint.run.app/v1`).
-    * *ADK 도구에 중요:* 배포할 때 서빙 도구가 OpenAI 호환 도구/함수 호출을 지원하고 활성화하는지 확인합니다. vLLM의 경우 모델에 따라 `--enable-auto-tool-choice` 및 잠재적으로 특정 `--tool-call-parser`와 같은 플래그가 필요할 수 있습니다. 도구 사용에 대한 vLLM 문서를 참조하십시오.
+    * *ADK 도구에 중요:* 배포할 때 서빙 도구가 OpenAI 호환 도구/함수 호출을 지원하고 활성화하는지 확인합니다. vLLM의 경우 모델에 따라 `--enable-auto-tool-choice` 및 잠재적으로 특정 `--tool-call-parser`와 같은 플래그가 필요할 수 있습니다. 도구 사용에 대한 vLLM 문서를 참고하세요.
 2. **인증:** 엔드포인트가 인증을 처리하는 방법(예: API 키, 베어러 토큰)을 결정합니다.
 
     **통합 예시:**
@@ -770,7 +770,7 @@ Anthropic와 같은 일부 제공업체는 Vertex AI를 통해 직접 모델을 
 
     1.  **Vertex AI 환경:**
         *   Google Cloud 프로젝트 및 리전이 올바르게 설정되었는지 확인합니다.
-        *   **ADC(Application Default Credentials):** ADC가 환경에 올바르게 구성되었는지 확인합니다. 일반적으로 `gcloud auth application-default login`을 실행하여 수행됩니다. Java 클라이언트 라이브러리는 이 자격 증명을 사용하여 Vertex AI로 인증합니다. 자세한 설정은 [Google Cloud Java 문서의 ADC](https://cloud.google.com/java/docs/reference/google-auth-library/latest/com.google.auth.oauth2.GoogleCredentials#com_google_auth_oauth2_GoogleCredentials_getApplicationDefault__)를 참조하세요.
+        *   **ADC(Application Default Credentials):** ADC가 환경에 올바르게 구성되었는지 확인합니다. 일반적으로 `gcloud auth application-default login`을 실행하여 수행됩니다. Java 클라이언트 라이브러리는 이 자격 증명을 사용하여 Vertex AI로 인증합니다. 자세한 설정은 [Google Cloud Java 문서의 ADC](https://cloud.google.com/java/docs/reference/google-auth-library/latest/com.google.auth.oauth2.GoogleCredentials#com_google_auth_oauth2_GoogleCredentials_getApplicationDefault__)를 참고하세요.
 
     2.  **제공업체 라이브러리 종속성:**
         *   **타사 클라이언트 라이브러리(종종 전이적):** ADK 코어 라이브러리에는 Vertex AI의 일반적인 타사 모델(예: Anthropic에 필요한 클래스)에 대한 필요한 클라이언트 라이브러리가 **전이적 종속성**으로 포함되는 경우가 많습니다. 즉, `pom.xml` 또는 `build.gradle`에 Anthropic Vertex SDK에 대한 별도의 종속성을 명시적으로 추가할 필요가 없을 수 있습니다.

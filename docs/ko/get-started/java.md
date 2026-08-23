@@ -1,6 +1,6 @@
 # ADK용 Java 빠른 시작
 
-이 가이드는 ADK(Agent Development Kit) for Java를 사용하여 시작하는 방법을 보여줍니다. 시작하기 전에 다음이 설치되어 있는지 확인하십시오.
+이 가이드는 ADK(Agent Development Kit) for Java를 사용하여 시작하는 방법을 보여줍니다. 시작하기 전에 다음이 설치되어 있는지 확인하세요.
 
 *   Java 17 이상
 *   Maven 3.9 이상
@@ -86,7 +86,7 @@ public class HelloTimeAgent {
 
     ADK Java v0.3.0 이하는 함수 호출에 대한 사고 서명 변경으로 인해
     [Gemini 3 Pro Preview](https://ai.google.dev/gemini-api/docs/models#gemini-3-pro)와 호환되지 않습니다.
-    대신 Gemini 2.5 이하 모델을 사용하십시오.
+    대신 Gemini 2.5 이하 모델을 사용하세요.
 
 ### 프로젝트 및 종속성 구성
 
@@ -168,7 +168,7 @@ ADK 에이전트 프로젝트는 `pom.xml` 프로젝트 파일에 다음 종속�
     ```
 
 ??? tip "ADK에서 다른 AI 모델 사용"
-    ADK는 다양한 생성형 AI 모델 사용을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법에 대한 자세한 내용은 [모델 및 인증](/ko/agents/models)을 참조하세요.
+    ADK는 다양한 생성형 AI 모델 사용을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법에 대한 자세한 내용은 [모델 및 인증](/ko/agents/models)을 참고하세요.
 
 ### 에이전트 명령줄 인터페이스 생성
 

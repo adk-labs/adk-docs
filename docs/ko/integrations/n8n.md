@@ -46,7 +46,7 @@ n8n 인스턴스에 안전하게 연결해 워크플로를 검색, 점검, 트�
 
 자세한 설정 방법은
 [n8n MCP documentation](https://docs.n8n.io/advanced-ai/accessing-n8n-mcp-server/)
-를 참조하세요.
+를 참고하세요.
 
 ## 에이전트와 함께 사용
 

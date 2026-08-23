@@ -17,7 +17,7 @@
 ## 전제 조건
 
 - API 토큰을 얻으려면 [Bright Data 계정](https://brightdata.com/)에 가입하세요.
-- 자세한 내용은 [설명서](https://docs.brightdata.com/mcp-server/overview)를 참조하세요.
+- 자세한 내용은 [설명서](https://docs.brightdata.com/mcp-server/overview)를 참고하세요.
 - 서버는 프로토타이핑 및 일상적인 워크플로에 유용한 **월 5,000개 요청의 무료 등급**을 제공합니다.
 
 ## 에이전트와 함께 사용

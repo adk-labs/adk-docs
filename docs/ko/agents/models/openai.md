@@ -10,8 +10,8 @@
 
 ADK에서 OpenAI 모델을 사용할 수 있습니다. 연결하는 방법은 사용하는 언어에 따라 다릅니다.
 
-- **Go — 기본 지원:** ADK Go는 OpenAI Responses API를 타겟팅하여 `model.LLM` 인터페이스를 구현하는 `openaimodel` 패키지를 직접 제공합니다. [시작하기](#시작하기)를 참조하세요.
-- **Python — LiteLLM 경유:** ADK Python은 LiteLLM 커넥터를 통해 OpenAI 모델(및 기타 다양한 제공업체)에 액세스합니다. [LiteLLM](/ko/agents/models/litellm/)을 참조하세요.
+- **Go — 기본 지원:** ADK Go는 OpenAI Responses API를 타겟팅하여 `model.LLM` 인터페이스를 구현하는 `openaimodel` 패키지를 직접 제공합니다. [시작하기](#시작하기)를 참고하세요.
+- **Python — LiteLLM 경유:** ADK Python은 LiteLLM 커넥터를 통해 OpenAI 모델(및 기타 다양한 제공업체)에 액세스합니다. [LiteLLM](/ko/agents/models/litellm/)을 참고하세요.
 
 ## 시작하기
 
@@ -47,7 +47,7 @@ ADK에서 OpenAI 모델을 사용할 수 있습니다. 연결하는 방법은 �
     }
     ```
 
-실행 가능한 전체 샘플은 ADK Go 저장소의 [examples/openai/](https://github.com/google/adk-go/tree/main/examples/openai)를 참조하세요.
+실행 가능한 전체 샘플은 ADK Go 저장소의 [examples/openai/](https://github.com/google/adk-go/tree/main/examples/openai)를 참고하세요.
 
 ## 지원되는 기능
 

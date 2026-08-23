@@ -14,7 +14,7 @@ hide:
 
 ## 전제 조건
 
-- GitHub에서 [개인용 액세스 토큰](https://github.com/settings/personal-access-tokens/new)을 만듭니다. 자세한 내용은 [설명서](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)를 참조하세요.
+- GitHub에서 [개인용 액세스 토큰](https://github.com/settings/personal-access-tokens/new)을 만듭니다. 자세한 내용은 [설명서](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)를 참고하세요.
 
 ## 에이전트와 함께 사용
 

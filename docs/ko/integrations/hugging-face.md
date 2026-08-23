@@ -27,7 +27,7 @@ ADK 에이전트를 Hugging Face Hub와 수천 개의 Gradio AI 애플리케이�
 
 - Hugging Face에서 [user access token](https://huggingface.co/settings/tokens)을
   생성하세요. 자세한 내용은
-  [문서](https://huggingface.co/docs/hub/en/security-tokens)를 참조하세요.
+  [문서](https://huggingface.co/docs/hub/en/security-tokens)를 참고하세요.
 
 ## 에이전트와 함께 사용
 
