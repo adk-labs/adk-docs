@@ -45,23 +45,23 @@ uvx google-agents-cli setup
 
 ## 인증
 
-Agents CLI에서 에이전트를 실행하려면 제너레이티브 AI API용 사용자 인증 정보가 필요합니다. 가장 간단한 옵션은 Google AI Studio의 Gemini API 키입니다. [API 키](https://aistudio.google.com/app/apikey) 페이지에서 키를 생성한 다음, 다음 단계에서 프로젝트를 스캐폴딩한 후 해당 `.env` 파일을 열고 다음과 같이 설정합니다.
+Agents CLI에서 에이전트를 실행하려면 생성형 AI API 인증 정보가 필요합니다. 가장 간단한 방법은 Google AI Studio의 Gemini API 키를 사용하는 것입니다. [API 키](https://aistudio.google.com/app/apikey) 페이지에서 키를 발급한 뒤, 다음 단계에서 프로젝트를 생성하고 `.env` 파일을 열어 다음과 같이 설정합니다.
 
 ```env title="업데이트: .env"
 GEMINI_API_KEY=YOUR_API_KEY
 ```
 
-동일한 파일의 세 가지 `GOOGLE_CLOUD_*` 줄을 주석 처리하여 SDK가 Vertex AI 대신 해당 키를 사용하도록 합니다.
+동일한 파일에서 `GOOGLE_CLOUD_*`로 시작하는 세 줄을 주석 처리하면 SDK가 Vertex AI 대신 해당 API 키를 사용합니다.
 
 ??? note "대신 Google Cloud Agent Platform 사용하기"
 
-    이미 Google Cloud 프로젝트가 있는 경우 Agents CLI는 애플리케이션 기본 사용자 인증 정보(ADC)를 가져옵니다.
+    이미 Google Cloud 프로젝트가 있다면 Agents CLI가 애플리케이션 기본 사용자 인증 정보(ADC)를 자동으로 가져옵니다.
 
     ```shell
     gcloud auth application-default login
     ```
 
-    생성된 `.env` 파일의 `GOOGLE_CLOUD_*` 줄 주석 처리를 해제하고 프로젝트 식별자로 설정했는지 확인하세요. ADK로 Google Cloud 서비스 및 프로젝트에 연결하는 방법에 대한 자세한 내용은 ADK의 [Google Cloud 설정 가이드](/ko/get-started/google-cloud/)를 참조하세요.
+    생성된 `.env` 파일에서 `GOOGLE_CLOUD_*` 줄의 주석을 해제하고 프로젝트 식별자를 입력하세요. ADK로 Google Cloud 서비스 및 프로젝트에 연결하는 방법은 [Google Cloud 설정 가이드](/ko/get-started/google-cloud/)를 참고하세요.
 
 ## 에이전트 빌드
 
@@ -133,11 +133,11 @@ agents-cli playground
 이 명령어는 핫 리로드를 통해 ADK 웹 인터페이스를 시작하므로 편집 시 변경 사항이 프로젝트에 바로 반영됩니다. 플레이그라운드는 [http://localhost:8080](http://localhost:8080)에서 액세스할 수 있습니다. 왼쪽 상단에서 에이전트를 선택하고 몇 개의 텍스트 문단을 붙여넣습니다. 에이전트가 짧은 글머리 기호 요약으로 응답합니다.
 
 ## 다음 단계: 에이전트 평가 및 배포
-
-이제 Agents CLI를 설치하고 첫 번째 에이전트를 실행했으므로 다음과 같은 지침을 사용하여 코딩 에이전트로 평가 및 배포할 수 있습니다.
-
-*   ***"이 에이전트에 대한 평가를 작성하고 실행해줘"***: 범위를 지정할 때 설정한 성공 기준에 따라 [에이전트를 평가](https://google.github.io/agents-cli/guide/evaluation/)합니다. 코딩 에이전트가 결과를 채점하고 원인별로 실패를 그룹화하며 통과할 때까지 에이전트 지침을 조정합니다.
+ 
+이제 Agents CLI를 설치하고 첫 번째 에이전트를 실행했으므로, 다음과 같이 코딩 에이전트에 지시하여 평가와 배포를 진행할 수 있습니다.
+ 
+*   ***"이 에이전트 평가를 작성하고 실행해줘"***: 설정한 성공 기준에 따라 [에이전트를 평가](https://google.github.io/agents-cli/guide/evaluation/)합니다. 코딩 에이전트가 결과를 채점하고 원인별로 실패 요인을 분류하며, 테스트를 통과할 때까지 에이전트 지침을 개선합니다.
 *   ***"이 에이전트를 Cloud Run에 배포해줘"***: Agent Runtime, Cloud Run 또는 GKE로 [에이전트를 배포](/ko/deploy/agent-runtime/agents-cli/)합니다.
-*   ***"내 에이전트를 위한 관찰 가능성 인프라를 설정해줘"***: 프롬프트-응답 로깅 및 콘텐츠 로그를 추가합니다.
-
-평가, 배포 및 관찰 가능성을 포함한 전체 연습 과정은 Agents CLI [튜토리얼: 첫 번째 에이전트 빌드](https://google.github.io/agents-cli/guide/quickstart-tutorial/)를 참조하세요.
+*   ***"에이전트 관측 가능성 인프라를 설정해줘"***: 프롬프트-응답 로깅 및 콘텐츠 로그를 추가합니다.
+ 
+평가, 배포, 관측 가능성을 포함한 전체 실습 과정은 Agents CLI [튜토리얼: 첫 번째 에이전트 빌드](https://google.github.io/agents-cli/guide/quickstart-tutorial/)를 참고하세요.

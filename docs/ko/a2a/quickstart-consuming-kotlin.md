@@ -4,11 +4,11 @@
   <span class="lst-supported">ADK에서 지원</span><span class="lst-kotlin">Kotlin</span><span class="lst-preview">실험적 기능</span>
 </div>
 
-이 빠른 시작에서는 모든 개발자가 가장 흔하게 마주하는 시작점인 **"원격 에이전트가 있을 때 내 ADK 에이전트가 A2A를 통해 이를 사용하도록 하려면 어떻게 해야 할까?"**에 대해 다룹니다. 이는 다양한 에이전트가 협업하고 상호작용해야 하는 복잡한 다중 에이전트 시스템을 구축할 때 매우 중요합니다.
+이 빠른 시작에서는 모든 개발자가 가장 흔하게 마주하는 질문인 **"원격 에이전트가 있을 때 내 ADK 에이전트가 A2A로 이를 활용하려면 어떻게 해야 할까?"**를 다룹니다. 이는 여러 에이전트가 협업하는 복잡한 다중 에이전트 시스템을 구축할 때 핵심적인 구성 요소입니다.
 
 ## 개요
 
-이 샘플은 Kotlin용 Agent Development Kit (ADK)에서 **Agent2Agent (A2A)** 아키텍처를 시연하여, 로컬 에이전트가 다른 곳에서 실행 중인 에이전트에 작업의 일부를 위임하는 방법을 보여줍니다.
+이 샘플은 Kotlin용 Agent Development Kit (ADK)에서 **Agent2Agent (A2A)** 아키텍처를 활용해, 로컬 에이전트가 외부에서 실행 중인 다른 에이전트에 작업을 위임하는 방법을 보여줍니다.
 
 ```text
 ┌─────────────────┐         ┌────────────────────────┐
@@ -82,15 +82,15 @@ curl http://localhost:8001/a2a/check_prime_agent/.well-known/agent-card.json
 
     해당 기본 URL(`http://localhost:9090`)을 아래의 `agentCardUrl`로 전달하세요.
 
-## 원격 에이전트에 연결
-
-`A2AAgent`는 해당 카드를 가져와 원격 에이전트의 설명과 원격 에이전트가 스트리밍을 지원하는지 여부를 읽습니다. 전달하는 `name`은 카드에서 알리는 이름과 별개로 사용자 자체 에이전트 트리 내에서 이 에이전트의 식별자가 됩니다. 일시 중단 함수(suspending function)이므로 코루틴 내에서 호출하세요.
-
+## 원격 에이전트 연결
+ 
+`A2AAgent`는 해당 카드를 가져와 원격 에이전트의 설명과 스트리밍 지원 여부를 확인합니다. 전달하는 `name`은 카드에 적힌 이름과 별개로 내 에이전트 트리 안에서 이 에이전트를 식별하는 고유 이름이 됩니다. `suspend` 함수이므로 코루틴 안에서 호출하세요.
+ 
 ```kotlin title="A2AConsumer.kt"
 --8<-- "examples/kotlin/snippets/a2a/A2AConsumer.kt:remote_agent"
 ```
-
-이미 `AgentCard`를 보유하고 있는 경우(예: 직접 확인했거나 구성에 체크인된 정적 카드), 직접 전달받는 비 일시 중단 오버로드인 `A2AAgent(name = ..., agentCard = ...)`를 사용할 수 있습니다.
+ 
+이미 `AgentCard`가 있는 경우(예: 직접 생성했거나 정적 카드로 관리하는 경우), 카드를 바로 전달하는 비동기(non-suspending) 생성자 `A2AAgent(name = ..., agentCard = ...)`를 사용할 수 있습니다.
 
 ## 하위 에이전트로 사용
 
