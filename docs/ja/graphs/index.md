@@ -1,7 +1,7 @@
 # Graph-based agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
 Graph-based agent workflows in ADK let you build agents with more precise control,
@@ -101,6 +101,14 @@ function, and the final agent reports the information.
     )
     ```
 
+=== "TypeScript"
+
+    ADK TypeScript v2.0.0 では、`Workflow` は `edges` 配列を受け取ります。各行には順番に実行するノードがリストされます。`node()` 関数は、関数、エージェント、ツール、または別の `Workflow` をグラフノードとしてラップし、ノードの名前と `inputSchema` および `outputSchema` の契約を設定します。スキーマには Zod オブジェクトまたは genai の `Schema` を使用します。各ノードの戻り値は次のノードに入力として渡されるため、セッション状態 (session state) への書き込みは不要です。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/index/get_started.ts:get-started"
+    ```
+
 === "Go"
 
     In ADK Go v2.0.0, sequential workflows use the graph engine:
@@ -192,6 +200,14 @@ translated into a graph-based agent:
            )
        ],
     )
+    ```
+
+=== "TypeScript"
+
+    ADK TypeScript v2.0.0 では、ルーターノードは `createEvent({route})` で作成された `route` 値を含むイベントを返します。2つ目の edge の行では、各ルート値をそれを処理するノードにマッピングします。`route` に配列を設定すると、一致するすべてのブランチにディスパッチされるため、この例の分類器は複数のカテゴリを返すことができます。`DEFAULT_ROUTE` 設定は、どのブランチにも一致しなかったすべての値をキャッチします。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/index/process_pipeline.ts:process-pipeline"
     ```
 
 === "Go"

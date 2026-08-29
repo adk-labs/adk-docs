@@ -1,7 +1,7 @@
 # Graph-based agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
 Graph-based agent workflows in ADK let you build agents with more precise control,
@@ -101,6 +101,14 @@ function, and the final agent reports the information.
     )
     ```
 
+=== "TypeScript"
+
+    ADK TypeScript v2.0.0에서 `Workflow`는 `edges` 배열을 받습니다. 각 행에는 순서대로 실행할 노드가 나열됩니다. `node()` 함수는 함수, 에이전트, 도구 또는 다른 `Workflow`를 그래프 노드로 래핑하며 노드의 이름과 `inputSchema` 및 `outputSchema` 계약을 설정합니다. 스키마는 Zod 객체 또는 genai `Schema`입니다. 각 노드의 반환 값은 다음 노드의 입력으로 전달되므로 세션 상태(session state)에 별도로 기록할 필요가 없습니다.
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/index/get_started.ts:get-started"
+    ```
+
 === "Go"
 
     In ADK Go v2.0.0, sequential workflows use the graph engine:
@@ -192,6 +200,14 @@ translated into a graph-based agent:
            )
        ],
     )
+    ```
+
+=== "TypeScript"
+
+    ADK TypeScript v2.0.0에서 라우터 노드는 `createEvent({route})`로 생성된 `route` 값을 담은 이벤트를 반환합니다. 두 번째 edge 행은 각 라우트 값을 이를 처리하는 노드에 매핑합니다. `route`를 배열로 설정하면 일치하는 모든 브랜치로 디스패치되므로, 이 예제의 분류기는 둘 이상의 카테고리를 반환할 수 있습니다. `DEFAULT_ROUTE` 설정은 어떤 브랜치와도 일치하지 않는 모든 값을 처리합니다.
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/index/process_pipeline.ts:process-pipeline"
     ```
 
 === "Go"

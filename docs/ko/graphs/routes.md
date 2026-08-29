@@ -1,7 +1,7 @@
 # Build graph routes for agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
 Graph-based workflows in ADK define agent logic as a graph of execution nodes
@@ -33,6 +33,25 @@ agents.
         ),
       ],
     )
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    export const rootAgent = new Workflow({
+      name: 'routing_workflow',
+      edges: [
+        ['START', processMessage, router],
+        [
+          router,
+          {
+            'output-1': response1,
+            'output-2': response2,
+            'output-3': response3,
+          },
+        ],
+      ],
+    });
     ```
 
 === "Go"
@@ -91,6 +110,14 @@ objects.
         return Event(output=input_text_modified)
     ```
 
+=== "TypeScript"
+
+    ADK TypeScript v2.0.0에서 기본 노드 유형은 함수를 `node()`에 전달하여 생성하는 `FunctionNode`입니다. 핸들러는 항상 `(ctx, input)` 매개변수를 받으며, ADK는 매개변수 이름을 통해 값을 주입하지 않습니다. 값을 직접 반환하면 이벤트의 `output` 필드로 자동 래핑됩니다. `route` 또는 `content`를 함께 설정해야 하는 경우에는 명시적인 형태인 `createEvent({output})`를 반환합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/function_node.ts:function-node"
+    ```
+
 === "Go"
 
     In ADK Go v2.0.0, the primary node type is `workflow.NewFunctionNode`.
@@ -134,6 +161,21 @@ A sequential route runs each node once, in the listed order.
             task_A_node,
             task_B_node,
             task_C_node)]           # 3 nodes run in order
+    ```
+
+=== "TypeScript"
+
+    `'START'`로 시작하는 `edges` 행은 나열된 각 노드를 순서대로 한 번씩 실행하고, 모든 노드의 반환 값을 다음 노드로 전달합니다:
+
+    ```typescript
+    edges: [['START', taskANode]]                       // 단일 노드
+    edges: [['START', taskANode, taskBNode, taskCNode]] // 3개 노드 순차 실행
+    ```
+
+    둘 이상의 행에 `'START'`를 나열하면 병렬 경로가 생성됩니다. 자세한 내용은 [팬아웃 및 조인](#parallel-tasks-fan-out-and-join-paths)을 참조하세요.
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/sequence.ts:sequence"
     ```
 
 === "Go"
@@ -183,6 +225,14 @@ A sequential route runs each node once, in the listed order.
             ),
         ],
     )
+    ```
+
+=== "TypeScript"
+
+    브랜칭에는 `route` 값을 방출하는 노드와 각 라우트 값을 처리하는 노드에 매핑하는 edge 행이 필요합니다. 라우트 값은 문자열, 숫자 또는 불리언일 수 있습니다. `DEFAULT_ROUTE` 설정은 동일한 소스 노드의 다른 어떤 라우트와도 일치하지 않을 때 매칭됩니다. 브랜치 대상은 모든 노드 유사(node-like) 값이 될 수 있습니다. 이 예제에서 `taskBNode`는 `LlmAgent`이고 `taskCNode`는 함수입니다.
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/branches.ts:branches"
     ```
 
 === "Go"
@@ -281,13 +331,13 @@ before passing results to the next step.
     ]
     ```
 
-    !!! warning "Caution: Stuck JoinNode from incomplete nodes"
+=== "TypeScript"
 
-        The ***JoinNode*** object proceeds only after all its upstream nodes
-        have provided an Event output. If one of the upstream nodes fails to
-        provide output, the JoinNode is stuck and workflow execution stops.
-        Make sure to include failsafe output from any node that outputs to a
-        ***JoinNode***.
+    `JoinNode`는 팬인(fan-in) 배리어입니다. 이 로직 메커니즘은 모든 이전(predecessor) 태스크가 완료될 때까지 대기한 후, 이전 노드 이름을 키로 하는 레코드를 후속 노드에 전달합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/fan_out_join.ts:fan-out-join"
+    ```
 
 === "Go"
 
@@ -323,13 +373,9 @@ before passing results to the next step.
     --8<-- "examples/go/snippets/graphs/routes/main.go:parallel-fan-out"
     ```
 
-    !!! warning "Caution: Stuck JoinNode from incomplete nodes"
+!!! warning "주의: JoinNode로 연결되는 노드는 반드시 출력을 생성해야 합니다"
 
-        `workflow.NewJoinNode` proceeds only after every predecessor node has
-        emitted an `event.Output`. If a predecessor fails without emitting
-        output, the JoinNode is stuck and workflow execution stops. Attach a
-        `RetryConfig` to flaky predecessor nodes to guard against transient
-        failures.
+    `JoinNode`는 모든 이전 노드가 완료된 후에만 해제됩니다. 조인으로 연결되는 모든 노드가 자체 출력을 생성하는지 확인하고, 실패할 수 있는 모든 노드에 재시도 구성을 연결하세요. 출력을 생성하지 않고 완료된 이전 노드가 있으면 조인에 해당 브랜치의 값이 남지 않으며, 결과적인 실패는 문제를 유발한 노드에서 떨어진 다운스트림에서 발생합니다.
 
 ## 중첩 워크플로
 
@@ -369,6 +415,16 @@ accomplish this goal.
     process traceability. When the nested workflow completes the last node in
     its process, the parent node extracts data from the final leaf nodes and
     emits it as the output of the nested workflow.
+
+=== "TypeScript"
+
+    `Workflow` 자체가 하나의 노드이므로, 재사용 가능한 하위 프로세스를 캡슐화하기 위해 다른 워크플로의 edges 내부에서 워크플로를 노드로 사용할 수 있습니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/nested_workflow.ts:nested-workflow"
+    ```
+
+    **중첩 워크플로 데이터 출력.** 내부 워크플로가 실행되는 동안 각 노드 이벤트는 추적성을 위해 상위 노드로 전달(bubble up)됩니다. 내부 워크플로가 완료되면 최종 노드의 출력이 중첩 워크플로 노드의 출력이 됩니다.
 
 === "Go"
 
@@ -434,6 +490,14 @@ lifecycle on each iteration.
     )
     ```
 
+=== "TypeScript"
+
+    루프는 역방향 에지(back-edge)입니다. 다운스트림 노드가 이전 노드로 다시 라우팅되며, 엔진은 반복마다 새로운 라이프사이클로 해당 노드를 다시 활성화합니다. 라우터가 종료 브랜치를 선택하면 루프가 종료됩니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/loop_escalation.ts:loop-escalation"
+    ```
+
 === "Go"
 
     The following example uses the graph engine with `workflow.EdgeBuilder`.
@@ -444,3 +508,7 @@ lifecycle on each iteration.
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:loop-escalate"
     ```
+
+!!! warning "주의: 제한 없는 그래프 순환"
+
+    그래프 사이클은 자동으로 제한되지 않습니다. 종료 조건이 결국 참(true)이 되도록 보장하거나, 루프가 자체 코드에서 실행되고 범위를 제어할 수 있는 [동적 워크플로](/graphs/dynamic/#loop-route)로 반복을 표현하세요.

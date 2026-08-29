@@ -1,7 +1,7 @@
 # Build graph routes for agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
 Graph-based workflows in ADK define agent logic as a graph of execution nodes
@@ -33,6 +33,25 @@ agents.
         ),
       ],
     )
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    export const rootAgent = new Workflow({
+      name: 'routing_workflow',
+      edges: [
+        ['START', processMessage, router],
+        [
+          router,
+          {
+            'output-1': response1,
+            'output-2': response2,
+            'output-3': response3,
+          },
+        ],
+      ],
+    });
     ```
 
 === "Go"
@@ -91,6 +110,14 @@ objects.
         return Event(output=input_text_modified)
     ```
 
+=== "TypeScript"
+
+    ADK TypeScript v2.0.0 では、プライマリノードタイプは関数を `node()` に渡して作成する `FunctionNode` です。ハンドラーは常に `(ctx, input)` パラメータを受け取ります。ADK はパラメータ名による値の挿入を行いません。値を直接返すと、イベントの `output` フィールドに自動的にラップされます。`route` や `content` も設定する必要がある場合は、明示的な形式である `createEvent({output})` を返します。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/function_node.ts:function-node"
+    ```
+
 === "Go"
 
     In ADK Go v2.0.0, the primary node type is `workflow.NewFunctionNode`.
@@ -134,6 +161,21 @@ A sequential route runs each node once, in the listed order.
             task_A_node,
             task_B_node,
             task_C_node)]           # 3 nodes run in order
+    ```
+
+=== "TypeScript"
+
+    `'START'` で始まる `edges` の行は、リストされた各ノードを順番に1回ずつ実行し、すべてのノードの戻り値を次のノードに渡します。
+
+    ```typescript
+    edges: [['START', taskANode]]                       // 単一ノード
+    edges: [['START', taskANode, taskBNode, taskCNode]] // 3つのノードを順に実行
+    ```
+
+    複数の行に `'START'` を指定すると、並列パスが作成されます。詳細については、[ファンアウトと結合](#parallel-tasks-fan-out-and-join-paths) を参照してください。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/sequence.ts:sequence"
     ```
 
 === "Go"
@@ -183,6 +225,14 @@ A sequential route runs each node once, in the listed order.
             ),
         ],
     )
+    ```
+
+=== "TypeScript"
+
+    分岐には、`route` 値を出力するノードと、各ルート値をそれを処理するノードにマッピングする edge の行が必要です。ルート値には文字列、数値、またはブール値を使用できます。`DEFAULT_ROUTE` 設定は、同じソースノード上の他のどのルートにも一致しない場合にマッチします。分岐のターゲットにはノードライクな任意の値を指定できます。この例では、`taskBNode` は `LlmAgent`、`taskCNode` は関数です。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/branches.ts:branches"
     ```
 
 === "Go"
@@ -281,13 +331,13 @@ before passing results to the next step.
     ]
     ```
 
-    !!! warning "Caution: Stuck JoinNode from incomplete nodes"
+=== "TypeScript"
 
-        The ***JoinNode*** object proceeds only after all its upstream nodes
-        have provided an Event output. If one of the upstream nodes fails to
-        provide output, the JoinNode is stuck and workflow execution stops.
-        Make sure to include failsafe output from any node that outputs to a
-        ***JoinNode***.
+    `JoinNode` はファンイン (fan-in) バリアです。このロジックメカニズムは、すべての先行タスクが完了するのを待機し、後続ノードに先行ノード名をキーとするレコードを渡します。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/fan_out_join.ts:fan-out-join"
+    ```
 
 === "Go"
 
@@ -323,13 +373,9 @@ before passing results to the next step.
     --8<-- "examples/go/snippets/graphs/routes/main.go:parallel-fan-out"
     ```
 
-    !!! warning "Caution: Stuck JoinNode from incomplete nodes"
+!!! warning "警告: JoinNode に接続するノードは出力を生成する必要があります"
 
-        `workflow.NewJoinNode` proceeds only after every predecessor node has
-        emitted an `event.Output`. If a predecessor fails without emitting
-        output, the JoinNode is stuck and workflow execution stops. Attach a
-        `RetryConfig` to flaky predecessor nodes to guard against transient
-        failures.
+    `JoinNode` は、すべての先行ノードが終了した後にのみ解放されます。結合に供給するすべてのノードが独自の出力を生成することを確認し、失敗する可能性のあるノードには再試行構成を設定してください。出力を生成せずに終了した先行ノードがあると、そのブランチの値が結合に存在しなくなり、その結果のエラーは原因となったノードから離れたダウンストリームで発生します。
 
 ## ネストされたワークフロー
 
@@ -369,6 +415,16 @@ accomplish this goal.
     process traceability. When the nested workflow completes the last node in
     its process, the parent node extracts data from the final leaf nodes and
     emits it as the output of the nested workflow.
+
+=== "TypeScript"
+
+    `Workflow` 自体がノードであるため、再利用可能なサブプロセスをカプセル化するために、別のワークフローの edges 内で使用できます。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/nested_workflow.ts:nested-workflow"
+    ```
+
+    **ネストされたワークフローのデータ出力。** 内部ワークフローの実行中、追跡性のために各ノードイベントが親にバブリングされます。終了すると、ターミナルノードの出力がネストされたワークフローノードの出力になります。
 
 === "Go"
 
@@ -434,6 +490,14 @@ lifecycle on each iteration.
     )
     ```
 
+=== "TypeScript"
+
+    ループはバックエッジ (back-edge) です。ダウンストリームのノードが以前のノードにルーティングし直し、エンジンはイテレーションごとに新しいライフサイクルでそのノードを再アクティブ化します。ルーターが終了ブランチを選択すると、ループが終了します。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/routes/loop_escalation.ts:loop-escalation"
+    ```
+
 === "Go"
 
     The following example uses the graph engine with `workflow.EdgeBuilder`.
@@ -444,3 +508,7 @@ lifecycle on each iteration.
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:loop-escalate"
     ```
+
+!!! warning "警告: 制限のないグラフサイクル"
+
+    グラフサイクルは自動的には制限されません。終了条件が最終的に true になるようにするか、ループが独自のコード内で実行され、その境界を制御できる [動的ワークフロー](/graphs/dynamic/#loop-route) として反復を表現してください。

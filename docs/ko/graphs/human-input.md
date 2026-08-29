@@ -1,7 +1,7 @@
 # Human input for agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
 Being able to request human input for data input, decision verification, or
@@ -39,6 +39,16 @@ the input process more predictable and reliable.
     system receives an input from a user. Once the system receives input from the
     user, that input is passed to the next node.
 
+=== "TypeScript"
+
+    ADK TypeScript v2.0.0에서 인간 입력 노드는 `RequestInput`을 yield합니다. `step1` 노드는 사용자가 응답할 때까지 워크플로를 일시 중지하고, 사용자의 응답은 다음 노드의 입력으로 전달됩니다. 인간 참여형(HITL) 노드는 모델을 필요로 하지 않으므로 일시 중지가 결정론적입니다.
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/human-input/get_started.ts:get-started"
+    ```
+
+    이 구현은 기본값인 `rerunOnResume: false` 핸드오프를 보여줍니다. 중단된 노드는 다시 실행되지 않으며, 사용자의 응답을 출력으로 삼아 완료됩니다. `ctx.runNode()`를 호출하는 노드는 대신 `rerunOnResume: true`가 필요합니다. 자세한 내용은 [동적 워크플로에서의 인간 입력](/graphs/dynamic/#human-input)을 참조하세요.
+
 === "Go"
 
     In ADK Go v2.0.0, a HITL graph node is built with
@@ -69,13 +79,18 @@ the input process more predictable and reliable.
         request.
     -   **`response_schema`:** A data structure the human response must conform to.
 
-    !!! note "Note: Response schema input limitations"
+=== "TypeScript"
 
-        For the **response_schema** setting, the ***RequestInput*** class does not
-        automatically reformat human responses to fit a specified data structure. The
-        human response must be provided in the specified format. For a better user
-        experience, consider providing a user interface to collect structured data
-        or use an Agent node to conform unstructured data to the format required.
+    `RequestInput` 클래스는 다음 구성 옵션을 사용합니다:
+
+    -   **`message`:** 사용자에게 질문 내용을 설명하는 텍스트입니다.
+    -   **`payload`:** 클라이언트가 추가 컨텍스트를 렌더링할 수 있도록 프롬프트와 함께 전송되는 구조화된 데이터입니다.
+    -   **`responseSchema`:** 응답이 취할 것으로 예상되는 형태입니다. 스키마는 인터럽트 시 `functionCall.args.response_schema`로 전달되며, 클라이언트는 이를 읽어 응답용 양식을 렌더링합니다.
+
+    노드의 `rerunOnResume` 옵션은 응답이 도착했을 때 일어나는 동작을 제어합니다:
+
+    -   **`false`** (리프 노드 기본값): 응답이 중단된 노드를 우회하여 해당 노드의 후속 노드에 입력으로 라우팅됩니다.
+    -   **`true`**: 노드 본문이 처음부터 다시 실행됩니다. 이 설정은 `ctx.runNode()`를 호출하는 모든 노드에 필요하며, 재개 시 캐시된 하위 결과를 전달할 수 있습니다.
 
 === "Go"
 
@@ -105,6 +120,10 @@ the input process more predictable and reliable.
         human's reply payload. If your workflow needs structured feedback,
         include a UI or a downstream agent node to validate the response before
         acting on it.
+
+!!! note "참고: 응답 스키마 입력 제한사항"
+
+    응답 스키마는 사람의 응답을 지정된 구조에 맞게 자동으로 재구성하지 않습니다. 응답은 이미 해당 형식이어야 합니다. 더 나은 사용자 경험을 위해 클라이언트 인터페이스에서 구조화된 데이터를 수집하거나, 일시 중지 뒤에 에이전트 노드를 배치하여 응답을 필요한 형식으로 변환하세요.
 
 ## 사람의 입력 (Human Input) examples
 
@@ -149,6 +168,14 @@ The following code examples demonstrate more detailed human input requests.
        )
     ```
 
+=== "TypeScript"
+
+    다음 3개 노드 그래프는 구조화된 여행 일정을 작성하고, 클라이언트가 이를 렌더링할 수 있도록 프롬프트와 함께 `payload`로 전송한 다음 사용자의 피드백에 따라 작동합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/human-input/payload_and_schema.ts:payload-and-schema"
+    ```
+
 === "Go"
 
     The following code sample shows a three-node graph: a builder node generates
@@ -187,7 +214,15 @@ specific tool call.
                Hobby,
                Example of attraction you liked
        """
-       yield RequestInput(message=input_message, response_schema=str)
+        yield RequestInput(message=input_message, response_schema=str)
+    ```
+
+=== "TypeScript"
+
+    도구가 실행되기 전에 에이전트가 승인을 위해 일시 중지하도록 하려면 `FunctionTool`에 `requireConfirmation: true`를 설정하세요. 그래프의 인간 참여형(HITL) 노드는 다른 목적으로 사용됩니다. 도구 호출을 확인하는 대신 사용자에게 입력을 요청하여 워크플로를 시작할 수 있습니다. `responseSchema: z.string()` 옵션은 일반 텍스트 응답을 요청합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/human-input/initial_prompt.ts:initial-prompt"
     ```
 
 === "Go"

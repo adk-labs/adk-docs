@@ -1,7 +1,7 @@
 # Data handling for agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
 Structuring and managing data between agents and graph-based nodes is critical
@@ -27,6 +27,23 @@ receives it as its typed input.
     -   **`message`**: Data intended as a response to a user.
     -   **`state`**: Data automatically persisted across nodes via ***Events***
         throughout an ADK session.
+
+=== "TypeScript"
+
+    ADK TypeScript v2.0.0 では、ノードはイベントを通じてデータを交換します。ノードのデータ処理における主なフィールドは次のとおりです。
+
+    -   **`output`**: 次のノードに渡される値。値を直接返すと ADK がそれをイベントにラップします。または `createEvent({output})` で明示的にフィールドを設定します。
+    -   **`content`**: ユーザー向けのメッセージ。ランタイムはこのフィールドをレンダリングしますが、グラフはこれを次のノードに渡しません。
+    -   **`route`**: 追従する条件付き edge を選択するルーティングキー。
+
+    セッション状態 (Session state) はイベントから分離されています。ノードは `ctx.state` を介して状態の読み書きを行い、累積された差分はそのノードのイベントに添付されます。状態キーには有効期間とスコープを制御するプレフィックスを付けることができます。
+
+    | プレフィックス | スコープ |
+    |---|---|
+    | `app:` | アプリのすべてのユーザーおよびセッション間で共有 |
+    | `user:` | ユーザーに関連付けられ、そのセッション間で共有 |
+    | `temp:` | 現在の呼び出しが終了した後に破棄 |
+    | *(なし)* | セッションの有効期間中保持 |
 
 === "Go"
 
@@ -89,6 +106,18 @@ Each step in a workflow produces output for its successor.
     ***return*** or ***yield*** command without a parameter passes a `None` value
     to the next node.
 
+=== "TypeScript"
+
+    ノードの出力を生成するには、同等の3つの方法があります。値を直接返すか、`createEvent({output})` を返すか、結果とともに進行状況をストリーミングするために非同期ジェネレーター (async generator) からイベントを yield します。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/data-handling/node_output.ts:node-output"
+    ```
+
+    !!! warning "警告: 1回の実行につき1つのイベントから `output` を出力してください"
+
+        ノードは `output` を持つイベントをいくつでも yield できますが、この場合 ADK はエラーを発生させません。各イベントは前のイベントを上書きし、後続ノードは最終値のみを受け取ります。進行状況メッセージには代わりに `content` を使用してください。
+
 === "Go"
 
     **workflow package**: a `FunctionNode` simply returns a typed Go value.
@@ -131,6 +160,14 @@ Each step in a workflow produces output for its successor.
         one ***yield*** in a node, having two or more ***yield*** commands with
         an ***Event.output*** results in a runtime error.
 
+=== "TypeScript"
+
+    `output` フィールドはテキストに限定されません。シリアライズ可能な任意の値が次のノードに渡され、JSON の解析や状態の読み取りを必要とせず、型付きオブジェクトとして受け取ることができます。生成側のノードに `outputSchema` をアタッチするか、消費側のノードに `inputSchema` をアタッチすることで、契約が明示的になり、実行時に検証されます。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/data-handling/structured_output.ts:structured-output"
+    ```
+
 === "Go"
 
     **workflow package**: a `FunctionNode` can return any JSON-serializable
@@ -159,6 +196,14 @@ Each step in a workflow produces output for its successor.
         return Event(route="BUG")
     ```
 
+=== "TypeScript"
+
+    `route` 値は `output` と独立しているため、1つのイベントでブランチを選択し、同時にペイロードを転送することができます。`DEFAULT_ROUTE` 設定は、他のブランチと一致しなかったすべての値をキャッチします。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/data-handling/routing_output.ts:routing-output"
+    ```
+
 === "Go"
 
     **workflow package**: an emitting `FunctionNode` constructs a
@@ -182,6 +227,14 @@ Each step in a workflow produces output for its successor.
     async def user_message(node_input: str):
       """Tell user research process is starting."""
       yield Event(message="Beginning research process...")
+    ```
+
+=== "TypeScript"
+
+    ユーザー向けのメッセージはイベントの `content` フィールドです。ランタイムは `content` をレンダリングしますが、グラフはこれを次のノードに渡しません。ユーザー向けには `content` を、次のノード向けには `output` を使用してください。ノードは2つのイベントを送信することで両方を出力でき、そのうちの1つにのみ `output` を含めます。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/data-handling/user_message.ts:user-message"
     ```
 
 === "Go"
@@ -238,6 +291,18 @@ inside tools and callbacks regardless of which agent style you use.
         data* between nodes. Use artifacts or other data persistence mechanisms,
         such as database Tools, to persist large data resources during the life
         cycle of a Workflow.
+
+=== "TypeScript"
+
+    状態は戻り値として返すのではなく、`ctx.state` を介して書き込みます。書き込みは同じ実行内の以降のすべてのノードから参照でき、書き込みを行ったノードのイベントとともにコミットされます。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/data-handling/session_state.ts:session-state"
+    ```
+
+    !!! warning "警告: `state` データの制限事項"
+
+        セッション状態は軽量な Key-Value ストアです。ノード間で大きなペイロードを移動するために使用しないでください。代わりにアーティファクトまたはデータベースツールを使用してください。次のノードのみが値を必要とする場合は、ノードの `output` として edge に沿って渡します。値が実行後も存続する必要がある場合や、ツール、コールバック、または `{key}` 命令テンプレートによって読み取られる必要がある場合に状態を使用してください。
 
 === "Go"
 
@@ -306,6 +371,19 @@ accepted and produced by any agent node.
     )
     ```
 
+=== "TypeScript"
+
+    スキーマには Zod オブジェクトまたは genai の `Schema` を使用します。スキーマの場所によってその効果が決まります。
+
+    -   `LlmAgent.outputSchema` オプションは、モデルがその形式で応答することを要求します。
+    -   `LlmAgent.inputSchema` オプションは、エージェントがツールとして公開されている場合にのみ適用されます。グラフ内では、`node(agent, {inputSchema})` を使用してノード自体にノードの入力を検証するスキーマを設定します。
+
+    グラフ内のエージェントは、デフォルトである `single_turn` モードまたは `task` モードで実行する必要があります。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/data-handling/schemas.ts:schemas"
+    ```
+
 === "Go"
 
     **workflow package**: use `workflow.NewAgentNodeTyped[Input, Output]` to
@@ -366,6 +444,19 @@ accepted and produced by any agent node.
             (START, city_generator_agent, lookup_time_function, city_report_agent)
         ],
     )
+    ```
+
+=== "TypeScript"
+
+    エージェントの命令内では、2つのデータ選択形式を使用できます。
+
+    -   `{Class.field}` 形式は、このノードの入力からフィールドを読み取ります。
+    -   `<Class.field from source_node>` 形式は、名前付きの先行ノードの出力からフィールドを読み取ります。複数のアップストリームノードが同じフィールド名を共有している場合にこの形式を使用します。
+
+    どちらの形式も、セッション状態を読み取る `{state_key}` とは異なります。`Class.` プレフィックスはドキュメント用のみであり、解決にはドットの後のフィールド名が使用されます。
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/data-handling/structured_access.ts:structured-access"
     ```
 
 === "Go"

@@ -1,7 +1,7 @@
 # Dynamic agent workflows
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
 The ADK framework provides a programmatic way to define workflows as a more
@@ -66,6 +66,19 @@ workflow containing a single node with a function:
     keep the written code as simple as possible. This annotation generates wrappers
     that allow the code to be run in the context of an ADK dynamic workflow.
 
+=== "TypeScript"
+
+    TypeScript에는 `@node` 데코레이터가 없습니다. 대신 `node(fn, options)` 팩토리 함수를 사용하세요. `ctx.runNode()` 메서드는 `ctx.run_node()`에 해당합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/get_started.ts:get-started"
+    ```
+
+    오케스트레이터 노드를 작성할 때, 결과를 읽는 방법과 일시 중지 후 워크플로가 작동하는 방식에 영향을 미치는 두 가지 세부사항이 있습니다:
+
+    -   `ctx.runNode()` 메서드는 출력 값이 아닌 노드 결과(node result)로 확인(resolve)됩니다. 값을 가져오려면 `.output` 프로퍼티를 읽으세요.
+    -   `ctx.runNode()`를 호출하는 오케스트레이터는 반드시 `rerunOnResume: true`를 설정해야 합니다. 이 설정은 재개 시 노드 본문을 다시 실행하므로, 이미 완료된 하위 노드는 다시 실행되지 않고 체크포인트에서 재생됩니다.
+
 === "Go"
 
     In Go, `workflow.NewFunctionNode` replaces the `@node` decorator and
@@ -124,6 +137,19 @@ run within a workflow.
     functions from an external library, need to create multiple nodes from the
     same function with different configurations, or if you are managing node
     references in a registry for advanced orchestration.
+
+=== "TypeScript"
+
+    노드를 빌드하는 데는 `node(fn, options)` 팩토리 함수와 명시적인 `new FunctionNode(name, fn, config)` 생성자의 두 가지 방법이 있습니다. 다른 라이브러리의 함수를 래핑하거나, 하나의 함수에서 서로 다르게 구성된 여러 노드가 필요하거나, 고급 오케스트레이션을 위해 레지스트리에서 노드 참조를 관리할 때는 생성자를 사용하세요.
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/nodes.ts:node-forms"
+    ```
+
+    이 코드 샘플에서 가장 중요한 옵션은 `rerunOnResume`이며, 이는 인간 참여형(human-in-the-loop) 일시 중지 후 워크플로가 재개될 때 발생하는 동작을 제어합니다:
+
+    -   **`true` (재진입, re-entry):** 노드 본문이 처음부터 다시 실행됩니다. `ctx.runNode()`를 호출하는 모든 오케스트레이터에 이 설정을 사용하세요. 본문이 다시 실행되며 이미 완료된 하위 노드 활성화는 자동으로 건너뜁니다.
+    -   **`false` (핸드오프, 리프 노드 기본값):** 재개 페이로드가 중단된 노드를 우회하여 해당 노드의 후속 노드에 입력으로 라우팅됩니다.
 
 === "Go"
 
@@ -196,6 +222,14 @@ execution logic (order and paths) for those nodes.
     )
     ```
 
+=== "TypeScript"
+
+    오케스트레이터는 각 하위 단계에 대해 `ctx.runNode()`를 await하는 비동기 함수입니다. 이를 `rerunOnResume: true`로 노드로 래핑하고 그래프의 유일한 edge로 사용합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/nodes.ts:workflows"
+    ```
+
 === "Go"
 
     `workflow.NewDynamicNode` creates an orchestrator whose body calls
@@ -264,6 +298,16 @@ manually read and write session state keys for data transfer.
         return report_text
     ```
 
+=== "TypeScript"
+
+    `ctx.runNode()` 함수는 하위 노드의 결과를 직접 반환하므로, 값을 한 단계 다운스트림으로 이동하기 위해 세션 상태 키를 읽고 쓸 필요가 없습니다. 이 함수는 `LlmAgent`를 포함하여 노드 유사(node-like) 값을 먼저 `node()`로 래핑하지 않고도 허용합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/data_handling.ts:data-handling"
+    ```
+
+    스키마는 그래프에서와 동일하게 작동합니다. [순차 라우트](#sequence-route) 섹션에 표시된 것처럼 실행하는 노드에 스키마를 연결하세요.
+
 === "Go"
 
     In Go, `workflow.NewAgentNode` wraps an `agent.Agent` so it can be
@@ -303,6 +347,14 @@ as you can with graph-based workflows.
         report_text = await ctx.run_node(city_report_agent, city_time)
 
         return report_text
+    ```
+
+=== "TypeScript"
+
+    순차 라우트는 `ctx.runNode()` 호출을 차례로 await합니다. 각 호출은 다음 호출이 시작되기 전에 완료됩니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/sequence_route.ts:sequence-route"
     ```
 
 === "Go"
@@ -366,6 +418,14 @@ workflows offer much more flexibility to define the routing logic you need.
       return code
     ```
 
+=== "TypeScript"
+
+    동적 워크플로는 그래프의 역방향 에지 대신 일반 루프로 반복을 정의하여 워크플로 로직을 단순하게 유지하는 데 도움이 됩니다. 값은 로컬 변수에 유지되며, 상태는 에이전트의 지침 템플릿에서 다시 읽어야 하는 경우에만 기록됩니다. 그래프 사이클과 달리 루프는 루프 조건에 의해 바운딩(제한)됩니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/loop_route.ts:loop-route"
+    ```
+
 === "Go"
 
     In Go, the loop is a plain `for` loop inside the dynamic node body. The
@@ -411,6 +471,18 @@ Dynamic workflows in ADK can support parallel execution.
         The workflow framework ensures that if a dynamic workflow is resumed,
         only failed or interrupted worker nodes are re-executed, including
         parallel worker nodes.
+
+=== "TypeScript"
+
+    `ctx.runNode()` 메서드는 Promise를 반환하므로, 어떤 하위 노드도 await하기 전에 모든 하위 노드를 시작하면 하위 노드들이 동시에 실행되고 `Promise.all`이 결과를 수집합니다. 실행 ID(Run ID)는 호출 순서대로 할당되므로 재개 전반에서 ID를 결정론적으로 유지하려면 동기 루프에서 하위 노드를 시작하세요:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/parallel_route.ts:parallel-route"
+    ```
+
+    !!! tip "팁: 내장 병렬 워커를 선호하세요"
+
+        목록의 각 항목에 대해 하나의 노드를 실행하려면 `node(worker, {parallelWorker: true, maxParallelWorkers: 4})`를 사용하세요. 이 옵션은 팬아웃을 수행하고 동시성을 제한하며 기본값은 8입니다. 커스텀 스케줄링이나 부분 실패 처리가 필요한 경우 위에 표시된 수동 방식을 사용하세요. 재개 시 두 경우 모두 실패하거나 중단된 워커만 다시 실행됩니다.
 
 === "Go"
 
@@ -468,6 +540,18 @@ Dynamic workflows in ADK can also include human input or human in the loop
 
         Parent nodes in dynamic workflows that call `ctx.run_node` must set
         `rerun_on_resume=True` to handle interruptions properly.
+
+=== "TypeScript"
+
+    리프 노드는 워크플로를 일시 중지하기 위해 `RequestInput`을 반환하고 기본값인 `rerunOnResume: false`를 유지하여 응답이 출력이 되도록 합니다. 이를 호출하는 오케스트레이터는 반드시 `rerunOnResume: true`를 설정해야 합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/human_input.ts:human-input"
+    ```
+
+    !!! important "중요: 결정을 내리기 전에 `interruptIds`를 확인하세요"
+
+        `ctx.runNode()` 메서드는 하위 노드가 중단될 때 오류를 발생시키지 **않습니다**. 정상적으로 반환되며 결과의 `interruptIds` 프로퍼티가 채워지고 `output` 프로퍼티는 여전히 `undefined` 상태로 남습니다. 결과를 사용하기 전에 `interruptIds`를 확인하세요. 이 검사를 건너뛰는 오케스트레이터는 누락된 출력을 답변으로 취급하고 사용자가 제공하지 않은 값으로 계속 진행합니다.
 
 === "Go"
 
@@ -545,6 +629,14 @@ and logically remain the same for the input.
     `"1"` (represented as strings). Custom `run_id` values must contain at
     least one non-numeric character to avoid collisions with these
     auto-generated IDs.
+
+=== "TypeScript"
+
+    후행 옵션으로 `ctx.runNode()`에 `runId`를 전달하세요. 이 ID는 자동 생성되는 순차 ID와 충돌하지 않도록 하나 이상의 숫자가 아닌 문자를 포함해야 합니다:
+
+    ```typescript
+    --8<-- "examples/typescript/snippets/graphs/dynamic/custom_run_ids.ts:custom-execution-ids"
+    ```
 
 === "Go"
 
