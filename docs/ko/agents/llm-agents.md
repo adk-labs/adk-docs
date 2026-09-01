@@ -353,13 +353,24 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 !!! warning "경고: `output_schema`와 `tools` 함께 사용"
 
     동일한 LLM 요청에서 `output_schema`와 `tools`를 함께 사용하는 방식은 [Gemini 3.0](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#structured-output)을 포함한 특정 모델에서만 지원됩니다.
-    다른 모델에서는 ADK의 [함수 도구](https://github.com/google/adk-python/blob/main/src/google/adk/flows/llm_flows/_output_schema_processor.py))를 사용하는 우회 방식이 안정적으로 동작하지 않을 수 있습니다.
-    이런 경우에는 출력 형식을 별도로 처리하는 하위 에이전트를 사용하는 것을 고려하세요.
+    다른 모델의 경우, ADK는 구조화된 출력을 수집하기 위해 [`set_model_response` 함수 도구](https://github.com/google/adk-python/blob/main/src/google/adk/flows/llm_flows/_output_schema_processor.py)로 폴백하지만 안정적으로 작동하지 않을 수 있습니다.
+    이런 경우에는 출력 형식을 별도로 처리하는 서브 에이전트를 사용하는 것을 고려하세요.
 
 *   **`output_key` (선택 사항):** 문자열 키를 제공합니다. 설정된 경우, 에이전트의 *최종* 응답 텍스트 내용은 이 키 아래 세션의 상태 사전에 자동으로 저장됩니다. 이는 에이전트 간 또는 워크플로 단계 간에 결과를 전달하는 데 유용합니다.
     *   Python에서는 `session.state[output_key] = agent_response_text`와 같이 보일 수 있습니다.
     *   Java에서는 `session.state().put(outputKey, agentResponseText)`와 같습니다.
     *   Golang에서는 콜백 핸들러 내에서 `ctx.State().Set(output_key, agentResponseText)`와 같습니다.
+
+    `output_schema`도 함께 설정된 경우 텍스트 대신 *파싱된* 응답이 저장됩니다(Python에서는 `dict`, Java 및 Kotlin에서는 `Map`).
+
+!!! note "Java 및 Kotlin에서의 스키마 유효성 검사"
+
+    Java 및 Kotlin은 스키마의 *구조*(`type`, `required`, `nullable`, `anyOf`, `items`)를 기준으로 응답을 검사합니다([`SchemaUtils`](https://github.com/google/adk-kotlin/blob/v0.8.0/core/src/commonMain/kotlin/com/google/adk/kt/SchemaUtils.kt) 참고).
+    `pattern`, `minLength`, `minimum`과 같은 제약 조건 필드는 스키마의 일부로 모델에 전송되지만, ADK가 이를 다시 검사하지는 않으므로 준수 여부는 모델이 결정합니다. Python은 선언된 제약 조건을 자체적으로 강제하는 Pydantic 모델을 기준으로 유효성을 검사합니다.
+
+    Java 및 Kotlin은 최상위 객체(object) 스키마만 허용하며, 최상위 배열(array) 또는 원시 타입(primitive)은 유효성 검사에 실패합니다. Python은 목록(list) 및 원시 타입 출력 스키마도 지원합니다.
+
+    응답의 유효성 검사가 실패하면 ADK는 오류를 로깅하고 파싱된 객체 대신 원시 응답 문자열을 `output_key` 아래에 저장합니다([`LlmAgent`](https://github.com/google/adk-kotlin/blob/v0.8.0/core/src/commonMain/kotlin/com/google/adk/kt/agents/LlmAgent.kt) 참고).
 
 === "Python"
 
@@ -445,6 +456,18 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
             .build();
     ```
 
+=== "Kotlin"
+
+    입력 및 출력 스키마는 GenAI SDK의 동명 타입이 아니라 ADK 자체의 `com.google.adk.kt.types.Schema`입니다. ADK Kotlin v0.8.0부터 JSON 스키마에는 `pattern`, `minLength`, `maxLength`, `minimum`, `maximum`, `minItems`, `maxItems`, `format`, `nullable`, `default`, `anyOf`, `title` 필드에 대한 제약 조건이 포함됩니다.
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:schema_example"
+    ```
+
+    `format` 필드는 해당 필드의 타입에 대해 모델이 허용하는 값만 허용합니다. 허용되는 값은 Gemini [`Schema` 레퍼런스](https://ai.google.dev/api/caching#Schema)를 참고하세요.
+
+    `default` 필드는 JSON 네이티브 값을 포함해야 합니다. ADK 자체의 `Json`은 이를 직렬화하지만, 컨텍스트 `Any` 직렬 변환기가 없는 커스텀 직렬 변환기는 직렬화하지 못합니다.
+
 ### 컨텍스트 관리 (`include_contents`)
 
 에이전트가 이전 대화 기록을 수신할지 여부를 제어합니다.
@@ -489,6 +512,12 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
             // ... 다른 매개변수들
             .includeContents(IncludeContents.NONE)
             .build();
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:include_contents"
     ```
 
 ### 플래너(Planner)

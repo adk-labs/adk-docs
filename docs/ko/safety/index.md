@@ -1,7 +1,7 @@
 # AI 에이전트의 안전 및 보안
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin</span>
 </div>
 
 AI 에이전트의 기능이 발전함에 따라, 안전하고 보안이 유지되며 브랜드 가치에 부합하도록 운영하는 것이 무엇보다 중요합니다. 제어되지 않는 에이전트는 데이터 유출과 같이 의도와 다르거나 유해한 작업을 실행하거나, 브랜드 평판에 영향을 미칠 수 있는 부적절한 콘텐츠를 생성하는 등 여러 위험을 초래할 수 있습니다. **위험의 원인으로는 모호한 지침, 모델 환각, 적대적인 사용자의 탈옥 및 프롬프트 인젝션, 도구 사용을 통한 간접적인 프롬프트 인젝션 등이 있습니다.**
@@ -324,6 +324,72 @@ Gemini 모델은 콘텐츠 및 브랜드 안전성을 향상시키는 데 활용
 * **콘텐츠 안전 필터**: [콘텐츠 필터](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/configure-safety-attributes)는 유해 콘텐츠의 출력을 차단하는 데 도움이 됩니다. 이 필터들은 모델을 탈옥하려는 위협 행위자에 대한 다계층 방어의 일부로서 Gemini 모델과 독립적으로 작동합니다. Vertex AI의 Gemini 모델은 두 가지 유형의 콘텐츠 필터를 사용합니다:
 * **구성 불가 안전 필터**는 아동 성 학대 자료(CSAM) 및 개인 식별 정보(PII)와 같은 금지된 콘텐츠를 포함하는 출력을 자동으로 차단합니다.
 * **구성 가능 콘텐츠 필터**는 확률 및 심각도 점수를 기반으로 네 가지 유해 범주(증오심 표현, 괴롭힘, 성적으로 노골적인 내용, 위험한 콘텐츠)에 대한 차단 임계값을 정의할 수 있게 합니다. 이 필터들은 기본적으로 꺼져 있지만 필요에 따라 구성할 수 있습니다.
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import Agent
+    from google.genai import types
+
+    agent = Agent(
+        # ...
+        generate_content_config=types.GenerateContentConfig(
+            safety_settings=[
+                types.SafetySetting(
+                    category=types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                    threshold=types.HarmBlockThreshold.OFF,
+                ),
+            ],
+        ),
+    )
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+    	"google.golang.org/adk/v2/agent/llmagent"
+    	"google.golang.org/genai"
+    )
+
+    agent, _ := llmagent.New(llmagent.Config{
+    	// ...
+    	GenerateContentConfig: &genai.GenerateContentConfig{
+    		SafetySettings: []*genai.SafetySetting{
+    			{
+    				Category:  genai.HarmCategoryHateSpeech,
+    				Threshold: genai.HarmBlockThresholdBlockLowAndAbove,
+    			},
+    		},
+    	},
+    })
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.agents.LlmAgent
+    import com.google.adk.kt.types.GenerateContentConfig
+    import com.google.adk.kt.types.HarmBlockThreshold
+    import com.google.adk.kt.types.HarmCategory
+    import com.google.adk.kt.types.SafetySetting
+
+    val agent =
+        LlmAgent(
+            // ...
+            generateContentConfig =
+                GenerateContentConfig(
+                    safetySettings =
+                        listOf(
+                            SafetySetting(
+                                category = HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                                threshold = HarmBlockThreshold.OFF,
+                            ),
+                        ),
+                ),
+        )
+    ```
+
 * **안전을 위한 시스템 지침**: Vertex AI의 Gemini 모델에 대한 [시스템 지침](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/safety-system-instructions)은 모델이 어떻게 행동하고 어떤 종류의 콘텐츠를 생성해야 하는지에 대한 직접적인 지침을 제공합니다. 구체적인 지침을 제공함으로써, 조직의 고유한 요구를 충족시키기 위해 모델이 바람직하지 않은 콘텐츠를 생성하지 않도록 사전에 유도할 수 있습니다. 금지되거나 민감한 주제, 면책 조항 언어와 같은 콘텐츠 안전 가이드라인을 정의하고, 모델의 출력이 브랜드의 목소리, 톤, 가치, 대상 고객과 일치하도록 브랜드 안전 가이드라인을 정의하는 시스템 지침을 작성할 수 있습니다.
 
 이러한 조치들은 콘텐츠 안전성에 대해 강력하지만, 에이전트의 의도 불일치, 안전하지 않은 작업, 브랜드 안전성 위험을 줄이기 위해서는 추가적인 검사가 필요합니다.
