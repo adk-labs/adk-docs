@@ -6,10 +6,10 @@ hide:
 # ADK 2.0에 오신 것을 환영합니다
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-ADK 2.0은 정교한 AI 에이전트를 구축하기 위한 강력한 도구를 도입하여 에이전트를 더 뛰어난 제어력, 예측 가능성 및 신뢰성으로 까다로운 작업을 수행하도록 구조화할 수 있게 해줍니다. ADK 2.0은 Python 및 Go에서 사용 가능하며 다음 핵심 기능을 포함합니다.
+ADK 2.0은 정교한 AI 에이전트를 구축하기 위한 강력한 도구를 도입하여 에이전트를 더 뛰어난 제어력, 예측 가능성 및 신뢰성으로 까다로운 작업을 수행하도록 구조화할 수 있게 해줍니다. ADK 2.0은 Python, TypeScript 및 Go에서 사용 가능하며 다음 핵심 기능을 포함합니다.
 
 -   [**그래프 기반 워크플로**](/ko/graphs/): 작업이 라우팅되고 실행되는 방식을 더 세밀하게 제어할 수 있는 결정론적 에이전트 워크플로를 구축합니다.
 
@@ -26,6 +26,10 @@ ADK 2.0은 정교한 AI 에이전트를 구축하기 위한 강력한 도구를 
 !!! tip "ADK Go v2.0.0 정식 릴리스 (GA)"
 
     ADK Go 2.0은 2026년 6월 30일 자로 정식 버전(GA)이 릴리스되었습니다.
+
+!!! tip "ADK TypeScript v2.0.0 정식 릴리스 (GA)"
+
+    ADK TypeScript 2.0은 2026년 8월 21일 자로 정식 버전(GA)이 릴리스되었습니다.
 
 ## ADK Python 1.x 호환성
 
@@ -88,6 +92,75 @@ ADK를 업데이트하고 싶지만 아직 ADK 2.0으로 업그레이드할 준�
     ```bash
     pip install "google-adk~=1.0"
     ```
+
+## ADK TypeScript 1.x 호환성
+
+ADK TypeScript 2.0은 ADK TypeScript 1.x 릴리스로 개발된 에이전트와 호환되도록 설계되었습니다. 그러나 ADK TypeScript 1.x 프로젝트를 ADK TypeScript 2.0으로 업그레이드하기 전에 알아두어야 할 호환성 파괴 변경 사항(breaking changes)이 몇 가지 있습니다.
+
+!!! warning "주요 변경 사항: ADK TypeScript 1.x에서 2.0으로의 비호환성"
+
+    ADK TypeScript v2.0.0에서 도입된 알려진 비호환성 및 주요 변경 사항이 몇 가지 있습니다. 업그레이드하기 전에 이러한 변경 사항을 검토하고 필요한 경우 조치를 취하세요.
+
+ADK TypeScript 2.0 릴리스는 워크플로 런타임(Workflow Runtime)을 도입하여 ADK TypeScript를 계층적 에이전트 실행기에서 그래프 기반 실행 엔진으로 전환합니다. 이 새로운 아키텍처에서 에이전트, 도구 및 함수는 워크플로 그래프 내의 개별 *노드(nodes)*로 평가됩니다. ADK TypeScript 1.x에서 업그레이드하는 경우 다음 주요 변경 사항 및 마이그레이션 단계를 검토하세요.
+
+### 이벤트 스키마 및 사용자 지정 세션 스토리지
+
+ADK TypeScript 2.0은 그래프 라우팅, 워크플로 출력 및 멀티 에이전트 격리를 지원하기 위해 핵심 ***Event*** 인터페이스에 4개의 선택적 필드를 추가합니다:
+
+| 필드 | 타입 | 목적 |
+|---|---|---|
+| `output` | `unknown` | 방출 노드가 생성한 구조화된 출력입니다. |
+| `route` | `Route` | 라우팅 노드에서 방출하는 라우트 키로, 일치하는 나가는 엣지를 선택하는 데 사용됩니다. |
+| `nodeInfo` | `NodeInfo` | 이벤트를 방출한 노드를 식별하는 워크플로 노드 메타데이터입니다. |
+| `isolationScope` | `string` | LLM 프롬프트 히스토리에서 이 이벤트를 볼 수 있는 에이전트 컨텍스트를 제한합니다. |
+
+4개 필드는 모두 선택 사항이며, 각각 위에 표시된 이름으로 직렬화됩니다.
+
+*   **사용자 지정 세션 스토리지:** 엄격한 스키마가 있는 자체 SQL 또는 NoSQL 데이터베이스에 세션을 저장하는 등 사용자 지정 세션 서비스를 구현한 경우, 4개의 새 필드를 수용하도록 기본 데이터베이스 스키마를 업데이트해야 합니다. 2.0 ***Event***를 엄격한 1.x 데이터베이스 테이블에 삽입하면 삽입 또는 역직렬화 실패가 발생합니다. *단, 사용자 지정 세션 서비스가 이벤트를 직렬화된 JSON으로 저장하는 경우에는 스키마를 업데이트할 필요가 없습니다.*
+
+**마이그레이션 조치:** 모든 Event 페이로드에서 4개의 새 필드를 기대하고 저장하도록 데이터베이스 스키마 및 다운스트림 클라이언트 검증기를 업데이트하세요.
+
+### 에이전트 실행: BaseAgent extends BaseNode
+
+ADK TypeScript 1.x에서 `BaseAgent`는 독립형 클래스였습니다. ADK TypeScript 2.0에서 `BaseAgent`는 모든 에이전트가 워크플로 그래프의 노드로 실행될 수 있도록 `BaseNode`를 상속(extend)합니다. 서브클래스는 이제 `rerunOnResume`, `waitForOutput`, `retryConfig`, `timeout`, `inputSchema`, `outputSchema`, `stateSchema` 멤버를 상속받습니다.
+
+*   **멤버 이름 충돌:** 이러한 이름 중 하나를 사용하여 자체 필드를 선언하는 서브클래스는 이제 상속된 멤버와 충돌하여 컴파일에 실패합니다.
+*   **`description` 기본값:** `description` 멤버의 타입이 이제 `string`이며 기본값은 빈 문자열입니다. ADK TypeScript 1.x에서는 설정되지 않았을 때 `undefined`였으므로, `agent.description === undefined`와 같은 확인은 더 이상 일치하지 않습니다.
+
+**마이그레이션 조치:** 상속된 멤버와 충돌하는 서브클래스 필드의 이름을 바꾸세요. `undefined` 설명에 대한 확인을 빈 문자열에 대한 확인으로 대체하세요.
+
+### 컨텍스트: `InvocationContext.agent`는 선택 사항입니다
+
+워크플로 노드는 둘러싸는 에이전트 없이 실행될 수 있으므로, `InvocationContext`의 `agent` 속성이 `BaseAgent`에서 `BaseAgent | undefined`로 변경되었습니다. `undefined`를 처리하지 않고 이 속성을 읽는 코드는 더 이상 `strict` 모드에서 컴파일되지 않습니다.
+
+```typescript
+// 이전 (ADK TypeScript 1.x)
+const name = ctx.agent.name;
+
+// 이후 (ADK TypeScript 2.0), 에이전트 자체 실행 내부
+const name = requireAgent(ctx).name;
+
+// 이후 (ADK TypeScript 2.0), 에이전트 자체 실행 외부
+const name = ctx.agent?.name;
+```
+
+**마이그레이션 조치:** 에이전트 자체 실행 내부에서는 `requireAgent(ctx)`를 호출하세요. 이는 에이전트를 반환하거나 호출이 노드를 직접 실행 중임을 설명하는 오류를 발생시킵니다. 그 외 모든 위치에서는 `undefined` 경우를 처리하세요.
+
+### 지원 중단 예정: SequentialAgent, ParallelAgent 및 LoopAgent
+
+`SequentialAgent`, `ParallelAgent` 또는 `LoopAgent`를 생성하면 이제 프로세스당 클래스별로 한 번의 지원 중단 경고가 기록됩니다. 이러한 클래스는 그 외에는 변경되지 않았으며 ADK TypeScript 2.0에서도 계속 작동합니다.
+
+**마이그레이션 조치:** 즉각적인 조치가 필요하지는 않습니다. 경고를 중지하고 라우팅을 더 세밀하게 제어하려면 동일한 시퀀스, 팬아웃 또는 루프를 [그래프 워크플로](/ko/graphs/)로 표현하세요.
+
+추가적인 ADK TypeScript 1.x -> ADK 2.0 비호환성을 발견하면 [이슈 트래커](https://github.com/google/adk-js/issues/new?template=bug_report.md&labels=v2)를 통해 제보해 주세요.
+
+### ADK TypeScript 1.x 설치 {#install-ts}
+
+ADK TypeScript 1.x를 계속 사용하고 아직 ADK TypeScript 2.0으로 업그레이드할 준비가 되지 않은 경우 종속성을 1.x 릴리스 라인으로 고정하세요:
+
+```shell
+npm install @google/adk@^1.6.0
+```
 
 ## ADK Go 1.x 호환성
 
@@ -162,4 +235,20 @@ ADK 2.0 기능으로 에이전트를 구축하기 위한 개발자 가이드를 
 -   [**협업 에이전트**](/ko/workflows/collaboration/)
 -   [**동적 워크플로**](/ko/graphs/dynamic/)
 
-ADK 2.0에 관심을 가져주셔서 감사합니다! [ADK Go](https://github.com/google/adk-go/issues/new) 또는 [ADK Python](https://github.com/google/adk-python/issues/new)에서 의견을 나눠주세요.
+테스트 및 영감을 위해 다음 ADK 2.0 코드 샘플을 확인하세요:
+
+=== "Python"
+
+    -   [**워크플로 샘플**](https://github.com/google/adk-python/tree/main/contributing/samples/workflows)
+    -   [**협업 태스크 샘플**](https://github.com/google/adk-python/tree/main/contributing/samples/multi_agent)
+
+=== "TypeScript"
+
+    -   [**워크플로 샘플**](https://github.com/google/adk-js/tree/main/samples/workflows)
+
+=== "Go"
+
+    -   [**모든 워크플로 에이전트 샘플**](https://github.com/google/adk-go/tree/main/examples/workflow)
+    -   [**협업 태스크 샘플**](https://github.com/google/adk-go/tree/main/examples/multiagent/collaboration)
+
+ADK 2.0에 관심을 가져주셔서 감사합니다! [ADK Go](https://github.com/google/adk-go/issues/new), [ADK TypeScript](https://github.com/google/adk-js/issues/new) 또는 [ADK Python](https://github.com/google/adk-python/issues/new)에서 의견을 나눠주세요.

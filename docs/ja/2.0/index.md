@@ -6,10 +6,10 @@ hide:
 # ADK 2.0 へようこそ
 
 <div class="language-support-tag">
-  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">Supported in ADK</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-ADK 2.0 は、高度な AI エージェントを構築するための強力なツールを導入し、より高い制御性、予測可能性、および信頼性を持って困難なタスクを実行するようにエージェントを構造化するのに役立ちます。ADK 2.0 は Python および Go で利用可能であり、以下の主要機能が含まれています。
+ADK 2.0 は、高度な AI エージェントを構築するための強力なツールを導入し、より高い制御性、予測可能性、および信頼性を持って困難なタスクを実行するようにエージェントを構造化するのに役立ちます。ADK 2.0 は Python、TypeScript、および Go で利用可能であり、以下の主要機能が含まれています。
 
 -   [**グラフベースのワークフロー**](/ja/graphs/): タスクのルーティングと実行方法をより細かく制御できる、決定論的なエージェント ワークフローを構築します。
 
@@ -26,6 +26,10 @@ ADK 2.0 は、高度な AI エージェントを構築するための強力な�
 !!! tip "ADK Go v2.0.0 GA リリース"
 
     ADK Go 2.0 は 2026 年 6 月 30 日付で一般提供（GA）としてリリースされました。
+
+!!! tip "ADK TypeScript v2.0.0 GA リリース"
+
+    ADK TypeScript 2.0 は 2026 年 8 月 21 日付で一般提供（GA）としてリリースされました。
 
 ## ADK Python 1.x との互換性
 
@@ -88,6 +92,75 @@ ADK を更新したいが、まだ ADK 2.0 に更新する準備ができてい�
     ```bash
     pip install "google-adk~=1.0"
     ```
+
+## ADK TypeScript 1.x との互換性
+
+ADK TypeScript 2.0 は、ADK TypeScript 1.x リリースで開発されたエージェントと互換性があるように設計されています。ただし、ADK TypeScript 1.x プロジェクトを ADK TypeScript 2.0 にアップグレードする前に注意すべきいくつかの互換性を破る変更（breaking changes）があります。
+
+!!! warning "互換性を破る変更: ADK TypeScript 1.x から 2.0 への非互換性"
+
+    ADK TypeScript v2.0.0 で導入された既知の非互換性と破壊的変更がいくつかあります。アップグレードする前に、これらの変更を確認し、必要に応じて軽減手順を実行してください。
+
+ADK TypeScript 2.0 リリースでは Workflow Runtime が導入され、ADK TypeScript は階層的なエージェントエグゼキュータからグラフベースの実行エンジンへと移行しました。この新しいアーキテクチャでは、Agent、Tool、および Function はワークフローグラフ内の個々の*ノード*として評価されます。ADK TypeScript 1.x からアップグレードする場合は、以下の互換性を破る変更と移行手順を確認してください。
+
+### イベントスキーマとカスタムセッションストレージ
+
+ADK TypeScript 2.0 では、グラフラウティング、ワークフロー出力、およびマルチエージェント分離をサポートするために、コアの ***Event*** インターフェースに 4 つのオプションフィールドを追加します:
+
+| フィールド | 型 | 目的 |
+|---|---|---|
+| `output` | `unknown` | 送信ノードによって生成された構造化出力。 |
+| `route` | `Route` | ルーティングノードによって送信されるルートキー。一致する送信エッジを選択するために使用されます。 |
+| `nodeInfo` | `NodeInfo` | どのノードがイベントを送信したかを識別するワークフローノードのメタデータ。 |
+| `isolationScope` | `string` | LLM プロンプト履歴でどのエージェントコンテキストがこのイベントを表示できるかを制限します。 |
+
+4 つのフィールドはすべてオプションであり、それぞれ上記の名前にシリアライズされます。
+
+*   **カスタムセッションストレージ:** 厳格なスキーマを持つ独自の SQL または NoSQL データベースにセッションを保存するなど、カスタムセッションサービスを実装している場合、4 つの新しいフィールドに対応するために基礎となるデータベーススキーマを更新する必要があります。厳格な 1.x データベーステーブルに 2.0 ***Event*** を挿入すると、挿入またはデシリアライズのエラーが発生します。*ただし、カスタムセッションサービスがイベントをシリアライズされた JSON として保存している場合は、スキーマを更新する必要はありません。*
+
+**移行アクション:** すべての Event ペイロードで 4 つの新しいフィールドを想定して保存するように、データベーススキーマと下流のクライアントバリデータを更新します。
+
+### エージェント実行: BaseAgent が BaseNode を拡張
+
+ADK TypeScript 1.x では、`BaseAgent` はスタンドアロンのクラスでした。ADK TypeScript 2.0 では、すべてのエージェントがワークフローグラフ内のノードとして実行できるように、`BaseAgent` が `BaseNode` を拡張します。サブクラスは、`rerunOnResume`, `waitForOutput`, `retryConfig`, `timeout`, `inputSchema`, `outputSchema`, および `stateSchema` メンバーを継承するようになりました。
+
+*   **メンバー名の衝突:** これらのいずれかの名前を使用して独自のフィールドを宣言するサブクラスは、継承されたメンバーと衝突し、コンパイルに失敗します。
+*   **`description` のデフォルト値:** `description` メンバーの型が `string` になり、デフォルトで空の文字列になります。ADK TypeScript 1.x では設定されていない場合は `undefined` だったため、`agent.description === undefined` などのチェックは一致しなくなります。
+
+**移行アクション:** 継承されたメンバーと衝突するサブクラスフィールドの名前を変更します。`undefined` の説明のチェックを空の文字列のチェックに置き換えます。
+
+### コンテキスト: `InvocationContext.agent` はオプションです
+
+ワークフローノードはそれを囲むエージェントなしで実行できるため、`InvocationContext` の `agent` プロパティが `BaseAgent` から `BaseAgent | undefined` に変更されました。`undefined` を処理せずにこのプロパティを読み取るコードは、`strict` モードではコンパイルできなくなります。
+
+```typescript
+// 以前 (ADK TypeScript 1.x)
+const name = ctx.agent.name;
+
+// 以降 (ADK TypeScript 2.0), エージェント自身の実行内部
+const name = requireAgent(ctx).name;
+
+// 以降 (ADK TypeScript 2.0), エージェント自身の実行外部
+const name = ctx.agent?.name;
+```
+
+**移行アクション:** エージェント自身の実行内部では `requireAgent(ctx)` を呼び出します。これにより、エージェントが返されるか、呼び出しがノードを直接実行していることを説明するエラーがスローされます。それ以外の場所では、`undefined` のケースを処理します。
+
+### 非推奨: SequentialAgent、ParallelAgent、および LoopAgent
+
+`SequentialAgent`、`ParallelAgent`、または `LoopAgent` を構築すると、クラスごと、プロセスごとに 1 回非推奨の警告がログに出力されるようになりました。これらのクラスはそれ以外は変更されておらず、ADK TypeScript 2.0 でも引き続き動作します。
+
+**移行アクション:** 直ちのアクションは必要ありません。警告を停止し、ルーティングをより詳細に制御するには、同じシーケンス、ファンアウト、またはループを [グラフワークフロー](/ja/graphs/) として表現します。
+
+その他の ADK TypeScript 1.x から ADK 2.0 への非互換性が発生した場合は、[課題トラッカー](https://github.com/google/adk-js/issues/new?template=bug_report.md&labels=v2) から報告してください。
+
+### ADK TypeScript 1.x のインストール {#install-ts}
+
+引き続き ADK TypeScript 1.x を使用し、まだ ADK TypeScript 2.0 にアップグレードする準備ができていない場合は、依存関係を 1.x リリースラインに固定してください:
+
+```shell
+npm install @google/adk@^1.6.0
+```
 
 ## ADK Go 1.x との互換性
 
@@ -162,4 +235,20 @@ ADK 2.0 機能でエージェントを構築するための開発者ガイドを
 -   [**協調エージェント**](/ja/workflows/collaboration/)
 -   [**動的ワークフロー**](/ja/graphs/dynamic/)
 
-ADK 2.0 にご注目いただきありがとうございます！[ADK Go](https://github.com/google/adk-go/issues/new) または [ADK Python](https://github.com/google/adk-python/issues/new) でフィードバックをお寄せください。
+テストやインスピレーションのために、以下の ADK 2.0 コードサンプルを確認してください:
+
+=== "Python"
+
+    -   [**ワークフローのサンプル**](https://github.com/google/adk-python/tree/main/contributing/samples/workflows)
+    -   [**共同タスクのサンプル**](https://github.com/google/adk-python/tree/main/contributing/samples/multi_agent)
+
+=== "TypeScript"
+
+    -   [**ワークフローのサンプル**](https://github.com/google/adk-js/tree/main/samples/workflows)
+
+=== "Go"
+
+    -   [**すべてのワークフローエージェントのサンプル**](https://github.com/google/adk-go/tree/main/examples/workflow)
+    -   [**共同タスクのサンプル**](https://github.com/google/adk-go/tree/main/examples/multiagent/collaboration)
+
+ADK 2.0 にご注目いただきありがとうございます！[ADK Go](https://github.com/google/adk-go/issues/new)、[ADK TypeScript](https://github.com/google/adk-js/issues/new) または [ADK Python](https://github.com/google/adk-python/issues/new) でフィードバックをお寄せください。

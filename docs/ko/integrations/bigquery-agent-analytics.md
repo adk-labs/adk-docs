@@ -8,7 +8,7 @@ catalog_tags: ["observability", "google"]
 # ADK용 BigQuery Agent Analytics 플러그인
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.21.0</span><span class="lst-java">Java v1.5.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.21.0</span><span class="lst-java">Java v1.5.0</span><span class="lst-kotlin">Kotlin v0.8.0</span>
 </div>
 
 !!! important "버전 요구사항"
@@ -34,6 +34,14 @@ TRANSFER_A2A), 사람-개입형 상호작용을 위한 **HITL Event Tracing**이
     정보는 [BigQuery
     문서](https://cloud.google.com/bigquery/pricing?e=48754805&hl=en#data-ingestion-pricing)를
     참고하세요.
+
+??? note "Kotlin 지원"
+
+    **Kotlin** 플러그인은 invocation 수명 주기 이벤트를 기록합니다. 호출이 시작될 때 `INVOCATION_STARTING` 행을 작성하고, 종료될 때 `INVOCATION_COMPLETED` 행을 작성하며, 파티션 및 클러스터링된 이벤트 테이블이 아직 존재하지 않는 경우 처음 사용할 때 생성합니다.
+
+    행은 Python 및 Java에서 사용하는 Storage Write API 대신, 호출 경로에서 동기적으로 `tabledata.insertAll`을 통해 한 번에 하나씩 삽입됩니다.
+
+    Kotlin에서는 다음 항목이 구현되지 않았습니다: LLM, 도구, 에이전트, 상태, HITL 및 A2A 이벤트; ADK 2.0 워크플로 이벤트; 자동 뷰 생성; Auto Schema Upgrade; 도구 provenance; GCS 오프로딩; 및 드롭 통계.
 
 ## 사용 사례
 
@@ -62,6 +70,8 @@ TRANSFER_A2A), 사람-개입형 상호작용을 위한 **HITL Event Tracing**이
 [`create_views`](#configuration-options)가 활성화된 경우(기본값) 선택적으로
 생성되는 BigQuery 뷰를 보여줍니다.
 
+**Kotlin**에서는 플러그인이 `INVOCATION_STARTING`과 `INVOCATION_COMPLETED`만 기록하고 뷰를 생성하지 않으므로, 다른 행들과 전체 **뷰** 열은 Python 및 Java에 적용됩니다.
+
 | 이벤트 유형 | 캡처 시점 | 주요 페이로드 필드 | 뷰 |
 | --- | --- | --- | --- |
 | `USER_MESSAGE_RECEIVED` | 사용자 메시지가 invocation에 들어올 때 | 텍스트 요약 / content parts | `v_user_message_received` |
@@ -87,37 +97,98 @@ TRANSFER_A2A), 사람-개입형 상호작용을 위한 **HITL Event Tracing**이
 
 ## 빠른 시작
 
-플러그인을 에이전트의 `App` 객체에 추가합니다. 전제 조건은
-[전제 조건](#prerequisites)을 참고하세요.
+=== "Python"
 
-```python title="agent.py"
-import os
-from google.adk.agents import Agent
-from google.adk.apps import App
-from google.adk.models.google_llm import Gemini
-from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryAgentAnalyticsPlugin
+    플러그인을 에이전트의 `App` 객체에 추가합니다. 전제 조건은
+    [전제 조건](#prerequisites)을 참고하세요.
 
-os.environ['GOOGLE_CLOUD_PROJECT'] = 'your-gcp-project-id'
-os.environ['GOOGLE_CLOUD_LOCATION'] = 'us-central1'
-os.environ['GOOGLE_GENAI_USE_ENTERPRISE'] = 'True'
+    ```python title="agent.py"
+    import os
+    from google.adk.agents import Agent
+    from google.adk.apps import App
+    from google.adk.models.google_llm import Gemini
+    from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryAgentAnalyticsPlugin
 
-plugin = BigQueryAgentAnalyticsPlugin(
-    project_id="your-gcp-project-id",
-    dataset_id="your-big-query-dataset-id",
-)
+    os.environ['GOOGLE_CLOUD_PROJECT'] = 'your-gcp-project-id'
+    os.environ['GOOGLE_CLOUD_LOCATION'] = 'us-central1'
+    os.environ['GOOGLE_GENAI_USE_ENTERPRISE'] = 'True'
 
-root_agent = Agent(
-    model=Gemini(model="gemini-flash-latest"),
-    name='my_agent',
-    instruction="You are a helpful assistant.",
-)
+    plugin = BigQueryAgentAnalyticsPlugin(
+        project_id="your-gcp-project-id",
+        dataset_id="your-big-query-dataset-id",
+    )
 
-app = App(
-    name="my_agent",
-    root_agent=root_agent,
-    plugins=[plugin],
-)
-```
+    root_agent = Agent(
+        model=Gemini(model="gemini-flash-latest"),
+        name='my_agent',
+        instruction="You are a helpful assistant.",
+    )
+
+    app = App(
+        name="my_agent",
+        root_agent=root_agent,
+        plugins=[plugin],
+    )
+    ```
+
+=== "Java"
+
+    플러그인을 러너의 플러그인 목록에 추가합니다. 전제 조건은
+    [전제 조건](#prerequisites)을 참고하세요.
+
+    ```java title="Agent.java"
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.agents.RunConfig;
+    import com.google.adk.models.Gemini;
+    import com.google.adk.plugins.Plugin;
+    import com.google.adk.plugins.agentanalytics.BigQueryAgentAnalyticsPlugin;
+    import com.google.adk.plugins.agentanalytics.BigQueryLoggerConfig;
+    import com.google.adk.runner.InMemoryRunner;
+    import com.google.common.collect.ImmutableList;
+
+    public final class Agent {
+      public static void main(String[] args) throws Exception {
+        Plugin bqLoggingPlugin = new BigQueryAgentAnalyticsPlugin(
+            BigQueryLoggerConfig.builder()
+                .projectId("your-gcp-project-id")
+                .datasetId("your-big-query-dataset-id")
+                .tableName("agent_events") // 선택 사항, Java에서는 기본값이 "events"
+                .build());
+
+        InMemoryRunner runner = new InMemoryRunner(
+            LlmAgent.builder()
+                .model(Gemini.builder().modelName("gemini-2.5-flash").build())
+                .name("my_agent")
+                .instruction("You are a helpful assistant.")
+                .build(),
+            "my_agent",
+            ImmutableList.of(bqLoggingPlugin));
+
+        // runner 사용 ...
+
+        // 러너를 닫아 flush하고 플러그인을 종료합니다
+        runner.close().blockingAwait();
+      }
+    }
+    ```
+
+=== "Kotlin"
+
+    에이전트의 `App` 객체에 플러그인을 추가합니다. 전제 조건은
+    [전제 조건](#prerequisites)을 참고하세요. 플러그인은 JVM 전용이며 core 외부에
+    배포되므로 integrations 아티팩트를 추가하세요:
+
+    ```kotlin title="build.gradle.kts"
+    implementation("com.google.adk:google-adk-kotlin-integrations:0.8.0")
+    ```
+
+    ```kotlin title="BigQueryAnalyticsExample.kt"
+    --8<-- "examples/kotlin/snippets/integrations/BigQueryAnalyticsExample.kt:quickstart"
+    ```
+
+    플러그인은 처음 사용할 때 이벤트 테이블을 생성하므로, 범위 내의 자격 증명은 행 삽입뿐만 아니라 데이터 세트에 테이블을 생성할 수 있는 권한이 필요합니다. `location`을 데이터 세트 위치로 설정하세요(기본값은 `"US"`). 전체 옵션 세트는 [구성 옵션](#configuration-options)을 참고하세요.
+
+    로깅으로 인해 턴이 실패하지는 않습니다: 테이블을 생성할 수 없거나 행을 삽입할 수 없는 경우 플러그인이 오류를 기록하고 호출은 계속됩니다. 행이 누락된 경우 `com.google.adk.kt.plugins.agentanalytics.BigQueryAgentAnalyticsPlugin`에 대한 로깅을 활성화하세요 — 로그는 플러그인의 ADK 이름(`bigquery_agent_analytics`)이 아닌 해당 클래스 이름으로 출력됩니다.
 
 ### 에이전트 실행 및 테스트
 
@@ -257,105 +328,203 @@ LIMIT 20;
 
 ## 구성 옵션 {#configuration-options}
 
-### 생성자 파라미터
+=== "Python"
 
-`BigQueryAgentAnalyticsPlugin` 생성자는 다음 파라미터를 받습니다. 또한 아래의
-`BigQueryLoggerConfig`로 직접 전달되는 `**kwargs`도 받을 수 있습니다.
+    ### 생성자 파라미터
 
-| 파라미터 | 타입 | 기본값 | 사용 시점 |
-| --- | --- | --- | --- |
-| `project_id` | `str` | *(필수)* | Google Cloud 프로젝트를 선택합니다 |
-| `dataset_id` | `str` | *(필수)* | BigQuery 데이터 세트를 선택합니다 |
-| `table_id` | `Optional[str]` | `None` | 사용자 지정 테이블 이름을 사용합니다(config `table_id`를 재정의) |
-| `config` | `Optional[BigQueryLoggerConfig]` | `None` | 세부 튜닝을 위한 config 객체를 전달합니다 |
-| `location` | `str` | `"US"` | BigQuery 데이터 세트 위치와 맞춥니다(예: `"US"`, `"EU"`, `"us-central1"`) |
-| `credentials` | `Optional[google.auth.credentials.Credentials]` | `None` | [ADC](https://cloud.google.com/docs/authentication/application-default-credentials) 대신 명시적 서비스 계정, impersonated, cross-project 자격 증명을 사용합니다 |
+    `BigQueryAgentAnalyticsPlugin` 생성자는 다음 파라미터를 받습니다. 또한 아래의
+    `BigQueryLoggerConfig`로 직접 전달되는 `**kwargs`도 받을 수 있습니다.
 
-```python
-plugin = BigQueryAgentAnalyticsPlugin(
-    project_id="my-project",
-    dataset_id="my_dataset",
-    batch_size=10,           # forwarded to BigQueryLoggerConfig
-    shutdown_timeout=5.0,    # forwarded to BigQueryLoggerConfig
-)
-```
+    | 파라미터 | 타입 | 기본값 | 사용 시점 |
+    | --- | --- | --- | --- |
+    | `project_id` | `str` | *(필수)* | Google Cloud 프로젝트를 선택합니다 |
+    | `dataset_id` | `str` | *(필수)* | BigQuery 데이터 세트를 선택합니다 |
+    | `table_id` | `Optional[str]` | `None` | 사용자 지정 테이블 이름을 사용합니다(config `table_id`를 재정의) |
+    | `config` | `Optional[BigQueryLoggerConfig]` | `None` | 세부 튜닝을 위한 config 객체를 전달합니다 |
+    | `location` | `str` | `"US"` | BigQuery 데이터 세트 위치와 맞춥니다(예: `"US"`, `"EU"`, `"us-central1"`) |
+    | `credentials` | `Optional[google.auth.credentials.Credentials]` | `None` | [ADC](https://cloud.google.com/docs/authentication/application-default-credentials) 대신 명시적 서비스 계정, impersonated, cross-project 자격 증명을 사용합니다 |
 
-### BigQueryLoggerConfig 옵션
+    ```python
+    plugin = BigQueryAgentAnalyticsPlugin(
+        project_id="my-project",
+        dataset_id="my_dataset",
+        batch_size=10,           # forwarded to BigQueryLoggerConfig
+        shutdown_timeout=5.0,    # forwarded to BigQueryLoggerConfig
+    )
+    ```
 
-아래 옵션은 모두 선택 사항이며 합리적인 기본값을 제공합니다.
-`BigQueryLoggerConfig`에 전달하거나 플러그인 생성자의 `**kwargs`로 전달하세요.
+    ### BigQueryLoggerConfig 옵션
 
-| 옵션 | 타입 | 기본값 | 사용 시점 |
-| --- | --- | --- | --- |
-| `enabled` | `bool` | `True` | 로깅을 일시적으로 비활성화합니다 |
-| `table_id` | `str` | `"agent_events"` | 사용자 지정 테이블 이름을 사용합니다(생성자 값이 우선) |
-| `clustering_fields` | `List[str]` | `["event_type", "agent", "user_id"]` | 테이블 생성 시 클러스터링을 맞춤설정합니다 |
-| `gcs_bucket_name` | `Optional[str]` | `None` | 큰 텍스트와 멀티모달 콘텐츠를 GCS로 오프로딩합니다 |
-| `connection_id` | `Optional[str]` | `None` | BigQuery ObjectRef / object table을 사용합니다(예: `us.my-connection`) |
-| `max_content_length` | `int` | `500 * 1024` | 오프로딩/자르기 전 인라인 페이로드 크기를 제어합니다 |
-| `batch_size` | `int` | `1` | 쓰기 처리량과 지연 시간의 균형을 조정합니다 |
-| `batch_flush_interval` | `float` | `1.0` | 부분 batch를 주기적으로 flush합니다(초) |
-| `shutdown_timeout` | `float` | `10.0` | 종료 시 최종 flush를 기다립니다(초) |
-| `event_allowlist` | `Optional[List[str]]` | `None` | 선택한 [이벤트 유형](#event-types)만 기록합니다 |
-| `event_denylist` | `Optional[List[str]]` | `None` | 민감하거나 노이즈가 큰 [이벤트 유형](#event-types)을 건너뜁니다 |
-| `content_formatter` | `Optional[Callable]` | `None` | 이벤트별 맞춤 마스킹/포맷팅을 적용합니다(`(content, event_type)` 수신) |
-| `log_multi_modal_content` | `bool` | `True` | GCS 참조를 포함해 `content_parts` 세부 정보를 캡처합니다 |
-| `queue_max_size` | `int` | `10000` | 메모리 내 이벤트 큐 크기를 제한합니다 |
-| `retry_config` | `RetryConfig` | `RetryConfig()` | 재시도 동작을 조정합니다(`max_retries=3`, `initial_delay=1.0`, `multiplier=2.0`, `max_delay=10.0`) |
-| `log_session_metadata` | `bool` | `True` | `attributes`에 세션 정보(`session_id`, `app_name`, `user_id`, `state`)를 추가합니다. `temp:` 또는 `secret:` 접두사가 붙은 키는 [마스킹](#built-in-redaction)됩니다. |
-| `custom_tags` | `Dict[str, Any]` | `{}` | 모든 이벤트의 `attributes`에 정적 태그(예: `{"env": "prod"}`)를 추가합니다 |
-| `auto_schema_upgrade` | `bool` | `True` | 기존 테이블에 새 컬럼을 자동 추가합니다(추가 변경만) |
-| `create_views` | `bool` | `True` | 이벤트 유형별 BigQuery 뷰를 생성합니다(1.27.0+) |
-| `view_prefix` | `str` | `"v"` | 여러 플러그인이 같은 데이터 세트를 공유할 때 뷰 이름 충돌을 피합니다(예: `"v_staging"`) |
+    아래 옵션은 모두 선택 사항이며 합리적인 기본값을 제공합니다.
+    `BigQueryLoggerConfig`에 전달하거나 플러그인 생성자의 `**kwargs`로 전달하세요.
 
-다음 코드는 BigQuery Agent Analytics 플러그인용 구성을 정의하는 방법을 보여줍니다.
+    | 옵션 | 타입 | 기본값 | 사용 시점 |
+    | --- | --- | --- | --- |
+    | `enabled` | `bool` | `True` | 로깅을 일시적으로 비활성화합니다 |
+    | `table_id` | `str` | `"agent_events"` | 사용자 지정 테이블 이름을 사용합니다(생성자 값이 우선) |
+    | `clustering_fields` | `List[str]` | `["event_type", "agent", "user_id"]` | 테이블 생성 시 클러스터링을 맞춤설정합니다 |
+    | `gcs_bucket_name` | `Optional[str]` | `None` | 큰 텍스트와 멀티모달 콘텐츠를 GCS로 오프로딩합니다 |
+    | `connection_id` | `Optional[str]` | `None` | BigQuery ObjectRef / object table을 사용합니다(예: `us.my-connection`) |
+    | `max_content_length` | `int` | `500 * 1024` | 오프로딩/자르기 전 인라인 페이로드 크기를 제어합니다 |
+    | `batch_size` | `int` | `1` | 쓰기 처리량과 지연 시간의 균형을 조정합니다 |
+    | `batch_flush_interval` | `float` | `1.0` | 부분 batch를 주기적으로 flush합니다(초) |
+    | `shutdown_timeout` | `float` | `10.0` | 종료 시 최종 flush를 기다립니다(초) |
+    | `event_allowlist` | `Optional[List[str]]` | `None` | 선택한 [이벤트 유형](#event-types)만 기록합니다 |
+    | `event_denylist` | `Optional[List[str]]` | `None` | 민감하거나 노이즈가 큰 [이벤트 유형](#event-types)을 건너뜁니다 |
+    | `content_formatter` | `Optional[Callable]` | `None` | 이벤트별 맞춤 마스킹/포맷팅을 적용합니다(`(content, event_type)` 수신) |
+    | `log_multi_modal_content` | `bool` | `True` | GCS 참조를 포함해 `content_parts` 세부 정보를 캡처합니다 |
+    | `queue_max_size` | `int` | `10000` | 메모리 내 이벤트 큐 크기를 제한합니다 |
+    | `retry_config` | `RetryConfig` | `RetryConfig()` | 재시도 동작을 조정합니다(`max_retries=3`, `initial_delay=1.0`, `multiplier=2.0`, `max_delay=10.0`) |
+    | `log_session_metadata` | `bool` | `True` | `attributes`에 세션 정보(`session_id`, `app_name`, `user_id`, `state`)를 추가합니다. `temp:` 또는 `secret:` 접두사가 붙은 키는 [마스킹](#built-in-redaction)됩니다. |
+    | `custom_tags` | `Dict[str, Any]` | `{}` | 모든 이벤트의 `attributes`에 정적 태그(예: `{"env": "prod"}`)를 추가합니다 |
+    | `auto_schema_upgrade` | `bool` | `True` | 기존 테이블에 새 컬럼을 자동 추가합니다(추가 변경만) |
+    | `create_views` | `bool` | `True` | 이벤트 유형별 BigQuery 뷰를 생성합니다(1.27.0+) |
+    | `view_prefix` | `str` | `"v"` | 여러 플러그인이 같은 데이터 세트를 공유할 때 뷰 이름 충돌을 피합니다(예: `"v_staging"`) |
 
-```python
-import json
-import re
+    다음 코드는 BigQuery Agent Analytics 플러그인용 구성을 정의하는 방법을 보여줍니다.
 
-from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryLoggerConfig
+    ```python
+    import json
+    import re
 
-def redact_dollar_amounts(event_content: Any, event_type: str) -> str:
-    """
-    Custom formatter to redact dollar amounts (e.g., $600, $12.50)
-    and ensure JSON output if the input is a dict.
+    from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryLoggerConfig
 
-    Args:
-        event_content: The raw content of the event.
-        event_type: The event type string (e.g., "LLM_REQUEST", "LLM_RESPONSE").
-    """
-    text_content = ""
-    if isinstance(event_content, dict):
-        text_content = json.dumps(event_content)
-    else:
-        text_content = str(event_content)
+    def redact_dollar_amounts(event_content: Any, event_type: str) -> str:
+        """
+        Custom formatter to redact dollar amounts (e.g., $600, $12.50)
+        and ensure JSON output if the input is a dict.
 
-    # Regex to find dollar amounts: $ followed by digits, optionally with commas or decimals.
-    # Examples: $600, $1,200.50, $0.99
-    redacted_content = re.sub(r'\$\d+(?:,\d{3})*(?:\.\d+)?', 'xxx', text_content)
+        Args:
+            event_content: The raw content of the event.
+            event_type: The event type string (e.g., "LLM_REQUEST", "LLM_RESPONSE").
+        """
+        text_content = ""
+        if isinstance(event_content, dict):
+            text_content = json.dumps(event_content)
+        else:
+            text_content = str(event_content)
 
-    return redacted_content
+        # Regex to find dollar amounts: $ followed by digits, optionally with commas or decimals.
+        # Examples: $600, $1,200.50, $0.99
+        redacted_content = re.sub(r'\$\d+(?:,\d{3})*(?:\.\d+)?', 'xxx', text_content)
 
-config = BigQueryLoggerConfig(
-    enabled=True,
-    event_allowlist=["LLM_REQUEST", "LLM_RESPONSE"], # Only log these events
-    # event_denylist=["TOOL_STARTING"], # Skip these events
-    shutdown_timeout=10.0, # Wait up to 10s for logs to flush on exit
-    max_content_length=500, # Truncate content to 500 chars
-    content_formatter=redact_dollar_amounts, # Redact the dollar amounts in the logging content
-    queue_max_size=10000, # Max events to hold in memory
-    auto_schema_upgrade=True, # Automatically add new columns to existing tables
-    create_views=True, # Automatically create per-event-type views
-    # retry_config=RetryConfig(max_retries=3), # Optional: Configure retries
-)
+        return redacted_content
 
-plugin = BigQueryAgentAnalyticsPlugin(
-    project_id="my-project",
-    dataset_id="my_dataset",
-    config=config,
-)
-```
+    config = BigQueryLoggerConfig(
+        enabled=True,
+        event_allowlist=["LLM_REQUEST", "LLM_RESPONSE"], # Only log these events
+        # event_denylist=["TOOL_STARTING"], # Skip these events
+        shutdown_timeout=10.0, # Wait up to 10s for logs to flush on exit
+        max_content_length=500, # Truncate content to 500 chars
+        content_formatter=redact_dollar_amounts, # Redact the dollar amounts in the logging content
+        queue_max_size=10000, # Max events to hold in memory
+        auto_schema_upgrade=True, # Automatically add new columns to existing tables
+        create_views=True, # Automatically create per-event-type views
+        # retry_config=RetryConfig(max_retries=3), # Optional: Configure retries
+    )
+
+    plugin = BigQueryAgentAnalyticsPlugin(
+        project_id="my-project",
+        dataset_id="my_dataset",
+        config=config,
+    )
+    ```
+
+=== "Java"
+
+    Java에서는 모든 구성이 `BigQueryLoggerConfig` 빌더를 통해 관리됩니다.
+
+    #### BigQueryLoggerConfig 빌더 옵션
+
+    | 빌더 메서드 | 타입 | 기본값 | 설명 |
+    | --- | --- | --- | --- |
+    | `enabled(boolean)` | `boolean` | `true` | 로깅을 일시적으로 비활성화합니다 |
+    | `projectId(String)` | `String` | *(필수)* | Google Cloud 프로젝트를 선택합니다 |
+    | `datasetId(String)` | `String` | `"agent_analytics"` | BigQuery 데이터 세트를 선택합니다 |
+    | `tableName(String)` | `String` | `"events"` | 사용자 지정 테이블 이름을 사용합니다(참고: Python의 `"agent_events"`와 달리 Java에서는 기본값이 `"events"`입니다) |
+    | `location(String)` | `String` | `"us"` | BigQuery 데이터 세트 위치와 맞춥니다 |
+    | `clusteringFields(List<String>)` | `List<String>` | `["event_type", "agent", "user_id"]` | 테이블 생성 시 클러스터링을 맞춤설정합니다 |
+    | `gcsBucketName(String)` | `String` | `""` | 큰 텍스트와 멀티모달 콘텐츠를 GCS로 오프로딩합니다 |
+    | `connectionId(String)` | `String` | `null` | BigQuery ObjectRef / object table을 사용합니다 |
+    | `maxContentLength(int)` | `int` | `500 * 1024` | 오프로딩/자르기 전 인라인 페이로드 크기를 제어합니다 |
+    | `batchSize(int)` | `int` | `1` | 쓰기 처리량과 지연 시간의 균형을 조정합니다 |
+    | `batchFlushInterval(Duration)` | `Duration` | `Duration.ofSeconds(1)` | 부분 batch를 주기적으로 flush합니다 |
+    | `shutdownTimeout(Duration)` | `Duration` | `Duration.ofSeconds(10)` | 종료 시 최종 flush를 기다립니다 |
+    | `eventAllowlist(List<String>)` | `List<String>` | `[]` | 선택한 이벤트 유형만 기록합니다 |
+    | `eventDenylist(List<String>)` | `List<String>` | `[]` | 민감하거나 노이즈가 큰 이벤트 유형을 건너뜁니다 |
+    | `contentFormatter(BiFunction)` | `BiFunction<Object, String, Object>` | `null` | 이벤트별 맞춤 마스킹/포맷팅을 적용합니다 |
+    | `logMultiModalContent(boolean)` | `boolean` | `true` | GCS 참조를 포함해 `content_parts` 세부 정보를 캡처합니다 |
+    | `queueMaxSize(int)` | `int` | `10000` | 메모리 내 이벤트 큐 크기를 제한합니다 |
+    | `retryConfig(RetryConfig)` | `RetryConfig` | `RetryConfig.builder().build()` | 재시도 동작을 조정합니다 |
+    | `logSessionMetadata(boolean)` | `boolean` | `true` | `attributes`에 세션 정보를 추가합니다 |
+    | `customTags(Map<String, Object>)` | `Map<String, Object>` | `{}` | 모든 이벤트의 `attributes`에 정적 태그를 추가합니다 |
+    | `autoSchemaUpgrade(boolean)` | `boolean` | `true` | 기존 테이블에 새 컬럼을 자동 추가합니다 |
+    | `createViews(boolean)` | `boolean` | `false` | 이벤트 유형별 BigQuery 뷰를 생성합니다(참고: Python의 `true`와 달리 Java에서는 기본값이 `false`입니다) |
+    | `viewPrefix(String)` | `String` | `"v"` | 뷰 이름 충돌을 피합니다 |
+    | `credentials(Credentials)` | `Credentials` | `null` | 명시적 서비스 계정 자격 증명을 사용합니다 |
+
+    다음 코드 샘플은 Java에서 BigQuery Agent Analytics 플러그인 구성을 정의하는 방법을 보여줍니다:
+
+    ```java
+    import com.google.adk.plugins.agentanalytics.BigQueryAgentAnalyticsPlugin;
+    import com.google.adk.plugins.agentanalytics.BigQueryLoggerConfig;
+    import java.time.Duration;
+    import java.util.function.BiFunction;
+
+    // 달러 금액을 마스킹하는 커스텀 포맷터
+    BiFunction<Object, String, Object> redactDollarAmounts = (content, eventType) -> {
+      String textContent = content.toString();
+      return textContent.replaceAll("\\$\\d+(?:,\\d{3})*(?:\\.\\d+)?", "xxx");
+    };
+
+    BigQueryLoggerConfig config = BigQueryLoggerConfig.builder()
+        .enabled(true)
+        .projectId("my-project")
+        .datasetId("my_dataset")
+        .tableName("agent_events")
+        .batchSize(1)
+        .batchFlushInterval(Duration.ofMillis(500))
+        .contentFormatter(redactDollarAmounts)
+        .autoSchemaUpgrade(true)
+        .createViews(true)
+        .build();
+
+    BigQueryAgentAnalyticsPlugin plugin = new BigQueryAgentAnalyticsPlugin(config);
+    ```
+
+=== "Kotlin"
+
+    Kotlin에서는 모든 구성이 `BigQueryLoggerConfig` 데이터 클래스를 통해 관리되며, 플러그인은 이를 유일한 필수 인수로 받습니다.
+
+    #### BigQueryLoggerConfig 속성
+
+    | 옵션 | 타입 | 기본값 | 사용 시점 |
+    | --- | --- | --- | --- |
+    | `projectId` | `String` | *(필수)* | Google Cloud 프로젝트를 선택합니다 |
+    | `datasetId` | `String` | *(필수)* | BigQuery 데이터 세트를 선택합니다 |
+    | `enabled` | `Boolean` | `true` | 로깅을 일시적으로 비활성화합니다 |
+    | `location` | `String` | `"US"` | BigQuery 데이터 세트 위치와 맞춥니다 (예: `"EU"` 또는 `"us-central1"`) |
+    | `tableName` | `String` | `"agent_events"` | 사용자 지정 테이블 이름을 사용합니다 |
+    | `credentials` | `Credentials?` | `null` | [ADC](https://cloud.google.com/docs/authentication/application-default-credentials) 대신 명시적 서비스 계정 자격 증명을 사용합니다 |
+
+    다음 코드 샘플은 Kotlin에서 BigQuery Agent Analytics 플러그인 구성을 정의하는 방법을 보여줍니다:
+
+    ```kotlin
+    import com.google.adk.kt.plugins.agentanalytics.BigQueryAgentAnalyticsPlugin
+    import com.google.adk.kt.plugins.agentanalytics.BigQueryLoggerConfig
+
+    val config =
+        BigQueryLoggerConfig(
+            projectId = "my-project",
+            datasetId = "my_dataset",
+            location = "EU",
+            tableName = "agent_events",
+        )
+
+    val plugin = BigQueryAgentAnalyticsPlugin(config = config)
+    ```
+
+    배칭, 콘텐츠 포맷팅, 이벤트 허용 목록, GCS 오프로딩, 뷰 생성 등 **Python** 및 **Java** 탭에 나열된 옵션은 Kotlin에는 없습니다.
 
 ## 스키마 및 프로덕션 설정
 
@@ -382,6 +551,8 @@ plugin = BigQueryAgentAnalyticsPlugin(
 | **error_message** | `STRING` | `NULLABLE` | 사람이 읽을 수 있는 예외 메시지 또는 스택 트레이스 조각입니다. `status`가 `ERROR`일 때만 채워집니다. | `Error 404: Dataset not found` |
 | **is_truncated** | `BOOLEAN` | `NULLABLE` | `content` 또는 `attributes`가 BigQuery 셀 크기 제한(기본 10MB)을 초과하여 일부가 제거되면 `true`입니다. | `false` |
 | **content_parts** | `RECORD` | `REPEATED` | 멀티모달 세그먼트(Text, Image, Blob)의 배열입니다. 대용량 바이너리나 GCS 참조처럼 content를 단순 JSON으로 직렬화할 수 없을 때 사용됩니다. | `[{"mime_type": "text/plain", "text": "hello"}]` |
+
+**Kotlin**에서는 플러그인이 동일한 컬럼으로 테이블을 생성하지만 `timestamp`, `event_type`, `agent`, `session_id`, `invocation_id`, `user_id`, `content`만 채웁니다. 나머지 컬럼은 항상 null입니다.
 
 테이블이 없으면 플러그인이 자동으로 생성합니다. 프로덕션에서는 아래 DDL을 사용해
 테이블을 수동으로 만들 수도 있습니다.
@@ -690,6 +861,8 @@ LLM 호출이 예외로 실패할 때 기록됩니다. 오류 메시지가 캡�
 | `AGENT_COMPLETED` | `{}` |
 | `USER_MESSAGE_RECEIVED` | `{"text_summary": "Help me book a flight."}` |
 | `AGENT_RESPONSE` | `{"response": "Here are the flights..."}` |
+
+**Kotlin**에서는 두 invocation 이벤트가 빈 객체 대신 요약 메시지를 전달합니다: `{"message": "Invocation started"}` 및 `{"message": "Invocation completed"}`.
 
 **AGENT_RESPONSE**
 

@@ -1,7 +1,7 @@
 # 에이전트 검색 기반
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.2.0</span>
 </div>
 
 [Agent Search](/integrations/agent-search/)는 AI 에이전트가 개인 기업 문서 및 데이터 저장소의 정보에 액세스할 수 있도록 하는 ADK(에이전트 개발 키트)를 위한 강력한 도구입니다. 에이전트를 색인화된 엔터프라이즈 콘텐츠에 연결하면 사용자에게 조직의 지식 기반에 기반한 답변을 제공할 수 있습니다.
@@ -14,12 +14,12 @@
 
 ## 인증 설정
 
-**참고: 에이전트 검색에는 Google Cloud Platform(에이전트 플랫폼) 인증이 필요합니다. 이 도구에는 Google AI Studio가 지원되지 않습니다.**
+Agent Search는 ADK 에이전트가 Google Cloud 프로젝트 인증에 연결되어 있어야 합니다. 이 도구를 사용할 때는 Google AI Studio의 Gemini API 키를 사용할 수 없습니다. ADK 에이전트를 Google Cloud 프로젝트에 연결하는 방법에 대한 자세한 내용은 [Google Cloud에 연결](/ko/get-started/google-cloud/) 가이드를 참고하세요.
 
 * [gcloud CLI](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-local) 설정
 * `gcloud auth login`를 실행하여 터미널에서 Google Cloud에 인증합니다.
 * Python의 경우 **`.env`** 파일을 열고 프로젝트 ID와 위치를 지정합니다.
-* 자바의 경우 애플리케이션 환경에 Google Cloud 기본 사용자 인증 정보(`GOOGLE_APPLICATION_CREDENTIALS`)가 구성되어 있는지 확인하세요.
+* Java 및 Kotlin의 경우 애플리케이션 환경에 Google Cloud 기본 사용자 인증 정보(`GOOGLE_APPLICATION_CREDENTIALS`)가 구성되어 있는지 확인하고, `.env` 파일 대신 동일한 환경에 아래 변수들을 설정하세요.
 
 ```env title=".env"
 GOOGLE_GENAI_USE_ENTERPRISE=TRUE
@@ -65,6 +65,32 @@ GOOGLE_CLOUD_LOCATION=LOCATION
         .description("Enterprise document search assistant with Agent Search capabilities")
         .tools(VertexAiSearchTool.builder().dataStoreId(DATASTORE_ID).build())
         .build();
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.agents.Instruction
+    import com.google.adk.kt.agents.LlmAgent
+    import com.google.adk.kt.models.Gemini
+    import com.google.adk.kt.tools.VertexAiSearchTool
+
+    // Configuration
+    val DATASTORE_ID =
+        "projects/YOUR_PROJECT_ID/locations/global/collections/default_collection/dataStores/YOUR_DATASTORE_ID"
+
+    val rootAgent =
+        LlmAgent(
+            name = "vertex_search_agent",
+            model = Gemini(name = "gemini-flash-latest"),
+            instruction =
+                Instruction(
+                    "Answer questions using Agent Search to find information from internal " +
+                        "documents. Always cite sources when available.",
+                ),
+            description = "Enterprise document search assistant with Agent Search capabilities",
+            tools = listOf(VertexAiSearchTool(dataStoreId = DATASTORE_ID)),
+        )
     ```
 
 ## 검색을 통한 접지 작동 방식
@@ -186,6 +212,22 @@ Google 검색 접지와 달리 검색 접지에는 특정 디스플레이 구성
             // Optional: Show source count
             if (event.groundingMetadata().isPresent()) {
                 System.out.println("\nBased on " + event.groundingMetadata().get().groundingChunks().size() + " documents");
+            }
+        }
+    }
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    events.collect { event ->
+        if (event.isFinalResponse) {
+            println(event.content?.parts?.firstOrNull()?.text)
+
+            // Optional: Show source count
+            val chunks = event.groundingMetadata?.groundingChunks
+            if (!chunks.isNullOrEmpty()) {
+                println("\nBased on ${chunks.size} documents")
             }
         }
     }

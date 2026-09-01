@@ -1,7 +1,7 @@
 # エージェントの検索によるグラウンディング
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.2.0</span>
 </div>
 
 [Agent Search](/integrations/agent-search/) は、AI エージェントが企業のプライベート ドキュメントやデータ リポジトリから情報にアクセスできるようにするエージェント開発キット (ADK) の強力なツールです。エージェントをインデックス付きエンタープライズ コンテンツに接続することで、組織のナレッジ ベースに基づいた回答をユーザーに提供できます。
@@ -14,12 +14,12 @@
 
 ## 認証のセットアップ
 
-**注: エージェントの検索には、Google Cloud Platform (エージェント プラットフォーム) 認証が必要です。 Google AI Studio はこのツールではサポートされていません。**
+Agent Search は、ADK エージェントが Google Cloud プロジェクトの認証に接続されている必要があります。このツールを使用する際、Google AI Studio の Gemini API キーは使用できません。ADK エージェントを Google Cloud プロジェクトに接続する方法の詳細については、[Google Cloud への接続](/ja/get-started/google-cloud/) ガイドを参照してください。
 
 * [gcloud CLI](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-local) をセットアップします。
 * 端末から `gcloud auth login` を実行して、Google Cloud に対して認証します。
 * Python の場合、**`.env`** ファイルを開き、プロジェクト ID と場所を指定します。
-* Java の場合、アプリケーション環境に Google Cloud のデフォルト認証情報が設定されていることを確認してください (`GOOGLE_APPLICATION_CREDENTIALS`)。
+* Java および Kotlin の場合は、アプリケーション環境に Google Cloud デフォルト認証情報（`GOOGLE_APPLICATION_CREDENTIALS`）が構成されていることを確認し、`.env` ファイルではなく同じ環境で以下の変数を設定してください。
 
 ```env title=".env"
 GOOGLE_GENAI_USE_ENTERPRISE=TRUE
@@ -65,6 +65,32 @@ GOOGLE_CLOUD_LOCATION=LOCATION
         .description("Enterprise document search assistant with Agent Search capabilities")
         .tools(VertexAiSearchTool.builder().dataStoreId(DATASTORE_ID).build())
         .build();
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.agents.Instruction
+    import com.google.adk.kt.agents.LlmAgent
+    import com.google.adk.kt.models.Gemini
+    import com.google.adk.kt.tools.VertexAiSearchTool
+
+    // Configuration
+    val DATASTORE_ID =
+        "projects/YOUR_PROJECT_ID/locations/global/collections/default_collection/dataStores/YOUR_DATASTORE_ID"
+
+    val rootAgent =
+        LlmAgent(
+            name = "vertex_search_agent",
+            model = Gemini(name = "gemini-flash-latest"),
+            instruction =
+                Instruction(
+                    "Answer questions using Agent Search to find information from internal " +
+                        "documents. Always cite sources when available.",
+                ),
+            description = "Enterprise document search assistant with Agent Search capabilities",
+            tools = listOf(VertexAiSearchTool(dataStoreId = DATASTORE_ID)),
+        )
     ```
 
 ## 検索によるグラウンディングの仕組み
@@ -186,6 +212,22 @@ Google 検索のグラウンディングとは異なり、検索によるグラ�
             // Optional: Show source count
             if (event.groundingMetadata().isPresent()) {
                 System.out.println("\nBased on " + event.groundingMetadata().get().groundingChunks().size() + " documents");
+            }
+        }
+    }
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    events.collect { event ->
+        if (event.isFinalResponse) {
+            println(event.content?.parts?.firstOrNull()?.text)
+
+            // Optional: Show source count
+            val chunks = event.groundingMetadata?.groundingChunks
+            if (!chunks.isNullOrEmpty()) {
+                println("\nBased on ${chunks.size} documents")
             }
         }
     }
