@@ -338,6 +338,8 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
     再開機能の使用方法の詳細については、
     [停止したエージェントの再開](/ja/runtime/resume/)を参照してください。
 
+    **Kotlin** では、ランナーが関数応答自体の呼び出し ID から呼び出しを解決するため、`runAsync` に `invocationId` を渡す必要はありません。セッション内のどの関数呼び出しとも一致しない ID を持つ応答は、代わりに例外をスローします。
+
 ??? Tip "Java ADKにのみ適用"
 
     関数ツールで`ToolContext`を渡す場合は、次のいずれかが当てはまることを確認してください。
@@ -388,6 +390,12 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
     --8<-- "examples/java/snippets/src/main/java/tools/LongRunningFunctionExample.java:full_code"
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/function-tools/LongRunningTool.kt:call_reimbursement_tool"
+    ```
+
 ??? "Pythonの完全な例：ファイル処理シミュレーション"
 
     ```py
@@ -399,6 +407,8 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
 - **`LongRunningFunctionTool`**: 提供されたメソッド/関数をラップします。フレームワークは、生成された更新と最終的な戻り値を連続したFunctionResponsesとして送信することを処理します。
 - **エージェントの指示**: LLMにツールを使用し、ユーザーの更新のために受信するFunctionResponseストリーム（進行状況と完了）を理解するように指示します。
 - **最終的な戻り値**: 関数は最終的な結果の辞書を返し、完了を示すために最後のFunctionResponseで送信されます。
+- **Kotlin には `LongRunningFunctionTool` クラスがありません**: 関数に `@Tool(isLongRunning = true)` をアノテーションするか、`BaseTool` サブクラスに `isLongRunning = true` を渡します。
+- **Kotlin のターン数**: 上記のツールは `Unit` ではなく値を返すため、再開不可能な (non-resumable) アプリはそのプレースホルダーをモデルに送信し、2 回目に呼び出して中間応答でターン 1 を終了します。再開可能な (resumable) アプリは、2 回目のモデル呼び出しを行わずに、関数呼び出しで一時停止します。`Unit` を返すと、プレースホルダー応答が完全に抑制され、どちらのモードでも関数呼び出しでターンが終了します。
 
 ## ツールとしてのエージェント {#agent-tool}
 

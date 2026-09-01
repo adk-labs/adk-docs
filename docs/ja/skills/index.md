@@ -10,7 +10,8 @@
     スキル機能はプレビュー段階です。各 ADK GitHub リポジトリからのフィードバックをお待ちしております。
     [ADK Python](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=skills)、
     [ADK TypeScript](https://github.com/google/adk-js/issues/new?template=feature_request.md&labels=skills)、
-    [ADK Go](https://github.com/google/adk-go/issues/new?template=feature_request.md&labels=skills)。
+    [ADK Go](https://github.com/google/adk-go/issues/new?template=feature_request.md&labels=skills)、
+    [ADK Kotlin](https://github.com/google/adk-kotlin/issues/new)。
 
 ## はじめに
 
@@ -88,6 +89,14 @@
     ```
 
     完全な例については、[skills](https://github.com/google/adk-go/tree/main/examples/skills) のコード サンプルを参照してください。
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/skills/SkillsExample.kt:get_started"
+    ```
+
+    完全な例については、[skills](https://github.com/google/adk-kotlin/tree/main/examples/src/main/kotlin/com/google/adk/kt/examples/skills) のコード サンプルを参照してください。
 
 !!! note "作業ディレクトリの確認"
 
@@ -250,6 +259,16 @@ my_agent/
     }
     ```
 
+=== "Kotlin"
+
+    !!! note
+        ADK Kotlin は現在、インライン スキル用の標準 Source を提供していません。
+        コード内でスキルを直接定義するには、以下に示すように `SkillSource` インターフェースを独自に実装する必要があります。
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/skills/SkillsExample.kt:inline_skill"
+    ```
+
 !!! note
     `Source` インターフェースは、ライブ更新やパーソナライゼーションなどの動的なユースケースをサポートするために、任意のデータ ストア (データベースなど) によって支援されます。
 
@@ -297,6 +316,12 @@ my_agent/
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/skills/SkillsExample.kt:filesystem_skill"
+    ```
+
 ## スキルの処理と検証
 
 エージェントにスキルを含めると、エージェントは標準化されたプロセスを使用してスキルと対話します。このプロセスには、スキルの使用方法に関するシステム レベルの指示、スキルの表現方法に関する定義された形式、およびスキル定義の一連の検証ルールが含まれます。
@@ -307,4 +332,5 @@ my_agent/
 
 - [Python でのスキル - コード サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/environment_and_skills/skills_agent)
 - [Go でのスキル - コード サンプル](https://github.com/google/adk-go/tree/main/examples/skills)
+- [Kotlin でのスキル - コード サンプル](https://github.com/google/adk-kotlin/tree/main/examples/src/main/kotlin/com/google/adk/kt/examples/skills)
 - Agent Skills [仕様ドキュメント](https://agentskills.io/)

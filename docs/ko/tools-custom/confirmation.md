@@ -1,7 +1,7 @@
 # ADK 도구에 대한 작업 확인 (Action Confirmation)
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">실험적</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span><span class="lst-preview">실험적</span>
 </div>
 
 일부 에이전트 워크플로는 의사 결정, 검증, 보안 또는 일반적인 감독을 위해 확인이 필요합니다. 이러한 경우 워크플로를 진행하기 전에 사람이나 감독 시스템으로부터 응답을 받아야 합니다. ADK(Agent Development Kit)의 *도구 확인(Tool Confirmation)* 기능을 사용하면 ADK 도구의 실행을 일시 중지하고 사용자 또는 다른 시스템과 상호작용하여 확인을 받거나 구조화된 데이터를 수집한 후 계속 진행할 수 있습니다. ADK 도구에서 도구 확인을 다음과 같은 방식으로 사용할 수 있습니다:
@@ -23,7 +23,7 @@
 
 ## 불리언 확인 (Boolean confirmation) {#boolean-confirmation}
 
-도구에 사용자의 간단한 `yes` 또는 `no`만 필요한 경우 확인 단계를 추가할 수 있습니다. Python, Go 및 Java에서는 도구를 `FunctionTool` 클래스로 래핑하고 `require_confirmation` 매개변수(또는 이에 상응하는 매개변수)를 `True`로 설정하여 이를 활성화할 수 있습니다. TypeScript에서는 `ToolContext`를 사용하여 `execute` 함수 내에서 이 로직을 수동으로 구현합니다.
+도구에 사용자의 간단한 `yes` 또는 `no`만 필요한 경우 확인 단계를 추가할 수 있습니다. Python, Go 및 Java에서는 도구를 `FunctionTool` 클래스로 래핑하고 `require_confirmation` 매개변수(또는 이에 상응하는 매개변수)를 `True`로 설정하여 이를 활성화할 수 있습니다. Kotlin에서는 도구 함수의 `@Tool` 어노테이션에 `requireConfirmation = true`를 설정합니다. TypeScript에서는 `ToolContext`를 사용하여 `execute` 함수 내에서 이 로직을 수동으로 구현합니다.
 
 다음 예시는 불리언 확인을 활성화하는 방법을 보여줍니다:
 
@@ -85,9 +85,15 @@
         .build();
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/confirmation/ToolConfirmationExample.kt:boolean_confirmation"
+    ```
+
 ### 확인 필요 함수 (Require confirmation function)
 
-도구의 입력에 따라 불리언 응답을 반환하는 함수를 사용하여 확인 요구사항 동작을 동적으로 수정할 수 있습니다. TypeScript에서는 `execute` 함수에 조건부 로직을 추가하여 이를 처리합니다.
+도구의 입력에 따라 불리언 응답을 반환하는 함수를 사용하여 확인 요구사항 동작을 동적으로 수정할 수 있습니다. TypeScript에서는 `execute` 함수에 조건부 로직을 추가하여 이를 처리합니다. Kotlin에서는 `@Tool` 어노테이션의 플래그가 컴파일 타임 상수이므로 조건부 로직이 도구 함수 내부에 배치됩니다.
 
 === "Python"
 
@@ -161,6 +167,15 @@
         // ...
         .build();
     ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/confirmation/dynamic/ReimbursementTools.kt:dynamic_confirmation"
+    ```
+
+    !!! note
+        `@Tool` 어노테이션의 `requireConfirmation` 플래그는 컴파일 타임 상수이므로, ADK Java에서와 마찬가지로 `ToolContext`를 사용하여 도구 내부에서 임계값을 평가합니다.
 
 ## 고급 확인 (Advanced confirmation) {#advanced-confirmation}
 
@@ -280,6 +295,12 @@
             "approved_days", approvedDays
         );
     }
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/confirmation/ToolConfirmationExample.kt:advanced_confirmation"
     ```
 
 ## REST API를 통한 원격 확인 {#remote-response}

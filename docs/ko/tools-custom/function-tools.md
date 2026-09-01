@@ -337,6 +337,8 @@ Python에서는 함수를 `LongRunningFunctionTool`로 래핑합니다. Java에�
     재개 기능 사용에 대한 자세한 내용은 
     [중지된 에이전트 재개](/ko/runtime/resume/)를 참고하세요.
 
+    **Kotlin**에서는 러너가 함수 응답 자체의 호출 ID로부터 호출을 확인하므로 `runAsync`에 `invocationId`를 전달할 필요가 없습니다. 세션의 함수 호출과 일치하는 ID가 없는 응답은 대신 예외를 발생시킵니다.
+
 ??? Tip "Java ADK에만 적용"
 
     함수 도구와 함께 `ToolContext`를 전달할 때 다음 중 하나가 참인지 확인하세요.
@@ -387,6 +389,12 @@ Python에서는 함수를 `LongRunningFunctionTool`로 래핑합니다. Java에�
     --8<-- "examples/java/snippets/src/main/java/tools/LongRunningFunctionExample.java:full_code"
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/function-tools/LongRunningTool.kt:call_reimbursement_tool"
+    ```
+
 ??? "Python 전체 예: 파일 처리 시뮬레이션"
 
     ```py
@@ -398,6 +406,8 @@ Python에서는 함수를 `LongRunningFunctionTool`로 래핑합니다. Java에�
 - **`LongRunningFunctionTool`**: 제공된 메서드/함수를 래핑합니다. 프레임워크는 생성된 업데이트와 최종 반환 값을 순차적인 FunctionResponses로 보내는 것을 처리합니다.
 - **에이전트 지침**: LLM에 도구를 사용하고 사용자 업데이트를 위해 들어오는 FunctionResponse 스트림(진행률 대 완료)을 이해하도록 지시합니다.
 - **최종 반환**: 함수는 최종 결과 사전을 반환하며, 이는 완료를 나타내기 위해 마지막 FunctionResponse에서 전송됩니다.
+- **Kotlin에는 `LongRunningFunctionTool` 클래스가 없음**: 함수에 `@Tool(isLongRunning = true)`을 어노테이션하거나 `BaseTool` 서브클래스에 `isLongRunning = true`를 전달합니다.
+- **Kotlin 턴 수**: 위 도구는 `Unit` 대신 값을 반환하므로, 재개할 수 없는(non-resumable) 앱은 해당 플레이스홀더를 모델에 보내고 두 번째로 호출하여 중간 응답으로 턴 1을 종료합니다. 재개 가능한(resumable) 앱은 두 번째 모델 호출 없이 함수 호출에서 일시 중지됩니다. `Unit`을 반환하면 플레이스홀더 응답이 완전히 억제되어 어느 모드에서든 함수 호출에서 턴이 종료됩니다.
 
 ## 도구로서의 에이전트 {#agent-tool}
 

@@ -1,7 +1,7 @@
 # ADK ツールの操作確認の取得
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">プレビュー</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
 一部のエージェント ワークフローでは、意思決定、検証、セキュリティ、または一般的な監視のために確認が必要です。このような場合、ワークフローを続行する前に人間または監視システムから応答を取得する必要があります。Agent Development Kit (ADK) の*ツール確認 (Tool Confirmation)* 機能を使用すると、ADK ツールはその実行を一時停止し、ユーザーまたは他のシステムと対話して確認を取得したり、構造化データを収集したりしてから続行できます。ADK ツールでツール確認を次の方法で使用できます。
@@ -23,7 +23,7 @@
 
 ## ブール値の確認 (Boolean confirmation) {#boolean-confirmation}
 
-ツールでユーザーからの単純な `yes` または `no` のみが必要な場合は、確認ステップを追加できます。Python、Go、および Java では、ツールを `FunctionTool` クラスでラップし、`require_confirmation` パラメータ (または同等のパラメータ) を `True` に設定することでこれを有効にできます。TypeScript では、`ToolContext` を使用して `execute` 関数内でこのロジックを手動で実装します。
+ツールでユーザーからの単純な `yes` または `no` のみが必要な場合は、確認ステップを追加できます。Python、Go、および Java では、ツールを `FunctionTool` クラスでラップし、`require_confirmation` パラメータ (または同等のパラメータ) を `True` に設定することでこれを有効にできます。Kotlin では、ツール関数の `@Tool` アノテーションに `requireConfirmation = true` を設定します。TypeScript では、`ToolContext` を使用して `execute` 関数内でこのロジックを手動で実装します。
 
 次の例は、ブール値の確認を有効にする方法を示しています。
 
@@ -78,9 +78,15 @@
         .build();
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/confirmation/ToolConfirmationExample.kt:boolean_confirmation"
+    ```
+
 ### 確認要件関数 (Require confirmation function)
 
-ツールの入力に基づいてブール値の応答を返す関数を使用して、確認要件の動作を動的に変更できます。TypeScript では、`execute` 関数に条件付きロジックを追加することでこれを処理します。
+ツールの入力に基づいてブール値の応答を返す関数を使用して、確認要件の動作を動的に変更できます。TypeScript では、`execute` 関数に条件付きロジックを追加することでこれを処理します。Kotlin では、`@Tool` アノテーションのフラグがコンパイル時定数であるため、条件付きロジックはツール関数内に配置されます。
 
 === "Python"
 
@@ -147,6 +153,15 @@
         // ...
         .build();
     ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/confirmation/dynamic/ReimbursementTools.kt:dynamic_confirmation"
+    ```
+
+    !!! note
+        `@Tool` アノテーションの `requireConfirmation` フラグはコンパイル時定数であるため、ADK Java と同様に `ToolContext` を使用してツール内でしきい値が評価されます。
 
 ## 高度な確認 (Advanced confirmation) {#advanced-confirmation}
 
@@ -254,6 +269,12 @@
             "approved_days", approvedDays
         );
     }
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/tools/confirmation/ToolConfirmationExample.kt:advanced_confirmation"
     ```
 
 ## REST API によるリモート確認 {#remote-response}

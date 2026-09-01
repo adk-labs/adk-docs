@@ -10,7 +10,8 @@
     스킬 기능은 실험적입니다. 각 ADK GitHub 리포지토리를 통한 여러분의 피드백을 환영합니다:
     [ADK Python](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=skills),
     [ADK TypeScript](https://github.com/google/adk-js/issues/new?template=feature_request.md&labels=skills),
-    [ADK Go](https://github.com/google/adk-go/issues/new?template=feature_request.md&labels=skills).
+    [ADK Go](https://github.com/google/adk-go/issues/new?template=feature_request.md&labels=skills),
+    [ADK Kotlin](https://github.com/google/adk-kotlin/issues/new).
 
 ## 시작하기
 
@@ -88,6 +89,14 @@
     ```
 
     완전한 예제는 [skills](https://github.com/google/adk-go/tree/main/examples/skills)의 코드 샘플을 참고하세요.
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/skills/SkillsExample.kt:get_started"
+    ```
+
+    완전한 예제는 [skills](https://github.com/google/adk-kotlin/tree/main/examples/src/main/kotlin/com/google/adk/kt/examples/skills)의 코드 샘플을 참고하세요.
 
 !!! note "작업 디렉터리 확인"
 
@@ -250,6 +259,16 @@ my_agent/
     }
     ```
 
+=== "Kotlin"
+
+    !!! note
+        ADK Kotlin은 현재 인라인 스킬을 위한 표준 Source를 제공하지 않습니다.
+        코드에서 직접 스킬을 정의하려면 아래와 같이 `SkillSource` 인터페이스를 직접 구현해야 합니다.
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/skills/SkillsExample.kt:inline_skill"
+    ```
+
 !!! note
     `Source` 인터페이스는 라이브 업데이트 및 개인화와 같은 동적 사용 사례를 지원하기 위해 모든 데이터 저장소(예: 데이터베이스)로 지원될 수 있습니다.
 
@@ -297,6 +316,12 @@ my_agent/
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/skills/SkillsExample.kt:filesystem_skill"
+    ```
+
 ## 스킬 처리 및 유효성 검사
 
 에이전트에 스킬을 포함하면 에이전트는 표준화된 프로세스를 사용하여 스킬과 상호작용합니다. 이 프로세스에는 스킬 사용 방법에 대한 시스템 수준 지침, 스킬 표현 방식에 대한 정의된 형식, 스킬 정의에 대한 일련의 유효성 검사 규칙이 포함됩니다.
@@ -307,4 +332,5 @@ my_agent/
 
 - [Python 스킬 코드 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/environment_and_skills/skills_agent)
 - [Go 스킬 코드 샘플](https://github.com/google/adk-go/tree/main/examples/skills)
+- [Kotlin 스킬 코드 샘플](https://github.com/google/adk-kotlin/tree/main/examples/src/main/kotlin/com/google/adk/kt/examples/skills)
 - Agent Skills [사양 문서](https://agentskills.io/)
