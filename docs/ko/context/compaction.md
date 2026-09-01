@@ -166,7 +166,7 @@ compaction_config = EventsCompactionConfig(
 *   **`summarizer`**: (선택 사항) 요약에 사용할 특정 AI 모델을 포함하는 요약기 객체를 정의합니다. 자세한 내용은 [요약기 정의](#define-summarizer)를 참고하세요.
 
 ### 요약기 정의 {#define-summarizer}
-요약기를 정의하여 컨텍스트 압축 프로세스를 사용자 지정할 수 있습니다. `LlmEventSummarizer`(Python/Java) 또는 `LlmSummarizer`(TypeScript) 클래스를 사용하면 요약에 특정 모델을 지정할 수 있습니다. 다음 코드 예시는 사용자 지정 요약기를 정의하고 구성하는 방법을 보여줍니다.
+요약기를 정의하여 컨텍스트 압축 프로세스를 사용자 지정할 수 있습니다. `LlmEventSummarizer`(Python, Java 및 Kotlin) 또는 `LlmSummarizer`(TypeScript) 클래스를 사용하면 요약에 특정 모델을 지정할 수 있습니다. 다음 코드 예시는 사용자 지정 요약기를 정의하고 구성하는 방법을 보여줍니다.
 
 === "Python"
 
@@ -243,7 +243,32 @@ compaction_config = EventsCompactionConfig(
           summarizer: mySummarizer,
         }),
       ],
-    });
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.apps.App
+    import com.google.adk.kt.models.Gemini
+    import com.google.adk.kt.summarizer.EventsCompactionConfig
+    import com.google.adk.kt.summarizer.LlmEventSummarizer
+
+    // 요약에 사용할 AI 모델 정의:
+    val summarizationLlm = Gemini(name = "gemini-flash-latest")
+
+    // 사용자 지정 모델로 요약기 생성:
+    val mySummarizer = LlmEventSummarizer(model = summarizationLlm)
+
+    // 사용자 지정 요약기 및 압축 설정으로 App 구성:
+    val app =
+        App(
+            appName = "my-agent",
+            rootAgent = rootAgent,
+            eventsCompactionConfig =
+                EventsCompactionConfig(
+                    compactionInterval = 3,
+                    overlapSize = 1,
+                    summarizer = mySummarizer,
+                ),
+        )
     ```
 
-요약기를 조정해 압축기의 동작을 더 세밀하게 제어할 수도 있습니다. Python과 Java에서는 `LlmEventSummarizer`의 `prompt_template`을, TypeScript에서는 `LlmSummarizer`의 `prompt`를 사용자 지정할 수 있습니다. 자세한 내용은 [`LlmEventSummarizer` 코드](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) 또는 [`LlmSummarizer` 코드](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts)를 참고하세요.
+요약기를 조정해 압축기의 동작을 더 세밀하게 제어할 수도 있습니다. Python, Java 및 Kotlin에서는 `LlmEventSummarizer`의 프롬프트 템플릿을 사용자 지정할 수 있습니다. 프로퍼티 이름은 Python에서는 `prompt_template`, Java와 Kotlin에서는 `promptTemplate`입니다. TypeScript에서는 `LlmSummarizer`의 `prompt`를 사용자 지정할 수 있습니다. 자세한 내용은 [`LlmEventSummarizer` 코드](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) 또는 [`LlmSummarizer` 코드](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts)를 참고하세요.

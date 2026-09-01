@@ -308,8 +308,8 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
 次のパラメータで runtime guardrail と debugging を制御します。
 
 - `max_llm_calls`: run ごとの LLM call 合計数を制限します(デフォルト: 500)。0 または負の値は
-  無制限の呼び出しを意味しますが、本番環境では推奨されません。`sys.maxsize` 以上の値は
-  エラーになります。
+  無制限の呼び出しを意味しますが、本番環境では推奨されません。使用する言語の最大整数(Python では
+  `sys.maxsize`、Kotlin では `Int.MAX_VALUE`)を渡すとエラーになります。
 - `save_input_blobs_as_artifacts`: `True` の場合、input blob(例: uploaded file)を debugging と
   auditing 用の run artifact として保存します。
 - `custom_metadata`: invocation に添付される任意 metadata の `dict[str, Any]` です。tracing や

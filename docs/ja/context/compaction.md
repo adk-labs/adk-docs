@@ -166,7 +166,7 @@ compaction_config = EventsCompactionConfig(
 *   **`summarizer`**: (オプション) 要約に使用する特定のAIモデルを含むサマライザーオブジェクトを定義します。詳細については、[サマライザーの定義](#define-summarizer)を参照してください。
 
 ### サマライザーを定義する {#define-summarizer}
-サマライザーを定義することで、コンテキスト圧縮プロセスをカスタマイズできます。`LlmEventSummarizer`（Python/Java）または `LlmSummarizer`（TypeScript）クラスを使うと、要約に使うモデルを指定できます。次のコード例は、カスタムサマライザーを定義して構成する方法を示しています。
+サマライザーを定義することで、コンテキスト圧縮プロセスをカスタマイズできます。`LlmEventSummarizer`（Python、Java、および Kotlin）または `LlmSummarizer`（TypeScript）クラスを使うと、要約に使うモデルを指定できます。次のコード例は、カスタムサマライザーを定義して構成する方法を示しています。
 
 === "Python"
 
@@ -243,7 +243,32 @@ compaction_config = EventsCompactionConfig(
           summarizer: mySummarizer,
         }),
       ],
-    });
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.apps.App
+    import com.google.adk.kt.models.Gemini
+    import com.google.adk.kt.summarizer.EventsCompactionConfig
+    import com.google.adk.kt.summarizer.LlmEventSummarizer
+
+    // 要約に使用する AI モデルを定義します。
+    val summarizationLlm = Gemini(name = "gemini-flash-latest")
+
+    // カスタムモデルでサマライザーを作成します。
+    val mySummarizer = LlmEventSummarizer(model = summarizationLlm)
+
+    // カスタムサマライザーと圧縮設定で App を構成します。
+    val app =
+        App(
+            appName = "my-agent",
+            rootAgent = rootAgent,
+            eventsCompactionConfig =
+                EventsCompactionConfig(
+                    compactionInterval = 3,
+                    overlapSize = 1,
+                    summarizer = mySummarizer,
+                ),
+        )
     ```
 
-サマライザーを調整することで、圧縮器の動作をさらに細かく制御できます。Python と Java では `LlmEventSummarizer` の `prompt_template` を、TypeScript では `LlmSummarizer` の `prompt` をカスタマイズできます。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) または [`LlmSummarizer` コード](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts) を参照してください。
+サマライザーを調整することで、圧縮器の動作をさらに細かく制御できます。Python、Java、および Kotlin では `LlmEventSummarizer` のプロンプトテンプレートをカスタマイズできます（プロパティ名は Python では `prompt_template`、Java と Kotlin では `promptTemplate` です）。TypeScript では `LlmSummarizer` の `prompt` をカスタマイズできます。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) または [`LlmSummarizer` コード](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts) を参照してください。

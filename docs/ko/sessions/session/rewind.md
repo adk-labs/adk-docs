@@ -1,7 +1,7 @@
 # 에이전트 세션 되감기(Rewind)
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.17.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.17.0</span><span class="lst-kotlin">Kotlin v0.3.0</span>
 </div>
 
 ADK 세션 Rewind 기능을 사용하면 세션을 이전 요청 상태로 되돌릴 수 있어,
@@ -18,36 +18,44 @@ B를 지정해야 하며, 그러면 B와 C의 변경 사항이 취소됩니다. 
 ***Runner*** 인스턴스의 rewind 메서드를 사용해 되감을 수 있으며,
 아래 코드 스니펫처럼 사용자, 세션, invocation id를 지정합니다:
 
-```python
-# Create runner
-runner = InMemoryRunner(
-    agent=agent.root_agent,
-    app_name=APP_NAME,
-)
+=== "Python"
 
-# Create a session
-session = await runner.session_service.create_session(
-    app_name=APP_NAME, user_id=USER_ID
-)
-# call agent with wrapper function "call_agent_async()"
-await call_agent_async(
-    runner, USER_ID, session.id, "set state color to red"
-)
-# ... more agent calls ...
-events_list = await call_agent_async(
-    runner, USER_ID, session.id, "update state color to blue"
-)
+    ```python
+    # Create runner
+    runner = InMemoryRunner(
+        agent=agent.root_agent,
+        app_name=APP_NAME,
+    )
 
-# get invocation id
-rewind_invocation_id=events_list[1].invocation_id
+    # Create a session
+    session = await runner.session_service.create_session(
+        app_name=APP_NAME, user_id=USER_ID
+    )
+    # call agent with wrapper function "call_agent_async()"
+    await call_agent_async(
+        runner, USER_ID, session.id, "set state color to red"
+    )
+    # ... more agent calls ...
+    events_list = await call_agent_async(
+        runner, USER_ID, session.id, "update state color to blue"
+    )
 
-# rewind invocations (state color: red)
-await runner.rewind_async(
-    user_id=USER_ID,
-    session_id=session.id,
-    rewind_before_invocation_id=rewind_invocation_id,
-)
-```
+    # get invocation id
+    rewind_invocation_id=events_list[1].invocation_id
+
+    # rewind invocations (state color: red)
+    await runner.rewind_async(
+        user_id=USER_ID,
+        session_id=session.id,
+        rewind_before_invocation_id=rewind_invocation_id,
+    )
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/RewindExample.kt:rewind_session"
+    ```
 
 ***rewind*** 메서드를 호출하면, ADK가 관리하는 모든 세션 레벨 리소스는
 지정한 ***invocation id*** 이전 상태로 복원됩니다. 다만 앱 레벨/사용자 레벨

@@ -96,6 +96,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 *   **영속성 및 관리:** 아티팩트는 에이전트나 세션 상태 내에 직접 저장되지 않습니다. 저장 및 검색은 전용 **아티팩트 서비스(Artifact Service)**(`google.adk.artifacts`에 정의된 `BaseArtifactService`의 구현체)에 의해 관리됩니다. ADK는 다음과 같은 다양한 구현체를 제공합니다:
     *   테스트 또는 임시 저장을 위한 인메모리(in-memory) 서비스 (예: Python의 `InMemoryArtifactService`, `google.adk.artifacts.in_memory_artifact_service.py`에 정의됨).
     *   Google Cloud Storage (GCS)를 사용한 영구 저장을 위한 서비스 (예: Python의 `GcsArtifactService`, `google.adk.artifacts.gcs_artifact_service.py`에 정의됨).
+    *   기본 디렉터리를 유일한 인수로 받는 Kotlin의 `FileArtifactService`와 같이 로컬 파일 시스템의 디렉터리에 아티팩트를 영속화하는 서비스.
     선택된 서비스 구현체는 데이터를 저장할 때 자동으로 버전 관리를 처리합니다.
 
 ## 왜 아티팩트를 사용해야 하나요?
@@ -151,7 +152,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     * `Delete Artifact`: 아티팩트를 제거합니다(구현에 따라 모든 버전을 제거할 수도 있음).
     * `List versions`: 특정 아티팩트 파일 이름에 대해 사용 가능한 모든 버전 번호를 나열합니다.
 
-* **설정:** `Runner`를 초기화할 때 아티팩트 서비스의 인스턴스(예: `InMemoryArtifactService`, `GcsArtifactService`)를 제공합니다. 그러면 `Runner`는 `InvocationContext`를 통해 이 서비스를 에이전트와 도구에서 사용할 수 있도록 합니다.
+* **설정:** `Runner`를 초기화할 때 `InMemoryArtifactService`, `GcsArtifactService` 또는 Kotlin의 `FileArtifactService`와 같은 아티팩트 서비스의 인스턴스를 제공합니다. 그러면 `Runner`는 `InvocationContext`를 통해 이 서비스를 에이전트와 도구에서 사용할 수 있도록 합니다.
 
 === "Python"
 

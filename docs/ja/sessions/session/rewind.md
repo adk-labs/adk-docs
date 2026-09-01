@@ -1,7 +1,7 @@
 # エージェントのセッションを巻き戻す
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span><span class="lst-kotlin">Kotlin v0.3.0</span>
 </div>
 
 ADK セッションの Rewind 機能を使うと、セッションを過去の
@@ -19,36 +19,44 @@ B を指定します。これにより B と C の変更が取り消されます
 ***Runner*** インスタンスの rewind メソッドを使って行い、
 次のコードのように user、session、invocation id を指定します:
 
-```python
-# Create runner
-runner = InMemoryRunner(
-    agent=agent.root_agent,
-    app_name=APP_NAME,
-)
+=== "Python"
 
-# Create a session
-session = await runner.session_service.create_session(
-    app_name=APP_NAME, user_id=USER_ID
-)
-# call agent with wrapper function "call_agent_async()"
-await call_agent_async(
-    runner, USER_ID, session.id, "set state color to red"
-)
-# ... more agent calls ...
-events_list = await call_agent_async(
-    runner, USER_ID, session.id, "update state color to blue"
-)
+    ```python
+    # Create runner
+    runner = InMemoryRunner(
+        agent=agent.root_agent,
+        app_name=APP_NAME,
+    )
 
-# get invocation id
-rewind_invocation_id=events_list[1].invocation_id
+    # Create a session
+    session = await runner.session_service.create_session(
+        app_name=APP_NAME, user_id=USER_ID
+    )
+    # call agent with wrapper function "call_agent_async()"
+    await call_agent_async(
+        runner, USER_ID, session.id, "set state color to red"
+    )
+    # ... more agent calls ...
+    events_list = await call_agent_async(
+        runner, USER_ID, session.id, "update state color to blue"
+    )
 
-# rewind invocations (state color: red)
-await runner.rewind_async(
-    user_id=USER_ID,
-    session_id=session.id,
-    rewind_before_invocation_id=rewind_invocation_id,
-)
-```
+    # get invocation id
+    rewind_invocation_id=events_list[1].invocation_id
+
+    # rewind invocations (state color: red)
+    await runner.rewind_async(
+        user_id=USER_ID,
+        session_id=session.id,
+        rewind_before_invocation_id=rewind_invocation_id,
+    )
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/RewindExample.kt:rewind_session"
+    ```
 
 ***rewind*** メソッドを呼ぶと、ADK が管理するセッションレベルのリソースはすべて、
 指定した ***invocation id*** の *直前* の状態に復元されます。ただし、

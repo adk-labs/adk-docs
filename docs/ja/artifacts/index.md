@@ -96,6 +96,7 @@ ADKにおいて、**アーティファクト(Artifacts)**は、特定のユー�
 *   **永続化と管理:** アーティファクトは、エージェントやセッションの状態に直接保存されません。その保存と取得は、専用の **アーティファクトサービス(Artifact Service)** （`google.adk.artifacts` で定義された `BaseArtifactService` の実装）によって管理されます。ADKは、次のようなさまざまな実装を提供します：
     *   テストや一時的な保存のためのインメモリサービス（例：Pythonの `InMemoryArtifactService`、`google.adk.artifacts.in_memory_artifact_service.py` で定義）。
     *   Google Cloud Storage (GCS) を使用した永続的な保存のためのサービス（例：Pythonの `GcsArtifactService`、`google.adk.artifacts.gcs_artifact_service.py` で定義）。
+    *   ベースディレクトリを唯一の引数として受け取る Kotlin の `FileArtifactService` のように、ローカルファイルシステムのディレクトリにアーティファクトを永続化するサービス。
     選択されたサービス実装は、データを保存する際に自動的にバージョン管理を処理します。
 
 ## なぜアーティファクトを使用するのか？
@@ -151,7 +152,7 @@ ADKにおいて、**アーティファクト(Artifacts)**は、特定のユー�
     * `Delete Artifact`: アーティファクトを削除します（実装によっては、すべてのバージョンが削除される場合があります）。
     * `List versions`: 特定のアーティファクトファイル名で利用可能なすべてのバージョン番号をリストします。
 
-* **設定:** `Runner` の初期化時に、アーティファクトサービスのインスタンス（例：`InMemoryArtifactService`、`GcsArtifactService`）を提供します。`Runner` は、`InvocationContext` を介してこのサービスをエージェントやツールで利用可能にします。
+* **設定:** `Runner` の初期化時に、`InMemoryArtifactService`、`GcsArtifactService`、または Kotlin の `FileArtifactService` などのアーティファクトサービスのインスタンスを提供します。`Runner` は、`InvocationContext` を介してこのサービスをエージェントやツールで利用可能にします。
 
 === "Python"
 
