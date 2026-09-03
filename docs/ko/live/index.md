@@ -1,12 +1,12 @@
-# ADK Gemini Live API Toolkit
+# 라이브 및 음성 에이전트
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-preview">실험적 기능</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.5.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-preview">실험적 기능</span>
 </div>
-  
-ADK의 Gemini Live API Toolkit은 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live)의 저지연 양방향 음성 및 영상 상호작용 기능을 AI 에이전트에 추가합니다.
 
-양방향 스트리밍(라이브) 모드에서는 사용자에게 자연스럽고 사람 같은 음성 대화 경험을 제공할 수 있으며, 사용자가 음성 명령으로 에이전트 응답을 중단하는 것도 가능합니다. 스트리밍 에이전트는 텍스트, 오디오, 비디오 입력을 처리하고 텍스트 및 오디오 출력을 제공합니다.
+ADK는 라이브 및 음성 에이전트를 구축하기 위한 프레임워크입니다. 라이브 에이전트는 사용자와 열린 양방향 연결을 유지합니다. 메시지를 보내고 답장을 기다리는 대신 사용자와 에이전트가 동시에 말하고, 듣고, 응답하며, 실제 대화에서 사람들이 서로 말을 끊는 것처럼 사용자가 에이전트의 말을 중간에 끊을(interrupt) 수 있습니다. 라이브 에이전트는 텍스트, 오디오, 비디오 입력을 수락하고 텍스트 또는 음성으로 응답합니다.
+
+라이브 에이전트는 다른 모든 곳에서 사용하는 동일한 에이전트, 도구, 세션 추상화로 구축된 ADK 에이전트입니다. 개발자는 에이전트의 동작을 정의하고, ADK는 그 아래에서 실시간 연결, 도구 실행, 세션 상태를 관리합니다. 현재 이 연결은 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api) 위에서 실행되며, 플랫폼이 발전하더라도 에이전트 코드가 그대로 유지되도록 ADK가 연결 배선을 처리합니다.
 
 <div class="video-grid">
   <div class="video-item">
@@ -21,7 +21,81 @@ ADK의 Gemini Live API Toolkit은 [Gemini Live API](https://ai.google.dev/gemini
   </div>
 </div>
 
-## 라이브 데모
+## 라이브 에이전트 구축
+
+<div class="grid cards" markdown>
+
+-   :material-rocket-launch-outline: **시작하기**
+
+    ---
+
+    첫 번째 라이브 에이전트를 만들고 브라우저에서 대화해 보세요.
+
+    - [여기서 시작](get-started/index.md) — 언어를 선택하고 에이전트 구축하기
+    - [Python](get-started/streaming-python.md) 또는 [Java](get-started/streaming-java.md)로 바로 이동
+
+-   :material-book-open-variant: **개발 가이드**
+
+    ---
+
+    필요한 순서대로 정리된 기능별 가이드입니다.
+
+    - [세션](sessions.md) — `run_live()`, 세션 재개, 확장성
+    - [이벤트](events.md) — 반환되는 이벤트와 처리 방법
+    - [도구](tools.md) — 자동 실행 및 스트리밍 도구
+    - [워크플로](workflows.md) — 라이브 연결에서의 멀티 에이전트
+    - [오디오 및 비디오](audio-video.md) — 미디어 포맷 및 스트리밍
+    - [구성](configuration.md) — `RunConfig`, 음성, 전사, 턴 감지
+
+-   :material-server-network: **프로덕션 배포**
+
+    ---
+
+    `adk web`을 넘어 프로덕션으로 확장합니다.
+
+    - [평가](evaluation.md) — 출시 전 음성 대화 품질 점수 측정
+    - [커스텀 서버 구축](custom-server.md)
+    - [지원 모델](models.md)
+
+</div>
+
+## 어떤 종류의 스트리밍이 필요한가요?
+
+ADK에서 "스트리밍"은 세 가지 서로 다른 기능을 의미하며, 잘못 선택하는 것이 흔한 혼란의 원인이 됩니다.
+
+| | 동작 방식 | 사용자 끼어들기 가능 여부 | 사용 시점 | 위치 |
+| :---- | :---- | :---- | :---- | :---- |
+| **서버 측 스트리밍** | 라이브 피드처럼 서버에서 클라이언트로의 단방향 흐름. | 불가 | 대화가 아닌 대시보드나 피드 업데이트를 푸시할 때. | ADK 외부 |
+| **토큰 단위 스트리밍** | 텍스트가 단어 단위로 도착하지만, 추가 전송 전에 완료를 기다림. | 불가 | 응답성 높은 텍스트 채팅을 원할 때. | `StreamingMode.SSE` ([구성](configuration.md#streamingmode-bidi-or-sse)) |
+| **양방향 스트리밍** | 열린 단일 연결을 통해 양측이 동시에 말하고, 듣고, 응답함. | **가능** | 음성 또는 비디오 대화를 구축할 때. | `runner.run_live()` — 현재 문서들 |
+
+현재 문서들은 세 번째 행에 대해 다룹니다.
+
+```mermaid
+sequenceDiagram
+    participant Client as 사용자
+    participant Agent as 에이전트
+
+    Client->>Agent: "일본의 역사를 설명해줘"
+    Agent->>Client: "물론이죠! 일본의 역사는..." (진행 중)
+    Client->>Agent: "아, 잠깐만."
+    Agent->>Client: "네, 무엇을 도와드릴까요?" [interrupted: true]
+```
+
+## 왜 ADK로 라이브 에이전트를 구축해야 할까요?
+
+Live API는 스트리밍 프로토콜을 제공합니다. ADK는 그 주변의 모든 것을 제공하므로 스트리밍 인프라 대신 에이전트 동작 작성에 집중할 수 있습니다.
+
+| | 순수 Live API (`google-genai`) | ADK |
+|---|---|---|
+| 도구 실행 | 수동 | [자동](tools.md#automatic-tool-execution) |
+| 재연결 | 수동 | [자동 세션 재개](sessions.md#session-resumption) |
+| 이벤트 | 커스텀 구조 | [통합 이벤트 모델](events.md) |
+| 비동기 조율 | 수동 | [`LiveRequestQueue` + `run_live()`](sessions.md) |
+| 세션 지속성 | 수동 | [SQL, Agent Platform, 인메모리](../sessions/index.md) |
+| 멀티 에이전트 | 미제공 | [워크플로, 서브에이전트, 전송](workflows.md) |
+
+## 데모 및 리소스
 
 <div class="grid cards" markdown>
 
@@ -29,67 +103,25 @@ ADK의 Gemini Live API Toolkit은 [Gemini Live API](https://ai.google.dev/gemini
 
     ---
 
-    [![LensMosaic 스크린샷](https://raw.githubusercontent.com/kazunori279/lens-mosaic/main/assets/lens-mosaic-demo.png)](https://lens-mosaic-nhhfh7g7iq-uc.a.run.app)
+    라이브 카메라 입력, 음성 상호작용, 지능형 상품 검색을 결합합니다. 카메라를 어떤 물체에든 비추면 비슷한 상품을 찾습니다. ADK 라이브 에이전트, Gemini Embedding, Vector Search, FastAPI로 구축되었습니다.
 
-    라이브 카메라 입력, 음성 상호작용, 지능형 상품 검색을 결합한 데모 앱입니다. 카메라를 어떤 물체에든 비추면 비슷한 상품을 찾고, 시각·음성 입력을 결합해 개인화 추천을 받거나, 실시간 AI 쇼핑 어시스턴트와 대화할 수 있습니다. ADK Gemini Live API Toolkit, Gemini Embedding, Vector Search, FastAPI로 구축되었습니다.
-
-    - [LensMosaic 데모](https://lens-mosaic-nhhfh7g7iq-uc.a.run.app)
+    - [라이브 데모](https://lens-mosaic-nhhfh7g7iq-uc.a.run.app)
     - [소스 코드](https://github.com/kazunori279/lens-mosaic)
 
-</div>
-
-<div class="grid cards" markdown>
-
--   :material-console-line: **빠른 시작 (Gemini Live API Toolkit)**
+-   :material-post-outline: **양방향 스트리밍 비주얼 가이드**
 
     ---
 
-    이 빠른 시작에서는 간단한 에이전트를 만들고 ADK 스트리밍을 사용해 저지연 양방향 음성/영상 통신을 구현합니다.
+    스트리밍 동작 방식과 ADK로 인터랙티브 에이전트를 구축하는 방법을 다룬 다이어그램과 일러스트입니다.
 
-    - [빠른 시작 (Gemini Live API Toolkit)](../get-started/streaming/quickstart-streaming.md)
+    - [글 읽기](https://medium.com/google-cloud/adk-bidi-streaming-a-visual-guide-to-real-time-multimodal-ai-agent-development-62dd08c81399)
 
--   :material-console-line: **블로그 게시물: ADK Gemini Live API Toolkit 비주얼 가이드**
-
-    ---
-
-    ADK Gemini Live API Toolkit 기반 실시간 멀티모달 AI 에이전트 개발을 시각적으로 설명한 가이드입니다. 직관적인 다이어그램과 일러스트를 통해 스트리밍의 동작 방식과 인터랙티브 AI 에이전트 구축 방법을 이해할 수 있습니다.
-
-    - [블로그 게시물: ADK Gemini Live API Toolkit 비주얼 가이드](https://medium.com/google-cloud/adk-bidi-streaming-a-visual-guide-to-real-time-multimodal-ai-agent-development-62dd08c81399)
-
--   :material-console-line: **Gemini Live API Toolkit 개발 가이드 시리즈**
+-   :material-post-outline: **Google ADK + Gemini Live API**
 
     ---
 
-    ADK 기반 Gemini Live API Toolkit 개발을 더 깊게 다루는 시리즈입니다. 기본 개념과 사용 사례, 핵심 API, 엔드투엔드 애플리케이션 설계를 배울 수 있습니다.
+    `LiveRequestQueue` 기반으로 구축된 Python 서버 예제와 함께 실시간 오디오/비디오용 라이브 에이전트를 사용하는 방법을 알아봅니다.
 
-    - [1부: ADK Gemini Live API Toolkit 소개](dev-guide/part1.md) - 스트리밍 기초, Live API 기술, ADK 아키텍처 구성 요소, FastAPI 예제를 통한 전체 라이프사이클
-    - [2부: LiveRequestQueue로 메시지 전송](dev-guide/part2.md) - 업스트림 메시지 흐름, 텍스트/오디오/비디오 전송, 활동 신호, 동시성 패턴
-    - [3부: run_live() 이벤트 처리](dev-guide/part3.md) - 이벤트 처리, 텍스트/오디오/전사 처리, 자동 도구 실행, 멀티 에이전트 워크플로
-    - [4부: RunConfig 이해하기](dev-guide/part4.md) - 응답 모달리티, 스트리밍 모드, 세션 관리/재개, 컨텍스트 윈도우 압축, 쿼터 관리
-    - [5부: 오디오/이미지/비디오 사용 방법](dev-guide/part5.md) - 오디오 스펙, 모델 아키텍처, 오디오 전사, VAD(음성 활동 감지), 능동/감성 대화 기능
-
--   :material-console-line: **스트리밍 도구**
-
-    ---
-
-    스트리밍 도구를 사용하면 도구(함수)가 중간 결과를 에이전트로 스트리밍할 수 있고, 에이전트는 그 중간 결과에 반응할 수 있습니다. 예를 들어 주가 변화를 모니터링해 에이전트가 반응하도록 하거나, 비디오 스트림 변화를 감지해 보고하도록 만들 수 있습니다.
-
-    - [스트리밍 도구](streaming-tools.md)
-
--   :material-console-line: **블로그 게시물: Google ADK + Vertex AI Live API**
-
-    ---
-
-    이 글은 ADK의 Gemini Live API Toolkit을 사용해 실시간 오디오/비디오 스트리밍을 구현하는 방법을 보여줍니다. `LiveRequestQueue`를 사용해 사용자 정의 대화형 AI 에이전트를 구축하는 Python 서버 예제를 제공합니다.
-
-    - [블로그 게시물: Google ADK + Vertex AI Live API](https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e)
-
--   :material-console-line: **블로그 게시물: Claude Code Skills로 ADK 개발 가속화**
-
-    ---
-
-    Claude Code Skills를 사용해 ADK 개발을 가속하는 방법을 설명하며, 스트리밍 채팅 앱 구축 예제를 제공합니다. AI 기반 코딩 보조를 활용해 더 좋은 에이전트를 더 빠르게 개발하는 방법을 다룹니다.
-
-    - [블로그 게시물: Claude Code Skills로 ADK 개발 가속화](https://medium.com/@kazunori279/supercharge-adk-development-with-claude-code-skills-d192481cbe72)
+    - [글 읽기](https://medium.com/google-cloud/google-adk-vertex-ai-live-api-125238982d5e)
 
 </div>

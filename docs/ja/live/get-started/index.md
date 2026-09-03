@@ -1,27 +1,35 @@
-# ストリーミングエージェントの構築
+# ライブエージェントを使ってみる
 
-Agent Development Kit (ADK) は、ストリーミングを通じてAIエージェントとのリアルタイムかつインタラクティブな体験を実現します。これにより、ライブ音声会話、リアルタイムなツール使用、エージェントからの継続的な更新などの機能が可能になります。
+クイックスタートでは、マイクをキャプチャし、エージェントの応答を再生し、文字起こし（transcript）をレンダリングするブラウザクライアントがすでに同梱されている `adk web` でエージェントを実行します。エージェントを作成してモデルを選択するだけで、クライアントコードを記述する必要はありません。
 
-このページでは、PythonおよびJava ADKの両方でストリーミング機能をすぐに利用開始するためのクイックスタート例を提供します。
+エージェントには、双方向ストリーミング接続を維持できるモデルが必要です。現在のリストと設定方法については、[サポート対象モデル](../models.md) を参照してください。
 
-<div class.="grid cards" markdown>
+## 言語の選択
 
--   :fontawesome-brands-python:{ .lg .middle } **Python ADK: ストリーミングエージェント**
+<div class="grid cards" markdown>
 
-    ---
-    この例では、Python ADKを使用してエージェントとの基本的なストリーミング対話をセットアップする方法を示します。通常、`Runner.run_live()` メソッドの使用と非同期イベントの処理が含まれます。
-
-    [:octicons-arrow-right-24: Pythonストリーミングクイックスタートを表示](quickstart-streaming.md) <br>
-    <!-- [:octicons-arrow-right-24: View Python Streaming Quickstart](python/quickstart-streaming.md) -->
-
-<!-- This comment forces a block separation -->
-
--   :fontawesome-brands-java:{ .lg .middle } **Java ADK: ストリーミングエージェント**
+-   :fontawesome-brands-python:{ .lg .middle } **Python**
 
     ---
-    この例では、Java ADKを使用してエージェントとの基本的なストリーミング対話をセットアップする方法を示します。`Runner.runLive()` メソッド、`LiveRequestQueue` の使用、および `Flowable<Event>` ストリームの処理が含まれます。
 
-    [:octicons-arrow-right-24: Javaストリーミングクイックスタートを表示](quickstart-streaming-java.md) <br>
-    <!-- [:octicons-arrow-right-24: View Java Streaming Quickstart](java/quickstart-streaming-java.md)) -->
+    ADK をセットアップし、音声エージェントを構築して、`adk web` で対話します。
+
+    [:octicons-arrow-right-24: Python クイックスタート](streaming-python.md)
+
+-   :fontawesome-brands-java:{ .lg .middle } **Java**
+
+    ---
+
+    Maven をセットアップし、音声エージェントを構築して、`adk web` またはカスタムオーディオアプリで実行します。
+
+    [:octicons-arrow-right-24: Java クイックスタート](streaming-java.md)
 
 </div>
+
+## 次のステップ
+
+- **[設定](../configuration.md)** — 音声、言語、文字起こし、ターン検出を設定します。
+- **[ツール](../tools.md)** — 実行中に結果をストリーミングで返すツールを含め、会話の途中で呼び出せるツールをエージェントに提供します。
+- **[セッション](../sessions.md)** と **[イベント](../events.md)** — `run_live()` ループと、そこから返されるすべてのイベント。
+- **[評価](../evaluation.md)** — リリース前に音声会話をスコアリングします。
+- **[カスタムサーバーの構築](../custom-server.md)** — `adk web` は開発用クライアントであるため、独自のサーバーとクライアントの背後でライブエージェントを実行する方法を解説します。

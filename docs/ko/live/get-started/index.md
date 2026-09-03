@@ -1,27 +1,35 @@
-# 스트리밍 에이전트 구축하기
+# 라이브 에이전트 시작하기
 
-ADK(Agent Development Kit)를 사용하면 스트리밍을 통해 AI 에이전트와 실시간으로 상호작용하는 경험을 구현할 수 있습니다. 이를 통해 라이브 음성 대화, 실시간 도구(tool) 사용, 에이전트의 지속적인 상태 업데이트와 같은 기능을 사용할 수 있습니다.
+빠른 시작에서는 이미 마이크를 캡처하고, 에이전트의 응답을 재생하며, 전사(transcript)를 렌더링하는 브라우저 클라이언트를 제공하는 `adk web`에서 에이전트를 실행합니다. 개발자는 에이전트를 작성하고 모델을 선택하기만 하면 되며, 클라이언트 코드를 작성할 필요가 없습니다.
 
-이 페이지에서는 Python 및 Java ADK 환경에서 스트리밍 기능을 바로 시작할 수 있도록 돕는 퀵스타트 예제를 제공합니다.
+에이전트에는 양방향 스트리밍 연결을 유지할 수 있는 모델이 필요합니다. 최신 목록과 구성 방법은 [지원 모델](../models.md)을 참고하세요.
 
-<div class.="grid cards" markdown>
+## 언어 선택
 
--   :fontawesome-brands-python:{ .lg .middle } **Python ADK: 스트리밍 에이전트**
+<div class="grid cards" markdown>
 
-    ---
-    이 예제는 Python ADK를 사용하여 에이전트와 기본적인 스트리밍 상호작용을 설정하는 방법을 보여줍니다. 일반적으로 `Runner.run_live()` 메서드를 사용하고 비동기 이벤트를 처리하는 과정이 포함됩니다.
-
-    [:octicons-arrow-right-24: Python 스트리밍 퀵스타트 보기](quickstart-streaming.md) <br>
-    <!-- [:octicons-arrow-right-24: View Python Streaming Quickstart](python/quickstart-streaming.md) -->
-
-<!-- This comment forces a block separation -->
-
--   :fontawesome-brands-java:{ .lg .middle } **Java ADK: 스트리밍 에이전트**
+-   :fontawesome-brands-python:{ .lg .middle } **Python**
 
     ---
-    이 예제는 Java ADK를 사용하여 에이전트와 기본적인 스트리밍 상호작용을 설정하는 방법을 보여줍니다. `Runner.runLive()` 메서드와 `LiveRequestQueue`를 사용하고, `Flowable<Event>` 스트림을 처리하는 과정이 포함됩니다.
 
-    [:octicons-arrow-right-24: Java 스트리밍 퀵스타트 보기](quickstart-streaming-java.md) <br>
-    <!-- [:octicons-arrow-right-24: View Java Streaming Quickstart](java/quickstart-streaming-java.md)) -->
+    ADK를 설정하고, 음성 에이전트를 구축한 후 `adk web`에서 대화해 보세요.
+
+    [:octicons-arrow-right-24: Python 빠른 시작](streaming-python.md)
+
+-   :fontawesome-brands-java:{ .lg .middle } **Java**
+
+    ---
+
+    Maven을 설정하고, 음성 에이전트를 구축한 후 `adk web` 또는 커스텀 오디오 앱에서 실행해 보세요.
+
+    [:octicons-arrow-right-24: Java 빠른 시작](streaming-java.md)
 
 </div>
+
+## 다음 단계
+
+- **[구성](../configuration.md)** — 음성, 언어, 전사 및 턴(turn) 감지를 설정합니다.
+- **[도구](../tools.md)** — 실행 중에 중간 결과를 다시 스트리밍하는 도구를 포함하여 대화 중간에 호출할 수 있는 도구를 에이전트에 부여합니다.
+- **[세션](../sessions.md)** 및 **[이벤트](../events.md)** — `run_live()` 루프와 반환되는 모든 이벤트 처리.
+- **[평가](../evaluation.md)** — 출시 전 음성 대화 품질 점수 측정.
+- **[커스텀 서버 구축](../custom-server.md)** — `adk web`은 개발용 클라이언트이므로, 자체 서버와 클라이언트 뒤에서 라이브 에이전트를 실행하는 방법을 다룹니다.

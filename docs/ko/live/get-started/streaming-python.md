@@ -1,4 +1,4 @@
-# Python으로 스트리밍 에이전트 구축하기
+# Python으로 실시간 스트리밍 에이전트 구축하기
 
 이 퀵스타트에서는 간단한 에이전트를 만들고 ADK Streaming을 활용하여 지연 시간(Latency)이 짧은 양방향 음성 및 비디오 통신을 구현하는 방법을 배웁니다. ADK를 설치하고, 기본적인 "Google 검색" 에이전트를 설정하고, `adk web` 도구로 스트리밍 에이전트를 실행해 본 다음, ADK Streaming과 [FastAPI](https://fastapi.tiangolo.com/)를 사용하여 간단한 비동기 웹 앱을 직접 구축하는 방법을 설명합니다.
 
@@ -6,10 +6,10 @@
 
 ## 음성/비디오 스트리밍을 위한 지원 모델 {#supported-models}
 
-ADK에서 음성/비디오 스트리밍을 사용하려면 Live API를 지원하는 Gemini 모델을 사용해야 합니다. Gemini Live API를 지원하는 **모델 ID**는 다음 문서에서 확인할 수 있습니다.
+음성 및 비디오 스트리밍에는 Live API를 지원하는 Gemini 모델이 필요합니다. 지원하는 **모델 ID**는 다음 문서에서 확인할 수 있습니다.
 
 - [Google AI Studio: Gemini Live API](https://ai.google.dev/gemini-api/docs/models#live-api)
-- [Vertex AI: Gemini Live API](https://cloud.google.com/vertex-ai/generative-ai/docs/live-api)
+- [Agent Platform: Gemini Live API](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/live-api)
 
 ## 1. 환경 설정 및 ADK 설치 { #setup-environment-install-adk }
 
@@ -98,8 +98,8 @@ from . import agent
 
 === "Gemini - Google Cloud Vertex AI"
     1. 기존 [Google Cloud](https://cloud.google.com/?e=48754805&hl=en) 계정과 프로젝트가 필요합니다.
-        * [Google Cloud 프로젝트](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-gcp)를 설정합니다.
-        * [gcloud CLI](https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal#setup-local)를 설정합니다.
+        * [Google Cloud 프로젝트](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/start)를 설정합니다.
+        * [gcloud CLI](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/start)를 설정합니다.
         * 터미널에서 `gcloud auth login`을 실행하여 Google Cloud에 인증합니다.
         * [Vertex AI API를 활성화](https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com)합니다.
     2. (`app/`) 내부에 있는 **`.env`** 파일을 엽니다. 다음 코드를 복사하여 붙여넣고 프로젝트 ID와 위치(Region)를 업데이트하세요.
@@ -109,6 +109,9 @@ from . import agent
         GOOGLE_CLOUD_PROJECT=PASTE_YOUR_ACTUAL_PROJECT_ID
         GOOGLE_CLOUD_LOCATION=us-central1
         ```
+
+    ADK 에이전트에서 Google Cloud에 연결하는 방법에 대한 자세한 내용은
+    [Google Cloud 및 에이전트 플랫폼에 연결](../../get-started/google-cloud.md)을 참고하세요.
 
 ## 4. `adk web`으로 에이전트 체험하기 { #try-the-agent-with-adk-web }
 
@@ -178,4 +181,4 @@ UI에 다음 프롬프트를 입력하여 테스트해 보세요.
 
 ## 다음 단계: 커스텀 스트리밍 앱 구축
 
-[Gemini Live API Toolkit 개발 가이드 시리즈](../../live/dev-guide/part1.md)는 ADK Streaming과 [FastAPI](https://fastapi.tiangolo.com/)로 구축한 커스텀 비동기 웹 앱의 서버와 클라이언트 코드를 개괄적으로 설명하며, 실시간 양방향 오디오 및 텍스트 통신을 구현하는 방법을 안내합니다.
+[커스텀 서버 구축](../custom-server.md)에서는 실시간 양방향 오디오 및 텍스트 통신을 가능하게 하는 ADK 기반 커스텀 비동기 웹 앱의 서버와 클라이언트 코드를 단계별로 설명합니다. 이어서 [세션과 스트리밍 루프](../sessions.md)에서는 애플리케이션 수명 주기를 심층적으로 다루며, [이벤트](../events.md)에서는 `run_live()`가 반환하는 모든 것을 다룹니다.

@@ -28,7 +28,7 @@ ADK(에이전트 개발 키트)의 실용적인 가이드 모음을 통해 시�
 
     스트리밍 콘텐츠를 처리하는 에이전트를 만듭니다.
 
-    [:octicons-arrow-right-24: 스트리밍 에이전트 빌드하기](../get-started/live/index.md)
+    [:octicons-arrow-right-24: 스트리밍 에이전트 빌드하기](../live/get-started/index.md)
 
 -   :material-rocket-launch-outline: **샘플 에이전트 살펴보기**
 
