@@ -111,8 +111,8 @@ ADK Kotlin エージェントプロジェクトでは、`build.gradle.kts` プ�
 
 ```kotlin title="my_agent/build.gradle.kts (partial)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.9.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.9.0")
 }
 ```
 
@@ -132,9 +132,9 @@ dependencies {
     }
 
     dependencies {
-        implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
-        implementation("com.google.adk:google-adk-kotlin-webserver:0.8.0")
-        ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
+        implementation("com.google.adk:google-adk-kotlin-core:0.9.0")
+        implementation("com.google.adk:google-adk-kotlin-webserver:0.9.0")
+        ksp("com.google.adk:google-adk-kotlin-processor:0.9.0")
     }
 
     kotlin {
@@ -204,7 +204,7 @@ fun main() {
 
 ## エージェントを実行する
 
-対話型コマンドライン REPL、または `AdkWebServer` が提供する ADK Web
+対話型コマンドライン REPL、または `AdkDevServer` が提供する ADK Web
 ユーザーインターフェースを使って ADK エージェントを実行できます。
 どちらの方法でも、エージェントをテストして対話できます。
 
@@ -241,9 +241,9 @@ ADK Web インターフェースでエージェントを実行するには、
 
 ```kotlin title="my_agent/build.gradle.kts (add to dependencies)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.5.0")
-    implementation("com.google.adk:google-adk-kotlin-webserver:0.5.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.5.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.9.0")
+    implementation("com.google.adk:google-adk-kotlin-webserver:0.9.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.9.0")
 }
 ```
 
@@ -252,26 +252,15 @@ dependencies {
 ```kotlin title="my_agent/src/main/kotlin/com/example/agent/WebMain.kt"
 package com.example.agent
 
-import com.google.adk.kt.artifacts.InMemoryArtifactService
-import com.google.adk.kt.sessions.InMemorySessionService
-import com.google.adk.kt.webserver.AdkWebServer
-import com.google.adk.kt.webserver.loaders.SingleAgentLoader
-import com.google.adk.kt.webserver.telemetry.ApiServerSpanExporter
+import com.google.adk.kt.webserver.AdkServerConfig
+import com.google.adk.kt.webserver.dev.AdkDevServer
 
 fun main() {
-    val agent = HelloTimeAgent.rootAgent
-    val sessionService = InMemorySessionService()
-    val artifactService = InMemoryArtifactService()
+    // inMemory() はエージェントローダーとセッションおよびアーティファクトサービスを提供し、
+    // プロセス内でその状態を保持します。
+    val server = AdkDevServer(AdkServerConfig.inMemory(HelloTimeAgent.rootAgent))
 
-    val server = AdkWebServer(
-        port = 8080,
-        sessionService = sessionService,
-        artifactService = artifactService,
-        agentLoader = SingleAgentLoader(agent),
-        apiServerSpanExporter = ApiServerSpanExporter(),
-    )
-
-    println("Starting ADK web server on http://localhost:8080...")
+    println("Starting ADK dev server on http://localhost:8080")
     server.start(wait = true)
 }
 ```
@@ -294,7 +283,8 @@ gradle run -PmainClass=com.example.agent.WebMainKt
 !!! warning "注意: ADK Web は開発専用です"
 
     ADK Web は***本番環境での利用を目的としていません***。開発と
-    デバッグの目的でのみ ADK Web を使用してください。
+    デバッグの目的でのみ ADK Web を使用してください。詳細については、
+    ADK [Web インターフェース](/ja/runtime/web-interface/) を参照してください。
 
 ## 次: エージェントをビルドする
 

@@ -179,7 +179,7 @@ TRANSFER_A2A), 사람-개입형 상호작용을 위한 **HITL Event Tracing**이
     배포되므로 integrations 아티팩트를 추가하세요:
 
     ```kotlin title="build.gradle.kts"
-    implementation("com.google.adk:google-adk-kotlin-integrations:0.8.0")
+    implementation("com.google.adk:google-adk-kotlin-integrations:0.9.0")
     ```
 
     ```kotlin title="BigQueryAnalyticsExample.kt"

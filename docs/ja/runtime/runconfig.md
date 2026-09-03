@@ -173,13 +173,13 @@ Live API を使用します。
 Voice-enabled agent では、speech synthesis、audio transcription、response modality を
 設定します。
 
-- `speech_config`: speech output の voice と language を設定します。たとえば `en-US` と
-  "Kore" voice を使用できます。
-- `response_modalities`: output format を制御します。発話と text 返却の両方を行う
-  エージェントでは `["AUDIO", "TEXT"]` に設定します。
-- `output_audio_transcription` / `input_audio_transcription`: model の audio output と
-  ユーザーの audio input の transcription を有効にします。Python ではどちらもデフォルトが
-  `AudioTranscriptionConfig()` です。
+!!! tip "ライブエージェント"
+
+    このセクションでは、言語共通のオーディオフィールドを扱います。文字起こしストリーミング、音声選択、音声活動検出（VAD）、プロアクティブ/感情的対話など、完全なライブ（`run_live()`）構成リファレンスについては、[ライブエージェントの設定](../live/configuration.md) を参照してください。
+
+- `speech_config`: 音声出力の音声と言語を設定します（例: `en-US` と "Kore" 音声）。
+- `response_modalities`: 出力形式を制御します。セッションは厳密に1つのモダリティのみを受け入れるため、音声エージェントには `["AUDIO"]` を、テキストのみのエージェントには `["TEXT"]` を使用します。音声とテキストの両方を取得するには、`["AUDIO"]` に設定し、出力音声の文字起こし（transcription）からテキストを読み取ります。
+- `output_audio_transcription` / `input_audio_transcription`: モデルの音声出力とユーザーの音声入力の文字起こしを有効にします。Python ではどちらもデフォルトが `AudioTranscriptionConfig()` です。
 
 === "Python"
 
@@ -196,7 +196,7 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
                 )
             ),
         ),
-        response_modalities=["AUDIO", "TEXT"],
+        response_modalities=["AUDIO"],
         streaming_mode=StreamingMode.SSE,
         max_llm_calls=1000,
     )
@@ -217,7 +217,7 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
                 }
             },
         },
-        responseModalities: [Modality.AUDIO, Modality.TEXT],
+        responseModalities: [Modality.AUDIO],
         streamingMode: StreamingMode.SSE,
         maxLlmCalls: 1000,
     };
@@ -238,7 +238,7 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
         RunConfig.builder()
             .streamingMode(StreamingMode.SSE)
             .maxLlmCalls(1000)
-            .responseModalities(ImmutableList.of(new Modality(Modality.Known.AUDIO), new Modality(Modality.Known.TEXT)))
+            .responseModalities(ImmutableList.of(new Modality(Modality.Known.AUDIO)))
             .speechConfig(
                 SpeechConfig.builder()
                     .voiceConfig(
@@ -251,28 +251,17 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
             .build();
     ```
 
-## Live agent の設定
+## ライブエージェントの設定
 
-<div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
-</div>
+ライブ（`run_live()`）エージェントセッションには、`realtime_input_config`、`session_resumption`、`save_live_blob`、`tool_thread_pool_config`、`proactivity`、`enable_affective_dialog` などのリアルタイムパラメータが追加されます。これらはモデルごとのサポートと例とともに、ライブドキュメントの1か所にまとめられています。
 
-`runner.run_live()` を使用するときは、次の追加パラメータで real-time behavior を設定します。
+- **[ライブエージェントの設定](../live/configuration.md)** — ライブエージェント用の完全な `RunConfig` リファレンス。
+- **[セッション](../live/sessions.md#session-resumption)** — セッションの再開と再接続。
+- **[設定: プロアクティブおよび感情的な対話](../live/configuration.md#proactivity-and-affective-dialog)** — ネイティブオーディオ会話機能とそれをサポートするモデル。
 
-- `realtime_input_config`: ユーザーから audio input を受け取る方法を設定します。
-- `proactivity`: model が proactive に応答し、関係のない input を無視できるようにします。
-- `enable_affective_dialog`: `True` の場合、model がユーザーの感情を検出し、それに応じて tone を調整します。
-- `avatar_config`: live agent 用の avatar を設定します。
-- `session_resumption`: disconnect をまたいだ transparent session resumption を有効にします。
-- `save_live_blob`: `True` の場合、live audio と video data を session と artifact service に保存します。
-- `tool_thread_pool_config`: event loop がユーザーの interruption に responsive であり続けるよう、
-  tool execution を background thread pool で実行します。
-- `history_config`: クライアントとサーバー間の履歴交換を設定します。
-- `translation_config`: リアルタイムの音声間翻訳を設定します。翻訳モデルのみがサポートしています。
-- `explicit_vad_signal`: モデルからの明示的な音声活動検出（VAD）シグナルを有効にします。
+`tool_thread_pool_config` 設定は例外です。これは Live API の関心事というよりもランタイムの関心事であるため、ここに残されています。イベントループがユーザーの中断に応答し続けられるよう、ツール実行をバックグラウンドスレッドプールで実行します。
 
-すべてのパラメータがすべての言語で利用できるわけではありません。言語別の詳細は
-[API reference](#api-reference) を参照してください。
+すべてのパラメータがすべての言語で利用できるわけではありません。言語別の詳細は [API reference](#api-reference) を参照してください。
 
 === "Python"
 

@@ -107,8 +107,8 @@ ADK Kotlin 에이전트 프로젝트는 `build.gradle.kts` 프로젝트 파일�
 
 ```kotlin title="my_agent/build.gradle.kts (partial)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.9.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.9.0")
 }
 ```
 
@@ -127,9 +127,9 @@ dependencies {
     }
 
     dependencies {
-        implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
-        implementation("com.google.adk:google-adk-kotlin-webserver:0.8.0")
-        ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
+        implementation("com.google.adk:google-adk-kotlin-core:0.9.0")
+        implementation("com.google.adk:google-adk-kotlin-webserver:0.9.0")
+        ksp("com.google.adk:google-adk-kotlin-processor:0.9.0")
     }
 
     kotlin {
@@ -199,7 +199,7 @@ fun main() {
 
 ## 에이전트 실행
 
-대화형 명령줄 REPL 또는 `AdkWebServer`가 제공하는 ADK 웹 사용자
+대화형 명령줄 REPL 또는 `AdkDevServer`가 제공하는 ADK 웹 사용자
 인터페이스로 ADK 에이전트를 실행할 수 있습니다. 두 옵션 모두 에이전트를
 테스트하고 상호작용할 수 있게 해 줍니다.
 
@@ -234,9 +234,9 @@ ADK 웹 인터페이스로 에이전트를 실행하려면 `build.gradle.kts`에
 
 ```kotlin title="my_agent/build.gradle.kts (add to dependencies)"
 dependencies {
-    implementation("com.google.adk:google-adk-kotlin-core:0.8.0")
-    implementation("com.google.adk:google-adk-kotlin-webserver:0.8.0")
-    ksp("com.google.adk:google-adk-kotlin-processor:0.8.0")
+    implementation("com.google.adk:google-adk-kotlin-core:0.9.0")
+    implementation("com.google.adk:google-adk-kotlin-webserver:0.9.0")
+    ksp("com.google.adk:google-adk-kotlin-processor:0.9.0")
 }
 ```
 
@@ -245,26 +245,15 @@ dependencies {
 ```kotlin title="my_agent/src/main/kotlin/com/example/agent/WebMain.kt"
 package com.example.agent
 
-import com.google.adk.kt.artifacts.InMemoryArtifactService
-import com.google.adk.kt.sessions.InMemorySessionService
-import com.google.adk.kt.webserver.AdkWebServer
-import com.google.adk.kt.webserver.loaders.SingleAgentLoader
-import com.google.adk.kt.webserver.telemetry.ApiServerSpanExporter
+import com.google.adk.kt.webserver.AdkServerConfig
+import com.google.adk.kt.webserver.dev.AdkDevServer
 
 fun main() {
-    val agent = HelloTimeAgent.rootAgent
-    val sessionService = InMemorySessionService()
-    val artifactService = InMemoryArtifactService()
+    // inMemory()는 에이전트 로더와 세션 및 아티팩트 서비스를 제공하며,
+    // 해당 상태를 프로세스 내에 유지합니다.
+    val server = AdkDevServer(AdkServerConfig.inMemory(HelloTimeAgent.rootAgent))
 
-    val server = AdkWebServer(
-        port = 8080,
-        sessionService = sessionService,
-        artifactService = artifactService,
-        agentLoader = SingleAgentLoader(agent),
-        apiServerSpanExporter = ApiServerSpanExporter(),
-    )
-
-    println("Starting ADK web server on http://localhost:8080...")
+    println("Starting ADK dev server on http://localhost:8080")
     server.start(wait = true)
 }
 ```
@@ -285,7 +274,8 @@ gradle run -PmainClass=com.example.agent.WebMainKt
 !!! warning "주의: ADK Web은 개발 전용입니다"
 
     ADK Web은 ***프로덕션 배포용이 아닙니다***. 개발과 디버깅 용도로만
-    ADK Web을 사용해야 합니다.
+    ADK Web을 사용해야 합니다. 자세한 내용은 ADK [웹 인터페이스](/ko/runtime/web-interface/)를
+    참고하세요.
 
 ## 다음 단계: 에이전트 빌드
 

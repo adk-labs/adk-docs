@@ -795,6 +795,19 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
     읽기 쉬운 요약이 필요하다면 `LoadArtifactsTool`을 서브클래싱하고, 선택한
     아티팩트 내용을 로드하기 전에 요청 지침을 맞춤설정하세요.
 
+    **스프레드시트 아티팩트 파싱 (Python 전용):**
+
+    기본적으로 스프레드시트 파일(`.xlsx`, `.xls`)은 모델이 인라인으로 직접 읽을 수 없습니다. Python에서는 `enable_spreadsheet_parsing=True`를 설정하여 Markdown 테이블로 파싱할 수 있습니다:
+
+    ```python
+    tools=[
+        LoadArtifactsTool(enable_spreadsheet_parsing=True),
+    ]
+    ```
+
+    - 각 시트는 시트 제목 아래에 별도의 Markdown 테이블로 렌더링됩니다.
+    - 컨텍스트 창 한도를 초과하지 않도록 테이블 출력은 시트당 처음 100행으로 제한됩니다.
+
 === "Go"
 
     ```go

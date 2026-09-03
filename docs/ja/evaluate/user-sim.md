@@ -279,3 +279,52 @@ adk eval_set generate_eval_cases \
 *   **`generation_instruction`** (任意): テストしたいシナリオの種類や目標を指示する自然言語プロンプトです。
 *   **`environment_context`** (任意): エージェントのツールが参照できるバックエンドデータや状態を説明するコンテキストです。これにより、生成器は現実的なデータ（たとえば有効なデバイス ID）に基づくクエリを作成できます。
 *   **`model_name`** (必須): 生成に使用する Gemini モデルです（例: `gemini-flash-latest`）。
+
+## ライブエージェント向けオーディオユーザーシミュレーション
+
+ユーザーシミュレーターは、テスト対象のエージェントがライブ（音声）エージェントであるかどうかに関係なく動作するため、同じ `ConversationScenario`（または固定された会話）を使用してテキストとライブの両方の評価を行うことができます。ライブエージェントの場合、シミュレートされたユーザーのターンを**音声**に合成してエージェントにストリーミングできます。
+
+これは、評価構成ファイル（`test_config.json`）の `llm_audio` ユーザーシミュレーターで構成します。標準のテキストシミュレーターをラップし、Text-to-Speech モデルを使用して生成された各ユーザーターンを音声に変換します。デフォルトでは Google Cloud Text-to-Speech（`cloud_tts`）が使用されますが、Gemini TTS モデル名を代わりに使用することもできます。
+
+```json
+{
+  "criteria": {
+    "tool_trajectory_avg_score": 1.0,
+    "response_match_score": 0.5
+  },
+  "live_model_config": {
+    "timeout_seconds": 300
+  },
+  "user_simulator_config": {
+    "type": "llm_audio",
+    "model": "gemini-2.5-flash",
+    "audio_model": "cloud_tts",
+    "audio_model_configuration": {
+      "speech_config": {
+        "voice_config": {
+          "prebuilt_voice_config": { "voice_name": "en-US-Studio-O" }
+        },
+        "language_code": "en-US"
+      }
+    },
+    "include_text_with_audio": true
+  }
+}
+```
+
+主なフィールド：
+
+*   `type`: `"llm_audio"` はオーディオユーザーシミュレーターを選択します。
+*   `audio_model`: Google Cloud Text-to-Speech の場合は `"cloud_tts"`、または Gemini TTS モデル名（例: `"gemini-2.5-flash-preview-tts"`）。
+*   `audio_model_configuration.speech_config`: 音声と言語を選択します。
+*   `include_text_with_audio`: 生成された音声とともにユーザーターンにテキストパートも含めるかどうか。
+
+!!! note "ライブモデルにはライブ推論が必要です"
+
+    ライブエージェントを評価するには、ライブ（双方向ストリーミング）推論が必要ですが、これはデフォルトでは**ありません**。構成ファイルに `live_model_config` ブロックを追加して有効にします。ライブ API モデル（例: `gemini-*-live-*`）は、非ライブ評価で使用される単項の `generateContent` エンドポイントでは提供されないため、ライブモードなしで実行すると失敗します。
+
+    `use_live` は `live_model_config` から設定される内部フィールドであるため、構成ファイルに直接指定しても効果はありません。
+
+    `cloud_tts` を使用するには、`google-cloud-texttospeech` パッケージ（`google-adk[eval]` エクストラに含まれる）と Cloud Text-to-Speech API へのアクセス権が必要です。
+
+完全に実行可能なライブ評価構成のサンプルについては、[`contributing/samples/live/live_non_blocking_tool_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/live/live_non_blocking_tool_agent) を参照してください。

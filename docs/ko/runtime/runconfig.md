@@ -172,13 +172,13 @@ Long-running session에서는 얼마나 많은 history를 load할지, context wi
 Voice-enabled agent에서는 speech synthesis, audio transcription, response modality를
 구성합니다.
 
-- `speech_config`: speech output의 voice와 language를 설정합니다. 예를 들어 `en-US`와
-  "Kore" voice를 사용할 수 있습니다.
-- `response_modalities`: output format을 제어합니다. 말하기와 text 반환을 모두 수행하는
-  에이전트에는 `["AUDIO", "TEXT"]`로 설정합니다.
-- `output_audio_transcription` / `input_audio_transcription`: model의 audio output과 사용자의
-  audio input transcription을 활성화합니다. Python에서는 둘 다 기본값이
-  `AudioTranscriptionConfig()`입니다.
+!!! tip "라이브 에이전트"
+
+    이 섹션에서는 언어 전반에 공통으로 사용되는 오디오 필드를 다룹니다. 전사 스트리밍, 음성 선택, 음성 활동 감지(VAD), 능동적/감정적 대화 등 전체 라이브(`run_live()`) 구성 참조는 [라이브 에이전트 구성](../live/configuration.md)을 참고하세요.
+
+- `speech_config`: 음성 출력의 음성과 언어를 설정합니다(예: `en-US`와 "Kore" 음성).
+- `response_modalities`: 출력 형식을 제어합니다. 세션은 정확히 하나의 모달리티만 허용하므로, 음성 에이전트에는 `["AUDIO"]`를, 텍스트 전용 에이전트에는 `["TEXT"]`를 사용합니다. 음성과 텍스트를 모두 얻으려면 `["AUDIO"]`로 설정하고 출력 오디오 전사(transcription)에서 텍스트를 읽으세요.
+- `output_audio_transcription` / `input_audio_transcription`: 모델의 오디오 출력 및 사용자의 오디오 입력 전사를 활성화합니다. Python에서는 둘 다 기본값이 `AudioTranscriptionConfig()`입니다.
 
 === "Python"
 
@@ -195,7 +195,7 @@ Voice-enabled agent에서는 speech synthesis, audio transcription, response mod
                 )
             ),
         ),
-        response_modalities=["AUDIO", "TEXT"],
+        response_modalities=["AUDIO"],
         streaming_mode=StreamingMode.SSE,
         max_llm_calls=1000,
     )
@@ -216,7 +216,7 @@ Voice-enabled agent에서는 speech synthesis, audio transcription, response mod
                 }
             },
         },
-        responseModalities: [Modality.AUDIO, Modality.TEXT],
+        responseModalities: [Modality.AUDIO],
         streamingMode: StreamingMode.SSE,
         maxLlmCalls: 1000,
     };
@@ -237,7 +237,7 @@ Voice-enabled agent에서는 speech synthesis, audio transcription, response mod
         RunConfig.builder()
             .streamingMode(StreamingMode.SSE)
             .maxLlmCalls(1000)
-            .responseModalities(ImmutableList.of(new Modality(Modality.Known.AUDIO), new Modality(Modality.Known.TEXT)))
+            .responseModalities(ImmutableList.of(new Modality(Modality.Known.AUDIO)))
             .speechConfig(
                 SpeechConfig.builder()
                     .voiceConfig(
@@ -250,28 +250,17 @@ Voice-enabled agent에서는 speech synthesis, audio transcription, response mod
             .build();
     ```
 
-## Live agent 구성
+## 라이브 에이전트 구성
 
-<div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
-</div>
+라이브(`run_live()`) 에이전트 세션에는 `realtime_input_config`, `session_resumption`, `save_live_blob`, `tool_thread_pool_config`, `proactivity`, `enable_affective_dialog` 등을 포함한 일련의 실시간 매개변수가 추가됩니다. 이러한 설정은 모델별 지원 여부 및 예제와 함께 라이브 문서의 한 곳에 정리되어 있습니다:
 
-`runner.run_live()`를 사용할 때는 다음 추가 매개변수로 real-time behavior를 구성합니다.
+- **[라이브 에이전트 구성](../live/configuration.md)** — 라이브 에이전트용 전체 `RunConfig` 레퍼런스.
+- **[세션](../live/sessions.md#session-resumption)** — 세션 재개 및 재연결.
+- **[구성: 능동적 및 감정적 대화](../live/configuration.md#proactivity-and-affective-dialog)** — 네이티브 오디오 대화 기능 및 이를 지원하는 모델.
 
-- `realtime_input_config`: 사용자로부터 audio input을 받는 방식을 구성합니다.
-- `proactivity`: model이 proactive하게 응답하고 관련 없는 input을 무시할 수 있게 합니다.
-- `enable_affective_dialog`: `True`이면 model이 사용자 감정을 감지하고 그에 맞게 tone을 조정합니다.
-- `avatar_config`: live agent용 avatar를 구성합니다.
-- `session_resumption`: disconnect 전반의 transparent session resumption을 활성화합니다.
-- `save_live_blob`: `True`이면 live audio 및 video data를 session과 artifact service에 저장합니다.
-- `tool_thread_pool_config`: event loop가 사용자 interruption에 responsive하게 유지되도록 tool
-  execution을 background thread pool에서 실행합니다.
-- `history_config`: 클라이언트와 서버 간의 기록 교환을 구성합니다.
-- `translation_config`: 실시간 음성 대 음성 번역을 구성합니다. 번역 모델만 이를 지원합니다.
-- `explicit_vad_signal`: 모델의 명시적 음성 활동 감지(VAD) 신호를 활성화합니다.
+`tool_thread_pool_config` 설정은 예외입니다. 이는 Live API 관심사라기보다는 런타임 관심사이므로 여기에 유지됩니다. 이벤트 루프가 사용자의 인터럽트에 계속 응답할 수 있도록 도구 실행을 백그라운드 스레드 풀에서 실행합니다.
 
-모든 매개변수가 모든 언어에서 제공되는 것은 아닙니다. 언어별 세부 정보는
-[API reference](#api-reference)를 참고하세요.
+모든 매개변수가 모든 언어에서 제공되는 것은 아닙니다. 언어별 세부 정보는 [API reference](#api-reference)를 참고하세요.
 
 === "Python"
 

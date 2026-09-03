@@ -95,7 +95,7 @@ ADK CLI를 사용하여 에이전트를 배포하거나 실행할 때 플래그�
     adk deploy agent_engine \
         --project=$GOOGLE_CLOUD_PROJECT \
         --region=$GOOGLE_CLOUD_LOCATION \
-        --trace_to_cloud \
+        --otel_to_cloud \
         $AGENT_PATH
     ```
 
@@ -213,12 +213,29 @@ ADK 에이전트에서 생성된 모든 사용 가능한 추적을 볼 수 있�
 
 ### 캡처된 속성(Attributes)
 
-ADK는 에이전트의 동작을 필터링하고 분석하는 데 도움이 되도록 다음 속성으로 추적을 자동 보강합니다.
+Agent Development Kit(ADK)는 에이전트 동작을 필터링, 모니터링 및 분석하는 데 도움이 되도록 텔레메트리 속성으로 추적을 보강합니다.
 
-- `gen_ai.agent.name`: 실행 중인 에이전트의 이름.
-- `gcp.vertex.agent.invocation_id`: 호출의 고유 ID.
-- `gcp.vertex.agent.event_id`: 특정 이벤트의 ID.
-- `gen_ai.conversation.id`: 세션 ID.
+| 속성 | 설명 |
+| :--- | :--- |
+| `gen_ai.agent.name` | 실행 중인 에이전트의 이름입니다. |
+| `gcp.vertex.agent.invocation_id` | 호출의 고유 ID입니다. |
+| `gcp.vertex.agent.event_id` | 특정 이벤트의 ID입니다. |
+| `gen_ai.conversation.id` | 세션 또는 대화 ID입니다. |
+| `gcp.vertex.agent.session_id` | 에이전트 호출 컨텍스트와 연관된 세션 ID입니다. |
+| `gcp.vertex.agent.llm_request` | 프롬프트 텍스트와 구성을 포함하는 직렬화된 LLM 요청입니다. |
+| `gcp.vertex.agent.llm_response` | 모델 출력을 포함하는 직렬화된 LLM 응답입니다. |
+| `gcp.vertex.agent.tool_call_args` | 도구 호출에 전달된 직렬화된 인수입니다. |
+| `gcp.vertex.agent.tool_response` | 도구가 반환한 직렬화된 결과입니다. |
+| `gcp.vertex.agent.data` | 에이전트에 전송된 직렬화된 데이터 페이로드입니다. |
+
+### 데이터 프라이버시 및 페이로드 마스킹(Redaction)
+
+프로덕션 환경에서 민감한 데이터와 개인 식별 정보(PII)의 노출을 방지하려면:
+
+- **배포 기본값:** `adk deploy agent_engine --otel_to_cloud`로 배포할 때, `.env` 설정에 이미 정의되어 있지 않은 한 ADK는 `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS='false'`를 자동으로 설정합니다. Cloud Run 또는 GKE와 같은 다른 대상의 경우 이 변수를 명시적으로 설정하세요.
+- **마스킹된 페이로드:** `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS`가 `'false'` 또는 `'0'`인 경우 페이로드 속성(`gcp.vertex.agent.llm_request`, `gcp.vertex.agent.llm_response`, `gcp.vertex.agent.tool_call_args`, `gcp.vertex.agent.tool_response`, `gcp.vertex.agent.data`)이 `"{}"` 또는 `"N/A"`와 같은 플레이스홀더 값으로 대체됩니다.
+- **캡처 활성화:** 로컬 테스트 또는 디버깅을 위해 전체 페이로드를 캡처하려면 `.env` 파일 또는 환경 변수에서 `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS='true'`를 명시적으로 설정하세요.
+- **OpenTelemetry 메시지 캡처:** OpenTelemetry 이벤트에서 프롬프트 및 응답 내용의 로깅을 활성화하려면 `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT='true'`(또는 `'1'`)를 설정하세요.
 
 ## 리소스
 

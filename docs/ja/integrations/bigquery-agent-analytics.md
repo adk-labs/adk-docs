@@ -177,7 +177,7 @@ Creation**（フラットでクエリしやすいイベントビューの生成�
     プラグインをエージェントの `App` オブジェクトに追加します。前提条件については、[前提条件](#prerequisites) を参照してください。プラグインは JVM 専用で core の外部で提供されるため、integrations アーティファクトを追加してください。
 
     ```kotlin title="build.gradle.kts"
-    implementation("com.google.adk:google-adk-kotlin-integrations:0.8.0")
+    implementation("com.google.adk:google-adk-kotlin-integrations:0.9.0")
     ```
 
     ```kotlin title="BigQueryAnalyticsExample.kt"

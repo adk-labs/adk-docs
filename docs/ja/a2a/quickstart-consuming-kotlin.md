@@ -25,7 +25,7 @@
 A2A サポートは別個のアーティファクトとして提供されます。`A2AAgent` の `httpClient` パラメータはデフォルトで `JdkA2AHttpClient()` に設定されるため、コンパイル クラスパスに A2A SDK クライアントも含める必要があります。
 
 ```kotlin title="build.gradle.kts"
-implementation("com.google.adk:google-adk-kotlin-a2a:0.8.0")
+implementation("com.google.adk:google-adk-kotlin-a2a:0.9.0")
 implementation("org.a2aproject.sdk:a2a-java-sdk-client:1.0.0.Final")
 ```
 

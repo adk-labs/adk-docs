@@ -797,6 +797,19 @@ ADKにおいて、**アーティファクト(Artifacts)**は、特定のユー�
     `LoadArtifactsTool` をサブクラス化し、選択したアーティファクト内容を
     ロードする前にリクエスト指示をカスタマイズしてください。
 
+    **スプレッドシート アーティファクトのパース (Python のみ):**
+
+    デフォルトでは、スプレッドシート ファイル (`.xlsx`, `.xls`) はモデルによってインラインで直接読み取ることはできません。Python では、`enable_spreadsheet_parsing=True` を設定することで、これらを Markdown テーブルにパースできます。
+
+    ```python
+    tools=[
+        LoadArtifactsTool(enable_spreadsheet_parsing=True),
+    ]
+    ```
+
+    - 各シートは、シート見出しの下に個別の Markdown テーブルとしてレンダリングされます。
+    - コンテキスト ウィンドウの上限を超えないように、テーブル出力はシートごとに最初の 100 行に制限されます。
+
 === "Go"
 
     ```go

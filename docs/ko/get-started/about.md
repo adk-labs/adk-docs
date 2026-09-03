@@ -32,7 +32,7 @@ ADK는 에이전트 기반 애플리케이션을 구축하는 개발자에게 �
 2.  **풍부한 툴 생태계:** 에이전트에게 다양한 기능을 갖추게 합니다. ADK는 사용자 정의 함수(`FunctionTool`) 통합, 다른 에이전트를 툴로 사용(`AgentTool`), 코드 실행과 같은 내장 기능 활용, 외부 데이터 소스 및 API(예: 검색, 데이터베이스)와의 상호작용을 지원합니다. 장기 실행 툴을 지원하여 비동기 작업을 효과적으로 처리할 수 있습니다.
 3.  **유연한 오케스트레이션:** 내장된 워크플로우 에이전트(`SequentialAgent`, `ParallelAgent`, `LoopAgent`)와 LLM 기반의 동적 라우팅을 함께 사용하여 복잡한 에이전트 워크플로우를 정의합니다. 이를 통해 예측 가능한 파이프라인과 적응형 에이전트 동작을 모두 구현할 수 있습니다.
 4.  **통합된 개발자 도구:** 쉽게 로컬에서 개발하고 반복 작업을 수행합니다. ADK는 에이전트 실행, 실행 단계(이벤트, 상태 변경) 검사, 상호작용 디버깅, 에이전트 정의 시각화를 위한 명령줄 인터페이스(CLI) 및 개발자 UI와 같은 도구를 포함합니다.
-5.  **네이티브 스트리밍 지원:** [ADK Gemini Live API Toolkit](../live/index.md)을 사용해 양방향 스트리밍(텍스트 및 오디오)을 네이티브로 지원하는 실시간 대화형 경험을 구축합니다. 이는 [Gemini Developer API용 Gemini Live API](https://ai.google.dev/gemini-api/docs/live) 및 [Vertex AI용 Live API](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/multimodal-live)와 같은 기반 기능과 원활하게 통합되며, 대개 간단한 구성 변경만으로 활성화할 수 있습니다.
+5.  **네이티브 스트리밍 지원:** 양방향 스트리밍(텍스트 및 오디오)을 기본적으로 지원하는 [라이브 및 음성 에이전트](../live/index.md)를 통해 실시간 대화형 경험을 구축합니다. 이는 [Gemini Developer API용 Gemini Live API](https://ai.google.dev/gemini-api/docs/live) 및 [Vertex AI용 Live API](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/multimodal-live)와 같은 기반 기능과 원활하게 통합되며, 대개 간단한 구성 변경만으로 활성화할 수 있습니다.
 6.  **내장된 에이전트 평가:** 에이전트 성능을 체계적으로 평가합니다. 이 프레임워크는 멀티턴(multi-turn) 평가 데이터셋을 생성하고, 품질 측정 및 개선 방향을 안내하기 위해 로컬에서(CLI 또는 개발 UI를 통해) 평가를 실행하는 도구를 포함합니다.
 7.  **광범위한 LLM 지원:** Google의 Gemini 모델에 최적화되어 있지만, 프레임워크는 유연성을 위해 설계되어 `BaseLlm` 인터페이스를 통해 다양한 LLM(오픈 소스 또는 파인튜닝된 모델 포함)과 통합할 수 있습니다.
 8.  **아티팩트 관리:** 에이전트가 파일과 바이너리 데이터를 처리할 수 있도록 합니다. 프레임워크는 에이전트가 실행 중에 이미지, 문서 또는 생성된 보고서와 같은 버전 관리된 아티팩트를 저장, 로드 및 관리할 수 있는 메커니즘(`ArtifactService`, 컨텍스트 메서드)을 제공합니다.

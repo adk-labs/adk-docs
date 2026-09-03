@@ -95,7 +95,7 @@ ADK CLI を使用してエージェントをデプロイまたは実行すると
     adk deploy agent_engine \
         --project=$GOOGLE_CLOUD_PROJECT \
         --region=$GOOGLE_CLOUD_LOCATION \
-        --trace_to_cloud \
+        --otel_to_cloud \
         $AGENT_PATH
     ```
 
@@ -213,12 +213,29 @@ ADK エージェントが生成したすべての利用可能なトレースが�
 
 ### キャプチャされた属性（Attributes）
 
-ADK は、エージェントの動作のフィルタリングや分析に役立つよう、トレースに次の属性を自動的に追加します。
+Agent Development Kit（ADK）は、エージェントの動作をフィルタリング、監視、分析できるように、テレメトリ属性でトレースを補強します。
 
-- `gen_ai.agent.name`: 実行されているエージェントの名前。
-- `gcp.vertex.agent.invocation_id`: 呼び出しの一意の ID。
-- `gcp.vertex.agent.event_id`: 特定のイベントの ID。
-- `gen_ai.conversation.id`: セッション ID。
+| 属性 | 説明 |
+| :--- | :--- |
+| `gen_ai.agent.name` | 実行されているエージェントの名前です。 |
+| `gcp.vertex.agent.invocation_id` | 呼び出しの一意の ID です。 |
+| `gcp.vertex.agent.event_id` | 特定のイベントの ID です。 |
+| `gen_ai.conversation.id` | セッションまたは会話の ID です。 |
+| `gcp.vertex.agent.session_id` | エージェント呼び出しコンテキストに関連付けられたセッション ID です。 |
+| `gcp.vertex.agent.llm_request` | プロンプト テキストと構成を含むシリアル化された LLM リクエストです。 |
+| `gcp.vertex.agent.llm_response` | モデルの出力を含むシリアル化された LLM レスポンスです。 |
+| `gcp.vertex.agent.tool_call_args` | ツール呼び出しに渡されたシリアル化された引数です。 |
+| `gcp.vertex.agent.tool_response` | ツールによって返されたシリアル化された結果です。 |
+| `gcp.vertex.agent.data` | エージェントに送信されたシリアル化されたデータ ペイロードです。 |
+
+### データのプライバシーとペイロードの秘匿化（Redaction）
+
+本番環境で機密データや個人を特定できる情報（PII）の漏洩を防ぐには：
+
+- **デプロイのデフォルト:** `adk deploy agent_engine --otel_to_cloud` でデプロイする場合、`.env` 設定ですでに定義されていない限り、ADK は `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS='false'` を自動的に設定します。Cloud Run や GKE などの他のターゲットの場合は、この変数を明示的に設定してください。
+- **秘匿化されたペイロード:** `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS` が `'false'` または `'0'` の場合、ペイロード属性（`gcp.vertex.agent.llm_request`、`gcp.vertex.agent.llm_response`、`gcp.vertex.agent.tool_call_args`、`gcp.vertex.agent.tool_response`、`gcp.vertex.agent.data`）は `"{}"` や `"N/A"` などのプレースホルダー値に置き換えられます。
+- **キャプチャの有効化:** ローカル テストまたはデバッグのために完全なペイロードをキャプチャするには、`.env` ファイルまたは環境変数で `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS='true'` を明示的に設定します。
+- **OpenTelemetry メッセージ キャプチャ:** OpenTelemetry イベントでプロンプトとレスポンスの内容のロギングを有効にするには、`OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT='true'`（または `'1'`）を設定します。
 
 ## リソース
 
