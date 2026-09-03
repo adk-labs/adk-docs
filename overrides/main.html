@@ -161,16 +161,17 @@
 {% block announce %}
 <span class="announce-item">
   {% if config.theme.language == "ko" %}
-  <a href="{{ base_url }}/2.0/">ADK Go 2.0 GA</a>가 그래프 기반 워크플로와
-  협업 에이전트와 함께 정식 출시되었습니다! <a href="{{ base_url }}/get-started/go/">시작하기</a>
+  <strong>정식 출시!</strong>
+  <a href="{{ base_url }}/2.0/">ADK TypeScript 2.0 GA</a>가 그래프 기반 워크플로 지원과 함께 출시되었습니다! <a href="{{ base_url }}/graphs/#typescript">시작하기</a>
   {% elif config.theme.language == "ja" %}
-  <a href="{{ base_url }}/2.0/">ADK Go 2.0 GA</a> が、グラフベースの
-  ワークフローと協調エージェントとともに正式リリースされました！<a href="{{ base_url }}/get-started/go/">はじめに</a>
+  <strong>リリース！</strong>
+  <a href="{{ base_url }}/2.0/">ADK TypeScript 2.0 GA</a> がグラフワークフローのサポートとともに利用可能になりました！ <a href="{{ base_url }}/graphs/#typescript">はじめる</a>
   {% else %}
+  <strong>Released!</strong>
   <a href="{{ base_url }}/2.0/">
-    ADK Go 2.0 GA
+    ADK TypeScript 2.0 GA
   </a>
-  is LIVE with graph workflows and collaborative agents! <a href="{{ base_url }}/get-started/go/">Get started.</a>
+  is now available with graph workflows support! <a href="{{ base_url }}/graphs/#typescript">Get started</a>
   {% endif %}
 </span>
 {% endblock %}
