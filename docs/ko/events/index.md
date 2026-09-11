@@ -464,7 +464,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         if (!responses.isEmpty()) {
             for (FunctionResponse response : responses) {
                 String toolName = response.name().get();
-                Map<String, String> result= response.response().get(); // 응답을 가져오기 전에 확인
+                Map<String, Object> result = response.response().get(); // 응답을 가져오기 전에 확인
                 System.out.println("  도구 결과: " + toolName + " -> " + result);
             }
         }
@@ -514,15 +514,15 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```
 
     === "Java"
-        `ConcurrentMap<String, Object> delta = event.actions().stateDelta();`
+        `Map<String, Object> delta = event.actions().stateDelta();`
 
         ```java
-        import java.util.concurrent.ConcurrentMap;
+        import java.util.Map;
         import com.google.adk.events.EventActions;
 
         EventActions actions = event.actions(); // event.actions()가 null이 아니라고 가정
         if (actions != null && actions.stateDelta() != null && !actions.stateDelta().isEmpty()) {
-            ConcurrentMap<String, Object> stateChanges = actions.stateDelta();
+            Map<String, Object> stateChanges = actions.stateDelta();
             System.out.println("  상태 변경: " + stateChanges);
             // 필요한 경우 로컬 UI 또는 애플리케이션 상태 업데이트
         }
@@ -571,19 +571,18 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```
 
     === "Java"
-        `ConcurrentMap<String, Part> artifactChanges = event.actions().artifactDelta();`
+        `Map<String, Integer> artifactChanges = event.actions().artifactDelta();`
 
         ```java
-        import java.util.concurrent.ConcurrentMap;
-        import com.google.genai.types.Part;
+        import java.util.Map;
         import com.google.adk.events.EventActions;
 
         EventActions actions = event.actions(); // event.actions()가 null이 아니라고 가정
         if (actions != null && actions.artifactDelta() != null && !actions.artifactDelta().isEmpty()) {
-            ConcurrentMap<String, Part> artifactChanges = actions.artifactDelta();
+            Map<String, Integer> artifactChanges = actions.artifactDelta();
             System.out.println("  저장된 아티팩트: " + artifactChanges);
             // UI가 아티팩트 목록을 새로 고칠 수 있음
-            // artifactChanges.entrySet()을 순회하여 파일명과 Part 세부 정보 가져오기
+            // artifactChanges.entrySet()을 순회하여 파일명과 버전 가져오기
         }
         ```
 

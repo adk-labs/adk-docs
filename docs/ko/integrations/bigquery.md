@@ -37,7 +37,7 @@ BigQuery 연동을 제공하는 도구 모음은 다음과 같습니다:
 
 ```python
 import google.auth
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # 애플리케이션 기본 사용자 인증 정보 로드
 credentials, project_id = google.auth.default()
@@ -53,7 +53,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 
 ```python
 from google.oauth2 import service_account
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # 서비스 계정 인증 정보 로드
 credentials = service_account.Credentials.from_service_account_file('path/to/key.json')
@@ -69,7 +69,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 
 ```python
 from google.oauth2.credentials import Credentials
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # 'user_token'이 외부 OAuth 흐름을 통해 획득되었다고 가정
 credentials = Credentials(token=user_token)
@@ -84,7 +84,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 Gemini Enterprise와 같이 토큰이 플랫폼에 의해 관리되는 외부 인증 제공업체와 통합하는 경우 `external_access_token_key`를 사용합니다.
 
 ```python
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # 세션 상태에서 액세스 토큰을 조회하는 데 사용되는 키
 credentials_config = BigQueryCredentialsConfig(
@@ -98,7 +98,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 대화형 세션을 위해 `adk web` 인터페이스를 사용할 때 OAuth 2.0 클라이언트 인증 정보를 제공하여 로그인 흐름을 트리거할 수 있습니다. 이 메커니즘은 로컬 개발 환경과 Cloud Run과 같은 환경에 배포된 ADK 에이전트 모두에서 작동합니다.
 
 ```python
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # OAuth 2.0 클라이언트 ID 및 보안 비밀 제공
 credentials_config = BigQueryCredentialsConfig(

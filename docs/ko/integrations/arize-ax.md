@@ -6,9 +6,9 @@ catalog_tags: ["observability", "evaluation"]
 ---
 # Arize AX를 사용한 에이전트 관측성(Observability)
 
-[Arize AX](https://arize.com/docs/ax)는 대규모 LLM 애플리케이션 및 AI 에이전트를 모니터링, 디버깅, 개선하기 위한 프로덕션 등급의 관측성 플랫폼입니다. Google ADK 애플리케이션을 위한 포괄적인 추적, 평가, 모니터링 기능을 제공합니다. 시작하려면 [무료 계정](https://app.arize.com/auth/join)에 가입하세요.
+[Arize AX](https://arize.com/products/ax/)는 프로덕션 팀, AI 네이티브 기업, 엔터프라이즈를 위한 [Arize AI](https://arize.com/)의 전체 기능을 갖춘 AI 관측성 및 평가 플랫폼입니다. 관리형 클라우드 또는 엔터프라이즈 셀프 호스팅 배포로 제공되며 Google ADK 애플리케이션을 위한 포괄적인 추적, 평가, 모니터링 기능을 제공합니다. 시작하려면 [무료 계정](https://app.arize.com/auth/join)에 가입하세요.
 
-오픈소스, 셀프 호스팅 대안으로는 [Phoenix](https://arize.com/docs/phoenix)를 확인해보세요.
+로컬 개발, 실험 또는 단일 컨테이너 셀프 호스팅을 위한 오픈소스 경로는 [Arize Phoenix ADK 연동](/integrations/phoenix/)을 확인하세요. Arize의 [에이전트 평가 가이드](https://arize.com/guides/ai-agent-handbook/agent-evaluation/)와 [LLM 평가 가이드](https://arize.com/resources/llm-evaluation/)에서는 팀들이 트레이스를 사용하여 에이전트의 결정, 도구 호출, 모델 동작을 평가하는 방법을 보여줍니다.
 
 ## 개요
 

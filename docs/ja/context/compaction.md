@@ -63,7 +63,8 @@ app = App(
 # （任意）補助設定としてのイベントベースのスライディングウィンドウ
 compaction_config = EventsCompactionConfig(
     compaction_interval=10,   # 標準圧縮の間のターン数
-    overlap_size=2,           # 重複コンテキストとして保持するイベント数
+    overlap_size=2            # 重複コンテキストとして保持するイベント数
+)
 ```
 
 ## コンテキスト圧縮の設定

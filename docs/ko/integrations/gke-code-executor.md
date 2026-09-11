@@ -157,7 +157,7 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
     ```python
     from google.adk.agents import LlmAgent
     from google.adk.code_executors import GkeCodeExecutor
-    from google.adk.code_executors import CodeExecutionInput
+    from google.adk.code_executors.code_execution_utils import CodeExecutionInput
     from google.adk.agents.invocation_context import InvocationContext
 
     # Job Mode용 실행기 초기화

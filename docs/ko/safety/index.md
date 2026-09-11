@@ -285,8 +285,10 @@ AI 에이전트의 기능이 발전함에 따라, 안전하고 보안이 유지�
       public Object query(String query, ToolContext toolContext) {
 
         // 'policy'가 컨텍스트에서 검색된다고 가정, 예: 세션 상태를 통해:
+        @SuppressWarnings("unchecked")
         Map<String, Object> queryToolPolicy =
-            toolContext.invocationContext.session().state().getOrDefault("query_tool_policy", null);
+            (Map<String, Object>)
+                toolContext.invocationContext.session().state().getOrDefault("query_tool_policy", null);
         List<String> actualTables = explainQuery(query);
 
         // --- 플레이스홀더 정책 강제 ---
@@ -332,6 +334,7 @@ Gemini 모델은 콘텐츠 및 브랜드 안전성을 향상시키는 데 활용
     from google.genai import types
 
     agent = Agent(
+        name="safety_agent",
         # ...
         generate_content_config=types.GenerateContentConfig(
             safety_settings=[

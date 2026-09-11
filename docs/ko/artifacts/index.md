@@ -694,7 +694,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
             public void processLatestReportJava(String userId, String sessionId, String filename) {
                 // 버전에 Optional.empty()를 전달하여 최신 버전 로드
                 artifactService
-                        .loadArtifact(appName, userId, sessionId, filename, Optional.empty())
+                        .loadArtifact(appName, userId, sessionId, filename)
                         .subscribe(
                                 new MaybeObserver<Part>() {
                                     @Override
@@ -737,7 +737,7 @@ ADK에서 **아티팩트(Artifacts)**는 특정 사용자 상호작용 세션에
 
                 // 예시: 특정 버전 로드 (예: 버전 0)
                 /*
-                artifactService.loadArtifact(appName, userId, sessionId, filename, Optional.of(0))
+                artifactService.loadArtifact(appName, userId, sessionId, filename, 0)
                     .subscribe(part -> {
                         System.out.println("자바 아티팩트 '" + filename + "'의 버전 0을 로드했습니다.");
                     }, throwable -> {

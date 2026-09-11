@@ -63,7 +63,8 @@ app = App(
 # (선택 사항) 보조 설정으로 이벤트 기반 슬라이딩 윈도우 사용
 compaction_config = EventsCompactionConfig(
     compaction_interval=10,   # 표준 압축 사이의 턴 수
-    overlap_size=2,           # 겹치는 컨텍스트로 유지할 이벤트 수
+    overlap_size=2            # 겹치는 컨텍스트로 유지할 이벤트 수
+)
 ```
 
 ## 컨텍스트 압축 구성

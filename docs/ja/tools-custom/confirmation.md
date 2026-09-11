@@ -56,7 +56,7 @@
         Name:        "reimburse",
         Description: "Reimburse an amount",
         RequireConfirmation: true,
-    }, func(ctx tool.Context, args ReimburseArgs) (ReimburseResult, error) {
+    }, func(ctx agent.Context, args ReimburseArgs) (ReimburseResult, error) {
         return ReimburseResult{Status: "ok"}, nil
     })
 
@@ -121,7 +121,7 @@
         RequireConfirmationProvider: func(args ReimburseArgs) bool {
             return args.Amount > 1000
         },
-    }, func(ctx tool.Context, args ReimburseArgs) (ReimburseResult, error) {
+    }, func(ctx agent.Context, args ReimburseArgs) (ReimburseResult, error) {
         return ReimburseResult{Status: "ok"}, nil
     })
     ```
@@ -212,7 +212,7 @@
 === "Go"
 
     ```go
-    func requestTimeOff(ctx tool.Context, args RequestTimeOffArgs) (map[string]any, error) {
+    func requestTimeOff(ctx agent.Context, args RequestTimeOffArgs) (map[string]any, error) {
         confirmation := ctx.ToolConfirmation()
         if confirmation == nil {
             ctx.RequestConfirmation(

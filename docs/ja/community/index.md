@@ -180,6 +180,16 @@ ADK Community Google Group に参加して、次回のコールに関する更�
         <p>コミットログ、リリースノート、ブログ記事を扱う ADK エージェントによって作成された、自動生成の日本語 ADK ポッドキャストです。</p>
       </div>
     </a>
+  <a href="https://mauripsale.github.io/doc-adk-training/" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="../assets/community-adk-zero-to-hero.jpg" alt="ADK: From Zero to Hero">
+    </div>
+    <div class="card-content">
+      <div class="type">オンライン コース</div>
+      <h3>🎓 ADK: From Zero to Hero</h3>
+      <p>実際のチャレンジ ラボ（理論、実際に解決する演習、そして隠された解答）を中心に構築された、40 以上のモジュールからなる実践的な ADK 2.0 カリキュラム（Python）です。最初のエージェントから、完全なオブザーバビリティを備えたエンタープライズ グレードの分散型マルチエージェント システムまでをカバーします。</p>
+    </div>
+  </a>
 </div>
 
 ## エージェントチュートリアルとデモ

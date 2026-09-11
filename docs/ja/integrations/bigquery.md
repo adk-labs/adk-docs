@@ -37,7 +37,7 @@ BigQuery 統合を提供するツールセットは次のとおりです。
 
 ```python
 import google.auth
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # アプリケーションのデフォルト認証情報をロード
 credentials, project_id = google.auth.default()
@@ -53,7 +53,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 
 ```python
 from google.oauth2 import service_account
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # サービス アカウントの認証情報をロード
 credentials = service_account.Credentials.from_service_account_file('path/to/key.json')
@@ -69,7 +69,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 
 ```python
 from google.oauth2.credentials import Credentials
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # 外部 OAuth フローによって 'user_token' が取得されたと仮定
 credentials = Credentials(token=user_token)
@@ -84,7 +84,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 Gemini Enterprise など、トークンがプラットフォームによって管理される外部認証プロバイダーと統合する場合は、`external_access_token_key` を使用します。
 
 ```python
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # セッション状態内のアクセス トークンを検索するために使用されるキー
 credentials_config = BigQueryCredentialsConfig(
@@ -98,7 +98,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 対話型セッションに `adk web` インターフェースを使用する場合、OAuth 2.0 クライアント認証情報を提供してログイン フローをトリガーできます。このメカニズムは、ローカル開発と Cloud Run などの環境にデプロイされた ADK エージェントの両方で機能します。
 
 ```python
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # OAuth 2.0 クライアント ID とシークレットを提供
 credentials_config = BigQueryCredentialsConfig(

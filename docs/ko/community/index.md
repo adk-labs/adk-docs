@@ -179,6 +179,16 @@ ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 
         <p>커밋 로그, 릴리스 노트, 블로그 게시물을 다루는 ADK 에이전트가 생성한 자동 생성 일본어 팟캐스트입니다.</p>
       </div>
     </a>
+  <a href="https://mauripsale.github.io/doc-adk-training/" class="resource-card">
+    <div class="card-image-wrapper">
+      <img src="../assets/community-adk-zero-to-hero.jpg" alt="ADK: From Zero to Hero">
+    </div>
+    <div class="card-content">
+      <div class="type">온라인 코스</div>
+      <h3>🎓 ADK: From Zero to Hero</h3>
+      <p>실제 챌린지 실습(이론, 직접 풀어야 하는 실습, 그리고 숨겨진 해답)을 중심으로 구성된 40개 이상의 모듈로 이루어진 실습형 ADK 2.0 커리큘럼(Python)입니다. 첫 번째 에이전트 구축부터 완전한 관찰 가능성을 갖춘 엔터프라이즈급 분산 다중 에이전트 시스템까지 다룹니다.</p>
+    </div>
+  </a>
 </div>
 
 ## 에이전트 튜토리얼 및 데모

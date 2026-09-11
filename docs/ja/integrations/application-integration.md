@@ -348,7 +348,7 @@ workflow をエージェントツールとして使うか、新規作成しま�
     `agent.java` を更新してツールを追加するには次のコードを使います:
 
       ```java
-          import com.google.adk.agent.LlmAgent;
+          import com.google.adk.agents.LlmAgent;
           import com.google.adk.tools.BaseTool;
           import com.google.common.collect.ImmutableList;
 

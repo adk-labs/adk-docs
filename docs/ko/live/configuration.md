@@ -14,7 +14,7 @@
 
 | 매개변수 | 타입 | 목적 | 참조 |
 |---|---|---|---|
-| **response_modalities** | list[str] | 출력 형식. 라이브 에이전트는 반드시 `AUDIO`를 사용해야 함 — 라이브 모델은 `TEXT`를 지원하지 않음 | [세부정보](#response-modalities) |
+| **response_modalities** | list[str] | 출력 형식. 라이브 에이전트는 반드시 `AUDIO`를 사용해야 함 — 라이브 모델은 `TEXT`를 지원하지 않음 | [세부정보](#response-modes) |
 | **streaming_mode** | StreamingMode | `run_async()` 경로에서의 청크 또는 단일 샷 전달; `run_live()`에서는 읽히지 않음 | [세부정보](#streamingmode-bidi-or-sse) |
 | **session_resumption** | SessionResumptionConfig | 자동 재연결 활성화 | [세부정보](sessions.md#session-resumption) |
 | **context_window_compression** | ContextWindowCompressionConfig | 무제한 세션 지속 시간 지원 | [세부정보](sessions.md#context-window-compression) |
@@ -318,4 +318,4 @@ run_config = RunConfig(
 
 두 동작 모두 확률적이며 응답의 예측 가능성을 낮추므로 격식 있는 컨텍스트, 높은 정확도가 요구되는 환경 및 디버깅 중에는 꺼두는 것이 좋습니다.
 
-이 설정은 `gemini-live-2.5-flash-native-audio`에 적용됩니다. 일부 라이브 모델은 이 동작이 내장되어 있어 두 설정을 모두 무시하므로 별도로 설정할 필요가 없습니다. [지원 모델](models.md#live-models)을 참고하세요.
+두 설정 모두 모델에 따라 달라집니다. Gemini 2.5 Flash Live는 이를 지원하지만 Gemini 3.1 Flash Live는 지원하지 않으며, 이를 설정한 채로 두는 것이 3.1로 전환할 때 가장 흔한 실패 원인입니다. [모델별 기능 지원](models.md#per-model-feature-support)을 참고하세요.

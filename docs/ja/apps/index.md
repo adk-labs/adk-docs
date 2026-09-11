@@ -111,7 +111,7 @@ ADKワークフローで***App***オブジェクトを定義することはオ�
 === "Java"
 
     ```java title="AppMain.java"
-    import com.google.adk.agents.Content;
+    import com.google.genai.types.Content;
     import com.google.adk.runner.Runner;
 
     public class AppMain {

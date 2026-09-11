@@ -694,35 +694,35 @@ ADKにおいて、**アーティファクト(Artifacts)**は、特定のユー�
             public void processLatestReportJava(String userId, String sessionId, String filename) {
                 // バージョンに Optional.empty() を渡して最新バージョンを読み込む
                 artifactService
-                        .loadArtifact(appName, userId, sessionId, filename, Optional.empty())
+                        .loadArtifact(appName, userId, sessionId, filename)
                         .subscribe(
                                 new MaybeObserver<Part>() {
                                     @Override
                                     public void onSubscribe(Disposable d) {
-                                        // オプション：サブスクリプションを処理
+                                        // 任意: サブスクリプションの処理
                                     }
 
                                     @Override
                                     public void onSuccess(Part reportArtifact) {
                                         System.out.println(
-                                                "最新のJavaアーティファクト '" + filename + "' を正常に読み込みました。");
+                                                "最新の Java アーティファクト '" + filename + "' を正常に読み込みました。");
                                         reportArtifact
                                                 .inlineData()
                                                 .ifPresent(
                                                         blob -> {
                                                             System.out.println(
-                                                                    "MIMEタイプ: " + blob.mimeType().orElse("N/A"));
+                                                                    "MIME タイプ: " + blob.mimeType().orElse("N/A"));
                                                             byte[] pdfBytes = blob.data().orElse(new byte[0]);
-                                                            System.out.println("レポートサイズ: " + pdfBytes.length + " バイト。");
+                                                            System.out.println("レポートのサイズ: " + pdfBytes.length + " バイト。");
                                                             // ... pdfBytes のさらなる処理 ...
                                                         });
                                     }
 
                                     @Override
                                     public void onError(Throwable e) {
-                                        // 潜在的なストレージエラーやその他の例外を処理
+                                        // 潜在的なストレージエラーやその他の例外を処理する
                                         System.err.println(
-                                                "Javaアーティファクト '"
+                                                "Java アーティファクト '"
                                                         + filename
                                                         + "' の読み込み中にエラーが発生しました: "
                                                         + e.getMessage());
@@ -731,13 +731,13 @@ ADKにおいて、**アーティファクト(Artifacts)**は、特定のユー�
                                     @Override
                                     public void onComplete() {
                                         // アーティファクト（最新バージョン）が見つからない場合に呼び出される
-                                        System.out.println("Javaアーティファクト '" + filename + "' が見つかりません。");
+                                        System.out.println("Java アーティファクト '" + filename + "' が見つかりません。");
                                     }
                                 });
 
-                // 例：特定のバージョンを読み込む（例：バージョン0）
+                // 例: 特定のバージョンの読み込み（例: バージョン 0）
                 /*
-                artifactService.loadArtifact(appName, userId, sessionId, filename, Optional.of(0))
+                artifactService.loadArtifact(appName, userId, sessionId, filename, 0)
                     .subscribe(part -> {
                         System.out.println("Javaアーティファクト '" + filename + "' のバージョン0を読み込みました。");
                     }, throwable -> {

@@ -45,6 +45,13 @@ Agent Development Kit（ADK）は、開発者がAI搭載エージェントを迅
     コーディング エージェントで最初の ADK エージェントを作成します。
 
     [:octicons-arrow-right-24: Agents CLI で始める](agents-cli.md) <br>
+
+-   :material-swap-horizontal:{ .lg .middle } **ADK への移行**
+
+    ---
+    Agents CLI を使用して既存のエージェントやワークフローを ADK に移行します。
+
+    [:octicons-arrow-right-24: ADK への移行](migrate.md) <br>
 </div>
 
 技術概要から始めるには、この[リンク](about.md)を確認してください。

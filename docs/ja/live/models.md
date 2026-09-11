@@ -14,9 +14,12 @@
 
 | モデル | AI Studio | Agent Platform |
 |---|---|---|
-| Gemini 2.5 Flash Live | `gemini-2.5-flash-native-audio-preview-12-2025` | `gemini-live-2.5-flash-native-audio` |
+| Gemini 2.5 Flash Live | `gemini-2.5-flash-native-audio-preview-12-2025` (Preview) | `gemini-live-2.5-flash-native-audio` (GA) |
+| Gemini 3.1 Flash Live | `gemini-3.1-flash-live-preview` (Preview) | 利用不可 |
 
-`gemini-live-2.5-flash-native-audio` は ADK の `LlmAgent.DEFAULT_LIVE_MODEL` であり、このセクションの例で使用されているモデルです。
+Gemini 2.5 Flash Live はバックエンドごとに異なる ID を持つ単一のモデルであり、提供される機能は同じです。`gemini-live-2.5-flash-native-audio` は ADK の `LlmAgent.DEFAULT_LIVE_MODEL` であり、一般公開されている唯一の Live モデルであり、このセクションの例で使用されているモデルです。
+
+Gemini 3.1 Flash Live はより新しいモデルで低レイテンシですが、AI Studio 専用であり、2.5 が持つ機能の一部が削除されています。切り替える前に [モデルごとの機能サポート](#per-model-feature-support) を確認してください。
 
 ## バックエンドの選択
 
@@ -32,9 +35,9 @@
 
 `GOOGLE_GENAI_USE_ENTERPRISE` 環境変数（AI Studio は `FALSE`、Agent Platform は `TRUE`）で切り替えます。コードの変更は不要です。セットアップについては [クイックスタート](get-started/streaming-python.md) を参照してください。
 
-!!! note "Agent Platform: ロケーションのサポート確認"
+!!! note "Agent Platform: `global` ロケーションはサポートされていません"
 
-    Agent Platform では、ロケーション（リージョン）によってライブモデルの利用可否が異なります。デプロイする前に、[Agent Platform のロケーション](https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/locations) のエンドポイントとロケーションの対応表で `GOOGLE_CLOUD_LOCATION` を確認してください。`us-central1`、`us-east1`、または `asia-northeast1` などのリージョンエンドポイントが安全なデフォルトです。
+    ライブモデルは `GOOGLE_CLOUD_LOCATION=global` では利用できません。`us-central1`、`us-east1`、または `asia-northeast1` などのリージョン エンドポイントを使用し、デプロイする前に [Agent Platform のロケーション](https://docs.cloud.google.com/gemini-enterprise-agent-platform/resources/locations) のエンドポイントとロケーションの対応表で確認してください。
 
 これらのモデルは、自然なプロソディを持つ音声を直接生成し、会話の言語を独自に検出します。音声、文字起こし、ターン検出など、その上に設定する項目については [設定](configuration.md) で説明されています。
 
@@ -42,12 +45,17 @@
 
 ### モデルごとの機能サポート
 
-一部の `RunConfig` 設定は、実行しているモデルに依存します。
+一部の `RunConfig` およびツール設定は、実行しているモデルに依存します。
 
-| 機能 | `gemini-live-2.5-flash-native-audio` |
-|---|---|
-| [プロアクティブおよび感情的な対話](configuration.md#proactivity-and-affective-dialog) | `RunConfig` によるオプトイン |
-| ツールの [`response_scheduling`](tools.md#non-blocking-tools) | サポート |
+| 機能 | Gemini 2.5 Flash Live | Gemini 3.1 Flash Live |
+|---|---|---|
+| [プロアクティブおよび感情的な対話](configuration.md#proactivity-and-affective-dialog) | `RunConfig` によるオプトイン | サポートされていません |
+| ツールの [`response_scheduling`](tools.md#non-blocking-tools) | サポート | サポートされていません。関数呼び出しは同期式であるため、ツールのレスポンスが返されるまでモデルは沈黙します |
+| 思考制御 (Thinking control) | `thinking_budget` | `thinking_level` (`minimal`, `low`, `medium`, `high`) |
+
+!!! warning "2.5 から 3.1 への移行時の注意"
+
+    `RunConfig.proactivity` または `RunConfig.enable_affective_dialog` を設定したままにすることが最も一般的なアップグレード失敗の原因です。これらを削除してください。また、クライアント コードに影響する 2 つの相違点があります。1 つ目は、単一のサーバー イベントが複数のコンテンツ パートを一度に運ぶことができるようになったため、`parts[0]` を読み取るのではなく `event.content.parts` を反復処理してください。2 つ目は、ターンの対象範囲に検出されたすべての音声アクティビティとビデオ フレームがデフォルトで含まれるようになり、ビデオを連続してストリーミングする場合にトークン コストが変化します。アップストリームの [移行ガイド](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-live-preview#migrating-from-gemini-25-flash-live) を参照してください。
 
 ## プラットフォームの制限と割り当て
 
@@ -95,6 +103,9 @@ agent = Agent(
 # AI Studio
 DEMO_AGENT_MODEL=gemini-2.5-flash-native-audio-preview-12-2025
 
+# AI Studio（プロアクティビティ、感情対話、ノンブロッキングツールが不要な場合）
+# DEMO_AGENT_MODEL=gemini-3.1-flash-live-preview
+
 # Agent Platform
 # DEMO_AGENT_MODEL=gemini-live-2.5-flash-native-audio
 ```
@@ -130,7 +141,7 @@ DEMO_AGENT_MODEL=gemini-2.5-flash-native-audio-preview-12-2025
 
 **適切なモデルの選択:**
 
-1. **バックエンドの選択**: プロトタイピングには AI Studio、本番環境には Agent Platform を選択します。これにより、上の表の ID 列が決まります。
+1. **バックエンドの選択**: プロトタイピングには AI Studio、本番環境には Agent Platform を選択します。これにより、上の表の ID 列が決まります。また、Agent Platform ではモデルも決定されます（Gemini 2.5 Flash Live がそこにある唯一の Live モデルです）。
 2. **現在の利用可能性の確認**: 上のモデル表と公式ドキュメントを参照してください。
 3. **環境変数の設定**: `.env` ファイルにモデル名を設定し、エージェント作成時にそこから読み取ります。
 

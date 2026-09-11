@@ -464,7 +464,7 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
         if (!responses.isEmpty()) {
             for (FunctionResponse response : responses) {
                 String toolName = response.name().get();
-                Map<String, String> result= response.response().get(); // 応答を取得する前に確認
+                Map<String, Object> result = response.response().get(); // 応答を取得する前に確認
                 System.out.println("  ツールの結果: " + toolName + " -> " + result);
             }
         }
@@ -514,15 +514,15 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
         ```
 
     === "Java"
-        `ConcurrentMap<String, Object> delta = event.actions().stateDelta();`
+        `Map<String, Object> delta = event.actions().stateDelta();`
 
         ```java
-        import java.util.concurrent.ConcurrentMap;
+        import java.util.Map;
         import com.google.adk.events.EventActions;
 
         EventActions actions = event.actions(); // event.actions()がnullでないと仮定
         if (actions != null && actions.stateDelta() != null && !actions.stateDelta().isEmpty()) {
-            ConcurrentMap<String, Object> stateChanges = actions.stateDelta();
+            Map<String, Object> stateChanges = actions.stateDelta();
             System.out.println("  状態の変更: " + stateChanges);
             // 必要に応じてローカルUIまたはアプリケーションの状態を更新
         }
@@ -571,19 +571,18 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
         ```
 
     === "Java"
-        `ConcurrentMap<String, Part> artifactChanges = event.actions().artifactDelta();`
+        `Map<String, Integer> artifactChanges = event.actions().artifactDelta();`
 
         ```java
-        import java.util.concurrent.ConcurrentMap;
-        import com.google.genai.types.Part;
+        import java.util.Map;
         import com.google.adk.events.EventActions;
 
         EventActions actions = event.actions(); // event.actions()がnullでないと仮定
         if (actions != null && actions.artifactDelta() != null && !actions.artifactDelta().isEmpty()) {
-            ConcurrentMap<String, Part> artifactChanges = actions.artifactDelta();
+            Map<String, Integer> artifactChanges = actions.artifactDelta();
             System.out.println("  保存されたアーティファクト: " + artifactChanges);
             // UIがアーティファクトリストを更新する可能性があります
-            // artifactChanges.entrySet()をループしてファイル名とPartの詳細を取得
+            // artifactChanges.entrySet()をループしてファイル名とバージョンを取得
         }
         ```
 

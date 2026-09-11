@@ -335,14 +335,14 @@
     === "Go"
 
         ```go
-        # StoryFlowAgent 예제의 전체 실행 가능 코드
+        // StoryFlowAgent 예제의 전체 실행 가능 코드
         --8<-- "examples/go/snippets/agents/custom-agent/storyflow_agent.go:full_code"
         ```
 
     === "Java"
     
         ```java
-        # StoryFlowAgent 예제의 전체 실행 가능 코드
+        // StoryFlowAgent 예제의 전체 실행 가능 코드
         --8<-- "examples/java/snippets/src/main/java/agents/StoryFlowAgentExample.java:full_code"
         ```
 

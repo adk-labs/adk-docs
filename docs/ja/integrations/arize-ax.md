@@ -6,9 +6,9 @@ catalog_tags: ["observability", "evaluation"]
 ---
 # Arize AX によるエージェントの可観測性
 
-[Arize AX](https://arize.com/docs/ax) は、大規模な LLM アプリケーションと AI エージェントを監視、デバッグ、改善するための本番運用レベルの可観測性プラットフォームです。Google ADK アプリケーション向けに包括的なトレース、評価、モニタリング機能を提供します。始めるには、[無料アカウント](https://app.arize.com/auth/join)に登録してください。
+[Arize AX](https://arize.com/products/ax/) は、本番運用チーム、AI ネイティブ企業、エンタープライズ向けの [Arize AI](https://arize.com/) によるフル機能の AI 可観測性および評価プラットフォームです。マネージド クラウドまたはエンタープライズ向けセルフホスト デプロイとして利用可能で、Google ADK アプリケーション向けに包括的なトレース、評価、モニタリング機能を提供します。始めるには、[無料アカウント](https://app.arize.com/auth/join)に登録してください。
 
-オープンソースでセルフホスト可能な代替手段については、[Phoenix](https://arize.com/docs/phoenix)を確認してください。
+ローカル開発、実験、または単一コンテナでのセルフホスト向けのオープンソース パスについては、[Arize Phoenix ADK 統合](/integrations/phoenix/) を確認してください。Arize の [エージェント評価ガイド](https://arize.com/guides/ai-agent-handbook/agent-evaluation/) および [LLM 評価ガイド](https://arize.com/resources/llm-evaluation/) では、チームがトレースを使用してエージェントの決定、ツール呼び出し、モデルの動作を評価する方法が説明されています。
 
 ## 概要
 

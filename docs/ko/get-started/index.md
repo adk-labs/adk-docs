@@ -45,6 +45,13 @@
     코딩 에이전트와 함께 첫 번째 ADK 에이전트를 만듭니다.
 
     [:octicons-arrow-right-24: Agents CLI로 시작](agents-cli.md) <br>
+
+-   :material-swap-horizontal:{ .lg .middle } **ADK로 마이그레이션**
+
+    ---
+    Agents CLI를 사용하여 기존 에이전트 및 워크플로우를 ADK로 마이그레이션합니다.
+
+    [:octicons-arrow-right-24: ADK로 마이그레이션](migrate.md) <br>
 </div>
 
 기술 개요부터 시작하려면 이 [링크](about.md)를 확인하세요.

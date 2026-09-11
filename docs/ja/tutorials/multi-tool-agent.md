@@ -488,7 +488,7 @@
             ```py
             root_agent = Agent(
                 name="weather_time_agent",
-                model="replace-me-with-model-id", #例: gemini-2.0-flash-live-001
+                model="replace-me-with-model-id", #例: gemini-live-2.5-flash-native-audio
                 ...
             ```
 
@@ -501,7 +501,7 @@
             `adk run`を使用する場合、次のようにコマンドにテキストをパイプすることで、プロンプトをエージェントに注入して開始できます。
 
             ```shell
-            echo "まずファイルをリストアップしてください" | adk run file_listing_agent
+            echo "まずファイルをリストアップしてください" | adk run multi_tool_agent
             ```
 
         次のコマンドを実行して、Weatherエージェントとチャットします。

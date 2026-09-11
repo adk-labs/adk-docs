@@ -329,6 +329,7 @@ plugins:
                 - Kotlin: get-started/kotlin.md
                 - 고급 설정: get-started/installation.md
                 - Google Cloud: get-started/google-cloud.md
+                - ADK로 마이그레이션: get-started/migrate.md
               - 에이전트 만들기:
                 - tutorials/index.md
                 - 다중 도구 에이전트: tutorials/multi-tool-agent.md
@@ -511,6 +512,7 @@ plugins:
                 - Kotlin: get-started/kotlin.md
                 - 高度な設定: get-started/installation.md
                 - Google Cloud: get-started/google-cloud.md
+                - ADK への移行: get-started/migrate.md
               - エージェントを作成:
                 - tutorials/index.md
                 - マルチツールエージェント: tutorials/multi-tool-agent.md

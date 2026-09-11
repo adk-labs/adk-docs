@@ -488,7 +488,7 @@
             ```py
             root_agent = Agent(
                 name="weather_time_agent",
-                model="replace-me-with-model-id", #e.g. gemini-2.0-flash-live-001
+                model="replace-me-with-model-id", #e.g. gemini-live-2.5-flash-native-audio
                 ...
             ```
 
@@ -501,7 +501,7 @@
             `adk run`을 사용할 때 다음처럼 명령에 텍스트를 파이프하여 에이전트에 프롬프트를 주입하여 시작할 수 있습니다.
 
             ```shell
-            echo "파일 목록을 나열하여 시작하십시오." | adk run file_listing_agent
+            echo "파일 목록을 나열하여 시작하십시오." | adk run multi_tool_agent
             ```
 
             날씨 에이전트와 채팅하려면 다음 명령을 실행하세요.

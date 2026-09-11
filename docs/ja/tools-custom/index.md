@@ -193,7 +193,7 @@ ADKは、いくつかのタイプのツールをサポートすることで柔�
 
 ### **エージェントフローの制御**
 
-`tool_context.actions`属性（Javaでは`ToolContext.actions()`、Goでは`tool.Context.Actions()`）は、**EventActions**オブジェクトを保持します。このオブジェクトの属性を変更すると、ツールが実行を完了した後にエージェントまたはフレームワークが何をするかに影響を与えることができます。
+`tool_context.actions`属性（Javaでは`ToolContext.actions()`、Goでは`agent.Context.Actions()`）は、**EventActions**オブジェクトを保持します。このオブジェクトの属性を変更すると、ツールが実行を完了した後にエージェントまたはフレームワークが何をするかに影響を与えることができます。
 
 * **`skip_summarization: bool`**: （デフォルト：False）Trueに設定すると、ADKに通常ツールの出力を要約するLLM呼び出しをバイパスするように指示します。これは、ツールの戻り値がすでにユーザーがすぐに使えるメッセージである場合に役立ちます。
 

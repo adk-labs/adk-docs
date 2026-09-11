@@ -168,7 +168,7 @@ GKE Code Executor ツールを使って ADK プロジェクトを正しくデプ
     ```python
     from google.adk.agents import LlmAgent
     from google.adk.code_executors import GkeCodeExecutor
-    from google.adk.code_executors import CodeExecutionInput
+    from google.adk.code_executors.code_execution_utils import CodeExecutionInput
     from google.adk.agents.invocation_context import InvocationContext
 
     # Job Mode 用の実行器を初期化

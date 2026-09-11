@@ -343,7 +343,7 @@ Integration Connectors용 Application Integration Toolset을 만들려면 다음
     `agent.java` 파일을 업데이트하고 에이전트에 도구를 추가하려면 다음 코드를 사용합니다:
 
       ```java
-          import com.google.adk.agent.LlmAgent;
+          import com.google.adk.agents.LlmAgent;
           import com.google.adk.tools.BaseTool;
           import com.google.common.collect.ImmutableList;
 

@@ -365,12 +365,12 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 
 !!! note "Java 및 Kotlin에서의 스키마 유효성 검사"
 
-    Java 및 Kotlin은 스키마의 *구조*(`type`, `required`, `nullable`, `anyOf`, `items`)를 기준으로 응답을 검사합니다([`SchemaUtils`](https://github.com/google/adk-kotlin/blob/v0.8.0/core/src/commonMain/kotlin/com/google/adk/kt/SchemaUtils.kt) 참고).
+    Java 및 Kotlin은 스키마의 *구조*(`type`, `required`, `nullable`, `anyOf`, `items`)를 기준으로 응답을 검사합니다([`SchemaUtils`](https://github.com/google/adk-kotlin/blob/v1.0.0/core/src/commonMain/kotlin/com/google/adk/kt/SchemaUtils.kt) 참고).
     `pattern`, `minLength`, `minimum`과 같은 제약 조건 필드는 스키마의 일부로 모델에 전송되지만, ADK가 이를 다시 검사하지는 않으므로 준수 여부는 모델이 결정합니다. Python은 선언된 제약 조건을 자체적으로 강제하는 Pydantic 모델을 기준으로 유효성을 검사합니다.
 
     Java 및 Kotlin은 최상위 객체(object) 스키마만 허용하며, 최상위 배열(array) 또는 원시 타입(primitive)은 유효성 검사에 실패합니다. Python은 목록(list) 및 원시 타입 출력 스키마도 지원합니다.
 
-    응답의 유효성 검사가 실패하면 ADK는 오류를 로깅하고 파싱된 객체 대신 원시 응답 문자열을 `output_key` 아래에 저장합니다([`LlmAgent`](https://github.com/google/adk-kotlin/blob/v0.8.0/core/src/commonMain/kotlin/com/google/adk/kt/agents/LlmAgent.kt) 참고).
+    응답의 유효성 검사가 실패하면 ADK는 오류를 로깅하고 파싱된 객체 대신 원시 응답 문자열을 `output_key` 아래에 저장합니다([`LlmAgent`](https://github.com/google/adk-kotlin/blob/v1.0.0/core/src/commonMain/kotlin/com/google/adk/kt/agents/LlmAgent.kt) 참고).
 
 === "Python"
 
@@ -538,6 +538,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
     from google.genai import types
 
     my_agent = Agent(
+        name="my_agent",
         model="gemini-flash-latest",
         planner=BuiltInPlanner(
             thinking_config=types.ThinkingConfig(
@@ -575,6 +576,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
     from google.adk.planners import PlanReActPlanner
 
     my_agent = Agent(
+        name="my_agent",
         model="gemini-flash-latest",
         planner=PlanReActPlanner(),
         # ... 여기에 도구 추가

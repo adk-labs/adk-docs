@@ -292,12 +292,12 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 
 !!! note "Java および Kotlin でのスキーマ検証"
 
-    Java および Kotlin は、スキーマの*構造*（`type`、`required`、`nullable`、`anyOf`、`items`）に照らして応答を検証します（[`SchemaUtils`](https://github.com/google/adk-kotlin/blob/v0.8.0/core/src/commonMain/kotlin/com/google/adk/kt/SchemaUtils.kt) を参照）。
+    Java および Kotlin は、スキーマの*構造*（`type`、`required`、`nullable`、`anyOf`、`items`）に照らして応答を検証します（[`SchemaUtils`](https://github.com/google/adk-kotlin/blob/v1.0.0/core/src/commonMain/kotlin/com/google/adk/kt/SchemaUtils.kt) を参照）。
     `pattern`、`minLength`、`minimum` などの制約フィールドはスキーマの一部としてモデルに送信されますが、ADK がそれらを再検証することはなく、従うかどうかはモデルに委ねられます。Python は、宣言された制約を強制する Pydantic モデルに対して検証を行います。
 
     Java および Kotlin は最上位のオブジェクト スキーマのみを受け入れ、最上位の配列やプリミティブは検証に失敗します。Python はリストおよびプリミティブの出力スキーマもサポートしています。
 
-    応答の検証に失敗した場合、ADK はエラーをログに記録し、パースされたオブジェクトの代わりに生の応答文字列を `output_key` の下に保存します（[`LlmAgent`](https://github.com/google/adk-kotlin/blob/v0.8.0/core/src/commonMain/kotlin/com/google/adk/kt/agents/LlmAgent.kt) を参照）。
+    応答の検証に失敗した場合、ADK はエラーをログに記録し、パースされたオブジェクトの代わりに生の応答文字列を `output_key` の下に保存します（[`LlmAgent`](https://github.com/google/adk-kotlin/blob/v1.0.0/core/src/commonMain/kotlin/com/google/adk/kt/agents/LlmAgent.kt) を参照）。
 
 === "Python"
 
@@ -428,6 +428,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     from google.genai import types
 
     my_agent = Agent(
+        name="my_agent",
         model="gemini-flash-latest",
         planner=BuiltInPlanner(
             thinking_config=types.ThinkingConfig(
@@ -446,6 +447,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     from google.adk.planners import PlanReActPlanner
 
     my_agent = Agent(
+        name="my_agent",
         model="gemini-flash-latest",
         planner=PlanReActPlanner(),
         # ... ここにツールを記述

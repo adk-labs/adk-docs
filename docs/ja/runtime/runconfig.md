@@ -91,19 +91,14 @@ Long-running session では、どれだけの history を load するか、conte
     )
     ```
 
-## ストリーミングの有効化
+## テキスト応答オプション { #enable-streaming }
 
-エージェントがレスポンスを配信する方法を制御するには、`streaming_mode` パラメータを
-設定します。
+エージェントがテキスト モードで応答する方法を、生成されるにつれて単語ごとに配信するか、または 1 つの完全な応答として配信するかを、以下で説明する ***Streaming Mode*** パラメータで制御できます:
 
-- **`StreamingMode.NONE`** (デフォルト): runner は turn ごとに 1 つの完全なレスポンスを
-  返します。CLI tool、batch processing、synchronous workflow に適しています。
-- **`StreamingMode.SSE`**: Server-Sent Events streaming です。LLM が生成している間、
-  runner が partial event を yield し、typewriter-style UI や real-time chat display を
-  実現できます。
-- **`StreamingMode.BIDI`**: bidirectional streaming 用に予約されていますが、標準の
-  `run_async()` path では **使用されません**。Bidirectional streaming には
-  `runner.run_live()` を使ってください。
+- **`StreamingMode.NONE`** (デフォルト): runner は turn ごとに 1 つの完全なレスポンスを返します。CLI tool、batch processing、synchronous workflow に適しています。
+- **`StreamingMode.SSE`**: Server-Sent Events streaming です。LLM が生成している間、runner が partial event を yield し、typewriter-style UI や real-time chat display を実現できます。
+
+音声の入力と出力を含むデータの双方向ストリーミングを可能にする ***Streaming Mode*** パラメータのもう 1 つの設定があります。この機能には、シンプルなエージェントを超える追加の設定が必要です。詳細については、[ライブおよび音声エージェント](../live/index.md) を参照してください。
 
 `StreamingMode.SSE` とともに `support_cfc=True` を設定すると、Compositional Function Calling(CFC)
 を有効にできます。CFC により、model は function call を動的に構成して実行でき、内部では
@@ -131,7 +126,6 @@ Live API を使用します。
 
     const config: RunConfig = {
         streamingMode: StreamingMode.SSE,
-        supportCfc: true,
         maxLlmCalls: 150,
     };
     ```
@@ -253,14 +247,18 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
 
 ## ライブエージェントの設定
 
-ライブ（`run_live()`）エージェントセッションには、`realtime_input_config`、`session_resumption`、`save_live_blob`、`tool_thread_pool_config`、`proactivity`、`enable_affective_dialog` などのリアルタイムパラメータが追加されます。これらはモデルごとのサポートと例とともに、ライブドキュメントの1か所にまとめられています。
+<div class="language-support-tag">
+  <span class="lst-supported">ADK でサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-java">Java</span>
+</div>
 
-- **[ライブエージェントの設定](../live/configuration.md)** — ライブエージェント用の完全な `RunConfig` リファレンス。
-- **[セッション](../live/sessions.md#session-resumption)** — セッションの再開と再接続。
-- **[設定: プロアクティブおよび感情的な対話](../live/configuration.md#proactivity-and-affective-dialog)** — ネイティブオーディオ会話機能とそれをサポートするモデル。
+ADK エージェントは、対話型のエージェント体験を作成するために [ライブおよび音声エージェント](../live/index.md) をサポートできます。`runner.run_live()` メソッドを使用して、この機能をサポートするエージェントを設定します。
+ライブエージェント（`run_live()`）セッションには、`realtime_input_config`、`session_resumption`、`save_live_blob`、`tool_thread_pool_config`、`proactivity`、`enable_affective_dialog` などのリアルタイム パラメータが追加されます。詳細については、ライブエージェントのドキュメントを参照してください:
+
+- **[ライブエージェントの設定](../live/configuration.md)**: ライブエージェント用の完全な `RunConfig` リファレンス。
+- **[セッション](../live/sessions.md#session-resumption)**: セッションの再開と再接続。
+- **[設定: プロアクティブおよび感情的な対話](../live/configuration.md#proactivity-and-affective-dialog)**: ネイティブ オーディオ会話機能とそれをサポートするモデル。
 
 `tool_thread_pool_config` 設定は例外です。これは Live API の関心事というよりもランタイムの関心事であるため、ここに残されています。イベントループがユーザーの中断に応答し続けられるよう、ツール実行をバックグラウンドスレッドプールで実行します。
-
 すべてのパラメータがすべての言語で利用できるわけではありません。言語別の詳細は [API reference](#api-reference) を参照してください。
 
 === "Python"
@@ -290,6 +288,20 @@ Voice-enabled agent では、speech synthesis、audio transcription、response m
             proactiveAudio: true,
         },
     };
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.RunConfig;
+    import com.google.genai.types.AvatarConfig;
+
+    RunConfig config = RunConfig.builder()
+        .avatarConfig(
+            AvatarConfig.builder()
+                .avatarName("PREBUILT_AVATAR_ID")
+                .build())
+        .build();
     ```
 
 ## ランタイム制限とデバッグの設定

@@ -111,7 +111,7 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
 === "Java"
 
     ```java title="AppMain.java"
-    import com.google.adk.agents.Content;
+    import com.google.genai.types.Content;
     import com.google.adk.runner.Runner;
 
     public class AppMain {

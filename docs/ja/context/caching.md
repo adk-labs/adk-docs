@@ -20,6 +20,7 @@ ADKコンテキストキャッシュ機能を使用すると、Gemini 2.0以降�
     from google.adk.agents.context_cache_config import ContextCacheConfig
 
     root_agent = Agent(
+      name='my_caching_agent',
       # Gemini 2.0以降を使用するエージェントを構成する
     )
 

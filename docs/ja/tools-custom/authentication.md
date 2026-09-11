@@ -78,7 +78,7 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
 
 ツールセットのタイプ（OpenAPIベースまたはGoogle APIツールセット）や、Cloud IAMで保護されたサービスでアクセストークンの代わりにIDトークンが必要かどうかに応じて、認証構成を使い分けることができます。以下の各セクションで詳細を説明します。
 
-#### OpenAPIベースのツールセットの使用（`OpenAPIToolset`、`APIHubToolset`など）
+#### OpenAPIベースのツールセットの使用
 
 ツールセットの初期化中にスキームと資格情報を渡します。ツールセットは、生成されたすべてのツールにそれらを適用します。ADKで認証付きのツールを作成する方法はいくつかあります。
 
@@ -192,7 +192,7 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
       )
       ```
 
-#### Google APIツールセットの使用（例：`calendar_tool_set`）
+#### Google APIツールセットの使用
 
 これらのツールセットには、多くの場合、専用の構成メソッドがあります。
 
@@ -200,17 +200,19 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
 
 ```py
 # 例：Googleカレンダーツールの構成
-from google.adk.tools.google_api_tool import calendar_tool_set
+from google.adk.tools.google_api_tool import CalendarToolset
 
 client_id = "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com"
 client_secret = "YOUR_GOOGLE_OAUTH_CLIENT_SECRET"
 
-# 이 도구 세트 유형에 대한 특정 구성 메서드 사용
-calendar_tool_set.configure_auth(
-    client_id=oauth_client_id, client_secret=oauth_client_secret
+calendar_toolset = CalendarToolset()
+
+# このツールセットタイプ用の特定の構成メソッドを使用
+calendar_toolset.configure_auth(
+    client_id=client_id, client_secret=client_secret
 )
 
-# agent = LlmAgent(..., tools=calendar_tool_set.get_tool('calendar_tool_set'))
+# agent = LlmAgent(..., tools=[calendar_toolset])
 ```
 
 #### ID トークンの使用
@@ -282,21 +284,16 @@ sample_toolset = OpenAPIToolset(
 構成すると、認証情報マネージャーは標準の OAuth フローをスキップします。代わりに、エージェントの `tool_context.state` からキーを取得し、トークンを直接認証に使用します。
 この構成パラメータの使用は相互に排他的であり、同じ構成ブロックに `credentials`、`client_id`、`client_secret`、または `scopes` パラメータを含めることはできません。
 
-次の例に従ってキーを構成してください。
-
+使用しているツールセットの認証情報構成でキーを設定します。次の例ではBigQueryを使用します。
+ 
 ```python
-from google.adk.auth.auth_credential import AuthCredential
-from google.adk.auth.auth_credential import AuthCredentialTypes
+from google.adk.integrations.bigquery import BigQueryCredentialsConfig
 
-# セッション状態から "get_my_frontend_token" を探すようにツールを構成
-credentials_config = AuthCredential(
-    auth_type=AuthCredentialTypes.GOOGLE_CREDENTIALS,
-    google_credentials_config={
-        # 本番コードに認証キーをハードコードしないでください
-        "external_access_token_key": "get_my_frontend_token" 
-    }
+# セッション状態から "my_frontend_token" を探すようにツールセットを構成
+credentials_config = BigQueryCredentialsConfig(
+    # 本番コードに認証キーをハードコードしないでください
+    external_access_token_key="my_frontend_token"
 )
-
 ```
 
 #### 認証要求フロー

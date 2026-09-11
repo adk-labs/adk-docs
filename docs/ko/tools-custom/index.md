@@ -192,7 +192,7 @@ ADK는 여러 유형의 도구를 지원하여 유연성을 제공합니다.
 
 ### **에이전트 흐름 제어**
 
-`tool_context.actions` 속성(Java에서는 `ToolContext.actions()`, Go에서는 `tool.Context.Actions()`)은 **EventActions** 개체를 보유합니다. 이 개체의 속성을 수정하면 도구가 완료된 후 에이전트 또는 프레임워크가 수행하는 작업에 영향을 줄 수 있습니다.
+`tool_context.actions` 속성(Java에서는 `ToolContext.actions()`, Go에서는 `agent.Context.Actions()`)은 **EventActions** 개체를 보유합니다. 이 개체의 속성을 수정하면 도구가 완료된 후 에이전트 또는 프레임워크가 수행하는 작업에 영향을 줄 수 있습니다.
 
 * **`skip_summarization: bool`**: (기본값: False) True로 설정하면 ADK에 일반적으로 도구의 출력을 요약하는 LLM 호출을 건너뛰도록 지시합니다. 이는 도구의 반환 값이 이미 사용자에게 준비된 메시지인 경우에 유용합니다.
 

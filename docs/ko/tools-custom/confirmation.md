@@ -61,7 +61,7 @@
         Description: "Reimburse an amount",
         // 도구 호출에 대한 사용자 확인을 요구하려면 RequireConfirmation을 true로 설정합니다.
         RequireConfirmation: true,
-    }, func(ctx tool.Context, args ReimburseArgs) (ReimburseResult, error) {
+    }, func(ctx agent.Context, args ReimburseArgs) (ReimburseResult, error) {
         // 실제 구현
         return ReimburseResult{Status: "ok"}, nil
     })
@@ -130,7 +130,7 @@
         RequireConfirmationProvider: func(args ReimburseArgs) bool {
             return args.Amount > 1000
         },
-    }, func(ctx tool.Context, args ReimburseArgs) (ReimburseResult, error) {
+    }, func(ctx agent.Context, args ReimburseArgs) (ReimburseResult, error) {
         // 실제 구현
         return ReimburseResult{Status: "ok"}, nil
     })
@@ -234,7 +234,7 @@
 === "Go"
 
     ```go
-    func requestTimeOff(ctx tool.Context, args RequestTimeOffArgs) (map[string]any, error) {
+    func requestTimeOff(ctx agent.Context, args RequestTimeOffArgs) (map[string]any, error) {
         confirmation := ctx.ToolConfirmation()
         if confirmation == nil {
             ctx.RequestConfirmation(

@@ -92,17 +92,14 @@ Long-running session에서는 얼마나 많은 history를 load할지, context wi
     )
     ```
 
-## 스트리밍 활성화
+## 텍스트 응답 옵션 { #enable-streaming }
 
-에이전트가 응답을 전달하는 방식을 제어하려면 `streaming_mode` 매개변수를 설정합니다.
+에이전트가 텍스트 모드에서 응답하는 방식을 단어가 생성되는 대로 전달할지, 아니면 하나의 전체 응답으로 전달할지 아래에 설명된 ***스트리밍 모드(Streaming Mode)*** 매개변수로 제어할 수 있습니다:
 
-- **`StreamingMode.NONE`**(기본값): runner가 turn마다 하나의 완성된 응답을 반환합니다.
-  CLI tool, batch processing, synchronous workflow에 적합합니다.
-- **`StreamingMode.SSE`**: Server-Sent Events streaming입니다. LLM이 생성하는 동안 runner가
-  partial event를 yield하여 typewriter-style UI와 real-time chat display를 구현할 수 있습니다.
-- **`StreamingMode.BIDI`**: bidirectional streaming용으로 예약되어 있지만 표준
-  `run_async()` path에서는 **사용되지 않습니다**. Bidirectional streaming에는
-  `runner.run_live()`를 사용하세요.
+- **`StreamingMode.NONE`**(기본값): runner가 turn마다 하나의 완성된 응답을 반환합니다. CLI tool, batch processing, synchronous workflow에 적합합니다.
+- **`StreamingMode.SSE`**: Server-Sent Events streaming입니다. LLM이 생성하는 동안 runner가 partial event를 yield하여 typewriter-style UI와 real-time chat display를 구현할 수 있습니다.
+
+음성 입력과 출력을 포함한 데이터의 양방향 스트리밍을 활성화하는 ***스트리밍 모드*** 매개변수의 또 다른 설정이 있습니다. 이 기능은 단순한 에이전트 이상의 추가 구성이 필요합니다. 이 기능에 대한 자세한 내용은 [라이브 및 음성 에이전트](../live/index.md)를 참고하세요.
 
 `StreamingMode.SSE`와 함께 `support_cfc=True`를 설정하면 Compositional Function Calling(CFC)을
 활성화할 수 있습니다. CFC는 모델이 function call을 동적으로 구성하고 실행할 수 있게 하며,
@@ -130,7 +127,6 @@ Long-running session에서는 얼마나 많은 history를 load할지, context wi
 
     const config: RunConfig = {
         streamingMode: StreamingMode.SSE,
-        supportCfc: true,
         maxLlmCalls: 150,
     };
     ```
@@ -252,14 +248,18 @@ Voice-enabled agent에서는 speech synthesis, audio transcription, response mod
 
 ## 라이브 에이전트 구성
 
-라이브(`run_live()`) 에이전트 세션에는 `realtime_input_config`, `session_resumption`, `save_live_blob`, `tool_thread_pool_config`, `proactivity`, `enable_affective_dialog` 등을 포함한 일련의 실시간 매개변수가 추가됩니다. 이러한 설정은 모델별 지원 여부 및 예제와 함께 라이브 문서의 한 곳에 정리되어 있습니다:
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-java">Java</span>
+</div>
 
-- **[라이브 에이전트 구성](../live/configuration.md)** — 라이브 에이전트용 전체 `RunConfig` 레퍼런스.
-- **[세션](../live/sessions.md#session-resumption)** — 세션 재개 및 재연결.
-- **[구성: 능동적 및 감정적 대화](../live/configuration.md#proactivity-and-affective-dialog)** — 네이티브 오디오 대화 기능 및 이를 지원하는 모델.
+ADK 에이전트는 대화형 에이전트 경험을 생성하기 위해 [라이브 및 음성 에이전트](../live/index.md)를 지원할 수 있습니다. `runner.run_live()` 메서드를 사용하여 이 기능을 지원하는 에이전트를 구성합니다.
+라이브 에이전트(`run_live()`) 세션은 `realtime_input_config`, `session_resumption`, `save_live_blob`, `tool_thread_pool_config`, `proactivity`, `enable_affective_dialog` 등을 포함한 실시간 매개변수 집합을 추가합니다. 자세한 내용은 라이브 에이전트 문서를 참조하세요:
+
+- **[라이브 에이전트 구성](../live/configuration.md)**: 라이브 에이전트를 위한 전체 `RunConfig` 참조.
+- **[세션](../live/sessions.md#session-resumption)**: 세션 재개 및 재연결.
+- **[구성: 능동적 및 감정적 대화](../live/configuration.md#proactivity-and-affective-dialog)**: 네이티브 오디오 대화 기능 및 이를 지원하는 모델.
 
 `tool_thread_pool_config` 설정은 예외입니다. 이는 Live API 관심사라기보다는 런타임 관심사이므로 여기에 유지됩니다. 이벤트 루프가 사용자의 인터럽트에 계속 응답할 수 있도록 도구 실행을 백그라운드 스레드 풀에서 실행합니다.
-
 모든 매개변수가 모든 언어에서 제공되는 것은 아닙니다. 언어별 세부 정보는 [API reference](#api-reference)를 참고하세요.
 
 === "Python"
@@ -289,6 +289,20 @@ Voice-enabled agent에서는 speech synthesis, audio transcription, response mod
             proactiveAudio: true,
         },
     };
+    ```
+
+=== "Java"
+
+    ```java
+    import com.google.adk.agents.RunConfig;
+    import com.google.genai.types.AvatarConfig;
+
+    RunConfig config = RunConfig.builder()
+        .avatarConfig(
+            AvatarConfig.builder()
+                .avatarName("PREBUILT_AVATAR_ID")
+                .build())
+        .build();
     ```
 
 ## 런타임 제한 및 디버깅 구성

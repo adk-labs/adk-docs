@@ -286,8 +286,10 @@ AIエージェントの能力が向上するにつれて、それらが安全か
       public Object query(String query, ToolContext toolContext) {
 
         // 'policy'がコンテキストから取得されると仮定する。例：セッション状態経由
+        @SuppressWarnings("unchecked")
         Map<String, Object> queryToolPolicy =
-            toolContext.invocationContext.session().state().getOrDefault("query_tool_policy", null);
+            (Map<String, Object>)
+                toolContext.invocationContext.session().state().getOrDefault("query_tool_policy", null);
         List<String> actualTables = explainQuery(query);
 
         // --- プレースホルダーのポリシー施行 ---
@@ -333,6 +335,7 @@ Geminiモデルには、コンテンツとブランドの安全性を向上さ�
     from google.genai import types
 
     agent = Agent(
+        name="safety_agent",
         # ...
         generate_content_config=types.GenerateContentConfig(
             safety_settings=[
