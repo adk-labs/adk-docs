@@ -386,7 +386,6 @@ workflows offer much more flexibility to define the routing logic you need.
         name="generator_agent",
         model="gemini-flash-latest",
         instruction="Write python code for user request.",
-        output_schema=str,
     )
 
     @node(name="lint_reviewer")
@@ -401,7 +400,6 @@ workflows offer much more flexibility to define the routing logic you need.
         model="gemini-flash-latest",
         instruction="""Refactor current code {code}.
             Based on compile & lint review: {findings}""",
-        output_schema=str,
     )
 
     @node # workflow node
