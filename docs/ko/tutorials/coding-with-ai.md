@@ -54,6 +54,8 @@ MCP 서버를 사용하도록 코딩 도구를 구성하면 ADK 문서를 검색
           "args": [
             "--from",
             "mcpdoc",
+            "--with",
+            "mcp<2",
             "mcpdoc",
             "--urls",
             "AgentDevelopmentKit:https://adk.dev/llms.txt",
@@ -71,7 +73,7 @@ MCP 서버를 사용하도록 코딩 도구를 구성하면 ADK 문서를 검색
 서버를 추가하려면 다음을 실행하세요.
 
 ```bash
-claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls AgentDevelopmentKit:https://adk.dev/llms.txt --transport stdio
+claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc --with "mcp<2" mcpdoc --urls AgentDevelopmentKit:https://adk.dev/llms.txt --transport stdio
 ```
 
 ### Cursor
@@ -91,6 +93,8 @@ claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls Age
           "args": [
             "--from",
             "mcpdoc",
+            "--with",
+            "mcp<2",
             "mcpdoc",
             "--urls",
             "AgentDevelopmentKit:https://adk.dev/llms.txt",
@@ -101,6 +105,9 @@ claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls Age
       }
     }
     ```
+
+!!! note "MCP 버전 설정"
+    `mcp<2` 제약 조건 설정은 `mcpdoc`이 현재 사용 중인 MCP 1.x FastMCP API와의 호환성을 유지하도록 합니다.
 
 ### Other Tools
 

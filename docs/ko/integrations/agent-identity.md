@@ -33,9 +33,9 @@ catalog_tags: ["google"]
 
 - [Google Cloud 프로젝트](https://cloud.google.com/resource-manager/docs/creating-managing-projects)
 - 프로젝트에 생성된 하나 이상의 Agent Identity
-  [auth provider](https://cloud.google.com/iam/docs/manage-auth-providers)
+  [auth provider](https://cloud.google.com/iam/docs/manage-auth-providers-v2)
 - 호출자 ID에
-  [`iamconnectors.user`](https://docs.cloud.google.com/iam/docs/roles-permissions/iamconnectors#iamconnectors.user)
+  [`agentidentity.user`](https://docs.cloud.google.com/iam/docs/roles-permissions/agentidentity#agentidentity.user)
   역할 또는 동등한 권한 필요
 - [Application Default Credentials](https://docs.cloud.google.com/docs/authentication/application-default-credentials)
   (`gcloud auth application-default login`)로 인증 구성
@@ -80,7 +80,8 @@ from google.adk.integrations.agent_identity import GcpAuthProviderScheme
 from google.adk.tools.mcp import McpToolset
 
 auth_scheme = GcpAuthProviderScheme(
-    name="projects/PROJECT_ID/locations/LOCATION/connectors/AUTH_PROVIDER_NAME",
+    # 기존 V1 API를 사용하는 경우 리소스 이름에 'authProviders' 대신 'connectors'를 사용합니다: projects/.../connectors/...
+    name="projects/PROJECT_ID/locations/LOCATION/authProviders/AUTH_PROVIDER_NAME",
     # continue_uri is only needed for 3-legged OAuth flows. This URI receives
     # the redirect after user consent and must be hosted by your application.
     continue_uri=CONTINUE_URI
@@ -103,14 +104,14 @@ toolset = McpToolset(
       `GcpAuthProviderScheme`에 정의한 `continue_uri` callback으로 redirect합니다.
       에이전트 애플리케이션 서비스는 이 redirect를 구현해야 합니다. 발급을 마무리하려면
       handler가 credentials endpoint로 POST 요청을 제출해야 합니다.
-      `https://iamconnectorcredentials.googleapis.com/v1alpha/{connector_name}/credentials:finalize`.
+      `https://agentidentitycredentials.googleapis.com/v1/{auth_provider_name}/credentials:finalize`.
     - 자격 증명 finalization이 성공하면 웹 애플리케이션은 FunctionResponse를 보내
       에이전트를 재개해야 합니다. 샘플 구현은
-      [sample code](https://docs.cloud.google.com/iam/docs/auth-with-3lo#resume-conversation)를
+      [sample code](https://docs.cloud.google.com/iam/docs/auth-with-3lo-v2#resume-conversation)를
       참고하세요. 네이티브 사용자 동의 흐름과 달리 에이전트를 재개하는 데 authorization
       code가 필요하지 않습니다.
     - 자세한 내용은
-      [sample handler implementation](https://docs.cloud.google.com/iam/docs/auth-with-3lo#validation-endpoint)을
+      [sample handler implementation](https://docs.cloud.google.com/iam/docs/auth-with-3lo-v2#validation-endpoint)을
       참고하세요.
 - **대화 재개**: 동의 흐름의 성공 여부와 관계없이, 에이전트 앱은 conversation turn을
   완료하기 위해 에이전트를 재개해야 합니다. ADK는 동의가 성공적으로 완료되었는지
@@ -119,7 +120,7 @@ toolset = McpToolset(
 ## 리소스
 
 - [Google Cloud Agent Identity Overview](https://docs.cloud.google.com/iam/docs/agent-identity-overview)
-- [Google Cloud Agent Identity를 사용한 2-legged OAuth](https://docs.cloud.google.com/iam/docs/auth-with-2lo)
-- [Google Cloud Agent Identity를 사용한 3-legged OAuth](https://docs.cloud.google.com/iam/docs/auth-with-3lo)
-- [Google Cloud Agent Identity를 사용한 API key auth](https://docs.cloud.google.com/iam/docs/auth-with-api-key)
-- [Sample agent code](https://github.com/google/adk-python/tree/main/contributing/samples/gcp_auth)
+- [Google Cloud Agent Identity를 사용한 2-legged OAuth](https://docs.cloud.google.com/iam/docs/auth-with-2lo-v2)
+- [Google Cloud Agent Identity를 사용한 3-legged OAuth](https://docs.cloud.google.com/iam/docs/auth-with-3lo-v2)
+- [Google Cloud Agent Identity를 사용한 API key auth](https://docs.cloud.google.com/iam/docs/auth-with-api-key-v2)
+- [Sample agent code](https://github.com/google/adk-python/tree/main/src/google/adk/integrations/agent_identity)

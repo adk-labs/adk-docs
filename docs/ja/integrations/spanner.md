@@ -26,6 +26,7 @@ catalog_tags: ["data","google"]
 - **`list_named_schemas`**: Spanner データベースの名前付きスキーマを取得します。
 - **`get_table_schema`**: Spanner データベースのテーブル スキーマとメタデータ情報を取得します。
 - **`execute_sql`**: Spanner データベースで SQL クエリを実行し、結果を取得します。
+- **`query_result_mode`**: `execute_sql` ツールがデータベース クエリ結果を返す形式を決定します。このパラメータを `QueryResultMode.DICT_LIST` に設定すると、結果をディクショナリのリストとして返すようにツールが構成されます。`QueryResultMode` は `google.adk.tools.spanner.settings` からインポートします。
 - **`similarity_search`**: テキスト クエリを使用して Spanner で類似性検索を実行します。
 
 ## エージェントでの使用

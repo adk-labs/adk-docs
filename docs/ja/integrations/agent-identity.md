@@ -33,9 +33,9 @@ catalog_tags: ["google"]
 
 - [Google Cloud プロジェクト](https://cloud.google.com/resource-manager/docs/creating-managing-projects)
 - プロジェクトに作成された 1 つ以上の Agent Identity
-  [auth provider](https://cloud.google.com/iam/docs/manage-auth-providers)
+  [auth provider](https://cloud.google.com/iam/docs/manage-auth-providers-v2)
 - 呼び出し元 ID に
-  [`iamconnectors.user`](https://docs.cloud.google.com/iam/docs/roles-permissions/iamconnectors#iamconnectors.user)
+  [`agentidentity.user`](https://docs.cloud.google.com/iam/docs/roles-permissions/agentidentity#agentidentity.user)
   ロール、または同等の権限が必要です
 - [Application Default Credentials](https://docs.cloud.google.com/docs/authentication/application-default-credentials)
   (`gcloud auth application-default login`) による認証設定
@@ -80,7 +80,8 @@ from google.adk.integrations.agent_identity import GcpAuthProviderScheme
 from google.adk.tools.mcp import McpToolset
 
 auth_scheme = GcpAuthProviderScheme(
-    name="projects/PROJECT_ID/locations/LOCATION/connectors/AUTH_PROVIDER_NAME",
+    # 従来の V1 API を使用する場合、リソース名には 'authProviders' ではなく 'connectors' を使用します: projects/.../connectors/...
+    name="projects/PROJECT_ID/locations/LOCATION/authProviders/AUTH_PROVIDER_NAME",
     # continue_uri is only needed for 3-legged OAuth flows. This URI receives
     # the redirect after user consent and must be hosted by your application.
     continue_uri=CONTINUE_URI
@@ -104,14 +105,14 @@ toolset = McpToolset(
       redirect します。エージェントアプリケーションサービスはこの redirect を実装する
       必要があります。発行を完了するには、handler が credentials endpoint に POST
       リクエストを送信する必要があります。
-      `https://iamconnectorcredentials.googleapis.com/v1alpha/{connector_name}/credentials:finalize`.
+      `https://agentidentitycredentials.googleapis.com/v1/{auth_provider_name}/credentials:finalize`.
     - 認証情報の finalization が成功したら、Web アプリケーションは FunctionResponse を
       送信してエージェントを再開する必要があります。サンプル実装は
-      [sample code](https://docs.cloud.google.com/iam/docs/auth-with-3lo#resume-conversation)を
+      [sample code](https://docs.cloud.google.com/iam/docs/auth-with-3lo-v2#resume-conversation)を
       参照してください。ネイティブなユーザー同意フローとは異なり、エージェントを再開する
       ために authorization code は不要です。
     - 詳細は
-      [sample handler implementation](https://docs.cloud.google.com/iam/docs/auth-with-3lo#validation-endpoint)を
+      [sample handler implementation](https://docs.cloud.google.com/iam/docs/auth-with-3lo-v2#validation-endpoint)を
       参照してください。
 - **会話の再開**: 同意フローが成功したかどうかに関係なく、エージェントアプリは
   conversation turn を完了するためにエージェントを再開する必要があります。ADK は同意が
@@ -120,7 +121,7 @@ toolset = McpToolset(
 ## リソース
 
 - [Google Cloud Agent Identity Overview](https://docs.cloud.google.com/iam/docs/agent-identity-overview)
-- [Google Cloud Agent Identity を使用した 2-legged OAuth](https://docs.cloud.google.com/iam/docs/auth-with-2lo)
-- [Google Cloud Agent Identity を使用した 3-legged OAuth](https://docs.cloud.google.com/iam/docs/auth-with-3lo)
-- [Google Cloud Agent Identity を使用した API key auth](https://docs.cloud.google.com/iam/docs/auth-with-api-key)
-- [Sample agent code](https://github.com/google/adk-python/tree/main/contributing/samples/gcp_auth)
+- [Google Cloud Agent Identity を使用した 2-legged OAuth](https://docs.cloud.google.com/iam/docs/auth-with-2lo-v2)
+- [Google Cloud Agent Identity を使用した 3-legged OAuth](https://docs.cloud.google.com/iam/docs/auth-with-3lo-v2)
+- [Google Cloud Agent Identity を使用した API key auth](https://docs.cloud.google.com/iam/docs/auth-with-api-key-v2)
+- [Sample agent code](https://github.com/google/adk-python/tree/main/src/google/adk/integrations/agent_identity)

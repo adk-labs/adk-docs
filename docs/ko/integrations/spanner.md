@@ -26,6 +26,7 @@ catalog_tags: ["data","google"]
 - **`list_named_schemas`**: Spanner 데이터베이스의 명명된 스키마(named schema)를 가져옵니다.
 - **`get_table_schema`**: Spanner 데이터베이스 테이블 스키마 및 메타데이터 정보를 가져옵니다.
 - **`execute_sql`**: Spanner 데이터베이스에서 SQL 쿼리를 실행하고 결과를 가져옵니다.
+- **`query_result_mode`**: `execute_sql` 도구가 데이터베이스 쿼리 결과를 반환하는 형식을 결정합니다. 이 매개변수를 `QueryResultMode.DICT_LIST`로 설정하면 결과를 딕셔너리 목록으로 반환하도록 도구를 구성합니다. `google.adk.tools.spanner.settings`에서 `QueryResultMode`를 임포트하세요.
 - **`similarity_search`**: 텍스트 쿼리를 사용하여 Spanner에서 유사도 검색을 수행합니다.
 
 ## 에이전트와 함께 사용

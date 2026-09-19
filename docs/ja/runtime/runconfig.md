@@ -74,7 +74,7 @@ Long-running session では、どれだけの history を load するか、conte
 制御できます。
 
 - `get_session_config`: session を load するときに取得する event を制限します。 invocation ごとに
-  event history 全体を load しないよう、`num_recent_events` または `after_timestamp` を使います。
+  event history 全体を load しないよう、`num_recent_events` または `after_timestamp` を使います。これらのフィルターは保存されたイベントを削除することなく、読み込まれるビューのみを制限します。新しいイベントは保存された履歴に追加され、読み込まれたビューから除外された過去のイベントもそのまま保持されます。
 - `context_window_compression`: LLM input の context window compression を有効にします。
   session が model context limit に近づく場合に便利です。
 - `model_input_context`: 今回の呼び出しにのみ LLM リクエストに追加される `types.Content` のリスト。ランナーはこれをセッションに永続化しないため、会話履歴を変更せずにターンごとのコンテキストを提供できます。

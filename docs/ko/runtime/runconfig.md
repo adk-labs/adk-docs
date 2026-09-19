@@ -75,7 +75,7 @@ Long-running session에서는 얼마나 많은 history를 load할지, context wi
 
 - `get_session_config`: session을 load할 때 가져오는 event를 제한합니다. 매 invocation마다
   전체 event history를 load하지 않도록 `num_recent_events` 또는 `after_timestamp`를
-  사용합니다.
+  사용합니다. 이러한 필터는 저장된 이벤트를 삭제하지 않고 로드되는 뷰만 제한합니다. 새 이벤트는 저장된 히스토리에 추가되며, 로드된 뷰에서 제외된 이전 이벤트는 그대로 보존됩니다.
 - `context_window_compression`: LLM input에 대한 context window compression을 활성화합니다.
   session이 model context limit에 가까워질 때 유용합니다.
 - `model_input_context`: 이번 호출에 대해서만 LLM 요청에 추가되는 `types.Content` 목록입니다. 러너는 이를 세션에 유지하지 않으므로 대화 기록을 변경하지 않고 턴별 컨텍스트를 제공할 수 있습니다.

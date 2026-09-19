@@ -48,6 +48,55 @@ ADK のメトリクスに対するアプローチは、軽量で標準化され�
 | **`gen_ai.client.operation.duration`** | Histogram (seconds) | 単一モデルの `generate_content` 呼び出しのレイテンシ。 | `gen_ai.agent.name`, `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`, `error.type` |
 | **`gen_ai.client.token.usage`** | Histogram (tokens) | モデル呼び出しごとのトークン消費量。`gen_ai.token.type` により入力と出力に分割されます。 | `gen_ai.agent.name`, `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`, `gen_ai.token.type` |
 
+### 実験的メトリクス
+
+ADK は `adk.experimental.*` ネームスペースで追加のテレメトリを出力します。これには以下のメトリクスだけでなくスパン属性も含まれます。これらはいずれも OpenTelemetry のセマンティック規約の一部ではないため、名前、属性、意味がリリース間で変更される可能性があります。自由に探索できますが、名前が確定するまではこれらに依存して構築した長期間運用する仕組みを再確認する必要が生じる可能性があることに留意してください。
+
+以下のメトリクスは、`gen_ai.client.*` が測定する単一のモデル呼び出しよりも一段階粒度の高い、エージェント呼び出し全体またはワークフロー全体のトークン消費量と呼び出し回数を集計します。これにより、モデル呼び出しを自分で合算することなく 1 ターンのコストを把握できます。
+
+これらはデフォルトで無効になっています。有効にするには環境変数を設定します:
+
+```bash
+export ADK_EXPERIMENTAL_TELEMETRY=true
+```
+
+リクエストごとにオプトインすることも可能で、環境変数よりも優先されます:
+
+```python
+from google.adk.agents.run_config import RunConfig
+from google.adk.telemetry import TelemetryConfig
+
+run_config = RunConfig(
+    telemetry=TelemetryConfig(adk_experimental_telemetry_opt_in=True)
+)
+```
+
+どちらも設定されていない場合、以下のメトリクスは記録されません。
+
+8 つの `invoke_workflow` 行にはもう 1 つ設定が必要です: Vertex AI Agent Engine ではデフォルトで有効、それ以外の環境では無効になっているテレメトリスキーマ v2 です。他の環境では `ADK_TELEMETRY_SCHEMA_VERSION_OPT_IN=2` を設定してください。設定しない場合、それらの行は空のままになります。`invoke_agent` 行は影響を受けず、`Workflow` エンジン上に構築されたアプリはどちらのバージョンでもノードごとのデータポイントを記録します。
+
+| メトリクス名 | タイプ | 説明 | 主要な属性（次元） |
+| :--- | :--- | :--- | :--- |
+| **`adk.experimental.invoke_agent.input_tokens`** | Histogram (tokens) | サーバー側ツール結果やキャッシュされたプロンプトトークンを含め、1 回のエージェント呼び出しで合算された入力（プロンプト）トークン。 | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.output_tokens`** | Histogram (tokens) | 推論トークンおよびツール呼び出しの出力に消費されたトークンを含め、1 回のエージェント呼び出しで合算された出力（補完）トークン。 | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.total_tokens`** | Histogram (tokens) | 1 回のエージェント呼び出しの入力トークンと出力トークンの合計。 | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.cache_read.input_tokens`** | Histogram (tokens) | プロバイダー管理キャッシュから提供された入力トークン（1 回のエージェント呼び出しで合算）。 | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.reasoning.output_tokens`** | Histogram (tokens) | 推論（思考の連鎖 / 拡張思考）に消費された出力トークン（1 回のエージェント呼び出しで合算）。 | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.tool.input_tokens`** | Histogram (tokens) | コード実行や検索グラウンディングなど、単一リクエスト内でモデルが自身にフィードバックしたサーバー側ツール結果の入力トークン。クライアント側の関数ツールでは 0。 | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_workflow.input_tokens`** | Histogram (tokens) | 1 回のワークフロー呼び出しで実行された全エージェントにわたる上記の `input_tokens` の合算。 | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+| **`adk.experimental.invoke_workflow.output_tokens`** | Histogram (tokens) | 1 回のワークフロー呼び出しで実行された全エージェントにわたる上記の `output_tokens` の合算。 | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+| **`adk.experimental.invoke_workflow.total_tokens`** | Histogram (tokens) | 1 回のワークフロー呼び出しで実行された全エージェントにわたる上記の `total_tokens` の合算。 | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+| **`adk.experimental.invoke_workflow.cache_read.input_tokens`** | Histogram (tokens) | 1 回のワークフロー呼び出しで実行された全エージェントにわたる上記の `cache_read.input_tokens` の合算。 | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+| **`adk.experimental.invoke_workflow.reasoning.output_tokens`** | Histogram (tokens) | 1 回のワークフロー呼び出しで実行された全エージェントにわたる上記の `reasoning.output_tokens` の合算。 | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+| **`adk.experimental.invoke_workflow.tool.input_tokens`** | Histogram (tokens) | 1 回のワークフロー呼び出しで実行された全エージェントにわたる上記の `tool.input_tokens` の合算。 | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+| **`adk.experimental.invoke_workflow.inference_calls`** | Histogram (count) | 1 回のワークフロー呼び出し全体で行われた推論（モデル）呼び出しの回数。 | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+| **`adk.experimental.invoke_workflow.tool_calls`** | Histogram (count) | 1 回のワークフロー呼び出し全体で行われたツール呼び出しの回数。 | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (ネストされたワークフローのみ) |
+
+!!! warning
+    ネストされたワークフローは独自のデータポイントを記録し、その合計はそれを囲む各親ワークフローにも組み込まれるため、すべてのデータポイントで `invoke_workflow` メトリクスを合算すると二重カウントになります。
+
+`gen_ai.workflow.nested` 属性はネストされたワークフローにのみ設定されるため、これを除外すると最も外側のワークフローのみが残り、そのデータポイントがターン全体をカバーします。ワークフロー全体にわたる値は単一のエージェントに帰属させることができないため、ワークフローメトリクスにはエージェントの次元がありません。代わりに 2 つの名前を持ちます: `gen_ai.workflow.name` は `gen_ai.invoke_workflow.duration` と結合され、`adk.experimental.root_agent.name` はアプリを識別します（ターンがサブエージェントに入ると 2 つの名前は一致しなくなります）。
+
 ---
 
 ## メトリクスエクスポートの設定

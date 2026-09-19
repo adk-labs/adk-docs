@@ -55,6 +55,7 @@ ADK はライブエージェントと音声エージェントを構築するた�
 
     - [評価](evaluation.md) — リリース前に音声会話をスコアリング
     - [カスタムサーバーの構築](custom-server.md)
+    - [LiveKit](../integrations/livekit.md) — カスタムサーバー不要の WebRTC および電話通信
     - [サポート対象モデル](models.md)
 
 </div>

@@ -45,6 +45,55 @@ ADK의 메트릭 접근 방식은 가볍고 표준화되어 있으며, 선택한
 | **`gen_ai.client.operation.duration`** | Histogram (seconds) | 단일 모델 `generate_content` 호출의 지연 시간입니다. | `gen_ai.agent.name`, `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`, `error.type` |
 | **`gen_ai.client.token.usage`** | Histogram (tokens) | 모델 호출당 토큰 소비량으로, `gen_ai.token.type`에 의해 입력과 출력으로 나뉩니다. | `gen_ai.agent.name`, `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, `gen_ai.response.model`, `gen_ai.token.type` |
 
+### 실험적 메트릭
+
+ADK는 `adk.experimental.*` 네임스페이스 아래에서 추가 텔레메트리를 방출하며, 이는 아래 메트릭뿐만 아니라 스팬 속성(span attributes)도 포함합니다. 이 항목들은 아직 OpenTelemetry 시맨틱 규칙의 일부가 아니므로 릴리스 간에 이름, 속성, 의미가 변경될 수 있습니다. 자유롭게 탐색해 보되, 이름이 확정되기 전까지 이를 기반으로 구축된 장기 실행 구성은 재검토가 필요할 수 있음을 염두에 두세요.
+
+아래 메트릭은 단일 모델 호출을 측정하는 `gen_ai.client.*`보다 한 단계 높은 수준인 에이전트 호출 전체 또는 워크플로 전체에 걸쳐 토큰 소비량과 호출 횟수를 집계하므로, 모델 호출을 직접 합산하지 않고도 단일 턴의 비용을 파악할 수 있습니다.
+
+이 메트릭들은 기본적으로 비활성화되어 있습니다. 활성화하려면 환경 변수를 설정하세요:
+
+```bash
+export ADK_EXPERIMENTAL_TELEMETRY=true
+```
+
+환경 변수보다 우선 적용되는 요청별 옵트인도 가능합니다:
+
+```python
+from google.adk.agents.run_config import RunConfig
+from google.adk.telemetry import TelemetryConfig
+
+run_config = RunConfig(
+    telemetry=TelemetryConfig(adk_experimental_telemetry_opt_in=True)
+)
+```
+
+둘 다 설정되지 않은 경우 아래 메트릭은 기록되지 않습니다.
+
+8개의 `invoke_workflow` 행은 한 가지 추가 사항이 필요합니다: Vertex AI Agent Engine에서는 기본값이고 그 외 환경에서는 꺼져 있는 텔레메트리 스키마 v2입니다. 다른 환경에서는 `ADK_TELEMETRY_SCHEMA_VERSION_OPT_IN=2`를 설정해야 하며, 그렇지 않으면 해당 행은 비어 있게 됩니다. `invoke_agent` 행은 영향을 받지 않으며, `Workflow` 엔진으로 구축된 앱은 두 버전 모두에서 노드별 데이터 포인트를 기록합니다.
+
+| 메트릭 이름 | 유형 | 설명 | 주요 속성(차원) |
+| :--- | :--- | :--- | :--- |
+| **`adk.experimental.invoke_agent.input_tokens`** | Histogram (tokens) | 서버 측 도구 결과 및 캐시된 프롬프트 토큰을 포함하여, 단일 에이전트 호출에 걸쳐 합산된 입력(프롬프트) 토큰입니다. | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.output_tokens`** | Histogram (tokens) | 추론 토큰 및 도구 호출 생성에 사용된 토큰을 포함하여, 단일 에이전트 호출에 걸쳐 합산된 출력(완성) 토큰입니다. | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.total_tokens`** | Histogram (tokens) | 단일 에이전트 호출에 대한 입력 및 출력 토큰의 합계입니다. | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.cache_read.input_tokens`** | Histogram (tokens) | 제공업체 관리 캐시에서 제공된 입력 토큰으로, 단일 에이전트 호출에 걸쳐 합산됩니다. | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.reasoning.output_tokens`** | Histogram (tokens) | 추론(생각의 사슬 / 확장된 생각)에 사용된 출력 토큰으로, 단일 에이전트 호출에 걸쳐 합산됩니다. | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.tool.input_tokens`** | Histogram (tokens) | 코드 실행이나 검색 접지(grounding)와 같이 단일 요청 내에서 모델이 다시 입력으로 피드백한 서버 측 도구 결과의 입력 토큰입니다. 클라이언트 측 함수 도구의 경우 0입니다. | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_workflow.input_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `input_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+| **`adk.experimental.invoke_workflow.output_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `output_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+| **`adk.experimental.invoke_workflow.total_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `total_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+| **`adk.experimental.invoke_workflow.cache_read.input_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `cache_read.input_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+| **`adk.experimental.invoke_workflow.reasoning.output_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `reasoning.output_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+| **`adk.experimental.invoke_workflow.tool.input_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `tool.input_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+| **`adk.experimental.invoke_workflow.inference_calls`** | Histogram (count) | 단일 워크플로 호출 전반에서 수행된 추론(모델) 호출 횟수입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+| **`adk.experimental.invoke_workflow.tool_calls`** | Histogram (count) | 단일 워크플로 호출 전반에서 수행된 도구 호출 횟수입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
+
+!!! warning
+    중첩 워크플로는 자체 데이터 포인트를 기록하며, 해당 총계는 이를 감싸는 모든 상위 워크플로에도 합산되므로 모든 데이터 포인트에 걸쳐 `invoke_workflow` 메트릭을 합산하면 이중 계산이 발생합니다.
+
+`gen_ai.workflow.nested` 속성은 중첩 워크플로에만 설정되므로, 이를 제외하면 가장 바깥쪽 워크플로만 남아 전체 턴을 포함하는 데이터 포인트를 얻을 수 있습니다. 워크플로 전체에 걸친 값은 단일 에이전트에 귀속될 수 없으므로 워크플로 메트릭에는 에이전트 차원이 없습니다. 대신 두 가지 이름을 갖습니다: `gen_ai.workflow.name`은 `gen_ai.invoke_workflow.duration`과 조인되며, `adk.experimental.root_agent.name`은 앱을 식별하므로 턴이 서브에이전트로 진입할 때 두 이름이 달라집니다.
+
 ---
 
 ## 메트릭 내보내기 설정

@@ -87,7 +87,7 @@ ADK 프로젝트를 Agent Runtime에 배포할 때 몇 가지 추가 파일이 �
     당신의 프로젝트.
 
     ```shell
-    agents-cli scaffold enhance --deployment-target agent_engine
+    agents-cli scaffold enhance --deployment-target agent_runtime
     ```
 
 1. Agents CLI 도구의 지침을 따릅니다. 일반적으로 수락할 수 있습니다.

@@ -478,14 +478,18 @@ export const rootAgent = new LlmAgent({
   description: '旅行計画を支援する便利なアシスタントです。',
   tools: [
     new MCPToolset({
-      // リモートの Grounding Lite サービスには、
-      // Python の StreamableHTTPConnectionParams に相当する SseConnectionParams を使います。
-      type: 'SseConnectionParams',
+      // Grounding Lite はストリーマブル HTTP 経由でアクセスするリモート MCP サーバーであるため、
+      // 接続タイプには StreamableHTTPConnectionParams を使用します。カスタムヘッダーは
+      // transportOptions.requestInit を介してすべてのリクエストに渡されます。トランスポート自身が
+      // Accept と Content-Type を設定するため、ここでは API キーのみを指定すれば十分です。
+      type: 'StreamableHTTPConnectionParams',
       url: 'https://mapstools.googleapis.com/mcp',
-      headers: {
-        'X-Goog-Api-Key': googleMapsApiKey,
-        'Content-Type': 'application/json',
-        Accept: 'application/json, text/event-stream',
+      transportOptions: {
+        requestInit: {
+          headers: {
+            'X-Goog-Api-Key': googleMapsApiKey,
+          },
+        },
       },
     }),
   ],
@@ -1281,5 +1285,3 @@ McpToolset(
 *   [Model Context Protocol ドキュメント](https://modelcontextprotocol.io/ )
 *   [MCP 仕様](https://modelcontextprotocol.io/specification/)
 *   [MCP Python SDK と例](https://github.com/modelcontextprotocol/)
-
-```

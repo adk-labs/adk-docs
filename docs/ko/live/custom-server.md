@@ -145,6 +145,9 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str, session_id: str
 
 서버가 WebSocket을 노출하므로 클라이언트가 이에 연결해야 합니다. 개발 단계에서는 `adk web`이 이 역할을 담당합니다. 프로덕션에서는 브라우저 앱, 모바일 앱, 또는 전화/WebRTC 브릿지와 같이 개발자가 직접 작성한 클라이언트가 됩니다. 어떤 것을 구축하든 동일한 규약을 상속하므로 `adk web`이 수행하는 작업과 제한 범위를 정확히 이해하는 것이 중요합니다.
 
+WebRTC 또는 전화 브릿지가 필요한 경우 ADK에서 기본 제공합니다.
+[LiveKit 러너](../integrations/livekit.md)는 라이브 에이전트를 LiveKit 룸에 제공하여 미디어 캡처, 재생, 끼어들기(barge-in), SIP를 처리하므로 커스텀 서버를 직접 작성할 필요가 없습니다.
+
 **`adk web`이 자동으로 처리하는 작업:**
 
 | 기능 | 내장 클라이언트가 수행하는 작업 |

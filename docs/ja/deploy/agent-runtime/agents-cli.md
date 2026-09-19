@@ -87,7 +87,7 @@ ADK プロジェクトをエージェント ランタイムにデプロイする
     あなたのプロジェクト。
 
     ```shell
-    agents-cli scaffold enhance --deployment-target agent_engine
+    agents-cli scaffold enhance --deployment-target agent_runtime
     ```
 
 1. エージェント CLI ツールの指示に従います。一般的には受け付けてもらえますが、

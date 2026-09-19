@@ -54,6 +54,8 @@ MCP サーバーを使うようにコーディングツールを設定すれば�
           "args": [
             "--from",
             "mcpdoc",
+            "--with",
+            "mcp<2",
             "mcpdoc",
             "--urls",
             "AgentDevelopmentKit:https://adk.dev/llms.txt",
@@ -71,7 +73,7 @@ MCP サーバーを使うようにコーディングツールを設定すれば�
 MCP サーバーを追加するには、次を実行します。
 
 ```bash
-claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls AgentDevelopmentKit:https://adk.dev/llms.txt --transport stdio
+claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc --with "mcp<2" mcpdoc --urls AgentDevelopmentKit:https://adk.dev/llms.txt --transport stdio
 ```
 
 ### Cursor
@@ -91,6 +93,8 @@ claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls Age
           "args": [
             "--from",
             "mcpdoc",
+            "--with",
+            "mcp<2",
             "mcpdoc",
             "--urls",
             "AgentDevelopmentKit:https://adk.dev/llms.txt",
@@ -101,6 +105,9 @@ claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc mcpdoc --urls Age
       }
     }
     ```
+
+!!! note "MCP バージョンの設定"
+    `mcp<2` の制約設定により、`mcpdoc` が現在使用している MCP 1.x FastMCP API との互換性が維持されます。
 
 ### Other Tools
 

@@ -476,14 +476,19 @@ export const rootAgent = new LlmAgent({
   description: '여행 계획을 돕는 유용한 어시스턴트입니다.',
   tools: [
     new MCPToolset({
-      // 원격 Grounding Lite 서비스에는 Python의 StreamableHTTPConnectionParams와 같은 의미로
-      // SseConnectionParams를 사용해 연결합니다.
-      type: 'SseConnectionParams',
+      // Grounding Lite는 스트리밍 가능한 HTTP를 통해 연결되는 원격 MCP 서버이므로
+      // 연결 유형으로 StreamableHTTPConnectionParams를 사용합니다. 커스텀 헤더는
+      // transportOptions.requestInit을 통해 모든 요청에 전달되며,
+      // 전송 계층이 Accept 및 Content-Type을 자체적으로 설정하므로 여기서는
+      // API 키만 제공하면 됩니다.
+      type: 'StreamableHTTPConnectionParams',
       url: 'https://mapstools.googleapis.com/mcp',
-      headers: {
-        'X-Goog-Api-Key': googleMapsApiKey,
-        'Content-Type': 'application/json',
-        Accept: 'application/json, text/event-stream',
+      transportOptions: {
+        requestInit: {
+          headers: {
+            'X-Goog-Api-Key': googleMapsApiKey,
+          },
+        },
       },
     }),
   ],
