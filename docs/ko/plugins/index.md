@@ -32,6 +32,8 @@ ADK에는 에이전트 워크플로에 즉시 추가할 수 있는 여러 플러
     도구 실패를 추적하고 도구 요청을 지능적으로 재시도합니다.
 *   [**BigQuery 분석**](/ko/observability/bigquery-agent-analytics/):
     BigQuery를 사용하여 에이전트 로깅 및 분석을 활성화합니다.
+*   [**Model Armor**](/ko/integrations/model-armor/):
+    Google Cloud Model Armor 템플릿을 기반으로 사용자 입력 및 모델 출력을 필터링합니다.
 *   [**컨텍스트 필터**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/context_filter_plugin.py):
     생성형 AI 컨텍스트를 필터링하여 크기를 줄입니다.
 *   [**전역 지침**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/global_instruction_plugin.py):

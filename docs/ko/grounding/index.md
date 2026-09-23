@@ -48,7 +48,7 @@ ADK는 여러 그라운딩 방식을 지원합니다.
 
     주제를 인용이 포함된 종합 보고서로 변환하는 프로덕션 준비형 풀스택 리서치 에이전트입니다. 계획 승인에 human-in-the-loop를 사용하고, 반복 검색 정제와 계획/조사/비평/작성용 멀티 에이전트 구조를 갖춥니다.
 
-    - [Deep Search Agent](https://github.com/google/adk-samples/tree/main/python/agents/deep-search)
+    - [Deep Search Agent](https://github.com/google/adk-samples/tree/main/core/python/deep-search)
 
 -   :material-file-document-multiple: **RAG Agent**
 

@@ -48,7 +48,7 @@ ADK は複数のグラウンディング手法をサポートしています。
 
     トピックを引用付きの包括的なレポートへ変換する、本番対応のフルスタック リサーチ エージェントです。計画承認に human-in-the-loop を使い、反復的な検索改善と、計画・調査・批評・執筆を担当するマルチエージェント構成を備えています。
 
-    - [Deep Search Agent](https://github.com/google/adk-samples/tree/main/python/agents/deep-search)
+    - [Deep Search Agent](https://github.com/google/adk-samples/tree/main/core/python/deep-search)
 
 -   :material-file-document-multiple: **RAG Agent**
 

@@ -111,3 +111,4 @@ Google Cloud Agent Platform は、Gemini モデル、サードパーティ AI �
 * [BigQuery Toolset](/ja/integrations/bigquery/)
 * [BigQuery Agent Analytics](/ja/integrations/bigquery-agent-analytics/)
 * [Data Agent](/ja/integrations/data-agent/)
+* [Model Armor](/ja/integrations/model-armor/)

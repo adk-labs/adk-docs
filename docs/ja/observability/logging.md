@@ -1,266 +1,412 @@
-# エージェント開発キット（ADK）におけるロギング
+# エージェントのアクティビティロギング
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-エージェント開発キット（ADK）は、Pythonの標準`logging`モジュールを使用して、柔軟かつ強力なロギング機能を提供します。これらのログの設定方法と解釈を理解することは、エージェントの振る舞いを監視し、問題を効果的にデバッグするために非常に重要です。
+Agent Development Kit（ADK）は、エージェントの動作を監視し、問題を効果的にデバッグするための柔軟で強力なロギング機能を提供します。
 
 ## ロギングの思想
 
 ADKのロギングに対するアプローチは、デフォルトで過度に冗長になることなく、詳細な診断情報を提供することです。アプリケーション開発者が設定できるように設計されており、開発環境であれ本番環境であれ、特定のニーズに合わせてログ出力を調整できます。
 
-- **標準ライブラリ:** 標準の`logging`ライブラリを使用しているため、これと互換性のある任意の設定やハンドラはADKでも機能します。
-- **階層的なロガー:** ロガーはモジュールパスに基づいて階層的に命名されます（例: `google_adk.google.adk.agents.llm_agent`）。これにより、フレームワークのどの部分がログを生成するかをきめ細かく制御できます。
-- **ユーザーによる設定:** フレームワーク自体はロギングを設定しません。アプリケーションのエントリーポイントで目的のロギング設定を行うのは、フレームワークを使用する開発者の責任です。
+- **標準ライブラリの統合:** ADKはホスト言語の標準ロギング機能（Pythonの `logging` モジュール、Goの `log` パッケージなど）を使用します。
+- **構造化されたGenAIロギング:** ADKはOpenTelemetryを使用してGenAIのリクエストとレスポンスに関する構造化イベントを記録し、クラウド環境での高度な監視とデバッグを可能にします。
+- **ユーザーによる設定:** ADKはデフォルト設定やCLIツールとの統合を提供しますが、特定の環境に合わせてロギングを設定することは、最終的にはアプリケーション開発者の責任です。
 
-## ロギングの設定方法
+## ロギングスキーマ
 
-メインのアプリケーションスクリプト（例: `main.py`）で、エージェントを初期化して実行する前にロギングを設定できます。最も簡単な方法は`logging.basicConfig`を使用することです。
+ADKは標準ライブラリ機能とOpenTelemetryによる構造化GenAIイベントを使用してログを出力します。
 
-### 設定例
+### 構造化GenAIログ
 
-`DEBUG`レベルのメッセージを含む詳細なロギングを有効にするには、スクリプトの先頭に以下を追加します。
+OpenTelemetryを介して出力される構造化GenAIログは、[Semantic Conventions for GenAI](https://github.com/open-telemetry/semantic-conventions/blob/main/docs/gen-ai/gen-ai-events.md) に準拠しています。
 
-```python
-import logging
+セキュリティ上の理由から、デフォルトではログ内のプロンプト内容は省略（elide）されます。環境変数またはプログラムによる設定を使用して、プロンプトのロギングを有効にできます。`adk web` については [ADK Webでのプロンプト内容のキャプチャ](#adk-webでのプロンプト内容のキャプチャ) を、コードでの設定については [プログラムによるプロンプト内容のキャプチャ](#プロンプト内容のキャプチャ) をご覧ください。
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(levelname)s - %(name)s - %(message)s'
-)
+### ログレベル（Python）
 
-# ADKエージェントのコードはここに続きます...
-# from google.adk.agents import LlmAgent
-# ...
-```
+次の表は、標準ロガーを使用した場合にPythonの各レベルで記録される内容を示しています。
 
-### ADK CLIを使用したロギング設定
+| レベル | 説明 | 記録される情報の種類 |
+| :--- | :--- | :--- |
+| **`DEBUG`** | **デバッグに不可欠。** きめ細かい診断情報を提供する最も詳細なレベル。 | <ul><li>**完全なLLMプロンプト:** システム指示、履歴、ツールを含む、言語モデルに送信された完全なリクエスト。</li><li>サービスからの詳細なAPIレスポンス。</li><li>内部状態遷移と変数の値。</li></ul> |
+| **`INFO`** | エージェントのライフサイクルに関する一般情報。 | <ul><li>エージェントの初期化と起動。</li><li>セッションの作成および削除イベント。</li><li>名前と引数を含むツールの実行。</li></ul> |
+| **`WARNING`** | 潜在的な問題や非推奨機能の使用を示します。エージェントは機能し続けますが、注意が必要な場合があります。 | <ul><li>非推奨のメソッドまたはパラメータの使用。</li><li>システムが回復した非クリティカルなエラー。</li></ul> |
+| **`ERROR`** | 操作の完了を妨げた重大なエラー。 | <ul><li>外部サービス（LLM、セッションサービスなど）へのAPI呼び出しの失敗。</li><li>エージェント実行中の未処理の例外。</li><li>設定エラー。</li></ul> |
 
-ADKの組み込みWebサーバーやAPIサーバーを使用してエージェントを実行する場合、コマンドラインから直接ログの詳細度を簡単に制御できます。`adk web`、`adk api_server`、`adk deploy cloud_run`コマンドはすべて`--log_level`オプションを受け入れます。
+!!! note
+    本番環境では `INFO` または `WARNING` の使用をお勧めします。`DEBUG` ログは非常に冗長であり、機密情報が含まれる可能性があるため、問題を能動的にトラブルシューティングする場合にのみ有効にしてください。
 
-これにより、エージェントのソースコードを変更することなく、簡単にロギングレベルを設定できます。
+## ADK Webでのロギング
 
-> **注意:** コマンドラインでの設定は、ADKのロガーに対してプログラムによる設定（`logging.basicConfig`など）よりも常に優先されます。本番環境では`INFO`または`WARNING`を使用し、問題解決時のみ`DEBUG`を有効にすることが推奨されます。
+ADKの `adk web`、`adk api_server`、`adk deploy cloud_run`、`adk deploy gke` コマンドを使用してエージェントを実行する場合、ログの詳細度や出力先を制御できます。
 
-**`adk web`の使用例:**
+### ADK Webでのロギングレベル
 
-`DEBUG`レベルのロギングでWebサーバーを起動するには、次のように実行します。
+`DEBUG` レベルのロギングでWebサーバーを起動するには、次を実行します。
 
 ```bash
 adk web --log_level DEBUG path/to/your/agents_dir
 ```
 
-`--log_level`オプションで利用可能なログレベルは次のとおりです。
+`--log_level` オプションで使用可能なログレベルは、`DEBUG`、`INFO`（デフォルト）、`WARNING`、`ERROR`、`CRITICAL` です。
 
-- `DEBUG`
-- `INFO` (デフォルト)
-- `WARNING`
-- `ERROR`
-- `CRITICAL`
+### ADK Webでのプロンプト内容のキャプチャ
 
-> `-v`または`--verbose`を`--log_level DEBUG`のショートカットとして使用することもできます。
->
-> ```bash
-> adk web -v path/to/your/agents_dir
-> ```
-
-#### GCP エクスポート設定
-
-GCP エクスポートは `--otel_to_cloud` フラグで有効にできます。
-
-```bash
-adk web --otel_to_cloud path/to/your/agents_dir
-```
-
-### ログレベル
-
-ADKは標準のログレベルを使用してメッセージを分類します。設定されたレベルによって、どの情報が記録されるかが決まります。
-
-| レベル | 説明 | 記録される情報の種類 |
-| :--- | :--- | :--- |
-| **`DEBUG`** | **デバッグに不可欠です。** きめ細かい診断情報のための最も詳細なレベルです。 | <ul><li>**完全なLLMプロンプト:** システム指示、履歴、ツールを含む、言語モデルに送信された完全なリクエスト。</li><li>サービスからの詳細なAPIレスポンス。</li><li>内部の状態遷移と変数値。</li></ul> |
-| **`INFO`** | エージェントのライフサイクルに関する一般情報です。 | <ul><li>エージェントの初期化と起動。</li><li>セッションの作成および削除イベント。</li><li>ツール名と引数を含むツールの実行。</li></ul> |
-| **`WARNING`** | 潜在的な問題や非推奨機能の使用を示します。エージェントは機能し続けますが、注意が必要な場合があります。 | <ul><li>非推奨のメソッドやパラメータの使用。</li><li>システムが回復した、致命的ではないエラー。</li></ul> |
-| **`ERROR`** | ある操作の完了を妨げた深刻なエラーです。 | <ul><li>外部サービス（例：LLM、Session Service）へのAPI呼び出しの失敗。</li><li>エージェント実行中の未処理の例外。</li><li>設定エラー。</li></ul> |
-
-> **注意:** 本番環境では`INFO`または`WARNING`の使用を推奨します。`DEBUG`ログは非常に冗長であり、機密情報を含む可能性があるため、積極的に問題をトラブルシューティングしている場合にのみ有効にしてください。
-
-## Goでのロギング設定
-
-Goでは、ADKは一般的なイベントには標準の`log`パッケージを使用し、GenAIアクティビティのロギングにはOpenTelemetryを使用します。
-
-### OpenTelemetry ロギング
-
-ADK GoはOpenTelemetry(OTel)を使用してGenAIのリクエストとレスポンスを記録します。デフォルトでは、セキュリティ上の理由からプロンプト内容はログから省略されます。環境変数またはプログラムによる設定でプロンプトのロギングを有効にできます。
-
-#### プロンプトロギングを有効にする
-
-次の環境変数を`true`に設定すると、OTelログに完全なプロンプトが含まれます:
+セキュリティ上の理由から、デフォルトではログ内のプロンプト内容は省略されます。環境変数を使用してプロンプトのロギングを有効にできます。
 
 ```bash
 export OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true
 ```
 
-#### プログラムによる設定
+この変数で使用可能な値は、`NO_CONTENT`、`EVENT_ONLY`、`SPAN_ONLY`、`SPAN_AND_EVENT` です。ブール値の `true` または `1` は、出力されるログイベントにコンテンツを記録する `EVENT_ONLY` を意味します。これら4つ以外の値は `NO_CONTENT` にフォールバックします。推論スパン（inference span）にコンテンツを記録するには、`SPAN_ONLY` および `SPAN_AND_EVENT` で `OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental` も必要です。
 
-`google.golang.org/adk/v2/telemetry`パッケージを使用してtelemetry providerを設定できます。
+!!! warning
+    `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` 設定は、ユーザープロンプトとエージェントレスポンスの全内容をログに記録します。これはデバッグに役立ちますが、機密データや個人情報（PII）が取得される可能性があります。本番環境では、これを false に設定するか、適切なデータ処理ポリシーが整備されていることを確認してください。
 
-```go
-import (
-	"context"
-	"google.golang.org/adk/v2/telemetry"
-)
+### ADK WebでのOTLPエクスポート
 
-func main() {
-	ctx := context.Background()
-
-	// プロンプト内容のロギングを有効にしてテレメトリーを初期化します。
-	tp, err := telemetry.New(ctx,
-		telemetry.WithGenAICaptureMessageContent(true),
-		// GCPへのエクスポートには WithOtelToCloud(true) などのオプションも追加できます。
-	)
-	if err != nil {
-		// エラー処理
-	}
-	defer tp.Shutdown(ctx)
-
-	// グローバルなOTel providerとして登録します。
-	tp.SetGlobalOtelProviders()
-
-	// この後にADKエージェントのコードが続きます...
-}
-```
-
-### 一般的なロギング
-
-サーバー起動やHTTPリクエストのような一般的なイベントは、標準のGo `log`パッケージで記録されます。これらのログはデフォルトで`stderr`に書き込まれます。
-
-### ADK Goランチャーを使用したロギング設定
-
-ADK Goの`full.Launcher`または`prod.Launcher`を使用すると、テレメトリーは自動的に初期化されます。`-otel_to_cloud`フラグを使用してGCPエクスポートを有効にできます:
+OTLP互換のバックエンドにログをエクスポートするには、標準のOTel環境変数を設定します。
 
 ```bash
-go run main.go web -otel_to_cloud a2a
+export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="http://your-collector:4318/v1/logs"
+adk web path/to/your/agents_dir
 ```
 
----
+!!! note
+    ログに加えてメトリクスやトレースも同じエンドポイントに送信したい場合は、一般的な `OTEL_EXPORTER_OTLP_ENDPOINT` 環境変数を設定することもできます。
 
-## ログの読み方と理解
+### ADK WebでのGCPエクスポート設定
 
-`basicConfig`の例にある`format`文字列が、各ログメッセージの構造を決定します。
+`--otel_to_cloud` フラグを使用してGCPエクスポートを有効にできます。
 
-以下はログエントリのサンプルです。
-
-```text
-2025-07-08 11:22:33,456 - DEBUG - google_adk.google_adk.google.adk.models.google_llm - LLM Request: contents { ... }
+```bash
+adk web --otel_to_cloud path/to/your/agents_dir
 ```
 
-| ログセグメント                  | フォーマット指定子 | 意味                                           |
-| ------------------------------- | ---------------- | ---------------------------------------------- |
-| `2025-07-08 11:22:33,456`       | `%(asctime)s`    | タイムスタンプ                                 |
-| `DEBUG`                         | `%(levelname)s`  | 重要度レベル                                   |
-| `google_adk.google_adk.google.adk.models.google_llm`  | `%(name)s`       | ロガー名（ログを生成したモジュール）           |
-| `LLM Request: contents { ... }` | `%(message)s`    | 実際のログメッセージ                           |
+## プログラムによる設定
 
-ロガー名を読めば、ログの発生源をすぐに特定し、エージェントのアーキテクチャ内でのコンテキストを理解できます。
+プログラムによる設定では、システムレベルの診断や本番環境でのオブザーバビリティのために、独自のコードから基盤となるロギングフレームワークとOpenTelemetryエクスポーターを設定します。ADKは次のロギング機能を使用します。
 
-## ログを使用したデバッグ：実践例
+- **Python:** ADKは標準の `logging` モジュールと、構造化GenAIログ用のOpenTelemetryを使用します。
+- **Go:** ADKはOpenTelemetryの設定に `google.golang.org/adk/v2/telemetry` パッケージを使用し、一般的なイベントには標準の `log` パッケージを使用してデフォルトで `stderr` に出力します。
+- **Kotlin:** ADKは標準のJVMロギング機能（デフォルトはFlogger）を使用し、構造化GenAIログにOpenTelemetryを使用します。
 
-**シナリオ:** エージェントが期待される出力を生成せず、LLMに送信されるプロンプトが不正確か、情報が欠落している疑いがあります。
+### ロギングレベル
 
-**手順:**
+次のように、標準のロギングコントロールを使用してADKエージェントのロギングレベルを設定できます。
 
-1.  **DEBUGロギングの有効化:** `main.py`で、設定例に示したようにロギングレベルを`DEBUG`に設定します。
+=== "Python"
+
+    `DEBUG` レベルのメッセージを含む詳細なロギングを有効にするには、スクリプトの先頭に以下を追加します。
 
     ```python
+    import logging
+
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(name)s - %(message)s'
     )
     ```
 
-2.  **エージェントの実行:** 通常通りにエージェントのタスクを実行します。
+=== "Go"
 
-3.  **ログの確認:** コンソール出力から`google_adk.google.adk.models.google_llm`ロガーからの`LLM Request:`で始まるメッセージを探します。
+    一般的なイベント（サーバーの起動やHTTPリクエストなど）は、標準のGo `log` パッケージを使用してログに記録され、デフォルトで `stderr` に書き込まれます。
 
-    ```log
-    ...
-    2025-07-10 15:26:13,778 - DEBUG - google_adk.google_adk.google.adk.models.google_llm - Sending out request, model: gemini-flash-latest, backend: GoogleLLMVariant.GEMINI_API, stream: False
-    2025-07-10 15:26:13,778 - DEBUG - google_adk.google_adk.google.adk.models.google_llm - 
-    LLM Request:
-    -----------------------------------------------------------
-    System Instruction:
+=== "Kotlin"
 
-          You roll dice and answer questions about the outcome of the dice rolls.
-          You can roll dice of different sizes.
-          ...
-        
+    ADKは標準のJVMロギング機能（デフォルトはFlogger）を使用します。ログの詳細度を調整するには、`java.util.logging` や SLF4J などのJVMロガーバックエンドを設定します。
 
-    You are an agent. Your internal name is "hello_world_agent".
+### プロンプト内容のキャプチャ
 
-    The description about you is "hello world agent that can roll a dice of 8 sides and check prime numbers."
-    -----------------------------------------------------------
-    Contents:
-    {"parts":[{"text":"Roll a 6 sided dice"}],"role":"user"}
-    {"parts":[{"function_call":{"args":{"sides":6},"name":"roll_die"}}],"role":"model"}
-    {"parts":[{"function_response":{"name":"roll_die","response":{"result":2}}}],"role":"user"}
-    -----------------------------------------------------------
-    Functions:
-    roll_die: {'sides': {'type': <Type.INTEGER: 'INTEGER'>}} 
-    check_prime: {'nums': {'items': {'type': <Type.INTEGER: 'INTEGER'>}, 'type': <Type.ARRAY: 'ARRAY'>}} 
-    -----------------------------------------------------------
+=== "Python"
 
-    2025-07-10 15:26:13,779 - INFO - google_genai.models - AFC is enabled with max remote calls: 10.
-    2025-07-10 15:26:14,309 - INFO - google_adk.google_adk.google.adk.models.google_llm - 
-    LLM Response:
-    -----------------------------------------------------------
-    Text:
-    I have rolled a 6 sided die, and the result is 2.
-    ...
+    環境変数を設定することで、プログラムから完全なプロンプトロギングを有効にできます。
+
+    ```python
+    import os
+
+    os.environ["OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT"] = "true"
     ```
 
-4.  **プロンプトの分析:** 記録されたリクエストの`System Instruction`、`contents`、`functions`セクションを調べることで、以下を確認できます。
-    -   システム指示は正しいか？
-    -   会話履歴（`user`と`model`のターン）は正確か？
-    -   最新のユーザーからのクエリは含まれているか？
-    -   正しいツールがモデルに提供されているか？
-    -   モデルによってツールは正しく呼び出されているか？
-    -   モデルが応答するのにどれくらいの時間がかかっているか？
+    プロセス全体ではなく単一の実行（run）にコンテンツキャプチャのスコープを限定するには、環境変数ではなく `RunConfig.telemetry` を設定します。
 
-この詳細な出力により、不適切なプロンプトエンジニアリングからツールの定義に関する問題まで、幅広い問題をログファイルから直接診断できます。
+    ```python
+    from google.adk.agents.run_config import RunConfig
+    from google.adk.telemetry import ContentCapturingMode, TelemetryConfig
 
-### Kotlinのプログラムによる設定
+    run_config = RunConfig(
+        telemetry=TelemetryConfig(
+            capture_message_content=ContentCapturingMode.SPAN_AND_EVENT,
+        ),
+    )
+    ```
 
-Kotlinでは、ADKは標準のJVMロギング機能（デフォルトではFlogger）とOpenTelemetryを使用して、構造化されたGenAIログを提供します。
+=== "Go"
 
-#### プロンプト内容のキャプチャ
+    テレメトリを初期化する際に `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true` をエクスポートすることで、完全なプロンプトロギングを有効にできます。
 
-グローバルな`TelemetryConfig`を構成することで、完全なプロンプトロギングを有効にできます。
+    ```go
+    package main
 
-```kotlin
---8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:capture_content"
-```
+    import (
+    	"context"
+    	"os"
 
-#### プラグインによるアクティビティロギング
+    	"google.golang.org/adk/v2/telemetry"
+    )
 
-コンソールでエージェント活動（ユーザーメッセージ、モデルリクエスト/レスポンス、ツール呼び出し）の詳細ログを取得するには、`LoggingPlugin`を使用します。
+    func main() {
+    	ctx := context.Background()
 
-```kotlin
---8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:logging_plugin"
-```
+    	// OpenTelemetry環境変数を介してGenAIメッセージコンテンツのキャプチャを有効化
+    	os.Setenv("OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT", "true")
 
-#### ファイルへの完全なデバッグ キャプチャ
+    	tp, err := telemetry.New(ctx)
+    	if err != nil {
+    		// エラー処理
+    	}
+    	defer tp.Shutdown(ctx)
+    	tp.SetGlobalOtelProviders()
+    }
+    ```
+
+=== "Kotlin"
+
+    グローバルの `TelemetryConfig` を設定することで、完全なプロンプトロギングを有効にできます。
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:capture_content"
+    ```
+
+### OTLPエクスポート
+
+=== "Python"
+
+    OpenTelemetry Collector（またはOTLP互換バックエンド）にプログラムからログをエクスポートするには:
+
+    ```python
+    from google.adk.telemetry.setup import maybe_set_otel_providers
+    import os
+
+    os.environ["OTEL_EXPORTER_OTLP_LOGS_ENDPOINT"] = "http://your-collector:4318/v1/logs"
+    os.environ["OTEL_SERVICE_NAME"] = "your-adk-agent"
+    os.environ["OTEL_RESOURCE_ATTRIBUTES"] = "key1=value1,key2=value2"
+    maybe_set_otel_providers()
+    ```
+
+=== "Go"
+
+    OTLP互換バックエンドにログをエクスポートするには、`OTEL_EXPORTER_OTLP_ENDPOINT` や `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` などの標準OpenTelemetry環境変数を設定します。ADKテレメトリパッケージは初期化時にこれらの設定を自動的に使用します。
+
+=== "Kotlin"
+
+    ADK KotlinのOpenTelemetry統合は**トレースのみ**を出力します。`LoggerProvider` を登録しないため、OTLPログのエクスポートはありません。アプリケーションログはJVMロギングバックエンドに出力されます。トレースエクスポートの設定については、[トレース](traces.md) のドキュメントをご覧ください。
+
+### GCPエクスポート設定
+
+=== "Python"
+
+    Google Cloud Loggingにプログラムからログをエクスポートするには、OpenTelemetry Google Cloudエクスポーターを使用します。以下はPythonの例です。
+
+    ```python
+    from google.adk.telemetry.google_cloud import get_gcp_exporters
+    from google.adk.telemetry.setup import maybe_set_otel_providers
+    import os
+
+    gcp_exporters = get_gcp_exporters(
+      enable_cloud_logging = True,
+    )
+    os.environ["OTEL_SERVICE_NAME"] = "your-adk-agent"
+    os.environ["OTEL_RESOURCE_ATTRIBUTES"] = "key1=value1,key2=value2"
+    maybe_set_otel_providers([gcp_exporters])
+    ```
+
+=== "Go"
+
+    Google Cloud Loggingにログをエクスポートするには、`WithOtelToCloud` オプションを使用します。
+
+    ```go
+    package main
+
+    import (
+    	"context"
+    	"google.golang.org/adk/v2/telemetry"
+    )
+
+    func main() {
+    	ctx := context.Background()
+    	tp, err := telemetry.New(ctx,
+    		telemetry.WithOtelToCloud(true),
+    	)
+    	if err != nil {
+    		// エラー処理
+    	}
+    	defer tp.Shutdown(ctx)
+    	tp.SetGlobalOtelProviders()
+    }
+    ```
+
+    Goランチャーを使用している場合は、CLIフラグを介してGCPエクスポートを有効にすることもできます。
+
+    ```bash
+    go run main.go web -otel_to_cloud
+    ```
+
+=== "Kotlin"
+
+    ADK KotlinはOpenTelemetryログレコードを出力しないため、Cloud Loggingが受信するものはありません。アプリケーションログはJVMロギングバックエンドに送られます。ADK Kotlinの**トレース**は、標準のOTLPエクスポーターが `telemetry.googleapis.com` を指すように設定することでGoogle Cloudに送信できます。必要な認証情報、割り当てプロジェクト、`roles/telemetry.writer` 付与については、[Google CloudでのOTLP](https://cloud.google.com/stackdriver/docs/otlp/overview) をご覧ください。
+
+## プラグインによるアクティビティロギング
+
+ADKは、ユーザーメッセージ、モデルのリクエストとレスポンス、ツール呼び出し、および（`DebugLoggingPlugin` を使用した場合の）セッション状態を含むエージェントのアクティビティをキャプチャする組み込みプラグインを提供します。これらのプラグインを使用する際に、エージェントのロジックを変更する必要はありません。
+
+### `LoggingPlugin` によるコンソールロギング
+
+実行中に構造化されたアクティビティログをコンソールに出力するには、`App` に `LoggingPlugin` をアタッチします。
+
+=== "Python"
+
+    ```python
+    from google.adk.apps import App
+    from google.adk.plugins import LoggingPlugin
+
+    app = App(
+        name="my_app",
+        root_agent=root_agent,
+        plugins=[LoggingPlugin()],
+    )
+    ```
+
+=== "Go"
+
+    ```go
+    package main
+
+    import (
+    	"context"
+    	"log"
+    	"os"
+
+    	"google.golang.org/adk/v2/agent"
+    	"google.golang.org/adk/v2/cmd/launcher"
+    	"google.golang.org/adk/v2/cmd/launcher/full"
+    	"google.golang.org/adk/v2/plugin"
+    	"google.golang.org/adk/v2/plugin/loggingplugin"
+    	"google.golang.org/adk/v2/runner"
+    )
+
+    func main() {
+    	ctx := context.Background()
+    	logPlugin := loggingplugin.MustNew("logging_plugin")
+
+    	config := &launcher.Config{
+    		AgentLoader: agent.NewSingleLoader(rootAgent),
+    		PluginConfig: runner.PluginConfig{
+    			Plugins: []*plugin.Plugin{logPlugin},
+    		},
+    	}
+
+    	l := full.NewLauncher()
+    	if err := l.Execute(ctx, config, os.Args[1:]); err != nil {
+    		log.Fatalf("run failed: %v", err)
+    	}
+    }
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:logging_plugin"
+    ```
+
+### `DebugLoggingPlugin` によるファイルへの完全なデバッグキャプチャ
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-kotlin">Kotlin v0.6.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.23.0</span><span class="lst-kotlin">Kotlin v0.6.0</span>
 </div>
 
-省略されたコンソール出力ではなく、同じアクティビティを完全な形で `adk_debug.yaml` に追記される YAML として記録するには、`DebugLoggingPlugin` を使用します。
+切り捨てられたコンソール出力ではなく、人間が読める形式のYAMLとして完全なインタラクションデータを `adk_debug.yaml` に追加記録するには、`DebugLoggingPlugin` を使用します。
 
-```kotlin
---8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:debug_logging_plugin"
+=== "Python"
+
+    ```python
+    from google.adk.apps import App
+    from google.adk.plugins import DebugLoggingPlugin
+
+    app = App(
+        name="my_app",
+        root_agent=root_agent,
+        plugins=[
+            DebugLoggingPlugin(
+                output_path="adk_debug.yaml",
+                include_session_state=True,
+                include_system_instruction=True,
+            ),
+        ],
+    )
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/observability/LoggingExamples.kt:debug_logging_plugin"
+    ```
+
+!!! warning
+    出力ファイルには、未加工のプロンプト、ツールの引数、セッション状態が保持されます。ADKはPythonにおいて認証情報や `temp:` スコープの状態キーを自動的にマスキング（redact）しますが、出力ファイルは機密情報として扱ってください。
+
+## ログ出力の理解
+
+### Pythonログエントリのサンプル
+
+```text
+2025-07-08 11:22:33,456 - DEBUG - google_adk.google.adk.models.google_llm - LLM Request: contents { ... }
 ```
 
-!!! warning "警告"
-    出力ファイルには生のプロンプト、ツール引数、セッション ステートが含まれます。機密情報として扱ってください。
+| ログセグメント | フォーマット指定子 | 意味 |
+| ------------------------------- | ---------------- | ---------------------------------------------- |
+| `2025-07-08 11:22:33,456`       | `%(asctime)s`    | タイムスタンプ |
+| `DEBUG`                         | `%(levelname)s`  | 重大度レベル |
+| `google_adk.google.adk.models.google_llm`  | `%(name)s`       | ロガー名（ログを生成したモジュール） |
+| `LLM Request: contents { ... }` | `%(message)s`    | 実際のログメッセージ |
+
+ロガー名を確認することで、ログの発生元を即座に特定し、エージェントのアーキテクチャ内でのコンテキストを把握できます。ADKのロガー名は `google_adk.` の後にモジュールの完全修飾名が続くため、すべてのADKロガーは `google_adk` ロガーの子になります。これらは `logging.getLogger("google_adk")` を使用してグループとして設定できます。
+
+### デバッグの例
+
+`DEBUG` ロギングを有効にした後（上記の [ロギングレベル](#ロギングレベル) を参照）、エージェントを実行して `google_adk.google.adk.models.google_llm` ロガーからのメッセージを探します。出力には完全なLLMリクエストとレスポンスが表示されます。
+
+```text
+2025-07-10 15:26:13,778 - DEBUG - google_adk.google.adk.models.google_llm -
+LLM Request:
+-----------------------------------------------------------
+System Instruction:
+      You roll dice and answer questions about the outcome of the dice rolls.
+      ...
+-----------------------------------------------------------
+Contents:
+{"parts":[{"text":"Roll a 6 sided dice"}],"role":"user"}
+{"parts":[{"function_call":{"args":{"sides":6},"name":"roll_die"}}],"role":"model"}
+{"parts":[{"function_response":{"name":"roll_die","response":{"result":2}}}],"role":"user"}
+-----------------------------------------------------------
+Functions:
+roll_die: {'sides': {'type': <Type.INTEGER: 'INTEGER'>}}
+check_prime: {'nums': {'items': {'type': <Type.INTEGER: 'INTEGER'>}, 'type': <Type.ARRAY: 'ARRAY'>}}
+-----------------------------------------------------------
+2025-07-10 15:26:14,309 - INFO - google_adk.google.adk.models.google_llm -
+LLM Response:
+-----------------------------------------------------------
+Text:
+I have rolled a 6 sided die, and the result is 2.
+...
+```
+
+この出力から以下を確認できます:
+
+- システム指示は正しいか？
+- 会話履歴（`user` および `model` ターン）は正確か？
+- 正しいツールがモデルに提供されているか？
+- ツールがモデルによって正しく呼び出されているか？
+- モデルが応答するのにどれくらいの時間がかかっているか？

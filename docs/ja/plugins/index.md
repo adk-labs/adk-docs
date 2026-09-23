@@ -32,6 +32,8 @@ ADKには、エージェントワークフローにすぐに追加できるい�
     ツールの失敗を追跡し、ツールリクエストをインテリジェントに再試行します。
 *   [**BigQueryアナリティクス**](/ja/observability/bigquery-agent-analytics/):
     BigQueryによるエージェントのロギングと分析を可能にします。
+*   [**Model Armor**](/ja/integrations/model-armor/):
+    Google Cloud Model Armor テンプレートに照らしてユーザー入力とモデル出力をスクリーニングします。
 *   [**コンテキストフィルター**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/context_filter_plugin.py):
     生成AIのコンテキストをフィルタリングしてサイズを削減します。
 *   [**グローバルインストラクション**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/global_instruction_plugin.py):

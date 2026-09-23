@@ -111,3 +111,4 @@ Google Cloud Agent Platform은 Gemini 모델, 서드파티 AI 모델, 오픈 가
 * [BigQuery Toolset](/ko/integrations/bigquery/)
 * [BigQuery Agent Analytics](/ko/integrations/bigquery-agent-analytics/)
 * [Data Agent](/ko/integrations/data-agent/)
+* [Model Armor](/ko/integrations/model-armor/)

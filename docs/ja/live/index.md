@@ -53,6 +53,7 @@ ADK はライブエージェントと音声エージェントを構築するた�
 
     `adk web` を超えてライブエージェントを運用します。
 
+    - [ガードレール](guardrails.md) — ユーザーの発言とエージェントの応答をスクリーニング
     - [評価](evaluation.md) — リリース前に音声会話をスコアリング
     - [カスタムサーバーの構築](custom-server.md)
     - [LiveKit](../integrations/livekit.md) — カスタムサーバー不要の WebRTC および電話通信

@@ -53,6 +53,7 @@ ADK는 라이브 및 음성 에이전트를 구축하기 위한 프레임워크�
 
     `adk web`을 넘어 프로덕션으로 확장합니다.
 
+    - [가드레일](guardrails.md) — 사용자의 발화 및 에이전트의 응답 필터링
     - [평가](evaluation.md) — 출시 전 음성 대화 품질 점수 측정
     - [커스텀 서버 구축](custom-server.md)
     - [LiveKit](../integrations/livekit.md) — 커스텀 서버 없이 WebRTC 및 전화 통신 연결

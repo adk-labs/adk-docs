@@ -5,7 +5,7 @@
 </div>
 
 ADK 에이전트는 다양한 기능을 제공하는 [Google Gemma](https://ai.google.dev/gemma/docs) 생성형 AI 모델 계열을 사용할 수 있습니다. ADK는 [도구 호출](/tools-custom/)
-과 [구조화된 출력](/agents/llm-agents/#structuring-data-input_schema-output_schema-output_key) 등 여러 Gemma 기능을 지원합니다.
+과 [구조화된 출력](/agents/llm-agents/#data-handling) 등 여러 Gemma 기능을 지원합니다.
 
 Gemma 4는 [Gemini API](https://ai.google.dev/gemini-api/docs)를 통해 사용할 수 있으며,
 또는 Google Cloud의 여러 셀프 호스팅 옵션을 통해 사용할 수도 있습니다:
