@@ -221,6 +221,6 @@ A2UI 저장소에는 바로 실행할 수 있는 ADK 샘플 에이전트가 포�
 - [A2UI 사양](https://a2ui.org/)
 - [A2UI GitHub 저장소](https://github.com/a2ui-project/a2ui)
 - [A2UI Python SDK (`a2ui-agent-sdk`)](https://pypi.org/project/a2ui-agent-sdk/)
-- [에이전트 개발 가이드](https://github.com/a2ui-project/a2ui/blob/main/agent_sdks/python/a2ui_agent/agent_development.md)
+- [에이전트 개발 가이드](https://github.com/a2ui-project/a2ui/blob/main/python/a2ui_agent/agent_development.md)
 - [컴포넌트 갤러리](https://a2ui.org/reference/components/)
 - [A2A 프로토콜](https://a2a-protocol.org)

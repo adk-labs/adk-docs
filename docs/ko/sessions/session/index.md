@@ -319,17 +319,47 @@ ADK 에이전트에서 Google Cloud에 연결하는 방법에 대한 자세한 �
 
     *   **작동 방식:** 관계형 데이터베이스(예: PostgreSQL, MySQL, SQLite)에 연결하여 세션 데이터를 테이블에 영구적으로 저장합니다.
     *   **영속성:** 있음. 데이터는 애플리케이션 재시작 후에도 유지됩니다.
-    *   **필요 사항:** 구성된 데이터베이스.
+    *   **필요 사항:** 구성된 데이터베이스. Python의 경우 `pip install google-adk[db]`로 설치하는 `db` 엑스트라. Go의 경우 데이터베이스용 [GORM](https://gorm.io/) 드라이버.
     *   **적합한 경우:** 직접 관리하는 안정적이고 영속적인 스토리지가 필요한 애플리케이션.
 
-    ```py
-    from google.adk.sessions import DatabaseSessionService
-    # 로컬 SQLite 파일을 사용하는 예시:
-    # 참고: 구현에는 비동기 데이터베이스 드라이버가 필요합니다.
-    # SQLite의 경우 비동기 호환성을 보장하기 위해 'sqlite' 대신 'sqlite+aiosqlite'를 사용하세요.
-    db_url = "sqlite+aiosqlite:///./my_agent_data.db"
-    session_service = DatabaseSessionService(db_url=db_url)
-    ```
+    === "Python"
+
+        ```py
+        from google.adk.sessions import DatabaseSessionService
+        # 로컬 SQLite 파일을 사용하는 예시:
+        # 참고: 구현에는 비동기 데이터베이스 드라이버가 필요합니다.
+        # SQLite의 경우 비동기 호환성을 보장하기 위해 'sqlite' 대신 'sqlite+aiosqlite'를 사용하세요.
+        db_url = "sqlite+aiosqlite:///./my_agent_data.db"
+        session_service = DatabaseSessionService(db_url=db_url)
+        ```
+
+    === "Go"
+
+        ```go
+        import (
+            "log"    
+            "github.com/glebarez/sqlite"
+            "gorm.io/gorm"
+
+            "google.golang.org/adk/v2/session/database"
+        )
+
+        // 로컬 SQLite 파일을 사용하는 예시입니다. PostgreSQL용 gorm.io/driver/postgres 등
+        // 모든 GORM 다이얼렉터(dialector)가 작동합니다.
+        sessionService, err := database.NewSessionService(sqlite.Open("my_agent_data.db"), &gorm.Config{})
+        if err != nil {
+            log.Fatal(err)
+        }
+        // 테이블을 생성하고 최신 ADK 릴리스에 필요한 열을 추가합니다.
+        // 애플리케이션이 시작될 때마다 실행하세요.
+        if err := database.AutoMigrate(sessionService); err != nil {
+            log.Fatal(err)
+        }
+        ```
+
+        !!! warning "매 시작 시 `AutoMigrate` 실행"
+
+            Go 세션 서비스는 테이블을 자동으로 생성하거나 업데이트하지 않습니다. 트래픽을 처리하기 전에 애플리케이션이 시작될 때마다 `database.AutoMigrate`를 호출하세요. 누락된 테이블과 열을 생성하며 기존 테이블이나 열은 삭제하지 않으므로, ADK 업그레이드로 열이 추가된 후에도 데이터베이스가 계속 정상 작동합니다. 또한 기존 열의 타입을 ADK가 예상하는 타입과 일치하도록 변경할 수도 있습니다. `AutoMigrate`를 실행하는 대신 스키마를 직접 관리하는 경우, 새 열을 도입하는 ADK 릴리스를 배포하기 전에 해당 열을 미리 추가하세요. 그렇지 않으면 해당 테이블에 대한 쓰기 작업이 실패합니다.
 
 #### 동시성 및 잠금 (Concurrency and locking)
 

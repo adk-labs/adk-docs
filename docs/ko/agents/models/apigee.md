@@ -30,7 +30,9 @@
         # 기본 경로를 포함한 배포된 Apigee 프록시의 프록시 URL
         proxy_url=f"https://{APIGEE_PROXY_URL}",
         # 필요한 인증/인가 헤더 전달 (예: API 키)
-        custom_headers={"foo": "bar"}
+        custom_headers={"foo": "bar"},
+        # 선택 사항: 프록시에 추가 OAuth 범위가 필요한 경우 google-auth 자격 증명 전달
+        # credentials=my_credentials
     )
 
     # 구성된 모델 래퍼를 LlmAgent에 전달

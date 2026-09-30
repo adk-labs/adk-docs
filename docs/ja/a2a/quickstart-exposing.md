@@ -114,6 +114,33 @@ a2a_app = to_a2a(root_agent, port=8001, agent_card="/path/to/your/agent-card.jso
 * **`push_config_store` (任意):** A2A プッシュ通知を管理するためのカスタム ストア実装。指定しない場合、システムはデフォルトでインメモリ ストア（`InMemoryPushNotificationConfigStore`）を使用します。
 * **`agent_card` (任意):** `AgentCard` オブジェクトまたは JSON ファイルへのパス。省略した場合、ADK はエージェントのコードからエージェント カードを自動生成します。
 * **`runner` (任意):** 事前構築された `Runner`。省略した場合、インメモリ サービスでバックアップされたデフォルトのランナーが作成されます。
+* **`lifespan` (任意):** 起動時およびシャットダウン時のロジックを実行するために使用される、Starlette lifespan イベント用の非同期コンテキストマネージャー。[アプリケーションのライフサイクルの管理](#manage-the-application-lifecycle)を参照してください。
+
+### アプリケーションのライフサイクルの管理
+
+`to_a2a` 関数の `lifespan` 引数を使用して、アプリケーションのライフサイクルを管理します。起動時にデータベース接続を開始し、シャットダウン時に閉じるなどのセットアップタスクや破棄タスクを実行するには、非同期コンテキストマネージャーを渡します。
+
+コンテキストマネージャーは `Starlette` アプリインスタンスを受け取ります。アプリケーションがグローバルにアクセスする必要があるリソースを保存するには、`app.state` を使用します。
+
+```python
+from contextlib import asynccontextmanager
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
+from starlette.applications import Starlette
+
+
+@asynccontextmanager
+async def lifespan(app: Starlette):
+  # アプリケーション起動時にリソースを初期化
+  app.state.db = await init_db()
+
+  yield
+
+  # アプリケーションシャットダウン時にリソースをクリーンアップ
+  await app.state.db.close()
+
+
+a2a_app = to_a2a(agent, lifespan=lifespan)
+```
 
 それでは、サンプルコードを見ていきましょう。
 
@@ -276,6 +303,32 @@ adk Webサーバーを開くには、[http://localhost:8000](http://localhost:80
     ```bash
     export ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS=true
     ```
+
+### アプリケーションのライフサイクルの管理
+
+`to_a2a` 関数の `lifespan` 引数を使用して、アプリケーションのライフサイクルを管理します。起動時にデータベース接続を開始し、シャットダウン時に閉じるなどのセットアップタスクや破棄タスクを実行するには、非同期コンテキストマネージャーを渡します。
+
+コンテキストマネージャーは `Starlette` アプリインスタンスを受け取ります。アプリケーションがグローバルにアクセスする必要があるリソースを保存するには、`app.state` を使用します。
+
+```python
+from contextlib import asynccontextmanager
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
+from starlette.applications import Starlette
+
+
+@asynccontextmanager
+async def lifespan(app: Starlette):
+  # アプリケーション起動時にリソースを初期化
+  app.state.db = await init_db()
+
+  yield
+
+  # アプリケーションシャットダウン時にリソースをクリーンアップ
+  await app.state.db.close()
+
+
+a2a_app = to_a2a(agent, lifespan=lifespan)
+```
 
 ## Agent Executor V2
 

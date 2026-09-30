@@ -114,6 +114,33 @@ a2a_app = to_a2a(root_agent, port=8001, agent_card="/path/to/your/agent-card.jso
 * **`push_config_store` (선택 사항):** A2A 푸시 알림을 관리하기 위한 사용자 정의 저장소 구현입니다. 제공되지 않으면 시스템은 인메모리 저장소(`InMemoryPushNotificationConfigStore`)를 기본값으로 사용합니다.
 * **`agent_card` (선택 사항):** `AgentCard` 객체 또는 JSON 파일 경로입니다. 생략할 경우 ADK는 에이전트 코드에서 에이전트 카드를 자동으로 생성합니다.
 * **`runner` (선택 사항):** 사전 구축된 `Runner`입니다. 생략할 경우 인메모리 서비스로 지원되는 기본 러너가 생성됩니다.
+* **`lifespan` (선택 사항):** 시작 및 종료 로직을 실행하는 데 사용되는 Starlette lifespan 이벤트를 위한 비동기 컨텍스트 관리자입니다. [애플리케이션 수명 주기 관리](#manage-the-application-lifecycle)를 참조하세요.
+
+### 애플리케이션 수명 주기 관리
+
+`to_a2a` 함수의 `lifespan` 인수를 사용하여 애플리케이션의 수명 주기를 관리할 수 있습니다. 시작 시 데이터베이스 연결을 시작하고 종료 시 닫는 등의 설정 및 해제 작업을 수행하려면 비동기 컨텍스트 관리자를 전달하세요.
+
+컨텍스트 관리자는 `Starlette` 앱 인스턴스를 수신합니다. 애플리케이션이 전역적으로 액세스해야 하는 리소스를 저장하려면 `app.state`를 사용하세요.
+
+```python
+from contextlib import asynccontextmanager
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
+from starlette.applications import Starlette
+
+
+@asynccontextmanager
+async def lifespan(app: Starlette):
+  # 애플리케이션 시작 시 리소스 초기화
+  app.state.db = await init_db()
+
+  yield
+
+  # 애플리케이션 종료 시 리소스 정리
+  await app.state.db.close()
+
+
+a2a_app = to_a2a(agent, lifespan=lifespan)
+```
 
 이제 샘플 코드를 자세히 살펴보겠습니다.
 
@@ -260,6 +287,32 @@ adk 웹 서버를 열려면 [http://localhost:8000](http://localhost:8000)으로
     ```bash
     export ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS=true
     ```
+
+### 애플리케이션 수명 주기 관리
+
+`to_a2a` 함수의 `lifespan` 인수를 사용하여 애플리케이션의 수명 주기를 관리할 수 있습니다. 시작 시 데이터베이스 연결을 시작하고 종료 시 닫는 등의 설정 및 해제 작업을 수행하려면 비동기 컨텍스트 관리자를 전달하세요.
+
+컨텍스트 관리자는 `Starlette` 앱 인스턴스를 수신합니다. 애플리케이션이 전역적으로 액세스해야 하는 리소스를 저장하려면 `app.state`를 사용하세요.
+
+```python
+from contextlib import asynccontextmanager
+from google.adk.a2a.utils.agent_to_a2a import to_a2a
+from starlette.applications import Starlette
+
+
+@asynccontextmanager
+async def lifespan(app: Starlette):
+  # 애플리케이션 시작 시 리소스 초기화
+  app.state.db = await init_db()
+
+  yield
+
+  # 애플리케이션 종료 시 리소스 정리
+  await app.state.db.close()
+
+
+a2a_app = to_a2a(agent, lifespan=lifespan)
+```
 
 ## Agent Executor V2
 

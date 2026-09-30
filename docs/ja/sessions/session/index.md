@@ -319,15 +319,47 @@ ADK エージェントから Google Cloud への接続に関する詳細につ�
 
     *   **仕組み:** リレーショナルデータベース（例：PostgreSQL, MySQL, SQLite）に接続し、セッションデータをテーブルに永続的に保存します。
     *   **永続性:** あり。データはアプリケーションの再起動後も存続します。
-    *   **要件:** 設定済みのデータベース。
+    *   **要件:** 設定済みのデータベース。Python では `pip install google-adk[db]` でインストールされる `db` エクストラ。Go ではデータベース用の [GORM](https://gorm.io/) ドライバー。
     *   **最適な用途:** 自身で管理する、信頼性の高い永続ストレージを必要とするアプリケーション。
 
-    ```py
-    from google.adk.sessions import DatabaseSessionService
-    # ローカルのSQLiteファイルを使用する例：
-    db_url = "sqlite:///./my_agent_data.db"
-    session_service = DatabaseSessionService(db_url=db_url)
-    ```
+    === "Python"
+
+        ```py
+        from google.adk.sessions import DatabaseSessionService
+        # ローカルSQLiteファイルを使用する例:
+        # 注: 実装には非同期データベースドライバーが必要です。
+        # SQLiteの場合、非同期互換性を確保するために 'sqlite' ではなく 'sqlite+aiosqlite' を使用してください。
+        db_url = "sqlite+aiosqlite:///./my_agent_data.db"
+        session_service = DatabaseSessionService(db_url=db_url)
+        ```
+
+    === "Go"
+
+        ```go
+        import (
+            "log"    
+            "github.com/glebarez/sqlite"
+            "gorm.io/gorm"
+
+            "google.golang.org/adk/v2/session/database"
+        )
+
+        // ローカル SQLite ファイルを使用する例。PostgreSQL 向けの gorm.io/driver/postgres など、
+        // 任意の GORM ダイアレクターが動作します。
+        sessionService, err := database.NewSessionService(sqlite.Open("my_agent_data.db"), &gorm.Config{})
+        if err != nil {
+            log.Fatal(err)
+        }
+        // テーブルを作成し、新しい ADK リリースで必要となるカラムを追加します。
+        // アプリケーション起動時に毎回実行してください。
+        if err := database.AutoMigrate(sessionService); err != nil {
+            log.Fatal(err)
+        }
+        ```
+
+        !!! warning "起動ごとに `AutoMigrate` を実行する"
+
+            Go セッションサービスはテーブルの作成や更新を自動では行いません。トラフィックを処理する前に、アプリケーションが起動するたびに `database.AutoMigrate` を呼び出してください。不足しているテーブルやカラムを作成し、既存のものは削除しないため、ADK アップグレードによってカラムが追加された後もデータベースは正常に動作し続けます。また、既存のカラムの型を ADK が想定する型に合わせて変更することもできます。`AutoMigrate` を実行せずに自身でスキーマを管理する場合は、新しいカラムを導入する ADK リリースをデプロイする前に新しいカラムを追加してください。そうしないと、そのテーブルへの書き込みが失敗します。
 
 #### 同時実行とロック (Concurrency and locking)
 

@@ -349,11 +349,16 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 *   **`input_schema` (선택 사항):** 예상 입력 구조를 나타내는 스키마를 정의합니다. 설정된 경우, 이 에이전트에 전달되는 사용자 메시지 내용은 이 스키마를 준수하는 JSON 문자열이어야 합니다. 명령은 사용자나 이전 에이전트를 그에 맞게 안내해야 합니다.
 
 *   **`output_schema` (선택 사항):** 원하는 출력 구조를 나타내는 스키마를 정의합니다. 설정된 경우, 에이전트의 최종 응답은 이 스키마를 준수하는 JSON 문자열이어야 합니다.
+    *   Python에서 지원되는 스키마 유형은 다음과 같습니다.
+        *   Pydantic 모델 클래스 (예: `MySchema`)
+        *   원시 타입 리스트 (예: `list[str]`, `list[int]`, `list[bool]`, `list[float]`)
+        *   `dict`
+        *   `google.genai.types.Schema`
 
 !!! warning "경고: `output_schema`와 `tools` 함께 사용"
 
     동일한 LLM 요청에서 `output_schema`와 `tools`를 함께 사용하는 방식은 [Gemini 3.0](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#structured-output)을 포함한 특정 모델에서만 지원됩니다.
-    다른 모델의 경우, ADK는 구조화된 출력을 수집하기 위해 [`set_model_response` 함수 도구](https://github.com/google/adk-python/blob/main/src/google/adk/flows/llm_flows/_output_schema_processor.py)로 폴백하지만 안정적으로 작동하지 않을 수 있습니다.
+    다른 모델의 경우, ADK는 구조화된 출력을 수집하기 위해 [`set_model_response` 함수 도구](https://github.com/google/adk-python/blob/main/src/google/adk/tools/set_model_response_tool.py)로 폴백하지만 안정적으로 작동하지 않을 수 있습니다.
     이런 경우에는 출력 형식을 별도로 처리하는 서브 에이전트를 사용하는 것을 고려하세요.
 
 *   **`output_key` (선택 사항):** 문자열 키를 제공합니다. 설정된 경우, 에이전트의 *최종* 응답 텍스트 내용은 이 키 아래 세션의 상태 사전에 자동으로 저장됩니다. 이는 에이전트 간 또는 워크플로 단계 간에 결과를 전달하는 데 유용합니다.

@@ -11,7 +11,7 @@ catalog_tags: ["data", "mcp"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
-[`adk-perseus-context`](https://github.com/Perseus-Computing-LLC/adk-perseus-context) 統合は、決定論的にコンパイルされたコンテキストを ADK エージェントのシステム指示（system instruction）に挿入します。これはオープンソースのコンテキストコンパイラである [Perseus](https://github.com/Perseus-Computing-LLC/perseus) によって動作します。Perseus は、検索インデックスやエンベディング、余分な LLM 往復なしに、推論時に `@file`、`@search`、および `@memory` などのディレクティブを 1 つのバイトスタティックなコンテキスト文字列に解決します。すべてがローカルで動作します。
+[`adk-perseus-context`](https://github.com/Perseus-Computing-LLC/adk-perseus-context) 統合は、決定論的にコンパイルされたコンテキストを ADK エージェントのシステム指示（system instruction）に挿入します。これはオープンソースのコンテキストコンパイラである Perseus によって動作します。Perseus は、検索インデックスやエンベディング、余分な LLM 往復なしに、推論時に `@file`、`@search`、および `@memory` などのディレクティブを 1 つのバイトスタティックなコンテキスト文字列に解決します。すべてがローカルで動作します。
 
 Perseus はコンテキストコンパイラであり、メモリや RAG バックエンドではありません。永続的なセッション間メモリについては、その姉妹サービスである [Perseus Vault](/ja/integrations/perseus-vault/) とペアリングして使用してください。
 
@@ -145,5 +145,4 @@ agent = Agent(
 
 - [GitHub の adk-perseus-context](https://github.com/Perseus-Computing-LLC/adk-perseus-context)
 - [PyPI の adk-perseus-context](https://pypi.org/project/adk-perseus-context/)
-- [Perseus (コンテキストエンジン)](https://github.com/Perseus-Computing-LLC/perseus)
 - [Perseus Vault Memory 統合ガイド](/ja/integrations/perseus-vault/)

@@ -221,6 +221,6 @@ A2UI リポジトリには、すぐに実行できる ADK サンプルエージ�
 - [A2UI 仕様](https://a2ui.org/)
 - [A2UI GitHub リポジトリ](https://github.com/a2ui-project/a2ui)
 - [A2UI Python SDK (`a2ui-agent-sdk`)](https://pypi.org/project/a2ui-agent-sdk/)
-- [エージェント開発ガイド](https://github.com/a2ui-project/a2ui/blob/main/agent_sdks/python/a2ui_agent/agent_development.md)
+- [エージェント開発ガイド](https://github.com/a2ui-project/a2ui/blob/main/python/a2ui_agent/agent_development.md)
 - [コンポーネントギャラリー](https://a2ui.org/reference/components/)
 - [A2A プロトコル](https://a2a-protocol.org)

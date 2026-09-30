@@ -276,11 +276,16 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 *   **`input_schema` (任意):** 期待される入力構造を表すスキーマを定義します。設定されている場合、このエージェントに渡されるユーザーメッセージの内容は、このスキーマに準拠したJSON文字列でなければなりません。あなたの指示は、ユーザーまたは先行するエージェントをそれに従ってガイドする必要があります。
 
 *   **`output_schema` (任意):** 望ましい出力構造を表すスキーマを定義します。設定されている場合、エージェントの最終応答は、このスキーマに準拠したJSON文字列でなければなりません。
+    *   Python でサポートされているスキーマタイプは次のとおりです。
+        *   Pydantic モデルクラス（例: `MySchema`）
+        *   プリミティブのリスト（例: `list[str]`, `list[int]`, `list[bool]`, `list[float]`）
+        *   `dict`
+        *   `google.genai.types.Schema`
 
 !!! warning "警告: `output_schema` と `tools` の併用"
 
     同じ LLM リクエストで `output_schema` と `tools` を併用できるのは、[Gemini 3.0](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#structured-output) を含む一部のモデルに限られます。
-    それ以外のモデルでは、ADK は構造化出力を収集するために [`set_model_response` 関数ツール](https://github.com/google/adk-python/blob/main/src/google/adk/flows/llm_flows/_output_schema_processor.py) にフォールバックしますが、安定して動作しない可能性があります。
+    それ以外のモデルでは、ADK は構造化出力を収集するために [`set_model_response` 関数ツール](https://github.com/google/adk-python/blob/main/src/google/adk/tools/set_model_response_tool.py) にフォールバックしますが、安定して動作しない可能性があります。
     そのような場合は、出力フォーマットを別途処理する sub-agent の利用を検討してください。
 
 *   **`output_key` (任意):** 文字列キーを提供します。設定されている場合、エージェントの*最終*応答のテキスト内容は、このキーの下でセッションの状態辞書に自動的に保存されます。これは、エージェント間やワークフローのステップ間で結果を渡すのに便利です。

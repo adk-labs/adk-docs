@@ -68,6 +68,8 @@ export GOOGLE_API_KEY=your-api-key
     1. 서비스 계정(예: "1234567890-compute@developer.gserviceaccount.com")
     1. GOOGLE_API_KEY
 
+또한 Google Cloud CLI(`gcloud`)가 설치되어 있어야 합니다.
+
 ## 비밀
 
 서비스 계정으로 읽을 수 있는 비밀을 만들었는지 확인하세요.

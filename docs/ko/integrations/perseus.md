@@ -11,7 +11,7 @@ catalog_tags: ["data", "mcp"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[`adk-perseus-context`](https://github.com/Perseus-Computing-LLC/adk-perseus-context) 통합은 결정적으로 컴파일된 컨텍스트를 ADK 에이전트의 시스템 지침(system instruction)에 주입합니다. 이 통합은 오픈 소스 컨텍스트 컴파일러인 [Perseus](https://github.com/Perseus-Computing-LLC/perseus)에 의해 구동됩니다. Perseus는 검색 인덱스, 임베딩, 추가 LLM 왕복 없이 추론 시점에 `@file`, `@search` 및 `@memory`와 같은 지시어를 바이트 안정적인 하나의 컨텍스트 문자열로 해석(resolve)합니다. 모든 프로세스는 로컬에서 실행됩니다.
+[`adk-perseus-context`](https://github.com/Perseus-Computing-LLC/adk-perseus-context) 통합은 결정적으로 컴파일된 컨텍스트를 ADK 에이전트의 시스템 지침(system instruction)에 주입합니다. 이 통합은 오픈 소스 컨텍스트 컴파일러인 Perseus에 의해 구동됩니다. Perseus는 검색 인덱스, 임베딩, 추가 LLM 왕복 없이 추론 시점에 `@file`, `@search` 및 `@memory`와 같은 지시어를 바이트 안정적인 하나의 컨텍스트 문자열로 해석(resolve)합니다. 모든 프로세스는 로컬에서 실행됩니다.
 
 Perseus는 컨텍스트 컴파일러이며 메모리나 RAG 백엔드가 아닙니다. 영구적인 세션 간 메모리를 사용하려면 자매 서비스인 [Perseus Vault](/ko/integrations/perseus-vault/)와 페어링하여 사용하세요.
 
@@ -145,5 +145,4 @@ agent = Agent(
 
 - [GitHub의 adk-perseus-context](https://github.com/Perseus-Computing-LLC/adk-perseus-context)
 - [PyPI의 adk-perseus-context](https://pypi.org/project/adk-perseus-context/)
-- [Perseus (컨텍스트 엔진)](https://github.com/Perseus-Computing-LLC/perseus)
 - [Perseus Vault Memory 통합 가이드](/ko/integrations/perseus-vault/)

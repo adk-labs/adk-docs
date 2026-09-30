@@ -15,11 +15,11 @@
 
 リクエストがユーザーに伝達される方法を構成でき、システムは ADK サーバーの REST API を介して送信された[リモート応答](#remote-response)を使用することもできます。ADK Web ユーザー インターフェースで確認機能を使用すると、図 1 に示すように、エージェント ワークフローに入力を求めるダイアログ ボックスが表示されます。
 
-![ツール確認のデフォルト ユーザー インターフェースのスクリーンショット](../assets/confirmation-ui.png)
+![ツール確認のデフォルト ユーザー インターフェースのスクリーンショット](/assets/confirmation-ui.png)
 
 **図 1.** 高度なツール応答実装を使用した確認応答要求ダイアログ ボックスの例。
 
-次のセクションでは、確認シナリオでこの機能を使用する方法について説明します。完全なコード サンプルについては、[human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) の例を参照してください。エージェント ワークフローに人間の入力を組み込むその他の方法については、[Human-in-the-loop](../workflows/patterns.md#human-in-the-loop) エージェント パターンを参照してください。
+次のセクションでは、確認シナリオでこの機能を使用する方法について説明します。完全なコード サンプルについては、[human_tool_confirmation](https://github.com/google/adk-python/blob/main/contributing/samples/hitl/human_tool_confirmation/agent.py) の例を参照してください。エージェント ワークフローに人間の入力を組み込むその他の方法については、[Human-in-the-loop](/workflows/patterns/#human-in-the-loop) エージェント パターンを参照してください。
 
 ## ブール値の確認 (Boolean confirmation) {#boolean-confirmation}
 

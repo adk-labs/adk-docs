@@ -7,7 +7,7 @@ catalog_tags: ["mcp"]
 # Notion
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span>
 </div>
 
 [Notion MCP 서버](https://github.com/makenotion/notion-mcp-server)는 ADK 에이전트를 Notion에 연결하여 작업 공간 내에서 페이지, 데이터베이스 등을 검색, 생성 및 관리할 수 있도록 합니다. 이를 통해 에이전트는 자연어를 사용하여 Notion 작업 공간의 콘텐츠를 쿼리, 생성 및 구성할 수 있습니다.
@@ -29,39 +29,146 @@ catalog_tags: ["mcp"]
 
 ## 에이전트와 함께 사용
 
-=== "로컬 MCP 서버"
+=== "Python"
 
-    ```python
-    from google.adk.agents import Agent
-    from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-    from google.adk.tools.mcp_tool import McpToolset
-    from mcp import StdioServerParameters
+    === "로컬 MCP 서버"
 
-    NOTION_TOKEN = "YOUR_NOTION_TOKEN"
+        ```python
+        from google.adk.agents import Agent
+        from google.adk.tools.mcp_tool import McpToolset
+        from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+        from mcp import StdioServerParameters
 
-    root_agent = Agent(
-        model="gemini-2.5-pro",
-        name="notion_agent",
-        instruction="사용자가 Notion에서 정보를 얻도록 돕습니다.",
-        tools=[
-            McpToolset(
-                connection_params=StdioConnectionParams(
-                    server_params = StdioServerParameters(
-                        command="npx",
-                        args=[
-                            "-y",
-                            "@notionhq/notion-mcp-server",
-                        ],
-                        env={
-                            "NOTION_TOKEN": NOTION_TOKEN,
-                        }
+        NOTION_TOKEN = "YOUR_NOTION_TOKEN"
+
+        root_agent = Agent(
+            model="gemini-flash-latest",
+            name="notion_agent",
+            instruction="Help users get information from Notion",
+            tools=[
+                McpToolset(
+                    connection_params=StdioConnectionParams(
+                        server_params = StdioServerParameters(
+                            command="npx",
+                            args=[
+                                "-y",
+                                "@notionhq/notion-mcp-server",
+                            ],
+                            env={
+                                "NOTION_TOKEN": NOTION_TOKEN,
+                            }
+                        ),
+                        timeout=30,
                     ),
-                    timeout=30,
-                ),
-            )
-        ],
-    )
-    ```
+                )
+            ],
+        )
+        ```
+
+=== "TypeScript"
+
+    === "로컬 MCP 서버"
+
+        ```typescript
+        import { LlmAgent, MCPToolset } from "@google/adk";
+
+        const NOTION_TOKEN = "YOUR_NOTION_TOKEN";
+
+        const rootAgent = new LlmAgent({
+            model: "gemini-flash-latest",
+            name: "notion_agent",
+            instruction: "Help users get information from Notion",
+            tools: [
+                new MCPToolset({
+                    type: "StdioConnectionParams",
+                    serverParams: {
+                        command: "npx",
+                        args: ["-y", "@notionhq/notion-mcp-server"],
+                        env: {
+                            NOTION_TOKEN: NOTION_TOKEN,
+                        },
+                    },
+                }),
+            ],
+        });
+
+        export { rootAgent };
+        ```
+
+=== "Go"
+
+    === "로컬 MCP 서버"
+
+        ```go
+        package main
+
+        import (
+        	"context"
+        	"log"
+        	"os"
+        	"os/exec"
+
+        	"github.com/modelcontextprotocol/go-sdk/mcp"
+        	"google.golang.org/genai"
+
+        	"google.golang.org/adk/v2/agent"
+        	"google.golang.org/adk/v2/agent/llmagent"
+        	"google.golang.org/adk/v2/cmd/launcher"
+        	"google.golang.org/adk/v2/cmd/launcher/full"
+        	"google.golang.org/adk/v2/model/gemini"
+        	"google.golang.org/adk/v2/tool"
+        	"google.golang.org/adk/v2/tool/mcptoolset"
+        )
+
+        const notionToken = "YOUR_NOTION_TOKEN"
+
+        func main() {
+        	ctx := context.Background()
+
+        	model, err := gemini.NewModel(ctx, "gemini-flash-latest", &genai.ClientConfig{
+        		APIKey: os.Getenv("GOOGLE_API_KEY"),
+        	})
+        	if err != nil {
+        		log.Fatalf("Failed to create the model: %v", err)
+        	}
+
+        	server := exec.CommandContext(ctx, "npx", "-y", "@notionhq/notion-mcp-server")
+        	// Forward only what npx needs, plus the Notion token. The parent environment
+        	// may hold unrelated secrets, such as the GOOGLE_API_KEY read above.
+        	server.Env = []string{"NOTION_TOKEN=" + notionToken}
+        	for _, k := range []string{
+        		"PATH", "HOME", // POSIX
+        		"APPDATA", "LOCALAPPDATA", "TEMP", "USERPROFILE", // Windows
+        	} {
+        		if v, ok := os.LookupEnv(k); ok {
+        			server.Env = append(server.Env, k+"="+v)
+        		}
+        	}
+
+        	notion, err := mcptoolset.New(mcptoolset.Config{
+        		Transport: &mcp.CommandTransport{Command: server},
+        	})
+        	if err != nil {
+        		log.Fatalf("Failed to create the Notion tool set: %v", err)
+        	}
+
+        	rootAgent, err := llmagent.New(llmagent.Config{
+        		Model:       model,
+        		Name:        "notion_agent",
+        		Instruction: "Help users get information from Notion",
+        		Toolsets:    []tool.Toolset{notion},
+        	})
+        	if err != nil {
+        		log.Fatalf("Failed to create the agent: %v", err)
+        	}
+
+        	l := full.NewLauncher()
+        	cfg := &launcher.Config{AgentLoader: agent.NewSingleLoader(rootAgent)}
+        	if err := l.Execute(ctx, cfg, os.Args[1:]); err != nil {
+        		log.Fatalf("Run failed: %v\n\n%s", err, l.CommandLineSyntax())
+        	}
+        }
+        ```
 
 ## 사용 가능한 도구
 

@@ -11,7 +11,7 @@ catalog_tags: ["data"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
-[`adk-perseus-vault-memory`](https://github.com/Perseus-Computing-LLC/adk-mimir-memory) 統合は、ADK エージェントを永続的なセッション間メモリバックエンドである [Perseus Vault](https://github.com/Perseus-Computing-LLC/perseus-vault) に接続します。SQLite データベースが組み込まれた単一の Rust バイナリでサポートされており、**クラウドへの依存関係はゼロ**で、すべてがローカルで実行されます。メモリは AES-256-GCM によって保管時に暗号化され、検索は FTS5 キーワードマッチングと密ベクトル（dense vector）の取得を組み合わせます。
+[`adk-perseus-vault-memory`](https://github.com/Perseus-Computing-LLC/adk-mimir-memory) 統合は、ADK エージェントを永続的なセッション間メモリバックエンドである Perseus Vault に接続します。SQLite データベースが組み込まれた単一の Rust バイナリでサポートされており、**クラウドへの依存関係はゼロ**で、すべてがローカルで実行されます。メモリは AES-256-GCM によって保管時に暗号化され、検索は FTS5 キーワードマッチングと密ベクトル（dense vector）の取得を組み合わせます。
 
 ## ユースケース
 
@@ -26,18 +26,8 @@ catalog_tags: ["data"]
 ## 前提条件
 
 - Python 3.10+
-- `perseus-vault` バイナーリ（[インストール](#インストール) を参照）
+- `perseus-vault` バイナリがすでにインストールされていること。入手方法と手順については、[Perseus Computing Vault](https://perseus.observer/vault/) をご覧ください。
 - `google-adk>=1.0.0`
-
-## インストール
-
-Python パッケージをインストールします。
-
-```bash
-pip install adk-perseus-vault-memory
-```
-
-その後、`perseus-vault` バイナリをインストールします。[リリースピージ](https://github.com/Perseus-Computing-LLC/perseus-vault/releases)からお使いのプラットフォーム用のビルドをダウンロードし、`PATH` に配置します。サービスはデフォルトで `perseus-vault` を探しますが、あるいは `PerseusVaultMemoryService` に `vault_binary="/absolute/path/to/perseus-vault"` を渡すこともできます。
 
 ## エージェントとの連携
 
@@ -128,5 +118,4 @@ session = await runner.session_service.create_session(
 
 - [GitHub の adk-perseus-vault-memory](https://github.com/Perseus-Computing-LLC/adk-mimir-memory)
 - [PyPI の adk-perseus-vault-memory](https://pypi.org/project/adk-perseus-vault-memory/)
-- [Perseus Vault (バックアップサービス)](https://github.com/Perseus-Computing-LLC/perseus-vault)
 - [Perseus Context 統合ガイド](/ja/integrations/perseus/)

@@ -13,12 +13,12 @@ Galileo는 에이전트 실행, 도구 호출, 모델 요청에 대해 ADK에서
 OpenTelemetry(OTel) 트레이스 수집을 지원합니다.
 
 자세한 내용은 Galileo의
-[Google ADK 통합](https://v2docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk)
+[Google ADK 통합](https://docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk)
 문서를 참고하세요.
 
 ## 전제 조건
 
-- [Galileo API 키](https://v2docs.galileo.ai/references/faqs/find-keys#galileo-api-key)
+- [Galileo API 키](https://docs.galileo.ai/references/faqs/find-keys#galileo-api-key)
 - Galileo Project 및 Log stream
 - [Gemini API 키](https://aistudio.google.com/app/apikey)
 
@@ -133,7 +133,7 @@ Project를 선택한 뒤 Log Stream에서 트레이스와 스팬을 확인합니
 
 ## 리소스
 
-- [Galileo Google ADK Integration Documentation](https://v2docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk):
+- [Galileo Google ADK Integration Documentation](https://docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk):
   OpenTelemetry와 OpenInference를 사용해 Google ADK 프로젝트를 Galileo와
   통합하는 공식 문서입니다.
 - [Google ADK + OpenTelemetry Example Project](https://github.com/rungalileo/sdk-examples/tree/main/python/agent/google-adk):

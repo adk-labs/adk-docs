@@ -30,7 +30,9 @@
         # ベースパスを含むデプロイされた Apigee プロキシのプロキシ URL
         proxy_url=f"https://{APIGEE_PROXY_URL}",
         # 必要な認証/認可ヘッダー (API キーなど) を渡す
-        custom_headers={"foo": "bar"}
+        custom_headers={"foo": "bar"},
+        # 省略可能: プロキシに追加のOAuthスコープが必要な場合はgoogle-auth認証情報を渡す
+        # credentials=my_credentials
     )
 
     # 構成されたモデル ラッパーを LlmAgent に渡す

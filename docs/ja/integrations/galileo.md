@@ -11,12 +11,12 @@ catalog_tags: ["observability", "evaluation"]
 Galileo は ADK からの OpenTelemetry（OTel）トレースの直接取り込みをサポートしており、エージェント実行、ツール呼び出し、モデルリクエストを追跡できます。
 
 詳細は、Galileo の
-[Google ADK integration](https://v2docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk)
+[Google ADK integration](https://docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk)
 ドキュメントを参照してください。
 
 ## 前提条件
 
-- [Galileo API キー](https://v2docs.galileo.ai/references/faqs/find-keys#galileo-api-key)
+- [Galileo API キー](https://docs.galileo.ai/references/faqs/find-keys#galileo-api-key)
 - Galileo の Project と Log stream
 - [Gemini API キー](https://aistudio.google.com/app/apikey)
 
@@ -128,7 +128,7 @@ Project を選択し、Log Stream 内でトレースとスパンを確認しま�
 
 ## リソース
 
-- [Galileo Google ADK Integration Documentation](https://v2docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk):
+- [Galileo Google ADK Integration Documentation](https://docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk):
 Google ADK プロジェクトを OpenTelemetry と OpenInference を使って Galileo と統合するための公式ドキュメントです。
 - [Google ADK + OpenTelemetry Example Project](https://github.com/rungalileo/sdk-examples/tree/main/python/agent/google-adk):
 Galileo を Google ADK と一緒に使う方法を示すサンプルプロジェクトです。この例は、Galileo の計測を追加した完成版の

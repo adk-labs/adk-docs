@@ -40,8 +40,14 @@ ADKには、エージェントワークフローにすぐに追加できるい�
     Appレベルでグローバルインストラクション機能を提供するプラグインです。
 *   [**ファイルをアーティファクトとして保存**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/save_files_as_artifacts_plugin.py):
     ユーザーメッセージに含まれるファイルをアーティファクトとして保存します。
-*   [**ロギング**](https://github.com/google/adk-python/blame/main/src/google/adk/plugins/logging_plugin.py):
+*   [**自動トレース（Auto Tracing）**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/auto_tracing_plugin.py):
+    エージェント固有のパッケージ内の関数を OpenTelemetry スパンでラップします。
+*   [**マルチモーダルツール結果（Multimodal Tool Results）**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/multimodal_tool_results_plugin.py):
+    関数ツールがコンテンツパーツをモデルに直接返せるようにします。
+*   [**ロギング**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/logging_plugin.py):
     各エージェントワークフローのコールバックポイントで重要な情報をログに記録します。
+
+エージェント向けのネイティブおよびサードパーティの追加プラグインについては、[ADK インテグレーション](/ja/integrations/) ページをご覧ください。
 
 ## プラグインの定義と登録
 

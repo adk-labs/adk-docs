@@ -41,7 +41,7 @@
 
     # 이 구현 방법은 최소한의 코드가 필요하지만 사용자나 확인 시스템의 간단한 승인으로 제한됩니다.
     # 이 접근 방식에 대한 완전한 예제는 다음 코드 샘플을 참조하세요:
-    # https://github.com/google/adk-python/blob/main/contributing/samples/human_tool_confirmation/agent.py
+    # https://github.com/google/adk-python/blob/main/contributing/samples/hitl/human_tool_confirmation/agent.py
     ```
 
 === "TypeScript"

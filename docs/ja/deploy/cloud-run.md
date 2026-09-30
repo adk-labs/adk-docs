@@ -68,6 +68,8 @@ export GOOGLE_API_KEY=your-api-key
     1. サービスアカウント (例: "1234567890-compute@developer.gserviceaccount.com")
     1. GOOGLE_API_KEY
 
+また、Google Cloud CLI（`gcloud`）がインストールされている必要があります。
+
 ## シークレット
 
 サービスアカウントが読み取れるシークレットを作成したことを確認してください。

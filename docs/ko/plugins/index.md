@@ -40,8 +40,14 @@ ADK에는 에이전트 워크플로에 즉시 추가할 수 있는 여러 플러
     앱 수준에서 전역 지침 기능을 제공하는 플러그인입니다.
 *   [**아티팩트로 파일 저장**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/save_files_as_artifacts_plugin.py):
     사용자 메시지에 포함된 파일을 아티팩트로 저장합니다.
-*   [**로깅**](https://github.com/google/adk-python/blame/main/src/google/adk/plugins/logging_plugin.py):
+*   [**자동 트레이싱(Auto Tracing)**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/auto_tracing_plugin.py):
+    에이전트 자체 패키지의 함수를 OpenTelemetry 스팬으로 래핑합니다.
+*   [**멀티모달 도구 결과(Multimodal Tool Results)**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/multimodal_tool_results_plugin.py):
+    함수 도구가 콘텐츠 파트를 모델에 직접 반환할 수 있도록 합니다.
+*   [**로깅**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/logging_plugin.py):
     각 에이전트 워크플로 콜백 지점에서 중요한 정보를 로깅합니다.
+
+에이전트를 위한 추가 기본 플러그인 및 서드파티 플러그인은 [ADK 통합](/ko/integrations/) 페이지를 확인하세요.
 
 ## 플러그인 정의 및 등록
 
