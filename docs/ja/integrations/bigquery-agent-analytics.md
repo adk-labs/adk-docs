@@ -183,7 +183,7 @@ pip install "google-adk[bigquery-analytics]>=2.7.0"
     core, so add the integrations artifact:
 
     ```kotlin title="build.gradle.kts"
-    implementation("com.google.adk:google-adk-kotlin-integrations:1.0.0")
+    implementation("com.google.adk:google-adk-kotlin-integrations:1.3.1")
     ```
 
     ```kotlin title="BigQueryAnalyticsExample.kt"

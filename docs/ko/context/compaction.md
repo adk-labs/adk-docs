@@ -1,7 +1,7 @@
 # 성능 향상을 위한 에이전트 컨텍스트 압축
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.16.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
+  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.16.0</span><span class="lst-go">Go v2.3.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 ADK 에이전트는 실행되면서 사용자 지침, 검색된 데이터, 도구 응답 및 생성된 콘텐츠를 포함한 *컨텍스트* 정보를 수집합니다. 이 컨텍스트 데이터의 크기가 커질수록 에이전트 처리 시간도 일반적으로 증가합니다. 점점 더 많은 데이터가 에이전트가 사용하는 생성형 AI 모델로 전송되어 처리 시간이 길어지고 응답이 느려집니다. ADK 컨텍스트 압축 기능은 지침, 입력 및 모델 응답을 포함하여 이전 세션 기록을 요약함으로써 에이전트가 실행되는 동안 컨텍스트 크기를 줄이도록 설계되었습니다. 이 프로세스는 컴팩트한 컨텍스트 창을 유지함으로써 필수적인 최근 상호 작용에 대한 에이전트의 접근 권한을 보장하는 동시에 **대기 시간을 최적화하고 비용을 절감**합니다.
@@ -69,7 +69,7 @@ compaction_config = EventsCompactionConfig(
 
 ## 컨텍스트 압축 구성
 
-워크플로의 App 객체(Python/Java/Kotlin)에 이벤트 압축 구성 설정을 추가하거나, `LlmAgent`(TypeScript)에 `contextCompactors`를 설정하여 에이전트 워크플로에 컨텍스트 압축을 추가합니다. 구성의 일부로 다음 샘플 코드에 표시된 대로 압축 간격과 오버랩 크기(Python/Java) 또는 토큰 임계값과 이벤트 유지 크기(TypeScript/Kotlin)를 지정해야 합니다.
+App 객체(Python/Java/Kotlin)에 이벤트 압축 구성 설정을 추가하거나, `LlmAgent`(TypeScript)에 `contextCompactors`를 구성하거나, 러너 구성(Go)에 `Compaction`을 설정하여 에이전트 워크플로에 컨텍스트 압축을 추가합니다. 구성의 일부로 다음 샘플 코드에 표시된 대로 압축 간격과 오버랩 크기(Python/Java), 압축 간격과 선택적 오버랩 크기(Go), 또는 토큰 임계값과 이벤트 유지 크기(TypeScript/Kotlin/Go)를 지정해야 합니다.
 
 === "Python"
 
@@ -143,6 +143,26 @@ compaction_config = EventsCompactionConfig(
         )
     ```
 
+=== "Go"
+
+    ```go
+    import (
+    	"google.golang.org/adk/v2/runner"
+    	"google.golang.org/adk/v2/session/compaction"
+    )
+
+    // Compaction is set on the runner rather than on an App object.
+    r, err := runner.New(runner.Config{
+    	AppName:        "my-agent",
+    	Agent:          rootAgent,
+    	SessionService: sessionService,
+    	Compaction: &compaction.Config{
+    		CompactionInterval: 3, // Trigger compaction every 3 new invocations.
+    		OverlapSize:        1, // Include last invocation from the previous window.
+    	},
+    })
+    ```
+
 일단 구성되면 ADK `Runner`는 세션이 간격에 도달할 때마다 백그라운드에서 압축 프로세스를 처리합니다.
 
 ## 컨텍스트 압축 예시
@@ -167,7 +187,7 @@ compaction_config = EventsCompactionConfig(
 *   **`summarizer`**: (선택 사항) 요약에 사용할 특정 AI 모델을 포함하는 요약기 객체를 정의합니다. 자세한 내용은 [요약기 정의](#define-summarizer)를 참고하세요.
 
 ### 요약기 정의 {#define-summarizer}
-요약기를 정의하여 컨텍스트 압축 프로세스를 사용자 지정할 수 있습니다. `LlmEventSummarizer`(Python, Java 및 Kotlin) 또는 `LlmSummarizer`(TypeScript) 클래스를 사용하면 요약에 특정 모델을 지정할 수 있습니다. 다음 코드 예시는 사용자 지정 요약기를 정의하고 구성하는 방법을 보여줍니다.
+요약기를 정의하여 컨텍스트 압축 프로세스를 사용자 지정할 수 있습니다. `LlmEventSummarizer`(Python, Java 및 Kotlin), `LlmSummarizer`(TypeScript) 또는 `LLMSummarizer`(Go) 클래스를 사용하면 요약에 특정 모델을 지정할 수 있습니다. 다음 코드 예시는 사용자 지정 요약기를 정의하고 구성하는 방법을 보여줍니다.
 
 === "Python"
 
@@ -244,6 +264,9 @@ compaction_config = EventsCompactionConfig(
           summarizer: mySummarizer,
         }),
       ],
+    });
+    ```
+
 === "Kotlin"
 
     ```kotlin
@@ -272,4 +295,34 @@ compaction_config = EventsCompactionConfig(
         )
     ```
 
-요약기를 조정해 압축기의 동작을 더 세밀하게 제어할 수도 있습니다. Python, Java 및 Kotlin에서는 `LlmEventSummarizer`의 프롬프트 템플릿을 사용자 지정할 수 있습니다. 프로퍼티 이름은 Python에서는 `prompt_template`, Java와 Kotlin에서는 `promptTemplate`입니다. TypeScript에서는 `LlmSummarizer`의 `prompt`를 사용자 지정할 수 있습니다. 자세한 내용은 [`LlmEventSummarizer` 코드](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) 또는 [`LlmSummarizer` 코드](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts)를 참고하세요.
+=== "Go"
+
+    ```go
+    import (
+    	"google.golang.org/adk/v2/model/gemini"
+    	"google.golang.org/adk/v2/runner"
+    	"google.golang.org/adk/v2/session/compaction"
+    )
+
+    // Define the AI model to be used for summarization:
+    summarizationLLM, err := gemini.NewModel(ctx, "gemini-flash-latest", nil)
+
+    // Create the summarizer with the custom model:
+    mySummarizer, err := compaction.NewLLMSummarizer(compaction.LLMSummarizerConfig{
+    	Model: summarizationLLM,
+    })
+
+    // Configure the runner with the custom summarizer and compaction settings:
+    r, err := runner.New(runner.Config{
+    	AppName:        "my-agent",
+    	Agent:          rootAgent,
+    	SessionService: sessionService,
+    	Compaction: &compaction.Config{
+    		CompactionInterval: 3,
+    		OverlapSize:        1,
+    		Summarizer:         mySummarizer,
+    	},
+    })
+    ```
+
+요약기를 조정해 압축기의 동작을 더 세밀하게 제어할 수도 있습니다. Python, Java 및 Kotlin에서는 `LlmEventSummarizer`의 프롬프트 템플릿을 사용자 지정할 수 있습니다. 프로퍼티 이름은 Python에서는 `prompt_template`, Java와 Kotlin에서는 `promptTemplate`입니다. TypeScript에서는 `LlmSummarizer`의 `prompt`를 사용자 지정할 수 있습니다. Go에서는 `LLMSummarizerConfig`에 `PromptTemplate`을 설정하며, 여기에는 반드시 `{conversation_history}` 플레이스홀더가 포함되어야 합니다. 자세한 내용은 [`LlmEventSummarizer` 코드](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) 또는 [`LlmSummarizer` 코드](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts)를 참고하세요.

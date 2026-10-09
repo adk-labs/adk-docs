@@ -360,6 +360,17 @@ ADKは、ツールの軌跡の一致からLLMベースの応答品質評価ま�
 *   `rubric_based_tool_use_quality_v1`：カスタムルーブリックに基づくLLM判定によるツール使用品質。
 *   `hallucinations_v1`：コンテキストに対するエージェント応答のLLM判定によるグラウンディング。
 *   `safety_v1`：エージェント応答の安全性/無害性。
+*   `per_turn_user_simulator_quality_v1`：LLM判定によるユーザーシミュレーター品質。
+*   `multi_turn_task_success_v1`：会話目標の達成度を評価。
+*   `multi_turn_trajectory_quality_v1`：会話全体の軌跡を評価。
+*   `multi_turn_tool_use_quality_v1`：会話中に行われた関数呼び出しを評価。
+
+以下は*効率性（efficiency）*基準です。これらは値を報告しますが評価ケースを合格または不合格にすることはなく、`EvalConfig` に記載しなくてもすべての評価で報告されます。
+
+*   **tool_call_count_v1**: 行われたツール呼び出しの回数。
+*   **inference_call_count_v1**: 行われたモデル呼び出しの回数。
+*   **token_usage_v1**: 消費されたトークン数（合計とともに種類別の内訳が報告されます）。
+*   **invocation_duration_v1**: エージェントの実行中に測定された、ターンにかかった実時間（秒）。
 
 !!! warning "Vertex AI 評価 API の要件"
 
@@ -395,8 +406,7 @@ ADKは、ツールの軌跡の一致からLLMベースの応答品質評価ま�
 *   **マルチターンの目標達成を評価する：** `multi_turn_task_success_v1`を使用して、会話の目標達成を評価します。
 *   **会話全体の軌跡を評価する：** `multi_turn_trajectory_quality_v1`を使用して、会話全体の軌跡品質を評価します。
 *   **マルチターンのツール使用を評価する：** `multi_turn_tool_use_quality_v1`を使用して、会話中に行われた関数呼び出しを評価します。
-
-
+*   **エージェントの実行コストを追跡する：** 効率性基準（`tool_call_count_v1`、`inference_call_count_v1`、`token_usage_v1`、`invocation_duration_v1`）は、設定不要かつ追加のモデル呼び出しなしで自動的に報告されます。複数の実行間でこれらを比較することで、品質は変わらないままトークン使用量が倍増するような変更を検知できます。これらは評価を不合格にしないため、CI/CD 実行に新しい失敗モードを追加することはありません。
 
 さらに、予想されるエージェントツールの使用および/または応答に関する情報を必要とする基準は、[ユーザーシミュレーション](./user-sim.md)との組み合わせではサポートされていません。現在、`hallucinations_v1`、`safety_v1`、`per_turn_user_simulator_quality_v1` および新しいマルチターンメトリックのみがそのような評価をサポートしています。
 

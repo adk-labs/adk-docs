@@ -327,4 +327,4 @@ adk eval_set generate_eval_cases \
 
     `cloud_tts` を使用するには、`google-cloud-texttospeech` パッケージ（`google-adk[eval]` エクストラに含まれる）と Cloud Text-to-Speech API へのアクセス権が必要です。
 
-完全に実行可能なライブ評価構成のサンプルについては、[`contributing/samples/live/live_non_blocking_tool_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/live/live_non_blocking_tool_agent) を参照してください。
+完全に実行可能なライブ評価構成のサンプルについては、[`contributing/samples/live/non_blocking_tool_agent`](https://github.com/google/adk-python/tree/main/contributing/samples/live/non_blocking_tool_agent) を参照してください。

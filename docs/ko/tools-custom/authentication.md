@@ -302,6 +302,44 @@ credentials_config = BigQueryCredentialsConfig(
 
 ![인증](../assets/auth_part1.svg) 
 
+### 도구 세트(Toolset) 수준에서 인증
+
+<div class="language-support-tag">
+  <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.24.0</span>
+</div>
+
+각 도구를 개별적으로 인증하는 대신 도구 세트(Toolset) 수준에서 전체 도구 모음을 한 번에 인증할 수 있습니다.
+내부적으로 `BaseLlmFlow`는 도구를 나열하거나 실행하기도 *전에* 도구 세트의 `get_auth_config()` 메서드를 확인하여 `BaseToolset`의 인증 요구사항을 자동으로 확인합니다.
+도구 세트가 `AuthConfig` 객체를 반환하고 세션에 필요한 자격 증명이 아직 없는 경우 ADK 프레임워크는 다음 단계를 수행합니다.
+
+1. **실행 일시중지:** 현재 흐름을 안전하게 중지합니다.
+2. **자격 증명 요청:** [대화형 OAuth/OIDC 흐름 처리(클라이언트 측)](#2-oauthoidc)에 자세히 설명된 대화형 흐름과 유사하게 클라이언트에 `adk_request_credential` 이벤트를 발행합니다.
+
+이 접근 방식을 사용하면 관련된 도구 그룹에 대한 인증 요구사항을 단일 중앙 집중식 위치에서 정의할 수 있습니다. 프레임워크가 인증 절차를 처리하므로 에이전트가 도구 세트의 도구에 액세스하기 전에 필요한 자격 증명이 확인됩니다.
+
+#### 활성화 방법
+
+이를 설정하려면 커스텀 `BaseToolset` 서브클래스에서 `get_auth_config()` 메서드를 재정의하세요.
+
+```python
+from google.adk.auth import AuthConfig
+from google.adk.tools.base_toolset import BaseToolset
+
+
+class MyAuthenticatedToolset(BaseToolset):
+  async def get_tools(
+      self, readonly_context: Optional[ReadonlyContext] = None
+  ) -> list[BaseTool]:
+    # ADK는 이를 호출하기 전에 get_auth_config()에서 자격 증명을 확인하므로,
+    # 여기서 반환하는 도구는 해당 자격 증명에 의존할 수 있습니다.
+    return []  # 도구 세트의 도구로 바꾸세요.
+
+  def get_auth_config(self) -> AuthConfig:
+    return AuthConfig(
+        auth_scheme=auth_scheme,
+        raw_auth_credential=auth_credential,
+    )
+```
 
 ### 2. 대화형 OAuth/OIDC 흐름 처리(클라이언트 측)
 

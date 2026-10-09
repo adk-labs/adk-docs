@@ -172,6 +172,21 @@ Integration Connectors 用の Application Integration Toolset を作るには次
 
     * デフォルト認証情報の代わりにサービスアカウントを使うには、[Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete#creating) を生成し、サービスアカウントへ適切な [Application Integration and Integration Connector IAM roles](#prerequisites) を付与してください。
     * connection でサポートされる entity/actions 一覧は Connector API の [listActions](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listActions) または [listEntityTypes](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listEntityTypes) で確認できます。
+    * カスタムワークフローを使用するには、`connection_template_override` パラメータを使用してデフォルトの `ExecuteConnection` 統合をオーバーライドします。
+
+        !!! note "言語サポート"
+            このパラメータには **Python SDK v1.21.0** 以降が必要です。
+
+      ```py
+      from google.adk.tools.application_integration_tool.application_integration_toolset import ApplicationIntegrationToolset
+
+      connector_tool = ApplicationIntegrationToolset(
+          project="YOUR_PROJECT_ID",
+          location="YOUR_LOCATION", # e.g., "us-central1"
+          connection="YOUR_CONNECTION_NAME",
+          connection_template_override="YOUR_CUSTOM_INTEGRATION_NAME",
+      )
+      ```
 
 
     `ApplicationIntegrationToolset` は Integration Connectors の **動的 OAuth2 認証** のために `auth_scheme` と `auth_credential` をサポートします。利用するには `tools.py` に次のように記述します:

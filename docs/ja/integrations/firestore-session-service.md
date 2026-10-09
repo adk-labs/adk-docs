@@ -31,7 +31,7 @@ ADK は Firestore を使って永続的なエージェントセッション状�
 
 !!! note
 
-    互換性を確保するため、`google-adk` と `google-adk-firestore-session-service` には同じバージョンを使用してください。以下の例では `1.6.0` を使用します。最新の ADK バージョンを確認し、両方の依存関係でそれを使用してください。
+    互換性を確保するため、`google-adk` と `google-adk-firestore-session-service` には同じバージョンを使用してください。以下の例では `1.11.0` を使用します。最新の ADK バージョンを確認し、両方の依存関係でそれを使用してください。
 
 ### Maven
 
@@ -41,13 +41,13 @@ ADK は Firestore を使って永続的なエージェントセッション状�
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk</artifactId>
-        <version>1.6.0</version>
+        <version>1.11.0</version>
     </dependency>
     <!-- Firestore Session Service -->
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk-firestore-session-service</artifactId>
-        <version>1.6.0</version>
+        <version>1.11.0</version>
     </dependency>
 </dependencies>
 ```
@@ -57,9 +57,9 @@ ADK は Firestore を使って永続的なエージェントセッション状�
 ```gradle
 dependencies {
     // ADK Core
-    implementation 'com.google.adk:google-adk:1.6.0'
+    implementation 'com.google.adk:google-adk:1.11.0'
     // Firestore Session Service
-    implementation 'com.google.adk:google-adk-firestore-session-service:1.6.0'
+    implementation 'com.google.adk:google-adk-firestore-session-service:1.11.0'
 }
 ```
 

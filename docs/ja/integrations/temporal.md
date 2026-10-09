@@ -170,7 +170,7 @@ asyncio.run(start())
 
 ### MCP ツールを使う
 
-[MCP](/mcp/) ツールを Temporal Activity として実行します:
+[MCP](/tools-custom/mcp-tools/) ツールを Temporal Activity として実行します:
 
 ```python
 from google.adk.agents import Agent

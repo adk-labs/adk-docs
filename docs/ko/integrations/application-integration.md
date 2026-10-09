@@ -168,6 +168,21 @@ Integration Connectors용 Application Integration Toolset을 만들려면 다음
 
     * 기본 자격 증명 대신 서비스 계정을 사용하려면 [Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete#creating)를 생성하고, 해당 서비스 계정에 올바른 [Application Integration and Integration Connector IAM roles](#prerequisites)를 부여하세요.
     * 연결에서 지원하는 entity/actions 목록은 Connectors API의 [listActions](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listActions) 또는 [listEntityTypes](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listEntityTypes)로 확인할 수 있습니다.
+    * 커스텀 워크플로우를 사용하려면 `connection_template_override` 매개변수로 기본 `ExecuteConnection` 통합을 재정의하세요.
+
+        !!! note "언어 지원"
+            이 매개변수는 **Python SDK v1.21.0** 이상이 필요합니다.
+
+      ```py
+      from google.adk.tools.application_integration_tool.application_integration_toolset import ApplicationIntegrationToolset
+
+      connector_tool = ApplicationIntegrationToolset(
+          project="YOUR_PROJECT_ID",
+          location="YOUR_LOCATION", # e.g., "us-central1"
+          connection="YOUR_CONNECTION_NAME",
+          connection_template_override="YOUR_CUSTOM_INTEGRATION_NAME",
+      )
+      ```
 
 
     `ApplicationIntegrationToolset`은 Integration Connectors의 **동적 OAuth2 인증**을 위해 `auth_scheme`과 `auth_credential`을 지원합니다. 사용하려면 `tools.py`에 다음과 같이 도구를 생성하세요:

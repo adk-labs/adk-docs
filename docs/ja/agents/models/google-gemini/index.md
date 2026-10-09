@@ -352,7 +352,9 @@ Gemini の [Interactions API](https://ai.google.dev/gemini-api/docs/interactions
     ```
 
 完全なサンプルは
-[Interactions API サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/interactions_api)を参照してください。
+[Interactions API サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/models/interactions_api)を参照してください。
+
+Interactions API を有効にすると、実行ごとにサービングティアを選択することもできます。オフピーク容量で実行されるようにモデル呼び出しをキューに入れる方法の詳細については、[遅延スケジューリング](deferred-schedule.md)をご覧ください。
 
 ### 既知の制限
 

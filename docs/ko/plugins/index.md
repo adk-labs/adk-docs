@@ -20,9 +20,9 @@ ADK(Agent Development Kit)의 플러그인은 콜백 후크를 사용하여 에�
 
 ## 플러그인은 어떻게 작동합니까?
 
-ADK 플러그인은 `BasePlugin` 클래스를 확장하며 에이전트 수명 주기에서 플러그인이 실행되어야 하는 위치를 나타내는 하나 이상의 `callback` 메서드를 포함합니다. 에이전트의 `Runner` 클래스에 플러그인을 등록하여 에이전트에 통합합니다. 에이전트 애플리케이션에서 플러그인을 트리거할 수 있는 방법과 위치에 대한 자세한 내용은 [플러그인 콜백 후크](#plugin-callback-hooks)를 참고하세요.
+ADK 플러그인은 `BasePlugin` 클래스를 확장하며 에이전트 수명 주기에서 플러그인이 실행되어야 하는 위치를 나타내는 하나 이상의 `callback` 메서드를 포함합니다. 에이전트의 `Runner` 클래스(Python의 경우 `App` 객체)에 플러그인을 등록하여 에이전트에 통합합니다. 에이전트 애플리케이션에서 플러그인을 트리거할 수 있는 방법과 위치에 대한 자세한 내용은 [플러그인 콜백 후크](#plugin-callback-hooks)를 참고하세요.
 
-플러그인 기능은 ADK의 확장 가능한 아키텍처의 핵심 설계 요소인 [콜백](../callbacks/index.md)을 기반으로 합니다. 일반적인 에이전트 콜백은 *특정 작업*을 위해 *단일 에이전트, 단일 도구*에 구성되는 반면, 플러그인은 `Runner`에 *한 번* 등록되며 해당 콜백은 해당 러너가 관리하는 모든 에이전트, 도구 및 LLM 호출에 *전역적으로* 적용됩니다. 플러그인을 사용하면 관련 콜백 함수를 함께 묶어 워크플로 전체에서 사용할 수 있습니다. 따라서 플러그인은 전체 에이전트 애플리케이션에 걸쳐 있는 기능을 구현하는 데 이상적인 솔루션입니다.
+플러그인 기능은 ADK의 확장 가능한 아키텍처의 핵심 설계 요소인 [콜백](../callbacks/index.md)을 기반으로 합니다. 일반적인 에이전트 콜백은 *특정 작업*을 위해 *단일 에이전트, 단일 도구*에 구성되는 반면, 플러그인은 `Runner`(Python의 경우 `App`)에 *한 번* 등록되며 해당 콜백은 해당 러너가 관리하는 모든 에이전트, 도구 및 LLM 호출에 *전역적으로* 적용됩니다. 플러그인을 사용하면 관련 콜백 함수를 함께 묶어 워크플로 전체에서 사용할 수 있습니다. 따라서 플러그인은 전체 에이전트 애플리케이션에 걸쳐 있는 기능을 구현하는 데 이상적인 솔루션입니다.
 
 ## 사전 빌드된 플러그인
 
@@ -46,6 +46,12 @@ ADK에는 에이전트 워크플로에 즉시 추가할 수 있는 여러 플러
     함수 도구가 콘텐츠 파트를 모델에 직접 반환할 수 있도록 합니다.
 *   [**로깅**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/logging_plugin.py):
     각 에이전트 워크플로 콜백 지점에서 중요한 정보를 로깅합니다.
+*   [**디버그 로깅(Debug Logging)**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/debug_logging_plugin.py):
+    각 호출에 대한 전체 디버그 정보를 YAML 파일로 캡처합니다.
+*   [**모델 반영 및 재시도(Reflect and Retry Model)**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/_reflect_retry_model_plugin.py):
+    잘못된 형식의 함수 호출과 같이 응답이 오류로 끝날 때 모델에 다시 시도하도록 요청합니다.
+*   [**도구 호출 무결성(Tool Call Integrity)**](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/_tool_call_integrity_plugin.py):
+    세션에 저장된 각 함수 호출에 비밀 키로 서명하고 호출의 서명이 검증된 경우에만 도구를 실행합니다. 워크플로 노드로 실행되는 도구는 확인하지 않습니다.
 
 에이전트를 위한 추가 기본 플러그인 및 서드파티 플러그인은 [ADK 통합](/ko/integrations/) 페이지를 확인하세요.
 
@@ -171,11 +177,16 @@ public class CountInvocationPlugin extends BasePlugin {
 
 ### 플러그인 클래스 등록
 
-`plugins` 매개변수를 사용하여 에이전트 초기화 시 `Runner` 클래스의 일부로 플러그인 클래스를 등록하여 통합합니다. 이 매개변수로 여러 플러그인을 지정할 수 있습니다. 다음 코드 예시는 이전 섹션에서 정의된 `CountInvocationPlugin` 플러그인을 간단한 ADK 에이전트에 등록하는 방법을 보여줍니다.
+`plugins` 매개변수를 사용하여 에이전트 초기화 시 `Runner` 클래스(Python의 경우 `App` 객체)의 일부로 플러그인 클래스를 등록하여 통합합니다. 이 매개변수로 여러 플러그인을 지정할 수 있습니다. 다음 코드 예시는 이전 섹션에서 정의된 `CountInvocationPlugin` 플러그인을 간단한 ADK 에이전트에 등록하는 방법을 보여줍니다.
+
+!!! note "Python: `Runner(plugins=...)` 대신 `App(plugins=...)` 사용"
+
+    Python에서 `Runner` 및 `InMemoryRunner`의 `plugins` 매개변수는 지원 중단되었으며 `DeprecationWarning`을 발생시킵니다. 대신 [`App`](../apps/index.md)에 `plugins`를 설정하고 해당 `App`을 `InMemoryRunner(app=app)`으로 러너에 전달하세요. `plugins`와 `app`을 모두 전달하면 `ValueError`가 발생합니다.
 
 ```py
 from google.adk.runners import InMemoryRunner
 from google.adk import Agent
+from google.adk.apps import App
 from google.adk.tools.tool_context import ToolContext
 from google.genai import types
 import asyncio
@@ -195,16 +206,18 @@ root_agent = Agent(
     tools=[hello_world],
 )
 
+app = App(
+    name='test_app_with_plugin',
+    root_agent=root_agent,
+
+    # 여기에 플러그인을 추가합니다. 여러 플러그인을 추가할 수 있습니다.
+    plugins=[CountInvocationPlugin()],
+)
+
 async def main():
   """에이전트의 메인 진입점입니다."""
   prompt = 'hello world'
-  runner = InMemoryRunner(
-      agent=root_agent,
-      app_name='test_app_with_plugin',
-
-      # 여기에 플러그인을 추가합니다. 여러 플러그인을 추가할 수 있습니다.
-      plugins=[CountInvocationPlugin()],
-  )
+  runner = InMemoryRunner(app=app)
 
   # 나머지는 일반 ADK 러너를 시작하는 것과 동일합니다.
   session = await runner.session_service.create_session(
@@ -347,6 +360,12 @@ public class Main {
     --8<-- "examples/kotlin/snippets/plugins/CountInvocationPlugin.kt:register_plugin"
     ```
 
+Python에서는 `--extra_plugins` 옵션을 사용하여 `adk web` 또는 `adk api_server`에 가져오기 경로(import path)를 전달함으로써 에이전트 코드를 변경하지 않고도 플러그인을 로드할 수 있습니다. ADK는 `App`에서 등록한 플러그인 뒤에 이를 추가합니다. 생성자가 `name` 인수를 허용하는 경우에만 클래스를 전달하고, 그렇지 않으면 모듈 수준에서 정의된 플러그인 인스턴스를 전달하세요. 둘 이상의 플러그인을 로드하려면 옵션을 반복하여 사용하세요.
+
+```shell
+adk web --extra_plugins=google.adk.plugins.LoggingPlugin /path/to/agents
+```
+
 ### 플러그인으로 에이전트 실행
 
 평소처럼 플러그인을 실행합니다. 다음은 명령줄을 실행하는 방법을 보여줍니다.
@@ -388,9 +407,17 @@ ADK 에이전트 실행에 대한 자세한 내용은 [에이전트 런타임](/
 
 **주의:** 플러그인 콜백 함수는 객체 수준에서 구현된 콜백보다 우선합니다. 이 동작은 플러그인 수준 콜백 코드가 에이전트, 모델 또는 도구 객체 콜백이 실행되기 *전에* 실행됨을 의미합니다. 또한 플러그인 수준 에이전트 콜백이 비어 있지 않은(`None`이 아닌) 응답을 반환하면 에이전트, 모델 또는 도구 수준 콜백은 *실행되지 않습니다* (건너뜀).
 
+Python에서 둘 이상의 플러그인을 등록할 때는 다음 동작에 유의하세요.
+
+-   **순서:** ADK는 `plugins` 목록에 플러그인이 나타나는 순서대로 각 콜백을 실행하며, `None` 이외의 값을 반환하는 첫 번째 플러그인에서 멈춥니다.
+-   **이름:** 각 플러그인에는 고유한 `name`이 필요합니다. 이름이 같은 두 플러그인이 있으면 `Runner`가 생성될 때 `ValueError`가 발생하므로, 동일한 클래스의 각 인스턴스에 고유한 이름을 지정하세요.
+-   **예외:** 플러그인 콜백에서 발생한 예외는 원래 예외를 `__cause__`로 가지는 `RuntimeError`로 코드에 도달합니다.
+    `on_agent_error_callback` 및 `on_run_error_callback` 후크는 다르게 작동합니다.
+    ADK는 모든 플러그인에서 이를 실행하며, 내부에서 발생한 예외는 다시 발생시키는 대신 로그에 기록합니다.
+
 플러그인 설계는 코드 실행 계층 구조를 설정하고 전역 관심사를 로컬 에이전트 논리에서 분리합니다. 플러그인은 `PerformanceMonitoringPlugin`과 같이 빌드하는 상태 저장 *모듈*인 반면, 콜백 후크는 해당 모듈 내에서 실행되는 특정 *함수*입니다. 이 아키텍처는 다음과 같은 중요한 방식으로 표준 에이전트 콜백과 근본적으로 다릅니다.
 
--   **범위**: 플러그인 후크는 *전역적*입니다. `Runner`에 플러그인을 한 번 등록하면 해당 후크는 관리하는 모든 에이전트, 모델 및 도구에 보편적으로 적용됩니다. 대조적으로 에이전트 콜백은 *로컬*이며 특정 에이전트 인스턴스에 개별적으로 구성됩니다.
+-   **범위**: 플러그인 후크는 *전역적*입니다. `Runner`(Python의 경우 `App`)에 플러그인을 한 번 등록하면 해당 후크는 관리하는 모든 에이전트, 모델 및 도구에 보편적으로 적용됩니다. 대조적으로 에이전트 콜백은 *로컬*이며 특정 에이전트 인스턴스에 개별적으로 구성됩니다.
 -   **실행 순서**: 플러그인이 *우선*합니다. 주어진 이벤트에 대해 플러그인 후크는 항상 해당 에이전트 콜백보다 먼저 실행됩니다. 이 시스템 동작은 플러그인을 보안 정책, 범용 캐싱 및 전체 애플리케이션에 걸친 일관된 로깅과 같은 교차 절단 기능을 구현하기 위한 올바른 아키텍처 선택으로 만듭니다.
 
 ### 에이전트 콜백 및 플러그인
@@ -418,7 +445,7 @@ ADK 에이전트 실행에 대한 자세한 내용은 [에이전트 런타임](/
     </tr>
     <tr>
       <td><strong>구성</strong></td>
-      <td><code>Runner</code>에서 한 번 구성합니다.</td>
+      <td><code>Runner</code>(Python의 경우 <code>App</code>)에서 한 번 구성합니다.</td>
       <td>각 <code>BaseAgent</code> 인스턴스에서 개별적으로 구성합니다.</td>
     </tr>
     <tr>
@@ -431,7 +458,7 @@ ADK 에이전트 실행에 대한 자세한 내용은 [에이전트 런타임](/
 
 ## 플러그인 콜백 후크
 
-플러그인 클래스에서 정의할 콜백 함수를 사용하여 플러그인이 호출되는 시기를 정의합니다. 콜백은 사용자 메시지가 수신될 때, `Runner`, `Agent`, `Model` 또는 `Tool`이 호출되기 전후, `이벤트`에 대해, 그리고 `Model` 또는 `Tool` 오류가 발생할 때 사용할 수 있습니다. 이러한 콜백은 에이전트, 모델 및 도구 클래스 내에 정의된 모든 콜백을 포함하며 우선합니다.
+플러그인 클래스에서 정의할 콜백 함수를 사용하여 플러그인이 호출되는 시기를 정의합니다. 콜백은 사용자 메시지가 수신될 때, `Runner`, `Agent`, `Model` 또는 `Tool`이 호출되기 전후, `Events`에 대해, 그리고 `Model` 또는 `Tool` 오류가 발생할 때 사용할 수 있습니다. Python에서는 `Agent`가 예외를 발생시킬 때와 실행 자체가 실패할 때에도 오류 콜백이 실행됩니다. 이러한 콜백은 에이전트, 모델 및 도구 클래스 내에 정의된 모든 콜백을 포함하며 우선합니다.
 
 다음 다이어그램은 에이전트 워크플로 중에 플러그인 기능을 연결하고 실행할 수 있는 콜백 지점을 보여줍니다.
 
@@ -445,6 +472,7 @@ ADK 에이전트 실행에 대한 자세한 내용은 [에이전트 런타임](/
 -   [에이전트 실행 콜백](#agent-execution-callbacks)
 -   [모델 콜백](#model-callbacks)
 -   [도구 콜백](#tool-callbacks)
+-   [이벤트 콜백](#event-callbacks)
 -   [러너 종료 콜백](#runner-end-callbacks)
 
 ### 사용자 메시지 콜백
@@ -489,9 +517,9 @@ public Maybe<Content> onUserMessageCallback(
 
 *러너 시작* 콜백(`before_run_callback`)은 `Runner` 객체가 잠재적으로 수정된 사용자 메시지를 받아 실행을 준비할 때 발생합니다. `before_run_callback`은 여기서 실행되어 에이전트 로직이 시작되기 전에 전역 설정을 허용합니다.
 
--   **실행 시점:** `runner.run()`이 호출된 직후, 다른 처리 이전에 발생합니다.
--   **목적:** 사용자의 원시 입력을 검사하거나 수정하는 첫 번째 기회입니다.
--   **흐름 제어:** 사용자 원본 메시지를 **대체**할 `types.Content` 객체를 반환합니다.
+-   **실행 시점:** 사용자 메시지가 처리된 후 에이전트 실행이 시작되기 전에 발생합니다.
+-   **목적:** 호출이 실행되기 전의 전역 설정 또는 초기화입니다.
+-   **흐름 제어:** `types.Content` 객체를 반환하여 **실행을 중지**합니다. `Runner`가 조기에 종료되고 해당 콘텐츠를 결과로 하여 실행을 마칩니다. Python에서는 이 조기 종료가 `LlmAgent` 또는 `Workflow`를 포함한 모든 루트 에이전트에 적용됩니다. 정상적으로 진행하려면 `None`을 반환합니다.
 
 다음 코드 예시는 이 콜백의 기본 구문을 보여줍니다.
 
@@ -518,7 +546,7 @@ public Maybe<Content> beforeRunCallback(InvocationContext invocationContext) {
 
 ### 에이전트 실행 콜백
 
-*에이전트 실행* 콜백(`before_agent`, `after_agent`)은 `Runner` 객체가 에이전트를 호출할 때 발생합니다. `before_agent_callback`은 에이전트의 주요 작업이 시작되기 직전에 실행됩니다. 주요 작업은 모델 또는 도구 호출을 포함할 수 있는 요청 처리의 전체 에이전트 프로세스를 포괄합니다. 에이전트가 모든 단계를 완료하고 결과를 준비한 후 `after_agent_callback`이 실행됩니다.
+*에이전트 실행* 콜백(`before_agent`, `after_agent`)은 `Runner` 객체가 에이전트를 호출할 때 발생합니다. `before_agent_callback`은 에이전트의 주요 작업이 시작되기 직전에 실행됩니다. 주요 작업은 모델 또는 도구 호출을 포함할 수 있는 요청 처리의 전체 에이전트 프로세스를 포괄합니다. 에이전트가 모든 단계를 완료하고 결과를 준비한 후 `after_agent_callback`이 실행됩니다. Python에서는 에이전트 실행에서 예외가 발생하면 `after_agent_callback` 대신 `on_agent_error_callback(*, agent, callback_context, error)`이 실행됩니다. 이 콜백은 실패만 관찰하며 반환 값은 무시되고 원래 예외가 그대로 발생합니다.
 
 **주의:** 이러한 콜백을 구현하는 플러그인은 에이전트 수준 콜백이 실행되기 *전에* 실행됩니다. 또한 플러그인 수준 에이전트 콜백이 `None` 또는 null 응답 이외의 다른 값을 반환하면 에이전트 수준 콜백은 *실행되지 않습니다* (건너뜀).
 
@@ -526,7 +554,7 @@ public Maybe<Content> beforeRunCallback(InvocationContext invocationContext) {
 
 ### 모델 콜백
 
-모델 콜백 **(`before_model`, `after_model`, `on_model_error`)**은 모델 객체가 실행되기 전후에 발생합니다. 플러그인 기능은 아래에 자세히 설명된 대로 오류 발생 시 콜백도 지원합니다.
+모델 콜백 **(`before_model`, `after_model`, `on_model_error`)**은 모델 객체가 실행되기 전후 또는 모델 호출이 실패할 때 다음과 같이 발생합니다.
 
 -   에이전트가 AI 모델을 호출해야 하는 경우 `before_model_callback`이 먼저 실행됩니다.
 -   모델 호출이 성공하면 `after_model_callback`이 다음으로 실행됩니다.
@@ -536,7 +564,7 @@ public Maybe<Content> beforeRunCallback(InvocationContext invocationContext) {
 
 #### 모델 오류 시 콜백 세부 정보
 
-모델 객체에 대한 오류 시 콜백은 플러그인 기능에서만 지원되며 다음과 같이 작동합니다.
+모델 객체에 대한 오류 시 콜백은 다음과 같이 작동합니다.
 
 -   **실행 시점:** 모델 호출 중에 예외가 발생할 때.
 -   **일반적인 사용 사례:** 정상적인 오류 처리, 특정 오류 로깅 또는 "AI 서비스는 현재 사용할 수 없습니다."와 같은 대체 응답 반환.
@@ -544,7 +572,7 @@ public Maybe<Content> beforeRunCallback(InvocationContext invocationContext) {
     -   `LlmResponse` 객체를 반환하여 **예외를 억제**하고 대체 결과를 제공합니다.
     -   `None`을 반환하여 원래 예외가 발생하도록 허용합니다.
 
-**참고**: 모델 객체의 실행이 `LlmResponse`를 반환하면 시스템은 실행 흐름을 재개하고 `after_model_callback`이 정상적으로 트리거됩니다.****
+**참고**: 모델 객체의 실행이 `LlmResponse`를 반환하면 시스템은 실행 흐름을 재개하고 `after_model_callback`이 정상적으로 트리거됩니다.
 
 다음 코드 예시는 이 콜백의 기본 구문을 보여줍니다.
 
@@ -580,7 +608,7 @@ public Maybe<LlmResponse> onModelErrorCallback(
 
 ### 도구 콜백
 
-플러그인에 대한 도구 콜백 **(`before_tool`, `after_tool`, `on_tool_error`)**은 도구 실행 전후 또는 오류 발생 시 발생합니다. 플러그인 기능은 아래에 자세히 설명된 대로 오류 발생 시 콜백도 지원합니다.
+플러그인에 대한 도구 콜백 **(`before_tool`, `after_tool`, `on_tool_error`)**은 도구 실행 전후 또는 오류 발생 시 다음과 같이 발생합니다.
 
 -   에이전트가 도구를 실행하면 `before_tool_callback`이 먼저 실행됩니다.
 -   도구가 성공적으로 실행되면 `after_tool_callback`이 다음으로 실행됩니다.
@@ -590,7 +618,7 @@ public Maybe<LlmResponse> onModelErrorCallback(
 
 #### 도구 오류 시 콜백 세부 정보
 
-도구 객체에 대한 오류 시 콜백은 플러그인 기능에서만 지원되며 다음과 같이 작동합니다.
+도구 객체에 대한 오류 시 콜백은 다음과 같이 작동합니다.
 
 -   **실행 시점:** 도구의 `run` 메서드 실행 중에 예외가 발생할 때.
 -   **목적:** 특정 도구 예외(`APIError`와 같은)를 포착하고, 실패를 로깅하고, LLM에 사용자 친화적인 오류 메시지를 다시 제공합니다.
@@ -638,7 +666,7 @@ public Maybe<Map<String, Object>> onToolErrorCallback(
 
 -   **실행 시점:** 에이전트가 `Event`를 생성한 후 사용자에게 보내기 전에. 에이전트 실행은 여러 이벤트를 생성할 수 있습니다.
 -   **목적:** 이벤트 수정 또는 보강(예: 메타데이터 추가) 또는 특정 이벤트에 따라 부작용 트리거에 유용합니다.
--   **흐름 제어:** 원본 이벤트를 **대체**할 `Event` 객체를 반환합니다.
+-   **흐름 제어:** 원본 이벤트를 **재정의**할 `Event` 객체를 반환합니다. Python에서 ADK는 반환된 이벤트를 원본 이벤트에 병합합니다. 즉, 설정한 필드만 적용되며 `id`, `invocation_id`, `timestamp`는 항상 원본 이벤트에서 가져옵니다.
 
 다음 코드 예시는 이 콜백의 기본 구문을 보여줍니다.
 
@@ -679,7 +707,7 @@ public Maybe<Event> onEventCallback(InvocationContext invocationContext, Event e
 ```py
 async def after_run_callback(
     self, *, invocation_context: InvocationContext
-) -> Optional[None]:
+) -> None:
 ```
 
 === "TypeScript"
@@ -696,6 +724,11 @@ public Completable afterRunCallback(InvocationContext invocationContext) {
   return Completable.complete();
 }
 ```
+
+Python에서 ADK는 플러그인에 두 가지 수명 주기 이벤트를 추가로 알립니다.
+
+-   **`on_run_error_callback(*, invocation_context, error)`**: 처리되지 않은 예외로 인해 실행이 실패할 때 `after_run_callback` 대신 실행됩니다. 이 콜백은 실패만 관찰하며 반환 값은 무시되고 원래 예외가 그대로 발생합니다.
+-   **`close()`**: 실행당 한 번이 아니라 `await runner.close()`로 `Runner`를 닫을 때 플러그인당 한 번 실행됩니다. HTTP 클라이언트나 측정항목 내보내기(exporter)와 같이 플러그인이 소유한 리소스를 해제하는 데 사용하세요. 각 `close()` 호출은 러너의 `plugin_close_timeout`(기본값 5초)으로 제한됩니다.
 
 ## 언어별 빠른 참고
 

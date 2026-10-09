@@ -1,7 +1,7 @@
 # パフォーマンスのためのエージェントコンテキストの圧縮
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.16.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.16.0</span><span class="lst-go">Go v2.3.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-typescript">TypeScript v0.6.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
 ADK エージェントは実行されながら、ユーザーの指示、取得されたデータ、ツールの応答、生成されたコンテンツを含む*コンテキスト*情報を収集します。このコンテキストデータのサイズが大きくなるにつれて、エージェントの処理時間も通常は増加します。より多くのデータがエージェントの使用する生成 AI モデルに送信されるため、処理時間が長くなり応答が遅くなります。ADK のコンテキスト圧縮機能は、指示、入力、モデルの応答を含む古いセッション履歴を要約することで、エージェントの実行中にコンテキストのサイズを削減するように設計されています。このプロセスは、コンパクトなコンテキストウィンドウを維持することにより、重要な最近のやり取りへのエージェントのアクセスを確保しつつ、**レイテンシを最適化しコストを削減**します。
@@ -69,7 +69,7 @@ compaction_config = EventsCompactionConfig(
 
 ## コンテキスト圧縮の設定
 
-ワークフローの App オブジェクト（Python/Java/Kotlin）にイベント圧縮設定を追加するか、`LlmAgent`（TypeScript）で `contextCompactors` を構成することで、エージェントワークフローにコンテキスト圧縮を追加できます。設定の一部として、次のサンプルコードのように圧縮間隔と重複サイズ（Python/Java）またはトークンしきい値とイベント保持サイズ（TypeScript/Kotlin）を指定する必要があります。
+App オブジェクト（Python/Java/Kotlin）にイベント圧縮設定を追加するか、`LlmAgent`（TypeScript）で `contextCompactors` を構成するか、ランナー構成（Go）で `Compaction` を設定することで、エージェントワークフローにコンテキスト圧縮を追加できます。設定の一部として、次のサンプルコードのように圧縮間隔と重複サイズ（Python/Java）、圧縮間隔と任意の重複サイズ（Go）、またはトークンしきい値とイベント保持サイズ（TypeScript/Kotlin/Go）を指定する必要があります。
 
 === "Python"
 
@@ -143,6 +143,26 @@ compaction_config = EventsCompactionConfig(
         )
     ```
 
+=== "Go"
+
+    ```go
+    import (
+    	"google.golang.org/adk/v2/runner"
+    	"google.golang.org/adk/v2/session/compaction"
+    )
+
+    // Compaction is set on the runner rather than on an App object.
+    r, err := runner.New(runner.Config{
+    	AppName:        "my-agent",
+    	Agent:          rootAgent,
+    	SessionService: sessionService,
+    	Compaction: &compaction.Config{
+    		CompactionInterval: 3, // Trigger compaction every 3 new invocations.
+    		OverlapSize:        1, // Include last invocation from the previous window.
+    	},
+    })
+    ```
+
 構成されると、ADK `Runner`はセッションが間隔に達するたびにバックグラウンドで圧縮プロセスを処理します。
 
 ## コンテキスト圧縮の例
@@ -167,7 +187,7 @@ compaction_config = EventsCompactionConfig(
 *   **`summarizer`**: (オプション) 要約に使用する特定のAIモデルを含むサマライザーオブジェクトを定義します。詳細については、[サマライザーの定義](#define-summarizer)を参照してください。
 
 ### サマライザーを定義する {#define-summarizer}
-サマライザーを定義することで、コンテキスト圧縮プロセスをカスタマイズできます。`LlmEventSummarizer`（Python、Java、および Kotlin）または `LlmSummarizer`（TypeScript）クラスを使うと、要約に使うモデルを指定できます。次のコード例は、カスタムサマライザーを定義して構成する方法を示しています。
+サマライザーを定義することで、コンテキスト圧縮プロセスをカスタマイズできます。`LlmEventSummarizer`（Python、Java、および Kotlin）、`LlmSummarizer`（TypeScript）、または `LLMSummarizer`（Go）クラスを使うと、要約に使うモデルを指定できます。次のコード例は、カスタムサマライザーを定義して構成する方法を示しています。
 
 === "Python"
 
@@ -244,6 +264,9 @@ compaction_config = EventsCompactionConfig(
           summarizer: mySummarizer,
         }),
       ],
+    });
+    ```
+
 === "Kotlin"
 
     ```kotlin
@@ -272,4 +295,34 @@ compaction_config = EventsCompactionConfig(
         )
     ```
 
-サマライザーを調整することで、圧縮器の動作をさらに細かく制御できます。Python、Java、および Kotlin では `LlmEventSummarizer` のプロンプトテンプレートをカスタマイズできます（プロパティ名は Python では `prompt_template`、Java と Kotlin では `promptTemplate` です）。TypeScript では `LlmSummarizer` の `prompt` をカスタマイズできます。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) または [`LlmSummarizer` コード](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts) を参照してください。
+=== "Go"
+
+    ```go
+    import (
+    	"google.golang.org/adk/v2/model/gemini"
+    	"google.golang.org/adk/v2/runner"
+    	"google.golang.org/adk/v2/session/compaction"
+    )
+
+    // Define the AI model to be used for summarization:
+    summarizationLLM, err := gemini.NewModel(ctx, "gemini-flash-latest", nil)
+
+    // Create the summarizer with the custom model:
+    mySummarizer, err := compaction.NewLLMSummarizer(compaction.LLMSummarizerConfig{
+    	Model: summarizationLLM,
+    })
+
+    // Configure the runner with the custom summarizer and compaction settings:
+    r, err := runner.New(runner.Config{
+    	AppName:        "my-agent",
+    	Agent:          rootAgent,
+    	SessionService: sessionService,
+    	Compaction: &compaction.Config{
+    		CompactionInterval: 3,
+    		OverlapSize:        1,
+    		Summarizer:         mySummarizer,
+    	},
+    })
+    ```
+
+サマライザーを調整することで、圧縮器の動作をさらに細かく制御できます。Python、Java、および Kotlin では `LlmEventSummarizer` のプロンプトテンプレートをカスタマイズできます（プロパティ名は Python では `prompt_template`、Java と Kotlin では `promptTemplate` です）。TypeScript では `LlmSummarizer` の `prompt` をカスタマイズできます。Go では `LLMSummarizerConfig` で `PromptTemplate` を設定します（`{conversation_history}` プレースホルダーを含める必要があります）。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) または [`LlmSummarizer` コード](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts) を参照してください。

@@ -340,7 +340,9 @@ Gemini [Interactions API](https://ai.google.dev/gemini-api/docs/interactions)
     ```
 
 전체 샘플 코드는
-[Interactions API 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/interactions_api)을 참고하세요.
+[Interactions API 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/models/interactions_api)을 참고하세요.
+
+Interactions API를 활성화하면 각 실행에 대한 서빙 등급(serving tier)을 선택할 수도 있습니다. 오프피크 용량에서 실행되도록 모델 호출을 대기열에 넣는 방법에 대한 자세한 내용은 [지연 스케줄링](deferred-schedule.md)을 참고하세요.
 
 ### 알려진 제한
 

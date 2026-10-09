@@ -302,6 +302,44 @@ credentials_config = BigQueryCredentialsConfig(
 
 ![認証](../assets/auth_part1.svg) 
 
+### ツールセットレベルでの認証
+
+<div class="language-support-tag">
+  <span class="lst-supported">ADK でのサポート</span><span class="lst-python">Python v1.24.0</span>
+</div>
+
+各ツールを個別に認証する代わりに、ツールセット（Toolset）レベルで一連のツール全体を一度に認証できます。
+内部では、`BaseLlmFlow` はツールを一覧表示または実行する*前*に、ツールセットの `get_auth_config()` メソッドをチェックすることで、`BaseToolset` の認証要件を自動的に確認します。
+ツールセットが `AuthConfig` オブジェクトを返し、セッションに必要な認証情報がまだない場合、ADK フレームワークは次のステップを実行します。
+
+1. **実行の一時停止:** 現在のフローを安全に停止します。
+2. **認証情報の要求:** [対話型OAuth/OIDCフローの処理（クライアント側）](#2-oauthoidc)で詳しく説明されている対話型フローと同様に、クライアントに対して `adk_request_credential` イベントを発行します。
+
+このアプローチにより、関連するツールのグループの認証要件を単一の集中管理された場所で定義できます。フレームワークが認証手順を処理し、エージェントがツールセット内のツールにアクセスする前に必要な認証情報が確実に解決されるようにします。
+
+#### 有効にする方法
+
+これを設定するには、カスタム `BaseToolset` サブクラスで `get_auth_config()` メソッドをオーバーライドします。
+
+```python
+from google.adk.auth import AuthConfig
+from google.adk.tools.base_toolset import BaseToolset
+
+
+class MyAuthenticatedToolset(BaseToolset):
+  async def get_tools(
+      self, readonly_context: Optional[ReadonlyContext] = None
+  ) -> list[BaseTool]:
+    # ADK はこれを呼び出す前に get_auth_config() から認証情報を解決するため、
+    # ここで返すツールはその認証情報に依存できます。
+    return []  # ツールセット内のツールに置き換えてください。
+
+  def get_auth_config(self) -> AuthConfig:
+    return AuthConfig(
+        auth_scheme=auth_scheme,
+        raw_auth_credential=auth_credential,
+    )
+```
 
 ### 2. 対話型OAuth/OIDCフローの処理（クライアント側）
 

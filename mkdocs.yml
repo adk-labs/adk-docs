@@ -360,7 +360,9 @@ plugins:
                 - 워크플로우 패턴: workflows/patterns.md
               - 에이전트용 모델:
                 - agents/models/index.md
-                - Gemini: agents/models/google-gemini.md
+                - Gemini:
+                  - agents/models/google-gemini/index.md
+                  - 지연 스케줄링: agents/models/google-gemini/deferred-schedule.md
                 - Gemma: agents/models/google-gemma.md
                 - Claude: agents/models/anthropic.md
                 - Agent Platform 호스팅: agents/models/agent-platform.md
@@ -415,7 +417,12 @@ plugins:
                   - 개요: tools-custom/function-tools.md
                   - 도구 성능: tools-custom/performance.md
                   - 작업 확인: tools-custom/confirmation.md
-                - MCP 도구: tools-custom/mcp-tools.md
+                - MCP 도구:
+                  - tools-custom/mcp-tools/index.md
+                  - 고급 설정: tools-custom/mcp-tools/advanced.md
+                  - 배포: tools-custom/mcp-tools/deployment.md
+                  - MCP 서버로서의 에이전트: tools-custom/mcp-tools/agent-as-server.md
+                  - 서브 에이전트 위임: tools-custom/mcp-tools/agent-managed.md
                 - OpenAPI 도구: tools-custom/openapi-tools.md
                 - 인증: tools-custom/authentication.md
                 - 도구 제한 사항: tools/limitations.md
@@ -442,8 +449,6 @@ plugins:
                 - 메모리: sessions/memory.md
                 - 컨텍스트 압축: context/compaction.md
                 - 모델 컨텍스트 캐싱: context/caching.md
-              - MCP:
-                - mcp/index.md
               - A2A 프로토콜:
                 - a2a/index.md
                 - A2A 소개: a2a/intro.md
@@ -463,14 +468,18 @@ plugins:
                   - live/get-started/index.md
                   - Python: live/get-started/streaming-python.md
                   - Java: live/get-started/streaming-java.md
-                - Gemini Live API Toolkit 개발 가이드:
-                  - 파트 1. 스트리밍 소개: live/dev-guide/part1.md
-                  - 파트 2. 메시지 전송: live/dev-guide/part2.md
-                  - 파트 3. 이벤트 처리: live/dev-guide/part3.md
-                  - 파트 4. 런 구성: live/dev-guide/part4.md
-                  - 파트 5. 오디오, 이미지, 비디오: live/dev-guide/part5.md
-                - 스트리밍 도구: live/streaming-tools.md
-                - 스트리밍 동작 구성: live/configuration.md
+                - 구축:
+                  - 워크플로우: live/workflows.md
+                  - 도구: live/tools.md
+                  - 세션: live/sessions.md
+                  - 이벤트: live/events.md
+                  - 오디오 및 비디오: live/audio-video.md
+                  - 설정: live/configuration.md
+                - 프로덕션:
+                  - 가드레일: live/guardrails.md
+                  - 평가: live/evaluation.md
+                  - 커스텀 서버 구축: live/custom-server.md
+                - 지원되는 모델: live/models.md
               - 그라운딩:
                 - grounding/index.md
                 - Google 검색 그라운딩: grounding/google_search_grounding.md
@@ -543,7 +552,9 @@ plugins:
                 - ワークフローパターン: workflows/patterns.md
               - エージェント向けモデル:
                 - agents/models/index.md
-                - Gemini: agents/models/google-gemini.md
+                - Gemini:
+                  - agents/models/google-gemini/index.md
+                  - 遅延スケジューリング: agents/models/google-gemini/deferred-schedule.md
                 - Gemma: agents/models/google-gemma.md
                 - Claude: agents/models/anthropic.md
                 - Agent Platform hosted: agents/models/agent-platform.md
@@ -598,7 +609,12 @@ plugins:
                   - 概要: tools-custom/function-tools.md
                   - ツールのパフォーマンス: tools-custom/performance.md
                   - アクションの確認: tools-custom/confirmation.md
-                - MCPツール: tools-custom/mcp-tools.md
+                - MCPツール:
+                  - tools-custom/mcp-tools/index.md
+                  - 高度な設定: tools-custom/mcp-tools/advanced.md
+                  - デプロイ: tools-custom/mcp-tools/deployment.md
+                  - MCPサーバーとしてのエージェント: tools-custom/mcp-tools/agent-as-server.md
+                  - サブエージェントへの委任: tools-custom/mcp-tools/agent-managed.md
                 - OpenAPIツール: tools-custom/openapi-tools.md
                 - 認証: tools-custom/authentication.md
                 - ツールの制限: tools/limitations.md
@@ -625,8 +641,6 @@ plugins:
                 - メモリ: sessions/memory.md
                 - コンテキストの圧縮: context/compaction.md
                 - モデルコンテキストのキャッシュ: context/caching.md
-              - MCP:
-                - mcp/index.md
               - A2Aプロトコル:
                 - a2a/index.md
                 - A2Aの紹介: a2a/intro.md
@@ -646,14 +660,18 @@ plugins:
                   - live/get-started/index.md
                   - Python: live/get-started/streaming-python.md
                   - Java: live/get-started/streaming-java.md
-                - Gemini Live API Toolkit 開発ガイド:
-                  - パート1. ストリーミング入門: live/dev-guide/part1.md
-                  - パート2. メッセージ送信: live/dev-guide/part2.md
-                  - パート3. イベント処理: live/dev-guide/part3.md
-                  - パート4. RunConfig: live/dev-guide/part4.md
-                  - パート5. 音声・画像・動画: live/dev-guide/part5.md
-                - ストリーミングツール: live/streaming-tools.md
-                - ストリーミング動作の設定: live/configuration.md
+                - 構築:
+                  - ワークフロー: live/workflows.md
+                  - ツール: live/tools.md
+                  - セッション: live/sessions.md
+                  - イベント: live/events.md
+                  - 音声と動画: live/audio-video.md
+                  - 設定: live/configuration.md
+                - 本番環境:
+                  - ガードレール: live/guardrails.md
+                  - 評価: live/evaluation.md
+                  - カスタムサーバーの構築: live/custom-server.md
+                - サポートされているモデル: live/models.md
               - グラウンディング:
                 - grounding/index.md
                 - Google検索グラウンディング: grounding/google_search_grounding.md

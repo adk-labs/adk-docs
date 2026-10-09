@@ -360,6 +360,18 @@ ADK는 도구 궤적 일치에서 LLM 기반 응답 품질 평가에 이르기�
 *   `rubric_based_tool_use_quality_v1`: 사용자 지정 루브릭을 기반으로 한 LLM 판단 도구 사용 품질.
 *   `hallucinations_v1`: 컨텍스트에 대한 에이전트 응답의 LLM 판단 근거.
 *   `safety_v1`: 에이전트 응답의 안전성/무해성.
+*   `per_turn_user_simulator_quality_v1`: LLM이 판단하는 사용자 시뮬레이터 품질.
+*   `multi_turn_task_success_v1`: 대화 목표 달성 여부 평가.
+*   `multi_turn_trajectory_quality_v1`: 대화의 전체 궤적 평가.
+*   `multi_turn_tool_use_quality_v1`: 대화 중 수행된 함수 호출 평가.
+
+다음은 *효율성(efficiency)* 기준입니다. 값을 보고하지만 평가 케이스를 통과시키거나 실패 처리하지 않으며, `EvalConfig`에 나열되지 않아도 모든 평가에 대해 보고됩니다.
+
+*   **tool_call_count_v1**: 수행된 도구 호출 횟수.
+*   **inference_call_count_v1**: 수행된 모델 호출 횟수.
+*   **token_usage_v1**: 소비된 토큰 수로, 총합과 함께 유형별 세부 내역이 보고됩니다.
+*   **invocation_duration_v1**: 에이전트가 실행되는 동안 측정된, 해당 턴에 소요된 실제 경과 시간(초).
+
 !!! warning "Vertex AI 평가 API 요구 사항"
 
     Vertex AI 평가 기준(`trajectory_quality_v1`, `pairwise_trajectory_quality_v1`, `safety_v1` 등)은 [Vertex Gen AI Evaluation Service API](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/evaluation)가 필요합니다. 이를 사용하려면 `GOOGLE_API_KEY` 환경 변수를 설정하여 인증하거나, Google Cloud 프로젝트 자격 증명(`GOOGLE_CLOUD_PROJECT` 및 `GOOGLE_CLOUD_LOCATION`과 함께 애플리케이션 기본 자격 증명(Application Default Credentials))을 사용해야 합니다.
@@ -394,6 +406,7 @@ ADK는 도구 궤적 일치에서 LLM 기반 응답 품질 평가에 이르기�
 *   **멀티 턴 목표 달성 평가:** `multi_turn_task_success_v1`을 사용하여 대화의 목표 달성 여부를 평가합니다.
 *   **대화 전체 궤적 평가:** `multi_turn_trajectory_quality_v1`을 사용하여 대화 전체의 궤적 품질을 평가합니다.
 *   **멀티 턴 도구 사용 평가:** `multi_turn_tool_use_quality_v1`을 사용하여 대화 중 수행된 함수 호출을 평가합니다.
+*   **에이전트 실행 비용 추적:** 효율성 기준(`tool_call_count_v1`, `inference_call_count_v1`, `token_usage_v1`, `invocation_duration_v1`)은 별도의 설정이나 추가 모델 호출 없이 자동으로 보고됩니다. 여러 실행에 걸쳐 이 값들을 비교하면 품질은 그대로 유지되면서 토큰 사용량이 두 배로 늘어나는 등의 변경 사항을 포착할 수 있습니다. 이 기준들은 평가를 실패 처리하지 않으므로 CI/CD 실행에 새로운 실패 요인을 추가하지 않습니다.
 
 또한 예상 에이전트 도구 사용 및/또는 응답에 대한 정보가 필요한 기준은 [사용자 시뮬레이션](./user-sim.md)과 함께 지원되지 않습니다. 현재 `hallucinations_v1`, `safety_v1`, `per_turn_user_simulator_quality_v1` 및 새 다중 턴 메트릭만 이러한 평가를 지원합니다.
 

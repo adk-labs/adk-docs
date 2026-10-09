@@ -44,7 +44,7 @@ root_agent = Workflow(
 )
 ```
 
-`adk web`으로 이를 제공하고 라이브 세션을 시작하거나, `Runner.run_live()`에 전달합니다. 러너는 `Workflow` 루트를 감지하고 라이브 연결을 통해 이를 구동하며, 개발자는 모든 노드에 걸쳐 단일 이벤트 스트림을 소비합니다. 타입이 지정된 핸드오프와 라이브 평가 세트를 포함하는 3단계 음성 접수 흐름에 대한 실행 가능한 샘플은 [`live_workflow` 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/live/live_workflow)을 참고하세요.
+`adk web`으로 이를 제공하고 라이브 세션을 시작하거나, `Runner.run_live()`에 전달합니다. 러너는 `Workflow` 루트를 감지하고 라이브 연결을 통해 이를 구동하며, 개발자는 모든 노드에 걸쳐 단일 이벤트 스트림을 소비합니다. 타입이 지정된 핸드오프와 라이브 평가 세트를 포함하는 3단계 음성 접수 흐름에 대한 실행 가능한 샘플은 [`workflow` 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/live/workflow)을 참고하세요.
 
 **말을 하는 모든 에이전트에는 `mode='task'` 또는 `mode='chat'`이 필요합니다.** 워크플로의 노드로서 `mode`가 없는 `LlmAgent`는 `single_turn`으로 폴백되어 라이브 연결 외부에서 실행되고 오디오 큐를 완전히 무시하므로, 발신자는 해당 에이전트의 음성을 전혀 들을 수 없습니다. 대화하는 모든 노드에 모드를 명시적으로 설정하세요.
 

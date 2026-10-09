@@ -91,4 +91,4 @@ adk eval path/to/your_agent \
 
 ## 샘플
 
-[`live_workflow` 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/live/live_workflow)은 직접 실행해볼 수 있는 완전한 음성 평가 예제입니다. 그래프 워크플로의 세 라이브 에이전트, 중간의 도구 호출, 세 가지 루브릭 기준 모두가 연결된 평가 세트 및 `test_config.json`을 포함합니다.
+[`workflow` 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/live/workflow)은 직접 실행해볼 수 있는 완전한 음성 평가 예제입니다. 그래프 워크플로의 세 라이브 에이전트, 중간의 도구 호출, 세 가지 루브릭 기준 모두가 연결된 평가 세트 및 `test_config.json`을 포함합니다.

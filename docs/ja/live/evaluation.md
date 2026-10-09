@@ -91,4 +91,4 @@ adk eval path/to/your_agent \
 
 ## サンプル
 
-[`live_workflow` サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/live/live_workflow) は、実際に実行できる完全な音声評価のサンプルです。グラフワークフロー内の 3 つのライブエージェント、途中のツール呼び出し、そして 3 つのルーブリック基準すべてが設定された評価セットと `test_config.json` が含まれています。
+[`workflow` サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/live/workflow) は、実際に実行できる完全な音声評価のサンプルです。グラフワークフロー内の 3 つのライブエージェント、途中のツール呼び出し、そして 3 つのルーブリック基準すべてが設定された評価セットと `test_config.json` が含まれています。

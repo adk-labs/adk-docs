@@ -31,7 +31,7 @@ ADK는 Firestore를 사용해 지속적인 에이전트 세션 상태를 관리�
 
 !!! note
 
-    호환성을 보장하려면 `google-adk`와 `google-adk-firestore-session-service`에 같은 버전을 사용해야 합니다. 아래 예제에서는 `1.6.0`을 사용합니다. 최신 ADK 버전을 확인하고 두 의존성 모두에 해당 버전을 사용하세요.
+    호환성을 보장하려면 `google-adk`와 `google-adk-firestore-session-service`에 같은 버전을 사용해야 합니다. 아래 예제에서는 `1.11.0`을 사용합니다. 최신 ADK 버전을 확인하고 두 의존성 모두에 해당 버전을 사용하세요.
 
 ### Maven
 
@@ -41,13 +41,13 @@ ADK는 Firestore를 사용해 지속적인 에이전트 세션 상태를 관리�
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk</artifactId>
-        <version>1.6.0</version>
+        <version>1.11.0</version>
     </dependency>
     <!-- Firestore Session Service -->
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk-firestore-session-service</artifactId>
-        <version>1.6.0</version>
+        <version>1.11.0</version>
     </dependency>
 </dependencies>
 ```
@@ -57,9 +57,9 @@ ADK는 Firestore를 사용해 지속적인 에이전트 세션 상태를 관리�
 ```gradle
 dependencies {
     // ADK Core
-    implementation 'com.google.adk:google-adk:1.6.0'
+    implementation 'com.google.adk:google-adk:1.11.0'
     // Firestore Session Service
-    implementation 'com.google.adk:google-adk-firestore-session-service:1.6.0'
+    implementation 'com.google.adk:google-adk-firestore-session-service:1.11.0'
 }
 ```
 

@@ -97,7 +97,7 @@ ADK 에이전트 프로젝트는 `pom.xml` 프로젝트 파일에 다음 종속�
     <dependency>
         <groupId>com.google.adk</groupId>
         <artifactId>google-adk</artifactId>
-        <version>1.6.0</version>
+        <version>1.11.0</version>
     </dependency>
 </dependencies>
 ```
@@ -130,13 +130,13 @@ ADK 에이전트 프로젝트는 `pom.xml` 프로젝트 파일에 다음 종속�
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk</artifactId>
-                <version>1.6.0</version>
+                <version>1.11.0</version>
             </dependency>
             <!-- 에이전트를 디버그하기 위한 ADK 개발 웹 UI -->
             <dependency>
                 <groupId>com.google.adk</groupId>
                 <artifactId>google-adk-dev</artifactId>
-                <version>1.6.0</version>
+                <version>1.11.0</version>
             </dependency>
         </dependencies>
 

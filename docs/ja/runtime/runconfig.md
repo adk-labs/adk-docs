@@ -315,6 +315,10 @@ ADK エージェントは、対話型のエージェント体験を作成する�
   auditing 用の run artifact として保存します。
 - `custom_metadata`: invocation に添付される任意 metadata の `dict[str, Any]` です。tracing や
   logging に便利です。
+- `service_tier`: 実行時のモデル呼び出しに対するサービング容量を選択します。ADK Python のみに対応しており、
+  Interactions API を使用する Gemini モデルにのみ適用されます。`ServiceTier.DEFERRED` は各モデル呼び出しを
+  オフピーク容量で実行するようにキューに入れ、`StreamingMode.SSE` と組み合わせることはできません。
+  詳細については、[遅延スケジューリング（Deferred scheduling）](/agents/models/google-gemini/deferred-schedule/)をご覧ください。
 
 ## API reference
 

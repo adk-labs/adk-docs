@@ -1432,6 +1432,37 @@ Access relevant information from the past or external sources.
     }
     ```
 
+### UI 위젯 렌더링 {#render-ui-widgets}
+
+<div class="language-support-tag">
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.27.0</span>
+</div>
+
+에이전트 응답과 함께 풍부한 UI 구성요소(예: MCP 앱 iframe)를 클라이언트로 전송하려면 `context.render_ui_widget()`을 사용하세요.
+
+=== "Python"
+
+    ```python
+    from google.adk.events.ui_widget import UiWidget
+    from google.adk.tools import ToolContext
+
+    def render_styled_widget(color: str, context: ToolContext) -> str:
+        """Render a UI widget utilizing the user-specified color."""
+        
+        widget = UiWidget(
+            id="my_status_dashboard",
+            provider="mcp",
+            payload={
+                "resource_uri": "ui://analytics/status",
+                "tool": {"name": "get_system_status"},
+                "tool_args": {"theme_color": color} # Dynamically passed from user interaction
+            }
+        )
+        
+        context.render_ui_widget(widget)
+        return f"Widget successfully rendered with color: {color}"
+    ```
+
 ### Advanced: Direct `InvocationContext` Usage
 
 <div class="language-support-tag">
@@ -1561,6 +1592,7 @@ Setting `ctx.end_invocation = True` is a way to gracefully stop the entire reque
 *   **State for Data Flow:** `context.state` is the primary way to share data, remember preferences, and manage conversational memory *within* an invocation. Use prefixes (`app:`, `user:`, `temp:`) thoughtfully when using persistent storage.
 *   **Artifacts for Files:** Use `context.save_artifact` and `context.load_artifact` for managing file references (like paths or URIs) or larger data blobs. Store references, load content on demand.
 *   **Tracked Changes:** Modifications to state or artifacts made via context methods are automatically linked to the current step's `EventActions` and handled by the `SessionService`.
+*   **UI 렌더링:** `context.render_ui_widget(widget)`을 사용하여 풍부한 UI 구성요소(예: MCP 앱 iframe)를 클라이언트로 전송하세요.
 *   **Start Simple:** Focus on `state` and basic artifact usage first. Explore authentication, memory, and advanced `InvocationContext` fields (like those for live streaming) as your needs become more complex.
 
 By understanding and effectively using these context objects, you can build more sophisticated, stateful, and capable agents with ADK.

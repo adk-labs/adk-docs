@@ -62,11 +62,11 @@ report_tool = FunctionTool(export_report)
 report_tool.response_scheduling = types.FunctionResponseScheduling.WHEN_IDLE
 ```
 
-エージェントはツールが実行されている間も自由に応答でき、ユーザーが投げかける他の質問に答え、準備が整った時点で結果を会話に組み込みます。実行可能な例は、[`live_non_blocking_tool_agent` サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/live/live_non_blocking_tool_agent) として提供されています。
+エージェントはツールが実行されている間も自由に応答でき、ユーザーが投げかける他の質問に答え、準備が整った時点で結果を会話に組み込みます。実行可能な例は、[`non_blocking_tool_agent` サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/live/non_blocking_tool_agent) として提供されています。
 
-!!! note "Python 2.4+ が必要"
+!!! note "ADK Python 2.4 以降が必要"
 
-    `response_scheduling` は adk-python 2.4 で追加され、モデルごとにサポートが異なります。[サポート対象モデル](models.md#live-models) を参照してください。
+    `response_scheduling` 機能は adk-python 2.4 で追加され、モデルごとにサポートが異なります。[サポート対象モデル](models.md#live-models) を参照してください。
 
 `response_scheduling` は、完了した結果がユーザーに届く*タイミング*も制御します。
 

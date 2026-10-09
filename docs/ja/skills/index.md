@@ -27,8 +27,15 @@
     from google.adk.tools import skill_toolset
 
     weather_skill = load_skill_from_dir(
-        pathlib.Path(__file__).parent / "skills" / "weather_skill"
+        pathlib.Path(__file__).parent / "skills" / "weather-skill"
     )
+
+    def get_weather_tool(city: str) -> dict:
+        """Retrieves the current weather report for a specified city."""
+        return {
+            "status": "success",
+            "report": f"The weather in {city} is sunny with a temperature of 25°C.",
+        }
 
     my_skill_toolset = skill_toolset.SkillToolset(
         skills=[weather_skill],
@@ -98,9 +105,9 @@
 
     完全な例については、[skills](https://github.com/google/adk-kotlin/tree/main/examples/src/main/kotlin/com/google/adk/kt/examples/skills) のコード サンプルを参照してください。
 
-!!! note "作業ディレクトリの確認"
+!!! note "`skills/` が解決される場所の確認"
 
-    現在の作業ディレクトリに `skills/` ディレクトリが存在し、エージェントで使用するスキルのサブディレクトリが含まれていることを確認してください。
+    上記の Python と TypeScript の例では、エージェントのソースファイルがあるディレクトリを基準として `skills/` を解決するため、そのファイルの隣に `skills/` を配置してください。一方、Go と Kotlin の例では相対パス `skills` を渡しているため、現在の作業ディレクトリを基準として解決されます。
 
 ## スキルの構造
 
@@ -133,6 +140,10 @@
 *   **description**:
     *   空であってはなりません。
     *   1024 文字以下である必要があります。
+
+!!! note "ディレクトリ名は名前と一致する必要があります"
+    
+    ファイルシステムからスキルを読み込む場合、ディレクトリ名は frontmatter の **name** と一致している必要があります。一致しない場合、読み込みに失敗します。
 
 ### スキル ディレクトリ構造
 

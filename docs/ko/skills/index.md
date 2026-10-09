@@ -27,8 +27,15 @@
     from google.adk.tools import skill_toolset
 
     weather_skill = load_skill_from_dir(
-        pathlib.Path(__file__).parent / "skills" / "weather_skill"
+        pathlib.Path(__file__).parent / "skills" / "weather-skill"
     )
+
+    def get_weather_tool(city: str) -> dict:
+        """Retrieves the current weather report for a specified city."""
+        return {
+            "status": "success",
+            "report": f"The weather in {city} is sunny with a temperature of 25°C.",
+        }
 
     my_skill_toolset = skill_toolset.SkillToolset(
         skills=[weather_skill],
@@ -98,9 +105,9 @@
 
     완전한 예제는 [skills](https://github.com/google/adk-kotlin/tree/main/examples/src/main/kotlin/com/google/adk/kt/examples/skills)의 코드 샘플을 참고하세요.
 
-!!! note "작업 디렉터리 확인"
+!!! note "`skills/`가 확인되는 위치 확인"
 
-    현재 작업 디렉터리에 `skills/` 디렉터리가 존재하고 에이전트에서 사용할 스킬의 하위 디렉터리가 포함되어 있는지 확인하세요.
+    위의 Python 및 TypeScript 예제는 에이전트 소스 파일이 있는 디렉터리를 기준으로 `skills/`를 확인하므로 해당 파일 옆에 `skills/`를 배치하세요. 반면 Go 및 Kotlin 예제는 상대 경로인 `skills`를 전달하므로 현재 작업 디렉터리를 기준으로 확인됩니다.
 
 ## 스킬 구조
 
@@ -133,6 +140,10 @@
 *   **description**:
     *   비어 있어서는 안 됩니다.
     *   1024자 이하여야 합니다.
+
+!!! note "디렉터리 이름이 스킬 이름과 일치해야 함"
+    
+    파일 시스템에서 스킬을 로드할 때 디렉터리 이름이 frontmatter의 **name**과 일치해야 하며, 그렇지 않으면 로드에 실패합니다.
 
 ### 스킬 디렉터리 구조
 

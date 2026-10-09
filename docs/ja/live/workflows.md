@@ -44,7 +44,7 @@ root_agent = Workflow(
 )
 ```
 
-これを `adk web` で配信してライブセッションを開始するか、`Runner.run_live()` に渡します。ランナーは `Workflow` ルートを検出し、ライブ接続上でそれを駆動します。すべてのノードにわたって1つのイベントストリームを消費します。型付けされた引き継ぎとライブ評価セットを備えた3段階の音声受付フローの実行可能なサンプルについては、[`live_workflow` サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/live/live_workflow) を参照してください。
+これを `adk web` で配信してライブセッションを開始するか、`Runner.run_live()` に渡します。ランナーは `Workflow` ルートを検出し、ライブ接続上でそれを駆動します。すべてのノードにわたって1つのイベントストリームを消費します。型付けされた引き継ぎとライブ評価セットを備えた3段階の音声受付フローの実行可能なサンプルについては、[`workflow` サンプル](https://github.com/google/adk-python/tree/main/contributing/samples/live/workflow) を参照してください。
 
 **話すエージェントにはすべて `mode='task'` または `mode='chat'` が必要です。** ワークフロー内のノードとして、`mode` が設定されていない `LlmAgent` は `single_turn` にフォールバックし、ライブ接続の外部で実行され、オーディオキューを完全に無視するため、発信者にはそのエージェントの音声が全く聞こえません。話をするすべてのノードで明示的にモードを設定してください。
 
