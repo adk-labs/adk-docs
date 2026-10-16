@@ -41,6 +41,8 @@ hide:
 <!-- FAQ Section -->
 {{% include 'ja/_includes/homepage/_faq.md' %}}
 
+</div>
+
 <script>
 // Tab switching logic
 document.addEventListener("DOMContentLoaded", function() {

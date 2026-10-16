@@ -172,7 +172,7 @@ catalog_tags: ["mcp"]
 
 ## 사용 가능한 도구
 
-도구 <img width="200px"/> | 설명
+도구 | 설명
 ---- | -----------
 `notion-search` | Notion 작업 공간 및 Slack, Google Drive, Jira와 같은 연결된 도구에서 검색합니다. AI 기능을 사용할 수 없는 경우 기본 작업 공간 검색으로 대체됩니다.
 `notion-fetch` | URL로 Notion 페이지 또는 데이터베이스에서 콘텐츠를 검색합니다.

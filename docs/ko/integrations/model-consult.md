@@ -1,7 +1,8 @@
 ---
 catalog_title: Model Consult
 catalog_description: 빠른 실행 모델의 어려운 추론을 더 강력한 어드바이저 모델로 에스컬레이션합니다
-catalog_tags: ["resilience", "observability"]
+catalog_icon: /integrations/assets/adk.png
+catalog_tags: ["resilience", "observability", "google"]
 ---
 
 # ADK용 Model Consult 도구
@@ -87,6 +88,40 @@ root_agent = Agent(
 2. **컨텍스트 전달(Context handover)** — `ModelConsultTool`은 자문 내용을 단일 `role='user'` `types.Content` 메시지로 패키징합니다. `include_agent_instruction` 및 `include_tool_inventory`가 `True`인 경우, 메시지는 확인된 실행 모델 인스트럭션과 형제(sibling) 도구 목록으로 시작합니다. 다음으로, `ModelConsultTool`은 `ModelConsultContextConfig`에 따라 `Session.events`의 부분적이지 않고(non-partial) 되돌려지지 않은(non-rewound) 이벤트를 변환하여, 텍스트 파트를 화자별로 라벨링하고 이전 도구 호출과 도구 응답을 읽기 쉬운 텍스트 요약으로 평탄화하는 동시에 현재 진행 중인 `model_consult` 호출은 제외합니다. 마지막으로 `ModelConsultTool`은 활성 에이전트 이름, 실행 모델의 질문, 실행 모델이 전달한 추가 `context` 문자열을 포함하는 핸드오프 파트를 추가합니다.
 3. **도구 없는 어드바이저 호출** — `ModelConsultTool`은 도구 호출이 비활성화된 상태로 기본 어드바이저 시스템 인스트럭션(또는 제공된 경우 커스텀 `advisor_instruction`)을 사용하여 구성된 어드바이저 `BaseLlm`을 호출합니다. 어드바이저 요청에서 도구 선언이 제외되므로 어드바이저는 스스로 도구를 실행하거나 부작용(side effects)을 일으킬 수 없으며, 실행 모델이 다음에 어떤 도구를 어떤 인수로 호출해야 하는지 알려주는 텍스트 가이드만 반환할 수 있습니다.
 4. **구조화된 도구 응답** — `ModelConsultTool`은 에이전트 루프로 예외를 다시 발생시키지 않습니다. 대신 [응답 상태 값](#response-status-values)에 설명된 대로 `status` 값이 포함된 딕셔너리를 반환합니다.
+
+### 도구 호출 검사하기
+
+기본적으로 사람이 읽을 수 있는 모드의 `adk run`은 최종 텍스트 응답(`[support_executor]: ...`)만 출력하고 중간 도구 호출은 숨깁니다. 사용자는 세 가지 방법으로 `model_consult` 호출을 검사하고 어드바이저의 응답을 확인할 수 있습니다:
+
+1. **ADK Web UI** — [`adk-python`](https://github.com/google/adk-python) 리포지토리의 클론에서 `adk web contributing/samples/tools`를 실행합니다:
+   채팅 창에서 각 자문 요청은 `model_consult` 도구 이벤트로 표시됩니다. `model_consult` 이벤트를 클릭하면 왼쪽에 **Events / Trace** 검사기가 열립니다:
+   - **`functionCall`**은 실행 모델이 어드바이저에게 보낸 정확한 `question`(및 선택적 `context`)을 보여줍니다.
+   - **`functionResponse`**는 `"status"`, `"guidance"`, `"advisor_model"`, `"thinking_level"`, `"consults"`, `"usage"`, `"latency_ms"`를 포함하여 `ModelConsultTool`이 반환한 구조화된 딕셔너리를 보여줍니다.
+
+2. **ADK CLI**:
+   `adk run` 명령을 사용하여 `model_consult`의 `functionCall` 및 `functionResponse`를 포함한 모든 세션 이벤트를 JSON으로 출력합니다. 원하는 모드를 선택하세요:
+   - **단일 쿼리 모드:** `--jsonl`을 전달하여 이벤트를 JSON 라인 형식으로 stdout에 스트리밍합니다:
+     ```bash
+     adk run contributing/samples/tools/model_consult \
+       "Customer CUST-108 wants a full refund to their original payment method for order ORD-502." \
+       --jsonl
+     ```
+   - **대화형 모드:** 종료 시 전체 세션 로그를 저장하려면 `--save_session`을 전달합니다:
+     ```bash
+     adk run contributing/samples/tools/model_consult --save_session --session_id consult_demo
+     ```
+
+3. **`Runner.run_async` 이벤트를 통한 프로그래밍 방식**:
+   Python에서 에이전트를 실행할 때 `name == "model_consult"`인 `event.get_function_calls()` 및 `event.get_function_responses()`를 검사합니다:
+
+   ```python
+   async for event in runner.run_async(user_id="u1", session_id="s1", new_message=msg):
+       for resp in event.get_function_responses():
+           if resp.name == "model_consult":
+               print(resp.response["status"], resp.response.get("guidance"))
+               print("Consult budget:", resp.response.get("consults"))
+               print("Advisor token usage:", resp.response.get("usage"))
+   ```
 
 ### 응답 상태 값 {#response-status-values}
 

@@ -48,7 +48,7 @@ npm install -D @google/adk-devtools
 
 ### 에이전트 코드 정의
 
-`getCurrentTime`이라는 [Function Tool](/tools/function-tools/)의 간단한 구현을 포함한
+`get_current_time`이라는 [Function Tool](/ko/tools-custom/function-tools/)의 간단한 구현을 포함한
 기본 에이전트 코드를 만듭니다.
 프로젝트 디렉터리에 `agent.ts`를 만들고 다음 코드를 추가합니다.
 
@@ -73,7 +73,7 @@ export const rootAgent = new LlmAgent({
   model: 'gemini-flash-latest',
   description: 'Tells the current time in a specified city.',
   instruction: `You are a helpful assistant that tells the current time in a city.
-                Use the 'getCurrentTime' tool for this purpose.`,
+                Use the 'get_current_time' tool for this purpose.`,
   tools: [getCurrentTime],
 });
 ```

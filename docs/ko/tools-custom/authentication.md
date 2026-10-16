@@ -84,7 +84,7 @@ ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 �
 
 === "API 키"
 
-      API 키가 필요한 도구를 만듭니다.
+      토큰 교환이 필요 없는 단순한 인증을 위해 API 키가 필요한 도구를 만듭니다:
 
       ```py
       from google.adk.tools.openapi_tool.auth.auth_helpers import token_to_scheme_credential
@@ -101,9 +101,9 @@ ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 �
       )
       ```
 
-=== "OAuth2"
+=== "OAuth2 (Authorization Code)"
 
-      OAuth2가 필요한 도구를 만듭니다.
+      인간 사용자를 대신한 대화형 인증을 위해 OAuth 2.0 인증 코드 흐름이 필요한 도구를 만듭니다:
 
       ```py
       from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import OpenAPIToolset
@@ -141,9 +141,56 @@ ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 �
       )
       ```
 
+=== "OAuth2 (Client Credentials)"
+
+      비대화형 머신 간(M2M) 인증을 위해 OAuth 2.0 클라이언트 자격 증명 권한 부여 유형을 사용하는 도구를 만듭니다. 액세스 토큰을 얻으려면 `client_id` 및 `client_secret`을 제공하세요:
+
+      ```python
+      from fastapi.openapi.models import (
+          OAuth2,
+          OAuthFlowClientCredentials,
+          OAuthFlows,
+      )
+      from google.adk.auth import (
+          AuthCredential,
+          AuthCredentialTypes,
+          OAuth2Auth,
+      )
+      from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import (
+          OpenAPIToolset,
+      )
+
+      # 클라이언트 자격 증명 흐름으로 OAuth2 체계를 정의합니다.
+      flows = OAuthFlows(
+          clientCredentials=OAuthFlowClientCredentials(
+              tokenUrl="https://example.com/token",  # 인증 서버의 토큰 엔드포인트로 바꿉니다.
+              scopes={"read:weather": "Read weather data"},
+          )
+      )
+      auth_scheme = OAuth2(flows=flows)
+
+      # 클라이언트 ID와 클라이언트 시크릿으로 AuthCredential을 정의합니다.
+      # 시크릿을 하드코딩하지 마세요: 로컬에서는 .env 파일에서 로드하거나
+      # 프로덕션 환경에서는 시크릿 관리자에서 로드하세요. 위의 "자체 관리형 인증"을 참조하세요.
+      auth_credential = AuthCredential(
+          auth_type=AuthCredentialTypes.OAUTH2,
+          oauth2=OAuth2Auth(
+              client_id="YOUR_CLIENT_ID",
+              client_secret="YOUR_CLIENT_SECRET",
+          ),
+      )
+
+      weather_toolset = OpenAPIToolset(
+          spec_str="...",  # 여기에 OpenAPI 사양 YAML 문자열을 전달합니다.
+          spec_str_type="yaml",
+          auth_scheme=auth_scheme,
+          auth_credential=auth_credential,
+      )
+      ```
+
 === "서비스 계정"
 
-      서비스 계정이 필요한 도구를 만듭니다.
+      서비스 계정 JSON 키 또는 애플리케이션 기본 자격 증명(ADC)을 사용하여 비인간 신원으로 인증하는 도구를 만듭니다:
 
       ```py
       from google.adk.tools.openapi_tool.auth.auth_helpers import service_account_dict_to_scheme_credential
@@ -162,9 +209,9 @@ ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 �
       )
       ```
 
-=== "OpenID connect"
+=== "OpenID Connect"
 
-      OpenID connect가 필요한 도구를 만듭니다.
+      인증 서버를 통해 사용자 신원을 확인하기 위해 OpenID Connect가 필요한 도구를 만듭니다:.
 
       ```py
       from google.adk.auth.auth_schemes import OpenIdConnectWithConfig
@@ -692,7 +739,7 @@ except Exception as e:
 **7단계: 도구 결과 반환**
 
 * API 호출이 성공하면 결과를 LLM에 유용한 사전 형식으로 처리합니다.
-* **중요하게,** 데이터와 함께 **를 포함합니다.**
+* **가장 중요한 점은,** 데이터와 함께 `status` 필드를 포함하는 것입니다.
 
 ```py
 # 도구 함수 내부, API 호출 성공 후

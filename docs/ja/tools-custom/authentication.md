@@ -84,7 +84,7 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
 
 === "APIキー"
 
-      APIキーが必要なツールを作成します。
+      トークン交換を必要としないシンプルな認証のために、API キーを必要とするツールを作成します:
 
       ```py
       from google.adk.tools.openapi_tool.auth.auth_helpers import token_to_scheme_credential
@@ -101,9 +101,9 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
       )
       ```
 
-=== "OAuth2"
+=== "OAuth2 (Authorization Code)"
 
-      OAuth2が必要なツールを作成します。
+      人間のユーザーに代わって対話型認証を行うために、OAuth 2.0 認可コードフローを必要とするツールを作成します:
 
       ```py
       from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import OpenAPIToolset
@@ -141,9 +141,56 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
       )
       ```
 
+=== "OAuth2 (Client Credentials)"
+
+      非対話型のマシン間 (M2M) 認証のために、OAuth 2.0 クライアント認証情報グラントタイプを使用するツールを作成します。アクセス トークンを取得するには `client_id` と `client_secret` を指定します:
+
+      ```python
+      from fastapi.openapi.models import (
+          OAuth2,
+          OAuthFlowClientCredentials,
+          OAuthFlows,
+      )
+      from google.adk.auth import (
+          AuthCredential,
+          AuthCredentialTypes,
+          OAuth2Auth,
+      )
+      from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import (
+          OpenAPIToolset,
+      )
+
+      # クライアント認証情報フローで OAuth2 スキームを定義します。
+      flows = OAuthFlows(
+          clientCredentials=OAuthFlowClientCredentials(
+              tokenUrl="https://example.com/token",  # 認可サーバーのトークンエンドポイントに置き換えてください。
+              scopes={"read:weather": "Read weather data"},
+          )
+      )
+      auth_scheme = OAuth2(flows=flows)
+
+      # クライアント ID とクライアントシークレットで AuthCredential を定義します。
+      # シークレットをハードコードしないでください。ローカルでは .env ファイルから、
+      # 本番環境ではシークレットマネージャーから読み込みます。上記の「自己管理型認証」を参照してください。
+      auth_credential = AuthCredential(
+          auth_type=AuthCredentialTypes.OAUTH2,
+          oauth2=OAuth2Auth(
+              client_id="YOUR_CLIENT_ID",
+              client_secret="YOUR_CLIENT_SECRET",
+          ),
+      )
+
+      weather_toolset = OpenAPIToolset(
+          spec_str="...",  # ここに OpenAPI 仕様の YAML 文字列を渡します。
+          spec_str_type="yaml",
+          auth_scheme=auth_scheme,
+          auth_credential=auth_credential,
+      )
+      ```
+
 === "サービスアカウント"
 
-      サービスアカウントが必要なツールを作成します。
+      サービスアカウントの JSON キーまたは Application Default Credentials を使用して、非人間の ID として認証するツールを作成します:
 
       ```py
       from google.adk.tools.openapi_tool.auth.auth_helpers import service_account_dict_to_scheme_credential
@@ -162,9 +209,9 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
       )
       ```
 
-=== "OpenID connect"
+=== "OpenID Connect"
 
-      OpenID connectが必要なツールを作成します。
+      認可サーバーを介してユーザーの ID を検証するために、OpenID Connect を必要とするツールを作成します:
 
       ```py
       from google.adk.auth.auth_schemes import OpenIdConnectWithConfig
@@ -692,7 +739,7 @@ except Exception as e:
 **ステップ7：ツール結果を返す**
 
 * API呼び出しが成功したら、結果をLLMに役立つ辞書形式に処理します。
-* **重要なことに、** データとともに**を含めます。**
+* **極めて重要な点として、** データとともに `status` フィールドを含めます。
 
 ```py
 # ツール関数内、API呼び出し成功後

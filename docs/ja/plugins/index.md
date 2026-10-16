@@ -493,7 +493,8 @@ async def on_user_message_callback(
     invocation_context: InvocationContext,
     user_message: types.Content,
 ) -> Optional[types.Content]:
-```
+        ...
+    ```
 
 ```java
 @Override
@@ -517,7 +518,8 @@ public Maybe<Content> onUserMessageCallback(
 async def before_run_callback(
     self, *, invocation_context: InvocationContext
 ) -> Optional[types.Content]:
-```
+        ...
+    ```
 
 ```java
 @Override
@@ -566,7 +568,8 @@ async def on_model_error_callback(
     llm_request: LlmRequest,
     error: Exception,
 ) -> Optional[LlmResponse]:
-```
+        ...
+    ```
 
 ```java
 @Override
@@ -607,7 +610,8 @@ async def on_tool_error_callback(
     tool_context: ToolContext,
     error: Exception,
 ) -> Optional[dict]:
-```
+        ...
+    ```
 
 ```java
 @Override
@@ -631,7 +635,8 @@ public Maybe<Map<String, Object>> onToolErrorCallback(
 async def on_event_callback(
     self, *, invocation_context: InvocationContext, event: Event
 ) -> Optional[Event]:
-```
+        ...
+    ```
 
 ```java
 @Override
@@ -654,7 +659,8 @@ public Maybe<Event> onEventCallback(InvocationContext invocationContext, Event e
 async def after_run_callback(
     self, *, invocation_context: InvocationContext
 ) -> None:
-```
+        ...
+    ```
 
 ```java
 @Override

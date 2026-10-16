@@ -139,7 +139,7 @@ AgentOps를 통합함으로써 ADK 개발자는 강력한 AI 에이전트를 구
 
 ## 추가 정보
 
-시작하려면 [AgentOps 계정을 만드세요](http://app.agentops.ai). 기능 요청이나 버그 보고는 [AgentOps 리포지토리](https://github.com/AgentOps-AI/agentops)에서 AgentOps 팀에 문의하세요.
+시작하려면 [AgentOps 계정을 만드세요](https://app.agentops.ai). 기능 요청이나 버그 보고는 [AgentOps 리포지토리](https://github.com/AgentOps-AI/agentops)에서 AgentOps 팀에 문의하세요.
 
 ### 추가 링크
-🐦 [트위터](http://x.com/agentopsai) • 📢 [디스코드](http://x.com/agentopsai) • 🖇️ [AgentOps 대시보드](http://app.agentops.ai) • 📙 [문서](http://docs.agentops.ai)
+🐦 [X](https://x.com/agentopsai)   •   📢 [Discord](https://discord.gg/UgJyyxx7uc)   •   🖇️ [AgentOps 대시보드](https://app.agentops.ai)   •   📙 [문서](https://docs.agentops.ai)

@@ -139,7 +139,7 @@ AgentOpsを統合することで、ADK開発者は堅牢なAIエージェント�
 
 ## 詳細情報
 
-始めるには、[AgentOpsアカウントを作成](http://app.agentops.ai)してください。機能リクエストやバグレポートについては、[AgentOpsリポジトリ](https://github.com/AgentOps-AI/agentops)でAgentOpsチームにお問い合わせください。
+始めるには、[AgentOpsアカウントを作成](https://app.agentops.ai)してください。機能リクエストやバグレポートについては、[AgentOpsリポジトリ](https://github.com/AgentOps-AI/agentops)でAgentOpsチームにお問い合わせください。
 
 ### 外部リンク
-🐦 [Twitter](http://x.com/agentopsai) • 📢 [Discord](http://x.com/agentopsai) • 🖇️ [AgentOpsダッシュボード](http://app.agentops.ai) • 📙 [ドキュメント](http.docs.agentops.ai)
+🐦 [X](https://x.com/agentopsai)   •   📢 [Discord](https://discord.gg/UgJyyxx7uc)   •   🖇️ [AgentOpsダッシュボード](https://app.agentops.ai)   •   📙 [ドキュメント](https://docs.agentops.ai)

@@ -85,13 +85,41 @@ ADK를 업데이트하고 싶지만 아직 ADK 2.0으로 업그레이드할 준�
 
 최신 버전의 ADK 1.x를 설치하려면 다음 단계를 따르세요.
 
-1.  Python 가상 환경을 활성화합니다.
+1.  Python 가상 환경을 활성화합니다. 자세한 내용은 아래 지침을 참조하세요.
 
 2.  ADK 1.x용 호환 릴리스 `~=` 연산자를 사용하여 pip로 패키지를 설치합니다.
 
     ```bash
     pip install "google-adk~=1.0"
     ```
+
+??? tip "권장사항: Python 가상 환경 생성 및 활성화"
+
+    Python 가상 환경을 생성합니다:
+
+    ```shell
+    python3 -m venv .venv
+    ```
+
+    Python 가상 환경을 활성화합니다:
+
+    === "Windows CMD"
+
+        ```console
+        .venv\Scripts\activate.bat
+        ```
+
+    === "Windows PowerShell"
+
+        ```console
+        .venv\Scripts\Activate.ps1
+        ```
+
+    === "Linux / macOS"
+
+        ```shell
+        source .venv/bin/activate
+        ```
 
 ## ADK TypeScript 1.x 호환성
 

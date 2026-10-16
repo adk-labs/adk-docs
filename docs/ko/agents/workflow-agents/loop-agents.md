@@ -65,3 +65,7 @@
 ```typescript
 --8<-- "examples/typescript/snippets/agents/workflow-agents/loop_agent_doc_improv_agent.ts:init"
 ```
+
+!!! tip "모든 에이전트를 위한 전역 지침"
+
+    `App`의 `GlobalInstructionPlugin`([Python](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/global_instruction_plugin.py), [TypeScript](https://github.com/google/adk-js/blob/main/core/src/plugins/global_instruction_plugin.ts), [Java](https://github.com/google/adk-java/blob/main/core/src/main/java/com/google/adk/plugins/GlobalInstructionPlugin.java)) 또는 에이전트의 `GlobalInstruction` 매개변수([Go](https://github.com/google/adk-go/blob/main/agent/llmagent/llmagent.go))를 사용하여 워크플로 전체에 일관된 규칙을 적용하세요.

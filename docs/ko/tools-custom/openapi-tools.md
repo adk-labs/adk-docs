@@ -81,3 +81,63 @@ OpenAPI 사양을 에이전트에 통합하려면 다음 단계를 따르세요.
     ```python title="openapi_example.py"
     --8<-- "examples/python/snippets/tools/openapi_tool.py"
     ```
+
+
+## 고급 구성
+
+!!! note
+    이 섹션의 매개변수는 ADK Python v2.0.0 이상이 필요합니다.
+
+### `header_provider`를 사용한 커스텀 헤더
+
+모든 API 요청에 커스텀 헤더를 동적으로 추가하려면 `header_provider`에 호출 가능한 객체(callable)를 제공하세요. 다음 예제와 같이 callable은 `ReadonlyContext`를 전달받아 헤더 딕셔너리를 반환합니다.
+
+```python
+from google.adk.agents.readonly_context import ReadonlyContext
+from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import OpenAPIToolset
+
+openapi_spec = {...}  # OpenAPI 파일에서 로드됨.
+
+
+def my_header_provider(context: ReadonlyContext) -> dict[str, str]:
+    return {"X-Request-ID": context.invocation_id}
+
+
+toolset = OpenAPIToolset(
+    spec_dict=openapi_spec,
+    header_provider=my_header_provider,
+)
+```
+
+### `ssl_verify`를 사용한 SSL 인증서 검증
+
+도구 세트의 모든 도구에 대한 SSL 인증서 검증을 구성하려면 `ssl_verify` 매개변수를 사용하세요. 다음 예제는 커스텀 CA 인증서가 있는 환경에서 SSL 검증을 구성하는 방법을 보여줍니다.
+
+```python
+from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import OpenAPIToolset
+
+openapi_spec = {...}  # OpenAPI 파일에서 로드됨.
+
+toolset = OpenAPIToolset(
+    spec_dict=openapi_spec,
+    ssl_verify="/path/to/ca.pem",
+)
+```
+
+!!! warning "검증을 비활성화하지 마세요"
+    `ssl_verify`는 `True`, `False` 또는 `ssl.SSLContext`도 허용합니다. `ssl_verify=False`로 설정하면 인증서 검증이 완전히 비활성화되어 요청이 가로채기(인터셉트) 위험에 노출됩니다. 대신 CA 번들 경로 또는 커스텀 `SSLContext`를 사용하세요.
+
+### `tool_name_prefix`를 사용한 도구 이름 접두사
+
+도구 세트에서 생성된 모든 도구 이름에 접두사를 추가하려면 `tool_name_prefix` 매개변수를 사용하세요. 다음 예제는 여러 OpenAPI 사양을 사용할 때 이름 충돌을 방지하는 방법을 보여줍니다.
+
+```python
+from google.adk.tools.openapi_tool.openapi_spec_parser.openapi_toolset import OpenAPIToolset
+
+openapi_spec = {...}  # OpenAPI 파일에서 로드됨.
+
+toolset = OpenAPIToolset(
+    spec_dict=openapi_spec,
+    tool_name_prefix="my_api",
+)
+```

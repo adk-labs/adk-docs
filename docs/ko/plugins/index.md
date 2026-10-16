@@ -492,7 +492,8 @@ async def on_user_message_callback(
     invocation_context: InvocationContext,
     user_message: types.Content,
 ) -> Optional[types.Content]:
-```
+        ...
+    ```
 
 === "TypeScript"
 
@@ -527,7 +528,8 @@ public Maybe<Content> onUserMessageCallback(
 async def before_run_callback(
     self, *, invocation_context: InvocationContext
 ) -> Optional[types.Content]:
-```
+        ...
+    ```
 
 === "TypeScript"
 
@@ -584,7 +586,8 @@ async def on_model_error_callback(
     llm_request: LlmRequest,
     error: Exception,
 ) -> Optional[LlmResponse]:
-```
+        ...
+    ```
 
 === "TypeScript"
 
@@ -637,7 +640,8 @@ async def on_tool_error_callback(
     tool_context: ToolContext,
     error: Exception,
 ) -> Optional[dict]:
-```
+        ...
+    ```
 
 === "TypeScript"
 
@@ -674,7 +678,8 @@ public Maybe<Map<String, Object>> onToolErrorCallback(
 async def on_event_callback(
     self, *, invocation_context: InvocationContext, event: Event
 ) -> Optional[Event]:
-```
+        ...
+    ```
 
 === "TypeScript"
 
@@ -708,7 +713,8 @@ public Maybe<Event> onEventCallback(InvocationContext invocationContext, Event e
 async def after_run_callback(
     self, *, invocation_context: InvocationContext
 ) -> None:
-```
+        ...
+    ```
 
 === "TypeScript"
 

@@ -188,7 +188,7 @@ ADK를 사용하여 Google 검색 에이전트를 성공적으로 만들고 상�
 
 이 다이어그램은 사용자 쿼리가 그라운딩된 응답으로 이어지는 단계별 프로세스를 보여줍니다.
 
-![](../assets/google_search_grd_dataflow.png)
+![Google 검색 그라운딩 데이터 흐름](../assets/google_search_grd_dataflow.png)
 
 ### **상세 설명**
 

@@ -27,6 +27,8 @@ LLMがツールを正しく使用するには、明確に定義された関数�
 
 #### パラメーター
 
+パラメーターは、呼び出し時にツールが受け取ることを期待するデータを決定します。ツールのニーズに基づいて、必須またはオプションとして構成できます。
+
 ##### 必須パラメーター
 
 === "Python"
@@ -138,6 +140,123 @@ LLMがツールを正しく使用するには、明確に定義された関数�
 
 ##### 可変長引数（`*args`および`**kwargs`）
 他の目的で関数シグネチャに`*args`（可変長位置引数）および`**kwargs`（可変長キーワード引数）を含めることはできますが、LLMのツールスキーマを生成する際に**ADKフレームワークによって無視されます**。LLMはそれらを認識せず、引数を渡すことはできません。LLMから期待するすべてのデータについては、明示的に定義されたパラメーターに依存するのが最善です。
+
+##### JSON スキーマ ツール宣言の構成
+
+Python 版 ADK は、モデルの関数宣言に Pydantic を使用して関数シグネチャから JSON スキーマを生成します。この機能（`JSON_SCHEMA_FOR_FUNC_DECL`）は**デフォルトで有効**です。
+
+!!! example "試験的機能"
+    
+    JSON スキーマ ツール宣言（`JSON_SCHEMA_FOR_FUNC_DECL`）は、Python 版 ADK の試験的機能です。この機能はデフォルトで有効になっていますが、その動作や API は変更される可能性があり、アクティブな間、ADK は `[EXPERIMENTAL]` 警告を出力します。
+
+###### オプション 1: コマンドライン経由で設定
+
+エージェントプロセスを起動する前に、ターミナルで適切な環境変数を設定します。
+
+=== "macOS/Linux"
+
+    ```bash
+    export ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
+    ```
+    
+=== "Windows (コマンドプロンプト)"
+
+    ```cmd
+    set ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
+    ```
+    
+=== "Windows (PowerShell)"
+
+    ```powershell
+    $env:ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL="1"
+    ```
+
+JSON スキーマの生成を無効にして以前の `Schema` ベースの宣言動作にフォールバックするには:
+
+=== "macOS/Linux"
+
+    ```bash
+    export ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
+    ```
+
+=== "Windows (コマンドプロンプト)"
+
+    ```cmd
+    set ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
+    ```
+
+=== "Windows (PowerShell)"
+
+    ```powershell
+    $env:ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL="1"
+    ```
+
+###### オプション 2: Python コード内で設定
+
+ツールやエージェントを作成する前に、ADK の `override_feature_enabled` 関数を使用します。
+
+```python
+import asyncio
+from google.adk.features import FeatureName, override_feature_enabled
+from google.adk.agents import Agent
+from google.adk.tools import FunctionTool
+
+# この機能はデフォルトで有効になっているため、以前の動作にフォールバックするには False を渡します。
+override_feature_enabled(FeatureName.JSON_SCHEMA_FOR_FUNC_DECL, False)
+
+def get_current_weather(location: str, unit: str = "celsius") -> str:
+    """指定された場所の現在の天気を取得します。
+    
+    Args:
+        location: 都市と州（例: San Francisco, CA）
+        unit: 温度の単位（'celsius' または 'fahrenheit'）
+    """
+    return f"Weather in {location}: 22° {unit.capitalize()}"
+
+async def main():
+    weather_tool = FunctionTool(func=get_current_weather)
+    
+    agent = Agent(
+        model="gemini-2.5-flash",
+        name="my_agent",
+        instruction="You are a helpful assistant.",
+        tools=[weather_tool]
+    )
+    # 実行ロジック
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+あるいは、エージェントコンポーネントを初期化する前にスクリプト内で環境変数を設定します。
+
+```python
+import os
+import asyncio
+
+os.environ["ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL"] = "1"
+
+from google.adk.agents import Agent
+from google.adk.tools import FunctionTool
+
+def get_current_weather(location: str) -> str:
+    """指定された場所の現在の天気を取得します。"""
+    return f"Weather in {location}: 20°C"
+
+async def main():
+    weather_tool = FunctionTool(func=get_current_weather)
+    
+    agent = Agent(
+        model="gemini-2.5-flash",
+        name="my_agent",
+        instruction="You are a helpful assistant.",
+        tools=[weather_tool]
+    )
+    # 実行ロジック
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
 
 #### 戻り値の型
 

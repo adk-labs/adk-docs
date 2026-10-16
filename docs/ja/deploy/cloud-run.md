@@ -27,7 +27,7 @@
     2. エージェントインスタンスはランチャー構成に渡され、通常はagent.NewSingleLoader(yourAgent)を使用します。adkgoツールは、このランチャーを使用して、正しいサービスでエージェントを起動します。
     3. go.modおよびgo.sumファイルは、依存関係を管理するためにプロジェクトディレクトリにあります。
 
-    詳細については、次のセクションを参照してください。GitHubリポジトリで[サンプルアプリ](https://github.com/google/tree/main/examples/go/cloud-run)も参照できます。
+    詳細については、次のセクションを参照してください。GitHubリポジトリで[サンプルアプリ](https://github.com/google/adk-docs/tree/main/examples/go/cloud-run)も参照できます。
 
 === "Java"
 
@@ -35,7 +35,7 @@
     2. エージェント変数はグローバルで、`public static final BaseAgent ROOT_AGENT`形式に従います。
     3. エージェント定義は静的クラスメソッドにあります。
 
-    詳細については、次のセクションを参照してください。GitHubリポジトリで[サンプルアプリ](https://github.com/google/tree/main/examples/java/cloud-run)も参照できます。
+    詳細については、次のセクションを参照してください。GitHubリポジトリで[サンプルアプリ](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run)も参照できます。
 
 
 ## 環境変数
@@ -471,12 +471,12 @@ google-adk
           <dependency>
              <groupId>com.google.adk</groupId>
              <artifactId>google-adk</artifactId>
-             <version>1.11.0</version>
+             <version>1.12.0</version>
           </dependency>
           <dependency>
              <groupId>com.google.adk</groupId>
              <artifactId>google-adk-dev</artifactId>
-             <version>1.11.0</version>
+             <version>1.12.0</version>
           </dependency>
         </dependencies>
 

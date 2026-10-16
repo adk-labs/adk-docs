@@ -188,7 +188,7 @@ ADKを使用してGoogle検索エージェントの作成と対話に成功し�
 
 この図は、ユーザーのクエリがグラウンディングされた応答になるまでのステップバイステップのプロセスを示しています。
 
-![](../assets/google_search_grd_dataflow.png)
+![Google 検索グラウンディングのデータフロー](../assets/google_search_grd_dataflow.png)
 
 ### **詳細な説明**
 

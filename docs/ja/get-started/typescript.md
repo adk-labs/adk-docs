@@ -47,7 +47,7 @@ npm install -D @google/adk-devtools
 
 ### エージェントコードを定義
 
-`getCurrentTime` という [Function Tool](/tools/function-tools/) のシンプルな実装を含む、
+`get_current_time` という [Function Tool](/ja/tools-custom/function-tools/) のシンプルな実装を含む、
 基本エージェントのコードを作成します。`my-agent` プロジェクトに `agent.ts` を作成して次を追加します。
 
 ```typescript title="my-agent/agent.ts"
@@ -71,7 +71,7 @@ export const rootAgent = new LlmAgent({
   model: 'gemini-flash-latest',
   description: 'Tells the current time in a specified city.',
   instruction: `You are a helpful assistant that tells the current time in a city.
-                Use the 'getCurrentTime' tool for this purpose.`,
+                Use the 'get_current_time' tool for this purpose.`,
   tools: [getCurrentTime],
 });
 ```

@@ -1,7 +1,8 @@
 ---
 catalog_title: Model Consult
 catalog_description: 高速な実行モデルでの困難な推論を、より強力なアドバイザーモデルにエスカレーションします
-catalog_tags: ["resilience", "observability"]
+catalog_icon: /integrations/assets/adk.png
+catalog_tags: ["resilience", "observability", "google"]
 ---
 
 # ADK 用 Model Consult ツール
@@ -87,6 +88,40 @@ root_agent = Agent(
 2. **コンテキストの引き継ぎ（Context handover）** — `ModelConsultTool` は相談内容を単一の `role='user'` の `types.Content` メッセージにパッケージ化します。`include_agent_instruction` と `include_tool_inventory` が `True` の場合、メッセージは解決された実行モデルのインストラクションと併用ツールのインベントリから始まります。次に、`ModelConsultTool` は `ModelConsultContextConfig` に従って `Session.events` 内の非部分的（non-partial）かつ巻き戻されていない（non-rewound）イベントを変換し、テキストパートを発話者ごとにラベル付けし、進行中の `model_consult` 呼び出しを除外しながら過去のツール呼び出しとツールレスポンスを読みやすいテキスト要約にフラット化します。最後に、`ModelConsultTool` はアクティブなエージェント名、実行モデルの質問、および実行モデルから渡された追加の `context` 文字列を含むハンドオフパートを追加します。
 3. **ツールなしのアドバイザー呼び出し** — `ModelConsultTool` はツール呼び出しを無効にし、デフォルトのアドバイザーシステムインストラクション（または指定されている場合はカスタムの `advisor_instruction`）を使用して、構成されたアドバイザー `BaseLlm` を呼び出します。アドバイザーへのリクエストからはツール宣言が除外されるため、アドバイザー自身がツールを実行したり副作用を生じさせたりすることはできず、実行モデルが次にどのツールをどの引数で呼び出すべきかを示すテキストガイダンスのみを返すことができます。
 4. **構造化されたツールレスポンス** — `ModelConsultTool` がエージェントループに例外を送出することはありません。代わりに、[レスポンスのステータス値](#response-status-values)で説明されているように、`status` 値を含む辞書を返します。
+
+### ツール呼び出しの検査
+
+デフォルトでは、人間が読みやすいモードの `adk run` は最終的なテキスト応答（`[support_executor]: ...`）のみを出力し、中間ツール呼び出しは非表示にします。ユーザーは次の 3 つの方法で `model_consult` の呼び出しを検査し、アドバイザーの応答を確認できます:
+
+1. **ADK Web UI** — [`adk-python`](https://github.com/google/adk-python) のクローンから `adk web contributing/samples/tools` を実行します:
+   チャットペインで、各相談は `model_consult` ツールイベントとして表示されます。`model_consult` イベントをクリックすると、左側に **Events / Trace** インスペクターが開きます:
+   - **`functionCall`** は、エグゼキューターがアドバイザーに送信した正確な `question`（およびオプションの `context`）を表示します。
+   - **`functionResponse`** は、`"status"`, `"guidance"`, `"advisor_model"`, `"thinking_level"`, `"consults"`, `"usage"`, `"latency_ms"` を含む、`ModelConsultTool` が返した構造化辞書を表示します。
+
+2. **ADK CLI**:
+   `adk run` コマンドを使用して、`model_consult` の `functionCall` および `functionResponse` を含むすべてのセッションイベントを JSON として出力します。モードを選択してください:
+   - **単一クエリモード:** `--jsonl` を渡して、イベントを JSON 行として stdout にストリーミングします:
+     ```bash
+     adk run contributing/samples/tools/model_consult \
+       "Customer CUST-108 wants a full refund to their original payment method for order ORD-502." \
+       --jsonl
+     ```
+   - **インタラクティブモード:** 終了時に完全なセッションログを保存するには `--save_session` を渡します:
+     ```bash
+     adk run contributing/samples/tools/model_consult --save_session --session_id consult_demo
+     ```
+
+3. **`Runner.run_async` イベントによるプログラムでの確認**:
+   Python でエージェントを実行する場合、`name == "model_consult"` の `event.get_function_calls()` および `event.get_function_responses()` を検査します:
+
+   ```python
+   async for event in runner.run_async(user_id="u1", session_id="s1", new_message=msg):
+       for resp in event.get_function_responses():
+           if resp.name == "model_consult":
+               print(resp.response["status"], resp.response.get("guidance"))
+               print("Consult budget:", resp.response.get("consults"))
+               print("Advisor token usage:", resp.response.get("usage"))
+   ```
 
 ### レスポンスのステータス値 {#response-status-values}
 

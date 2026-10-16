@@ -27,6 +27,8 @@ ADK 프레임워크는 이름, docstring, 매개변수, 유형 힌트 및 기본
 
 #### 매개변수
 
+매개변수는 도구가 호출될 때 수신할 것으로 예상되는 데이터를 결정합니다. 도구의 필요에 따라 필수 또는 선택사항으로 구성할 수 있습니다.
+
 ##### 필수 매개변수
 
 === "Python"
@@ -137,6 +139,123 @@ ADK 프레임워크는 이름, docstring, 매개변수, 유형 힌트 및 기본
 
 ##### 가변 매개변수(`*args` 및 `**kwargs`)
 다른 목적으로 함수 서명에 `*args`(가변 위치 인수) 및 `**kwargs`(가변 키워드 인수)를 포함할 수 있지만 LLM에 대한 도구 스키마를 생성할 때 **ADK 프레임워크에서 무시**됩니다. LLM은 이를 인식하지 못하며 인수를 전달할 수 없습니다. LLM에서 예상하는 모든 데이터에 대해 명시적으로 정의된 매개변수를 사용하는 것이 가장 좋습니다.
+
+##### JSON 스키마 도구 선언 구성
+
+Python용 ADK는 모델 함수 선언을 위해 Pydantic을 사용하여 함수 서명에서 JSON 스키마를 생성합니다. 이 기능(`JSON_SCHEMA_FOR_FUNC_DECL`)은 **기본적으로 활성화**되어 있습니다.
+
+!!! example "실험적 기능"
+    
+    JSON 스키마 도구 선언(`JSON_SCHEMA_FOR_FUNC_DECL`)은 Python용 ADK의 실험적 기능입니다. 이 기능은 기본적으로 활성화되어 있지만 동작 및 API가 변경될 수 있으며, 활성화된 동안 ADK는 `[EXPERIMENTAL]` 경고를 출력합니다.
+
+###### 옵션 1: 명령줄을 통해 구성
+
+에이전트 프로세스를 시작하기 전에 터미널에서 적절한 환경 변수를 설정합니다.
+
+=== "macOS/Linux"
+
+    ```bash
+    export ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
+    ```
+    
+=== "Windows (명령 프롬프트)"
+
+    ```cmd
+    set ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
+    ```
+    
+=== "Windows (PowerShell)"
+
+    ```powershell
+    $env:ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL="1"
+    ```
+
+JSON 스키마 생성을 비활성화하고 이전의 `Schema` 기반 선언 동작으로 대체(fallback)하려면 다음을 설정합니다.
+
+=== "macOS/Linux"
+
+    ```bash
+    export ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
+    ```
+
+=== "Windows (명령 프롬프트)"
+
+    ```cmd
+    set ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
+    ```
+
+=== "Windows (PowerShell)"
+
+    ```powershell
+    $env:ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL="1"
+    ```
+
+###### 옵션 2: Python 코드에서 구성
+
+도구와 에이전트를 만들기 전에 ADK의 `override_feature_enabled` 함수를 사용합니다.
+
+```python
+import asyncio
+from google.adk.features import FeatureName, override_feature_enabled
+from google.adk.agents import Agent
+from google.adk.tools import FunctionTool
+
+# 이 기능은 기본적으로 활성화되어 있으므로 이전 동작으로 돌아가려면 False를 전달합니다.
+override_feature_enabled(FeatureName.JSON_SCHEMA_FOR_FUNC_DECL, False)
+
+def get_current_weather(location: str, unit: str = "celsius") -> str:
+    """Get the current weather for a given location.
+    
+    Args:
+        location: The city and state, e.g. San Francisco, CA
+        unit: Temperature unit ('celsius' or 'fahrenheit')
+    """
+    return f"Weather in {location}: 22° {unit.capitalize()}"
+
+async def main():
+    weather_tool = FunctionTool(func=get_current_weather)
+    
+    agent = Agent(
+        model="gemini-2.5-flash",
+        name="my_agent",
+        instruction="You are a helpful assistant.",
+        tools=[weather_tool]
+    )
+    # 실행 로직
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+또는 에이전트 구성 요소를 초기화하기 전에 스크립트에서 환경 변수를 설정할 수도 있습니다.
+
+```python
+import os
+import asyncio
+
+os.environ["ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL"] = "1"
+
+from google.adk.agents import Agent
+from google.adk.tools import FunctionTool
+
+def get_current_weather(location: str) -> str:
+    """Get the current weather for a given location."""
+    return f"Weather in {location}: 20°C"
+
+async def main():
+    weather_tool = FunctionTool(func=get_current_weather)
+    
+    agent = Agent(
+        model="gemini-2.5-flash",
+        name="my_agent",
+        instruction="You are a helpful assistant.",
+        tools=[weather_tool]
+    )
+    # 실행 로직
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
 
 #### 반환 유형
 

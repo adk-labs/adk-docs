@@ -1,7 +1,7 @@
 # Model Context Protocol 툴
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 **Model Context Protocol (MCP)** 은 생성형 AI 모델을 외부 데이터 소스, 툴, 시스템에 연결하기 위한 개방형 표준입니다. LLM이 컨텍스트를 확보하고 작업을 실행하며 다양한 시스템과 상호작용하는 방식을 단순화하는 범용 연결 메커니즘으로 생각할 수 있습니다.

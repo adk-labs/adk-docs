@@ -533,7 +533,7 @@ LIMIT 20;
     | `clustering_fields` | `List[str]` | `["event_type", "agent", "user_id"]` | 생성 시 테이블 클러스터링 필드 사용자 정의 |
     | `gcs_bucket_name` | `Optional[str]` | `None` | 대용량 텍스트 및 멀티모달 콘텐츠를 GCS로 오프로드 |
     | `connection_id` | `Optional[str]` | `None` | GCS 콘텐츠를 쿼리하기 위한 BigQuery ObjectRef / 객체 테이블 사용 |
-    | `max_content_length` | `int` | `500 * 1024` | 오프로드/자르기 전 인라인 페이로드 크기 제어(바이트) |
+    | `max_content_length` | `int` | `500 * 1024` | 오프로드/자르기 전 인라인 페이로드 크기 제어. 제한을 두지 않으려면 `-1`을 사용하세요. 다른 값은 최소 `1` 이상이어야 합니다. |
     | `batch_size` | `int` | `1` | 쓰기 처리량 대 지연 시간 조정(기본값 1은 낮은 지연 시간용, 높은 처리량의 경우 증가) |
     | `batch_flush_interval` | `float` | `1.0` | 부분 일괄 처리를 주기적으로 플러시(초) |
     | `shutdown_timeout` | `float` | `10.0` | 종료 시 최종 플러시 대기 시간(초) |
@@ -549,11 +549,16 @@ LIMIT 20;
     | `create_views` | `bool` | `True` | 이벤트 유형별 BigQuery 뷰 생성 |
     | `view_prefix` | `str` | `"v"` | 여러 플러그인이 데이터 세트를 공유할 때 뷰 이름 충돌 방지(예: `"v_staging"`) |
     | `enable_otel_correlation` | `bool` | `False` | 최선형 Cloud Trace 조인 키로서 주변 OpenTelemetry span 컨텍스트를 `attributes.otel.{span_id, trace_id}`로 캡처 |
-    | `custom_metadata_allowlist` | `Optional[List[str]]` | `None` | 선택된 `event.custom_metadata` 키를 `attributes.custom_metadata.*`에 캡처: 정확한 키 또는 `"prefix*"` 패턴 |
+    | `custom_metadata_allowlist` | `Optional[List[str]]` | `None` | 선택된 `event.custom_metadata` 키를 `attributes.custom_metadata.*`에 캡처: 정확한 키 또는 `"prefix*"` 패턴. ADK Python v2.12.0 이상에서는 최종 `LLM_RESPONSE` 행이 `llm_response.custom_metadata`의 키를 캡처합니다. |
     | `payload_column_denylist` | `Optional[List[str]]` | `None` | 쓰기 시 테이블에서 페이로드 열(`content`, `content_parts`, `attributes`, `latency_ms`) 제외 투영 |
     | `final_response_tool_names` | `FrozenSet[str]` | `frozenset()` | 선택한 성공 도구의 호출 인수를 `AGENT_RESPONSE` 페이로드로 기록 |
     | `flush_on_run_end` | `bool` | `True` | 각 실행이 끝날 때 대기열에 있는 행 쓰기 완료 대기 |
     | `exactly_once_delivery` | `bool` | `False` | 커밋된 스트림과 명시적 오프셋을 사용하여 활성 프로세서 내에서 모호한 재시도 중복 방지 |
+    | `use_dedicated_background_loop` | `Optional[bool]` | `None` | 배치 기록기가 실행되는 위치 선택: `None`은 `flush_on_run_end=False`일 때 [공유 백그라운드 기록기](#shared-background-writer) 스레드를 사용하고, `True`는 항상 이를 사용하며, `False`는 기록기를 호출자의 이벤트 루프에 유지합니다. |
+    | `credentials_identifier` | `Optional[str]` | `None` | 백그라운드 기록기를 공유할 플러그인 인스턴스를 명시적으로 선택합니다. 생성자 인수가 우선합니다. 동일한 자격 증명 및 기록기 설정을 가진 인스턴스에 대해서만 동일한 식별자를 사용하세요. |
+    | `debug_content_formatter_errors` | `bool` | `False` | `content_formatter`에 의해 발생한 예외의 제한된 트레이스백을 플러그인의 로컬 Python 로그 경고에 추가합니다. 트레이스백에는 포맷팅되지 않은 콘텐츠가 포함될 수 있으며 BigQuery에는 기록되지 않습니다. |
+    | `on_schema_error` | `Optional[Callable[[Exception], None]]` | `None` | ADK Python v2.12.0 이상에서, [테이블 준비 상태 확인](#table-readiness-callbacks)이 테이블을 읽거나 생성하거나 업그레이드하는 데 실패할 때마다 예외와 함께 동기 콜백을 실행합니다. 동기 콜러블이 아닌 값은 플러그인 생성 시 `ValueError`를 발생시킵니다. |
+    | `on_schema_ready` | `Optional[Callable[[], None]]` | `None` | ADK Python v2.12.0 이상에서, 요청된 모든 뷰를 포함하여 [테이블 준비 상태 확인](#table-readiness-callbacks)이 성공할 때마다 인수가 없는 동기 콜백을 실행합니다. 동기 콜러블이 아닌 값은 플러그인 생성 시 `ValueError`를 발생시킵니다. |
 
     다음 코드 샘플은 BigQuery Agent Analytics 플러그인 구성을 정의하는 방법을 보여줍니다.
 
@@ -614,7 +619,7 @@ LIMIT 20;
     세 가지 옵션이 `attributes`에 들어갈 추가 컨텍스트와 페이로드 열의 작성 여부를 제어합니다. 각 옵션은 위의 `BigQueryLoggerConfig` 옵션 표에 나열되어 있으며, 아래의 참고사항은 단순 표에서 표현할 수 없는 교차 옵션 규칙을 설명합니다.
 
     - **`enable_otel_correlation`**: 캡처된 span 컨텍스트는 외래 키가 아니라 최선형 Cloud Trace 상관관계 키입니다. 비활성화된 경우(기본값) `attributes.otel`이 작성되지 않습니다.
-    - **`custom_metadata_allowlist`**: 설정하지 않으면 기본 `a2a:*` 캡처만 실행되는 이전 동작이 유지됩니다. 캡처된 값은 다른 모든 로깅 콘텐츠와 동일한 안전 파이프라인(자르기, 민감한 키 수정, 순환 참조 처리)을 통과합니다.
+    - **`custom_metadata_allowlist`**: 설정하지 않으면 기본 `a2a:*` 캡처만 실행되는 이전 동작이 유지됩니다. 키는 `event.custom_metadata`에서 읽습니다. ADK Python v2.12.0 이상에서는 최종(부분 응답이 아닌) `LLM_RESPONSE` 행이 `llm_response.custom_metadata`에서 키를 읽습니다. 캡처된 값은 다른 모든 로깅 콘텐츠와 동일한 안전 파이프라인(자르기, 민감한 키 수정, 순환 참조 처리)을 통과합니다.
     - **`payload_column_denylist`**: `content`, `content_parts`, `attributes`, `latency_ms`만 나열할 수 있습니다. 식별 및 상관관계 열은 보호되며 나열 시 `ValueError`가 발생합니다. 프로젝션은 스키마 우선으로 적용되므로 테이블 스키마, 작성된 행 및 자동 생성된 뷰가 일관성을 유지합니다(뷰는 거부된 열에 종속된 파생 열을 삭제함). `attributes`를 거부하면 `attributes.otel` 및 `attributes.custom_metadata`도 비활성화되며, 비어 있지 않은 `custom_metadata_allowlist`와 결합하면 생성 시 거부됩니다.
 
     ```python
@@ -629,13 +634,33 @@ LIMIT 20;
 
     에이전트가 일반 텍스트 최종 이벤트를 생성하는 대신 전용 도구를 호출하여 최종 답변을 제공하는 경우 `final_response_tool_names`를 사용하세요. 일치하는 도구 호출이 성공하면 플러그인은 도구의 호출 인수를 `AGENT_RESPONSE` 행으로 작성하고 `attributes`에 `source_tool`을 추가합니다.
 
-    `flush_on_run_end` 옵션의 기본값은 `True`이며, 이는 `after_run_callback`이 현재 이벤트 루프의 쓰기 큐를 대기하도록 만듭니다. 응답 경로에서 해당 플러시를 제거하려면 `False`로 설정하세요. 백그라운드 기록기가 대기열을 계속 비우므로 실행이 반환된 후 잠시 뒤에 BigQuery에 행이 나타날 수 있습니다.
+    `flush_on_run_end` 옵션의 기본값은 `True`이며, 이는 `after_run_callback`이 현재 이벤트 루프의 쓰기 큐를 대기하도록 만듭니다. 응답 경로에서 해당 플러시를 제거하려면 `False`로 설정하세요. 백그라운드 기록기가 대기열을 계속 비우므로 실행이 반환된 후 잠시 뒤에 BigQuery에 행이 나타날 수 있습니다. Python v2.10.0 이상에서는 이 설정을 사용하면 기록기가 [공유 백그라운드 기록기](#shared-background-writer)로 이동합니다.
 
     ```python
     config = BigQueryLoggerConfig(
         final_response_tool_names=frozenset({"submit_final_response"}),
         flush_on_run_end=False,
     )
+    ```
+
+    ### 공유 백그라운드 기록기 {#shared-background-writer}
+
+    <div class="language-support-tag">
+      <span class="lst-supported">ADK 지원 버전</span><span class="lst-python">Python v2.10.0</span>
+    </div>
+
+    `flush_on_run_end=False`인 경우 플러그인은 호출자의 이벤트 루프 대신 프로세스 수명 주기를 갖는 전용 백그라운드 이벤트 루프 스레드에서 배치 기록기를 실행합니다. `flush_on_run_end=True`일 때도 해당 스레드를 사용하려면 `use_dedicated_background_loop=True`로 설정하고, 기록기를 호출자의 이벤트 루프에 유지하려면 `False`로 설정하세요.
+
+    동일한 프로세스 내에서 동등한 자격 증명으로 동일한 테이블을 대상으로 하는 플러그인 인스턴스는 단일 백그라운드 기록기와 BigQuery 쓰기 클라이언트를 공유하므로, 요청당 하나와 같이 수명이 짧은 플러그인 인스턴스가 각각 새 기록기를 열지 않습니다. 동등성은 자격 증명 ID(예: 서비스 계정 이메일, 범위, 프로젝트)에서 파생됩니다. 어떤 플러그인 인스턴스가 기록기를 공유할지 명시적으로 선택하려면 `credentials_identifier`를 설정하세요. 동등한 자격 증명과 기록기 설정을 가진 인스턴스에 대해서만 동일한 식별자를 사용하세요. 공유 기록기는 이를 생성한 인스턴스의 자격 증명 및 기록기 설정(예: `batch_size`, `retry_config`)을 사용합니다.
+
+    기본 인수로 `shutdown()` 또는 `close()`를 호출하면 플러그인 인스턴스가 공유 기록기에서 분리되지만 기록기는 계속 실행되므로 대기 중인 행이 계속 기록됩니다. 인터프리터 종료 시 플러그인은 활성 기록기를 비우기 위해 최선의 노력을 다합니다. 독립 실행형 스크립트나 테스트 종료 시 등 공유 기록기를 명시적으로 비우고 중지하려면 `close_background_transport=True`를 전달하거나 `close_shared_background_transports()`를 호출하세요.
+
+    ```python
+    # 이 플러그인의 테이블 및 자격 증명에 대한 공유 기록기를 비우고 중지합니다.
+    await plugin.close(close_background_transport=True)
+
+    # 또는 프로세스의 모든 공유 백그라운드 기록기를 비우고 중지합니다.
+    await BigQueryAgentAnalyticsPlugin.close_shared_background_transports(timeout=10.0)
     ```
 
     ### 전송 및 중복 제거 {#delivery-and-deduplication}
@@ -663,6 +688,23 @@ LIMIT 20;
     ```
 
     이름과 달리 이 옵션은 무손실 전송을 보장하지 않습니다. 재시도 소진, 오프셋 충돌 또는 교체 스트림 실패 후에도 일괄 처리가 드롭될 수 있습니다. 스트림 교체 실패 후 30초의 교체 백오프 중에 도착하는 이벤트도 드롭됩니다. `offset_conflict` 및 기타 [드롭 원인](#dropped-event-observability)을 모니터링하고 `event_id`를 소비자 중복 제거 키로 유지하세요.
+
+    ### 테이블 준비 상태 콜백 {#table-readiness-callbacks}
+
+    <div class="language-support-tag">
+      <span class="lst-supported">ADK 지원 버전</span><span class="lst-python">Python v2.12.0</span>
+    </div>
+
+    플러그인이 설정 중에 실행하는 테이블 준비 상태 확인을 관찰하려면 `on_schema_error` 및 `on_schema_ready`를 사용하세요. 이 확인은 BigQuery 테이블을 읽거나 생성하거나 업그레이드하고 요청된 모든 뷰를 생성합니다.
+
+    - `on_schema_error`: 확인 과정에서 테이블을 읽거나 생성하거나 업그레이드하는 데 실패할 때마다 예외와 함께 호출됩니다. 확인당 최대 한 번 실행되므로 설정 재시도 중에 반복적으로 호출될 수 있습니다. 뷰를 생성할 수 없거나 라벨 전용 테이블 새로고침이 실패하는 경우에는 호출되지 않습니다. 플러그인은 이러한 실패를 로그에 기록하고 계속 진행합니다.
+    - `on_schema_ready`: 확인이 성공할 때마다 인수 없이 호출되며, 이는 테이블이 존재하거나 생성 또는 업그레이드되었고 요청된 모든 뷰가 생성되었음을 의미합니다.
+
+    두 콜백 모두 이벤트 루프가 아닌 워커 스레드에서 실행되므로 빠르고 논블로킹 상태를 유지해야 합니다. 콜백에서 발생하는 예외는 로그에 기록되고 억제됩니다. 동기 콜러블이 아닌 값은 플러그인 생성 시 `ValueError`를 발생시킵니다.
+
+    확인에 성공한 후 동일한 플러그인의 후속 설정에서는 `close()` 후, 포크 후, 그리고 나중에 피클된 복사본을 포함하여 이 확인을 건너뜁니다. 두 콜백 모두 다시 실행되지 않으며, 이후의 테이블 중단은 행이 기록될 때 [삭제된 행](#dropped-event-observability)으로만 나타납니다. 확인을 기다리던 설정이 취소되었거나 `create_analytics_views()` 호출이 뷰 생성에 실패한 경우에만 후속 설정에서 확인을 다시 실행합니다. 모든 뷰를 생성하는 `create_analytics_views()` 호출은 이후 설정에서 확인을 건너뛰게 만들며, 자체 뷰 생성은 두 콜백을 호출하지 않습니다.
+
+    표준 `pickle` 모듈로 플러그인을 직렬화하는 경우 콜백은 모듈 수준 함수와 같이 피클 가능해야 합니다. 람다와 클로저는 `pickle`로 피클할 수 없으며 바인딩된 메서드는 인스턴스를 함께 피클합니다.
 
 === "Java"
 
@@ -785,8 +827,8 @@ LIMIT 20;
 | **attributes** | `JSON` | `NULLABLE` | 추가 메타데이터(예: `root_agent_name`, `model_version`, `usage_metadata`, `session_metadata`, `custom_tags`)를 위한 임의의 키-값 쌍입니다. | `{"model_version": "gemini-flash-latest", ...}` |
 | **latency_ms** | `JSON` | `NULLABLE` | 지연 시간 측정값(예: 총 소요 시간인 `total_ms`)입니다. | `{"total_ms": 1250}` |
 | **status** | `STRING` | `NULLABLE` | 이벤트의 결과로, 일반적으로 'OK' 또는 'ERROR'입니다. | `OK` |
-| **error_message** | `STRING` | `NULLABLE` | 정제된 오류 또는 모델 종료 진단 정보입니다. | `ResourceExhausted: Quota exceeded` |
-| **is_truncated** | `BOOLEAN` | `NULLABLE` | 인라인 콘텐츠가 `max_content_length` 제한을 초과하여 잘렸는지 여부를 나타내는 플래그입니다. | `false` |
+| **error_message** | `STRING` | `NULLABLE` | 예외 및 모델 종료 세부정보에 대한 정제된 진단 메시지입니다. Python에서는 최종 `LLM_RESPONSE` 또는 커스텀 `content_formatter`가 실패한 행(예: `content_formatter raised ImportError`)과 같이 `status`가 `OK`로 유지되는 행에 채워질 수 있습니다. | `Error 404: Dataset not found` |
+| **is_truncated** | `BOOLEAN` | `NULLABLE` | 구성된 `max_content_length`, 정제기 깊이 또는 노드 예산, 진단 텍스트 정제를 포함하여 콘텐츠나 메타데이터가 안전 경계에 의해 잘리거나 대체된 경우 `true`입니다. ADK Python v2.12.0 이상에서는 모델 응답의 포맷팅된 파트에서 일반적인 자격 증명 패턴이 수정(redact)된 경우 및 응답 또는 컴팩션 콘텐츠의 기본 포맷팅 실패 시 기록되는 플레이스홀더인 `[FORMATTING FAILED]`에 의해서도 설정됩니다(커스텀 `content_formatter` 실패를 나타내는 `[FORMATTER_FAILED]`와 혼동하지 마세요). 일반적인 구조화된 민감한 키 수정은 단독으로 이 값을 설정하지 않습니다. | `false` |
 
 ??? example "프로덕션 BigQuery DDL (수동 생성용)"
 
@@ -823,7 +865,7 @@ LIMIT 20;
       attributes JSON OPTIONS(description="Arbitrary key-value pairs for additional metadata (e.g., 'root_agent_name', 'model_version', 'usage_metadata', 'session_metadata', 'custom_tags')."),
       latency_ms JSON OPTIONS(description="Latency measurements (e.g., total_ms)."),
       status STRING OPTIONS(description="The outcome of the event, typically 'OK' or 'ERROR'."),
-      error_message STRING OPTIONS(description="Sanitized error or model termination diagnostic."),
+      error_message STRING OPTIONS(description="Diagnostic message for errors and model termination details; may be populated on rows whose status is 'OK', such as LLM_RESPONSE rows and rows whose content_formatter failed."),
       is_truncated BOOLEAN OPTIONS(description="Flag indicates if content was truncated.")
     )
     PARTITION BY DATE(timestamp)
@@ -872,7 +914,7 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
 | **`v_tool_starting`** | `tool_name` (STRING), `tool_args` (JSON), `tool_origin` (STRING) |
 | **`v_tool_completed`** | `tool_name` (STRING), `tool_result` (JSON), `tool_origin` (STRING), `total_ms` (INT64), `pause_kind` (STRING), `function_call_id` (STRING) |
 | **`v_tool_error`** | `tool_name` (STRING), `tool_args` (JSON), `tool_origin` (STRING), `total_ms` (INT64) |
-| **`v_agent_starting`** | `agent_instruction` (STRING) |
+| **`v_agent_starting`** | `agent_instruction` (STRING); ADK Python v2.12.0 이상에서는 `instruction_source` (STRING), `static_instruction` (STRING), `agent_description` (STRING), `model` (STRING), `sub_agents` (JSON)도 포함 |
 | **`v_agent_completed`** | `total_ms` (INT64) |
 | **`v_agent_error`** | `total_ms` (INT64), `error_traceback` (STRING) |
 | **`v_invocation_starting`** | *(공통 열만 해당)* |
@@ -898,6 +940,7 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
 - Java는 `v_agent_error`, `v_invocation_error`, `v_node_output`, `v_node_error` 이벤트를 내보내지 않으므로 해당 뷰를 생성하지 않습니다.
 - Java의 `v_llm_response`는 `usage_metadata`에서 끝납니다. `usage_thinking_tokens`, `usage_tool_use_tokens`, `cache_metadata`, `cache_type`, `finish_reason`은 노출되지 않습니다.
 - Java의 `v_agent_response`는 `response_text` 대신 `text_summary`를 노출합니다.
+- Java의 `v_agent_starting`은 `agent_instruction`만 노출합니다.
 - Java의 `v_a2a_interaction`은 `a2a_response`를 생략합니다. 응답은 `response_content`에서 계속 사용할 수 있습니다.
 
 ## 이벤트 유형 및 페이로드 {#event-types}
@@ -936,7 +979,16 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
   "attributes": {
     "root_agent_name": "my_bq_agent",
     "model": "gemini-flash-latest",
-    "tools": ["list_dataset_ids", "execute_sql"],
+    "tools": [
+      {
+        "name": "list_dataset_ids",
+        "description": "..."
+      },
+      {
+        "name": "execute_sql",
+        "description": "..."
+      }
+    ],
     "llm_config": {
       "temperature": 0.5,
       "top_p": 0.9
@@ -944,6 +996,8 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
   }
 }
 ```
+
+자동으로 생성되는 `v_llm_request` 뷰는 `tools` 속성을 해당 뷰의 `tools` (JSON) 열로 노출합니다. Python에서 `tools`는 도구당 하나의 항목을 가지며, 도구의 `name`과 사용 가능한 경우 `description` 및 `parameters`(도구의 매개변수 스키마)를 포함합니다. 이러한 항목은 다른 속성과 동일한 크기 제한 및 민감한 키 수정 파이프라인을 거칩니다. Java는 도구 이름만 기록합니다(예: `["list_dataset_ids", "execute_sql"]`).
 
 **2. LLM_RESPONSE**
 
@@ -967,7 +1021,8 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
       "prompt_token_count": 10129,
       "candidates_token_count": 19,
       "total_token_count": 10148
-    }
+    },
+    "finish_reason": "STOP"
   },
   "latency_ms": {
     "time_to_first_token_ms": 2579,
@@ -975,6 +1030,12 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
   }
 }
 ```
+
+Python 플러그인은 최종(부분 응답이 아닌) 응답에만 `finish_reason`을 추가합니다. `v_llm_response` 뷰는 최종 응답의 `cache_type`과 함께 이를 `STRING`으로 노출합니다. 모델이 종료 진단 정보를 제공하는 경우, 해당 행의 `status`가 `OK`로 유지되더라도 공통 `error_message` 열에 정제된 값을 저장합니다.
+
+Python에서는 모델 종료 및 차단 이유가 `LLM_RESPONSE`로 계속 분류됩니다. 플러그인은 모델 호출에서 예외가 발생한 경우에만 `LLM_ERROR`를 사용합니다.
+
+Python에서 `content.response`는 응답 파트를 `|`로 구분하여 요약합니다(예: 텍스트의 경우 `text: '...'`, 함수 호출의 경우 `call: <name>`, 함수 응답의 경우 `resp: <name>`, 기타 파트 유형의 경우 `other`). `max_content_length`보다 긴 텍스트는 잘리고 `is_truncated`가 설정됩니다. ADK Python v2.12.0 이상에서는 요약에 실행 가능한 코드를 `Executable code (<language>): <code>`로, 코드 실행 결과를 `Code execution result (<outcome>): <output>`으로 표시하고, 텍스트, 코드 및 출력에서 일반적인 자격 증명 패턴을 수정(redact)하며, 잘린 값은 `...[TRUNCATED]`로 끝납니다. 이 수정으로 인해 `is_truncated`도 설정됩니다. v2.12.0 이상에서 `custom_metadata_allowlist`가 설정된 경우, 최종(부분 응답이 아닌) `LLM_RESPONSE` 행은 `llm_response.custom_metadata`에서 허용 목록에 있는 키를 `attributes.custom_metadata`로 캡처합니다.
 
 **3. LLM_ERROR**
 
@@ -1102,10 +1163,24 @@ LLM 호출이 예외로 실패할 때 기록됩니다. 오류 메시지가 캡�
 | ---------- | ----------------- |
 | `INVOCATION_STARTING` | `{}` |
 | `INVOCATION_COMPLETED` | `{}` |
-| `AGENT_STARTING` | `"You are a helpful agent..."` |
+| `INVOCATION_ERROR` | `{"error_traceback": "..."}` |
+| `AGENT_STARTING` | `"You are a helpful agent..."` (ADK Python v2.12.0 이상에서는 지침이 비어 있거나 콜러블 `InstructionProvider`인 경우 `null`) |
 | `AGENT_COMPLETED` | `{}` |
+| `AGENT_ERROR` | `{"error_traceback": "..."}` |
 | `USER_MESSAGE_RECEIVED` | `{"text_summary": "Help me book a flight."}` |
 | `AGENT_RESPONSE` | `{"response": "Here are the flights..."}` |
+
+Python에서 `AGENT_ERROR` 및 `INVOCATION_ERROR` 행은 `status="ERROR"`, 정제된 `error_message`, 그리고 `content`에 정제된 트레이스백을 갖습니다. 에이전트 오류 뷰는 경과된 `total_ms`도 노출합니다. 이러한 이벤트는 에이전트 또는 러너 실행을 벗어난 처리되지 않은 예외를 나타냅니다.
+
+ADK Python v2.12.0 이상에서는 `AGENT_STARTING` 행에 다음 `attributes` 키를 추가할 수도 있으며, `v_agent_starting` 뷰는 이를 열로 노출합니다:
+
+- `instruction_source`: 에이전트의 지침이 콜러블 `InstructionProvider`인 경우 `"provider"`.
+- `static_instruction`: 에이전트의 정적 지침 텍스트.
+- `agent_description`: 에이전트의 설명.
+- `model`: 에이전트의 모델 이름. LLM 에이전트가 `model`을 설정하지 않은 경우 모델을 설정한 가장 가까운 조상 에이전트로부터 상속받은 모델입니다.
+- `sub_agents`: 에이전트의 하위 에이전트 이름들.
+
+해당되지 않거나 값이 비어 있는 키는 생략됩니다. v2.12.0 이상에서 행의 콘텐츠가 지침 텍스트 대신 `<function ...>`과 같은 Python 콜러블의 텍스트 표현인 경우 뷰의 `agent_instruction` 열은 `NULL`입니다.
 
 **Kotlin**에서는 두 invocation 이벤트가 빈 객체 대신 요약 메시지를 전달합니다: `{"message": "Invocation started"}` 및 `{"message": "Invocation completed"}`.
 
@@ -1919,7 +1994,7 @@ print(f"Deployed agent: {remote_app.api_resource.name}")
 
 !!! warning "OAuth 토큰, API 키, 클라이언트 보안 비밀을 로깅하지 마세요"
 
-    BigQuery Agent Analytics 플러그인은 도구 인수, LLM 프롬프트, 인증 관련 이벤트(HITL 자격 증명 요청 등)를 포함하여 자세한 이벤트 페이로드를 캡처합니다. 기본 제공 수정(redaction)은 소문자 변환 및 하이픈 정규화 후 키 이름을 정확히 일치시키므로 `clientSecret` 또는 `accessToken`과 같은 카멜표기법(camelCase) 변형은 일치하지 **않습니다**. ADK는 `adk_request_credential` 인수를 카멜표기법 별칭으로 직렬화하므로, `AuthenticatedFunctionTool` OAuth2 흐름에서 `client_secret` 및 `access_token` 값이 여전히 `content` 열에 기록될 수 있습니다([google/adk-python#3845](https://github.com/google/adk-python/issues/3845), 현재 열려 있음). 수정 기능은 범용 데이터 손실 방지(DLP) 시스템이 아니므로 애플리케이션별 키 또는 자유 형식 텍스트에 포함된 시크릿도 BigQuery에 기록될 수 있습니다.
+    BigQuery Agent Analytics 플러그인은 도구 인수, LLM 프롬프트, 인증 관련 이벤트(HITL 자격 증명 요청 등)를 포함하여 자세한 이벤트 페이로드를 캡처합니다. 기본 제공 수정(redaction)은 소문자 변환 및 하이픈 정규화 후 키 이름을 정확히 일치시키므로 `clientSecret` 또는 `accessToken`과 같은 카멜표기법(camelCase) 변형은 일치하지 **않습니다**. ADK는 `adk_request_credential` 인수를 카멜표기법 별칭으로 직렬화하므로, `AuthenticatedFunctionTool` OAuth2 흐름에서 `client_secret` 및 `access_token` 값이 `content` 열에 기록될 수 있습니다([google/adk-python#3845](https://github.com/google/adk-python/issues/3845)). ADK Python v2.9.0 이상에서는 `adk_request_credential` 요청에서 구성된 OAuth2 클라이언트 보안 비밀(client secret)을 제거하며, ADK Python v2.12.0 이상에서는 API 키, HTTP Basic 비밀번호, HTTP bearer 토큰 및 추가 HTTP 헤더도 제거합니다. OAuth2 액세스 토큰은 여전히 제거되지 않습니다. ADK가 해당 요청에서 제거하지 않는 필드는 카멜표기법 이름을 유지하며 기본 제공 수정과 일치하지 않습니다. 자체 도구 인수의 카멜표기법 키도 마찬가지입니다. 수정 기능은 범용 데이터 손실 방지(DLP) 시스템이 아니므로 애플리케이션별 키 또는 자유 형식 텍스트에 포함된 시크릿도 BigQuery에 기록될 수 있습니다.
 
 플러그인에는 일반적인 시크릿을 자동으로 보호하는 **기본 제공 수정** 기능이 포함되어 있습니다. 추가 제어가 필요한 경우 그 위에 커스텀 수정을 계층화할 수 있습니다.
 
@@ -1948,6 +2023,10 @@ Python 플러그인은 키 이름을 소문자로 정규화하고 하이픈을 �
 !!! info "별도 구성 불필요"
 
     구조화된 속성 및 상태 로깅에 대해 기본 제공 수정이 항상 활성화되어 있으며, 속성 값 내의 중첩된 딕셔너리 및 JSON 인코딩 문자열에 재귀적으로 적용됩니다. 커스텀 `content_formatter`는 원시 콘텐츠에 대해 **먼저** 실행됩니다. 오류가 발생하거나 지원되지 않는 유형을 반환하는 경우 Python은 원본 콘텐츠 대신 `[FORMATTER_FAILED]`를 작성하고 `formatter_failed` 인시던트 카운터를 증가시킵니다.
+
+    Python `content_formatter`는 `None`, `str`, `dict` 또는 `list`(또는 이들의 하위 클래스)를 반환하거나 정확한 `types.Content`, `types.Part` 또는 `LlmRequest`를 반환할 수 있습니다. ADK Python v2.11.0 이상에서는 포맷터 실패가 행의 `error_message`에도 기록되며, 예외 또는 반환 값 클래스 이름만 표시됩니다(예: `content_formatter raised ImportError`, `content_formatter raised <subclass of ValueError>`, 또는 `content_formatter returned unsupported type tuple`). 이벤트에 이미 `TOOL_ERROR`와 같은 `error_message`가 있는 경우 해당 메시지가 먼저 유지되고 그 뒤에 세미콜론과 포맷터 실패가 이어집니다. 행의 `status`는 변경되지 않으므로 성공적인 이벤트는 `status` `OK`를 유지하지만 null이 아닌 모든 `error_message`를 오류로 처리하는 쿼리에서는 해당 행이 여전히 플래그 지정됩니다.
+
+    예외를 발생시키는 포맷터를 디버깅하려면 `debug_content_formatter_errors=True`로 설정하여 플러그인의 Python 로그 경고에 제한된 트레이스백을 추가하세요. 트레이스백에는 포맷팅되지 않은 콘텐츠가 포함될 수 있으며 구성된 모든 로그 핸들러에 도달하므로 해당 콘텐츠를 볼 수 있는 환경에서만 활성화하세요. 이는 BigQuery에는 기록되지 않습니다.
 
 !!! note "Java의 기본 제공 수정"
 
@@ -2142,18 +2221,14 @@ Python 플러그인은 키 이름을 소문자로 정규화하고 하이픈을 �
 
 === "Python"
 
-    `BigQueryAgentAnalyticsPlugin`은 수명 주기 및 유지보수 제어를 위해 다음 공개 메서드를 노출합니다.
+    플러그인은 수명 주기 관리를 위해 다음과 같은 여러 공개 메서드를 노출합니다:
 
-    - **`await plugin.flush()`**: 백그라운드 쓰기 큐가 비워질 때까지 대기합니다. 기본 제공 `after_run_callback`은 실행마다 이를 자동으로 수행합니다. 프로세스 종료 전에 명시적으로 호출하거나 턴 간에 조기 지속성을 보장하기 위해 호출할 수 있습니다.
-    - **`await plugin.close()`**: 큐를 플러그인 종료 타임스탬프(`shutdown_timeout`에 바인딩됨)까지 비우고, 백그라운드 워커를 취소하며, BigQuery 쓰기 클라이언트 세션을 닫습니다. `App` 종료 시 호출해야 합니다.
-    - **`await plugin.create_analytics_views()`**: BigQuery에서 분석 뷰 세트를 멱등원(idempotent) 방식으로 다시 생성하거나 새로고침합니다. 일반적으로 `create_views=True`를 통해 초기화 시 자동으로 호출되지만 수동 스키마 업그레이드 후 명시적으로 호출할 수도 있습니다.
-    - **`plugin.get_drop_stats()`** (v2.7.0+): 플러그인 시작 이후 드롭된 이벤트 수에 대한 스냅샷인 딕셔너리(`{reason: count}`)를 반환합니다. 자세한 내용은 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참고하세요.
-
-    ```python
-    # 수동 플러시 및 정상 종료
-    await plugin.flush()
-    await plugin.close()
-    ```
+    - **`await plugin.flush()`**: 현재 이벤트 루프와 연결된 보류 중인 이벤트의 쓰기가 완료될 때까지 대기합니다.
+    - **`await plugin.shutdown(timeout=None, *, close_background_transport=False)`**: 보류 중인 이벤트를 플러시하고 리소스를 해제하여 플러그인을 정상적으로 종료합니다. 선택적 `timeout` 매개변수는 구성의 `shutdown_timeout`을 재정의합니다. 플러그인이 [공유 백그라운드 기록기](#shared-background-writer)를 사용하는 경우 종료 시 플러그인이 해당 기록기에서 분리되고 기록기는 계속 실행 상태로 남습니다. 이 플러그인의 테이블 및 자격 증명에 대한 공유 기록기도 비우고 중지하려면 `close_background_transport=True`를 전달하세요.
+    - **`await plugin.close(timeout=None, *, close_background_transport=False)`**: 플러그인 관리자 수명 주기 계약을 실행합니다. 동일한 인수로 `shutdown()`에 위임하며 러너가 플러그인을 닫을 때 자동으로 호출됩니다.
+    - **`await BigQueryAgentAnalyticsPlugin.close_shared_background_transports(timeout=10.0)`** (Python v2.10.0+): 독립 실행형 스크립트, 프로세스 종료 핸들러 또는 테스트 정리 픽스처 등 프로세스의 모든 공유 백그라운드 기록기를 비우고 중지합니다. 기록기를 드레인하지 못하거나 `timeout` 내에 완료되지 않으면 예외가 발생합니다(한 기록기가 실패한 경우 기록기의 오류 또는 `TimeoutError`, 여러 기록기가 실패한 경우 `RuntimeError`). 동일한 작업이 `google.adk.plugins.bigquery_agent_analytics_plugin`의 모듈 수준 함수 `close_shared_background_transports(timeout=10.0)`로도 제공됩니다.
+    - **`await plugin.create_analytics_views()`**: 이벤트 유형별 모든 분석 뷰를 수동으로 (재)생성합니다. 스키마 업그레이드 후 또는 뷰를 새로고침해야 할 때 유용합니다.
+    - **`plugin.get_drop_stats()`**: 원인별 전송 손실 및 콘텐츠 정제 인시던트 수의 스냅샷을 반환합니다. 자세한 내용은 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참고하세요.
 
 === "Java"
 

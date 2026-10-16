@@ -127,6 +127,10 @@ root = Agent(
 
 **表 1.** ADK の協調エージェント ***mode*** の挙動と制限の比較。
 
+!!! tip "すべてのエージェントに対するグローバル指示"
+
+    `App` の `GlobalInstructionPlugin`（[Python](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/global_instruction_plugin.py)、[TypeScript](https://github.com/google/adk-js/blob/main/core/src/plugins/global_instruction_plugin.ts)、[Java](https://github.com/google/adk-java/blob/main/core/src/main/java/com/google/adk/plugins/GlobalInstructionPlugin.java)）またはエージェントの `GlobalInstruction` パラメータ（[Go](https://github.com/google/adk-go/blob/main/agent/llmagent/llmagent.go)）を使用して、ワークフロー全体に一貫したルールを適用します。
+
 ## 運用時の考慮事項
 
 協調エージェントモードを使う際は、次のセクションで説明するように、
