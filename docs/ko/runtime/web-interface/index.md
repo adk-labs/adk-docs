@@ -35,6 +35,18 @@ ADK 웹 인터페이스를 사용하면 브라우저에서 에이전트를 직�
     go run agent.go web api webui
     ```
 
+    Go에서는 웹 인터페이스와 API 서버가 함께 실행됩니다. 웹 인터페이스를 함께 사용하려면 `api`와 `webui`가 모두 필요하며, API나 UI를 독립적으로만 사용하려는 경우 둘 중 하나를 생략할 수 있습니다.
+
+    `launcher.Config`의 `AgentLoader` 필드는 런처가 제공하는 에이전트를 설정합니다. 하나의 런처에서 여러 에이전트를 제공하려면 `agent.NewMultiLoader`로 로더를 생성하세요. 각 에이전트는 웹 인터페이스에서 선택할 수 있는 별도의 앱으로 나열됩니다. 에이전트 이름은 고유해야 합니다:
+
+    ```go
+    loader, err := agent.NewMultiLoader(rootAgent, otherAgent)
+    if err != nil {
+        log.Fatalf("Failed to create agent loader: %v", err)
+    }
+    config := &launcher.Config{AgentLoader: loader}
+    ```
+
 === "Java"
 
     포트 번호를 반드시 업데이트하세요.

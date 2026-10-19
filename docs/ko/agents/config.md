@@ -1,7 +1,7 @@
 # 에이전트 구성을 사용하여 에이전트 빌드
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">실험적</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-preview">실험적</span>
 </div>
 
 ADK 에이전트 구성 기능을 사용하면 코드를 작성하지 않고도 ADK 워크플로를 빌드할 수 있습니다. 에이전트 구성은 에이전트에 대한 간략한 설명이 포함된 YAML 형식 텍스트 파일을 사용하므로 누구나 ADK 에이전트를 조립하고 실행할 수 있습니다. 다음은 기본 에이전트 구성 정의의 간단한 예입니다.
@@ -31,7 +31,7 @@ Google Agent Development Kit 라이브러리를 설치하고 Gemini API와 같�
 
 에이전트 구성과 함께 사용하도록 ADK를 설정하려면:
 
-1.  [설치](/ko/get-started/installation/#python) 지침에 따라 ADK Python 라이브러리를 설치합니다. *현재 Python이 필요합니다.* 자세한 내용은 [알려진 제한 사항](#known-limitations)을 참고하세요.
+1.  [설치](/ko/get-started/installation/) 지침에 따라 ADK Python 라이브러리를 설치합니다. *현재 Python이 필요합니다.* 자세한 내용은 [알려진 제한 사항](#known-limitations)을 참고하세요.
 1.  터미널에서 다음 명령어를 실행하여 ADK가 설치되었는지 확인합니다.
 
         adk --version
@@ -39,7 +39,7 @@ Google Agent Development Kit 라이브러리를 설치하고 Gemini API와 같�
     이 명령어는 설치된 ADK 버전을 보여줍니다.
 
 !!! Tip
-    `adk` 명령어가 실행되지 않고 2단계에서 버전이 나열되지 않으면 Python 환경이 활성화되어 있는지 확인하세요. Mac 및 Linux 터미널에서 `source .venv/bin/activate`를 실행합니다. 다른 플랫폼 명령어는 [설치](/ko/get-started/installation/#python) 페이지를 참고하세요.
+    `adk` 명령어가 실행되지 않고 2단계에서 버전이 나열되지 않으면 Python 환경이 활성화되어 있는지 확인하세요. Mac 및 Linux 터미널에서 `source .venv/bin/activate`를 실행합니다. 다른 플랫폼 명령어는 [설치](/ko/get-started/installation/) 페이지를 참고하세요.
 
 ### 에이전트 빌드
 

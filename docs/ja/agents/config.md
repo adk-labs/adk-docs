@@ -1,7 +1,7 @@
 # エージェント設定でエージェントを構築する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-preview">実験的</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-preview">実験的</span>
 </div>
 
 ADKエージェント設定機能を使用すると、コードを記述することなくADKワークフローを構築できます。エージェント設定は、エージェントの簡単な説明を含むYAML形式のテキストファイルを使用するため、誰でもADKエージェントを組み立てて実行できます。以下は、基本的なエージェント設定定義の簡単な例です。
@@ -31,7 +31,7 @@ Google Agent Development Kitライブラリをインストールし、Gemini API
 
 エージェント設定で使用するためにADKをセットアップするには：
 
-1.  [インストール](/ja/get-started/installation/#python)の手順に従ってADK Pythonライブラリをインストールします。 *現在Pythonが必要です。* 詳細については、[既知の制限](#known-limitations)を参照してください。
+1.  [インストール](/ja/get-started/installation/)の手順に従ってADK Pythonライブラリをインストールします。 *現在Pythonが必要です。* 詳細については、[既知の制限](#known-limitations)を参照してください。
 1.  ターミナルで次のコマンドを実行して、ADKがインストールされていることを確認します。
 
         adk --version
@@ -39,7 +39,7 @@ Google Agent Development Kitライブラリをインストールし、Gemini API
     このコマンドは、インストールされているADKのバージョンを表示します。
 
 !!! Tip
-    `adk`コマンドが実行されず、ステップ2でバージョンが一覧表示されない場合は、Python環境がアクティブであることを確認してください。MacおよびLinuxのターミナルで`source .venv/bin/activate`を実行します。他のプラットフォームコマンドについては、[インストール](/ja/get-started/installation/#python)ページを参照してください。
+    `adk`コマンドが実行されず、ステップ2でバージョンが一覧表示されない場合は、Python環境がアクティブであることを確認してください。MacおよびLinuxのターミナルで`source .venv/bin/activate`を実行します。他のプラットフォームコマンドについては、[インストール](/ja/get-started/installation/)ページを参照してください。
 
 ### エージェントを構築する
 

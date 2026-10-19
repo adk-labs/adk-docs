@@ -50,9 +50,9 @@ ADK의 맥락에서 도구는 AI 에이전트에 제공되는 특정 기능을 �
 ADK는 여러 유형의 도구를 지원하여 유연성을 제공합니다.
 
 1. **[함수 도구](/ko/tools-custom/function-tools/):** 특정 애플리케이션의 요구에 맞게 직접 만든 도구입니다.
-    * **[함수/메서드](/ko/tools-custom/function-tools/#1-function-tool):** 코드에서 표준 동기 함수 또는 메서드를 정의합니다(예: Python def).
-    * **[도구로서의 에이전트](/ko/tools-custom/function-tools/#3-agent-as-a-tool):** 다른, 잠재적으로 특수화된 에이전트를 상위 에이전트의 도구로 사용합니다.
-    * **[장기 실행 함수 도구](/ko/tools-custom/function-tools/#2-long-running-function-tool):** 비동기 작업을 수행하거나 완료하는 데 상당한 시간이 걸리는 도구를 지원합니다.
+    * **[함수/메서드](/ko/tools-custom/function-tools/#function-tool):** 코드에서 표준 동기 함수 또는 메서드를 정의합니다(예: Python def).
+    * **[도구로서의 에이전트](/ko/tools-custom/function-tools/#agent-tool):** 다른, 잠재적으로 특수화된 에이전트를 상위 에이전트의 도구로 사용합니다.
+    * **[장기 실행 함수 도구](/ko/tools-custom/function-tools/#long-run-tool):** 비동기 작업을 수행하거나 완료하는 데 상당한 시간이 걸리는 도구를 지원합니다.
 2. **[기본 제공 도구](/ko/tools/built-in-tools/):** 일반적인 작업을 위해 프레임워크에서 제공하는 즉시 사용 가능한 도구입니다.
         예: Google 검색, 코드 실행, 검색 증강 생성(RAG).
 3. **타사 도구:** 인기 있는 외부 라이브러리의 도구를 원활하게 통합합니다.

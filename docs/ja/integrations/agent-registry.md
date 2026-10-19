@@ -336,7 +336,7 @@ Google MCP サーバーの場合、認証ヘッダーは自動的に渡されま
 
     - `project_id` (文字列、必須): Google Cloud プロジェクト ID。
     - `location` (文字列、必須): `global`、`us-central1` などの Google Cloud の場所/リージョン。
-    - `header_provider` (呼び出し可能、オプション): `ReadonlyContext` を受け取り、`get_mcp_toolset` が返す [McpToolset](/tools-custom/mcp-tools/#mcptoolset-class) によるターゲット MCP サーバーへのリクエストに含まれるカスタムヘッダーの辞書を返す呼び出し可能オブジェクト。これらのヘッダーは、Agent Registry API 自体への呼び出しや [RemoteA2aAgent](/a2a/quickstart-consuming/#quickstart-consuming-a-remote-agent-via-a2a) によるリクエストには影響しません。それらのリクエストの場合は、[リモート A2A エージェント](#remote-a2a-agents) のセクションに示すように、認証済みの `httpx.AsyncClient` を `get_remote_a2a_agent` に渡してください。
+    - `header_provider` (呼び出し可能、オプション): `ReadonlyContext` を受け取り、`get_mcp_toolset` が返す [McpToolset](/tools-custom/mcp-tools/#direct-mcp-tool-integration-mcptoolset) によるターゲット MCP サーバーへのリクエストに含まれるカスタムヘッダーの辞書を返す呼び出し可能オブジェクト。これらのヘッダーは、Agent Registry API 自体への呼び出しや [RemoteA2aAgent](/a2a/quickstart-consuming/#quickstart-consuming-a-remote-agent-via-a2a) によるリクエストには影響しません。それらのリクエストの場合は、[リモート A2A エージェント](#remote-a2a-agents) のセクションに示すように、認証済みの `httpx.AsyncClient` を `get_remote_a2a_agent` に渡してください。
 
 === "Go"
 

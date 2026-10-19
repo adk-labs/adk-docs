@@ -131,38 +131,38 @@ if __name__ == "__main__":
 
 1. `./adk_agent_samples/mcp_client_agent/`와 같은 새 디렉터리에 에이전트를 설정합니다. `agent.py` 파일을 생성하고 검색 가능하도록 `__init__.py`를 함께 포함합니다.
 
-```python
-from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool import McpToolset
-from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-from mcp import StdioServerParameters
+    ```python
+    from google.adk.agents import LlmAgent
+    from google.adk.tools.mcp_tool import McpToolset
+    from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+    from mcp import StdioServerParameters
 
-# 중요: 이전에 빌드한 서버 스크립트의 절대 경로를 제공하십시오.
-MCP_SERVER_SCRIPT = "/path/to/your/my_adk_mcp_server.py"
+    # 중요: 이전에 빌드한 서버 스크립트의 절대 경로를 제공하십시오.
+    MCP_SERVER_SCRIPT = "/path/to/your/my_adk_mcp_server.py"
 
-root_agent = LlmAgent(
-    model='gemini-flash-latest',
-    name='web_reader_mcp_client_agent',
-    instruction="Use the 'load_web_page' tool to fetch content from a URL provided by the user.",
-    tools=[
-        McpToolset(
-            connection_params=StdioConnectionParams(
-                server_params=StdioServerParameters(
-                    command='python3', 
-                    args=[MCP_SERVER_SCRIPT], 
+    root_agent = LlmAgent(
+        model='gemini-flash-latest',
+        name='web_reader_mcp_client_agent',
+        instruction="Use the 'load_web_page' tool to fetch content from a URL provided by the user.",
+        tools=[
+            McpToolset(
+                connection_params=StdioConnectionParams(
+                    server_params=StdioServerParameters(
+                        command='python3', 
+                        args=[MCP_SERVER_SCRIPT], 
+                    )
                 )
             )
-        )
-    ],
-)
-```
+        ],
+    )
+    ```
 
 2. 터미널에서 에이전트의 상위 디렉터리로 이동합니다:
 
-```bash
-cd ./adk_agent_samples
-adk web
-```
+    ```bash
+    cd ./adk_agent_samples
+    adk web
+    ```
 
 3. ADK 웹 UI를 열고 web_reader_mcp_client_agent를 선택합니다.
 4. *Load the content from "https://example.com"* 과 같은 프롬프트로 연결을 테스트합니다.

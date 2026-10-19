@@ -328,15 +328,17 @@ expected_tools:
 
 1. 기록 플러그인을 활성화한 상태로 ADK 웹 서버를 시작합니다.
 
-```shell
-adk web -v --extra_plugins=google.adk.cli.plugins.recordings_plugin.RecordingsPlugin /path/to/agents
-```
+    ```shell
+    adk web -v --extra_plugins=google.adk.cli.plugins.recordings_plugin.RecordingsPlugin /path/to/agents
+    ```
 
 2. 다음으로, 새 터미널 창을 열고 ADK에 `spec.yaml`을 기반으로 기준선 파일을 생성하도록 지시합니다.
 
-```shell
-adk conformance create tests/category/test_name
-```
+    ```shell
+    adk conformance record tests/category/test_name none
+    ```
+
+    후행 스트리밍 모드 인수가 필요합니다. `generated-recordings.yaml` 및 `generated-session.yaml`을 기록하려면 `none`을 사용하고, 대신 `generated-recordings-sse.yaml` 및 `generated-session-sse.yaml`을 기록하려면 `sse`를 사용하세요. `bidi` 모드는 기록에서 지원되지 않습니다.
 
 이렇게 하면 시나리오가 자동으로 실행되고, 모든 상호 작용이 기록되며, `generated-recordings.yaml` 및 `generated-session.yaml` 파일이 필요한 위치에 정확히 저장됩니다.
 

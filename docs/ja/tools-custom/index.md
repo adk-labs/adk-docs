@@ -51,9 +51,9 @@ ADKのコンテキストでは、ツールはAIエージェントに提供され
 ADKは、いくつかのタイプのツールをサポートすることで柔軟性を提供します。
 
 1. **[関数ツール](/ja/tools-custom/function-tools/)：** 特定のアプリケーションのニーズに合わせて作成したツール。
-    * **[関数/メソッド](/ja/tools-custom/function-tools/#1-function-tool):** コードで標準の同期関数またはメソッドを定義します（例：Python def）。
-    * **[ツールとしてのエージェント](/ja/tools-custom/function-tools/#3-agent-as-a-tool):** 別の、潜在的に特殊化されたエージェントを親エージェントのツールとして使用します。
-    * **[長時間実行関数ツール](/ja/tools-custom/function-tools/#2-long-running-function-tool):** 非同期操作を実行したり、完了にかなりの時間がかかるツールをサポートします。
+    * **[関数/メソッド](/ja/tools-custom/function-tools/#function-tool):** コードで標準の同期関数またはメソッドを定義します（例：Python def）。
+    * **[ツールとしてのエージェント](/ja/tools-custom/function-tools/#agent-tool):** 別の、潜在的に特殊化されたエージェントを親エージェントのツールとして使用します。
+    * **[長時間実行関数ツール](/ja/tools-custom/function-tools/#long-run-tool):** 非同期操作を実行したり、完了にかなりの時間がかかるツールをサポートします。
 2. **[組み込みツール](/ja/tools/built-in-tools/)：** 一般的なタスクのためにフレームワークが提供するすぐに使えるツール。
         例：Google検索、コード実行、検索拡張生成（RAG）。
 3. **サードパーティツール：** 人気のある外部ライブラリのツールをシームレスに統合します。

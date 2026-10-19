@@ -159,6 +159,7 @@
 !!! note "GlobalInstructionPlugin"
 
     시스템의 *모든* 에이전트에 공통 규칙이나 일관된 페르소나를 적용하려면 더 이상 사용되지 않는(deprecated) `global_instruction` 매개변수 대신 `GlobalInstructionPlugin`을 사용하세요.
+    ADK Go의 경우 `llmagent.Config`에 `GlobalInstruction` 또는 `GlobalInstructionProvider`를 설정하세요.
 
 ## 에이전트 갖추기: 도구 (`tools`)
 
@@ -507,6 +508,8 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
     --8<-- "examples/go/snippets/agents/llm-agents/snippets/main.go:include_contents"
     ```
 
+    워크플로 노드와 같이 `ModeSingleTurn` 노드로 실행되는 에이전트는 마치 `IncludeContents`가 `IncludeContentsNone`인 것처럼 현재 턴만 확인합니다. ADK Go v2.4.0부터는 `IncludeContents`를 `llmagent.IncludeContentsDefault`로 명시적으로 설정하여 대화 기록을 유지할 수 있습니다. 이전 버전에서는 단일 턴 노드에 대해 해당 설정을 무시합니다.
+
 === "Java"
 
     ```java
@@ -655,7 +658,7 @@ _(이 예시는 핵심 개념을 보여줍니다. 더 복잡한 에이전트는 
 이 페이지에서는 `LlmAgent`의 핵심 구성을 다루지만, 몇 가지 관련 개념은 더 고급 제어를 제공하며 다른 곳에서 자세히 설명합니다:
 
 *   **콜백(Callbacks):** `before_model_callback`, `after_model_callback` 등을 사용하여 실행 지점(모델 호출 전/후, 도구 호출 전/후)을 가로채기. [콜백](../callbacks/types-of-callbacks.md) 참조.
-*   **다중 에이전트 제어:** 계획(`planner`), 에이전트 전환 제어(`disallow_transfer_to_parent`, `disallow_transfer_to_peers`), 시스템 전반의 명령(`global_instruction`)을 포함한 에이전트 상호 작용의 고급 전략. [다중 에이전트](../workflows/patterns.md) 참조.
+*   **다중 에이전트 제어:** 계획(`planner`), 에이전트 전환 제어(`disallow_transfer_to_parent`, `disallow_transfer_to_peers`), 앱의 모든 에이전트에 대한 일관된 정체성 및 규칙(`GlobalInstructionPlugin` 또는 Go의 `GlobalInstruction`)을 포함한 에이전트 상호 작용의 고급 전략. [다중 에이전트](../workflows/patterns.md) 참조.
 
 ## Kotlin 예제 보강
 

@@ -127,6 +127,7 @@
 !!! note "GlobalInstructionPlugin"
 
     システム内の*すべて*のエージェントに共通のルールや一貫したペルソナを適用するには、非推奨となった `global_instruction` パラメータの代わりに `GlobalInstructionPlugin` を使用してください。
+    ADK Go の場合は、`llmagent.Config` で `GlobalInstruction` または `GlobalInstructionProvider` を設定してください。
 
 ## エージェントの装備：ツール (`tools`)
 
@@ -397,6 +398,8 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     --8<-- "examples/go/snippets/agents/llm-agents/snippets/main.go:include_contents"
     ```
 
+    ワークフロー ノードのように `ModeSingleTurn` ノードとして実行されるエージェントは、`IncludeContents` が `IncludeContentsNone` であるかのように現在のターンのみを参照します。ADK Go v2.4.0 以降では、`IncludeContents` を明示的に `llmagent.IncludeContentsDefault` に設定することで会話履歴を保持できます。それ以前のバージョンでは、シングルターン ノードに対するこの設定は無視されます。
+
 === "Java"
 
     ```java
@@ -526,7 +529,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 このページでは`LlmAgent`の基本的な設定について説明しましたが、いくつかの関連概念はより高度な制御を提供し、他の場所で詳しく説明されています：
 
 *   **コールバック:** `before_model_callback`、`after_model_callback`などを使用して、実行ポイント（モデル呼び出しの前後、ツール呼び出しの前後）をインターセプトします。[コールバック](../callbacks/types-of-callbacks.md)を参照してください。
-*   **マルチエージェント制御:** 計画（`planner`）、エージェント転送の制御（`disallow_transfer_to_parent`, `disallow_transfer_to_peers`）、およびシステム全体の指示（`global_instruction`）を含む、エージェント対話の高度な戦略。[マルチエージェント](../workflows/patterns.md)を参照してください。
+*   **マルチエージェント制御:** 計画（`planner`）、エージェント転送の制御（`disallow_transfer_to_parent`, `disallow_transfer_to_peers`）、およびアプリ内のすべてのエージェントに対する一貫したアイデンティティとルール（`GlobalInstructionPlugin`、または Go の `GlobalInstruction`）を含む、エージェント対話の高度な戦略。[マルチエージェント](../workflows/patterns.md)を参照してください。
 
 ## Kotlin の例の補足
 

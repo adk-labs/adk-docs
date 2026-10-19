@@ -289,6 +289,7 @@ Model Context Protocol (MCP) 및 ADK로 구축을 시작할 때, 이러한 주�
         ],
     )
     ```
+
     **2단계**: 환경 변수 설정. `adk web`을 실행하기 전에 터미널에 Google API 키를 설정합니다:
       
     ```bash
@@ -329,7 +330,7 @@ Model Context Protocol (MCP) 및 ADK로 구축을 시작할 때, 이러한 주�
             }),
         ],
     });
-    ``` 
+    ```
      
 ---
 

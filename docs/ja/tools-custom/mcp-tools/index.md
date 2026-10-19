@@ -289,6 +289,7 @@ Model Context Protocol (MCP) と ADK を使用して構築を開始する際、�
         ],
     )
     ```
+
     **ステップ 2**: 環境変数を設定します。`adk web` を実行する前に、ターミナルで Google API キーを設定します。
       
     ```bash
@@ -329,7 +330,7 @@ Model Context Protocol (MCP) と ADK を使用して構築を開始する際、�
             }),
         ],
     });
-    ``` 
+    ```
      
 ---
 

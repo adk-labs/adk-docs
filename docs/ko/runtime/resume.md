@@ -108,7 +108,7 @@ runner.run_async(user_id='u_123', session_id='s_abc',
 -   **에이전트 상태 검사점 추가**: 에이전트의 비동기 실행 함수를 수정하여 에이전트의 전체 작업의 각 완료된 단계에 대한 에이전트 상태를 생성하고 저장합니다.
 -   **에이전트 상태를 추적하기 위해 에이전트 상태 끝 추가:** 에이전트의 전체 작업이 성공적으로 완료되면 `end_of_agent=True` 상태를 포함하도록 에이전트의 비동기 실행 함수를 수정합니다.
 
-다음 예제는 [사용자 지정 에이전트](/ko/agents/custom-agents/#full-code-example) 가이드에 표시된 예제 StoryFlowAgent 클래스에 필요한 코드 수정을 보여줍니다.
+다음 예제는 [사용자 지정 에이전트](/ko/agents/custom-agents/#storyflow-agent-code-listing) 가이드에 표시된 예제 StoryFlowAgent 클래스에 필요한 코드 수정을 보여줍니다.
 
 ```python
 class WorkflowStep(int, Enum):

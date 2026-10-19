@@ -336,7 +336,7 @@ Google MCP 서버의 경우 인증 헤더가 자동으로 전달됩니다.
 
     - `project_id` (str, 필수): Google Cloud 프로젝트 ID.
     - `location` (str, 필수): `global`, `us-central1`과 같은 Google Cloud 위치/지역.
-    - `header_provider` (Callable, 선택): `ReadonlyContext`를 받아 대상 MCP 서버로 `get_mcp_toolset`이 반환하는 [McpToolset](/tools-custom/mcp-tools/#mcptoolset-class) 요청에 포함할 사용자 지정 헤더 딕셔너리를 반환하는 콜러블입니다. 이 헤더는 Agent Registry API 자체 호출이나 [RemoteA2aAgent](/a2a/quickstart-consuming/#quickstart-consuming-a-remote-agent-via-a2a)의 요청에는 영향을 주지 않습니다. 해당 요청의 경우 [원격 A2A 에이전트](#remote-a2a-agents) 섹션처럼 인증된 `httpx.AsyncClient`를 `get_remote_a2a_agent`에 전달하세요.
+    - `header_provider` (Callable, 선택): `ReadonlyContext`를 받아 대상 MCP 서버로 `get_mcp_toolset`이 반환하는 [McpToolset](/tools-custom/mcp-tools/#direct-mcp-tool-integration-mcptoolset) 요청에 포함할 사용자 지정 헤더 딕셔너리를 반환하는 콜러블입니다. 이 헤더는 Agent Registry API 자체 호출이나 [RemoteA2aAgent](/a2a/quickstart-consuming/#quickstart-consuming-a-remote-agent-via-a2a)의 요청에는 영향을 주지 않습니다. 해당 요청의 경우 [원격 A2A 에이전트](#remote-a2a-agents) 섹션처럼 인증된 `httpx.AsyncClient`를 `get_remote_a2a_agent`에 전달하세요.
 
 === "Go"
 

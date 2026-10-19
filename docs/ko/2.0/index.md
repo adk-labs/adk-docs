@@ -209,11 +209,11 @@ ADK Go 2.0은 새로운 메이저 버전 모듈 경로를 사용합니다. Go �
 
 **마이그레이션 조치:** `go get google.golang.org/adk/v2`를 실행하고 소스 파일의 모든 임포트 문을 `google.golang.org/adk/...`에서 `google.golang.org/adk/v2/...`로 업데이트하세요.
 
-### 에이전트 실행: Agent 인터페이스 변경 사항
+### 에이전트 실행: 커스텀 에이전트
 
-ADK Go 1.x에서 에이전트는 `Run` 메서드를 제공하여 `agent.Agent` 인터페이스를 구현했습니다. ADK Go 2.0에서 에이전트는 새 워크플로 그래프 엔진 내의 개별 *노드*로 평가됩니다.
+ADK Go 2.0에서 에이전트는 새로운 워크플로 그래프 엔진 내의 개별 *노드*로도 실행될 수 있습니다. 커스텀 에이전트는 1.x에서와 동일하게 작동합니다. `agent.New`에 `Run` 함수를 전달하면 ADK가 `agent.InvocationContext`와 함께 이를 호출하고 그 전후에 에이전트의 before 및 after 콜백을 실행합니다. `agent.Agent` 인터페이스는 동일한 `Run` 시그니처를 유지합니다.
 
-**마이그레이션 조치:** 사용자 지정 실행 로직을 표준화된 `BeforeAgentCallback` 및 `AfterAgentCallback` 훅으로 이동하여 실행 수명 주기에 안전하게 주입하세요.
+**마이그레이션 조치:** 커스텀 에이전트를 생성하거나 등록하는 방식에는 변경 사항이 없습니다. `Run` 내부의 코드에는 여전히 위의 임포트 경로 변경 사항과 새로운 `session.NewEvent` 시그니처 등 이 페이지의 다른 변경 사항이 적용되어야 합니다. [커스텀 에이전트](/ko/agents/custom-agents/)를 참고하세요.
 
 ### 이벤트 생성: `session.NewEvent` 시그니처 변경
 

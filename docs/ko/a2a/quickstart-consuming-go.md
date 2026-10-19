@@ -97,7 +97,7 @@ Go ADK에서는 A2A 시작 프로그램을 사용하여 에이전트를 노출�
 
 #### 작동 방식
 
-기본 에이전트는 `remoteagent.New`를 사용하여 원격 에이전트(이 예에서는 `prime_agent`)를 사용합니다. 아래에서 볼 수 있듯이 `Name`, `Description` 및 `AgentCardSource` URL이 필요합니다.
+기본 에이전트는 `google.golang.org/adk/v2/agent/remoteagent/v2` 패키지의 `remoteagent.NewA2A`를 사용하여 원격 에이전트(이 예에서는 `prime_agent`)를 소비합니다. 아래에서 볼 수 있듯이 `Name`, 선택적 `Description`, 그리고 `AgentCardProvider`를 설정합니다. `NewA2A`에는 정적 `AgentCard` 또는 `AgentCardProvider` 중 하나가 필요하며, `remoteagent.NewAgentCardProvider`는 URL이나 로컬 파일 경로에서 제공자를 생성합니다. `/v2` 접미사가 없는 이전 `google.golang.org/adk/v2/agent/remoteagent` 패키지는 더 이상 사용되지 않습니다(deprecated).
 
 ```go title="a2a_basic/main.go"
 --8<-- "examples/go/a2a_basic/main.go:new-prime-agent"

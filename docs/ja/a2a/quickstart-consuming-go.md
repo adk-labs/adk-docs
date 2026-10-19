@@ -97,7 +97,7 @@ Go ADKでは、A2Aランチャーを使用してエージェントを公開す�
 
 #### 仕組み
 
-メインエージェントは`remoteagent.New`を使用してリモートエージェント（この例では`prime_agent`）を利用します。以下に示すように、`Name`、`Description`、および`AgentCardSource` URLが必要です。
+メインエージェントは、`google.golang.org/adk/v2/agent/remoteagent/v2` パッケージの `remoteagent.NewA2A` を使用してリモートエージェント（この例では `prime_agent`）を利用します。以下に示すように、`Name`、オプションの `Description`、および `AgentCardProvider` を設定します。`NewA2A` には静的な `AgentCard` または `AgentCardProvider` のいずれかが必要であり、`remoteagent.NewAgentCardProvider` は URL またはローカルファイルパスからプロバイダを作成します。`/v2` サフィックスのない古い `google.golang.org/adk/v2/agent/remoteagent` パッケージは非推奨（deprecated）です。
 
 ```go title="a2a_basic/main.go"
 --8<-- "examples/go/a2a_basic/main.go:new-prime-agent"

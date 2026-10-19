@@ -131,38 +131,38 @@ if __name__ == "__main__":
 
 1. `./adk_agent_samples/mcp_client_agent/` などの新しいディレクトリにエージェントをセットアップします。`agent.py` ファイルを作成し、検出可能にするためにその隣に `__init__.py` を含めます。
 
-```python
-from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool import McpToolset
-from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
-from mcp import StdioServerParameters
+    ```python
+    from google.adk.agents import LlmAgent
+    from google.adk.tools.mcp_tool import McpToolset
+    from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
+    from mcp import StdioServerParameters
 
-# 重要: 前の手順で構築したサーバースクリプトへの絶対パスを指定してください
-MCP_SERVER_SCRIPT = "/path/to/your/my_adk_mcp_server.py"
+    # 重要: 前の手順で構築したサーバースクリプトへの絶対パスを指定してください
+    MCP_SERVER_SCRIPT = "/path/to/your/my_adk_mcp_server.py"
 
-root_agent = LlmAgent(
-    model='gemini-flash-latest',
-    name='web_reader_mcp_client_agent',
-    instruction="Use the 'load_web_page' tool to fetch content from a URL provided by the user.",
-    tools=[
-        McpToolset(
-            connection_params=StdioConnectionParams(
-                server_params=StdioServerParameters(
-                    command='python3', 
-                    args=[MCP_SERVER_SCRIPT], 
+    root_agent = LlmAgent(
+        model='gemini-flash-latest',
+        name='web_reader_mcp_client_agent',
+        instruction="Use the 'load_web_page' tool to fetch content from a URL provided by the user.",
+        tools=[
+            McpToolset(
+                connection_params=StdioConnectionParams(
+                    server_params=StdioServerParameters(
+                        command='python3', 
+                        args=[MCP_SERVER_SCRIPT], 
+                    )
                 )
             )
-        )
-    ],
-)
-```
+        ],
+    )
+    ```
 
 2. ターミナルでエージェントの親ディレクトリに移動します。
 
-```bash
-cd ./adk_agent_samples
-adk web
-```
+    ```bash
+    cd ./adk_agent_samples
+    adk web
+    ```
 
 3. ADK Web UI を開き、web_reader_mcp_client_agent を選択します。
 4. *Load the content from "https://example.com"* などのプロンプトを使用して接続をテストします。

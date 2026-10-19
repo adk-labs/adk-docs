@@ -149,9 +149,9 @@ ADK는 에이전트 실행 수명 주기의 다양한 지점에서 실행되는 
 
 ## LLM 상호작용 콜백
 
-이러한 콜백은 `LlmAgent`에 고유하며 대규모 언어 모델과의 상호작용에 대한 훅을 제공합니다. Python에서 `LlmAgent`는 모델 호출에서 예외가 발생할 때 실행되는 `on_model_error_callback`도 허용합니다. `LlmResponse`를 반환하면 예외가 억제되고 해당 응답이 대신 사용됩니다.
+이러한 콜백은 `LlmAgent`에 고유하며 대규모 언어 모델과의 상호작용에 대한 훅을 제공합니다. Python에서 `LlmAgent`는 모델 호출에서 예외가 발생할 때 실행되는 `on_model_error_callback`도 허용합니다. `LlmResponse`를 반환하면 예외가 억제되고 해당 응답이 대신 사용됩니다. Go에서는 `llmagent.Config`에 `OnModelErrorCallbacks`를 설정하세요. 이러한 콜백은 모델 호출이 오류를 반환할 때 실행됩니다. 콜백이 nil이 아닌 `*model.LLMResponse`와 nil 오류를 반환하면 해당 응답이 대신 사용됩니다. 오류를 반환하면 해당 오류가 원래 오류를 대체합니다.
 
-모델 콜백은 실시간 양방향 세션에서도 실행되며, 콜백이 턴의 서로 다른 지점에서 트리거되고 차단 시 요청-응답 흐름과는 다른 영향을 미칩니다. 자세한 내용은 [실시간 에이전트 가드레일](../live/guardrails.md)을 참고하세요.
+모델 콜백은 실시간 양방향 세션에서도 실행되며, 콜백이 턴의 서로 다른 지점에서 트리거되고 차단 시 요청-응답 흐름과는 다른 영향을 미칩니다. 자세한 내용은 [실시간 에이전트 가드레일](../live/guardrails.md)을 참고하세요. Go에서는 `OnModelErrorCallbacks`를 포함한 모델 콜백이 실시간 세션에서 실행되지 않습니다.
 
 ### Before Model 콜백
 
@@ -232,7 +232,7 @@ ADK는 에이전트 실행 수명 주기의 다양한 지점에서 실행되는 
 
 ## 도구 실행 콜백
 
-이러한 콜백 역시 `LlmAgent`에 고유하며 `FunctionTool` 및 `AgentTool`을 포함하여 LLM이 요청할 수 있는 도구의 실행 시점에 트리거됩니다. Python에서 `LlmAgent`는 도구에서 예외가 발생할 때 실행되는 `on_tool_error_callback`도 허용합니다. `dict`를 반환하면 예외가 억제되고 해당 `dict` 값이 도구 결과로 사용됩니다.
+이러한 콜백 역시 `LlmAgent`에 고유하며 `FunctionTool` 및 `AgentTool`을 포함하여 LLM이 요청할 수 있는 도구의 실행 시점에 트리거됩니다. Python에서 `LlmAgent`는 도구에서 예외가 발생할 때 실행되는 `on_tool_error_callback`도 허용합니다. `dict`를 반환하면 예외가 억제되고 해당 `dict` 값이 도구 결과로 사용됩니다. Go에서는 `llmagent.Config`에 `OnToolErrorCallbacks`를 설정하세요. 이러한 콜백은 스트리밍 도구의 오류를 제외하고 도구 호출이 실패할 때 실행됩니다. 콜백이 nil이 아닌 `map[string]any`와 nil 오류를 반환하면 해당 맵이 도구 결과로 사용됩니다. 오류를 반환하면 해당 오류가 원래 오류를 대체합니다.
 
 ### Before Tool 콜백
 

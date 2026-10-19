@@ -253,6 +253,6 @@ ADK 에이전트를 [PayPal](https://www.paypal.com/) 생태계와 연결합니�
 
 ## 추가 리소스
 
-- [PayPal MCP Server Documentation](https://docs.paypal.ai/developer/tools/ai/mcp-quickstart)
+- [PayPal MCP Server Documentation](https://github.com/paypal/paypal-mcp-server#paypal-model-context-protocol)
 - [PayPal MCP Server Repository](https://github.com/paypal/paypal-mcp-server)
-- [PayPal Agent Tools Reference](https://docs.paypal.ai/developer/tools/ai/agent-tools-ref)
+- [PayPal Agent Tools Reference](https://github.com/paypal/paypal-mcp-server#available-tools)

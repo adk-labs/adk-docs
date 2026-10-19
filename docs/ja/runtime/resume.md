@@ -108,7 +108,7 @@ runner.run_async(user_id='u_123', session_id='s_abc',
 -   **エージェント状態チェックポイントの追加**：エージェントの非同期実行関数を変更して、エージェントの全体的なタスクの各完了ステップのエージェNT状態を生成して保存します。
 -   **エージェント状態を追跡するためにエージェント状態の最後に追加：** エージェントの全体的なタスクが正常に完了したら、`end_of_agent=True`状態を含むようにエージェントの非同期実行関数を変更します。
 
-次の例は、[カスタムエージェント](/ja/agents/custom-agents/#full-code-example)ガイドに示されているStoryFlowAgentクラスの例に必要なコード変更を示しています。
+次の例は、[カスタムエージェント](/ja/agents/custom-agents/#storyflow-agent-code-listing)ガイドに示されているStoryFlowAgentクラスの例に必要なコード変更を示しています。
 
 ```python
 class WorkflowStep(int, Enum):

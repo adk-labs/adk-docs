@@ -328,15 +328,17 @@ expected_tools:
 
 1. 記録用プラグインを有効にした状態で、ADK Webサーバーを起動します。
 
-```shell
-adk web -v --extra_plugins=google.adk.cli.plugins.recordings_plugin.RecordingsPlugin /path/to/agents
-```
+    ```shell
+    adk web -v --extra_plugins=google.adk.cli.plugins.recordings_plugin.RecordingsPlugin /path/to/agents
+    ```
 
 2. 新しいターミナルウィンドウを開き、`spec.yaml` に基づいて基準線ファイルを生成するようにADKに指示します。
 
-```shell
-adk conformance create tests/category/test_name
-```
+    ```shell
+    adk conformance record tests/category/test_name none
+    ```
+
+    末尾のストリーミングモード引数は必須です。`generated-recordings.yaml` と `generated-session.yaml` を記録するには `none` を使用し、代わりに `generated-recordings-sse.yaml` と `generated-session-sse.yaml` を記録するには `sse` を使用します。`bidi` モードは記録ではサポートされていません。
 
 これにより、シナリオが自動的に実行され、すべてのインタラクションが記録され、`generated-recordings.yaml` および `generated-session.yaml` ファイルが必要な場所に正確に保存されます。
 
