@@ -30,12 +30,12 @@ Java에서는 요청을 수동으로 생성하는 대신, ADK가 공식 A2A SDK 
 
 ### 1. 샘플 코드 가져오기 { #getting-the-sample-code }
 
-이 빠른 시작과 일치하는 Java 네이티브 샘플은 `adk-java` 소스 코드의 `contrib/samples/a2a_basic` 아래에서 찾을 수 있습니다.
+이 빠른 시작과 일치하는 Java 네이티브 샘플은 `adk-java` 소스 코드의 `examples/a2a_basic` 아래에서 찾을 수 있습니다.
 
-[**`a2a_basic`** 샘플](https://github.com/google/adk-java/tree/main/contrib/samples/a2a_basic)로 이동할 수 있습니다.
+[**`a2a_basic`** 샘플](https://github.com/google/adk-java/tree/main/examples/a2a_basic)로 이동할 수 있습니다.
 
 ```bash
-cd contrib/samples/a2a_basic
+cd examples/a2a_basic
 ```
 
 ### 2. 원격 Prime Agent 서버 시작하기 { #start-the-remote-prime-agent-server }
@@ -44,7 +44,7 @@ ADK 에이전트가 A2A를 통해 원격 에이전트를 사용할 수 있음을
 
 ```bash
 # adk-java 루트에서, 9090 포트의 사전 구성된 Quarkus 원격 서비스를 시작
-./mvnw -f contrib/samples/a2a_server/pom.xml quarkus:dev
+./mvnw -f examples/a2a_server/pom.xml quarkus:dev
 ```
 
 정상적으로 실행되면 에이전트는 로컬 HTTP 엔드포인트로 접근할 수 있습니다.
@@ -60,7 +60,7 @@ ADK Java 웹서비스의 경우, 에이전트 카드는 일반적으로 기본 U
 다른 터미널에서 클라이언트 에이전트를 실행할 수 있습니다.
 
 ```bash
-./mvnw -f contrib/samples/a2a_basic/pom.xml exec:java -Dexec.args="http://localhost:9090"
+./mvnw -f examples/a2a_basic/pom.xml exec:java -Dexec.args="http://localhost:9090"
 ```
 
 #### 동작 방식

@@ -7,7 +7,7 @@
 이 지침에서는 다음에 배포된 ADK 에이전트를 테스트하는 방법을 설명합니다.
 [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)
 런타임 환경. 이 지침을 사용하기 전에 다음 사항을 완료해야 합니다.
-하나를 사용하여 Agent Runtime 런타임 환경에 에이전트를 배포합니다.
+하나를 사용하여 Agent Runtime 환경에 에이전트를 배포합니다.
 [available methods](/deploy/agent-runtime/)의. 이 가이드에서는
 Google Cloud를 통해 배포된 에이전트를 보고, 상호작용하고, 테스트하는 방법
 콘솔을 사용하고 REST API 호출 또는 Agent Platform SDK를 사용하여 에이전트와 상호 작용합니다.

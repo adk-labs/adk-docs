@@ -86,6 +86,42 @@ parent_folder/
     INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
     ```
 
+=== "TypeScript"
+
+    ```shell
+    +-----------------------------------------------------------------------------+
+    | ADK Web Server started                                                      |
+    |                                                                             |
+    | For local testing, access at http://localhost:8000.                         |
+    +-----------------------------------------------------------------------------+
+    ```
+
+=== "Go"
+
+    ```shell
+    2025/01/01 00:00:00 Starting the web server: &{port:8080 ...}
+    2025/01/01 00:00:00 Web servers starts on http://localhost:8080
+    2025/01/01 00:00:00        api:  you can access API using http://localhost:8080/api
+    2025/01/01 00:00:00        api:      for instance: http://localhost:8080/api/list-apps
+    ```
+
+    !!! note "Go: 기본 포트 및 경로 접두사"
+
+        Go API 서버는 기본적으로 포트 **8080**(8000이 아님)을 사용하며 모든 REST 엔드포인트를 기본적으로 **`/api`** 경로 접두사 아래에서 제공합니다. 아래의 모든 예제 `curl` 명령어를 이에 맞게 조정하세요:
+
+    | Python/TypeScript/Java | Go |
+    |---|---|
+    | `http://localhost:8000/list-apps` | `http://localhost:8080/api/list-apps` |
+    | `http://localhost:8000/apps/…` | `http://localhost:8080/api/apps/…` |
+    | `http://localhost:8000/run` | `http://localhost:8080/api/run` |
+    | `http://localhost:8000/run_sse` | `http://localhost:8080/api/run_sse` |
+
+    포트는 `web` 하위 명령어의 `-port` 플래그로 변경할 수 있으며, 접두사는 `api` 하위 명령어의 `-path_prefix` 플래그로 변경할 수 있습니다. 예시:
+
+    ```shell
+    go run agent.go web -port 8000 api -path_prefix ""
+    ```
+
 === "Java"
 
     ```shell

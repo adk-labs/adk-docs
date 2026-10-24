@@ -20,6 +20,7 @@
 | **서버 요청 샘플링 또는 인증 챌린지 처리** | Bi-directional Protocol Callbacks | `sampling_callback`, `elicitation_callback` | 서버 시작 LLM 생성 및 인증 프롬프트 |
 | **원시 STDERR 진단 스트림 검사** | Diagnostic Stream Logging | `errlog=sys.stderr` | MCP 하위 프로세스 비정상 종료 문제 해결 |
 | **채팅 내 풍부한 대화형 시각 위젯 렌더링** | Experimental UI Rendering | `meta.ui.resourceUri` | 지도, 차트, 날씨 카드 또는 커스텀 폼 |
+| **MCP 서버에서 에이전트 지침을 동적으로 가져오기** | Dynamic Instruction Provider | `McpInstructionProvider` | MCP 서버를 통한 중앙 집중식 프롬프트 관리 |
 
 ---
 
@@ -349,6 +350,45 @@ async def call_mcp_tool(name: str, arguments: dict) -> list[mcp_types.Content]:
   ]
 
 ``` 
+
+---
+
+## `McpInstructionProvider`를 사용한 동적 지침 {#dynamic-instructions-with-mcpinstructionprovider}
+
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.18.0</span>
+</div>
+
+Python에서 에이전트 지침을 동적으로 관리하려면 `McpInstructionProvider`를 사용하세요. 이 클래스는 Model Context Protocol(MCP) 서버에서 에이전트 지침을 가져옵니다.
+
+MCP 서버 연결 매개변수와 가져올 프롬프트 이름으로 `McpInstructionProvider`를 초기화한 다음, 이 인스턴스를 `LlmAgent`의 `instruction` 매개변수에 전달합니다:
+
+```python
+from google.adk.agents import LlmAgent, McpInstructionProvider
+from google.adk.tools.mcp_tool import SseConnectionParams
+
+# MCP 연결 매개변수를 정의합니다.
+mcp_connection_params = SseConnectionParams(
+    url="https://mcp.example.com",
+    headers={"Authorization": "Bearer YOUR_MCP_API_KEY"},
+)
+
+# 지침 제공자(instruction provider) 인스턴스를 생성합니다.
+instruction_provider = McpInstructionProvider(
+    connection_params=mcp_connection_params,
+    prompt_name="my-agent-prompt",
+)
+
+# 에이전트에서 지침 제공자를 사용합니다.
+my_agent = LlmAgent(
+    model="gemini-2.0-flash",
+    name="my_mcp_agent",
+    instruction=instruction_provider,
+)
+```
+
+!!! warning "주의"
+    MCP 서버에서 가져온 지침은 에이전트의 동작을 직접 제어합니다. 신뢰할 수 있는 MCP 서버에만 연결하고, 연결 매개변수에 사용되는 자격 증명을 안전하게 보호하세요.
 
 ---
 

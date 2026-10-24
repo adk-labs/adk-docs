@@ -10,7 +10,9 @@ catalog_tags: ["observability"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[Weights & Biases(WandB)의 Weave](https://weave-docs.wandb.ai/)는 모델 호출을 로깅하고 시각화하기 위한 강력한 플랫폼을 제공합니다. Google ADK를 Weave와 통합하면 OpenTelemetry(OTEL) 추적을 사용하여 에이전트의 성능과 동작을 추적하고 분석할 수 있습니다.
+[W&B Weave](https://docs.coreweave.com/products/wandb/weave)는 모델 호출을 로깅하고 시각화하기 위한 강력한 플랫폼을 제공합니다. Google ADK를 Weave와 통합하면 OpenTelemetry(OTEL) 추적을 사용하여 에이전트의 성능과 동작을 추적하고 분석할 수 있습니다.
+
+그룹화된 에이전트 대화, 턴 및 도구 세부 정보는 [CoreWeave Agent Lens 통합](https://docs.coreweave.com/products/agent-lens/integrations/google-adk)을 사용하세요. 아래 가이드는 기존 Weave Calls 내보내기 도구와 기존 워크플로를 유지합니다.
 
 ## 사전 준비 사항
 
@@ -130,8 +132,8 @@ root_agent = LlmAgent(
 
 ## 리소스
 
-- **[Weave로 OpenTelemetry 추적 보내기](https://weave-docs.wandb.ai/guides/tracking/otel)** - 인증 및 고급 설정 옵션을 포함하여 Weave로 OTEL을 구성하는 방법에 대한 포괄적인 가이드입니다.
+- **[Weave로 OpenTelemetry 추적 보내기](https://docs.coreweave.com/products/wandb/weave/guides/tracking/otel)** - 인증 및 고급 설정 옵션을 포함하여 Weave로 OTEL을 구성하는 방법에 대한 포괄적인 가이드입니다.
 
-- **[추적 뷰 탐색하기](https://weave-docs.wandb.ai/guides/tracking/trace-tree)** - 추적 계층 구조 및 스팬 세부 정보 이해를 포함하여 Weave UI에서 추적 정보를 효과적으로 분석하고 디버깅하는 방법을 알아보세요.
+- **[추적 뷰 탐색하기](https://docs.coreweave.com/products/wandb/weave/guides/tracking/trace-tree)** - 추적 계층 구조 및 스팬 세부 정보 이해를 포함하여 Weave UI에서 추적 정보를 효과적으로 분석하고 디버깅하는 방법을 알아보세요.
 
-- **[Weave 통합](https://weave-docs.wandb.ai/guides/integrations/)** - 다른 프레임워크 통합을 살펴보고 Weave가 전체 AI 스택과 어떻게 작동하는지 확인하세요.
+- **[Weave 통합](https://docs.coreweave.com/products/wandb/weave/guides/integrations/)** - 다른 프레임워크 통합을 살펴보고 Weave가 전체 AI 스택과 어떻게 작동하는지 확인하세요.

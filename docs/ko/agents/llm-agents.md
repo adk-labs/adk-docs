@@ -156,6 +156,8 @@
             .build();
     ```
 
+Python에서 Model Context Protocol(MCP) 서버로부터 에이전트 지침을 동적으로 가져오려면 [`McpInstructionProvider`를 사용한 동적 지침](/ko/tools-custom/mcp-tools/advanced/#dynamic-instructions-with-mcpinstructionprovider)을 참고하세요.
+
 !!! note "GlobalInstructionPlugin"
 
     시스템의 *모든* 에이전트에 공통 규칙이나 일관된 페르소나를 적용하려면 더 이상 사용되지 않는(deprecated) `global_instruction` 매개변수 대신 `GlobalInstructionPlugin`을 사용하세요.
@@ -343,7 +345,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
             .build();
     ```
 
-### 데이터 구조화 (`input_schema`, `output_schema`, `output_key`)
+### 데이터 구조화 (`input_schema`, `output_schema`, `output_key`) {#data-handling}
 
 `LLM Agent`와 구조화된 데이터 교환이 필요한 시나리오를 위해 ADK는 스키마 정의를 사용하여 예상 입력 및 원하는 출력 형식을 정의하는 메커니즘을 제공합니다.
 

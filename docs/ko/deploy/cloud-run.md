@@ -179,6 +179,7 @@ ADK 에이전트 워크플로를 Google Cloud Run에 배포할 때 다음 콘텐
     * `--memory_service_uri TEXT`: (선택 사항) 메모리 서비스의 URI입니다(예: `rag://<rag_corpus_id>`, `agentengine://<agent_engine>`, 또는 `memory://`).
     * `--port INTEGER`: (선택 사항) ADK API 서버가 컨테이너 내에서 수신 대기할 포트 번호입니다. 기본값은 8000입니다.
     * `--with_ui`: (선택 사항) 포함된 경우 ADK 개발 UI를 에이전트 API 서버와 함께 배포합니다. 기본적으로 API 서버만 배포됩니다.
+    * `--with_cloud_run_sandbox`: (선택 사항) 코드 실행을 위해 Cloud Run 샌드박스를 활성화합니다. 기본적으로 비활성화되어 있습니다. 활성화하면 ADK는 `--sandbox-launcher`와 함께 `gcloud beta run deploy`를 사용합니다.
     * `--temp_folder TEXT`: (선택 사항) 배포 프로세스 중에 생성된 중간 파일을 저장할 디렉토리를 지정합니다. 기본값은 시스템의 임시 디렉토리에 있는 타임스탬프가 지정된 폴더입니다. *(참고: 이 옵션은 일반적으로 문제 해결 시가 아니면 필요하지 않습니다.)*
     * `--help`: 도움말 메시지를 표시하고 종료합니다.
 

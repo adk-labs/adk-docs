@@ -20,6 +20,7 @@
 | **サーバーから要求されたサンプリングまたは認証チャレンジの処理** | Bi-directional Protocol Callbacks | `sampling_callback`, `elicitation_callback` | サーバー主導の LLM 生成および認証プロンプト |
 | **生の STDERR 診断ストリームの検査** | Diagnostic Stream Logging | `errlog=sys.stderr` | MCP サブプロセスのクラッシュのトラブルシューティング |
 | **チャット内でのリッチでインタラクティブなビジュアル ウィジェットのレンダリング** | Experimental UI Rendering | `meta.ui.resourceUri` | 地図、グラフ、天気カード、またはカスタム フォーム |
+| **MCP サーバーからエージェントの指示を動的に取得** | Dynamic Instruction Provider | `McpInstructionProvider` | MCP サーバーを介した一元的なプロンプト管理 |
 
 ---
 
@@ -349,6 +350,45 @@ async def call_mcp_tool(name: str, arguments: dict) -> list[mcp_types.Content]:
   ]
 
 ``` 
+
+---
+
+## `McpInstructionProvider` による動的な指示 {#dynamic-instructions-with-mcpinstructionprovider}
+
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.18.0</span>
+</div>
+
+Python でエージェントの指示を動的に管理するには、`McpInstructionProvider` を使用します。このクラスは、Model Context Protocol（MCP）サーバーからエージェントの指示を取得します。
+
+MCP サーバーの接続パラメータと取得するプロンプトの名前を指定して `McpInstructionProvider` を初期化し、このインスタンスを `LlmAgent` の `instruction` パラメータに渡します:
+
+```python
+from google.adk.agents import LlmAgent, McpInstructionProvider
+from google.adk.tools.mcp_tool import SseConnectionParams
+
+# MCP 接続パラメータを定義します。
+mcp_connection_params = SseConnectionParams(
+    url="https://mcp.example.com",
+    headers={"Authorization": "Bearer YOUR_MCP_API_KEY"},
+)
+
+# インストラクション プロバイダーのインスタンスを作成します。
+instruction_provider = McpInstructionProvider(
+    connection_params=mcp_connection_params,
+    prompt_name="my-agent-prompt",
+)
+
+# エージェントでインストラクション プロバイダーを使用します。
+my_agent = LlmAgent(
+    model="gemini-2.0-flash",
+    name="my_mcp_agent",
+    instruction=instruction_provider,
+)
+```
+
+!!! warning "注意"
+    MCP サーバーから取得した指示は、エージェントの動作を直接制御します。信頼できる MCP サーバーにのみ接続し、接続パラメータで使用する認証情報を保護してください。
 
 ---
 

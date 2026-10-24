@@ -10,7 +10,9 @@ catalog_tags: ["observability"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
-[Weights & Biases (WandB) の Weave](https://weave-docs.wandb.ai/) は、モデル呼び出しのロギングと可視化のための強力なプラットフォームを提供します。Google ADKをWeaveと統合することで、OpenTelemetry（OTEL）トレースを使用して、エージェントのパフォーマンスと振る舞いを追跡・分析できます。
+[W&B Weave](https://docs.coreweave.com/products/wandb/weave) は、モデル呼び出しのロギングと可視化のための強力なプラットフォームを提供します。Google ADKをWeaveと統合することで、OpenTelemetry（OTEL）トレースを使用して、エージェントのパフォーマンスと振る舞いを追跡・分析できます。
+
+グループ化されたエージェントの会話、ターン、およびツールの詳細については、[CoreWeave Agent Lens 統合](https://docs.coreweave.com/products/agent-lens/integrations/google-adk)を使用してください。以下のガイドでは、従来の Weave Calls エクスポーターとその既存のワークフローを維持しています。
 
 ## 事前準備
 
@@ -130,8 +132,8 @@ root_agent = LlmAgent(
 
 ## リソース
 
-- **[OpenTelemetryのトレースをWeaveに送信](https://weave-docs.wandb.ai/guides/tracking/otel)** - 認証や高度な設定オプションを含む、WeaveでOTELを設定するための包括的なガイドです。
+- **[OpenTelemetryのトレースをWeaveに送信](https://docs.coreweave.com/products/wandb/weave/guides/tracking/otel)** - 認証や高度な設定オプションを含む、WeaveでOTELを設定するための包括的なガイドです。
 
-- **[トレースビューのナビゲート](https://weave-docs.wandb.ai/guides/tracking/trace-tree)** - トレース階層やスパンの詳細の理解を含む、Weave UIでトレースを効果的に分析・デバッグする方法を学びます。
+- **[トレースビューのナビゲート](https://docs.coreweave.com/products/wandb/weave/guides/tracking/trace-tree)** - トレース階層やスパンの詳細の理解を含む、Weave UIでトレースを効果的に分析・デバッグする方法を学びます。
 
-- **[Weaveインテグレーション](https://weave-docs.wandb.ai/guides/integrations/)** - 他のフレームワークとのインテグレーションを探索し、WeaveがAIスタック全体でどのように機能するかを確認します。
+- **[Weaveインテグレーション](https://docs.coreweave.com/products/wandb/weave/guides/integrations/)** - 他のフレームワークとのインテグレーションを探索し、WeaveがAIスタック全体でどのように機能するかを確認します。

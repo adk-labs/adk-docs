@@ -226,4 +226,4 @@ sub_agents:
 
 ## 다음 단계
 
-ADK 에이전트 구성으로 무엇을 어떻게 빌드할지에 대한 아이디어는 ADK [adk-samples](https://github.com/search?q=repo:google/adk-python+path:/%5Econtributing%5C/samples%5C//+root_agent.yaml&type=code) 저장소의 YAML 기반 에이전트 정의를 참고하세요. 에이전트 구성 형식에서 지원하는 구문 및 설정에 대한 자세한 내용은 [에이전트 구성 구문 참조](/ko/api-reference/agentconfig/)를 참고하세요.
+ADK 에이전트 구성으로 무엇을 어떻게 빌드할지에 대한 아이디어는 ADK [adk-samples](https://github.com/search?q=repo:google/adk-python+path:/%5Econtributing%5C/samples%5C/.*%5C/root_agent%5C.yaml$/&type=code) 저장소의 YAML 기반 에이전트 정의를 참고하세요. 에이전트 구성 형식에서 지원하는 구문 및 설정에 대한 자세한 내용은 [에이전트 구성 구문 참조](/ko/api-reference/agentconfig/)를 참고하세요.

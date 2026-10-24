@@ -36,7 +36,7 @@
 SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAgent])
 ```
 
-これにより、コードが記述され、*次に*レビューされ、*最後に*リファクタリングされるという、厳密で信頼性の高い順序が保証されます。**各サブエージェントからの出力は、[出力キー (Output Key)](../llm-agents.md#structuring-data-input_schema-output_schema-output_key) を介して状態 (state) に保存され、次のエージェントに渡されます。**
+これにより、コードが記述され、*次に*レビューされ、*最後に*リファクタリングされるという、厳密で信頼性の高い順序が保証されます。**各サブエージェントからの出力は、[出力キー (Output Key)](../llm-agents.md#data-handling) を介して状態 (state) に保存され、次のエージェントに渡されます。**
 
 !!! note "共有のInvocationContext"
     `SequentialAgent`は、各サブエージェントに同じ `InvocationContext` を渡します。これは、すべてのサブエージェントが一時的な (`temp:`) 名前空間を含む同じセッション状態を共有することを意味し、単一のターン内でステップ間のデータ受け渡しを容易にします。

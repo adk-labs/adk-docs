@@ -736,6 +736,22 @@ Python에서 ADK는 플러그인에 두 가지 수명 주기 이벤트를 추가
 -   **`on_run_error_callback(*, invocation_context, error)`**: 처리되지 않은 예외로 인해 실행이 실패할 때 `after_run_callback` 대신 실행됩니다. 이 콜백은 실패만 관찰하며 반환 값은 무시되고 원래 예외가 그대로 발생합니다.
 -   **`close()`**: 실행당 한 번이 아니라 `await runner.close()`로 `Runner`를 닫을 때 플러그인당 한 번 실행됩니다. HTTP 클라이언트나 측정항목 내보내기(exporter)와 같이 플러그인이 소유한 리소스를 해제하는 데 사용하세요. 각 `close()` 호출은 러너의 `plugin_close_timeout`(기본값 5초)으로 제한됩니다.
 
+Go에서는 프로세스가 종료되기 전에 플러시해야 하는 버퍼링된 내보내기(exporter)와 같이 플러그인이 소유한 리소스를 해제하려면 `plugin.Config`에 `CloseFunc`를 설정하세요. `Runner`가 이를 대신 호출해 주지 않으므로 애플리케이션이 종료될 때 플러그인의 `Close` 메서드를 직접 호출해야 합니다. ADK Go는 `runner.PluginConfig.CloseTimeout`을 강제하지 않으므로 느린 정리 작업은 `CloseFunc` 내부에서 직접 제한 시간을 설정하세요.
+
+```go
+p, err := plugin.New(plugin.Config{
+	Name: "my_plugin",
+	CloseFunc: func() error {
+		// 여기에서 버퍼를 플러시하고 클라이언트를 해제합니다.
+		return nil
+	},
+})
+if err != nil {
+	log.Fatal(err)
+}
+defer p.Close()
+```
+
 ## 언어별 빠른 참고
 
 플러그인 콜백을 언어별로 한 번 더 정리해 두면, English 원문과의 탭 구조도 더 비슷해집니다.

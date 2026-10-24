@@ -25,10 +25,10 @@ Quarkus を使うと、受信する HTTP JSON-RPC ペイロードやセッショ
 
 ### 1. サンプルコードを取得する { #getting-the-sample-code }
 
-最も早い開始方法は、[**`adk-java`** リポジトリ](https://github.com/google/adk-java) 内の `contrib/samples/a2a_server` フォルダーにあるスタンドアロンの Quarkus アプリを確認することです。
+最も早い開始方法は、[**`adk-java`** リポジトリ](https://github.com/google/adk-java) 内の `examples/a2a_server` フォルダーにあるスタンドアロンの Quarkus アプリを確認することです。
 
 ```bash
-cd contrib/samples/a2a_server
+cd examples/a2a_server
 ```
 
 ### 2. 動作の仕組み
@@ -46,7 +46,7 @@ cd contrib/samples/a2a_server
 ネイティブ ADK 構成では、Quarkus の開発モードタスクを実行できます。
 
 ```bash
-./mvnw -f contrib/samples/a2a_server/pom.xml quarkus:dev
+./mvnw -f examples/a2a_server/pom.xml quarkus:dev
 ```
 
 実行すると、Quarkus が A2A 準拠の REST パスを自動的にホストします。手動の `curl` を使えば、ネイティブ A2A 仕様でペイロードをすぐにスモークテストできます。

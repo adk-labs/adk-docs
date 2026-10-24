@@ -674,6 +674,22 @@ Pythonでは、ADKはプラグインにさらに2つのライフサイクルイ�
 -   **`on_run_error_callback(*, invocation_context, error)`**: 未処理の例外によって実行が失敗したときに、`after_run_callback`の代わりに実行されます。このコールバックは失敗を監視するだけであり、戻り値は無視され、元の例外がそのまま送出されます。
 -   **`close()`**: 実行ごとに1回ではなく、`await runner.close()`で`Runner`を閉じたときにプラグインごとに1回実行されます。HTTPクライアントやメトリクスエクスポーターなど、プラグインが所有するリソースを解放するために使用します。各`close()`呼び出しは、ランナーの`plugin_close_timeout`（デフォルトは5秒）によって制限されます。
 
+Goでは、プロセス終了前にフラッシュする必要があるバッファリングされたエクスポーターなど、プラグインが所有するリソースを解放するために`plugin.Config`で`CloseFunc`を設定します。`Runner`は自動的にこれを呼び出さないため、アプリケーションのシャットダウン時にプラグインの`Close`メソッドを呼び出してください。ADK Goは`runner.PluginConfig.CloseTimeout`を強制しないため、時間のかかるクリーンアップ処理は`CloseFunc`自体の中で制限時間を設けてください。
+
+```go
+p, err := plugin.New(plugin.Config{
+	Name: "my_plugin",
+	CloseFunc: func() error {
+		// ここでバッファをフラッシュし、クライアントを解放します。
+		return nil
+	},
+})
+if err != nil {
+	log.Fatal(err)
+}
+defer p.Close()
+```
+
 ## コールバックフックのタブ要約
 
 ### ユーザーメッセージの要点

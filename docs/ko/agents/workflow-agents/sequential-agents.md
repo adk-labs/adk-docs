@@ -36,7 +36,7 @@
 SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAgent])
 ```
 
-이를 통해 코드가 작성되고, *그 다음* 검토되고, *마지막으로* 리팩터링되는 엄격하고 신뢰할 수 있는 순서를 보장합니다. **각 하위 에이전트의 출력은 [출력 키(Output Key)](../llm-agents.md#structuring-data-input_schema-output_schema-output_key)를 통해 상태(state)에 저장되어 다음 에이전트로 전달됩니다.**
+이를 통해 코드가 작성되고, *그 다음* 검토되고, *마지막으로* 리팩터링되는 엄격하고 신뢰할 수 있는 순서를 보장합니다. **각 하위 에이전트의 출력은 [출력 키(Output Key)](../llm-agents.md#data-handling)를 통해 상태(state)에 저장되어 다음 에이전트로 전달됩니다.**
 
 !!! note "공유된 Invocation Context"
     `SequentialAgent`는 각 하위 에이전트에 동일한 `InvocationContext`를 전달합니다. 이는 모든 하위 에이전트가 임시 (`temp:`) 네임스페이스를 포함한 동일한 세션 상태를 공유한다는 것을 의미하며, 단일 턴 내에서 단계 간 데이터 전달을 용이하게 합니다.

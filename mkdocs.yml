@@ -341,6 +341,7 @@ plugins:
                 - agents/index.md
                 - LLM 에이전트: agents/llm-agents.md
                 - Managed agents (관리형 에이전트): agents/managed-agents.md
+                - 서비스 등록: agents/service-registration.md
               - 그래프 워크플로우:
                 - graphs/index.md
                 - 그래프 경로: graphs/routes.md
@@ -533,6 +534,7 @@ plugins:
                 - agents/index.md
                 - LLMエージェント: agents/llm-agents.md
                 - Managed agents (マネージドエージェント): agents/managed-agents.md
+                - サービス登録: agents/service-registration.md
               - グラフワークフロー:
                 - graphs/index.md
                 - グラフルート: graphs/routes.md

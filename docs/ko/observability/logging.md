@@ -251,7 +251,7 @@ adk web --otel_to_cloud path/to/your/agents_dir
     Go 런처를 사용하는 경우 CLI 플래그를 통해 GCP 내보내기를 활성화할 수도 있습니다.
 
     ```bash
-    go run main.go web -otel_to_cloud
+    go run main.go web -otel_to_cloud api
     ```
 
 === "Kotlin"

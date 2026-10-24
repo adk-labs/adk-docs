@@ -27,6 +27,10 @@ BigQuery 統合を提供するツールセットは次のとおりです。
 
 これらは `BigQueryToolset` ツールセットとしてパッケージ化されています。
 
+!!! tip "ロケーション設定"
+
+    BigQuery のロケーションを選択するには、`google.adk.integrations.bigquery.config` の `BigQueryToolConfig(location="US")` をツールセットの `bigquery_tool_config` として渡します。データセットに一致する[ロケーション](https://cloud.google.com/bigquery/docs/locations)を選択してください。未設定のままにすると、BigQuery がロケーションを決定します。
+
 ## 認証
 
 `BigQueryToolset` は `BigQueryCredentialsConfig` を介して複数の認証メカニズムをサポートしています。

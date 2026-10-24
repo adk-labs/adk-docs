@@ -237,13 +237,15 @@ ADK Go 2.0은 그래프 라우팅, 워크플로 상태 및 HITL 일시 중지를
 
 | Go 필드 | 직렬화된 이름 | 목적 |
 |---|---|---|
-| `IsolationScope string` | `isolationScope` | LLM 프롬프트 히스토리에서 이 이벤트를 볼 수 있는 에이전트 컨텍스트를 제한합니다. |
-| `Routes []string` | `Routes` | 조건부 엣지 디스패치를 구동하기 위해 노드에서 방출하는 라우팅 키입니다. |
-| `RequestedInput *RequestInput` | `RequestedInput` | 워크플로 노드가 사람의 입력을 위해 일시 중지됨을 나타냅니다. |
-| `Output any` | `Output` | 워크플로 노드의 일반 데이터 출력입니다. |
-| `NodeInfo *NodeInfo` | `nodeInfo` | 이벤트를 방출한 노드를 식별하는 워크플로 노드 메타데이터입니다. |
+| `IsolationScope string` | `isolationScope` (`json:"isolationScope,omitempty"`) | LLM 프롬프트 히스토리에서 이 이벤트를 볼 수 있는 에이전트 컨텍스트를 제한합니다. |
+| `Routes []string` | `routes` (`json:"routes,omitempty"`) | 조건부 엣지 디스패치를 구동하기 위해 노드에서 방출하는 라우팅 키입니다. |
+| `RequestedInput *RequestInput` | `requestedInput` (`json:"requestedInput,omitempty"`) | 워크플로 노드가 사람의 입력을 위해 일시 중지됨을 나타냅니다. |
+| `Output any` | `output` (`json:"output,omitempty"`) | 워크플로 노드의 일반 데이터 출력입니다. |
+| `NodeInfo *NodeInfo` | `nodeInfo` (`json:"nodeInfo,omitempty"`) | 이벤트를 방출한 노드를 식별하는 워크플로 노드 메타데이터입니다. |
 
-**마이그레이션 조치:** 모든 Event 페이로드에서 5개의 새 필드를 수신하고 저장하도록 데이터베이스 스키마 및 다운스트림 클라이언트 검증기를 업데이트하세요.
+*   **사용자 지정 세션 스토리지:** 엄격한 스키마를 사용하는 자체 SQL 또는 NoSQL 데이터베이스에 세션을 저장하는 등 사용자 지정 `session.Service`를 구현한 경우, 5개의 새 필드를 모두 수용하도록 기본 데이터베이스 스키마를 업데이트해야 합니다. 엄격한 1.x 데이터베이스 테이블에 2.0 ***Event***를 삽입하면 삽입 또는 역직렬화 오류가 발생합니다. *단, 사용자 지정 세션 서비스가 이벤트를 직렬화된 JSON 블롭(blob)으로 저장하는 경우에는 스키마를 업데이트할 필요가 없습니다.*
+
+**마이그레이션 조치:** 위에 표시된 직렬화된 이름을 사용하여 모든 Event 페이로드에서 5개의 새 필드를 예상하고 저장하도록 데이터베이스 스키마 및 다운스트림 클라이언트 검증기를 업데이트하세요. v2.2.0 이전의 ADK Go 버전은 `Routes`, `RequestedInput`, `Output`을 Go 필드 이름으로 직렬화하므로, 해당 버전에서 저장한 이벤트는 해당 키를 사용합니다. ADK Go v2.2.0 이상에서도 이러한 이벤트를 계속 디코딩할 수 있습니다. Go 이외의 검증기 및 엄격한 스키마는 두 가지 형식을 모두 허용해야 합니다.
 
 추가적인 ADK Go 1.0 -> 2.0 비호환성을 발견하면 [이슈 트래커](https://github.com/google/adk-go/issues/new?template=bug_report.md&labels=v2)를 통해 제보해 주세요.
 

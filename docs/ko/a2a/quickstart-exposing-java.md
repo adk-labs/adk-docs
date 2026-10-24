@@ -25,10 +25,10 @@ Quarkus를 사용하면 들어오는 HTTP JSON-RPC 페이로드나 세션을 수
 
 ### 1. 샘플 코드 가져오기 { #getting-the-sample-code }
 
-시작하는 가장 빠른 방법은 [**`adk-java`** 저장소](https://github.com/google/adk-java)의 `contrib/samples/a2a_server` 폴더 안에 있는 독립형 Quarkus 앱을 확인하는 것입니다.
+시작하는 가장 빠른 방법은 [**`adk-java`** 저장소](https://github.com/google/adk-java)의 `examples/a2a_server` 폴더 안에 있는 독립형 Quarkus 앱을 확인하는 것입니다.
 
 ```bash
-cd contrib/samples/a2a_server
+cd examples/a2a_server
 ```
 
 ### 2. 동작 방식
@@ -46,7 +46,7 @@ cd contrib/samples/a2a_server
 네이티브 ADK 구조 안에서는 Quarkus 개발 모드 작업을 실행할 수 있습니다.
 
 ```bash
-./mvnw -f contrib/samples/a2a_server/pom.xml quarkus:dev
+./mvnw -f examples/a2a_server/pom.xml quarkus:dev
 ```
 
 실행되면 Quarkus가 A2A 호환 REST 경로를 자동으로 호스팅합니다. 수동 `curl`을 사용하면 네이티브 A2A 사양으로 페이로드를 즉시 스모크 테스트할 수 있습니다.

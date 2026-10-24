@@ -237,13 +237,15 @@ ADK Go 2.0 では、グラフ ルーティング、ワークフロー状態、�
 
 | Go フィールド | シリアル化名 | 目的 |
 |---|---|---|
-| `IsolationScope string` | `isolationScope` | LLM プロンプト履歴でこのイベントを表示できるエージェント コンテキストを制限します。 |
-| `Routes []string` | `Routes` | 条件付きエッジ ディスパッチを駆動するためにノードから放出されるルーティング キー。 |
-| `RequestedInput *RequestInput` | `RequestedInput` | ワークフロー ノードが人間の入力のために一時停止していることを示します。 |
-| `Output any` | `Output` | ワークフロー ノードからの汎用データ出力。 |
-| `NodeInfo *NodeInfo` | `nodeInfo` | イベントを放出したノードを識別するワークフロー ノード メタデータ。 |
+| `IsolationScope string` | `isolationScope` (`json:"isolationScope,omitempty"`) | LLM プロンプト履歴でこのイベントを表示できるエージェント コンテキストを制限します。 |
+| `Routes []string` | `routes` (`json:"routes,omitempty"`) | 条件付きエッジ ディスパッチを駆動するためにノードから放出されるルーティング キー。 |
+| `RequestedInput *RequestInput` | `requestedInput` (`json:"requestedInput,omitempty"`) | ワークフロー ノードが人間の入力のために一時停止していることを示します。 |
+| `Output any` | `output` (`json:"output,omitempty"`) | ワークフロー ノードからの汎用データ出力。 |
+| `NodeInfo *NodeInfo` | `nodeInfo` (`json:"nodeInfo,omitempty"`) | イベントを放出したノードを識別するワークフロー ノード メタデータ。 |
 
-**移行のアクション:** すべての Event ペイロードで 5 つの新しいフィールドを受信して保存するように、データベース スキーマおよびダウンストリーム クライアント検証ツールを更新してください。
+*   **カスタム セッション ストレージ:** 厳密なスキーマを持つ独自の SQL または NoSQL データベースにセッションを保存するなど、カスタムの `session.Service` を実装している場合は、5 つの新しいフィールドすべてに対応するように基盤となるデータベース スキーマを更新する必要があります。厳密な 1.x のデータベース テーブルに 2.0 の ***Event*** を挿入すると、挿入や逆シリアル化の失敗が発生します。*ただし、カスタム セッション サービスがイベントをシリアル化された JSON BLOB として保存している場合は、スキーマを更新する必要はありません。*
+
+**移行のアクション:** 上記のシリアル化名を使用して、すべての Event ペイロードで 5 つの新しいフィールドを想定して保存するように、データベース スキーマおよびダウンストリーム クライアント検証ツールを更新してください。v2.2.0 より前の ADK Go バージョンでは、`Routes`、`RequestedInput`、`Output` が Go フィールド名でシリアル化されるため、それらのバージョンで保存されたイベントではそれらのキーが使用されます。ADK Go v2.2.0 以降でもそれらのイベントは引き続きデコードされます。Go 以外の検証ツールおよび厳密なスキーマでは、両方の形式を受け入れる必要があります。
 
 その他の ADK Go 1.0 から 2.0 への非互換性に遭遇した場合は、[イシュー トラッカー](https://github.com/google/adk-go/issues/new?template=bug_report.md&labels=v2) から報告してください。
 

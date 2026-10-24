@@ -79,9 +79,9 @@ live_request_queue = LiveRequestQueue()
 
 ## LiveRequestQueue
 
-`LiveRequestQueue` は、エージェントにメッセージを送信するためのチャネルです。すべてのメッセージは、さまざまな種類の入力を保持する単一のコンテナである `LiveRequest` です。
+[`LiveRequestQueue`](/api-reference/python/google-adk.html#google.adk.agents.LiveRequestQueue) は、エージェントにメッセージを送信するためのチャネルです。すべてのメッセージは、さまざまな種類の入力を保持する単一のコンテナである `LiveRequest` です。
 
-```python title='リファレンス: <a href="../api-reference/python/google-adk.html#google.adk.agents.LiveRequestQueue">LiveRequestQueue</a>'
+```python title='リファレンス: LiveRequestQueue'
 class LiveRequest(BaseModel):
     content: Optional[Content] = None            # テキストおよび構造化データ
     blob: Optional[Blob] = None                  # 音声/動画のバイト列
@@ -129,9 +129,9 @@ live_request_queue.send_realtime(
 
 ## run_live() ループ
 
-`run_live()` は非同期ジェネレータです。バッファリングやポーリングを行うことなく、生成された瞬間に `Event` オブジェクトを出力（yield）します。その間、キューを通じて新しい入力を並行して送信できます。この同時実行性により、割り込み（インターラプト）が可能になります。エージェントが話している最中に、ユーザーが発話を被せることができます。
+[`run_live()`](/api-reference/python/google-adk.html#google.adk.runners.Runner.run_live) は非同期ジェネレータです。バッファリングやポーリングを行うことなく、生成された瞬間に `Event` オブジェクトを出力（yield）します。その間、キューを通じて新しい入力を並行して送信できます。この同時実行性により、割り込み（インターラプト）が可能になります。エージェントが話している最中に、ユーザーが発話を被せることができます。
 
-```python title='リファレンス: <a href="../api-reference/python/google-adk.html#google.adk.runners.Runner.run_live">Runner.run_live()</a>'
+```python title='リファレンス: Runner.run_live()'
 async for event in runner.run_live(
     user_id=user_id,
     session_id=session_id,

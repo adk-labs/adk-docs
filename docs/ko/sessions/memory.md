@@ -566,29 +566,46 @@ For example, you can automate this step with a callback:
 
 === "Go"
 
+    ADK Go에서 에이전트 콜백은 메모리 서비스에 액세스할 수 없습니다. 대신 플러그인의 `AfterRunCallback`에서 세션을 저장하고, 메모리 서비스와 함께 러너에 플러그인을 등록하세요:
+
     ```go
     import (
-        "context"
+        "log"
+
         "google.golang.org/adk/v2/agent"
         "google.golang.org/adk/v2/agent/llmagent"
-        "google.golang.org/adk/v2/session"
+        "google.golang.org/adk/v2/plugin"
+        "google.golang.org/adk/v2/runner"
         "google.golang.org/adk/v2/tool"
         "google.golang.org/adk/v2/tool/loadmemorytool"
     )
 
-    func autoSaveSessionToMemoryCallback(ctx agent.CallbackContext, s session.Session) (*genai.Content, error) {
-        if err := ctx.Memory().AddSessionToMemory(context.Background(), s); err != nil {
-            return nil, err
-        }
-        return nil, nil
-    }
+    autoSavePlugin, _ := plugin.New(plugin.Config{
+        Name: "auto_save_session_to_memory",
+        AfterRunCallback: func(ctx agent.InvocationContext) {
+            if m := ctx.Memory(); m != nil {
+                if err := m.AddSessionToMemory(ctx, ctx.Session()); err != nil {
+                    log.Printf("failed to save session to memory: %v", err)
+                }
+            }
+        },
+    })
 
-    agent, _ := llmagent.New(llmagent.Config{
-        Model:               model,
-        Name:                "Generic_QA_Agent",
-        Instruction:         "Answer the user's questions",
-        Tools:               []tool.Tool{loadmemorytool.New()},
-        AfterAgentCallbacks: []agent.AfterAgentCallback{autoSaveSessionToMemoryCallback},
+    rootAgent, _ := llmagent.New(llmagent.Config{
+        Model:       model,
+        Name:        "Generic_QA_Agent",
+        Instruction: "Answer the user's questions",
+        Tools:       []tool.Tool{loadmemorytool.New()},
+    })
+
+    r, _ := runner.New(runner.Config{
+        AppName:        "my_app",
+        Agent:          rootAgent,
+        SessionService: sessionService,
+        MemoryService:  memoryService,
+        PluginConfig: runner.PluginConfig{
+            Plugins: []*plugin.Plugin{autoSavePlugin},
+        },
     })
     ```
 

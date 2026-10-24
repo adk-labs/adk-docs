@@ -180,6 +180,7 @@ ADKエージェントワークフローをGoogle Cloud Runにデプロイする�
     * `--memory_service_uri TEXT`: (オプション) メモリ サービスの URI (例: `rag://<rag_corpus_id>`、`agentengine://<agent_engine>`、または `memory://`)。
     * `--port INTEGER`: (オプション) ADK APIサーバーがコンテナ内でリッスンするポート番号。デフォルトは8000です。
     * `--with_ui`: (オプション) 含めると、ADK開発UIがエージェントAPIサーバーとともにデプロイされます。デフォルトでは、APIサーバーのみがデプロイされます。
+    * `--with_cloud_run_sandbox`: (オプション) コード実行用に Cloud Run サンドボックスを有効にします。デフォルトでは無効です。有効にすると、ADK は `--sandbox-launcher` を指定して `gcloud beta run deploy` を使用します。
     * `--temp_folder TEXT`: (オプション) デプロイプロセス中に生成される中間ファイルを保存するディレクトリを指定します。デフォルトは、システムの一時ディレクトリ内のタイムスタンプ付きフォルダーです。*(注: このオプションは、問題のトラブルシューティングが必要な場合を除き、通常は必要ありません。)*
     * `--help`: ヘルプメッセージを表示して終了します。
 

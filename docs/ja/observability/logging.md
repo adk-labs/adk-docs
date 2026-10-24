@@ -251,7 +251,7 @@ adk web --otel_to_cloud path/to/your/agents_dir
     Goランチャーを使用している場合は、CLIフラグを介してGCPエクスポートを有効にすることもできます。
 
     ```bash
-    go run main.go web -otel_to_cloud
+    go run main.go web -otel_to_cloud api
     ```
 
 === "Kotlin"

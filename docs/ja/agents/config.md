@@ -226,4 +226,4 @@ sub_agents:
 
 ## 次のステップ
 
-ADKエージェント設定で何をどのように構築するかについてのアイデアは、ADKの[adk-samples](https://github.com/search?q=repo:google/adk-python+path:/%5Econtributing%5C/samples%5C//+root_agent.yaml&type=code)リポジトリのYAMLベースのエージェント定義を参照してください。エージェント設定形式でサポートされている構文と設定の詳細については、[エージェント設定構文リファレンス](/ja/api-reference/agentconfig/)を参照してください。
+ADKエージェント設定で何をどのように構築するかについてのアイデアは、ADKの[adk-samples](https://github.com/search?q=repo:google/adk-python+path:/%5Econtributing%5C/samples%5C/.*%5C/root_agent%5C.yaml$/&type=code)リポジトリのYAMLベースのエージェント定義を参照してください。エージェント設定形式でサポートされている構文と設定の詳細については、[エージェント設定構文リファレンス](/ja/api-reference/agentconfig/)を参照してください。

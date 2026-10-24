@@ -124,6 +124,8 @@
             .build();
     ```
 
+Python で Model Context Protocol（MCP）サーバーからエージェントの指示を動的に取得するには、[`McpInstructionProvider` による動的な指示](/ja/tools-custom/mcp-tools/advanced/#dynamic-instructions-with-mcpinstructionprovider)を参照してください。
+
 !!! note "GlobalInstructionPlugin"
 
     システム内の*すべて*のエージェントに共通のルールや一貫したペルソナを適用するには、非推奨となった `global_instruction` パラメータの代わりに `GlobalInstructionPlugin` を使用してください。
@@ -270,7 +272,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
             .build();
     ```
 
-### データの構造化 (`input_schema`, `output_schema`, `output_key`)
+### データの構造化 (`input_schema`, `output_schema`, `output_key`) {#data-handling}
 
 `LLM Agent`との構造化されたデータ交換を必要とするシナリオのために、ADKはスキーマ定義を使用して期待される入力と望ましい出力フォーマットを定義するメカニズムを提供します。
 

@@ -7,7 +7,7 @@
 これらの手順では、にデプロイされた ADK エージェントをテストする方法について説明します。
 [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)
 ランタイム環境。これらの手順を使用する前に、次の作業を完了する必要があります
-エージェント ランタイム ランタイム環境へのエージェントのデプロイメント
+エージェント ランタイム環境へのエージェントのデプロイメント
 [available methods](/deploy/agent-runtime/)の。このガイドでは、次のことを示します
 Google Cloud 経由でデプロイされたエージェントを表示、操作、テストする方法
 コンソール、および REST API 呼び出しまたはエージェント プラットフォーム SDK を使用してエージェントと対話する

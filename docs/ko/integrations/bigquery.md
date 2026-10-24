@@ -27,6 +27,10 @@ BigQuery 연동을 제공하는 도구 모음은 다음과 같습니다:
 
 이 도구들은 `BigQueryToolset`으로 패키징되어 있습니다.
 
+!!! tip "위치 설정 (Location setting)"
+
+    BigQuery 위치를 선택하려면 `google.adk.integrations.bigquery.config`의 `BigQueryToolConfig(location="US")`를 툴셋의 `bigquery_tool_config`로 전달하세요. 데이터셋과 일치하는 [위치](https://cloud.google.com/bigquery/docs/locations)를 선택해야 하며, 설정하지 않으면 BigQuery가 위치를 결정합니다.
+
 ## 인증 (Authentication)
 
 `BigQueryToolset`은 `BigQueryCredentialsConfig`를 통해 여러 인증 방식을 지원합니다.

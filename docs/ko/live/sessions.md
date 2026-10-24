@@ -79,9 +79,9 @@ live_request_queue = LiveRequestQueue()
 
 ## LiveRequestQueue
 
-`LiveRequestQueue`는 에이전트에 메시지를 보내는 채널입니다. 모든 메시지는 다양한 유형의 입력을 담는 단일 컨테이너인 `LiveRequest`입니다:
+[`LiveRequestQueue`](/api-reference/python/google-adk.html#google.adk.agents.LiveRequestQueue)는 에이전트에 메시지를 보내는 채널입니다. 모든 메시지는 다양한 유형의 입력을 담는 단일 컨테이너인 `LiveRequest`입니다:
 
-```python title='참조: <a href="../api-reference/python/google-adk.html#google.adk.agents.LiveRequestQueue">LiveRequestQueue</a>'
+```python title='참조: LiveRequestQueue'
 class LiveRequest(BaseModel):
     content: Optional[Content] = None            # 텍스트 및 구조화된 데이터
     blob: Optional[Blob] = None                  # 오디오/비디오 바이트
@@ -129,9 +129,9 @@ live_request_queue.send_realtime(
 
 ## run_live() 루프
 
-`run_live()`는 비동기 제너레이터입니다. 버퍼링이나 폴링 없이 `Event` 객체가 생성되는 즉시 이를 yield하며, 그동안 개발자는 큐를 통해 새로운 입력을 동시에 보낼 수 있습니다. 이러한 동시성이 바로 끼어들기(interruption)를 가능하게 합니다. 에이전트가 말하고 있는 동안에도 사용자가 끼어들어 말할 수 있습니다.
+[`run_live()`](/api-reference/python/google-adk.html#google.adk.runners.Runner.run_live)는 비동기 제너레이터입니다. 버퍼링이나 폴링 없이 `Event` 객체가 생성되는 즉시 이를 yield하며, 그동안 개발자는 큐를 통해 새로운 입력을 동시에 보낼 수 있습니다. 이러한 동시성이 바로 끼어들기(interruption)를 가능하게 합니다. 에이전트가 말하고 있는 동안에도 사용자가 끼어들어 말할 수 있습니다.
 
-```python title='참조: <a href="../api-reference/python/google-adk.html#google.adk.runners.Runner.run_live">Runner.run_live()</a>'
+```python title='참조: Runner.run_live()'
 async for event in runner.run_live(
     user_id=user_id,
     session_id=session_id,
