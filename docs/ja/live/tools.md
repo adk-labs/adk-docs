@@ -42,7 +42,7 @@ async for event in runner.run_live(...):
 | 状況 | 使用するもの | 方法 |
 |---|---|---|
 | 1 秒未満で返る高速なツール | **ブロッキング**（デフォルト） | 通常の 1 回 `return` するツール |
-| ユーザーに話す内容がない長い待機時間 | **[ノンブロッキングツール](#non-blocking-tools)** | ツールに `response_scheduling` を設定 |
+| ユーザーに話す内容がない長い待機時間 | **[ノンブロッキングツール](#non-blocking-tools)** | ツールに `response_scheduling` または `behavior` を設定 |
 | ユーザーに実況・進捗を伝える価値がある長い待機時間 | **[ストリーミングツール](#streaming-tools)** | 非同期ジェネレータから進捗を `yield` |
 
 ## ノンブロッキングツール
@@ -75,6 +75,19 @@ report_tool.response_scheduling = types.FunctionResponseScheduling.WHEN_IDLE
 | `WHEN_IDLE` | 会話の自然な合間を待つ | レポートや検索など、通常の選択肢 |
 | `INTERRUPT` | 即座に割り込んで伝える | アラーム、障害、「送金が失敗しました」などの緊急事態 |
 | `SILENT` | コンテキストにのみ追加され、関連がある場合のみ発話 | モデルが後で参照できる背景情報 |
+
+### `behavior` の明示的な設定
+
+`behavior` フィールドを使用してツールをノンブロッキングとしてマークすることもできます。設定した場合、`response_scheduling` よりも優先されます。
+
+```python
+report_tool = FunctionTool(export_report)
+report_tool.behavior = types.Behavior.NON_BLOCKING
+```
+
+!!! note "ADK Python 2.10 以降が必要"
+
+    `behavior` フィールドは adk-python 2.10 で追加されました。
 
 ## ストリーミングツール
 

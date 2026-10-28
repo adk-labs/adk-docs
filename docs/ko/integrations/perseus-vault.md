@@ -11,7 +11,7 @@ catalog_tags: ["data"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[`adk-perseus-vault-memory`](https://github.com/Perseus-Computing-LLC/adk-mimir-memory) 통합은 ADK 에이전트를 영구적인 세션 간 메모리 백엔드인 Perseus Vault에 연결합니다. SQLite 데이터베이스가 내장된 단일 Rust 바이너리로 지원되며, **클라우드 의존성이 전혀 없고** 모든 것이 로컬에서 실행됩니다. 메모리는 AES-256-GCM으로 유휴 상태일 때 암호화되며, 검색은 FTS5 키워드 매칭과 밀집 벡터(dense vector) 검색을 결합합니다.
+[`adk-perseus-vault-memory`](https://pypi.org/project/adk-perseus-vault-memory/) 통합은 ADK 에이전트를 영구적인 세션 간 메모리 백엔드인 Perseus Vault에 연결합니다. SQLite 데이터베이스가 내장된 단일 Rust 바이너리로 지원되며, **클라우드 의존성이 전혀 없고** 모든 것이 로컬에서 실행됩니다. 메모리는 AES-256-GCM으로 유휴 상태일 때 암호화되며, 검색은 FTS5 키워드 매칭과 밀집 벡터(dense vector) 검색을 결합합니다.
 
 ## 사용 사례
 
@@ -116,6 +116,5 @@ session = await runner.session_service.create_session(
 
 ## 리소스
 
-- [GitHub의 adk-perseus-vault-memory](https://github.com/Perseus-Computing-LLC/adk-mimir-memory)
 - [PyPI의 adk-perseus-vault-memory](https://pypi.org/project/adk-perseus-vault-memory/)
 - [Perseus Context 통합 가이드](/ko/integrations/perseus/)

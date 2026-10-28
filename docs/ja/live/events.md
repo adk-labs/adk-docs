@@ -129,6 +129,25 @@ async for event in runner.run_live(...):
 
 `interrupted` を処理しないと、すでにバッファリングされた音声がユーザーの発話に被さって再生され続けます。
 
+### インタラクションステータス（Interaction status） { #interaction-status }
+
+一部のモデルは、リクエストごとに `turn_complete` を複数回送信します。そのようなモデルでは、`event.interaction_status`（`/run_live` 上では `interactionStatus`）がモデルの処理完了まで `IN_PROGRESS` となり、完了すると `IDLE` になります。その他のモデルでは `None` になるため、その場合は `turn_complete` にフォールバックしてください。
+
+```python
+from google.genai import types
+
+async for event in runner.run_live(...):
+    if event.turn_complete and event.interaction_status in (
+        None,
+        types.InteractionStatus.IDLE,
+    ):
+        enable_microphone()     # モデルがリクエストの処理を完了
+```
+
+!!! note "ADK Python 2.8 以降が必要"
+
+    `interaction_status` フィールドは adk-python 2.8 で追加されました。
+
 ## エラー処理
 
 エラーは `event.error_code` と `event.error_message` に現れます。判断すべき決定事項は、モデルの応答を継続できるかどうかです。モデルが停止した場合は `break` し、一時的な障害の場合は `continue` します。

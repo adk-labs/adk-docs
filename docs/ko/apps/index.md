@@ -1,7 +1,7 @@
 # 앱: 워크플로 관리 클래스
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v1.4.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ***앱*** 클래스는 전체 에이전트 개발 키트(ADK) 에이전트 워크플로의 최상위 컨테이너입니다. ***루트 에이전트***별로 그룹화된 에이전트 모음의 수명 주기, 구성 및 상태를 관리하도록 설계되었습니다. **앱** 클래스는 에이전트 워크플로의 전체 운영 인프라에 대한 우려 사항을 개별 에이전트의 작업 지향적 추론과 분리합니다.
@@ -49,8 +49,29 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
         name="agents",
         root_agent=root_agent,
         # 선택적으로 App 수준 기능 포함:
-        # plugins, context_cache_config, resumability_config
+        # plugins, context_cache_config, events_compaction_config,
+        # resumability_config
     )
+    ```
+
+=== "TypeScript"
+
+    ```typescript title="agent.ts"
+    import {App, LlmAgent} from '@google/adk';
+
+    export const rootAgent = new LlmAgent({
+      model: 'gemini-flash-latest',
+      name: 'greeter_agent',
+      description: 'An agent that provides a friendly greeting.',
+      instruction: 'Reply with Hello, World!',
+    });
+
+    export const app = new App({
+      name: 'agents',
+      rootAgent: rootAgent,
+      // 선택적으로 App 수준 기능 포함:
+      // plugins, resumabilityConfig
+    });
     ```
 
 === "Java"
@@ -108,6 +129,33 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
 
     ```
 
+=== "TypeScript"
+
+    ```typescript title="main.ts"
+    import {InMemoryRunner, isFinalResponse, stringifyContent} from '@google/adk';
+    import {app} from './agent.js'; // agent.ts에서 코드 가져오기
+
+    // 가져온 애플리케이션 객체를 사용하여 Runner 설정
+    const runner = new InMemoryRunner({app});
+
+    async function main() {
+      try {
+        for await (const event of runner.runEphemeral({
+          userId: 'user',
+          newMessage: {role: 'user', parts: [{text: 'Hello there!'}]},
+        })) {
+          if (isFinalResponse(event) && event.content) {
+            console.log(`Response: ${stringifyContent(event)}`);
+          }
+        }
+      } catch (e) {
+        console.error(`An error occurred during agent execution: ${e}`);
+      }
+    }
+
+    main();
+    ```
+
 === "Java"
 
     ```java title="AppMain.java"
@@ -142,6 +190,14 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
 
     ```console
     python3 main.py
+    ```
+
+=== "TypeScript"
+
+    다음 명령을 사용하여 `main.ts` 코드로 앱 에이전트를 실행합니다.
+
+    ```console
+    npx tsx main.ts
     ```
 
 === "Java"

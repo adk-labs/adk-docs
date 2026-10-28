@@ -470,6 +470,10 @@ plugins:
                   - live/get-started/index.md
                   - Python: live/get-started/streaming-python.md
                   - Java: live/get-started/streaming-java.md
+                - 아키텍처:
+                  - 아키텍처 선택: live/architectures/index.md
+                  - 음성 대 음성 (Speech-to-speech): live/architectures/speech-to-speech.md
+                  - 캐스케이드 (Cascade): live/architectures/cascade.md
                 - 구축:
                   - 워크플로우: live/workflows.md
                   - 도구: live/tools.md
@@ -663,6 +667,10 @@ plugins:
                   - live/get-started/index.md
                   - Python: live/get-started/streaming-python.md
                   - Java: live/get-started/streaming-java.md
+                - アーキテクチャ:
+                  - アーキテクチャの選択: live/architectures/index.md
+                  - Speech-to-speech: live/architectures/speech-to-speech.md
+                  - カスケード (Cascade): live/architectures/cascade.md
                 - 構築:
                   - ワークフロー: live/workflows.md
                   - ツール: live/tools.md

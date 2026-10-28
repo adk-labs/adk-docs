@@ -6,7 +6,7 @@
 
 ADK はライブエージェントと音声エージェントを構築するためのフレームワークです。ライブエージェントはユーザーと双方向の常時接続を維持します。メッセージを送信して返信を待つのではなく、ユーザーとエージェントの双方が同時に話し、聞き、応答します。また、実際の会話で人間同士が遮るように、ユーザーはエージェントの発話途中に割り込んで中断（interrupt）することができます。ライブエージェントはテキスト、音声、動画の入力を受け付け、テキストまたは音声で応答します。
 
-ライブエージェントは、他の場所で使用するのと同じエージェント、ツール、セッションの抽象化を使用して構築された ADK エージェントです。開発者はエージェントの動作を記述し、ADK はその下でリアルタイム接続、ツール実行、セッション状態を管理します。現在、この接続は [Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api) 上で実行されます。プラットフォームが進化してもエージェントコードが変更されないように、ADK が配線を処理します。
+ライブエージェントは、他の場所で使用するのと同じエージェント、ツール、セッションの抽象化を使用して構築された ADK エージェントです。開発者はエージェントの動作を記述し、ADK はその下でリアルタイム接続、ツール実行、セッション状態を管理します。[Speech-to-speech](architectures/speech-to-speech.md) モデルを使用して [Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api) 上でライブエージェントをエンドツーエンドで実行することも、[カスケードパイプライン](architectures/cascade.md)で音声テキスト変換（STT）、任意のテキスト LLM、テキスト音声変換（TTS）を連結して実行することもできます。
 
 <div class="video-grid">
   <div class="video-item">
@@ -33,6 +33,7 @@ ADK はライブエージェントと音声エージェントを構築するた�
 
     - [ここから開始](get-started/index.md) — 言語を選択して構築する
     - [Python](get-started/streaming-python.md) または [Java](get-started/streaming-java.md) へ直接移動
+    - [アーキテクチャの選択](architectures/index.md): [Speech-to-speech](architectures/speech-to-speech.md) または [カスケード (Cascade)](architectures/cascade.md)
 
 -   :material-book-open-variant: **開発ガイド**
 

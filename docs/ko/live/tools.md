@@ -42,7 +42,7 @@ async for event in runner.run_live(...):
 | 상황 | 사용 방식 | 구현 방법 |
 |---|---|---|
 | 1초 이내에 반환되는 빠른 도구 | **블로킹** (기본값) | 일반적인 단일 `return` 도구 |
-| 중계할 내용이 없는 긴 대기 작업 | **[비차단(Non-blocking) 도구](#non-blocking-tools)** | 도구에 `response_scheduling` 설정 |
+| 중계할 내용이 없는 긴 대기 작업 | **[비차단(Non-blocking) 도구](#non-blocking-tools)** | 도구에 `response_scheduling` 또는 `behavior` 설정 |
 | 사용자에게 중계할 가치가 있는 긴 대기 작업 | **[스트리밍 도구](#streaming-tools)** | 비동기 제너레이터에서 진행 상황 `yield` |
 
 ## 비차단(Non-blocking) 도구
@@ -75,6 +75,19 @@ report_tool.response_scheduling = types.FunctionResponseScheduling.WHEN_IDLE
 | `WHEN_IDLE` | 자연스러운 대화 휴지기를 기다림 | 일반적인 보고서 및 조회 작업 (권장 선택) |
 | `INTERRUPT` | 즉시 전달 (끼어들기) | 알람, 장애 알림, "송금 실패" 등 긴급 상황 |
 | `SILENT` | 컨텍스트에만 입력되며 관련이 있을 때만 언급 | 모델이 나중에 사용할 수 있는 배경 정보 |
+
+### `behavior` 명시적 설정
+
+`behavior` 필드를 사용하여 도구를 비차단(non-blocking)으로 표시할 수도 있습니다. 이 필드를 설정하면 `response_scheduling`보다 우선 적용됩니다:
+
+```python
+report_tool = FunctionTool(export_report)
+report_tool.behavior = types.Behavior.NON_BLOCKING
+```
+
+!!! note "ADK Python 2.10 이상 필요"
+
+    `behavior` 필드는 adk-python 2.10에 추가되었습니다.
 
 ## 스트리밍 도구
 

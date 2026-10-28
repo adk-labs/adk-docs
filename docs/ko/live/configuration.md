@@ -6,7 +6,7 @@
 
 `RunConfig`는 라이브 세션의 동작을 결정하는 곳입니다. 에이전트의 음성 톤, 음성 전사 방식, 턴 종료 판단 시점, 유지할 대화 히스토리의 양, 적용할 한도 등을 설정합니다. 이를 [`Runner.run_live()`](https://google.github.io/adk-docs/api-reference/python/)에 전달하면 해당 세션에만 적용됩니다. 동일한 에이전트라도 두 명의 사용자가 완전히 다른 구성으로 실행할 수 있습니다.
 
-`RunConfig`는 라이브 전용이 아닙니다. [런타임 구성](../runtime/runconfig.md)에서는 전체 클래스와 `run_async()`에 적용되는 필드를 설명합니다. 다음은 `run_live()`에서 중요한 하위 집합과 라이브 세션에만 존재하는 음성 관련 설정입니다.
+`RunConfig`는 라이브 전용이 아닙니다. [런타임 구성](../runtime/runconfig.md)에서는 전체 클래스와 `run_async()`에 적용되는 필드를 설명합니다. 다음은 네이티브 오디오 모델에 대해 `run_live()`에서 중요한 하위 집합입니다. [캐스케이드 아키텍처](architectures/cascade.md#configure-a-cascaded-agent)를 사용하는 에이전트의 경우, 음성 제공업체에서 음성과 턴 감지를 대신 구성하세요.
 
 ## RunConfig 매개변수 빠른 참조
 
@@ -318,4 +318,4 @@ run_config = RunConfig(
 
 두 동작 모두 확률적이며 응답의 예측 가능성을 낮추므로 격식 있는 컨텍스트, 높은 정확도가 요구되는 환경 및 디버깅 중에는 꺼두는 것이 좋습니다.
 
-두 설정 모두 모델에 따라 달라집니다. Gemini 2.5 Flash Live는 이를 지원하지만 Gemini 3.1 Flash Live는 지원하지 않으며, 이를 설정한 채로 두는 것이 3.1로 전환할 때 가장 흔한 실패 원인입니다. [모델별 기능 지원](models.md#per-model-feature-support)을 참고하세요.
+두 설정 모두 모델에 따라 달라집니다. Gemini 2.5 Flash Live는 이를 지원하지만 Gemini 3.1 Flash Live 및 Gemini 3.8 Live 모델은 지원하지 않습니다. ADK는 이러한 설정을 Gemini 3.x Live 모델로 보내지 않으므로 설정한 채로 두어도 아무런 효과가 없습니다. [모델별 기능 지원](models.md#per-model-feature-support)을 참고하세요.

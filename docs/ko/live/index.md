@@ -6,7 +6,7 @@
 
 ADK는 라이브 및 음성 에이전트를 구축하기 위한 프레임워크입니다. 라이브 에이전트는 사용자와 열린 양방향 연결을 유지합니다. 메시지를 보내고 답장을 기다리는 대신 사용자와 에이전트가 동시에 말하고, 듣고, 응답하며, 실제 대화에서 사람들이 서로 말을 끊는 것처럼 사용자가 에이전트의 말을 중간에 끊을(interrupt) 수 있습니다. 라이브 에이전트는 텍스트, 오디오, 비디오 입력을 수락하고 텍스트 또는 음성으로 응답합니다.
 
-라이브 에이전트는 다른 모든 곳에서 사용하는 동일한 에이전트, 도구, 세션 추상화로 구축된 ADK 에이전트입니다. 개발자는 에이전트의 동작을 정의하고, ADK는 그 아래에서 실시간 연결, 도구 실행, 세션 상태를 관리합니다. 현재 이 연결은 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api) 위에서 실행되며, 플랫폼이 발전하더라도 에이전트 코드가 그대로 유지되도록 ADK가 연결 배선을 처리합니다.
+라이브 에이전트는 다른 모든 곳에서 사용하는 동일한 에이전트, 도구, 세션 추상화로 구축된 ADK 에이전트입니다. 개발자는 에이전트의 동작을 정의하고, ADK는 그 아래에서 실시간 연결, 도구 실행, 세션 상태를 관리합니다. [음성 대 음성(speech-to-speech)](architectures/speech-to-speech.md) 모델을 사용하여 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api) 위에서 라이브 에이전트를 엔드투엔드로 실행하거나, [캐스케이드 파이프라인](architectures/cascade.md)에서 음성-텍스트 변환(STT), 임의의 텍스트 LLM, 텍스트-음성 변환(TTS)을 순차적으로 연결하여 실행할 수 있습니다.
 
 <div class="video-grid">
   <div class="video-item">
@@ -33,6 +33,7 @@ ADK는 라이브 및 음성 에이전트를 구축하기 위한 프레임워크�
 
     - [여기서 시작](get-started/index.md) — 언어를 선택하고 에이전트 구축하기
     - [Python](get-started/streaming-python.md) 또는 [Java](get-started/streaming-java.md)로 바로 이동
+    - [아키텍처 선택](architectures/index.md): [음성 대 음성(speech-to-speech)](architectures/speech-to-speech.md) 또는 [캐스케이드(cascade)](architectures/cascade.md)
 
 -   :material-book-open-variant: **개발 가이드**
 

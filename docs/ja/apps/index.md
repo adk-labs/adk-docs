@@ -1,7 +1,7 @@
 # アプリ: ワークフロー管理クラス
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v1.4.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
 ***App***クラスは、Agent Development Kit（ADK）エージェントワークフロー全体の上位コンテナです。***ルートエージェント***によってグループ化されたエージェントのコレクションのライフサイクル、構成、および状態を管理するように設計されています。**App**クラスは、エージェントワークフローの全体的な運用インフラストラクチャの懸念事項を、個々のエージェントのタスク指向の推論から分離します。
@@ -49,8 +49,29 @@ ADKワークフローで***App***オブジェクトを定義することはオ�
         name="agents",
         root_agent=root_agent,
         # オプションで App レベル機能を含める:
-        # plugins, context_cache_config, resumability_config
+        # plugins, context_cache_config, events_compaction_config,
+        # resumability_config
     )
+    ```
+
+=== "TypeScript"
+
+    ```typescript title="agent.ts"
+    import {App, LlmAgent} from '@google/adk';
+
+    export const rootAgent = new LlmAgent({
+      model: 'gemini-flash-latest',
+      name: 'greeter_agent',
+      description: 'An agent that provides a friendly greeting.',
+      instruction: 'Reply with Hello, World!',
+    });
+
+    export const app = new App({
+      name: 'agents',
+      rootAgent: rootAgent,
+      // オプションで App レベル機能を含める:
+      // plugins, resumabilityConfig
+    });
     ```
 
 === "Java"
@@ -108,6 +129,33 @@ ADKワークフローで***App***オブジェクトを定義することはオ�
 
     ```
 
+=== "TypeScript"
+
+    ```typescript title="main.ts"
+    import {InMemoryRunner, isFinalResponse, stringifyContent} from '@google/adk';
+    import {app} from './agent.js'; // agent.tsからコードをインポート
+
+    // インポートされたアプリケーションオブジェクトを使用してランナーを設定する
+    const runner = new InMemoryRunner({app});
+
+    async function main() {
+      try {
+        for await (const event of runner.runEphemeral({
+          userId: 'user',
+          newMessage: {role: 'user', parts: [{text: 'Hello there!'}]},
+        })) {
+          if (isFinalResponse(event) && event.content) {
+            console.log(`Response: ${stringifyContent(event)}`);
+          }
+        }
+      } catch (e) {
+        console.error(`An error occurred during agent execution: ${e}`);
+      }
+    }
+
+    main();
+    ```
+
 === "Java"
 
     ```java title="AppMain.java"
@@ -142,6 +190,14 @@ ADKワークフローで***App***オブジェクトを定義することはオ�
 
     ```console
     python3 main.py
+    ```
+
+=== "TypeScript"
+
+    次のコマンドを使用して、`main.ts`コードでAppエージェントを実行します。
+
+    ```console
+    npx tsx main.ts
     ```
 
 === "Java"
