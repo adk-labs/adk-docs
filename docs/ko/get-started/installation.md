@@ -52,7 +52,9 @@ hide:
 
 === "Go"
 
-    ## 새 Go 모듈 만들기
+    **사전 요구 사항:** ADK Go v2.0.0에는 Go 1.25 이상이 필요합니다.
+
+    **새 Go 모듈 만들기**
 
     새 프로젝트를 시작하는 경우 새 Go 모듈을 만들 수 있습니다.
 
@@ -60,17 +62,27 @@ hide:
     go mod init example.com/my-agent
     ```
 
-    ## ADK 설치
+    **ADK Go v2.0.0 설치**
 
-    프로젝트에 ADK를 추가하려면 다음 명령을 실행합니다.
+    프로젝트에 ADK Go v2.0.0을 추가하려면 다음 명령을 실행합니다.
 
     ```shell
     go get google.golang.org/adk/v2
     ```
 
-    이렇게 하면 ADK가 `go.mod` 파일에 종속성으로 추가됩니다.
+    이렇게 하면 ADK Go v2.0.0이 `go.mod` 파일에 종속성으로 추가됩니다.
 
     (선택 사항) `go.mod` 파일에서 `google.golang.org/adk/v2` 항목을 확인하여 설치를 확인합니다.
+
+    ??? tip "아직 ADK Go v1.x를 사용하고 있나요?"
+
+        아직 v2.0.0으로 업그레이드할 준비가 되지 않았다면 v1.x 릴리스 라인을 계속 사용할 수 있습니다.
+
+        ```shell
+        go get google.golang.org/adk@v1
+        ```
+
+        ADK Go 1.x 프로젝트의 주요 변경 사항 및 마이그레이션 단계를 포함한 업그레이드 안내는 [ADK 2.0 릴리스 페이지](/ko/2.0/)를 참고하세요.
 
 === "Java"
 
@@ -142,8 +154,8 @@ hide:
     }
 
     dependencies {
-        implementation("com.google.adk:google-adk-kotlin-core:1.4.0")
-        ksp("com.google.adk:google-adk-kotlin-processor:1.4.0")
+        implementation("com.google.adk:google-adk-kotlin-core:1.5.0")
+        ksp("com.google.adk:google-adk-kotlin-processor:1.5.0")
     }
     ```
 

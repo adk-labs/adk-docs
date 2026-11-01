@@ -179,39 +179,32 @@ pip install "google-adk[bigquery-analytics]>=2.7.0"
 === "Kotlin"
 
     플러그인을 에이전트의 `App` 객체에 추가합니다. 전제 조건은
-    [전제 조건](#prerequisites)을 참고하세요. The plugin is JVM-only and ships outside
-    core, so add the integrations artifact:
+    [전제 조건](#prerequisites)을 참고하세요. 이 플러그인은 JVM 전용이며 코어 외부에서
+    제공되므로 통합(integrations) 아티팩트를 추가합니다.
 
     ```kotlin title="build.gradle.kts"
-    implementation("com.google.adk:google-adk-kotlin-integrations:1.3.1")
+    implementation("com.google.adk:google-adk-kotlin-integrations:1.5.0")
     ```
 
     ```kotlin title="BigQueryAnalyticsExample.kt"
     --8<-- "examples/kotlin/snippets/integrations/BigQueryAnalyticsExample.kt:quickstart"
     ```
 
-    The plugin creates the events table on first use, so the credentials in
-    scope need permission to create a table in the dataset, not only to insert
-    rows. Set `location` to your dataset's location; it defaults to `"US"`. For
-    the full set of options, see [Configuration
-    options](#configuration-options).
+    플러그인은 처음 사용할 때 이벤트 테이블을 생성하므로 범위 내의 사용자 인증 정보에는
+    행을 삽입할 권한뿐만 아니라 데이터 세트에 테이블을 생성할 권한도 필요합니다.
+    `location`을 데이터 세트의 위치로 설정하세요(기본값은 `"US"`). 전체 옵션 세트는
+    [구성 옵션](#configuration-options)을 참고하세요.
 
-    Logging never fails the turn: if the table cannot be created or a row cannot
-    be inserted, the plugin logs the error and the invocation continues. When
-    rows are missing, enable logging for
-    `com.google.adk.kt.plugins.agentanalytics.BigQueryAgentAnalyticsPlugin` —
-    logs are emitted under that class name, not under the plugin's ADK name
-    (`bigquery_agent_analytics`).
+    로깅 실패로 인해 턴이 실패하지는 않습니다. 테이블을 생성할 수 없거나 행을 삽입할 수 없는 경우
+    플러그인은 오류를 로그에 기록하고 호출은 계속 진행됩니다. 행이 누락된 경우
+    `com.google.adk.kt.plugins.agentanalytics.BigQueryAgentAnalyticsPlugin`에 대한 로깅을
+    활성화하세요. 로그는 플러그인의 ADK 이름(`bigquery_agent_analytics`)이 아닌 해당 클래스 이름으로
+    출력됩니다.
 
 
 ### 에이전트 실행 및 테스트
 
-Test the plugin by running the agent and making a few requests through the chat
-interface, such as "tell me what you can do" or "List datasets in my cloud
-project <your-gcp-project-id>". These actions create events which are recorded
-in your Google Cloud project BigQuery instance. Once these events have been
-processed, you can view the data for them in the [BigQuery
-Console](https://console.cloud.google.com/bigquery), using this query:
+에이전트를 실행하고 채팅 인터페이스를 통해 "무엇을 할 수 있는지 알려줘" 또는 "내 클라우드 프로젝트 `<your-gcp-project-id>`의 데이터 세트를 나열해 줘"와 같은 몇 가지 요청을 보내 플러그인을 테스트합니다. 이러한 작업은 Google Cloud 프로젝트의 BigQuery 인스턴스에 기록되는 이벤트를 생성합니다. 이벤트가 처리되면 [BigQuery 콘솔](https://console.cloud.google.com/bigquery)에서 다음 쿼리를 사용하여 데이터를 확인할 수 있습니다.
 
 ```sql
 SELECT timestamp, event_type, content
@@ -512,6 +505,7 @@ LIMIT 20;
     | `config` | `Optional[BigQueryLoggerConfig]` | `None` | 세부 조정을 위한 구성 객체 전달 |
     | `location` | `str` | `"US"` | BigQuery 데이터 세트 위치와 일치(예: `"US"`, `"EU"`, `"us-central1"`) |
     | `credentials` | `Optional[google.auth.credentials.Credentials]` | `None` | [ADC](https://cloud.google.com/docs/authentication/application-default-credentials) 대신 명시적 서비스 계정, 가장(impersonated) 또는 프로젝트 간 사용자 인증 정보 사용 |
+    | `credentials_identifier` | `Optional[str]` | `None` | [공유 백그라운드 기록기](#shared-background-writer)를 공유할 플러그인 인스턴스를 명시적으로 선택합니다. 동등한 자격 증명과 기록기 설정을 가진 인스턴스에 대해서만 동일한 식별자를 사용하세요. `config`를 수정하지 않고 `config.credentials_identifier`보다 우선 적용됩니다. |
 
     ```python
     plugin = BigQueryAgentAnalyticsPlugin(
