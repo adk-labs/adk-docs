@@ -4,7 +4,7 @@
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
-`RunConfig` は、ライブセッションの動作を形作る設定を行います。エージェントの声のトーン、音声の文字起こし方法、ターン終了の判定タイミング、保持する会話履歴の量、適用する制限などを設定します。これを [`Runner.run_live()`](https://google.github.io/adk-docs/api-reference/python/) に渡すと、そのセッションにのみ適用されます。同じエージェントの 2 人のユーザーが、まったく異なる設定でセッションを実行できます。
+`RunConfig` は、ライブセッションの動作を形作る設定を行います。エージェントの声のトーン、音声の文字起こし方法、ターン終了の判定タイミング、保持する会話履歴の量、適用する制限などを設定します。これを [`Runner.run_live()`](../api-reference/python/google-adk.html#google.adk.runners.Runner.run_live) に渡すと、そのセッションにのみ適用されます。同じエージェントの 2 人のユーザーが、まったく異なる設定でセッションを実行できます。
 
 `RunConfig` はライブ専用ではありません。[ランタイム設定](../runtime/runconfig.md) では、クラス全体と `run_async()` に適用されるフィールドについて説明しています。以下では、ネイティブ音声モデルに対して `run_live()` において重要となるサブセットについて説明します。[カスケードアーキテクチャ](architectures/cascade.md#configure-a-cascaded-agent)を使用するエージェントの場合は、代わりに音声プロバイダ側で音声とターン検出を設定してください。
 

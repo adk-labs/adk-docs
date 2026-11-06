@@ -62,7 +62,7 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
 *   [***OpenAPIToolset***](/ja/tools-custom/openapi-tools/): 初期化時に `auth_scheme` と `auth_credential` を設定します。
 *   [***APIHubToolset***](/ja/integrations/apigee-api-hub/): API が認証を必要とする場合は、初期化時に `auth_scheme` と `auth_credential` を設定します。
 *   [***ApplicationIntegrationToolset***](/ja/integrations/application-integration/): API が認証を必要とする場合は、初期化時に `auth_scheme` と `auth_credential` を設定します。
-*   [***GoogleApiToolSet***](https://github.com/google/adk-python/blob/main/src/google/adk/tools/google_api_tool/google_api_toolset.py): このツールセット専用の認証メソッドを使用します。
+*   [***GoogleApiToolset***](/ja/integrations/google-api-toolsets/): このツールセット専用の認証メソッドを使用します。
 
 他の事前構築済みツールや統合の認証詳細については、[ADK Integrations](/ja/integrations/) カタログを参照してください。
 

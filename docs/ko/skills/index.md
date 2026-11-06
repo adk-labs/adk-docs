@@ -1,16 +1,14 @@
 # ADK 에이전트용 스킬 (Skills)
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.25.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v1.2.0</span><span class="lst-preview">실험적</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.25.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v1.2.0</span>
 </div>
 
 에이전트 ***스킬(Skill)***은 ADK 에이전트가 특정 작업을 수행하는 데 사용할 수 있는 독립적인 기능 단위입니다. 에이전트 스킬은 [Agent Skill 사양](https://agentskills.io/specification)을 기반으로 작업에 필요한 지침, 리소스 및 도구를 캡슐화합니다. 스킬의 구조를 통해 점진적으로 로드하여 에이전트의 작동 컨텍스트 윈도우에 미치는 영향을 최소화할 수 있습니다.
 
-!!! example "실험적 기능"
-    스킬 기능은 실험적입니다. 각 ADK GitHub 리포지토리를 통한 여러분의 피드백을 환영합니다:
-    [ADK Python](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=skills),
+!!! example "TypeScript 및 Kotlin에서 실험적 기능"
+    스킬 기능은 ADK TypeScript 및 ADK Kotlin에서 실험적 기능입니다. 각 ADK GitHub 리포지토리를 통한 여러분의 피드백을 환영합니다:
     [ADK TypeScript](https://github.com/google/adk-js/issues/new?template=feature_request.md&labels=skills),
-    [ADK Go](https://github.com/google/adk-go/issues/new?template=feature_request.md&labels=skills),
     [ADK Kotlin](https://github.com/google/adk-kotlin/issues/new).
 
 ## 시작하기

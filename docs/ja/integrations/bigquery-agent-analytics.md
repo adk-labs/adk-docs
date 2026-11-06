@@ -8,24 +8,29 @@ catalog_tags: ["observability", "google"]
 # ADK 向け BigQuery Agent Analytics プラグイン
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v1.21.0</span><span class="lst-java">Java v1.5.0</span><span class="lst-kotlin">Kotlin v0.8.0</span>
+  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v1.21.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v1.5.0</span><span class="lst-kotlin">Kotlin v0.8.0</span>
 </div>
 
 BigQuery Agent Analytics プラグインは、エージェントの動作を詳細に分析するための堅牢なソリューションを提供することにより、Agent Development Kit（ADK）を大幅に強化します。ADK プラグインアーキテクチャと **BigQuery Storage Write API** を使用して、重要な運用イベントを Google BigQuery テーブルに直接キャプチャしてログに記録し、デバッグ、リアルタイム監視、および包括的なオフラインパフォーマンス評価のための高度な機能を提供します。
 
-また、本プラグインは **自動スキーマアップグレード（Auto Schema Upgrade）**（既存テーブルへの新しい列の安全な追加）、**ツールの出所追跡（Tool Provenance）**（LOCAL、MCP、SUB_AGENT、A2A、TRANSFER_AGENT、TRANSFER_A2A）、ヒューマンインザループ（HITL）インタラクション向けの **HITL イベントトレース**、および **自動ビュー作成（Automatic View Creation）**（クエリしやすいフラットなイベントビューの生成）を提供します。
+また、本プラグインは **自動スキーマアップグレード（Auto Schema Upgrade）**（既存テーブルへの新しい列の安全な追加）、**ツールの出所追跡（Tool Provenance）**（`LOCAL`、`MCP`、`SUB_AGENT`、`A2A`、`TRANSFER_AGENT`、`TRANSFER_A2A`、`TOOLBOX`、`SKILL`）、ヒューマンインザループ（HITL）インタラクション向けの **HITL イベントトレース**、および **自動ビュー作成（Automatic View Creation）**（クエリしやすいフラットなイベントビューの生成）を提供します。
 
-**ADK 2.0** マルチエージェントワークフローのサポートにより、エージェントのハンドオフ、状態チェックポイント、イベント圧縮（compaction）、および長時間実行ツールのトレースまで拡張されます。4 つの新しいイベントタイプ（`AGENT_TRANSFER`、`AGENT_STATE_CHECKPOINT`、`EVENT_COMPACTION`、`TOOL_PAUSED`）が追加されました。また、すべての行に `attributes.adk` エンベロープをスタンプするため、エージェントの実行グラフを再構築し、一時停止されたツールをそれを再開する行と結合できます。**Java** では、現在このサポートは `TOOL_PAUSED` イベントおよびその一時停止/再開ペアリングキーのみを対象としており（`attributes.adk` エンベロープは含みません）、詳細については [エージェントワークフローと一時停止/再開イベント（ADK 2.0）](#adk-2-events) を参照してください。
+**ADK 2.0** マルチエージェントワークフローのサポートにより、**Python** および **Go** においてエージェントのハンドオフ、状態チェックポイント、イベント圧縮（compaction）、および長時間実行ツールのトレースまで拡張されます。4 つのワークフローイベントタイプ（`AGENT_TRANSFER`、`AGENT_STATE_CHECKPOINT`（Go では `CustomMetadataAllowlist` でチェックポイントキーが有効になっている場合に出力）、`EVENT_COMPACTION`、`TOOL_PAUSED`）が追加されました。また、すべての行に `attributes.adk` エンベロープをスタンプするため、エージェントの実行グラフを再構築し、一時停止されたツールをそれを再開する行と結合できます。**Java** では、現在このサポートは `TOOL_PAUSED` イベントおよびその一時停止/再開ペアリングキーのみを対象としており（`attributes.adk` エンベロープは含みません）、詳細については [エージェントワークフローと一時停止/再開イベント（ADK 2.0）](#adk-2-events) を参照してください。
 
-プラグインには 3 つの信頼性と可観測性の修正が含まれています（Java: v1.7.0 以降）:
+プラグインには 3 つの信頼性と可観測性の機能が含まれています（Java: v1.7.0 以降、Go）:
 
 - **クロスリージョン Storage Write API ルーティング:** `US` マルチリージョン以外（例: `EU` や `northamerica-northeast1`）の BigQuery データセットへの書き込みが、書き込みストリームを所有するリージョンにルーティングされるようになりました。以前は「session not found」/ stream-not-found エラーで失敗し、すべての行が暗黙的にドロップされる可能性がありました。
-- **配信およびコンテンツインシデントの可観測性:** 配信損失が原因別に追跡されます。また、Python ではセンチネル行が書き込まれるフォーマッタおよびパーサーのエラーもカウントされます。これらのカウンタは `BigQueryAgentAnalyticsPlugin.get_drop_stats()`（Python）または `getDropStats()`（Java）を介して公開されるため、ホストがポーリングして独自のモニタリングにエクスポートできます。原因キーとセマンティクスは言語によって異なります。[ドロップされたイベントの可観測性](#dropped-event-observability) を参照してください。
+- **配信およびコンテンツインシデントの可観測性:** 配信損失が原因別に追跡されます。また、Python と Go ではセンチネル行が書き込まれるフォーマッタのエラー（Python ではさらにパーサーのエラー）もカウントされます。これらのカウンタは `BigQueryAgentAnalyticsPlugin.get_drop_stats()`（Python）、`DropStats()`（Go、`agentanalytics.AsBigQueryAgentAnalyticsPlugin` 経由）、または `getDropStats()`（Java）を介して公開されるため、ホストがポーリングして独自のモニタリングにエクスポートできます。原因キーとセマンティクスは言語によって異なります。[ドロップされたイベントの可観測性](#dropped-event-observability) を参照してください。
 - **Cloud Trace における重複スパンの防止:** Agent Engine テレメトリ（`GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true`）またはその他の Cloud Trace エクスポーターがグローバルトレーサープロバイダーに接続されている場合、プラグインは各フレームワークスパンの横に重複したスパンを生成しなくなりました。プラグインは依然として周囲の OTel スパンから `trace_id` を継承するため、BigQuery の行は Cloud Trace トレースとスムーズに結合されます。
 
-Python v2.7.0 以降では、すべての行が書き込みキューに入る前に安定した `event_id` を受け取ります。この ID は Storage Write API の再試行全体で保持されるため、コンシューマは再試行による重複を識別できます。オプトインの `exactly_once_delivery` モードは、コミット済みストリームと明示的なオフセットを使用して、ライブプロセッサ内での曖昧な再試行による重複を防ぎます。このモードはロスレス配信を保証するものではありません。[配信と重複排除](#delivery-and-deduplication) を参照してください。
+Python（v2.7.0 以降）および Go では、すべての行が書き込みキューに入る前に安定した 32 文字の 16 進数 `event_id` を受け取ります。この ID は Storage Write API の再試行全体で保持されるため、コンシューマは再試行による重複を識別できます。オプトインの `exactly_once_delivery`（Go では `ExactlyOnceDelivery`）モードは、コミット済みストリームと明示的なオフセットを使用して、ライブプロセッサ内での曖昧な再試行による重複を防ぎます。このモードはロスレス配信を保証するものではなく、ストリームローテーションや `ResourceExhausted` の再試行処理は Python と Go で異なります。[配信と重複排除](#delivery-and-deduplication) を参照してください。
 
-同じ Python リリースで、モデルとワークフローの終了詳細が追加されました。最終的な `LLM_RESPONSE` 行には `finish_reason` が含まれ、モデルから提供された場合はサニタイズされた `error_message` が含まれます。ワークフローノードは `NODE_OUTPUT` と `NODE_ERROR` を出力でき、未処理のエージェントまたは実行例外は `AGENT_ERROR` と `INVOCATION_ERROR` を出力します。
+Python（v2.7.0 以降）および Go では、モデルとワークフローの終了詳細もキャプチャされます。最終的な `LLM_RESPONSE` 行には `finish_reason` が含まれ、モデルから提供された場合はサニタイズされた `error_message` が含まれます。ワークフローノードは `NODE_OUTPUT` と `NODE_ERROR` を出力でき、エージェントまたは実行の失敗は `AGENT_ERROR` と `INVOCATION_ERROR` を出力します（Go では、`AGENT_ERROR` は ADK が `AfterAgent` コールバックなしで処理する失敗したアクティベーションも対象とします）。
+
+ADK Python v2.13.0 以降では、プラグインに次の機能が追加されています:
+
+- **ツール結果のエラー分類**（`tool_result_classifier` および `ToolResultClassification`）: `isError=True` / `is_error=True` を持つ MCP ツール結果および `ReflectAndRetryToolPlugin` のエラー応答の組み込み検出と並行して動作し、例外を発生させる代わりに戻り値で失敗を報告するツールが `TOOL_ERROR` 行として記録されます。
+- **エージェント評価ビュー**（`create_eval_views=True`、またはオンデマンドの `await plugin.create_eval_views()`）: BigQuery 内で直接 `AgentData` 評価トレースを再構築する `v_eval_session` および `v_eval_turn` ビューを作成します。
 
 !!! warning "BigQuery Storage Write API"
 
@@ -35,7 +40,7 @@ Python v2.7.0 以降では、すべての行が書き込みキューに入る前
 
     **Kotlin** プラグインは呼び出しライフサイクルイベントをログに記録します。呼び出しが開始されたときに `INVOCATION_STARTING` 行を書き込み、終了したときに `INVOCATION_COMPLETED` 行を書き込み、まだ存在しない場合は初回使用時にパーティション分割およびクラスタ化されたイベントテーブルを作成します。
 
-    行は、Python や Java で使用される Storage Write API ではなく、呼び出しパス上で同期的に `tabledata.insertAll` を介して 1 行ずつ挿入されます。
+    行は、Python、Go、および Java で使用される Storage Write API ではなく、呼び出しパス上で同期的に `tabledata.insertAll` を介して 1 行ずつ挿入されます。
 
     Kotlin では、LLM、ツール、エージェント、状態、HITL、A2A イベント、ADK 2.0 ワークフローイベント、自動ビュー作成、自動スキーマアップグレード、ツールの出所追跡、GCS オフロード、ドロップ統計は実装されていません。
 
@@ -45,18 +50,21 @@ Python v2.7.0 以降では、すべての行が書き込みキューに入る前
 - **大量の分析とデバッグ:** 高スループットと低レイテンシを実現するために、Storage Write API を使用して非同期でロギング操作を実行します。
 - **マルチモーダル分析:** テキスト、画像、その他のモダリティをログに記録して分析します。大きなファイルは GCS にオフロードされ、Object Tables 経由で BigQuery ML からアクセス可能になります。
 - **分散トレース:** エージェントの実行フローを視覚化するために、OpenTelemetry スタイルのトレース（`trace_id`、`span_id`）をネイティブにサポートします。
-- **ツールの出所追跡:** 各ツール呼び出しの出所（ローカル関数、MCP サーバー、サブエージェント、A2A リモートエージェント、または転送エージェント）を追跡します。
+- **ツールの出所追跡:** 各ツール呼び出しの出所（ローカル関数、MCP サーバー、サブエージェント、A2A リモートエージェント、転送エージェント、Toolbox ツール、または Skill ツールセット）を追跡します。
 - **Human-in-the-Loop（HITL）トレース:** 認証情報リクエスト、確認プロンプト、およびユーザー入力リクエスト専用のイベントタイプを提供します。
 - **エージェントワークフローのトレース（ADK 2.0）:** 実行グラフを再構築するための `attributes.adk` エンベロープとともに、エージェント転送、状態チェックポイント、イベント圧縮、および長時間実行ツールの一時停止/再開をキャプチャします。
 - **クエリ可能なイベントビュー:** JSON ペイロードデータを unnest してダウンストリーム分析を簡素化する、イベントタイプごとのフラットな BigQuery ビュー（例: `v_llm_request`、`v_tool_completed`）を自動的に作成します。
 
 ### キャプチャされたイベントの概要
 
-次の表は、プラグインが記録するすべてのイベントタイプの一覧です。詳細なペイロードの例については、[イベントタイプとペイロード](#event-types) を参照してください。**ビュー** 列はオプションの BigQuery ビューを示します。Python はデフォルトでビューを作成します。Java は `createViews(true)` が構成されている場合にのみビューを作成します。
+次の表は、プラグインが記録するすべてのイベントタイプの一覧です。詳細なペイロードの例については、[イベントタイプとペイロード](#event-types) を参照してください。**ビュー** 列はオプションの BigQuery ビューを示します。Python と Go はデフォルトでビューを作成します。Java は `createViews(true)` が構成されている場合にのみビューを作成します。
 
-**Kotlin** では、プラグインは `INVOCATION_STARTING` と `INVOCATION_COMPLETED` のみを記録し、ビューを作成しないため、他の行および **ビュー** 列全体は Python および Java に適用されます。
+**Kotlin** では、プラグインは `INVOCATION_STARTING` と `INVOCATION_COMPLETED` のみを記録し、ビューを作成しないため、他の行および **ビュー** 列全体は Python、Go、および Java に適用されます。
 
-この表は、Python と Java のイベントセットの和集合です。`INVOCATION_ERROR`、`AGENT_ERROR`、`AGENT_TRANSFER`、`AGENT_STATE_CHECKPOINT`、`EVENT_COMPACTION`、`NODE_OUTPUT`、`NODE_ERROR` は Python 専用です。Java は `TOOL_PAUSED` を出力しますが、他のワークフロー固有のイベントは出力しません。残りの行は両方の言語に適用されます。
+ADK Python v2.13.0 と Go は以下の 28 個のイベントタイプをサポートし、イベントタイプごとの 25 個のビューを提供します。3 つの HITL 完了イベントには専用のビューがありません。
+
+- **Python** と **Go** は表内の全 28 個のイベントタイプを出力します。
+- **Java** は表内の 28 個のイベントタイプのうち 21 個を出力します（`INVOCATION_ERROR`、`AGENT_ERROR`、`AGENT_TRANSFER`、`AGENT_STATE_CHECKPOINT`、`EVENT_COMPACTION`、`NODE_OUTPUT`、`NODE_ERROR` を除くすべての行。ワークフローイベントのうち、Java は `TOOL_PAUSED` を出力します）。
 
 | イベントタイプ | キャプチャのタイミング | 主要なペイロードフィールド | ビュー |
 | --- | --- | --- | --- |
@@ -64,9 +72,9 @@ Python v2.7.0 以降では、すべての行が書き込みキューに入る前
 | `INVOCATION_STARTING` | 呼び出しが開始されたとき | *(共通列のみ)* | `v_invocation_starting` |
 | `INVOCATION_COMPLETED` | 呼び出しが終了したとき | *(共通列のみ)* | `v_invocation_completed` |
 | `INVOCATION_ERROR` | 呼び出しが未処理の例外で失敗したとき | エラーメッセージ、サニタイズされたトレースバック | `v_invocation_error` |
-| `AGENT_STARTING` | エージェントの実行が開始されたとき | 指示の要約 | `v_agent_starting` |
+| `AGENT_STARTING` | エージェントの実行が開始されたとき | 指示テキスト。ADK Python v2.12.0+ では、指示ソース、静的指示、説明、モデル、サブエージェント名も含む（Go はエージェント自体に設定されている場合に `instruction_source`、`agent_description`、`sub_agents`、`model` を記録し、`static_instruction` は設定しません） | `v_agent_starting` |
 | `AGENT_COMPLETED` | エージェントの実行が終了したとき | レイテンシ | `v_agent_completed` |
-| `AGENT_ERROR` | エージェントの実行が未処理の例外で失敗したとき | エラーメッセージ、サニタイズされたトレースバック、レイテンシ | `v_agent_error` |
+| `AGENT_ERROR` | エージェントの実行が失敗したとき（Go では、ADK が `AfterAgent` コールバックなしで処理する失敗したアクティベーションも含む） | エラーメッセージ、サニタイズされたトレースバック、レイテンシ | `v_agent_error` |
 | `LLM_REQUEST` | モデルリクエストが送信されたとき | モデル、プロンプト、設定、ツール | `v_llm_request` |
 | `LLM_RESPONSE` | モデル応答を受信したとき | 応答、使用トークン、キャッシュメタデータ、終了理由、レイテンシ、TTFT | `v_llm_response` |
 | `LLM_ERROR` | モデル呼び出しが失敗したとき | エラーメッセージ、レイテンシ | `v_llm_error` |
@@ -83,7 +91,7 @@ Python v2.7.0 以降では、すべての行が書き込みキューに入る前
 | `A2A_INTERACTION` | リモート A2A 呼び出しが完了したとき | 応答、タスク ID、コンテキスト ID、リクエスト/レスポンス | `v_a2a_interaction` |
 | `AGENT_RESPONSE` | 最終的なエージェント応答が生成されたとき | 応答（content）、ソースイベント ID/作成者/ブランチ（attributes） | `v_agent_response` |
 | `AGENT_TRANSFER` | あるエージェントが別のエージェントに制御を渡したとき | 転送元エージェント、転送先エージェント、ソースイベント ID | `v_agent_transfer` |
-| `AGENT_STATE_CHECKPOINT` | エージェントが状態のスナップショットを作成したとき（または実行終了をマークしたとき） | エージェント状態、エージェント終了フラグ、ソースイベント ID | `v_agent_state_checkpoint` |
+| `AGENT_STATE_CHECKPOINT` | エージェントが状態のスナップショットを作成したとき（または実行終了をマークしたとき）。Go では `CustomMetadataAllowlist` でチェックポイントキーが有効になっている場合に出力 | エージェント状態、エージェント終了フラグ、ソースイベント ID | `v_agent_state_checkpoint` |
 | `EVENT_COMPACTION` | 一連のイベント期間が要約に圧縮されたとき | ウィンドウの開始/終了タイムスタンプ、圧縮されたコンテンツ | `v_event_compaction` |
 | `TOOL_PAUSED` | 長時間実行ツール（または HITL リクエスト）が一時停止し、再開を待機しているとき | ツール名、引数、一時停止の種類、関数呼び出し ID | `v_tool_paused` |
 | `NODE_OUTPUT` | ワークフローノードが最終的な構造化出力を出力したとき | 出力、ノードパス、実行 ID、親実行 ID | `v_node_output` |
@@ -91,13 +99,24 @@ Python v2.7.0 以降では、すべての行が書き込みキューに入る前
 
 ## インストール
 
-Python の場合、専用の BigQuery Agent Analytics エクストラ（extra）を使用して ADK をインストールします。このエクストラには、プラグインに必要な BigQuery クライアント、Cloud Storage クライアント、および `pyarrow` が含まれています。
+=== "Python"
 
-```bash
-pip install "google-adk[bigquery-analytics]>=2.7.0"
-```
+    専用の BigQuery Agent Analytics エクストラ（extra）を使用して ADK をインストールします。このエクストラには、プラグインに必要な BigQuery クライアント、Cloud Storage クライアント、および `pyarrow` が含まれています。
 
-`pyarrow` の依存関係は、一般的な `gcp` エクストラには含まれなくなりました。`pyarrow` が不足している場合、プラグインのインポートエラーによってインストールすべき `bigquery-analytics` エクストラが示されます。
+    ```bash
+    pip install "google-adk[bigquery-analytics]>=2.7.0"
+    ```
+
+    `pyarrow` の依存関係は、一般的な `gcp` エクストラには含まれなくなりました。`pyarrow` が不足している場合、プラグインのインポートエラーによってインストールすべき `bigquery-analytics` エクストラが示されます。
+
+=== "Go"
+
+    Go プラグインは、コア ADK アプリケーションが必要でない限り BigQuery および Cloud Storage クライアントの依存関係を取り込まないように、`adk-go` リポジトリ内の独立した Go サブモジュール（`plugin/agentanalytics/go.mod`）として公開されています。Go プラグインはコア `google.golang.org/adk/v2` とは別にバージョン管理されています（`module google.golang.org/adk/plugin/agentanalytics`、`/v2` メジャーバージョンサフィックスなし。プラグインリリース `v0.1.0` から `plugin/agentanalytics/v0.1.0` としてタグ付けされており、サポートバッジの `Go v0.1.0` はこれを示します）。`go get` を使用してコア ADK Go（`v2.0.0+`）とプラグインモジュールをインストールします（`@latest` は最新のタグ付きリリースに解決されます。または `google.golang.org/adk/plugin/agentanalytics@v0.1.0` のように明示的なプラグインリリースを固定することもできます）:
+
+    ```bash
+    go get google.golang.org/adk/v2@latest
+    go get google.golang.org/adk/plugin/agentanalytics@latest
+    ```
 
 ## クイックスタート
 
@@ -133,6 +152,95 @@ pip install "google-adk[bigquery-analytics]>=2.7.0"
         root_agent=root_agent,
         plugins=[plugin],
     )
+    ```
+
+=== "Go"
+
+    `agentanalytics.NewBigQueryAgentAnalyticsPlugin` でプラグインを作成し、`PluginConfig` を介して `runner.New` に渡します。ADK Go のランナーはプラグインを自動的にクローズしないため、終了前にバッファリングされたイベントをフラッシュして BigQuery クライアントを解放するために、実行関数内で `defer bqPlugin.Close()` を呼び出してください。前提条件については、[前提条件](#prerequisites) を参照してください。
+
+    ```go title="main.go"
+    package main
+
+    import (
+    	"context"
+    	"fmt"
+    	"log"
+
+    	"google.golang.org/adk/plugin/agentanalytics"
+    	"google.golang.org/adk/v2/agent"
+    	"google.golang.org/adk/v2/agent/llmagent"
+    	"google.golang.org/adk/v2/model/gemini"
+    	"google.golang.org/adk/v2/plugin"
+    	"google.golang.org/adk/v2/runner"
+    	"google.golang.org/adk/v2/session"
+    	"google.golang.org/genai"
+    )
+
+    func run(ctx context.Context) error {
+    	bqPlugin, err := agentanalytics.NewBigQueryAgentAnalyticsPlugin(
+    		ctx,
+    		"your-gcp-project-id",
+    		"your-big-query-dataset-id",
+    		"agent_events",
+    	)
+    	if err != nil {
+    		return fmt.Errorf("create BigQuery plugin: %w", err)
+    	}
+    	defer bqPlugin.Close()
+
+    	model, err := gemini.NewModel(ctx, "gemini-flash-latest", &genai.ClientConfig{
+    		Project:  "your-gcp-project-id",
+    		Location: "us-central1",
+    		Backend:  genai.BackendVertexAI,
+    	})
+    	if err != nil {
+    		return fmt.Errorf("create model: %w", err)
+    	}
+
+    	myAgent, err := llmagent.New(llmagent.Config{
+    		Name:        "my_agent",
+    		Model:       model,
+    		Instruction: "You are a helpful assistant.",
+    	})
+    	if err != nil {
+    		return fmt.Errorf("create agent: %w", err)
+    	}
+
+    	sessionService := session.InMemoryService()
+    	r, err := runner.New(runner.Config{
+    		AppName:        "my_agent",
+    		Agent:          myAgent,
+    		SessionService: sessionService,
+    		PluginConfig: runner.PluginConfig{
+    			Plugins: []*plugin.Plugin{bqPlugin},
+    		},
+    	})
+    	if err != nil {
+    		return fmt.Errorf("create runner: %w", err)
+    	}
+
+    	sessResp, err := sessionService.Create(ctx, &session.CreateRequest{
+    		AppName: "my_agent",
+    		UserID:  "demo_user",
+    	})
+    	if err != nil {
+    		return fmt.Errorf("create session: %w", err)
+    	}
+
+    	userMsg := genai.NewContentFromText("Hello!", genai.RoleUser)
+    	for _, err := range r.Run(ctx, "demo_user", sessResp.Session.ID(), userMsg, agent.RunConfig{}) {
+    		if err != nil {
+    			return fmt.Errorf("run error: %w", err)
+    		}
+    	}
+    	return nil
+    }
+
+    func main() {
+    	if err := run(context.Background()); err != nil {
+    		log.Fatal(err)
+    	}
+    }
     ```
 
 === "Java"
@@ -207,7 +315,7 @@ ORDER BY timestamp DESC
 LIMIT 20;
 ```
 
-??? example "Full example with GCS offloading, OpenTelemetry, and BigQuery tools"
+??? example "Full example with GCS offloading, OpenTelemetry, and tools"
 
     === "Python"
 
@@ -298,6 +406,136 @@ LIMIT 20;
             root_agent=root_agent,
             plugins=[bq_logging_plugin],
         )
+        ```
+
+    === "Go"
+
+        以下の Go の例では、カスタム `functiontool`（`reverse_string`）を登録しています。ADK Go ランナー自体は OpenTelemetry スパンを開始しないため、`cfg.EnableOTelCorrelation = true` は、`r.Run` を呼び出す前にホストアプリケーションが `ctx` 内でアクティブな OpenTelemetry スパンを開始した場合にのみ `attributes.otel` を記録することに注意してください。
+
+        ```go title="main.go"
+        package main
+
+        import (
+        	"context"
+        	"fmt"
+        	"log"
+        	"os"
+        	"time"
+
+        	"google.golang.org/adk/plugin/agentanalytics"
+        	"google.golang.org/adk/v2/agent"
+        	"google.golang.org/adk/v2/agent/llmagent"
+        	"google.golang.org/adk/v2/model/gemini"
+        	"google.golang.org/adk/v2/plugin"
+        	"google.golang.org/adk/v2/runner"
+        	"google.golang.org/adk/v2/session"
+        	"google.golang.org/adk/v2/tool"
+        	"google.golang.org/adk/v2/tool/functiontool"
+        	"google.golang.org/genai"
+        )
+
+        type ReverseArgs struct {
+        	Input string `json:"input" jsonschema:"Text to reverse."`
+        }
+
+        func reverseString(_ agent.Context, args ReverseArgs) (map[string]any, error) {
+        	runes := []rune(args.Input)
+        	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+        		runes[i], runes[j] = runes[j], runes[i]
+        	}
+        	return map[string]any{"reversed": string(runes)}, nil
+        }
+
+        func run(ctx context.Context) error {
+        	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
+        	datasetID := os.Getenv("BIG_QUERY_DATASET_ID")
+        	gcsBucket := os.Getenv("GCS_BUCKET_NAME")
+
+        	cfg := agentanalytics.DefaultConfig()
+        	cfg.ProjectID = projectID
+        	cfg.DatasetID = datasetID
+        	cfg.TableName = "agent_events"
+        	cfg.GCSBucketName = gcsBucket
+        	cfg.LogMultiModalContent = true
+        	cfg.MaxContentLen = 500 * 1024
+        	cfg.EnableOTelCorrelation = true
+        	cfg.ShutdownTimeout = 10 * time.Second
+
+        	bqPlugin, err := agentanalytics.NewBigQueryAgentAnalyticsPluginWithConfig(ctx, cfg)
+        	if err != nil {
+        		return fmt.Errorf("failed to create BigQuery plugin: %w", err)
+        	}
+        	defer bqPlugin.Close()
+
+        	reverseTool, err := functiontool.New(functiontool.Config{
+        		Name:        "reverse_string",
+        		Description: "Reverses the provided input string.",
+        	}, reverseString)
+        	if err != nil {
+        		return fmt.Errorf("failed to create tool: %w", err)
+        	}
+
+        	model, err := gemini.NewModel(ctx, "gemini-flash-latest", &genai.ClientConfig{
+        		Project:  projectID,
+        		Location: "us-central1",
+        		Backend:  genai.BackendVertexAI,
+        	})
+        	if err != nil {
+        		return fmt.Errorf("failed to create model: %w", err)
+        	}
+
+        	demoAgent, err := llmagent.New(llmagent.Config{
+        		Name:        "bq_demo_agent",
+        		Model:       model,
+        		Instruction: "You are a helpful assistant. Use reverse_string when asked to reverse text.",
+        		Tools:       []tool.Tool{reverseTool},
+        	})
+        	if err != nil {
+        		return fmt.Errorf("failed to create agent: %w", err)
+        	}
+
+        	sessionService := session.InMemoryService()
+        	r, err := runner.New(runner.Config{
+        		AppName:        "bq_demo_agent",
+        		Agent:          demoAgent,
+        		SessionService: sessionService,
+        		PluginConfig: runner.PluginConfig{
+        			Plugins: []*plugin.Plugin{bqPlugin},
+        		},
+        	})
+        	if err != nil {
+        		return fmt.Errorf("failed to create runner: %w", err)
+        	}
+
+        	sessResp, err := sessionService.Create(ctx, &session.CreateRequest{
+        		AppName: "bq_demo_agent",
+        		UserID:  "demo_user",
+        	})
+        	if err != nil {
+        		return fmt.Errorf("failed to create session: %w", err)
+        	}
+
+        	userMsg := genai.NewContentFromText("Please reverse the word 'analytics'.", genai.RoleUser)
+        	for event, err := range r.Run(ctx, "demo_user", sessResp.Session.ID(), userMsg, agent.RunConfig{}) {
+        		if err != nil {
+        			return fmt.Errorf("run error: %w", err)
+        		}
+        		if event.IsFinalResponse() && event.Content != nil {
+        			for _, part := range event.Content.Parts {
+        				if part.Text != "" {
+        					fmt.Printf("Agent: %s\n", part.Text)
+        				}
+        			}
+        		}
+        	}
+        	return nil
+        }
+
+        func main() {
+        	if err := run(context.Background()); err != nil {
+        		log.Fatal(err)
+        	}
+        }
         ```
 
     === "Java"
@@ -493,9 +731,11 @@ LIMIT 20;
 アカウント、ユーザーアカウントなど）に次の Google Cloud ロールが必要です。
 
 - `roles/bigquery.jobUser`: プロジェクトレベルで BigQuery クエリを実行するため
-- `roles/bigquery.dataEditor`: テーブルレベルでログ/イベントデータを書き込むため
+- `roles/bigquery.dataEditor`: イベントテーブルの作成またはアップグレード、イベントタイプごとのビューの作成（Python と Go はデフォルトでビューを作成）、およびログ/イベントデータの書き込みを行うためのデータセットレベル（イベントテーブルがすでに存在し、自動ビュー作成が無効になっている場合はテーブルレベル）の権限
 - **GCS オフロードを使う場合:** 対象バケットの `roles/storage.objectCreator` と
   `roles/storage.objectViewer`
+
+プリンシパルに対象テーブルのみの `roles/bigquery.dataEditor` がある場合、テーブル作成および自動ビュー作成（Python の `create_views=True`、Go の `DisableCreateViews: false`）は失敗します。データセットに対して `roles/bigquery.dataEditor` を付与するか、デプロイステップでテーブルとビューを事前作成してください（Python では `create_views=False`、Go では `DisableCreateViews: true` に加えて `bqPlugin.SyncViews(ctx)` または `cfg.ViewDefinitions()` を使用）。Go では、バックグラウンドのビュー作成の失敗は `agentanalytics.Config` に非デフォルトの `Logger` が構成されている場合にのみログ記録されるため、`Logger` を設定することを推奨します。
 
 ## 構成オプション {#configuration-options}
 
@@ -541,14 +781,15 @@ LIMIT 20;
     | `shutdown_timeout` | `float` | `10.0` | シャットダウン時に最終フラッシュを待機する時間（秒） |
     | `event_allowlist` | `Optional[List[str]]` | `None` | 選択したイベントタイプのみをログに記録 |
     | `event_denylist` | `Optional[List[str]]` | `None` | 機密性の高いイベントタイプやノイズの多いイベントタイプをスキップ |
-    | `content_formatter` | `Optional[Callable]` | `None` | イベントごとにカスタムマスキング/フォーマットを適用（シークレットの墨消しなど） |
+    | `content_formatter` | `Optional[Callable]` | `None` | イベントごとにカスタムマスキング/フォーマットを適用（`(content, event_type)` を受け取る） |
     | `log_multi_modal_content` | `bool` | `True` | GCS 参照を含む `content_parts` の詳細をキャプチャ |
-    | `queue_max_size` | `int` | `10000` | メモリ内のイベントキューサイズを制限 |
-    | `retry_config` | `Optional[RetryConfig]` | `None` | 再試行動作を調整 |
+    | `queue_max_size` | `int` | `10000` | メモリ内のイベントキューサイズを制限します。ADK Python v2.13.0 では、すべてのイベントタイプがこの容量を共有します。満杯のときは終了イベントである `INVOCATION_COMPLETED` および `INVOCATION_ERROR` 行もドロップされる可能性があり、`queue_full` としてカウントされます |
+    | `retry_config` | `RetryConfig` | `RetryConfig()` | 再試行動作を調整（`max_retries=3`, `initial_delay=1.0`, `multiplier=2.0`, `max_delay=10.0`） |
     | `log_session_metadata` | `bool` | `True` | `attributes` にセッション情報を追加（`session_id`, `app_name`, `user_id`, `state`）。`temp:` プレフィックスのキーは[墨消し](#built-in-redaction)されます。 |
     | `custom_tags` | `Dict[str, Any]` | `{}` | すべてのイベントの `attributes` に静的タグ（例: `{"env": "prod"}`）を追加 |
     | `auto_schema_upgrade` | `bool` | `True` | 既存のテーブルに新しい列を自動追加（追加のみ） |
     | `create_views` | `bool` | `True` | イベントタイプごとの BigQuery ビューを作成 |
+    | `create_eval_views` | `bool` | `False` | ADK Python v2.13.0 以降で、セットアップ中に[エージェント評価ビュー](#agent-evaluation-views)（`{view_prefix}_eval_session` および `{view_prefix}_eval_turn`）も作成 |
     | `view_prefix` | `str` | `"v"` | 複数のプラグインがデータセットを共有する場合のビュー名衝突を防止（例: `"v_staging"`） |
     | `enable_otel_correlation` | `bool` | `False` | ベストエフォートの Cloud Trace 結合キーとして周囲の OpenTelemetry スパンコンテキストを `attributes.otel.{span_id, trace_id}` にキャプチャ |
     | `custom_metadata_allowlist` | `Optional[List[str]]` | `None` | 選択した `event.custom_metadata` キーを `attributes.custom_metadata.*` にキャプチャ: 正確なキーまたは `"prefix*"` パターン。ADK Python v2.12.0 以降では、最終的な `LLM_RESPONSE` 行が `llm_response.custom_metadata` からキーをキャプチャします |
@@ -561,6 +802,7 @@ LIMIT 20;
     | `debug_content_formatter_errors` | `bool` | `False` | `content_formatter` によって発生した例外の制限付きトレースバックをプラグインのローカル Python ログ警告に追加。トレースバックには未フォーマットのコンテンツが含まれる可能性があり、BigQuery には書き込まれません |
     | `on_schema_error` | `Optional[Callable[[Exception], None]]` | `None` | ADK Python v2.12.0 以降で、[テーブル準備完了チェック](#table-readiness-callbacks)がテーブルの読み取り、作成、またはアップグレードに失敗するたびに、例外を引数として同期コールバックを実行。同期呼び出し可能オブジェクトでない値を渡すと、プラグイン構築時に `ValueError` が発生します |
     | `on_schema_ready` | `Optional[Callable[[], None]]` | `None` | ADK Python v2.12.0 以降で、要求されたすべてのビューを含め、[テーブル準備完了チェック](#table-readiness-callbacks)が成功するたびに引数なしの同期コールバックを実行。同期呼び出し可能オブジェクトでない値を渡すと、プラグイン構築時に `ValueError` が発生します |
+    | `tool_result_classifier` | `Optional[ToolResultClassifier]` | `None` | ADK Python v2.13.0 以降で、`ToolResultClassification`（または組み込みの MCP `isError` / `is_error` ルールにフォールバックする場合は `None`）を返す同期コールバックを介して、返されたツール結果を `"ERROR"` または `"OK"` として分類。[ツール結果のエラー分類](#tool-result-error-classification)を参照してください |
 
     次のコードサンプルは、BigQuery Agent Analytics プラグインの構成を定義する方法を示しています。
 
@@ -668,7 +910,7 @@ LIMIT 20;
     ### 配信と重複排除 {#delivery-and-deduplication}
 
     <div class="language-support-tag">
-      <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v2.7.0</span>
+      <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v2.7.0</span><span class="lst-go">Go v0.1.0</span>
     </div>
 
     すべての行は、エンキュー前に 32 文字の 16 進数 `event_id` を受け取ります。Storage Write API がその行を再試行する際にも同じ ID が再利用されるため、デフォルトの配信モードでの重複排除キーとして機能します。
@@ -683,13 +925,18 @@ LIMIT 20;
 
     `event_id IS NULL` 条件は、列が導入される前に書き込まれた行を保持します。
 
-    ループローカルなコミット済みストリームと明示的なオフセットを使用するには、`exactly_once_delivery=True` を設定します。これにより、最初の結果が曖昧だった再試行が、そのプロセッサの存続期間内に重複を作成するのを防ぎます。ストリームのローテーションが必要な場合、追加の BigQuery `CreateWriteStream` クォータを消費する可能性があります。
+    コミット済みストリームと明示的なオフセットを使用するには、`exactly_once_delivery=True`（Go では `ExactlyOnceDelivery: true`）を設定します。これにより、最初の結果が曖昧だった再試行が、そのプロセッサの存続期間内に重複を作成するのを防ぎます。ストリームのローテーションが必要な場合、追加の BigQuery `CreateWriteStream` クォータを消費する可能性があります。
 
     ```python
     config = BigQueryLoggerConfig(exactly_once_delivery=True)
     ```
 
-    その名前に反して、このオプションはロスレス配信を保証するものではありません。再試行の枯渇、オフセットの競合、または置換ストリームの失敗の後でも、バッチがドロップされる可能性があります。ストリームローテーションに失敗した後、30 秒のローテーションバックオフ中に到着したイベントもドロップされます。`offset_conflict` やその他の[ドロップ理由](#dropped-event-observability)を監視し、コンシューマ側の重複排除キーとして `event_id` を維持してください。
+    その名前に反して、このオプションはロスレス配信を保証するものではありません。再試行の枯渇、オフセットの競合、または置換ストリームの失敗の後でも、バッチがドロップされる可能性があります。ストリームローテーションに失敗した後、30 秒のローテーションバックオフ中に到着したイベントもドロップされます。`offset_conflict`（Go では `AppendFailureDrops`）やその他の[ドロップ理由](#dropped-event-observability)を監視し、コンシューマ側の重複排除キーとして `event_id` を維持してください。
+
+    **Go**（`cfg.ExactlyOnceDelivery = true`）では、ストリームローテーションと再試行の分類が Python とわずかに異なります:
+
+    - `OutOfRange`、`NotFound`、または予期しない `AlreadyExists` の後、Go はコミット済みストリームを（バッチごとに最大 1 回）置き換え、同じ追加処理内でバッチを再送信します。ただし、以前のバッチによってストリームがローテーションされ、まだコミットされていない場合（この場合はバッチをドロップしてローテーションを一時停止します）、またはそのバッチの以前の試行の結果が不明だった場合（この場合は重複を防ぐために `OutOfRange` または `NotFound` でバッチをドロップし、次のバッチの前にストリームを置き換えます）を除きます。Python はこれら 3 つのいずれかの後にバッチをドロップし、次のバッチの前にストリームを置き換えます。
+    - `Send` 成功後の RPC レベルの受信エラーにおいて、Go は `Unavailable`、`DeadlineExceeded`、`Canceled`、`Aborted`、`Internal`、および `Unknown` を結果不明として扱いますが、Python はこれらに加えて `ResourceExhausted`（`TooManyRequests`）も結果不明として扱います。
 
     ### テーブル準備完了コールバック {#table-readiness-callbacks}
 
@@ -707,6 +954,342 @@ LIMIT 20;
     チェックが成功した後は、`close()` 後、フォーク後、およびその後に pickle されたコピーを含め、同じプラグインの以降のセットアップではチェックがスキップされます。どちらのコールバックも再度トリガーされることはなく、それ以降のテーブル停止は行の書き込み時に[ドロップされた行](#dropped-event-observability)としてのみ現れます。チェックを待機していたセットアップがキャンセルされた場合、または `create_analytics_views()` の呼び出しがビューの作成に失敗した場合にのみ、以降のセットアップでチェックが再実行されます。すべてのビューを作成する `create_analytics_views()` の呼び出しにより、以降のセットアップはチェックをスキップするようになり、独自のビュー作成でコールバックが呼び出されることはありません。
 
     標準の `pickle` モジュールでプラグインをシリアライズする場合、コールバックはモジュールレベルの関数など、pickle 可能である必要があります。ラムダやクロージャは `pickle` でシリアライズできず、バインドされたメソッドはそのインスタンスを pickle します。
+
+    ### ツール結果のエラー分類 {#tool-result-error-classification}
+
+    <div class="language-support-tag">
+      <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v2.13.0</span>
+    </div>
+
+    多くのツールは、例外を発生させる代わりに構造化されたエラーペイロードを返します。ADK Python v2.13.0 以降では、`after_tool_callback` がすべてのツール結果を次の 3 つのステップで評価します:
+
+    1. **`ReflectAndRetryToolPlugin` のエラー応答**（`response_type` で識別）は、`error_details` または `error_type` を使用して常に `TOOL_ERROR` として記録されます。さらに、`on_tool_error_callback` がすでに記録した例外をツールが発生させた場合、同じ失敗が 2 回ログ記録されないように、後続のプラグインのフォールバック応答は `after_tool_callback` でスキップされます。発生したすべてのエラーを直接監視できるように、`ReflectAndRetryToolPlugin` などの再試行プラグインより前に `BigQueryAgentAnalyticsPlugin` を登録してください。
+    2. **カスタム `tool_result_classifier`**: `BigQueryLoggerConfig` で構成されている場合、プラグインは `tool_result_classifier(tool=..., tool_args=..., tool_context=..., result=...)` を呼び出します。分類器は同期的である必要があり、`ToolResultClassification(status="ERROR" | "OK", error_message=...)` または `None` を返す必要があります:
+       - `status="ERROR"` は、`status="ERROR"` および指定された `error_message`（省略された場合は固定のデフォルトメッセージ）を使用して、呼び出しを `TOOL_ERROR` としてログに記録します。未フォーマットのエラーペイロードが `content` に書き込まれないように、ツール結果自体は `TOOL_ERROR` のコンテンツから省略されます。`content_formatter` と `payload_column_denylist` は `error_message` には適用されないため、そのテキストの保存が許容される場合にのみツール出力を `error_message` にコピーしてください。
+       - `status="OK"` は、以下の組み込み MCP ルールがフラグ付けする場合であっても、呼び出しを `TOOL_COMPLETED` としてログに記録します。
+       - `None` は、判定を組み込みルールに委ねます。
+    3. **組み込みの MCP `isError` / `is_error` ルール**: トップレベルの `isError` または `is_error` が `True` である辞書の結果または MCP `CallToolResult` モデルは、固定メッセージ `"Tool returned an MCP result with isError=true."` とともに `TOOL_ERROR` として記録されます。
+
+    ```python
+    from google.adk.plugins.bigquery_agent_analytics_plugin import (
+        BigQueryLoggerConfig,
+        ToolResultClassification,
+    )
+
+    def classify_tool_result(*, tool, tool_args, tool_context, result):
+        if isinstance(result, dict) and result.get("status") == "ERROR":
+            return ToolResultClassification(
+                status="ERROR",
+                error_message=result.get("error_code", "tool returned status=ERROR"),
+            )
+        return None  # 組み込みの MCP isError / is_error チェックにフォールバック
+
+    config = BigQueryLoggerConfig(
+        tool_result_classifier=classify_tool_result,
+    )
+    ```
+
+    ### エージェント評価ビュー {#agent-evaluation-views}
+
+    <div class="language-support-tag">
+      <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v2.13.0</span>
+    </div>
+
+    `BigQueryLoggerConfig` で `create_eval_views=True` を設定する（またはオンデマンドで `await plugin.create_eval_views()` を呼び出す）と、セッションごとおよびターンごとのロールアップメトリクスとともに、`trace`（`JSON`）列に `google.cloud.aiplatform.v1beta1.AgentData` 評価トレースを再構築する 2 つのビューが作成されます:
+
+    - **`{view_prefix}_eval_session`**（デフォルトは `v_eval_session`）: `session_id` ごとに 1 行で、セッションレベルのメトリクス（`turn_count`、`tool_call_count`、`tool_error_count`、`llm_error_count`、`agent_error_count`、`has_error`、`has_truncated_content`、`has_tool_loop`、`max_consecutive_identical_tool_calls`、`distinct_tools_used`、`total_prompt_tokens`、`total_completion_tokens`、`total_tokens`、`total_latency_ms`、`eval_ready`）とマルチターンの `trace` を含みます。
+    - **`{view_prefix}_eval_turn`**（デフォルトは `v_eval_turn`）: `(session_id, invocation_id)` ターンごとに 1 行で、`turn_index`、ターンレベルのメトリクス（`turn_latency_ms`、トークン数とエラー数、`eval_ready`）、および内部の `turn_index` が `0` であるシングルターンの `trace` を含みます。
+
+    ADK Python v2.13.0 では、評価ビューには `content`（`payload_column_denylist` に `"content"` を指定すると `ValueError` が発生します）と、以下にリストされている全 15 個のイベントが必要です。`event_allowlist` / `event_denylist` で必須イベントを除外することは拒否されます（このリリースには会話のみの評価モードはありません）:
+
+    - `USER_MESSAGE_RECEIVED`、`AGENT_STARTING`、`LLM_REQUEST`、`TOOL_STARTING`、`TOOL_COMPLETED`、`TOOL_PAUSED`、`AGENT_TRANSFER`、`HITL_CREDENTIAL_REQUEST`、`HITL_CONFIRMATION_REQUEST`、`HITL_INPUT_REQUEST`、`HITL_CREDENTIAL_REQUEST_COMPLETED`、`HITL_CONFIRMATION_REQUEST_COMPLETED`、`HITL_INPUT_REQUEST_COMPLETED`、`AGENT_RESPONSE`、および `INVOCATION_COMPLETED`。
+
+    ビューはテーブル全体を `session_id` / `invocation_id` で集計するため、`session_start_timestamp` または `turn_start_timestamp` でフィルタリングしてもベーステーブルの `timestamp` パーティションはプルーニングされません。大規模なテーブルの場合は、評価ジョブを実行する前に日付でフィルタリングしたスライスを実体化（materialize）してください。
+
+=== "Go"
+
+    Go（`google.golang.org/adk/plugin/agentanalytics`）では、次の 3 つのコンストラクタのいずれかを使用してプラグインを構築できます:
+
+    - **`agentanalytics.NewBigQueryAgentAnalyticsPlugin(ctx, projectID, datasetID, tableID)`**:
+      `ProjectID`、`DatasetID`、`TableName` を設定した `agentanalytics.DefaultConfig()` を使用します。
+    - **`agentanalytics.NewBigQueryAgentAnalyticsPluginWithConfig(ctx, cfg)`**:
+      カスタマイズされた `agentanalytics.Config` を使用します。ゼロ初期化された `agentanalytics.Config{}` は `Enabled: false` となり何もしない無効なプラグインを返すため、常に `cfg := agentanalytics.DefaultConfig()` から開始するか、明示的に `Enabled: true` を設定してください。
+    - **`agentanalytics.NewBigQueryAgentAnalyticsPluginWithClients(ctx, cfg, bqClient, writeClient)`**:
+      呼び出し元が提供した `*bigquery.Client` および `*bqstorage.BigQueryWriteClient` インスタンスを使用します。`bqClient` が非 nil で、`cfg.ProjectID` が空または `bigquery.DetectProjectID` の場合、プラグインは `bqClient.Project()` を使用します。事前プロビジョニングされた追加専用のデプロイ向けに、`bqClient == nil` を渡すとテーブルの検査、作成、スキーマアップグレード、および自動ビュー作成がスキップされます（そのモードでは `cfg.ProjectID` を明示的に設定する必要があり、`bqPlugin.SyncViews` を呼び出すと `agentanalytics: BigQuery client is not configured for view creation` が返されます。代わりに各ビューの `Name`、`EventType`、`Query` を取得するには `cfg.ViewDefinitions()` を使用してください）。
+
+    #### `agentanalytics.Config` フィールド
+
+    | フィールド | 型 | デフォルト値（`DefaultConfig()`） | 使用するタイミング |
+    | --- | --- | --- | --- |
+    | `Enabled` | `bool` | `true` | プラグインを有効または無効にします。`DefaultConfig()` を使用しない構造体リテラルでは、明示的に `Enabled: true` を設定してください |
+    | `ProjectID` | `string` | `""`（プロジェクト ID を設定するか、プラグインがクライアントを作成する場合は `bigquery.DetectProjectID` を使用します。非 nil の `bqClient` が提供された場合、空の値は `bqClient.Project()` を使用します。`bqClient` が nil の場合は明示的なプロジェクト ID を設定してください） | Google Cloud プロジェクトを選択 |
+    | `DatasetID` | `string` | `"agent_analytics"` | BigQuery データセットを選択 |
+    | `TableName` | `string` | `"agent_events"` | BigQuery テーブル名を選択 |
+    | `MaxContentLen` | `int` | `500 * 1024` | インラインテキスト値をこの Unicode コードポイント（rune）数で切り詰めます。`0` はデフォルト（`500 * 1024` rune）を使用し、`-1` は切り詰めを無効にします |
+    | `BatchSize` | `int` | `100` | 書き込みバッチごとにデキューされる最大行数 |
+    | `BatchFlushIntv` | `time.Duration` | `time.Second` | 部分バッチをフラッシュするまでの最大間隔 |
+    | `QueueMaxSize` | `int` | `10000` | 新しいイベントがドロップ（`QueueFullDrops`）されるまでのメモリ内行チャネルの容量 |
+    | `ClientOptions` | `[]option.ClientOption` | `nil` | BigQuery および Storage Write API クライアント用のカスタム Google Cloud クライアントオプション（認証情報、エンドポイント） |
+    | `ClusteringFields` | `[]string` | `[]string{"event_type", "agent", "user_id"}` | テーブル作成時のクラスタ化フィールドをカスタマイズ（最大 4 フィールド） |
+    | `CustomTags` | `map[string]any` | `map[string]any{}`（`make(map[string]any)`） | すべての行の `attributes.custom_tags` の下に静的なキー・バリュータグを追加 |
+    | `LogMultiModalContent` | `bool` | `true` | ユーザーメッセージおよびモデルのリクエスト/レスポンスに対して `content_parts` を設定 |
+    | `DisableMultiModalContent` | `bool` | `false` | `DefaultConfig()` から開始した場合でも `content_parts` の抽出を明示的に無効化 |
+    | `ShutdownTimeout` | `time.Duration` | `10 * time.Second` | 各バックグラウンドバッチ書き込み（再試行を含む）、実行終了時のフラッシュ、および `Close()` がキューを排出する際の BigQuery 書き込みの上限時間。これは `Close()` 全体の単一の経過時間上限ではなく、GCS アップロードやビュー作成を伴う場合、`Close()` にはかなり長い時間（最大で `ShutdownTimeout` の約 2.5 倍）かかることがあります |
+    | `Logger` | `agentanalytics.Logger` | `log.Default()` | 警告およびエラー診断（バックグラウンドのビュー作成失敗を含む）のために `Printf(format string, v ...any)` と `Println(v ...any)` の両方を実装するカスタムロガー |
+    | `RetryConfig` | `agentanalytics.RetryConfig` | `MaxRetries: 3`, `InitialDelay: 100ms`, `MaxDelay: 10s`, `Multiplier: 2.0` | 再試行可能な Storage Write API 追加エラーに対する指数バックオフを調整 |
+    | `DisableSessionMetadata` | `bool` | `false` | `attributes.session_metadata`（`session_id`, `app_name`, `user_id`, `state`）を省略 |
+    | `CaptureFullMessageContent` | `bool` | `false` | テキストペイロードの長さによる切り詰めを無効化（`MaxContentLen` は無視されますが、機密キーの墨消しは引き続き実行されます） |
+    | `DisableSensitiveKeyRedaction` | `bool` | `false` | 自動的な機密キー、`temp:` 値、URI、ヘッダー、および認証情報パターンの墨消しをオプトアウトします。これによって `state_delta` 内のトップレベルの小文字の `temp:` エントリが保持されるわけではなく、それらは引き続き削除され、`temp:` のみの `STATE_DELTA` 行も引き続き抑制されます |
+    | `ContentFormatter` | `agentanalytics.ContentFormatter` | `nil` | シリアライズ前に適用されるカスタム `func(payload any, eventType string) (any, error)` |
+    | `DebugContentFormatterErrors` | `bool` | `false` | `ContentFormatter` が失敗した際、未加工のエラーテキストをログに記録することなく、エラーの形状メタデータ（バイト長など）をローカルの警告ログに含める |
+    | `EventAllowlist` | `[]string` | `nil` | リストされたイベントタイプのみをログに記録（セッションイベント行のエイリアスとして `"EVENT"` をサポート） |
+    | `EventDenylist` | `[]string` | `nil` | リストされたイベントタイプをスキップ |
+    | `PayloadColumnDenylist` | `[]string` | `nil` | 選択したペイロード列（`"content"`, `"content_parts"`, `"attributes"`, `"latency_ms"`）をテーブルスキーマ、書き込まれる行、およびビューから省略 |
+    | `CustomMetadataAllowlist` | `[]string` | `nil` | `session.Event.CustomMetadata` および最終的な `model.LLMResponse.CustomMetadata` から一致するキー（完全一致または `"prefix*"`）を `attributes.custom_metadata` にキャプチャします。また、`AGENT_STATE_CHECKPOINT` の出力（`"adk_agent_state"` / `"agent_state"` または `"end_of_agent"` / `"adk_end_of_agent"` などのチェックポイントキーが一致する場合）および `CustomMetadata` で伝達される `"adk_compaction"` も制御します |
+    | `FinalResponseToolNames` | `[]string` | `nil` | リストされたツールが完了したときに、`attributes.source_tool` を含む追加の `AGENT_RESPONSE` 行を出力 |
+    | `DisableFlushOnRunEnd` | `bool` | `false` | 各 `AfterRun` コールバックの終了時にバッチキューのフラッシュを待機しない |
+    | `DisableSchemaUpgrade` | `bool` | `false` | 既存テーブルに対する自動的な追加スキーマアップグレードを無効化 |
+    | `EnableOTelCorrelation` | `bool` | `false` | 周囲の OpenTelemetry の `span_id` と `trace_id` を `attributes.otel` の下にキャプチャ |
+    | `GCSBucketName` | `string` | `""` | `MaxInlineTextSize` より大きいインラインテキストとバイナリ blob をこの GCS バケットにオフロード |
+    | `GCSClientOptions` | `[]option.ClientOption` | `nil` | デフォルトの GCS クライアント用のカスタムクライアントオプション（空の場合は `ClientOptions` にフォールバック） |
+    | `GCSPathPrefix` | `string` | `""` | オフロードされた GCS パスの先頭に付加されるオプションのオブジェクト名プレフィックス |
+    | `ConnectionID` | `string` | `""` | オブジェクトテーブル / 署名付き URL 向けに `object_ref.authorizer` として保存される BigQuery 接続 ID（`"location.connection_id"`） |
+    | `MaxInlineTextSize` | `int` | `32 * 1024` | オフロードが構成されている場合に、これを超えるとテキストパーツが GCS にオフロードされるバイトしきい値（デフォルトは `32 KiB`） |
+    | `GCSMaxConcurrentUploads` | `int` | `8` | バッチフラッシュ中の最大同時 GCS アップロード数 |
+    | `GCSUploadTimeout` | `time.Duration` | `10 * time.Second` | バッチごとの同時 GCS アップロードのデッドライン。タイムアウト後、未完了のパーツはフォールバックし、同じ期間だけオフロードが一時停止します |
+    | `GCSMaxPendingUploadBytes` | `int64` | `256 * 1024 * 1024` | バッファリングされた行全体で GCS アップロード用にキューに入れられた保留中のテキストおよびバイナリペイロードバイト数のメモリ上限（デフォルトは `256 MiB`） |
+    | `GCSOffloader` | `agentanalytics.GCSContentOffloader` | `nil` | カスタムオフローダー実装（`GCSBucketName` から作成されるデフォルトの GCS クライアントをオーバーライド） |
+    | `DisableCreateViews` | `bool` | `false` | イベントタイプごとの 25 個の BigQuery ビュー（`v_<event_type>`）のバックグラウンドでの自動作成を無効化 |
+    | `ViewPrefix` | `string` | `"v"` | イベントタイプごとのビュー名のプレフィックス（`<ViewPrefix>_<event_type>`） |
+    | `ExactlyOnceDelivery` | `bool` | `false` | デフォルトストリームの代わりに、明示的なバッチオフセットを持つ `COMMITTED` Storage Write ストリームを介して書き込む |
+
+    Go では、`ContentFormatter` は未加工の型付きコンテンツペイロードを受け取ります（静的な `AGENT_STARTING` 指示の場合は文字列、`USER_MESSAGE_RECEIVED` の場合は `*genai.Content`、`LLM_REQUEST` の場合は `*model.LLMRequest`、`LLM_RESPONSE` の場合は `*model.LLMResponse`、ツールやその他のマップ形式のイベントの場合はマップ）。`NODE_OUTPUT` と `A2A_INTERACTION` は元の出力/応答値をそのまま渡し、スライスやスカラーになることもあります。属性（attributes）は変換しません。特に、`STATE_DELTA` はペイロードを `attributes.state_delta` に格納するため、`ContentFormatter` を呼び出しません。変更するポインタ、スライス、またはマップ（`*genai.Content` 内の `Part.Text`、`Part.ExecutableCode.Code`、`Part.CodeExecutionResult.Output`、`Part.FunctionCall.Args`、`Part.FunctionResponse.Response` を含む）はクローンを作成し、ライブペイロードを決して直接変更しないでください。
+
+    以下のヘルパーは編集する値のクローンを作成し、ネストが 50 レベルに達すると停止します。過度にネストされたペイロードや循環参照を含むペイロードはエラーを返すため、プラグインはプロセスクラッシュのリスクを冒す代わりに `[FORMATTER_FAILED]` を記録します。これらのヘルパーは JSON 形式の `map[string]any` および `[]any` 値（さらに `[]string`、`map[string]string`、`[]map[string]any`）を再帰的に処理します。ツールが返すその他の具体的な型については境界のあるケースを追加するか、フォーマット前にそれらの値を正規化し、この墨消しに依存する前に実際のペイロードでテストしてください:
+
+    ```go title="analytics.go"
+    package analytics
+
+    import (
+    	"context"
+    	"fmt"
+    	"regexp"
+    	"time"
+
+    	"google.golang.org/adk/plugin/agentanalytics"
+    	"google.golang.org/adk/v2/model"
+    	"google.golang.org/genai"
+    )
+
+    var dollarPattern = regexp.MustCompile(`\$\d+(?:,\d{3})*(?:\.\d+)?`)
+
+    func maskContent(c *genai.Content, eventType string, depth int) (*genai.Content, error) {
+    	if depth >= 50 {
+    		return nil, fmt.Errorf("redaction nesting limit exceeded")
+    	}
+    	if c == nil {
+    		return nil, nil
+    	}
+    	cloned := *c
+    	if len(c.Parts) > 0 {
+    		cloned.Parts = make([]*genai.Part, len(c.Parts))
+    		for i, p := range c.Parts {
+    			if p == nil {
+    				continue
+    			}
+    			partCopy := *p
+    			if partCopy.Text != "" {
+    				partCopy.Text = dollarPattern.ReplaceAllString(partCopy.Text, "xxx")
+    			}
+    			if partCopy.ExecutableCode != nil {
+    				codeCopy := *partCopy.ExecutableCode
+    				codeCopy.Code = dollarPattern.ReplaceAllString(codeCopy.Code, "xxx")
+    				partCopy.ExecutableCode = &codeCopy
+    			}
+    			if partCopy.CodeExecutionResult != nil {
+    				resultCopy := *partCopy.CodeExecutionResult
+    				resultCopy.Output = dollarPattern.ReplaceAllString(resultCopy.Output, "xxx")
+    				partCopy.CodeExecutionResult = &resultCopy
+    			}
+    			if partCopy.FunctionCall != nil {
+    				fcCopy := *partCopy.FunctionCall
+    				if fcCopy.Args != nil {
+    					redactedArgs, err := redactDollarAmountsAtDepth(fcCopy.Args, eventType, depth+1)
+    					if err != nil {
+    						return nil, err
+    					}
+    					if argsMap, ok := redactedArgs.(map[string]any); ok {
+    						fcCopy.Args = argsMap
+    					}
+    				}
+    				partCopy.FunctionCall = &fcCopy
+    			}
+    			if partCopy.FunctionResponse != nil {
+    				frCopy := *partCopy.FunctionResponse
+    				if frCopy.Response != nil {
+    					redactedResp, err := redactDollarAmountsAtDepth(frCopy.Response, eventType, depth+1)
+    					if err != nil {
+    						return nil, err
+    					}
+    					if respMap, ok := redactedResp.(map[string]any); ok {
+    						frCopy.Response = respMap
+    					}
+    				}
+    				partCopy.FunctionResponse = &frCopy
+    			}
+    			cloned.Parts[i] = &partCopy
+    		}
+    	}
+    	return &cloned, nil
+    }
+
+    func redactDollarAmounts(payload any, eventType string) (any, error) {
+    	return redactDollarAmountsAtDepth(payload, eventType, 0)
+    }
+
+    func redactDollarAmountsAtDepth(payload any, eventType string, depth int) (any, error) {
+    	if depth >= 50 {
+    		return nil, fmt.Errorf("redaction nesting limit exceeded")
+    	}
+    	switch v := payload.(type) {
+    	case string:
+    		return dollarPattern.ReplaceAllString(v, "xxx"), nil
+    	case *genai.Content:
+    		return maskContent(v, eventType, depth+1)
+    	case *model.LLMRequest:
+    		if v == nil {
+    			return nil, nil
+    		}
+    		cloned := *v
+    		if len(v.Contents) > 0 {
+    			cloned.Contents = make([]*genai.Content, len(v.Contents))
+    			for i, c := range v.Contents {
+    				masked, err := maskContent(c, eventType, depth+1)
+    				if err != nil {
+    					return nil, err
+    				}
+    				cloned.Contents[i] = masked
+    			}
+    		}
+    		if v.Config != nil && v.Config.SystemInstruction != nil {
+    			maskedSys, err := maskContent(v.Config.SystemInstruction, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cfgCopy := *v.Config
+    			cfgCopy.SystemInstruction = maskedSys
+    			cloned.Config = &cfgCopy
+    		}
+    		return &cloned, nil
+    	case *model.LLMResponse:
+    		if v == nil {
+    			return nil, nil
+    		}
+    		maskedContent, err := maskContent(v.Content, eventType, depth+1)
+    		if err != nil {
+    			return nil, err
+    		}
+    		cloned := *v
+    		cloned.Content = maskedContent
+    		return &cloned, nil
+    	case map[string]any:
+    		if v == nil {
+    			return map[string]any(nil), nil
+    		}
+    		cloned := make(map[string]any, len(v))
+    		for k, val := range v {
+    			redacted, err := redactDollarAmountsAtDepth(val, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[k] = redacted
+    		}
+    		return cloned, nil
+    	case map[string]string:
+    		if v == nil {
+    			return map[string]string(nil), nil
+    		}
+    		cloned := make(map[string]string, len(v))
+    		for k, val := range v {
+    			redacted, err := redactDollarAmountsAtDepth(val, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[k], _ = redacted.(string)
+    		}
+    		return cloned, nil
+    	case []any:
+    		if v == nil {
+    			return []any(nil), nil
+    		}
+    		cloned := make([]any, len(v))
+    		for i, item := range v {
+    			redacted, err := redactDollarAmountsAtDepth(item, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[i] = redacted
+    		}
+    		return cloned, nil
+    	case []string:
+    		if v == nil {
+    			return []string(nil), nil
+    		}
+    		cloned := make([]string, len(v))
+    		for i, item := range v {
+    			redacted, err := redactDollarAmountsAtDepth(item, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[i], _ = redacted.(string)
+    		}
+    		return cloned, nil
+    	case []map[string]any:
+    		if v == nil {
+    			return []map[string]any(nil), nil
+    		}
+    		cloned := make([]map[string]any, len(v))
+    		for i, item := range v {
+    			redacted, err := redactDollarAmountsAtDepth(item, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[i], _ = redacted.(map[string]any)
+    		}
+    		return cloned, nil
+    	default:
+    		return payload, nil
+    	}
+    }
+
+    func CreatePlugin(ctx context.Context) (*agentanalytics.BigQueryAgentAnalyticsPlugin, error) {
+    	cfg := agentanalytics.DefaultConfig()
+    	cfg.ProjectID = "my-project"
+    	cfg.DatasetID = "my_dataset"
+    	cfg.TableName = "agent_events"
+    	cfg.EventAllowlist = []string{
+    		agentanalytics.EventUserMessageReceived,
+    		agentanalytics.EventLLMRequest,
+    		agentanalytics.EventLLMResponse,
+    	}
+    	cfg.ShutdownTimeout = 10 * time.Second
+    	cfg.MaxContentLen = 500 * 1024
+    	cfg.ContentFormatter = redactDollarAmounts
+    	cfg.EnableOTelCorrelation = true
+    	cfg.CustomMetadataAllowlist = []string{"ticket_id", "exp:*"}
+    	cfg.ExactlyOnceDelivery = true
+
+    	adkPlugin, err := agentanalytics.NewBigQueryAgentAnalyticsPluginWithConfig(ctx, cfg)
+    	if err != nil {
+    		return nil, err
+    	}
+    	bqPlugin, ok := agentanalytics.AsBigQueryAgentAnalyticsPlugin(adkPlugin)
+    	if !ok {
+    		return nil, fmt.Errorf("unexpected plugin wrapper")
+    	}
+    	return bqPlugin, nil
+    }
+    ```
 
 === "Java"
 
@@ -804,7 +1387,7 @@ LIMIT 20;
     val plugin = BigQueryAgentAnalyticsPlugin(config = config)
     ```
 
-    バッチ処理、コンテンツフォーマット、イベント許可リスト、GCS オフロード、ビュー作成など、**Python** および **Java** タブに記載されているオプションは Kotlin には存在しません。
+    バッチ処理、コンテンツフォーマット、イベント許可リスト、GCS オフロード、ビュー作成など、**Python**、**Go**、および **Java** タブに記載されているオプションは Kotlin には存在しません。
 
 ## スキーマと本番環境セットアップ
 
@@ -815,22 +1398,26 @@ LIMIT 20;
 | フィールド名 | 型 | モード | 説明 | サンプル値 |
 | --- | --- | --- | --- | --- |
 | **timestamp** | `TIMESTAMP` | `REQUIRED` | イベント作成の UTC タイムスタンプ。プライマリソートキーおよび日次パーティションキーとして機能します。精度はマイクロ秒です。 | `2026-02-03 20:52:17 UTC` |
-| **event_id** | `STRING` | `NULLABLE` | エンキュー前に割り当てられた 32 文字の 16 進数 ID。コンシューマが重複行を識別できるように、Storage Write API の再試行全体で保持されます。スキーマバージョン 2 より前に書き込まれた行は `NULL` です。 | `ca5e3c9d99e24e46b614f2f44f93bf6e` |
+| **event_id** | `STRING` | `NULLABLE` | エンキュー前に割り当てられた 32 文字の 16 進数 ID（Python および Go）。コンシューマが重複行を識別できるように、Storage Write API の再試行全体で保持されます。スキーマバージョン 2 より前に書き込まれた行は `NULL` です。 | `ca5e3c9d99e24e46b614f2f44f93bf6e` |
 | **event_type** | `STRING` | `NULLABLE` | 正規のイベントカテゴリ。[イベントタイプとペイロード](#event-types) で説明されている LLM、ツール、エージェント、呼び出し、状態、HITL、A2A、レスポンス、ワークフロー、ノード出力、ノードエラーイベントなどの標準値が含まれます。高レベルのフィルタリングに使用されます。 | `LLM_REQUEST` |
 | **agent** | `STRING` | `NULLABLE` | このイベントを担当するエージェントの名前。エージェントの初期化中または `root_agent_name` コンテキストを介して定義されます。 | `my_bq_agent` |
 | **session_id** | `STRING` | `NULLABLE` | 会話スレッド全体の永続的な識別子。複数のターンやサブエージェント呼び出しにわたって一定に保たれます。 | `04275a01-1649-4a30-b6a7-5b443c69a7bc` |
-| **invocation_id** | `STRING` | `NULLABLE` | セッション内の個々のエージェント実行またはターンのユニークな識別子。 | `81014e7a-90da-4cb0-adbf-cb6d53955685` |
-| **user_id** | `STRING` | `NULLABLE` | 現在のセッションに関連付けられているユーザーの識別子。ユーザーごとの分析に役立ちます。 | `user_12345` |
-| **trace_id** | `STRING` | `NULLABLE` | 32 文字の 16 進数トレース ID。アクティブな場合は周囲の OpenTelemetry スパンから継承され、それ以外の場合はプラグインによって呼び出しごとに生成されます。 | `4bf92f3577b34da6a3ce929d0e0e4736` |
-| **span_id** | `STRING` | `NULLABLE` | この特定の操作に対する 16 文字の 16 進数スパン ID。プラグインの内部スタックで追跡されます。ルート呼び出しスパンは周囲の OTel スパン ID を再利用でき、子 BQAA スパンは内部で生成されます。OpenTelemetry スパンは作成もエクスポートもされません。 | `00f067aa0ba902b7` |
-| **parent_span_id** | `STRING` | `NULLABLE` | 直前の呼び出し元の 16 文字の 16 進数スパン ID。親子実行ツリーを再構築するために使用されます。 | `5fb397be34d23b0f` |
+| **invocation_id** | `STRING` | `NULLABLE` | 単一の実行ターンまたはリクエストサイクルのユニークな識別子。多くのコンテキストで `trace_id` に対応します。 | `e-b55b2000-68c6-4e8b-b3b3-ffb454a92e40` |
+| **user_id** | `STRING` | `NULLABLE` | セッションを開始したユーザー（人間またはシステム）の識別子。`User` オブジェクトまたはメタデータから抽出されます。 | `test_user` |
+| **trace_id** | `STRING` | `NULLABLE` | トレース識別子。周囲のスパン（例: Agent Engine の呼び出しスパンや ADK Runner スパン）から継承された場合は 32 文字の 16 進数 OpenTelemetry トレース ID になるため、BigQuery の行は既存の Cloud Trace トレースとスムーズに結合されます。周囲のスパンがない場合、Python はランダムな 32 文字の 16 進数フォールバックを生成します。周囲のスパンがない場合、Go は `invocation_id` が空のときにランダムな 32 文字の 16 進数 `trace_id` を生成します。それ以外の場合は、プラグインごとのランダムなシードと呼び出し ID に対して SHA-256 を使用し、そのプラグインインスタンス内で安定した 32 文字の 16 進数 ID を生成します。Java は ADK の呼び出し ID にフォールバックします。単一の分散リクエストライフサイクル内のすべての操作をリンクします。 | `a2c7f13d3a3f0bbb8793692f76a6012a` |
+| **span_id** | `STRING` | `NULLABLE` | この特定の原子的操作を識別する 16 文字の 16 進数スパン ID。**プラグインの内部スタックで追跡され、OTel スパンとしてはエクスポートされません。** プラグインは設定された OpenTelemetry プロバイダーに対して `tracer.start_span` を呼び出しません。Python と Java では、ルート呼び出しスパンは周囲の OTel スパンがアクティブな場合にその ID を再利用します。Go では、プラグインは常に独自の 16 文字の 16 進数ルート `span_id` を生成し、周囲の OTel スパン ID があれば `parent_span_id` に記録します。子スパンは内部で生成されます（[トレースと可観測性](#tracing-and-observability)を参照）。 | `3916f5762bcd4d42` |
+| **parent_span_id** | `STRING` | `NULLABLE` | 直前の呼び出し元のスパン ID。親子実行ツリー（DAG）を再構築するために使用されます。 | `4c4a42bfdeb84934` |
 | **content** | `JSON` | `NULLABLE` | JSON として保存されるイベント固有のデータ（ペイロード）。構造はイベントタイプによって異なります。 | `{"model": "gemini-flash-latest", ...}` |
 | **content_parts** | `ARRAY<STRUCT>` | `REPEATED` | 構造化パーツの配列。テキストチャンク、GCS に保存されているファイルへの URI/ObjectRef（ストレージオフロード用）、MIME タイプ、パーツメタデータをキャプチャします。 | `[{mime_type: "image/png", uri: "gs://..."}]` |
 | **attributes** | `JSON` | `NULLABLE` | 追加メタデータ（例: `root_agent_name`、`model_version`、`usage_metadata`、`session_metadata`、`custom_tags`）のための任意のキー値ペア。 | `{"model_version": "gemini-flash-latest", ...}` |
 | **latency_ms** | `JSON` | `NULLABLE` | レイテンシ測定値（例: 合計ミリ秒数である `total_ms`）。 | `{"total_ms": 1250}` |
 | **status** | `STRING` | `NULLABLE` | イベントの結果。通常は 'OK' または 'ERROR' です。 | `OK` |
-| **error_message** | `STRING` | `NULLABLE` | 例外およびモデル終了の詳細に関するサニタイズされた診断メッセージ。Python では、最終的な `LLM_RESPONSE` やカスタム `content_formatter` が失敗した行（例: `content_formatter raised ImportError`）など、`status` が `OK` のままの行にも入力される場合があります。 | `Error 404: Dataset not found` |
-| **is_truncated** | `BOOLEAN` | `NULLABLE` | 設定された `max_content_length`、サニタイザーの深さやノードの制限、診断テキストのサニタイズなど、コンテンツまたはメタデータが安全境界によって切り詰められたか置き換えられた場合に `true`。ADK Python v2.12.0 以降では、モデルレスポンスのフォーマットされた部分での一般的な認証情報パターンの墨消しや、レスポンスまたはコンパクションコンテンツの組み込みフォーマットが失敗したときに書き込まれるプレースホルダーである `[FORMATTING FAILED]` によっても設定されます（カスタム `content_formatter` の失敗を示す `[FORMATTER_FAILED]` と混同しないでください）。通常の構造化された機密キーの墨消し自体では設定されません。 | `false` |
+| **error_message** | `STRING` | `NULLABLE` | 例外およびモデル終了の詳細に関するサニタイズされた診断メッセージ。Python と Go では、最終的な `LLM_RESPONSE` やカスタム `content_formatter` / `ContentFormatter` が失敗した行（例: `content_formatter raised ImportError` または `content_formatter panicked`）など、`status` が `OK` のままの行にも入力される場合があります。 | `Error 404: Dataset not found` |
+| **is_truncated** | `BOOLEAN` | `NULLABLE` | 設定された `max_content_length`（Go では `MaxContentLen`）、サニタイザーの深さやノードの制限、診断テキストのサニタイズなど、コンテンツまたはメタデータが安全境界によって切り詰められたか置き換えられた場合に `true`。ADK Python v2.12.0 以降では、モデルレスポンスのフォーマットされた部分での一般的な認証情報パターンの墨消しや、レスポンスまたはコンパクションコンテンツの組み込みフォーマットが失敗したときに書き込まれるプレースホルダーである `[FORMATTING FAILED]` によっても設定されます（カスタム `content_formatter` の失敗を示す `[FORMATTER_FAILED]` と混同しないでください）。通常の構造化された機密キーの墨消し自体では設定されません。 | `false` |
+
+Python と Go では、`event_id` 列はスキーマバージョン 2 の一部です。Python の `auto_schema_upgrade=True`（または Go の `DisableSchemaUpgrade: false`、どちらもデフォルト）を使用すると、プラグインは既存のテーブルにこの列を自動的に追加します。テーブルスキーマを自分で管理する場合は、ADK Python v2.7.0+ または ADK Go を使用する前にこの列を追加してください。
+
+Java スキーマには `event_id` は含まれません。以下の手動 DDL から作成されたテーブルは、この列が NULL 許容であるため Java との互換性が維持されます。
 
 ??? example "本番環境向け BigQuery DDL（手動作成用）"
 
@@ -877,12 +1464,12 @@ LIMIT 20;
 ### 自動作成されるビュー
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v1.27.0</span><span class="lst-java">Java v1.5.0</span>
+  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v1.27.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v1.5.0</span>
 </div>
 
-Python では、`create_views=True`（デフォルト）により各イベントタイプのビューが自動生成されます。Java では `createViews(true)` を設定します（デフォルトは `false`）。Kotlin はビューを作成しません。ビューは一般的な JSON 構造をフラットな型付き列に unnest するため、反復的な `JSON_VALUE` および `JSON_QUERY` 式を記述する必要がなくなります。
+Python（`create_views=True`）および Go（`DisableCreateViews: false`）では、プラグインはデフォルトで各イベントタイプのビューを自動生成します。Java では `createViews(true)` を設定します（デフォルトは `false`）。Kotlin はビューを作成しません。ビューは一般的な JSON 構造をフラットな型付き列に unnest するため、反復的な `JSON_VALUE` および `JSON_QUERY` 式を記述する必要がなくなります。
 
-ビュー名は `{view_prefix}_{event_type_lowercase}` の命名規則に従います（例: デフォルトプレフィックス `"v"` の場合、`LLM_REQUEST` は `v_llm_request` になります）。複数のプラグインインスタンスが同一データセット内の異なるテーブルに書き込む場合は、`BigQueryLoggerConfig` で `view_prefix` に固有の値を設定して、ビュー名の競合を防止してください。
+ビュー名は `{view_prefix}_{event_type_lowercase}` の命名規則に従います（例: デフォルトプレフィックス `"v"` の場合、`LLM_REQUEST` は `v_llm_request` になります）。複数のプラグインインスタンスが同一データセット内の異なるテーブルに書き込む場合は、`BigQueryLoggerConfig` の `view_prefix`（Go の `agentanalytics.Config` では `ViewPrefix`）に固有の値を設定して、ビュー名の競合を防止してください。
 
 ```python
 # 同一データセット内で異なるビュープレフィックスを使用する 2 つのプラグイン
@@ -901,11 +1488,14 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
 # 作成されるビュー: v_staging_llm_request, v_staging_tool_completed, ...
 ```
 
-スキーマアップグレード後などに手動でビューを更新するには、パブリックな非同期メソッド `await plugin.create_analytics_views()` を呼び出すこともできます。
+オンデマンドでビューを更新することもできます:
 
-すべての Python ビューには次の **共通列** が含まれます: `timestamp`、`event_id`、`event_type`、`agent`、`session_id`、`invocation_id`、`user_id`、`trace_id`、`span_id`、`parent_span_id`、`status`、`error_message`、`is_truncated`。Java ビューには、`event_id` を除く同じ共通列が含まれます。
+- **Python**: `await plugin.create_analytics_views()` を呼び出します（Python v2.13.0+ で[エージェント評価ビュー](#agent-evaluation-views)を作成する場合は `await plugin.create_eval_views()` も呼び出します）。
+- **Go**: `bqPlugin, ok := agentanalytics.AsBigQueryAgentAnalyticsPlugin(adkPlugin)` でプラグインをアンラップし、`bqPlugin.SyncViews(ctx)` を呼び出します。`NewBigQueryAgentAnalyticsPluginWithClients(..., nil, ...)`（`bqClient == nil`）でプラグインを構築した場合、プラグインはビューを自動作成せず、`SyncViews` は `agentanalytics: BigQuery client is not configured for view creation` を返します。代わりにビュー DDL を確認または自分で実行するには、`cfg.ViewDefinitions()`（`Name`、`EventType`、`Query` を返す）を使用してください。
 
-次の表は、Python ビューとそれぞれのイベント固有の列の一覧です。
+すべての Python および Go ビューには次の **共通列** が含まれます: `timestamp`、`event_id`、`event_type`、`agent`、`session_id`、`invocation_id`、`user_id`、`trace_id`、`span_id`、`parent_span_id`、`status`、`error_message`、`is_truncated`。Java ビューには、`event_id` を除く同じ共通列が含まれます。
+
+次の表は、イベントタイプごとのビューとそれぞれのイベント固有の列の一覧です。
 
 | ビュー名 | イベント固有の列 |
 | --- | --- |
@@ -916,7 +1506,7 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
 | **`v_tool_starting`** | `tool_name` (STRING), `tool_args` (JSON), `tool_origin` (STRING) |
 | **`v_tool_completed`** | `tool_name` (STRING), `tool_result` (JSON), `tool_origin` (STRING), `total_ms` (INT64), `pause_kind` (STRING), `function_call_id` (STRING) |
 | **`v_tool_error`** | `tool_name` (STRING), `tool_args` (JSON), `tool_origin` (STRING), `total_ms` (INT64) |
-| **`v_agent_starting`** | `agent_instruction` (STRING); ADK Python v2.12.0 以降では、`instruction_source` (STRING)、`static_instruction` (STRING)、`agent_description` (STRING)、`model` (STRING)、`sub_agents` (JSON) も含む |
+| **`v_agent_starting`** | `agent_instruction` (STRING); ADK Python v2.12.0+ および Go では、`instruction_source` (STRING)、`static_instruction` (STRING; Go では常に `NULL`)、`agent_description` (STRING)、`model` (STRING)、`sub_agents` (JSON) も含む |
 | **`v_agent_completed`** | `total_ms` (INT64) |
 | **`v_agent_error`** | `total_ms` (INT64), `error_traceback` (STRING) |
 | **`v_invocation_starting`** | *(共通列のみ)* |
@@ -935,7 +1525,11 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
 | **`v_node_output`** | `node_path` (STRING), `node_run_id` (STRING), `node_parent_run_id` (STRING), `output` (JSON) |
 | **`v_node_error`** | `node_path` (STRING), `node_run_id` (STRING), `node_parent_run_id` (STRING), `error_code` (STRING) |
 
-4 つのワークフロービュー（`v_agent_transfer`、`v_agent_state_checkpoint`、`v_event_compaction`、`v_tool_paused`）および `v_tool_completed` の `pause_kind` / `function_call_id` 列は、[ADK 2.0 ワークフローイベントサポート](#adk-2-events) によって提供されます。**Java**（v1.7.0+）では、`v_tool_paused` と `v_tool_completed` の `pause_kind` / `function_call_id` 列のみが作成されます。`v_agent_transfer`、`v_agent_state_checkpoint`、`v_event_compaction` は Python 専用です（Java プラグインはこれらのイベントを出力しません）。`v_node_output` および `v_node_error` ビューは Python v2.7.0 以降で利用可能です。
+上記のイベントタイプごとのビューに加えて、ADK Python v2.13.0 以降では、`create_eval_views=True` が設定されている場合または `await plugin.create_eval_views()` が呼び出された場合に、2 つのオプションの[エージェント評価ビュー](#agent-evaluation-views)（`v_eval_session` および `v_eval_turn`）を作成できます。
+
+Go は `v_user_message_received` から `v_node_error` までのイベントタイプごとの全 25 個のビューを作成します（同一の列名を使用し、`PayloadColumnDenylist` が設定されている場合は射影を考慮して列を削除します）。評価ビュー（`v_eval_session` および `v_eval_turn`）は Python 専用（v2.13.0+）です。
+
+4 つのワークフロービュー（`v_agent_transfer`、`v_agent_state_checkpoint`、`v_event_compaction`、`v_tool_paused`）および `v_tool_completed` の `pause_kind` / `function_call_id` 列は、[ADK 2.0 ワークフローイベントサポート](#adk-2-events) によって提供されます。**Python** と **Go** は両方とも、これら 4 つのビューに加えて `v_node_output` および `v_node_error` を作成します。**Java**（v1.7.0+）では、`v_tool_paused` と `v_tool_completed` の `pause_kind` / `function_call_id` 列のみが作成されます。Java プラグインは `v_agent_transfer`、`v_agent_state_checkpoint`、`v_event_compaction` のイベントを出力しないため、Java ではこれらのビューは作成されません。
 
 その他の Java ビューの違いは以下の通りです。
 
@@ -1000,7 +1594,7 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
 }
 ```
 
-自動的に作成される `v_llm_request` ビューは、`tools` 属性をその `tools`（JSON）列として公開します。Python では、`tools` にはツールごとに 1 つのエントリが含まれ、その `name` と、利用可能な場合は `description` および `parameters`（ツールのパラメータスキーマ）が保持されます。これらのエントリは、他の属性と同じサイズ制限および機密キーの墨消しを通過します。Java では、`["list_dataset_ids", "execute_sql"]` のようにツール名のみが記録されます。
+自動的に作成される `v_llm_request` ビューは、`tools` 属性をその `tools`（JSON）列として公開します。Python と Go では、`tools` にはツールごとに 1 つのエントリが含まれ、その `name` と、利用可能な場合は `description` および `parameters`（ツールのパラメータスキーマ）が保持されます。これらのエントリは、他の属性と同じサイズ制限および機密キーの墨消しを通過します。Java では、`["list_dataset_ids", "execute_sql"]` のようにツール名のみが記録されます。
 
 **2. LLM_RESPONSE**
 
@@ -1034,11 +1628,11 @@ plugin_staging = BigQueryAgentAnalyticsPlugin(
 }
 ```
 
-Python プラグインは、最終的な（部分レスポンスではない）レスポンスにのみ `finish_reason` を追加します。`v_llm_response` ビューは、最終レスポンスの `cache_type` とともにこれを `STRING` として公開します。モデルが終了診断情報を提供する場合、行の `status` が `OK` のままであっても、共通の `error_message` 列にサニタイズされた値が保存されます。
+Python および Go プラグインは、最終的な（部分レスポンスではない）レスポンスにのみ `finish_reason` を追加します。それぞれの `v_llm_response` ビューは、最終レスポンスの `cache_type` とともにこれを `STRING` として公開します。モデルが終了診断情報を提供する場合、行の `status` が `OK` のままであっても、共通の `error_message` 列にサニタイズされた値が保存されます。
 
-Python では、モデルの終了理由およびブロック理由は引き続き `LLM_RESPONSE` として分類されます。プラグインは、モデル呼び出しで例外が発生した場合にのみ `LLM_ERROR` を使用します。
+Python と Go では、モデルの終了理由およびブロック理由は引き続き `LLM_RESPONSE` として分類されます。プラグインは、モデル呼び出しがエラーで失敗した場合にのみ `LLM_ERROR` を使用します。
 
-Python では、`content.response` はレスポンスパーツを `|` で区切って要約します（テキストの場合は `text: '...'`、関数呼び出しの場合は `call: <name>`、関数レスポンスの場合は `resp: <name>`、その他のパーツタイプの場合は `other` など）。`max_content_length` より長いテキストは切り詰められ、`is_truncated` が設定されます。ADK Python v2.12.0 以降では、サマリーに実行可能コードを `Executable code (<language>): <code>` として、コード実行結果を `Code execution result (<outcome>): <output>` として表示し、テキスト、コード、出力に含まれる一般的な認証情報パターンを墨消しし、切り詰められた値の末尾に `...[TRUNCATED]` を付加します。墨消しによっても `is_truncated` が設定されます。v2.12.0 以降で `custom_metadata_allowlist` が設定されている場合、最終的な（部分レスポンスではない）`LLM_RESPONSE` 行は `llm_response.custom_metadata` から許可リストに登録されたキーを `attributes.custom_metadata` にキャプチャします。
+Python と Go では、`content.response` はレスポンスパーツを `|` で区切って要約します（テキストの場合は `text: '...'`、関数呼び出しの場合は `call: <name>`、関数レスポンスの場合は `resp: <name>`、その他のパーツタイプの場合は `other` など）。`max_content_length`（Go では `MaxContentLen`）より長いテキストは切り詰められ、`is_truncated` が設定されます。ADK Python v2.12.0+ および Go では、サマリーに実行可能コードを `Executable code (<language>): <code>` として、コード実行結果を `Code execution result (<outcome>): <output>` として表示し、テキスト、コード、出力に含まれる一般的な認証情報パターンを墨消しし、切り詰められた値の末尾に `...[TRUNCATED]` を付加します。墨消しによっても `is_truncated` が設定されます。`custom_metadata_allowlist`（Go では `CustomMetadataAllowlist`）が設定されている場合、最終的な（部分レスポンスではない）`LLM_RESPONSE` 行は `llm_response.custom_metadata` から許可リストに登録されたキーを `attributes.custom_metadata` にキャプチャします。
 
 **3. LLM_ERROR**
 
@@ -1066,12 +1660,14 @@ LLM 呼び出しが例外で失敗したときに記録されます。エラー�
 
 | ツール出自 | 説明 |
 | --- | --- |
-| `LOCAL` | `FunctionTool` インスタンス（ローカル Python 関数） |
+| `LOCAL` | `FunctionTool` インスタンス（ローカル関数） |
 | `MCP` | Model Context Protocol ツール（`McpTool` インスタンス） |
 | `SUB_AGENT` | `AgentTool` インスタンス（サブエージェント） |
 | `A2A` | リモート Agent2Agent インスタンス（`RemoteA2aAgent`） |
-| `TRANSFER_AGENT` | `TransferToAgentTool` インスタンス（一般的なエージェント transfer） |
-| `TRANSFER_A2A` | `RemoteA2aAgent` へ transfer する `TransferToAgentTool` インスタンス（呼び出しレベルで分類） |
+| `TRANSFER_AGENT` | `TransferToAgentTool`（`transfer_to_agent`）インスタンス（一般的なエージェント転送） |
+| `TRANSFER_A2A` | Python および Go: リモート A2A エージェントに解決される `transfer_to_agent` 呼び出し（呼び出しレベルで分類） |
+| `TOOLBOX` | Python（v2.13.0+）および Go: MCP Toolbox for Databases（`ToolboxTool`）ツール |
+| `SKILL` | Python（v2.13.0+）: `SkillToolset` 組み込みツール（`list_skills`、`load_skill`、`load_skill_resource`、`run_skill_script`、`search_skills`、`unload_skill`）。Go: `SkillToolset` 組み込みツール（`list_skills`、`load_skill`、`load_skill_resource`） |
 | `UNKNOWN` | 未分類のツール |
 
 **4. TOOL_STARTING**
@@ -1114,8 +1710,7 @@ LLM 呼び出しが例外で失敗したときに記録されます。エラー�
 
 **6. TOOL_ERROR**
 
-ツール実行が例外で失敗したときに記録されます。ツール名、引数、ツール出自、
-エラーメッセージをキャプチャします。
+ツール実行が例外で失敗したとき、または（ADK Python v2.13.0 以降で）返されたツール結果が組み込みの MCP `isError` / `is_error` ルール、`ReflectAndRetryToolPlugin` のエラー応答、またはカスタム [`tool_result_classifier`](#tool-result-error-classification) によってエラーとして分類されたときに記録されます。ツール名、引数、ツール出自、エラーメッセージをキャプチャします。
 
 ```json
 {
@@ -1144,11 +1739,9 @@ LLM 呼び出しが例外で失敗したときに記録されます。エラー�
 エージェントの内部状態変更（例: ツールによって更新されたカスタムアプリケーション
 状態）を追跡します。
 
-!!! note "組み込みマスキング"
+!!! note "組み込みの墨消し"
 
-    `temp:` または `secret:` 接頭辞の状態キーは、記録される `state_delta` 内で
-    自動的に `[REDACTED]` にマスクされます。詳しくは [組み込み
-    マスキング](#built-in-redaction) を参照してください。
+    Python は `temp:` の状態値を `[REDACTED]` に置き換えます。Go はログ記録前に `state_delta` からトップレベルの小文字の `temp:` エントリを削除し、何も残らない場合は `STATE_DELTA` 行を出力しません。構造化されたコンテンツや属性内のその他の `temp:` 値は `[REDACTED]` に置き換えられます。詳しくは [組み込みの墨消し](#built-in-redaction) を参照してください。
 
 ```json
 {
@@ -1169,23 +1762,23 @@ LLM 呼び出しが例外で失敗したときに記録されます。エラー�
 | `INVOCATION_STARTING` | `{}` |
 | `INVOCATION_COMPLETED` | `{}` |
 | `INVOCATION_ERROR` | `{"error_traceback": "..."}` |
-| `AGENT_STARTING` | `"You are a helpful agent..."`（ADK Python v2.12.0 以降では、指示が空または呼び出し可能オブジェクト `InstructionProvider` である場合は `null`） |
+| `AGENT_STARTING` | `"You are a helpful agent..."`（ADK Python v2.12.0+ および Go では、指示が空または動的な指示プロバイダーである場合は `null`） |
 | `AGENT_COMPLETED` | `{}` |
 | `AGENT_ERROR` | `{"error_traceback": "..."}` |
 | `USER_MESSAGE_RECEIVED` | `{"text_summary": "Help me book a flight."}` |
 | `AGENT_RESPONSE` | `{"response": "Here are the flights..."}` |
 
-Python では、`AGENT_ERROR` および `INVOCATION_ERROR` 行は `status="ERROR"`、サニタイズされた `error_message`、および `content` にサニタイズされたトレースバックを持ちます。エージェントエラービューは経過した `total_ms` も公開します。これらのイベントは、エージェントまたはランナーの実行からエスケープした未処理の例外を表します。
+Python と Go では、`AGENT_ERROR` および `INVOCATION_ERROR` 行は `status="ERROR"`、サニタイズされた `error_message`、およびサニタイズされた `content.error_traceback` 値（Python ではフォーマットされたトレースバック、Go ではスタックトレースなしのサニタイズされた `err.Error()` メッセージ）を持ちます。エージェントエラービューは経過した `total_ms` も公開します。Python では、両方のイベントはエージェントまたはランナーの実行からエスケープした未処理の例外を表します。Go では、再試行された失敗したノード試行や失敗したツールとしてのエージェント実行など、ADK が `AfterAgent` コールバックなしで終了し、その失敗を自体で処理したアクティベーションに対しても `AGENT_ERROR` が書き込まれます。
 
-ADK Python v2.12.0 以降では、`AGENT_STARTING` 行に次の `attributes` キーを追加することもでき、`v_agent_starting` ビューはこれらを列として公開します。
+ADK Python v2.12.0+ および Go では、`AGENT_STARTING` 行に次の `attributes` キーを追加することもでき、`v_agent_starting` ビューはこれらを列として公開します。
 
-- `instruction_source`: エージェントの指示が呼び出し可能オブジェクト `InstructionProvider` である場合は `"provider"`。
-- `static_instruction`: エージェントの静的指示テキスト。
+- `instruction_source`: エージェントの指示が呼び出し可能な `InstructionProvider` に由来する場合は `"provider"`。
+- `static_instruction`: エージェントの静的指示テキスト *（Python v2.12.0+。Go プラグインでは設定されないため、Go では `v_agent_starting.static_instruction` は `NULL` になります）*。
 - `agent_description`: エージェントの説明。
-- `model`: エージェントのモデル名。LLM エージェントが `model` を未設定のままにしている場合、設定されている最も近い祖先エージェントから継承されたモデルになります。
+- `model`: エージェントのモデル名。Python では、LLM エージェントが `model` を未設定のままにしている場合、設定されている最も近い祖先エージェントから継承されたモデルになります。Go では、エージェント自体に設定されている場合にのみ `model` が記録されます。
 - `sub_agents`: エージェントのサブエージェント名。
 
-適用されないキーや値が空のキーは省略されます。v2.12.0 以降では、行のコンテンツが指示テキストではなく `<function ...>` などの Python 呼び出し可能オブジェクトのテキスト表現である場合、ビューの `agent_instruction` 列は `NULL` になります。
+適用されないキーや値が空のキーは省略されます。Python v2.12.0+ および Go では、行のコンテンツが指示テキストではなく `<function ...>` などの呼び出し可能オブジェクトのテキスト表現である場合、ビューの `agent_instruction` 列は `NULL` になります。
 
 **Kotlin** では、2 つの呼び出しイベントは空のオブジェクトではなく、サマリーメッセージを保持します: `{"message": "Invocation started"}` および `{"message": "Invocation completed"}`。
 
@@ -1207,6 +1800,10 @@ ADK Python v2.12.0 以降では、`AGENT_STARTING` 行に次の `attributes` キ
   }
 }
 ```
+
+この例は Python および Go のペイロードを示しています。Java は表示可能なコンテンツの要約を `{"text_summary": "Here are the available flights..."}` として保存し、`v_agent_response` でそのフィールドを `text_summary` として公開します。
+
+Python と Go では、`final_response_tool_names`（Go では `FinalResponseToolNames`）に正常に完了したツールの名前が含まれている場合、プラグインはそのツールの呼び出し引数をレスポンスペイロードとし、`attributes` に `source_tool` を含めて `AGENT_RESPONSE` も出力します。これは、表示可能なテキストイベントではなく専用のツールを介して最終回答を提供するエージェントをサポートします。
 
 ### Human-in-the-Loop (HITL) イベント {#hitl-events}
 
@@ -1265,10 +1862,12 @@ A2A リモートエージェント呼び出しが完了したときに記録さ�
 }
 ```
 
+この例は Python および Go のペイロードを示しています。Python、Go、および Java はレスポンスを `content` に直接保存します。Python と Go は名前空間付きのレスポンスを `attributes.a2a_metadata` にも保持しますが、Java はその重複を省略します。Python と Go の `v_a2a_interaction` ビューは `response_content`、`a2a_task_id`、`a2a_context_id`、`a2a_request`、および `a2a_response` を公開します。Java は最後の列を省略します。
+
 ### エージェントワークフローと一時停止/再開イベント（ADK 2.0） {#adk-2-events}
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v2.3.0</span><span class="lst-java">Java v1.7.0</span>
+  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v2.3.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v1.7.0</span>
 </div>
 
 !!! note "Java のサポート"
@@ -1279,21 +1878,23 @@ ADK 2.0 では、マルチエージェントワークフロー（制御を渡す
 
 #### `attributes.adk` エンベロープ
 
-このエンベロープは **Python** プラグインでのみ書き込まれます。現在、すべての行に `attributes.adk` オブジェクトが含まれています。`schema_version` と `app_name` は常に存在します。残りのフィールドは、ADK イベント（ライフサイクルおよびワークフローイベント）から発生した行にのみ追加されるため、コールバックのみの行には存在しません（クエリ時には SQL `NULL` に解決されます）。
+このエンベロープは **Python** および **Go** プラグインによって書き込まれます。すべての行に `attributes.adk` オブジェクトが含まれます。`schema_version` は常に存在します（Python では `app_name` も常に存在し、Go では `app_name` が空でない場合に存在します）。イベント由来のフィールドは ADK `Event`（ライフサイクルおよびワークフローイベント）から発生した行にのみ追加されるため、コールバックのみの行では省略され、クエリ時には SQL `NULL` に解決されます。
 
 | フィールド | 型 | 意味 |
 | --- | --- | --- |
 | `schema_version` | string | エンベロープのバージョン（現在は `"1"`）。エンベロープが進化した場合に、これに基づいてダウンストリームクエリを制御できます。 |
-| `app_name` | string | 行を生成した ADK アプリ。 |
+| `app_name` | string | 行を生成した ADK アプリ（Go では空の場合に省略）。 |
 | `source_event_id` | string | 発生元の ADK `Event` の ID。単一のイベントが生成する複数の行を結合するための信頼性の高いキーです。 |
-| `node` | object | ワークフローノードのアイデンティティ: `{ "path", "run_id", "parent_run_id" }`。`parent_run_id` は親ノードの実行 ID です（ルートでは `null`）。 |
+| `node` | object | ワークフローノードのアイデンティティ: `{ "path", "run_id", "parent_run_id" }`。`parent_run_id` は親ノードの実行 ID です（ルートでは `null`）。Go では、`NodeInfo` に設定されている場合に `message_as_output`（bool）および `output_for`（文字列の配列）も `node` に含まれます。 |
 | `branch` | string | ワークフローが分岐したパスを実行している場合のイベントのブランチ。 |
-| `scope` | object | 分離スコープ `{ "id", "kind" }`。ここで `kind` は `node_run`（ワークフローノード実行、例: `loopA@42`）、`function_call`（モデルが生成した呼び出し ID）、または `unknown` です。 |
-| `route` | string | イベントアクションによって選択されたルート（設定されている場合）。 |
-| `render_ui_widgets` | array | イベントアクションによって要求されたシリアル化された UI ウィジェット（設定されている場合）。 |
-| `rewind_before_invocation_id` | string | イベントアクションが巻き戻しを要求する基準となる呼び出し ID（設定されている場合）。 |
+| `scope` | object | 分離スコープ `{ "id", "kind" }`。ここで `kind` は `node_run`（ワークフローノード実行、例: `loopA@42`）、`function_call`（モデルが生成した呼び出し ID）、または *（Python）* `unknown` です。 |
+| `route` | string または array | イベントアクションによって選択されたルート（Python では文字列、Go では文字列の配列、設定されている場合）。 |
+| `render_ui_widgets` | array | イベントアクションによって要求されたシリアル化された UI ウィジェット（設定されている場合、*Python*）。 |
+| `rewind_before_invocation_id` | string | イベントアクションが巻き戻しを要求する基準となる呼び出し ID（設定されている場合、*Python*）。 |
 | `pause_kind` | string | `TOOL_PAUSED` の場合: 通常の長時間実行ツールの場合は `tool`、HITL リクエストの場合は `hitl_credential` / `hitl_confirmation` / `hitl_input`。再開された `TOOL_COMPLETED` 行では常に `tool`。HITL の完了は `TOOL_COMPLETED` ではなく `HITL_*_REQUEST_COMPLETED` としてログに記録されます。 |
 | `function_call_id` | string | 関数呼び出し ID。両者をペアリングできるように、`TOOL_PAUSED` および対応する再開された `TOOL_COMPLETED` 行に設定されます（通常のツールのみ）。 |
+
+**Go** では、`attributes.adk` はすべての行に `event_id` と `author` もスタンプし、空でない場合は `adk_version` と `invocation_id` をスタンプし、`DisableSessionMetadata` が `false` で値が空でない場合は `session_id` と `user_id` をスタンプし、ADK `session.Event` から派生した行には存在する場合は `isolation_scope`、`artifact_delta`、`skip_summarization`、および `escalate` を追加します。
 
 !!! tip "エンベロープのクエリ"
 
@@ -1318,7 +1919,7 @@ ADK 2.0 では、マルチエージェントワークフロー（制御を渡す
 
 #### AGENT_STATE_CHECKPOINT
 
-エージェントがその状態のスナップショットを作成したときに記録されます。プラグインはまた、エージェントの実行の終了をマークするために `end_of_agent: true` を含むチェックポイントを出力します。`v_agent_state_checkpoint` ビューは `agent_state_type` を公開するため、実際状態オブジェクトと明示的な `null` チェックポイント（実行終了マーカー）および未設定の値を区別できます。
+エージェントがその状態のスナップショットを作成したときに記録されます。プラグインはまた、エージェントの実行の終了をマークするために `end_of_agent: true` を含むチェックポイントを出力します。`v_agent_state_checkpoint` ビューは `agent_state_type` を公開するため、実際の状態オブジェクトと明示的な `null` チェックポイント（実行終了マーカー）および未設定の値を区別できます。Go では、チェックポイントは `CustomMetadata` キーの `adk_agent_state`/`agent_state` および `end_of_agent`/`adk_end_of_agent` から取得され、これらのキーが `CustomMetadataAllowlist` にリストされている場合にのみ出力されます。
 
 ```json
 {
@@ -1351,7 +1952,7 @@ ADK が以前のイベントウィンドウを要約に圧縮したときに記�
 #### NODE_OUTPUT および NODE_ERROR
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v2.7.0</span>
+  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python v2.7.0</span><span class="lst-go">Go v0.1.0</span>
 </div>
 
 ワークフローノードパスを持つ最終的な非部分イベントの場合、プラグインは該当するノード固有の終了行を出力します。
@@ -1450,12 +2051,9 @@ ORDER BY paused_at;
 
 ## ストレージ動作: GCS オフロード
 
-`BigQueryLoggerConfig` に `gcs_bucket_name` が構成されている場合、プラグインは
-大きなテキストやマルチモーダルコンテンツ（画像、音声など）を Google Cloud
-Storage へ自動的にオフロードします。`content` 列には要約または placeholder が
-入り、`content_parts` には GCS URI を指す `object_ref` が保存されます。
-[構成オプション](#configuration-options) の `connection_id` と
-`max_content_length` も参照してください。
+`BigQueryLoggerConfig` に `gcs_bucket_name`（Go の `agentanalytics.Config` では `GCSBucketName` または `GCSOffloader`）が構成されている場合、プラグインは大きなテキストやマルチモーダルコンテンツ（画像、音声など）を Google Cloud Storage へ自動的にオフロードします。`content` 列には要約またはプレースホルダーが入り、`content_parts` には GCS URI を指す `object_ref` が保存されます。[構成オプション](#configuration-options) の `connection_id`（Go では `ConnectionID`）、`max_content_length`（Go では `MaxContentLen` および `MaxInlineTextSize`）、および Go のアップロード同時実行数/メモリ制限（`GCSMaxConcurrentUploads`、`GCSUploadTimeout`、`GCSMaxPendingUploadBytes`）も参照してください。
+
+Go では、オフロードされたオブジェクトはそのオブジェクトパスに行のタイムスタンプの UTC 日付（`[prefix/]<YYYY-MM-DD>/<trace_id>/<span_id>_<event_id>_c<ord>_p<idx><ext>`）を使用し、`object_ref.details.gcs_metadata` に `"content_type"` とともに `"size"` を記録し（オフロードされたテキストでは `content_parts[].mime_type` を `"text/plain"` に保ちつつ GCS オブジェクトの `content_type` として `"text/plain; charset=utf-8"` を使用）、`USER_MESSAGE_RECEIVED` および `LLM_REQUEST` に加えて `LLM_RESPONSE` イベントに対しても `content_parts` を設定します。
 
 ### オフロードされたテキスト例
 
@@ -1469,7 +2067,7 @@ Storage へ自動的にオフロードします。`content` 列には要約ま�
       "storage_mode": "GCS_REFERENCE",
       "text": "AAAA... [OFFLOADED]",
       "object_ref": {
-        "uri": "gs://sample-bucket-name/2025-12-10/e-f9545d6d/ae5235e6_p1.txt",
+        "uri": "gs://sample-bucket-name/2025-12-10/a2c7f13d3a3f0bbb8793692f76a6012a/3916f5762bcd4d42_ca5e3c9d99e24e46b614f2f44f93bf6e_c0_p1.txt",
         "authorizer": "us.bqml_connection",
         "details": {"gcs_metadata": {"content_type": "text/plain"}}
       }
@@ -1490,7 +2088,7 @@ Storage へ自動的にオフロードします。`content` 列には要約ま�
       "storage_mode": "GCS_REFERENCE",
       "text": "[MEDIA OFFLOADED]",
       "object_ref": {
-        "uri": "gs://sample-bucket-name/2025-12-10/e-f9545d6d/ae5235e6_p2.png",
+        "uri": "gs://sample-bucket-name/2025-12-10/a2c7f13d3a3f0bbb8793692f76a6012a/3916f5762bcd4d42_ca5e3c9d99e24e46b614f2f44f93bf6e_c0_p2.png",
         "authorizer": "us.bqml_connection",
         "details": {"gcs_metadata": {"content_type": "image/png"}}
       }
@@ -2000,14 +2598,14 @@ print(f"Deployed agent: {remote_app.api_resource.name}")
 
 !!! warning "OAuth トークン、API キー、クライアントシークレットをログに記録しないでください"
 
-    BigQuery Agent Analytics プラグインは、ツール引数、LLM プロンプト、認証関連イベント（HITL 認証情報リクエストなど）を含む詳細なイベントペイロードをキャプチャします。組み込みの墨消しは、小文字化とハイフン正規化の後にキー名を正確に一致させるため、`clientSecret` や `accessToken` などの camelCase バリアントは一致**しません**。ADK は `adk_request_credential` 引数を camelCase エイリアスでシリアル化するため、`AuthenticatedFunctionTool` OAuth2 フローによって `client_secret` および `access_token` の値が `content` 列に書き込まれる可能性があります（[google/adk-python#3845](https://github.com/google/adk-python/issues/3845)）。ADK Python v2.9.0 以降では、`adk_request_credential` リクエストから構成済みの OAuth2 クライアントシークレットが削除され、ADK Python v2.12.0 以降では API キー、HTTP Basic パスワード、HTTP bearer トークン、および追加の HTTP ヘッダーも削除されます。OAuth2 アクセストークンは依然として削除されません。ADK がそのリクエストから削除しないフィールドは camelCase 名を保持し、組み込みの墨消しとは一致しません。独自のツール引数に含まれる camelCase キーも同様です。墨消しは一般的なデータ損失防止（DLP）システムではないため、アプリケーション固有のキーまたは自由形式テキストに含まれるシークレットも BigQuery に書き込まれる可能性があります。
+    BigQuery Agent Analytics プラグインは、ツール引数、LLM プロンプト、認証関連イベント（HITL 認証情報リクエストなど）を含む詳細なイベントペイロードをキャプチャします。Python では、組み込みの墨消しは小文字化とハイフン正規化の後にキー名を正確に一致させるため、`clientSecret` や `accessToken` などの camelCase バリアントは一致**しません**。Go はさらにアンダースコアとハイフンの区切り文字を無視するため、それらのバリアントに一致します。この警告の残りの部分は Python の認証情報リクエストペイロードに関するものです。ADK は `adk_request_credential` 引数を camelCase エイリアスでシリアル化するため、`AuthenticatedFunctionTool` OAuth2 フローによって `client_secret` および `access_token` の値が `content` 列に書き込まれる可能性があります（[google/adk-python#3845](https://github.com/google/adk-python/issues/3845)）。ADK Python v2.9.0 以降では、`adk_request_credential` リクエストから構成済みの OAuth2 クライアントシークレットが削除され、ADK Python v2.12.0 以降では API キー、HTTP Basic パスワード、HTTP bearer トークン、および追加の HTTP ヘッダーも削除されます。OAuth2 アクセストークンは依然として削除されません。ADK がそのリクエストから削除しないフィールドは camelCase 名を保持し、組み込みの墨消しとは一致しません。独自のツール引数に含まれる camelCase キーも同様です。墨消しは一般的なデータ損失防止（DLP）システムではないため、アプリケーション固有のキーまたは自由形式テキストに含まれるシークレットも BigQuery に書き込まれる可能性があります。
 
 プラグインには、一般的なシークレットを自動的に保護する **組み込みの墨消し** 機能が含まれています。さらに制御が必要な場合は、カスタム墨消しを重ねて適用できます。
 
 ### 組み込みの墨消し {#built-in-redaction}
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python</span><span class="lst-java">Java v1.7.0</span>
+  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v1.7.0</span>
 </div>
 
 Python プラグインはキー名を小文字に正規化し、ハイフンをアンダースコアのように扱います。構造化された `content` または `attributes` のどこに現れても、これらのキーの値を再帰的に `[REDACTED]` に置き換えます:
@@ -2018,9 +2616,9 @@ Python プラグインはキー名を小文字に正規化し、ハイフンを�
 `x_amz_credential`, `x_amz_signature`, `x_goog_credential`,
 `x_goog_security_token`, `x_goog_signature`
 
-**`temp:`** プレフィックスが付いたキーも、セッション状態および `state_delta` 行を含めて `[REDACTED]` に置き換えられます。
+Python は **`temp:`** の状態値を `[REDACTED]` に置き換えます。Go はログ記録前に `state_delta` からトップレベルの小文字の **`temp:`** エントリを削除し、何も残らない場合は `STATE_DELTA` 行を出力しません。構造化されたコンテンツや属性内のその他の **`temp:`** 値は `[REDACTED]` に置き換えられます。`secret:` プレフィックスには特別な意味はありません。呼び出しローカルの機密状態には `temp:` を使用するか、アプリケーション固有の状態値はロギングに到達する前にサニタイズしてください。カスタムコンテンツフォーマッタは状態属性を墨消ししません。
 
-!!! warning "訂正: セッション状態では `temp:` のみが墨消しされます"
+!!! warning "以前のガイダンスの訂正"
 
     以前のドキュメントでは、`secret:` プレフィックスが付いたキーも墨消しされると誤って記載されていました。プラグインは `temp:` プレフィックスのみに一致します。セッション状態に `secret:`（例: `secret:token`）の下でシークレットを保存した場合、カスタム `content_formatter` でマスクされない限り平文でログに記録されます。そのガイダンスに依存していた場合は、既存の `agent_events` テーブルで `temp:` 以外のキーの下にログ記録された値を監査してください。
 
@@ -2034,6 +2632,16 @@ Python プラグインはキー名を小文字に正規化し、ハイフンを�
 
     例外をスローするフォーマッタをデバッグするには、`debug_content_formatter_errors=True` を設定して、プラグインのローカル Python ログ警告に制限付きトレースバックを追加します。トレースバックには未フォーマットのコンテンツが含まれる可能性があり、設定されたすべてのログハンドラーに到達するため、そのコンテンツが表示されても問題のない場所でのみ有効にしてください。BigQuery に書き込まれることはありません。
 
+!!! note "Go における組み込みの墨消し"
+
+    Go プラグイン（`google.golang.org/adk/plugin/agentanalytics`）は、デフォルトで組み込みの墨消しを有効にします（`DisableSensitiveKeyRedaction: false`）。キー名は小文字化され、アンダースコア（`_`）とハイフン（`-`）が削除されて正規化されるため、`snake_case`、`kebab-case`、および `camelCase` のバリアント（`api_key`、`api-key`、`apiKey`、`clientSecret`、`accessToken`、`refreshToken`、`idToken`、`privateKey`、`sessionToken`、`secretAccessKey`、`codeVerifier`、`authCode`、`passphrase` など）が一致し、構造化された `content` および `attributes` 全体で `"[REDACTED]"` に置き換えられます（`DisableSensitiveKeyRedaction: true` の場合を除く）。
+
+    さらに、Go プラグインは次の処理を行います:
+
+    - ログ記録前に `state_delta` からトップレベルの小文字の **`temp:`** エントリを削除し、何も残らない場合は `STATE_DELTA` 行を出力しません。構造化されたコンテンツや属性内のその他の **`temp:`** 値は `"[REDACTED]"` に置き換え、`credential` または `credentials` の下にある認証情報コンテナエンベロープ全体を墨消しします。
+    - 外部 URI から認証情報ユーザー情報と機密クエリパラメータを除去し（機密クエリ値を安全に書き換えられない場合は `"[REDACTED_SENSITIVE_URI]"` にフェイルクローズします）、`error_message` と `uri` 内の `Authorization` ヘッダー、`Bearer` および `Basic` トークン、埋め込まれた JSON 認証情報フラグメントを除去します。
+    - 組み込みの墨消しの前にカスタム `ContentFormatter`（`func(content any, eventType string) (any, error)`）を実行します。`ContentFormatter` が非 nil のエラーを返すか panic を起こした場合、Go プラグインは `content` に `"[FORMATTER_FAILED]"` を書き込み、`content_parts` は書き込まず、`error_message` に `content_formatter raised <error type>` または `content_formatter panicked` を追加し、`DropStats().FormatterFailureDrops` をインクリメントします。
+
 !!! note "Java における組み込みの墨消し"
 
     Java プラグインには、v1.7.0 以降で組み込みの墨消しが含まれています。
@@ -2043,7 +2651,7 @@ Python プラグインはキー名を小文字に正規化し、ハイフンを�
 
 ### `content_formatter` を使用して追加のシークレットを墨消しする
 
-`BigQueryLoggerConfig` にカスタム `content_formatter` 関数を提供して、機密フィールドが書き込まれる前に削除またはマスクします:
+カスタム `content_formatter` 関数（Go では `ContentFormatter`、Java では `contentFormatter`）を提供して、機密フィールドが書き込まれる前に削除またはマスクします:
 
 === "Python"
 
@@ -2075,6 +2683,230 @@ Python プラグインはキー名を小文字に正規化し、ハイフンを�
         content_formatter=redact_credentials,
         # ... その他のオプション
     )
+    ```
+
+=== "Go"
+
+    Go では、フォーマッタは最終的な JSON ではなく未加工の型付きコンテンツペイロード（`string`、`*genai.Content`、`*model.LLMRequest`、`*model.LLMResponse`、または `map[string]any` など）を受け取り、`attributes.state_delta` などの属性（attributes）は変換しません。変更するポインタ、スライス、またはマップ（`*genai.Content` 内の `Part.Text`、`Part.ExecutableCode.Code`、`Part.CodeExecutionResult.Output`、`Part.FunctionCall.Args`、`Part.FunctionResponse.Response` を含む）はクローンを作成し、ライブペイロードを決して直接変更しないでください。
+
+    以下のヘルパーは編集する値のクローンを作成し、ネストが 50 レベルに達すると停止します。過度にネストされたペイロードや循環参照を含むペイロードはエラーを返すため、プラグインはプロセスクラッシュのリスクを冒す代わりに `[FORMATTER_FAILED]` を記録します。これらのヘルパーは JSON 形式の `map[string]any` および `[]any` 値（さらに `[]string`、`map[string]string`、`[]map[string]any`）を再帰的に処理します。ツールが返すその他の具体的な型については境界のあるケースを追加するか、フォーマット前にそれらの値を正規化し、この墨消しに依存する前に実際のペイロードでテストしてください:
+
+    ```go
+    package analytics
+
+    import (
+    	"fmt"
+    	"regexp"
+    	"strings"
+
+    	"google.golang.org/adk/plugin/agentanalytics"
+    	"google.golang.org/adk/v2/model"
+    	"google.golang.org/genai"
+    )
+
+    var ssnPattern = regexp.MustCompile(`\b\d{3}-\d{2}-\d{4}\b`)
+
+    func redactCustomSecrets(content any, eventType string) (any, error) {
+    	return redactCustomSecretsAtDepth(content, eventType, 0)
+    }
+
+    func redactCustomSecretsAtDepth(content any, eventType string, depth int) (any, error) {
+    	if depth >= 50 {
+    		return nil, fmt.Errorf("redaction nesting limit exceeded")
+    	}
+    	switch v := content.(type) {
+    	case string:
+    		return ssnPattern.ReplaceAllString(v, "[REDACTED_SSN]"), nil
+    	case *genai.Content:
+    		return redactGenAIContentSecrets(v, eventType, depth+1)
+    	case *model.LLMRequest:
+    		if v == nil {
+    			return nil, nil
+    		}
+    		cloned := *v
+    		if len(v.Contents) > 0 {
+    			cloned.Contents = make([]*genai.Content, len(v.Contents))
+    			for i, c := range v.Contents {
+    				redactedContent, err := redactGenAIContentSecrets(c, eventType, depth+1)
+    				if err != nil {
+    					return nil, err
+    				}
+    				cloned.Contents[i] = redactedContent
+    			}
+    		}
+    		if v.Config != nil && v.Config.SystemInstruction != nil {
+    			redactedSys, err := redactGenAIContentSecrets(v.Config.SystemInstruction, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cfgCopy := *v.Config
+    			cfgCopy.SystemInstruction = redactedSys
+    			cloned.Config = &cfgCopy
+    		}
+    		return &cloned, nil
+    	case *model.LLMResponse:
+    		if v == nil {
+    			return nil, nil
+    		}
+    		redactedContent, err := redactGenAIContentSecrets(v.Content, eventType, depth+1)
+    		if err != nil {
+    			return nil, err
+    		}
+    		cloned := *v
+    		cloned.Content = redactedContent
+    		return &cloned, nil
+    	case map[string]any:
+    		if v == nil {
+    			return map[string]any(nil), nil
+    		}
+    		cloned := make(map[string]any, len(v))
+    		for k, val := range v {
+    			if depth+1 >= 50 {
+    				return nil, fmt.Errorf("redaction nesting limit exceeded")
+    			}
+    			if strings.EqualFold(k, "internal_token") {
+    				cloned[k] = "[REDACTED]"
+    				continue
+    			}
+    			redactedVal, err := redactCustomSecretsAtDepth(val, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[k] = redactedVal
+    		}
+    		return cloned, nil
+    	case map[string]string:
+    		if v == nil {
+    			return map[string]string(nil), nil
+    		}
+    		cloned := make(map[string]string, len(v))
+    		for k, val := range v {
+    			if depth+1 >= 50 {
+    				return nil, fmt.Errorf("redaction nesting limit exceeded")
+    			}
+    			if strings.EqualFold(k, "internal_token") {
+    				cloned[k] = "[REDACTED]"
+    				continue
+    			}
+    			redactedVal, err := redactCustomSecretsAtDepth(val, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[k], _ = redactedVal.(string)
+    		}
+    		return cloned, nil
+    	case []any:
+    		if v == nil {
+    			return []any(nil), nil
+    		}
+    		cloned := make([]any, len(v))
+    		for i, item := range v {
+    			redactedItem, err := redactCustomSecretsAtDepth(item, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[i] = redactedItem
+    		}
+    		return cloned, nil
+    	case []string:
+    		if v == nil {
+    			return []string(nil), nil
+    		}
+    		cloned := make([]string, len(v))
+    		for i, item := range v {
+    			redactedItem, err := redactCustomSecretsAtDepth(item, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[i], _ = redactedItem.(string)
+    		}
+    		return cloned, nil
+    	case []map[string]any:
+    		if v == nil {
+    			return []map[string]any(nil), nil
+    		}
+    		cloned := make([]map[string]any, len(v))
+    		for i, item := range v {
+    			redactedItem, err := redactCustomSecretsAtDepth(item, eventType, depth+1)
+    			if err != nil {
+    				return nil, err
+    			}
+    			cloned[i], _ = redactedItem.(map[string]any)
+    		}
+    		return cloned, nil
+    	default:
+    		return content, nil
+    	}
+    }
+
+    func redactGenAIContentSecrets(c *genai.Content, eventType string, depth int) (*genai.Content, error) {
+    	if depth >= 50 {
+    		return nil, fmt.Errorf("redaction nesting limit exceeded")
+    	}
+    	if c == nil {
+    		return nil, nil
+    	}
+    	cloned := *c
+    	if len(c.Parts) > 0 {
+    		cloned.Parts = make([]*genai.Part, len(c.Parts))
+    		for i, p := range c.Parts {
+    			if p == nil {
+    				continue
+    			}
+    			partCopy := *p
+    			if partCopy.Text != "" {
+    				partCopy.Text = ssnPattern.ReplaceAllString(partCopy.Text, "[REDACTED_SSN]")
+    			}
+    			if partCopy.ExecutableCode != nil {
+    				codeCopy := *partCopy.ExecutableCode
+    				codeCopy.Code = ssnPattern.ReplaceAllString(codeCopy.Code, "[REDACTED_SSN]")
+    				partCopy.ExecutableCode = &codeCopy
+    			}
+    			if partCopy.CodeExecutionResult != nil {
+    				resultCopy := *partCopy.CodeExecutionResult
+    				resultCopy.Output = ssnPattern.ReplaceAllString(resultCopy.Output, "[REDACTED_SSN]")
+    				partCopy.CodeExecutionResult = &resultCopy
+    			}
+    			if partCopy.FunctionCall != nil {
+    				fcCopy := *partCopy.FunctionCall
+    				if fcCopy.Args != nil {
+    					redactedArgs, err := redactCustomSecretsAtDepth(fcCopy.Args, eventType, depth+1)
+    					if err != nil {
+    						return nil, err
+    					}
+    					if argsMap, ok := redactedArgs.(map[string]any); ok {
+    						fcCopy.Args = argsMap
+    					}
+    				}
+    				partCopy.FunctionCall = &fcCopy
+    			}
+    			if partCopy.FunctionResponse != nil {
+    				frCopy := *partCopy.FunctionResponse
+    				if frCopy.Response != nil {
+    					redactedResp, err := redactCustomSecretsAtDepth(frCopy.Response, eventType, depth+1)
+    					if err != nil {
+    						return nil, err
+    					}
+    					if respMap, ok := redactedResp.(map[string]any); ok {
+    						frCopy.Response = respMap
+    					}
+    				}
+    				partCopy.FunctionResponse = &frCopy
+    			}
+    			cloned.Parts[i] = &partCopy
+    		}
+    	}
+    	return &cloned, nil
+    }
+
+    func newRedactedConfig() agentanalytics.Config {
+    	cfg := agentanalytics.DefaultConfig()
+    	cfg.ProjectID = "your-gcp-project-id"
+    	cfg.DatasetID = "agent_analytics"
+    	cfg.TableName = "agent_events"
+    	cfg.ContentFormatter = redactCustomSecrets
+    	return cfg
+    }
     ```
 
 === "Java"
@@ -2193,6 +3025,19 @@ Python プラグインはキー名を小文字に正規化し、ハイフンを�
     )
     ```
 
+=== "Go"
+
+    ```go
+    cfg := agentanalytics.DefaultConfig()
+    cfg.ProjectID = "your-gcp-project-id"
+    cfg.DatasetID = "agent_analytics"
+    cfg.TableName = "agent_events"
+    cfg.EventDenylist = []string{
+    	agentanalytics.EventHITLCredentialRequest,
+    	agentanalytics.EventHITLCredentialCompleted,
+    }
+    ```
+
 === "Java"
 
     ```java
@@ -2215,13 +3060,14 @@ Python プラグインはキー名を小文字に正規化し、ハイフンを�
 
 ## 運用
 
-### トレースと可観測性
+### トレースと可観測性 {#tracing-and-observability}
 
 プラグインは、親子実行ツリー（エージェント → LLM 呼び出し / ツール呼び出し）が BigQuery からきれいに再構築できるように、出力されるすべての行に `trace_id`、`span_id`、`parent_span_id` 列を入力します。
 
-- **内部スパン追跡、OTel スパンエクスポートなし。** プラグインは、16 文字の 16 進数 `span_id` 値の独自の内部スタックで親子階層を追跡します。ルート呼び出しスパンは、周囲の OTel スパンがアクティブな場合にその ID を再利用します（ランナーの呼び出しスパンと一致させます）。子 BQAA スパンは内部で生成されます。設定された OpenTelemetry `TracerProvider` に対して `tracer.start_span(...)` を呼び出さ**ない**ため、そのインストルメンテーションが設定されたエクスポーターに到達することはありません。これにより、Agent Engine テレメトリが有効になっている場合（`GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true`）や、他の Cloud Trace エクスポーターをホストプロセスに接続した場合に、Cloud Trace でスパンが重複するのを防ぎます。同じ内部 ID のみのスパン追跡が、v1.7.0 以降の Java プラグインにも適用されます。以前の Java ビルドでは、フレームワークのスパンの横に重複して表示される可能性のあるプラグイン所有の OpenTelemetry スパンが作成されていました。
-- **周囲の OTel スパンが存在する場合の `trace_id` 継承。** Agent Engine の呼び出しスパン、ADK `Runner` 呼び出しスパン、またはエージェントの実行前に開始した任意のスパンなど、周囲のランタイムがすでに OTel スパンを開始している場合、プラグインはその `trace_id` を読み取り、すべての BigQuery 行にスタンプします。周囲のスパンがない場合、プラグインは呼び出しごとに一意の 32 文字の 16 進数 `trace_id` を生成します。
-- **明示的に保持される親子関係。** プラグインの内部スタックにより、各サブ操作（`LLM_REQUEST`、`TOOL_STARTING` など）が正しい呼び出しレベルまたはエージェントレベルの `span_id` を `parent_span_id` として参照することが保証されます。
+- **内部スパン追跡、OTel スパンエクスポートなし。** プラグインは、16 文字の 16 進数 `span_id` 値の独自の内部スタックで親子階層を追跡します。Python と Java では、ルート呼び出しスパンは周囲の OTel スパンがアクティブな場合にその ID を再利用します（ランナーの呼び出しスパンと一致させます）。Go では、プラグインは常に独自の 16 文字の 16 進数ルート `span_id` を生成し、周囲の OTel スパン ID があれば `parent_span_id` に記録します。子 BQAA スパンは内部で生成されます。設定された OpenTelemetry `TracerProvider` に対して `tracer.start_span(...)` を呼び出さ**ない**ため、そのインストルメンテーションが設定されたエクスポーターに到達することはありません。これにより、Agent Engine テレメトリが有効になっている場合（`GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true`）や、他の Cloud Trace エクスポーターをホストプロセスに接続した場合に、Cloud Trace でスパンが重複するのを防ぎます。同じ内部 ID のみのスパン追跡が Go プラグインおよび Java プラグイン（v1.7.0+）にも適用されます。以前の Java ビルドでは、フレームワークのスパンの横に重複して表示される可能性のあるプラグイン所有の OpenTelemetry スパンが作成されていました。
+- **周囲の OTel スパンが存在する場合の `trace_id` 継承。** Agent Engine の呼び出しスパン、ADK `Runner` 呼び出しスパン（Python および Java）、またはエージェントの実行前に開始した任意のスパンなど、周囲のランタイムがすでに OTel スパンを開始している場合、プラグインはその `trace_id` を読み取り、すべての BigQuery 行にスタンプします。これにより、BigQuery の行は共有された `trace_id` を介して既存の Cloud Trace トレースとスムーズに結合されます。
+- **周囲のスパンが存在しない場合のフォールバック。** アクティブな周囲の OTel スパンがない場合（例: ホスト側のトレーサーが構成されていない非 Agent Engine デプロイ）、Python は呼び出しごとにランダムな 32 文字の 16 進数 `trace_id` を生成します。周囲のスパンがない場合、Go は `invocation_id` が空のときにランダムな 32 文字の 16 進数 `trace_id` を生成します。それ以外の場合は、プラグインごとのランダムなシードと呼び出し ID に対して SHA-256 を使用し、そのプラグインインスタンス内で安定した 32 文字の 16 進数 ID を生成します。Java は `trace_id` として ADK の呼び出し ID にフォールバックするため、外部トレーサーのセットアップがなくても BigQuery で親子階層が常に保持されます。
+- **`TracerProvider` は不要。** アクティブなスパンなしで OpenTelemetry `TracerProvider` を構成しても効果はありません。プラグインは独自のスパンを開始しないため、すでに進行中のスパンからのみ `trace_id` を継承します。
 
 ### パブリックメソッド
 
@@ -2234,7 +3080,32 @@ Python プラグインはキー名を小文字に正規化し、ハイフンを�
     - **`await plugin.close(timeout=None, *, close_background_transport=False)`**: プラグインマネージャーのライフサイクルコントラクトを実行します。同じ引数で `shutdown()` に委任し、ランナーがプラグインを閉じるときに自動的に呼び出されます。
     - **`await BigQueryAgentAnalyticsPlugin.close_shared_background_transports(timeout=10.0)`**（Python v2.10.0+）: スタンドアロンスクリプト、プロセスシャットダウンハンドラー、テストクリーンアップフィクスチャなど、プロセス内のすべての共有バックグラウンドライターを排出して停止します。ライターの排出に失敗した場合、または `timeout` 内に完了しなかった場合に例外を発生させます（1 つのライターが失敗した場合はライターのエラーまたは `TimeoutError`、複数のライターが失敗した場合は `RuntimeError`）。同じ操作は、`google.adk.plugins.bigquery_agent_analytics_plugin` のモジュールレベル関数 `close_shared_background_transports(timeout=10.0)` としても利用可能です。
     - **`await plugin.create_analytics_views()`**: イベントタイプごとのすべての分析ビューを手動で（再）作成します。スキーマアップグレード後やビューを更新する必要がある場合に役立ちます。
+    - **`await plugin.create_eval_views()`**（Python v2.13.0+）: `create_eval_views=False` の場合でも、エージェント評価ビュー（`{view_prefix}_eval_session` および `{view_prefix}_eval_turn`）を手動で（再）作成します。[エージェント評価ビュー](#agent-evaluation-views)を参照してください。
     - **`plugin.get_drop_stats()`**: 原因ごとの配信損失およびコンテンツサニタイズインシデント数のスナップショットを返します。[ドロップされたイベントの可観測性](#dropped-event-observability) を参照してください。
+
+=== "Go"
+
+    Go（`google.golang.org/adk/plugin/agentanalytics`）では、プラグインのライフサイクルおよび運用ヘルパーは ADK の `*plugin.Plugin` ハンドルとアンラップされた `*agentanalytics.BigQueryAgentAnalyticsPlugin` を介して公開されます:
+
+    - **`adkPlugin.Close() error`**: キューに入っているイベントを排出し、バックグラウンドのバッチプロセッサを停止し（各フラッシュ/アップロードステージは `ShutdownTimeout`（デフォルト `10s`）によって制限され、合計経過時間は最大約 2.5 倍になります）、プラグイン所有の BigQuery、Storage Write、および GCS クライアントをクローズします。ADK Go のランナーはプラグインを自動的にクローズしません。構築直後に `defer bqPlugin.Close()` を記述するなどして、終了前に自分で `adkPlugin.Close()` を呼び出してください。
+    - **`agentanalytics.AsBigQueryAgentAnalyticsPlugin(adkPlugin)`**: ADK の `*plugin.Plugin` ハンドルから基礎となる `*agentanalytics.BigQueryAgentAnalyticsPlugin` をアンラップします。アンラップされたハンドルは `adkPlugin.Close()` の完了後も引き続きアクセス可能です。
+    - **`bqPlugin.DropStats() agentanalytics.DropStats`**: ドロップされたイベント数およびフォーマッタ失敗数のスナップショット（`QueueFullDrops`、`AppendFailureDrops`、`FormatterFailureDrops`、`ShutdownDrops`、および `TotalDrops`）を返します。[ドロップされたイベントの可観測性](#dropped-event-observability)を参照してください。
+    - **`bqPlugin.SyncViews(ctx context.Context) error`**: `DisableCreateViews: true` の場合でも、イベントタイプごとの全 25 個の BigQuery 分析ビューを手動で作成または更新します（`CREATE OR REPLACE VIEW`）。プラグインが `NewBigQueryAgentAnalyticsPluginWithClients(..., nil, ...)`（`bqClient == nil`）で構築された場合、`SyncViews` は `agentanalytics: BigQuery client is not configured for view creation` を返します。
+    - **`cfg.ViewDefinitions() ([]agentanalytics.ViewDefinition, error)`**: ネットワーク呼び出しを行わずに `cfg` に対する 25 個のビュー定義（`Name`、`EventType`、および `Query`）の決定論的なリストを返すため、Terraform やデプロイパイプラインを介して外部からビューをプロビジョニングできます。
+
+    ```go
+    // 具体的なプラグインをアンラップしてドロップ統計を検査するか、手動でビューを同期します:
+    if bqPlugin, ok := agentanalytics.AsBigQueryAgentAnalyticsPlugin(adkPlugin); ok {
+    	if err := bqPlugin.SyncViews(ctx); err != nil {
+    		log.Printf("SyncViews failed: %v", err)
+    	}
+    }
+
+    // シャットダウン時に保留中のイベントをフラッシュしてリソースを解放します:
+    if err := adkPlugin.Close(); err != nil {
+    	log.Printf("Close failed: %v", err)
+    }
+    ```
 
 === "Java"
 
@@ -2253,7 +3124,7 @@ Python プラグインはキー名を小文字に正規化し、ハイフンを�
 ### ドロップされたイベントの可観測性 {#dropped-event-observability}
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python</span><span class="lst-java">Java v1.7.0</span>
+  <span class="lst-supported">ADK サポート</span><span class="lst-python">Python</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v1.7.0</span>
 </div>
 
 BigQuery のログ記録はベストエフォートです。メモリ内キューのオーバーフロー、セットアップの利用不能、シャットダウンとコールバックの競合、または最終的な書き込み失敗時に、イベントがドロップされる可能性があります。プラグインはまた、コンテンツの代わりにセンチネルを伴って行が書き込まれるフォーマッタおよびパーサーのエラーもカウントします。カウンタはループのクリーンアップやシャットダウンをまたいで保持されます。
@@ -2262,10 +3133,12 @@ BigQuery のログ記録はベストエフォートです。メモリ内キュ�
 
 | 理由 | 原因 |
 |---|---|
-| `queue_full` | メモリ内のバッチキューがオーバーフローしました（ホストがドレイナーが送信できる速度よりも速くイベントを生成しています）。`BigQueryLoggerConfig` の `queue_max_size` を増やすか、`batch_size` を増やして大きなチャンクでドレインするか、コンシューマ側をスケールしてください。 |
+| `queue_full` | メモリ内のイベントキューを制限します。ADK Python v2.13.0 では、すべてのイベントタイプがこの容量を共有します。満杯のときは終了イベントである `INVOCATION_COMPLETED` および `INVOCATION_ERROR` 行もドロップされる可能性があり、`queue_full` としてカウントされます。`BigQueryLoggerConfig` の `queue_max_size` を増やすか、`batch_size` を増やして大きなチャンクでドレインするか、コンシューマ側をスケールしてください（より多くの同時呼び出しがより速く完了するようにします）。 |
 | `arrow_prep_failed` | 行を Arrow 表現に変換できませんでした（通常はスキーマ/型の不一致）。ログで問題のあるフィールドを調べてください。 |
 | `retry_exhausted` | 再試行予算が使い果たされるまで、Storage Write API 呼び出しが再試行可能なエラー（例: 一時的な gRPC 障害）を返し続けました。 |
-| `non_retryable` | Storage Write API が再試行不可能なエラー（権限、クォータ、スキーマの拒否）を返しました。通常、オペレーターの介入が必要です。 |
+| `permission_denied` | *（Python v2.13.0+）* Storage Write API が `PERMISSION_DENIED`（`google.api_core.exceptions.PermissionDenied`）を返しました。再試行不可能です。サービスアカウントに対象テーブルの `bigquery.tables.updateData`（例: `roles/bigquery.dataEditor`）があることを確認してください。 |
+| `not_found` | *（Python v2.13.0+）* 対象のデータセット、テーブル、または書き込みストリームが存在しない場合などに、Storage Write API がデフォルトストリームで `NOT_FOUND`（`google.api_core.exceptions.NotFound`）を返しました（`exactly_once_delivery` モードでの `NOT_FOUND` は `offset_conflict` としてカウントされます）。再試行不可能です。 |
+| `non_retryable` | Storage Write API がその他の再試行不可能なエラー（クォータ、スキーマの拒否、無効な引数）を返しました。通常、オペレーターの介入が必要です。 |
 | `unexpected_error` | バッチの準備または書き込み中に捕捉されたその他の例外。 |
 | `shutdown_timeout` | 制限されたシャットダウンまたはクローズがタイムアウトしたときに、行がキューに残っていました。 |
 | `shutdown_cancelled` | 外部のクローズタイムアウトなど、ホストによってシャットダウンがキャンセルされたときに、行がキューに残っていました。 |
@@ -2275,6 +3148,18 @@ BigQuery のログ記録はベストエフォートです。メモリ内キュ�
 | `stale_loop` | キューに入れられた行が、すでにクローズされており排出できないイベントループに属していました。 |
 | `formatter_failed` | カスタムフォーマッタが失敗したか、サポートされていない型を返しました。行は `[FORMATTER_FAILED]` で書き込まれます。これはドロップされた行数ではなく、インシデントカウントです。 |
 | `content_parse_failed` | コンテンツの解析に失敗しました。行は `[CONTENT_PARSE_FAILED]` で書き込まれます。これはドロップされた行数ではなく、インシデントカウントです。 |
+
+**ドロップカウンタ（Go）:**
+
+`bqPlugin.DropStats()` は、次の `int64` フィールドを持つ `agentanalytics.DropStats` 構造体を返します:
+
+| フィールド | 原因 |
+|---|---|
+| `QueueFullDrops` | イベントコールバックまたは `Append` が行をキューに入れようとしたときにメモリ内チャネル（`QueueMaxSize`、デフォルト `10000`）が満杯だったためにドロップされた行数。`agentanalytics.Config` の `QueueMaxSize` または `BatchSize` を増やしてください。 |
+| `AppendFailureDrops` | Storage Write API 配信中に失敗として記録された行数（`MaxRetries` を使い果たしたバッチ、再試行不可能な書き込みまたはスキーマ/ディスクリプタ準備エラー、再試行が失敗する前に壊れたストリーム上で ack が失われたサーバーコミット済みの追加、回復されたコールバック panic、および `Flush` でのバッチ失敗後にスキップされた残りのバッチを含む）。 |
+| `FormatterFailureDrops` | 非 nil のエラーを返したか panic を起こしたカスタム `ContentFormatter` 呼び出し。行は引き続き `"[FORMATTER_FAILED]"`、`content_parts` なし、および `error_message` に `content_formatter raised <error type>` または `content_formatter panicked` を伴って書き込まれます。これはインシデントカウントであり、`TotalDrops` には含まれません。 |
+| `ShutdownDrops` | `Close()` 中に `ShutdownTimeout` が期限切れになる前に排出できなかったキュー内の残り行数と、`Close()` の開始後に `Append` に渡された行数。 |
+| `TotalDrops` | ドロップとしてカウントされた行数の上限合計（`QueueFullDrops + AppendFailureDrops + ShutdownDrops`）。`AppendFailureDrops` には ack が失われたサーバーコミット済みのバッチが含まれる可能性があるため、`TotalDrops` は失われた行数の上限となります。 |
 
 **ドロップ理由（Java、v1.7.0+）:**
 
@@ -2297,15 +3182,33 @@ BigQuery のログ記録はベストエフォートです。メモリ内キュ�
     # プラグイン開始以降の {reason: count} のスナップショット。
     stats = plugin.get_drop_stats()
     # 例: {"queue_full": 12, "retry_exhausted": 0,
+    #      "permission_denied": 0, "not_found": 0,
     #      "formatter_failed": 1, ...}
 
     loss_reasons = {
         "queue_full", "arrow_prep_failed", "retry_exhausted",
-        "non_retryable", "unexpected_error", "shutdown_timeout",
-        "shutdown_cancelled", "offset_conflict", "setup_unavailable",
-        "shutdown_race", "stale_loop",
+        "permission_denied", "not_found", "non_retryable",
+        "unexpected_error", "shutdown_timeout", "shutdown_cancelled",
+        "offset_conflict", "setup_unavailable", "shutdown_race",
+        "stale_loop",
     }
     total_rows_lost = sum(stats.get(reason, 0) for reason in loss_reasons)
+    ```
+
+=== "Go"
+
+    ```go
+    if bqPlugin, ok := agentanalytics.AsBigQueryAgentAnalyticsPlugin(adkPlugin); ok {
+    	stats := bqPlugin.DropStats()
+    	fmt.Printf(
+    		"total_drops=%d (queue_full=%d append_failure=%d shutdown=%d) formatter_failures=%d\n",
+    		stats.TotalDrops,
+    		stats.QueueFullDrops,
+    		stats.AppendFailureDrops,
+    		stats.ShutdownDrops,
+    		stats.FormatterFailureDrops,
+    	)
+    }
     ```
 
 === "Java"
@@ -2340,7 +3243,7 @@ async def export_loop(plugin):
         await asyncio.sleep(60)
 ```
 
-ゼロ以外のすべての理由に対してアラートを設定してください。ほとんどの理由は、BigQuery に到達する前に行が失われたことを意味します。一方、`formatter_failed` および `content_parse_failed` の理由は、センチネルコンテンツで行が書き込まれたことを意味するため、プライバシーまたはデータ品質のインシデントとしてアラートを設定してください。`queue_full`、`retry_exhausted`、`non_retryable`、または `offset_conflict` のカウントが持続する場合は、一般にスループット、配信、または Storage Write の健全性の問題を示します。Java における同等の書き込みエラーバケットは `append_error` です。
+ゼロ以外のすべての理由に対してアラートを設定してください。ほとんどの理由は、BigQuery に到達する前に行が失われたことを意味します。一方、`formatter_failed`（Go では `FormatterFailureDrops`）および `content_parse_failed` の理由は、センチネルコンテンツで行が書き込まれたことを意味するため、プライバシーまたはデータ品質のインシデントとしてアラートを設定してください。`queue_full`、`retry_exhausted`、`permission_denied`、`not_found`、`non_retryable`、または `offset_conflict` のカウントが持続する場合は、一般にスループット、IAM、配信、または Storage Write の健全性の問題を示します。Go における同等の書き込みエラーカウンタは `AppendFailureDrops` であり、Java では `append_error` です。
 
 ### マルチプロセッシングと fork セーフティ
 
@@ -2398,6 +3301,8 @@ BigQuery Agent Analytics に関するフィードバックを歓迎します。�
 
 ## 追加リソース
 
+- [Python プラグインのソース](https://github.com/google/adk-python/blob/main/src/google/adk/plugins/bigquery_agent_analytics_plugin.py)
+- [Go プラグインのソース](https://github.com/google/adk-go/tree/main/plugin/agentanalytics)
 - [BigQuery Storage Write API](https://cloud.google.com/bigquery/docs/write-api)
 - [Introduction to Object Tables](https://docs.cloud.google.com/bigquery/docs/object-table-introduction)
-- [Interactive Demo Notebook](https://github.com/haiyuan-eng-google/demo_BQ_agent_analytics_plugin_notebook)
+- [BigQuery Agent Analytics SDK の例](https://github.com/GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK/tree/main/examples)

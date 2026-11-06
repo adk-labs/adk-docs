@@ -87,9 +87,9 @@ session_service = VertexAiSessionService(agent_engine_id=APP_ID)
     - Vertex AI エージェントエンジンセッションの作成、削除、更新：毎分10回
     - Vertex AI エージェントエンジンセッションへのイベント追加：毎分30回
 
-## `VertexAiMemoryBankService`によるメモリ管理
+## `VertexAiMemoryBankService`によるメモリ管理 {#memory-bank}
 
-[`VertexAiMemoryBankService`](../sessions/memory.md) は Vertex AI ExpressモードのAPIキーと互換性があります。プロジェクトやロケーションを指定せずにメモリオブジェクトを初期化できます。
+[`VertexAiMemoryBankService`](../sessions/memory.md#memory-bank) は Vertex AI ExpressモードのAPIキーと互換性があります。プロジェクトやロケーションを指定せずにメモリオブジェクトを初期化できます。
 
 ```py
 # 必要なライブラリ: pip install google-adk[gcp]

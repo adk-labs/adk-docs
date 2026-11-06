@@ -10,7 +10,7 @@ catalog_tags: ["observability", "evaluation"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
-[Freeplay](https://freeplay.ai/) は、AI エージェントを構築および最適化するためのエンドツーエンドのワークフローを提供し、ADK と統合できます。Freeplay を使用すると、チーム全体が簡単に共同作業して、エージェントの指示 (プロンプト) を繰り返し、さまざまなモデルとエージェントの変更を試して比較し、オフラインとオンラインの両方で評価を実行して品質を測定し、本番環境を監視し、手動でデータを確認できます。
+[Freeplay](https://app.freeplay.ai/) は、AI エージェントを構築および最適化するためのエンドツーエンドのワークフローを提供し、ADK と統合できます。Freeplay を使用すると、チーム全体が簡単に共同作業して、エージェントの指示 (プロンプト) を繰り返し、さまざまなモデルとエージェントの変更を試して比較し、オフラインとオンラインの両方で評価を実行して品質を測定し、本番環境を監視し、手動でデータを確認できます。
 
 Freeplay の主な利点:
 
@@ -31,7 +31,7 @@ Freeplay と ADK は互いに補完し合っています。ADK は強力で表�
 
 ### Freeplay アカウントの作成
 
-無料の [Freeplay アカウント](https://freeplay.ai/signup)にサインアップしてください。
+無料の [Freeplay アカウント](https://app.freeplay.ai/signup)にサインアップしてください。
 
 アカウントを作成したら、次の環境変数を定義できます。
 
@@ -154,4 +154,4 @@ ADK を使用して Freeplay でバッチテストを実行するためのコー
 
 ## 今すぐサインアップ
 
-[Freeplay](https://freeplay.ai/) にアクセスしてアカウントにサインアップし、[こちら](https://github.com/228Labs/freeplay-google-demo)で完全な Freeplay <> ADK 統合を確認してください。
+[Freeplay](https://app.freeplay.ai/signup) にアクセスしてアカウントにサインアップし、[こちら](https://github.com/228Labs/freeplay-google-demo)で完全な Freeplay <> ADK 統合を確認してください。

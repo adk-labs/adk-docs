@@ -1,16 +1,14 @@
 # ADK エージェント用スキル (Skills)
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.25.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v1.2.0</span><span class="lst-preview">プレビュー</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.25.0</span><span class="lst-typescript">TypeScript v0.6.1</span><span class="lst-go">Go v1.2.0</span>
 </div>
 
 エージェント ***スキル (Skill)*** は、ADK エージェントが特定のタスクを実行するために使用できる自己完結型の機能単位です。エージェント スキルは、[Agent Skill 仕様](https://agentskills.io/specification) に基づいて、タスクに必要な指示、リソース、ツールをカプセル化します。スキルの構造により、段階的にロードしてエージェントの動作コンテキスト ウィンドウへの影響を最小限に抑えることができます。
 
-!!! example "プレビュー"
-    スキル機能はプレビュー段階です。各 ADK GitHub リポジトリからのフィードバックをお待ちしております。
-    [ADK Python](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=skills)、
+!!! example "TypeScript および Kotlin では実験的機能"
+    スキル機能は、ADK TypeScript および ADK Kotlin では実験的機能です。各 ADK GitHub リポジトリからのフィードバックをお待ちしております。
     [ADK TypeScript](https://github.com/google/adk-js/issues/new?template=feature_request.md&labels=skills)、
-    [ADK Go](https://github.com/google/adk-go/issues/new?template=feature_request.md&labels=skills)、
     [ADK Kotlin](https://github.com/google/adk-kotlin/issues/new)。
 
 ## はじめに

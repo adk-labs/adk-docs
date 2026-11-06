@@ -10,7 +10,7 @@ catalog_tags: ["observability", "evaluation"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[Freeplay](https://freeplay.ai/)는 AI 에이전트를 구축하고 최적화하기 위한 엔드투엔드 워크플로우를 제공하며 ADK와 통합될 수 있습니다. Freeplay를 사용하면 전체 팀이 쉽게 협업하여 에이전트 지침(프롬프트)을 반복하고, 다양한 모델과 에이전트 변경 사항을 실험 및 비교하고, 오프라인 및 온라인에서 평가를 실행하여 품질을 측정하고, 프로덕션을 모니터링하고, 데이터를 직접 검토할 수 있습니다.
+[Freeplay](https://app.freeplay.ai/)는 AI 에이전트를 구축하고 최적화하기 위한 엔드투엔드 워크플로우를 제공하며 ADK와 통합될 수 있습니다. Freeplay를 사용하면 전체 팀이 쉽게 협업하여 에이전트 지침(프롬프트)을 반복하고, 다양한 모델과 에이전트 변경 사항을 실험 및 비교하고, 오프라인 및 온라인에서 평가를 실행하여 품질을 측정하고, 프로덕션을 모니터링하고, 데이터를 직접 검토할 수 있습니다.
 
 Freeplay의 주요 이점:
 
@@ -31,7 +31,7 @@ Freeplay와 ADK는 서로를 보완합니다. ADK는 강력하고 표현력이 �
 
 ### Freeplay 계정 만들기
 
-무료 [Freeplay 계정](https://freeplay.ai/signup)에 가입하십시오.
+무료 [Freeplay 계정](https://app.freeplay.ai/signup)에 가입하십시오.
 
 계정을 만든 후 다음 환경 변수를 정의할 수 있습니다.
 
@@ -154,4 +154,4 @@ ADK를 사용하여 Freeplay에서 일괄 테스트를 실행하는 코드 예�
 
 ## 지금 가입
 
-[Freeplay](https://freeplay.ai/)로 이동하여 계정에 가입하고 [여기](https://github.com/228Labs/freeplay-google-demo)에서 전체 Freeplay <> ADK 통합을 확인하십시오.
+[Freeplay](https://app.freeplay.ai/signup)로 이동하여 계정에 가입하고 [여기](https://github.com/228Labs/freeplay-google-demo)에서 전체 Freeplay <> ADK 통합을 확인하십시오.

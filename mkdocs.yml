@@ -348,6 +348,7 @@ plugins:
                 - 그래프 경로: graphs/routes.md
                 - 데이터 처리: graphs/data-handling.md
                 - 인간 입력: graphs/human-input.md
+                - 재시도 및 타임아웃: graphs/retry.md
                 - 동적 워크플로우: graphs/dynamic.md
               - 다중 에이전트 워크플로우:
                 - workflows/index.md
@@ -545,6 +546,7 @@ plugins:
                 - グラフルート: graphs/routes.md
                 - データ処理: graphs/data-handling.md
                 - 人間入力: graphs/human-input.md
+                - 再試行とタイムアウト: graphs/retry.md
                 - 動的ワークフロー: graphs/dynamic.md
               - マルチエージェントワークフロー:
                 - workflows/index.md

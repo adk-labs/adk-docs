@@ -4,7 +4,7 @@
   <span class="lst-supported">ADK でのサポート</span><span class="lst-python">Python v2.10.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
-エージェントのワークロードによって、レイテンシの要件は異なります。対話型アシスタントは即座に応答する必要がありますが、要約ジョブ、一括評価の実行、ドキュメント処理パイプラインなどは、空き容量を待つことができます。遅延スケジューリング（Deferred scheduling）を使用すると、ADK エージェントは対話用の容量を奪い合うのではなく、オフピーク容量で実行されるようにモデル呼び出しをキューに入れることができます。
+エージェントのワークロードによって、レイテンシの要件は異なります。対話型アシスタントは即座に応答する必要がありますが、要約ジョブ、一括評価の実行、ドキュメント処理パイプラインなどは、空き容量を待つことができます。遅延スケジューリング（Deferred scheduling）を使用すると、ADK エージェントは対話用の容量を奪い合うのではなく、[割引料金](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing)でオフピーク容量で実行されるようにモデル呼び出しをキューに入れることができます。
 
 `RunConfig` の `service_tier` 設定を使用して、実行（run）ごとに遅延スケジューリングをリクエストできます。この設定はモデルやエージェントではなく実行設定の一部であるため、1 つのエージェント定義で対話型リクエストとバッチワークロードの両方に対応できます。
 
@@ -76,7 +76,7 @@
 
 !!! warning "待機中は実行がハングしているように見えます"
 
-    リクエストがキューに入っている間、`run_async()` メソッドはイベントを生成しません。待機時間はバックエンドの負荷によって異なり、ADK は上限を設けません。Web UI やターミナルでは、この遅延がハングしているように見えることがあります。進行状況インジケーターを表示するか、[クライアント側のデッドラインを設定](#set-a-client-side-deadline)してください。
+    リクエストがキューに入っている間、`run_async()` メソッドはイベントを生成しません。待機時間はバックエンドの負荷によって異なり、ADK は上限を設けません。Web UI やターミナルでは、遅延の間、アプリケーションが応答していないように見えます。進行状況インジケーターを表示するか、[クライアント側のデッドラインを設定](#set-a-client-side-deadline)してください。
 
 ティア（tier）が適用されたことを確認するには、アプリケーションログで次のメッセージを確認してください。
 
@@ -91,7 +91,7 @@
 
 標準のモデルリクエストは同期的です。ADK がリクエストを送信すると、モデルは同じ接続上でレスポンスを返します。`ServiceTier.DEFERRED` を設定して遅延スケジューリングを有効にすると、ADK はリクエストをバックグラウンド実行としてマークし、バックエンドはそれをキューに入れて、結果の代わりにインタラクション ID（interaction ID）を即座に返します。
 
-その後、ADK はエクスポネンシャルバックオフ（指数バックオフ）を使用してキュー内の処理を確認し、最終ステータスに到達するまで一時的な読み取りエラーを吸収しながら結果を待機します。結果が返されると通常のレスポンスイベントに変換して生成します。このループは内部的に行われるため、インタラクション ID が外部に露出することはなく、取得用のコードを記述する必要もありません。ただし、キューの待機時間に加えて数秒のポーリング遅延が発生するため、短時間でレイテンシの影響を受けやすい呼び出しには遅延スケジューリングを使用しないでください。
+その後、ADK はエクスポネンシャルバックオフ（指数バックオフ）を使用してキュー内の処理を確認し、最終ステータスに到達するまで一時的な読み取りエラーを吸収しながら結果を待機します。5 回連続して読み取りに失敗した場合、ADK は最後の読み取りのエラーを送出します。結果が返されると通常のレスポンスイベントに変換して生成します。このループは内部的に行われるため、インタラクション ID が外部に露出することはなく、取得用のコードを記述する必要もありません。ただし、キューの待機時間に加えて数秒のポーリング遅延が発生するため、短時間でレイテンシの影響を受けやすい呼び出しには遅延スケジューリングを使用しないでください。
 
 待機動作の次の特性は、エージェントの設計方法に影響します。
 
@@ -136,26 +136,27 @@
     logger = logging.getLogger(__name__)
 
     # Continues from the Get started example, reusing runner and session.
-    message = types.Content(
-        role='user',
-        parts=[types.Part.from_text(text='Generate a quarterly summary.')],
-    )
-    run_config = RunConfig(service_tier=ServiceTier.DEFERRED)
+    async def run_with_deadline(runner, session) -> None:
+      message = types.Content(
+          role='user',
+          parts=[types.Part.from_text(text='Generate a quarterly summary.')],
+      )
+      run_config = RunConfig(service_tier=ServiceTier.DEFERRED)
 
-    try:
-      async with asyncio.timeout(300):
-        async for event in runner.run_async(
-            user_id='user_123',
-            session_id=session.id,
-            new_message=message,
-            run_config=run_config,
-        ):
-          if event.content and event.content.parts:
-            for part in event.content.parts:
-              if part.text:
-                print(part.text)
-    except TimeoutError:
-      logger.error('Deferred run exceeded the 300 second client deadline.')
+      try:
+        async with asyncio.timeout(300):
+          async for event in runner.run_async(
+              user_id='user_123',
+              session_id=session.id,
+              new_message=message,
+              run_config=run_config,
+          ):
+            if event.content and event.content.parts:
+              for part in event.content.parts:
+                if part.text:
+                  print(part.text)
+      except TimeoutError:
+        logger.error('Deferred run exceeded the 300 second client deadline.')
     ```
 
 !!! danger "クライアントのデッドラインはリクエストをキャンセルしません"

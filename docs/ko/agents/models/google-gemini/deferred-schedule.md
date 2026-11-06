@@ -4,7 +4,7 @@
   <span class="lst-supported">ADK에서 지원됨</span><span class="lst-python">Python v2.10.0</span><span class="lst-preview">프리뷰</span>
 </div>
 
-에이전트 워크로드마다 지연 시간(latency) 요구 사항이 다릅니다. 대화형 어시스턴트는 즉시 응답해야 하지만, 요약 작업, 대량 평가 실행 또는 문서 처리 파이프라인은 여유 용량을 기다릴 수 있습니다. 지연 스케줄링(Deferred scheduling)을 사용하면 ADK 에이전트가 대화형 용량을 두고 경쟁하는 대신 오프피크(off-peak) 용량에서 실행되도록 이러한 모델 호출을 대기열에 넣을 수 있습니다.
+에이전트 워크로드마다 지연 시간(latency) 요구 사항이 다릅니다. 대화형 어시스턴트는 즉시 응답해야 하지만, 요약 작업, 대량 평가 실행 또는 문서 처리 파이프라인은 여유 용량을 기다릴 수 있습니다. 지연 스케줄링(Deferred scheduling)을 사용하면 ADK 에이전트가 대화형 용량을 두고 경쟁하는 대신 [할인된 요금](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing)으로 오프피크(off-peak) 용량에서 실행되도록 이러한 모델 호출을 대기열에 넣을 수 있습니다.
 
 `RunConfig`의 `service_tier` 설정을 사용하여 실행(run) 단위로 지연 스케줄링을 요청할 수 있습니다. 이 설정은 모델이나 에이전트가 아닌 실행 설정의 일부이므로, 하나의 에이전트 정의로 대화형 요청과 배치 워크로드를 모두 처리할 수 있습니다.
 
@@ -76,7 +76,7 @@
 
 !!! warning "대기하는 동안 실행이 멈춘 것처럼 보일 수 있습니다"
 
-    요청이 대기열에 있는 동안 `run_async()` 메서드는 이벤트를 생성하지 않습니다. 대기 시간은 백엔드 부하에 따라 달라지며 ADK는 상한선을 두지 않습니다. 웹 UI나 터미널에서는 이 지연이 멈춤(hang) 현상처럼 보일 수 있습니다. 진행률 표시기를 표시하거나 [클라이언트 측 마감 시간(deadline)을 설정](#set-a-client-side-deadline)하세요.
+    요청이 대기열에 있는 동안 `run_async()` 메서드는 이벤트를 생성하지 않습니다. 대기 시간은 백엔드 부하에 따라 달라지며 ADK는 상한선을 두지 않습니다. 웹 UI나 터미널에서는 지연 시간 동안 애플리케이션이 응답하지 않는 것처럼 보입니다. 진행률 표시기를 표시하거나 [클라이언트 측 마감 시간(deadline)을 설정](#set-a-client-side-deadline)하세요.
 
 등급(tier)이 적용되었는지 확인하려면 애플리케이션 로그에서 다음 메시지를 확인하세요.
 
@@ -91,7 +91,7 @@
 
 표준 모델 요청은 동기식입니다. ADK가 요청을 보내면 모델은 동일한 연결에서 응답을 반환합니다. `ServiceTier.DEFERRED`를 설정하여 지연 스케줄링을 활성화하면 ADK는 요청을 백그라운드 실행으로 표시하고, 백엔드는 이를 대기열에 추가한 뒤 결과 대신 인터랙션 ID(interaction ID)를 즉시 반환합니다.
 
-그런 다음 ADK는 지수 백오프(exponential backoff)를 사용하여 대기열의 작업을 확인하고, 최종 상태에 도달할 때까지 일시적인 읽기 오류를 흡수하면서 결과를 기다립니다. 이후 결과를 일반 응답 이벤트로 변환하여 반환합니다. 이 루프는 내부적으로 처리되므로 인터랙션 ID가 외부에 노출되지 않으며 별도의 조회 코드를 작성할 필요가 없습니다. 다만 대기열 대기 시간 외에 몇 초의 폴링 지연이 추가되므로, 짧고 지연 시간에 민감한 호출에는 지연 스케줄링을 사용하지 않아야 합니다.
+그런 다음 ADK는 지수 백오프(exponential backoff)를 사용하여 대기열의 작업을 확인하고, 최종 상태에 도달할 때까지 일시적인 읽기 오류를 흡수하면서 결과를 기다립니다. 5회 연속 읽기에 실패하면 ADK는 마지막 읽기의 오류를 발생시킵니다. 이후 결과를 일반 응답 이벤트로 변환하여 반환합니다. 이 루프는 내부적으로 처리되므로 인터랙션 ID가 외부에 노출되지 않으며 별도의 조회 코드를 작성할 필요가 없습니다. 다만 대기열 대기 시간 외에 몇 초의 폴링 지연이 추가되므로, 짧고 지연 시간에 민감한 호출에는 지연 스케줄링을 사용하지 않아야 합니다.
 
 대기 동작의 다음 속성은 에이전트 설계 방식에 영향을 미칩니다.
 
@@ -136,26 +136,27 @@
     logger = logging.getLogger(__name__)
 
     # Continues from the Get started example, reusing runner and session.
-    message = types.Content(
-        role='user',
-        parts=[types.Part.from_text(text='Generate a quarterly summary.')],
-    )
-    run_config = RunConfig(service_tier=ServiceTier.DEFERRED)
+    async def run_with_deadline(runner, session) -> None:
+      message = types.Content(
+          role='user',
+          parts=[types.Part.from_text(text='Generate a quarterly summary.')],
+      )
+      run_config = RunConfig(service_tier=ServiceTier.DEFERRED)
 
-    try:
-      async with asyncio.timeout(300):
-        async for event in runner.run_async(
-            user_id='user_123',
-            session_id=session.id,
-            new_message=message,
-            run_config=run_config,
-        ):
-          if event.content and event.content.parts:
-            for part in event.content.parts:
-              if part.text:
-                print(part.text)
-    except TimeoutError:
-      logger.error('Deferred run exceeded the 300 second client deadline.')
+      try:
+        async with asyncio.timeout(300):
+          async for event in runner.run_async(
+              user_id='user_123',
+              session_id=session.id,
+              new_message=message,
+              run_config=run_config,
+          ):
+            if event.content and event.content.parts:
+              for part in event.content.parts:
+                if part.text:
+                  print(part.text)
+      except TimeoutError:
+        logger.error('Deferred run exceeded the 300 second client deadline.')
     ```
 
 !!! danger "클라이언트 마감 시간은 요청을 취소하지 않습니다"
