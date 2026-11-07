@@ -1,69 +1,46 @@
-# Memory: Long-term knowledge with `MemoryService`
+# 메모리: `MemoryService`를 사용한 장기 지식
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-While a `Session` tracks the history (`events`) and temporary data (`state`) of
-a single conversation, an agent may need to recall information from past
-interactions. This is where the concept of **Long-Term Knowledge** and the
-**`MemoryService`** come into play. Think of it this way:
+`Session`이 단일 대화의 기록(`events`) 및 임시 데이터(`state`)를 추적하는 반면, 에이전트는 과거 상호작용의 정보를 회상해야 할 수도 있습니다. 이것이 바로 **장기 지식(Long-Term Knowledge)**과 **`MemoryService`**의 개념이 필요한 부분입니다. 다음과 같이 생각할 수 있습니다:
 
-- **`Session` / `State`:** It's your short-term memory during one specific chat.
-- **Long-Term Knowledge (`MemoryService`)**: It's a searchable archive or
-  knowledge library the agent can consult, potentially containing information
-  from many past chats or other sources.
+- **`Session` / `State`:** 특정 채팅 중의 단기 기억입니다.
+- **장기 지식(`MemoryService`)**: 에이전트가 참조할 수 있는 검색 가능한 아카이브 또는 지식 라이브러리로, 여러 과거 채팅이나 기타 소스의 정보를 포함할 수 있습니다.
 
-## The `MemoryService` role
+## `MemoryService` 역할
 
-The `BaseMemoryService` (or `Service` in Go) defines the interface for managing
-this searchable, long-term knowledge store. It supports these operations:
+`BaseMemoryService`(Go에서는 `Service`)는 이 검색 가능한 장기 지식 저장소를 관리하기 위한 인터페이스를 정의합니다. 다음 작업을 지원합니다:
 
-- **Ingesting Information:**
-    - **`add_session_to_memory`**: Takes a completed `Session` and adds relevant
-      information to the long-term knowledge store. This approach is ideal for
-      automatically capturing the essence of a conversation.
-    - **`add_events_to_memory`**: Appends a delta of events (for example, the
-      latest turn) without re-ingesting the full session. Useful when you want
-      to write to memory partway through a long-running session.
-    - **`add_memory`**: Adds explicit `MemoryEntry` objects directly to the
-      memory. This method gives you fine-grained control and is useful for
-      injecting specific facts from other sources.
-- **Searching Information (`search_memory`):** Lets an agent (typically via a
-  `Tool`) query the knowledge store and retrieve relevant snippets or context
-  based on a search query.
+- **정보 수집(Ingesting Information):**
+    - **`add_session_to_memory`**: 완료된 `Session`을 가져와 관련 정보를 장기 지식 저장소에 추가합니다. 이 방식은 대화의 핵심을 자동으로 캡처하는 데 이상적입니다.
+    - **`add_events_to_memory`**: 전체 세션을 다시 수집하지 않고 이벤트 델타(예: 최신 턴)를 추가합니다. 장기 실행 세션 도중 메모리에 쓰고 싶을 때 유용합니다.
+    - **`add_memory`**: 명시적인 `MemoryEntry` 객체를 메모리에 직접 추가합니다. 이 메서드는 세밀한 제어를 제공하며 다른 소스의 특정 팩트를 주입할 때 유용합니다.
+- **정보 검색(`search_memory`):** 에이전트(일반적으로 `Tool`을 통해)가 지식 저장소를 쿼리하고 검색 쿼리를 기반으로 관련 스니펫이나 컨텍스트를 가져올 수 있도록 합니다.
 
-`add_events_to_memory` and `add_memory` are optional and are not implemented by
-every service, so confirm that your chosen service supports them before relying
-on them.
+`add_events_to_memory`와 `add_memory`는 선택 사항이며 모든 서비스에서 구현되는 것은 아니므로, 사용하기 전에 선택한 서비스가 이를 지원하는지 확인하세요.
 
-## Choose the right memory service
+## 올바른 메모리 서비스 선택
 
-The Python ADK ships three `MemoryService` implementations. Use the table below
-to decide which is the best fit for your agent.
+Python ADK는 세 가지 `MemoryService` 구현을 제공합니다. 아래 표를 사용하여 에이전트에 가장 적합한 것을 결정하세요.
 
-| **Feature** | **InMemoryMemoryService** | **VertexAiMemoryBankService** | **VertexAiRagMemoryService** |
+| **기능** | **InMemoryMemoryService** | **VertexAiMemoryBankService** | **VertexAiRagMemoryService** |
 | :--- | :--- | :--- | :--- |
-| **Persistence** | None, data is lost on restart | Yes, managed by the Agent Platform | Yes, stored in Knowledge Engine |
-| **Primary Use Case** | Prototyping, local development, and simple testing. | Building meaningful, evolving memories from user conversations. | Vector-search retrieval over the full conversation corpus, or alongside other RAG-indexed content. |
-| **Memory Extraction** | Stores full conversation | Extracts [meaningful information](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/generate-memories) from conversations and consolidates it with existing memories powered by LLM | Stores full conversation, indexed by [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview). |
-| **Search Capability** | Basic keyword matching. | Advanced semantic search. | Vector similarity search over Knowledge Engine. |
-| **Setup Complexity** | None. It's the default. | Low. Requires an [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview) instance on Agent Platform. | Medium. Requires [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/manage-your-rag-corpus). |
-| **Dependencies** | None. | Google Cloud Project, Agent Platform API | Google Cloud Project, Knowledge Engine, the Agent Platform SDK (optional install). |
-| **When to use it** | When you want to search across multiple sessions’ chat histories for prototyping. | When you want your agent to remember and learn from past interactions. | When you already have RAG infrastructure or want to retrieve over raw conversation transcripts. |
+| **지속성** | 없음(다시 시작하면 데이터가 손실됨) | 예(Agent Platform에서 관리) | 예(Knowledge Engine에 저장) |
+| **주요 사용 사례** | 프로토타이핑, 로컬 개발 및 간단한 테스트. | 사용자 대화에서 의미 있고 진화하는 메모리를 구축합니다. | 전체 대화 코퍼스 또는 다른 RAG 색인 콘텐츠와 함께 벡터 검색을 수행합니다. |
+| **메모리 추출** | 전체 대화 저장 | LLM을 기반으로 대화에서 [의미 있는 정보](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/generate-memories)를 추출하고 기존 메모리와 통합합니다. | [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)으로 색인된 전체 대화를 저장합니다. |
+| **검색 기능** | 기본 키워드 일치. | 고급 시맨틱 검색. | Knowledge Engine 기반 벡터 유사도 검색. |
+| **설정 복잡성** | 없음. 기본값입니다. | 낮음. Agent Platform의 [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview) 인스턴스가 필요합니다. | 중간. [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/manage-your-rag-corpus)이 필요합니다. |
+| **종속성** | 없음. | Google Cloud 프로젝트, Agent Platform API | Google Cloud 프로젝트, Knowledge Engine, Agent Platform SDK(선택 설치). |
+| **사용 시기** | 프로토타이핑을 위해 여러 세션의 채팅 기록을 검색하려는 경우. | 에이전트가 과거 상호작용을 기억하고 학습하기를 원하는 경우. | 이미 RAG 인프라가 있거나 원시 대화 기록을 검색하려는 경우. |
 
-You can always import `VertexAiRagMemoryService` from `google.adk.memory`, but
-constructing it raises `ImportError` unless the Agent Platform SDK is installed
-with `pip install google-adk[gcp]`. Memory Bank and RAG-backed memory are
-documented in [Memory Bank](#memory-bank) and [RAG Memory](#rag-memory) below.
+`google.adk.memory`에서 `VertexAiRagMemoryService`를 항상 가져올 수 있지만, `pip install google-adk[gcp]`를 통해 Agent Platform SDK가 설치되어 있지 않으면 생성 시 `ImportError`가 발생합니다. Memory Bank와 RAG 기반 메모리는 아래의 [Memory Bank](#memory-bank) 및 [RAG 메모리](#rag-memory)에 설명되어 있습니다.
 
 
 ## `InMemoryMemoryService`
 
-The `InMemoryMemoryService` stores session information in the application's
-memory and performs basic keyword matching for searches. It requires no setup
-and is best for prototyping and simple testing scenarios where persistence isn't
-required.
+`InMemoryMemoryService`는 애플리케이션의 메모리에 세션 정보를 저장하고 검색을 위해 기본 키워드 일치를 수행합니다. 설정이 필요 없으며 지속성이 필요하지 않은 프로토타이핑 및 간단한 테스트 시나리오에 가장 적합합니다.
 
 === "Python"
 
@@ -106,10 +83,9 @@ required.
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:instantiate_service"
     ```
 
-**Example: Add and search memory**
+**예: 메모리 추가 및 검색**
 
-This example demonstrates the basic flow using the `InMemoryMemoryService` for
-simplicity.
+이 예는 단순성을 위해 `InMemoryMemoryService`를 사용하는 기본 흐름을 보여줍니다.
 
 === "Python"
 
@@ -230,9 +206,9 @@ simplicity.
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:full_example"
     ```
 
-### Search memory within a tool
+### 도구 내에서 메모리 검색
 
-You can also search memory from within a custom tool by using the tool context.
+도구 컨텍스트를 사용하여 커스텀 도구 내에서 메모리를 검색할 수도 있습니다.
 
 === "Python"
 
@@ -293,34 +269,24 @@ You can also search memory from within a custom tool by using the tool context.
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:search_within_tool"
     ```
 
-## Memory Bank
+## Memory Bank {#memory-bank}
 
-The `VertexAiMemoryBankService` connects your agent to [Memory
-Bank](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview),
-a fully managed Google Cloud service that provides sophisticated, persistent
-memory capabilities for conversational agents.
+`VertexAiMemoryBankService`는 에이전트를 대화형 에이전트를 위한 정교하고 지속적인 메모리 기능을 제공하는 완전 관리형 Google Cloud 서비스인 [Memory Bank](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/overview)에 연결합니다.
 
-### How it works
+### 작동 방식
 
-The service handles two key operations:
+이 서비스는 두 가지 주요 작업을 처리합니다:
 
-- **Generating Memories:** At the end of a conversation, you can send the
-  session's events to the Memory Bank, which intelligently processes and stores
-  the information as "memories."
-- **Retrieving Memories:** Your agent code can issue a search query against the
-  Memory Bank to retrieve relevant memories from past conversations.
+- **메모리 생성:** 대화가 끝나면 세션의 이벤트를 Memory Bank로 보낼 수 있으며, Memory Bank는 정보를 지능적으로 처리하여 "메모리"로 저장합니다.
+- **메모리 검색:** 에이전트 코드는 Memory Bank에 대해 검색 쿼리를 실행하여 과거 대화에서 관련 메모리를 검색할 수 있습니다.
 
-### Direct memory ingestion with `add_memory`
+### `add_memory`를 사용한 직접 메모리 수집
 
-Besides generating memories from session history, `VertexAiMemoryBankService`
-also supports direct memory ingestion via the `add_memory` method. This method
-gives you precise control over the facts stored in the Memory Bank.
+세션 기록에서 메모리를 생성하는 것 외에도 `VertexAiMemoryBankService`는 `add_memory` 메서드를 통한 직접 메모리 수집을 지원합니다. 이 메서드를 사용하면 Memory Bank에 저장되는 팩트를 정밀하게 제어할 수 있습니다.
 
-How it works depends on the `enable_consolidation` option:
+작동 방식은 `enable_consolidation` 옵션에 따라 달라집니다:
 
-- **Direct Creation (Default):** By default, `add_memory` calls the underlying
-  `memories.create` API. Each `MemoryEntry` you provide is added as a distinct,
-  separate memory item.
+- **직접 생성(기본값):** 기본적으로 `add_memory`는 기본 `memories.create` API를 호출합니다. 제공하는 각 `MemoryEntry`는 별개의 독립된 메모리 항목으로 추가됩니다.
 
     ```python
     from google.adk.memory import VertexAiMemoryBankService
@@ -338,11 +304,7 @@ How it works depends on the `enable_consolidation` option:
     )
     ```
 
-- **Creation with Consolidation:** If you set `enable_consolidation` to `True`
-  in the `custom_metadata`, the service uses the `memories.generate` API. This
-  setting allows the Memory Bank to intelligently consolidate the new memory
-  items with existing related memories, preventing redundancy and building a
-  more coherent knowledge base.
+- **통합을 통한 생성(Creation with Consolidation):** `custom_metadata`에서 `enable_consolidation`을 `True`로 설정하면 서비스는 `memories.generate` API를 사용합니다. 이 설정을 통해 Memory Bank는 새로운 메모리 항목을 기존 관련 메모리와 지능적으로 통합하여 중복을 방지하고 보다 일관된 지식 기반을 구축할 수 있습니다.
 
     ```python
     await memory_service.add_memory(
@@ -355,46 +317,36 @@ How it works depends on the `enable_consolidation` option:
     )
     ```
 
-### Prerequisites
+### 전제 조건
 
-Before you can use this feature, you must have:
+이 기능을 사용하려면 다음이 있어야 합니다:
 
-1. **A Google Cloud Project:** With the Agent Platform API enabled.
-2. **An Agent Runtime:** You need to create an Agent Runtime on Agent Platform.
-   You do not need to deploy your agent to Agent Runtime to use Memory Bank.
-   This setup will provide you with the **Agent Runtime ID** required for
-   configuration.
-3. **Authentication:** Ensure your local environment is authenticated to access
-   Google Cloud services. The simplest way is to run:
+1. **Google Cloud 프로젝트:** Agent Platform API가 활성화되어 있어야 합니다.
+2. **Agent Runtime:** Agent Platform에서 Agent Runtime을 생성해야 합니다. Memory Bank를 사용하기 위해 에이전트를 Agent Runtime에 배포할 필요는 없습니다. 이 설정을 통해 구성에 필요한 **Agent Runtime ID**를 얻을 수 있습니다.
+3. **인증:** 로컬 환경이 Google Cloud 서비스에 액세스하도록 인증되었는지 확인합니다. 가장 간단한 방법은 다음을 실행하는 것입니다:
 
     ```bash
     gcloud auth application-default login
     ```
 
-4. **Environment Variables:** The service requires your Google Cloud Project ID
-   and Location. Set them as environment variables:
+4. **환경 변수:** 이 서비스에는 Google Cloud 프로젝트 ID와 위치가 필요합니다. 이를 환경 변수로 설정하세요:
 
     ```bash
     export GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
     export GOOGLE_CLOUD_LOCATION="your-gcp-location"
     ```
 
-For more information on connecting to Google Cloud from ADK agents, see [Connect
-to Google Cloud and Agent Platform](/get-started/google-cloud/).
+ADK 에이전트에서 Google Cloud에 연결하는 방법에 대한 자세한 내용은 [Google Cloud 및 Agent Platform에 연결](/get-started/google-cloud/)을 참조하세요.
 
-### Configuration
+### 구성
 
-To connect your agent to the Memory Bank, you use the `--memory_service_uri`
-flag when starting the ADK server (`adk web` or `adk api_server`). The Uniform
-Resource Identifier (URI) must be in the format
-`agentengine://<agent_engine_id>`.
+에이전트를 Memory Bank에 연결하려면 ADK 서버(`adk web` 또는 `adk api_server`)를 시작할 때 `--memory_service_uri` 플래그를 사용합니다. URI는 `agentengine://<agent_engine_id>` 형식이어야 합니다.
 
 ```bash title="bash"
 adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 ```
 
-Or, you can configure your agent to use the Memory Bank by manually
-instantiating the `VertexAiMemoryBankService` and passing it to the `Runner`.
+또는 `VertexAiMemoryBankService`를 수동으로 인스턴스화하고 `Runner`에 전달하여 Memory Bank를 사용하도록 에이전트를 구성할 수 있습니다.
 
 === "Python"
 
@@ -420,13 +372,9 @@ instantiating the `VertexAiMemoryBankService` and passing it to the `Runner`.
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:memory_bank"
     ```
 
-## RAG memory
+## RAG 메모리 {#rag-memory}
 
-The `VertexAiRagMemoryService` stores conversations in [Knowledge
-Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)
-and retrieves them by vector similarity. Use it when you already have RAG
-infrastructure or want raw transcript retrieval rather than the LLM-extracted
-memories produced by Memory Bank. Requires the Agent Platform SDK.
+`VertexAiRagMemoryService`는 대화를 [Knowledge Engine](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview)에 저장하고 벡터 유사도를 통해 검색합니다. 이미 RAG 인프라가 있거나 Memory Bank에서 생성된 LLM 추출 메모리 대신 원시 대화 기록 검색을 원할 때 사용하세요. Agent Platform SDK가 필요합니다.
 
 === "Python"
 
@@ -446,16 +394,14 @@ memories produced by Memory Bank. Requires the Agent Platform SDK.
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:rag_memory"
     ```
 
-## Use memory in your agent
+## 에이전트에서 메모리 사용
 
-When a memory service is configured, your agent can use a tool or callback to
-retrieve memories. ADK includes two pre-built tools for retrieving memories:
+메모리 서비스가 구성되면 에이전트는 도구 또는 콜백을 사용하여 메모리를 검색할 수 있습니다. ADK에는 메모리 검색을 위한 두 가지 기본 제공 도구가 포함되어 있습니다:
 
-- **Preload memory**: Automatically retrieves memory at the beginning of each
-  turn, similar to a callback.
-- **Load memory**: Retrieves memory when your agent decides it would be helpful.
+- **메모리 미리 로드(Preload memory)**: 콜백과 유사하게 각 턴이 시작될 때 메모리를 자동으로 검색합니다.
+- **메모리 로드(Load memory)**: 에이전트가 도움이 될 것이라고 판단할 때 메모리를 검색합니다.
 
-**Example:**
+**예:**
 
 === "Python"
 
@@ -521,8 +467,7 @@ retrieve memories. ADK includes two pre-built tools for retrieving memories:
     --8<-- "examples/kotlin/snippets/sessions/MemoryExample.kt:preload_memory_agent"
     ```
 
-To extract memories from your session, you need to call `add_session_to_memory`.
-For example, you can automate this step with a callback:
+세션에서 메모리를 추출하려면 `add_session_to_memory`를 호출해야 합니다. 예를 들어 콜백을 사용하여 이 단계를 자동화할 수 있습니다:
 
 === "Python"
 
@@ -672,55 +617,28 @@ async def update_session_memory(my_memory_service, my_completed_session):
 
 ```
 
-## Advanced concepts
+## 고급 개념
 
-### How memory works in practice
+### 실제 메모리 작동 방식
 
-The memory workflow includes the following steps:
+메모리 워크플로에는 다음 단계가 포함됩니다:
 
-1. **Session Interaction:** A user interacts with an agent via a `Session`,
-   managed by a `SessionService`. During this interaction, events are recorded
-   and session state may be updated.
-2. **Ingestion into Memory:** When a session concludes or captures significant
-   information, your application calls
-   `memory_service.add_session_to_memory(session)`. This action extracts key
-   data and persists it to your long-term knowledge store, such as the Agent
-   Runtime Memory Bank.
-3. **Later Query:** In a different, or in the same session, you might ask a
-   question requiring past context, for example, "What did we discuss about
-   project X last week?".
-4. **Agent Uses Memory Tool:** An agent equipped with a memory-retrieval tool,
-   such as the built-in `load_memory` tool, recognizes the need for past
-   context. It calls the tool, providing a search query (e.g., "discussion
-   project X last week").
-5. **Search Execution:** The tool internally calls
-   `memory_service.search_memory(app_name=..., user_id=..., query=...)`.
-6. **Results Returned:** The `MemoryService` searches its store, using keyword
-   matching or semantic search, and returns matching snippets as a
-   `SearchMemoryResponse` containing a list of `MemoryEntry` objects, each
-   holding `content`, and all optional: `id`, `author`, `timestamp`, and
-   `custom_metadata`.
-7. **Agent Uses Results:** The tool returns these results to the agent, usually
-   as part of the context or function response. The agent can then use this
-   retrieved information to formulate its final answer to the user.
+1. **세션 상호작용:** 사용자는 `SessionService`에서 관리하는 `Session`을 통해 에이전트와 상호작용합니다. 이 상호작용 동안 이벤트가 기록되고 세션 상태가 업데이트될 수 있습니다.
+2. **메모리로 수집:** 세션이 종료되거나 중요한 정보를 캡처하면 애플리케이션은 `memory_service.add_session_to_memory(session)`을 호출합니다. 이 작업은 핵심 데이터를 추출하여 Agent Runtime Memory Bank와 같은 장기 지식 저장소에 영구 저장합니다.
+3. **추후 쿼리:** 다른 세션 또는 동일한 세션에서 과거 컨텍스트가 필요한 질문(예: "지난주에 프로젝트 X에 대해 무엇을 논의했나요?")을 할 수 있습니다.
+4. **에이전트의 메모리 도구 사용:** 기본 제공 `load_memory` 도구와 같은 메모리 검색 도구가 장착된 에이전트는 과거 컨텍스트의 필요성을 인식합니다. 검색 쿼리(예: "discussion project X last week")를 제공하여 도구를 호출합니다.
+5. **검색 실행:** 도구는 내부적으로 `memory_service.search_memory(app_name=..., user_id=..., query=...)`를 호출합니다.
+6. **결과 반환:** `MemoryService`는 키워드 일치 또는 시맨틱 검색을 사용하여 저장소를 검색하고, 일치하는 스니펫을 `content`와 선택 사항인 `id`, `author`, `timestamp`, `custom_metadata`를 보유하는 `MemoryEntry` 객체 리스트가 포함된 `SearchMemoryResponse`로 반환합니다.
+7. **에이전트의 결과 사용:** 도구는 일반적으로 컨텍스트 또는 함수 응답의 일부로 이 결과를 에이전트에 반환합니다. 그런 다음 에이전트는 이 검색된 정보를 사용하여 사용자에 대한 최종 답변을 작성할 수 있습니다.
 
-### Can an agent have access to more than one memory service?
+### 에이전트가 둘 이상의 메모리 서비스에 액세스할 수 있나요?
 
-- **Through Standard Configuration: No.** The framework (`adk web`, `adk
-  api_server`) is designed to be configured with one memory service at a time
-  via the `--memory_service_uri` flag. That single service is wired into the
-  runner and exposed through `tool_context.search_memory()` and
-  `callback_context.search_memory()`.
-- **Within Your Agent's Code: Yes.** You can instantiate a second
-  `BaseMemoryService` and consult it from a custom tool, which already has a
-  `ToolContext` for the framework-configured service.
+- **표준 구성을 통해: 아니요.** 프레임워크(`adk web`, `adk api_server`)는 `--memory_service_uri` 플래그를 통해 한 번에 하나의 메모리 서비스로 구성되도록 설계되었습니다. 이 단일 서비스는 러너에 연결되며 `tool_context.search_memory()` 및 `callback_context.search_memory()`를 통해 노출됩니다.
+- **에이전트 코드 내에서: 예.** 두 번째 `BaseMemoryService`를 인스턴스화하고, 프레임워크에서 구성된 서비스를 위한 `ToolContext`가 이미 있는 커스텀 도구에서 이를 참조할 수 있습니다.
 
-For example, your agent can use the framework-configured `InMemoryMemoryService`
-for conversation history and manually instantiate a second service, a
-`VertexAiMemoryBankService`, a `VertexAiRagMemoryService` over a docs corpus, or
-any other `BaseMemoryService` implementation, for a separate knowledge base.
+예를 들어 에이전트는 대화 기록을 위해 프레임워크에서 구성된 `InMemoryMemoryService`를 사용하고, 별도의 지식 기반을 위해 `VertexAiMemoryBankService`, 문서 코퍼스 기반의 `VertexAiRagMemoryService` 또는 기타 `BaseMemoryService` 구현과 같은 두 번째 서비스를 수동으로 인스턴스화할 수 있습니다.
 
-#### Example: Use two memory services
+#### 예: 두 개의 메모리 서비스 사용
 
 === "Python"
 
