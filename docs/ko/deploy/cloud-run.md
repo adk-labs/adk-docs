@@ -471,12 +471,12 @@ google-adk
           <dependency>
              <groupId>com.google.adk</groupId>
              <artifactId>google-adk</artifactId>
-             <version>1.12.0</version>
+             <version>1.14.0</version>
           </dependency>
           <dependency>
              <groupId>com.google.adk</groupId>
              <artifactId>google-adk-dev</artifactId>
-             <version>1.12.0</version>
+             <version>1.14.0</version>
           </dependency>
         </dependencies>
 
