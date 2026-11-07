@@ -1,23 +1,16 @@
-# Human input for agent workflows
+# エージェントワークフローでの人間の入力 (Human input)
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-Being able to request human input for data input, decision verification, or
-action permission is an important part of many agent-powered workflows.
-Graph-based workflows in ADK can include human in the loop (HITL) nodes
-specifically built for obtaining input from humans as part of a workflow. These
-nodes do not require artificial intelligence (AI) models to run, which can make
-the input process more predictable and reliable.
+データ入力、意思決定の検証、またはアクションの許可のために人間の入力を要求できることは、多くのエージェントを活用したワークフローにおいて重要な要素です。ADK のグラフベースのワークフローには、ワークフローの一部として人間から入力を取得するために特別に構築されたヒューマンインザループ (HITL) ノードを含めることができます。これらのノードは実行に人工知能 (AI) モデルを必要としないため、入力プロセスをより予測可能で信頼性の高いものにすることができます。
 
 ## はじめに
 
 === "Python"
 
-    You can implement a human input node in a graph using the ***RequestInput***
-    class and a text prompt for the user. The following code example shows how to
-    add a human input node to a Workflow graph:
+    ***RequestInput*** クラスとユーザー向けのテキストプロンプトを使用して、グラフ内に人間の入力ノードを実装できます。次のコード例は、Workflow グラフに人間の入力ノードを追加する方法を示しています。
 
     ```python
     from google.adk.events import RequestInput
@@ -35,49 +28,37 @@ the input process more predictable and reliable.
     )
     ```
 
-    In this code example, `step1` pauses the execution of the agent until the
-    system receives an input from a user. Once the system receives input from the
-    user, that input is passed to the next node.
+    このコード例では、システムがユーザーからの入力を受け取るまで、`step1` がエージェントの実行を一時停止します。システムがユーザーから入力を受け取ると、その入力は次のノードに渡されます。
 
 === "TypeScript"
 
-    ADK TypeScript v2.0.0 では、人間の入力ノードは `RequestInput` を yield します。`step1` ノードはユーザーが応答するまでワークフローを一時停止し、その返信は入力として次のノードに渡されます。ヒューマンインザループ (HITL) ノードはモデルを必要としないため、一時停止が決定論的になります。
+    ADK TypeScript では、人間の入力ノードは `RequestInput` を yield します。`step1` ノードはユーザーが応答するまでワークフローを一時停止し、その返信は入力として次のノードに渡されます。ヒューマンインザループ (HITL) ノードはモデルを必要としないため、一時停止が決定論的になります。
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/human-input/get_started.ts:get-started"
     ```
 
-    この実装は、デフォルトの `rerunOnResume: false` ハンドオフを示しています。中断されたノードは再実行されず、ユーザーの返信を出力として完了します。`ctx.runNode()` を呼び出すノードには代わりに `rerunOnResume: true` が必要です。詳細については、[動的ワークフローでの人間の入力](/graphs/dynamic/#human-input) を参照してください。
+    この実装は、デフォルトの `rerunOnResume: false` ハンドオフを示しています。中断されたノードは再実行されず、ユーザーの返信を出力として完了します。`ctx.runNode()` を呼び出すノードには代わりに `rerunOnResume: true` が必要です。詳細については、[動的ワークフローでの人間の入力](/ja/graphs/dynamic/#human-input) を参照してください。
 
 === "Go"
 
-    In ADK Go v2.0.0, a HITL graph node is built with
-    `workflow.NewEmittingFunctionNode` and `workflow.ResumeOrRequestInput`.
-    This is the direct equivalent of Python's `RequestInput` node:
-
-    -   On the **first pass**, `workflow.ResumeOrRequestInput` emits a
-        `session.RequestInput` event (surfaced as `Event.RequestedInput`) and
-        returns `ErrNodeInterrupted`, pausing the workflow.
-    -   After the human replies, the node is **re-invoked from the top**
-        (`RerunOnResume: &true`) and `ResumeOrRequestInput` returns the reply
-        payload, which flows as typed input to the next node via `event.Output`.
+    ADK Go では、人間の入力ノードは `workflow.NewRequestInputEvent` でリクエストを発行し、`workflow.ErrNodeInterrupted` を返します。`step1` ノードはユーザーが応答するまでワークフローを一時停止します。このノードは再実行されません。返信がその出力となり、次のノードに渡されます。
 
     ```go
-    --8<-- "examples/go/snippets/graphs/human-input/main.go:graph-hitl-get-started"
+    --8<-- "examples/go/snippets/graphs/human-input/main.go:graph-hitl-handoff"
     ```
+
+    返信後に再実行する必要があるノードは、代わりに `RerunOnResume` を設定し、`workflow.ResumeOrRequestInput` を呼び出します。詳細については、[動的ワークフローでの人間の入力](/ja/graphs/dynamic/#human-input) を参照してください。
 
 ## 構成オプション
 
 === "Python"
 
-    Human input nodes can use the ***RequestInput*** class with the following
-    configuration options:
+    人間の入力ノードでは、次の構成オプションとともに ***RequestInput*** クラスを使用できます。
 
-    -   **`message`:** Text provided to the user to explain the human input
-        request.
-    -   **`payload`:** Structured data to be used as part of the human input
-        request.
-    -   **`response_schema`:** A data structure the human response must conform to.
+    -   **`message`:** 人間の入力リクエストを説明するためにユーザーに提供されるテキスト。
+    -   **`payload`:** 人間の入力リクエストの一部として使用される構造化データ。
+    -   **`response_schema`:** 人間の応答が準拠しなければならないデータ構造。
 
 === "TypeScript"
 
@@ -94,50 +75,31 @@ the input process more predictable and reliable.
 
 === "Go"
 
-    `session.RequestInput` carries the following fields, which map directly to
-    Python's `RequestInput` parameters:
+    `session.RequestInput` には次のフィールドがあり、Python の `RequestInput` パラメータに直接マッピングされます。
 
-    -   **`InterruptID`** (`string`): A unique identifier for this pause point.
-        Use a stable prefix plus a UUID to avoid collision across workflow runs.
-        Equivalent to the implicit interrupt ID in Python.
-    -   **`Message`** (`string`): Human-readable prompt displayed to the user.
-        Equivalent to Python's `message` parameter.
-    -   **`Payload`** (`any`): Optional structured data sent alongside the
-        prompt so the client can render additional context. Equivalent to
-        Python's `payload` parameter.
+    -   **`InterruptID`** (`string`): この一時停止ポイントの一意の識別子。ワークフロー実行間での衝突を避けるため、固定のプレフィックスと UUID を組み合わせて使用してください。Python の暗黙的な割り込み ID に相当します。
+    -   **`Message`** (`string`): ユーザーに表示される人間が読めるプロンプト。Python の `message` パラメータに相当します。
+    -   **`Payload`** (`any`): クライアントが追加のコンテキストをレンダリングできるようにプロンプトとともに送信されるオプションの構造化データ。Python の `payload` パラメータに相当します。
+    -   **`ResponseSchema`** (`*jsonschema.Schema`): 返信が準拠しなければならないオプションの JSON スキーマ。Python の `response_schema` パラメータに相当します。
 
-    `workflow.NodeConfig.RerunOnResume` controls what happens on resume:
+    `workflow.NodeConfig.RerunOnResume` フィールドは再開時の動作を制御します。
 
-    -   **`&true`**: the node body is re-run from the top; `ResumeOrRequestInput`
-        returns the human's reply on the second pass. Required for nodes that
-        use `ResumeOrRequestInput`.
-    -   **`&false`** or **`nil`** (leaf default): the reply is routed to the
-        node's successor as input, bypassing the interrupted node.
-
-    !!! note "Note: Structured response from the client"
-
-        ADK Go does not automatically parse or validate the structure of the
-        human's reply payload. If your workflow needs structured feedback,
-        include a UI or a downstream agent node to validate the response before
-        acting on it.
+    -   **`&true`**: ノード本体が最初から再実行され、2 回目のパスで `ResumeOrRequestInput` が人間の返信を返します。`ResumeOrRequestInput` を使用するノードで必須です。
+    -   **`&false`** または **`nil`** (リーフのデフォルト): 返信は中断されたノードをバイパスして、ノードの後続ノードに入力としてルーティングされます。
 
 !!! note "注: 応答スキーマの入力制限"
 
     応答スキーマは、人間の返信を指定された構造に合わせて自動的に再フォーマットしません。返信はすでにその形式である必要があります。より良いユーザーエクスペリエンスを提供するために、クライアントインターフェースで構造化データを収集するか、一時停止の後にエージェントノードを配置して返信を必要な形式に変換してください。
 
-## 人間の入力 (Human Input) examples
+## 人間の入力の例
 
-The following code examples demonstrate more detailed human input requests.
+次のコード例は、より詳細な人間の入力リクエストを示しています。
 
-### Request input with a message and payload
+### メッセージとペイロードを指定して入力を要求する
 
 === "Python"
 
-    The following code sample shows how to construct a ***RequestInput*** object
-    in a workflow node, including a ***payload*** and ***response schema***. In
-    this example, the `ActivitiesList` is expected to be completed by an agent
-    node that composes a list of activities, and the `get_user_feedback()` node
-    requests feedback from the user.
+    次のコードサンプルは、***payload*** と ***response schema*** を含む ***RequestInput*** オブジェクトをワークフローノード内で構築する方法を示しています。この例では、`ActivitiesList` はアクティビティのリストを作成するエージェントノードによって完成されることが想定されており、`get_user_feedback()` ノードがユーザーにフィードバックを要求します。
 
     ```python
     class ActivitiesList(BaseModel):
@@ -178,10 +140,7 @@ The following code examples demonstrate more detailed human input requests.
 
 === "Go"
 
-    The following code sample shows a three-node graph: a builder node generates
-    a structured itinerary, a HITL node sends it as `Payload` alongside the
-    prompt, and a final node acts on the user's feedback. The `Payload` field
-    lets the client render the full itinerary for the user before they respond:
+    次のコードサンプルは3ノードグラフを示しています。ビルダーノードが構造化された旅程を生成し、HITL ノードがプロンプトとともに `Payload` として送信し、最後のノードがユーザーのフィードバックに基づいて動作します。`Payload` フィールドにより、クライアントはユーザーが応答する前に旅程全体をレンダリングできます。
 
     ```go
     --8<-- "examples/go/snippets/graphs/human-input/main.go:graph-hitl-with-payload"
@@ -189,16 +148,11 @@ The following code examples demonstrate more detailed human input requests.
 
 ## ツール確認: LLM エージェントの承認プロンプト
 
-Tool-confirmation is a separate, LLM-agent–level mechanism for yes/no
-approval prompts. Unlike graph HITL nodes, tool-confirmation works inside an
-`llmagent` tool function rather than as a standalone graph node. It is useful
-when you want an LLM agent to pause and ask for approval before executing a
-specific tool call.
+ツール確認 (Tool-confirmation) は、はい/いいえの承認プロンプトのための独立した LLM エージェントレベルのメカニズムです。グラフの HITL ノードとは異なり、ツール確認はスタンドアロンのグラフノードとしてではなく、`llmagent` のツール関数内で動作します。特定のツール呼び出しを実行する前に LLM エージェントを一時停止して承認を求めたい場合に便利です。
 
 === "Python"
 
-    The following code sample shows how to construct a ***RequestInput*** object
-    in a workflow node, including a ***response schema***:
+    次のコードサンプルは、***response schema*** を含む ***RequestInput*** オブジェクトをワークフローノード内で構築する方法を示しています。
 
     ```python
     async def initial_prompt(ctx: Context):
@@ -214,7 +168,7 @@ specific tool call.
                Hobby,
                Example of attraction you liked
        """
-        yield RequestInput(message=input_message, response_schema=str)
+       yield RequestInput(message=input_message, response_schema=str)
     ```
 
 === "TypeScript"
@@ -227,15 +181,13 @@ specific tool call.
 
 === "Go"
 
-    Set `RequireConfirmation: true` in `functiontool.Config` for a static
-    yes/no approval before a tool executes, or call `ctx.RequestConfirmation`
-    from inside the tool for a custom hint message:
+    ツールが実行される前に静的なはい/いいえの承認を求めるには `functiontool.Config` で `RequireConfirmation: true` を設定するか、カスタムヒントメッセージを表示するにはツール内から `ctx.RequestConfirmation` を呼び出します。
 
     ```go
     --8<-- "examples/go/snippets/graphs/human-input/main.go:simple-hitl"
     ```
 
-    For a custom hint with manual re-entry handling:
+    手動の再エントリ処理を伴うカスタムヒントの場合:
 
     ```go
     --8<-- "examples/go/snippets/graphs/human-input/main.go:hitl-with-hint"
