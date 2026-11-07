@@ -1,24 +1,24 @@
 # エージェント コンテキスト
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-In the Agent Development Kit (ADK), *context* refers to the crucial bundle of information available to your agent and its tools during specific operations. Think of it as the necessary background knowledge and resources needed to handle a current task or conversation turn effectively.
+Agent Development Kit (ADK) において、*コンテキスト*とは、エージェントとそのツールが特定の操作中に利用できる重要な情報の集合体を指します。現在のタスクや会話のターンを効果的に処理するために必要な背景知識やリソースだと考えてください。
 
-Agents often need more than just the latest user message to perform well. Context is essential because it enables:
+エージェントがうまく機能するためには、多くの場合、最新のユーザーメッセージ以上の情報が必要です。コンテキストは以下を可能にするため、不可欠です。
 
-1. **Maintaining State:** Remembering details across multiple steps in a conversation (e.g., user preferences, previous calculations, items in a shopping cart). This is primarily managed through **session state**.
-2. **Passing Data:** Sharing information discovered or generated in one step (like an LLM call or a tool execution) with subsequent steps. Session state is key here too.
-3. **Accessing Services:** Interacting with framework capabilities like:
-    * **Artifact Storage:** Saving or loading files or data blobs (like PDFs, images, configuration files) associated with the session.
-    * **Memory:** Searching for relevant information from past interactions or external knowledge sources connected to the user.
-    * **Authentication:** Requesting and retrieving credentials needed by tools to access external APIs securely.
-4. **Identity and Tracking:** Knowing which agent is currently running (`agent.name`) and uniquely identifying the current request-response cycle (`invocation_id`) for logging and debugging.
-5. **Tool-Specific Actions:** Enabling specialized operations within tools, such as requesting authentication or searching memory, which require access to the current interaction's details.
+1.  **状態の維持：** 会話の複数のステップにわたる詳細（例：ユーザーの好み、以前の計算結果、ショッピングカートのアイテム）を記憶します。これは主に**セッション状態（session state）**を通じて管理されます。
+2.  **データの受け渡し：** あるステップ（LLMの呼び出しやツールの実行など）で発見または生成された情報を、後続のステップと共有します。ここでもセッション状態が鍵となります。
+3.  **サービスへのアクセス：** 以下のようなフレームワークの機能と対話します。
+    *   **アーティファクトストレージ：** セッションに関連付けられたファイルやデータのかたまり（PDF、画像、設定ファイルなど）を保存または読み込みます。
+    *   **メモリ：** ユーザーに関連する過去の対話や外部の知識ソースから関連情報を検索します。
+    *   **認証：** ツールが外部APIに安全にアクセスするために必要な認証情報を要求および取得します。
+4.  **IDと追跡：** 現在どのエージェントが実行されているか（`agent.name`）を把握し、ロギングとデバッグのために現在のリクエスト-レスポンスサイクル（`invocation_id`）を一意に識別します。
+5.  **ツール固有のアクション：** 現在の対話の詳細へのアクセスを必要とする、認証要求やメモリ検索など、ツール内での特化した操作を有効にします。
 
 
-The central piece holding all this information together for a single, complete user-request-to-final-response cycle (an **invocation**) is the `InvocationContext`. However, you typically won't create or manage this object directly. The ADK framework creates it when an invocation starts (e.g., via `runner.run_async`) and passes the relevant contextual information implicitly to your agent code, callbacks, and tools.
+単一の完全なユーザーリクエストから最終レスポンスまでのサイクル（**呼び出し (invocation)**）に関するこれらすべての情報をまとめる中心的な要素が`InvocationContext`です。しかし、通常、このオブジェクトを直接作成したり管理したりすることはありません。ADKフレームワークは、呼び出しが開始されるとき（例：`runner.run_async`経由で）にこれを作成し、関連するコンテキスト情報をエージェントコード、コールバック、ツールに暗黙的に渡します。
 
 === "Python"
 
@@ -108,28 +108,36 @@ The central piece holding all this information together for a single, complete u
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.runners.InMemoryRunner
+
+    --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:conceptual_runner_example"
+    ```
+
 ## コンテキストのタイプ
 
-ADK uses the `Context` class as the central mechanism to manage an agent's environment, state, and resources. While `Context` serves as the foundational base for all agent interactions, it manifests in specialized "flavors" designed to provide the right balance of capabilities and permissions depending on where they are used in the agent's execution flow.
-If you use these specific context types, ADK ensures that your agent has access to necessary information, such as memory, session state, or credentials, exactly when and where you need them.
-Here are the primary context flavors you will encounter:
+ADK は、エージェントの環境、状態、およびリソースを管理するための中心的なメカニズムとして `Context` クラスを使用します。`Context` はすべてのエージェントの相互作用の基礎として機能しますが、エージェントの実行フローのどこで使用されるかに応じて、機能と権限の適切なバランスを提供するように設計された、いくつかの特殊な「フレーバー」として現れます。
+これらの特定のコンテキストタイプを使用することで、ADK はメモリ、セッション状態、認証情報などの必要な情報に、必要な時に必要な場所でエージェントが正確にアクセスできるようにします。
+遭遇する主なコンテキストフレーバーは次のとおりです。
 
-- **`InvocationContext`**: Used during core agent runs (`_run_async_impl`, `_run_live_impl`) to provide a comprehensive view of the entire invocation, including service references and lifecycle management.
+- **`InvocationContext`**: サービスの参照やライフサイクル管理など、呼び出し全体の包括的なビューを提供するために、エージェントのコア実行時（`_run_async_impl`、`_run_live_impl`）に使用されます。
 
-- **`ReadonlyContext`**: A lightweight, restricted view of fundamental contextual details used in scenarios where mutation is disallowed, such as within instruction providers.
+- **`ReadonlyContext`**: インストラクションプロバイダー内など、変更が許可されないシナリオで使用される、基本的なコンテキスト詳細の軽量で制限されたビュー。
 
-- **`Context`**: Used in agent lifecycle and model callbacks. It provides a robust set of features for reading/writing session state, managing artifacts, and injecting data into the memory service.
+- **`Context`**: エージェントのライフサイクルおよびモデルのコールバックで使用されます。セッション状態の読み書き、アーティファクトの管理、メモリサービスへのデータ挿入のための堅牢な機能セットを提供します。
 
-- **`ToolContext`**: Tailored for tool execution and tool-related callbacks. In addition to the capabilities of Context, it includes specialized methods for authentication flows, memory searching, and artifact discovery.
+- **`ToolContext`**: ツールの実行およびツール関連のコールバック用に調整されています。Context の機能に加えて、認証フロー、メモリ検索、アーティファクト検出のための特殊なメソッドが含まれています。
 
 !!! note
-    **About compatibility**: In Python and TypeScript, `CallbackContext` and `ToolContext` have been replaced by the `Context` type. The `CallbackContext` class is maintained as an alias for `Context` to ensure backward compatibility. While you may encounter `CallbackContext` in existing codebases, **you should use the `Context` class** for all new development to take advantage of the full, unified feature set.
+    **互換性について**: Python と TypeScript では、`CallbackContext` と `ToolContext` は `Context` タイプに置き換えられました。`CallbackContext` クラスは、後方互換性を確保するための `Context` のエイリアスとして維持されます。既存のコードベースで `CallbackContext` に遭遇することがあるかもしれませんが、統合された完全な機能セットを利用するために、新規開発では **`Context` クラスを使用することをお勧めします**。
 
 ### `InvocationContext`
-- **Where Used:** Received as the `ctx` argument directly within an agent's core implementation methods (`_run_async_impl`, `_run_live_impl`).
-- **Purpose:** Provides access to the entire state of the current invocation. This is the most comprehensive context object.
-- **Key Contents:** Direct access to `session` (including `state` and `events`), the current `agent` instance, `invocation_id`, initial `user_content`, references to configured services (`artifact_service`, `memory_service`, `session_service`), and fields related to live/streaming modes.
-- **Use Case:** Primarily used when the agent's core logic needs direct access to the overall session or services, though often state and artifact interactions are delegated to callbacks/tools which use their own contexts. Also used to control the invocation itself (e.g., setting `ctx.end_invocation = True`).
+- **使用場所:** エージェントのコア実装メソッド（`_run_async_impl`、`_run_live_impl`）内で `ctx` 引数として直接受け取ります。
+- **目的:** 現在の呼び出しの全体の状態へのアクセスを提供します。これは最も包括的なコンテキストオブジェクトです。
+- **主な内容:** `session`（`state`と`events`を含む）、現在の`agent`インスタンス、`invocation_id`、初期の`user_content`、設定されたサービス（`artifact_service`、`memory_service`、`session_service`）への参照、およびライブ/ストリーミングモードに関連するフィールドへの直接アクセス。
+- **ユースケース:** 主にエージェントのコアロジックがセッション全体やサービスに直接アクセスする必要がある場合に使用されますが、状態やアーティファクトの操作は、独自のコンテキストを使用するコールバック/ツールに委譲されることが多いです。また、呼び出し自体を制御するためにも使用されます（例：`ctx.end_invocation = True` の設定）。
 
     === "Python"
 
@@ -204,10 +212,22 @@ Here are the primary context flavors you will encounter:
         }
         ```
 
+    === "Kotlin"
+
+        ```kotlin
+        import com.google.adk.kt.agents.BaseAgent
+        import com.google.adk.kt.agents.InvocationContext
+        import com.google.adk.kt.events.Event
+        import kotlinx.coroutines.flow.Flow
+        import kotlinx.coroutines.flow.flow
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:invocation_context_agent"
+        ```
+
 ### `ReadonlyContext`
-- **Where Used:** Provided in scenarios where only read access to basic information is needed and mutation is disallowed (e.g., `InstructionProvider` functions). It's also the base class for other contexts.
-- **Purpose:** Offers a safe, read-only view of fundamental contextual details.
-- **Key Contents:** `invocation_id`, `agent_name`, and a read-only *view* of the current `state`.
+- **使用場所：** 基本情報への読み取りアクセスのみが必要で、変更が許可されていないシナリオ（例：`InstructionProvider`関数）で提供されます。他のコンテキストのベースクラスでもあります。
+- **目的：** 基本的なコンテキスト詳細の安全な読み取り専用ビューを提供します。
+- **主な内容：** `invocation_id`、`agent_name`、および現在の`state`の読み取り専用*ビュー*。
 
     === "Python"
 
@@ -265,101 +285,122 @@ Here are the primary context flavors you will encounter:
         }
         ```
 
-### `CallbackContext` and `Context`
+    === "Kotlin"
 
-- **Where Used:** Passed as `callback_context` to agent lifecycle callbacks (`before_agent_callback`, `after_agent_callback`) and model interaction callbacks (`before_model_callback`, `after_model_callback`).
-- **Purpose:** Facilitates inspecting and modifying state, interacting with artifacts, and accessing invocation details *specifically within callbacks*.
-- **Key Capabilities (Adds to `ReadonlyContext`):**
-    - **Mutable `state` Property:** Allows reading and writing to session state. Changes made here (`callback_context.state['key'] = value`) are tracked and associated with the event generated by the framework after the callback.
-    - **Artifact Methods:** `load_artifact(filename)` and `save_artifact(filename, part)` methods for interacting with the configured `artifact_service`.
-    - Direct `user_content` access.
+        ```kotlin
+        import com.google.adk.kt.agents.ReadonlyContext
+        import com.google.adk.kt.types.Content
+        import com.google.adk.kt.types.Part
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:readonly_context_instruction"
+        ```
+
+### `CallbackContext` と `Context`
+
+- **使用場所：** エージェントのライフサイクルコールバック（`before_agent_callback`、`after_agent_callback`）およびモデルインタラクションコールバック（`before_model_callback`、`after_model_callback`）に`callback_context`として渡されます。
+- **目的：** *特にコールバック内で*、状態の検査と変更、アーティファクトとの対話、および呼び出し詳細へのアクセスを容易にします。
+- **主な機能（`ReadonlyContext`に追加）：**
+    - **変更可能な`state`プロパティ：** セッション状態の読み取りと書き込みを許可します。ここで行われた変更（`callback_context.state['key'] = value`）は追跡され、コールバック後にフレームワークによって生成されるイベントに関連付けられます。
+    - **アーティファクトメソッド：** 設定された`artifact_service`と対話するための`load_artifact(filename)`および`save_artifact(filename, part)`メソッド。
+    - 直接の`user_content`アクセス。
 
 !!! note
 
-    In Python and TypeScript, `CallbackContext` and `ToolContext` have been replaced by the `Context` type.
+    Python と TypeScript では、`CallbackContext` と `ToolContext` は `Context` タイプに置き換えられました。
 
-    === "Python"
+=== "Python"
 
-        ```python
-        # Example: Callback receiving Context (CallbackContext is unified into Context)
-        from google.adk.agents.context import Context
-        from google.adk.models import LlmRequest
-        from google.genai import types
-        from typing import Optional
+    ```python
+    # Example: Callback receiving Context (CallbackContext is unified into Context)
+    from google.adk.agents.context import Context
+    from google.adk.models import LlmRequest
+    from google.genai import types
+    from typing import Optional
 
-        def my_before_model_cb(context: Context, request: LlmRequest) -> Optional[types.Content]:
-            # Read/Write state example
-            call_count = context.state.get("model_calls", 0)
-            context.state["model_calls"] = call_count + 1 # Modify state (tracks delta)
+    def my_before_model_cb(context: Context, request: LlmRequest) -> Optional[types.Content]:
+        # Read/Write state example
+        call_count = context.state.get("model_calls", 0)
+        context.state["model_calls"] = call_count + 1 # Modify state (tracks delta)
 
-            # Optionally load an artifact
-            # config_part = context.load_artifact("model_config.json")
-            print(f"Preparing model call #{call_count + 1} for invocation {context.invocation_id}")
-            return None # Allow model call to proceed
-        ```
+        # Optionally load an artifact
+        # config_part = context.load_artifact("model_config.json")
+        print(f"Preparing model call #{call_count + 1} for invocation {context.invocation_id}")
+        return None # Allow model call to proceed
+    ```
 
-    === "TypeScript"
+=== "TypeScript"
 
-        ```typescript
-        // Pseudocode: Callback receiving Context
-        import { Context, LlmRequest } from '@google/adk';
-        import { Content } from '@google/genai';
+    ```typescript
+    // Pseudocode: Callback receiving Context
+    import { Context, LlmRequest } from '@google/adk';
+    import { Content } from '@google/genai';
 
-        function myBeforeModelCb(context: Context, request: LlmRequest): Content | undefined {
-          // Read/Write state example
-          const callCount = (context.state.get('model_calls') as number) || 0;
-          context.state.set('model_calls', callCount + 1); // Modify state
+    function myBeforeModelCb(context: Context, request: LlmRequest): Content | undefined {
+      // Read/Write state example
+      const callCount = (context.state.get('model_calls') as number) || 0;
+      context.state.set('model_calls', callCount + 1); // Modify state
 
-          // Optionally load an artifact
-          // const configPart = await context.loadArtifact('model_config.json');
-          console.log(`Preparing model call #${callCount + 1} for invocation ${context.invocationId}`);
-          return undefined; // Allow model call to proceed
-        }
-        ```
+      // Optionally load an artifact
+      // const configPart = await context.loadArtifact('model_config.json');
+      console.log(`Preparing model call #${callCount + 1} for invocation ${context.invocationId}`);
+      return undefined; // Allow model call to proceed
+    }
+    ```
 
-    === "Go"
+=== "Go"
 
-        ```go
-        import (
-        	"fmt"
+    ```go
+    import (
+      "fmt"
 
-        	"google.golang.org/adk/v2/agent"
-        	"google.golang.org/adk/v2/model"
-        )
+      "google.golang.org/adk/v2/agent"
+      "google.golang.org/adk/v2/model"
+    )
 
-        --8<-- "examples/go/snippets/context/main.go:callback_context_callback"
-        ```
+    --8<-- "examples/go/snippets/context/main.go:callback_context_callback"
+    ```
 
-    === "Java"
+=== "Java"
 
-        ```java
-        // Example: Callback receiving CallbackContext
-        import com.google.adk.agents.CallbackContext;
-        import com.google.adk.models.LlmRequest;
-        import com.google.adk.models.LlmResponse;
-        import io.reactivex.rxjava3.core.Maybe;
+    ```java
+    // Example: Callback receiving CallbackContext
+    import com.google.adk.agents.CallbackContext;
+    import com.google.adk.models.LlmRequest;
+    import com.google.adk.models.LlmResponse;
+    import io.reactivex.rxjava3.core.Maybe;
 
-        public Maybe<LlmResponse> myBeforeModelCb(CallbackContext callbackContext, LlmRequest request) {
-            // Read/Write state example
-            int callCount = (int) callbackContext.state().getOrDefault("model_calls", 0);
-            callbackContext.state().put("model_calls", callCount + 1); // Modify state (tracks delta)
+    public Maybe<LlmResponse> myBeforeModelCb(CallbackContext callbackContext, LlmRequest request) {
+        // Read/Write state example
+        int callCount = (int) callbackContext.state().getOrDefault("model_calls", 0);
+        callbackContext.state().put("model_calls", callCount + 1); // Modify state (tracks delta)
 
-            // Optionally load an artifact
-            // Maybe<Part> configPart = callbackContext.loadArtifact("model_config.json");
-            System.out.println("Preparing model call " + (callCount + 1) + " for invocation " + callbackContext.invocationId());
-            return Maybe.empty(); // Allow model call to proceed
-        }
-        ```
+        // Optionally load an artifact
+        // Maybe<Part> configPart = callbackContext.loadArtifact("model_config.json");
+        System.out.println("Preparing model call " + (callCount + 1) + " for invocation " + callbackContext.invocationId());
+        return Maybe.empty(); // Allow model call to proceed
+    }
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.agents.CallbackContext
+    import com.google.adk.kt.callbacks.CallbackChoice
+    import com.google.adk.kt.models.LlmRequest
+    import com.google.adk.kt.models.LlmResponse
+
+    --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:callback_context_callback"
+    ```
 
 ### `ToolContext`
-- **Where Used:** Passed as `tool_context` to the functions backing `FunctionTool`s and to tool execution callbacks (`before_tool_callback`, `after_tool_callback`).
-- **Purpose:** Provides everything `CallbackContext` does, plus specialized methods essential for tool execution, like handling authentication, searching memory, and listing artifacts.
-- **Key Capabilities (Adds to `CallbackContext`):**
-    - **Authentication Methods:** `request_credential(auth_config)` to trigger an auth flow, and `get_auth_response(auth_config)` to retrieve credentials provided by the user/system.
-    - **Artifact Listing:** `list_artifacts()` to discover available artifacts in the session.
-    - **Memory Search:** `search_memory(query)` to query the configured `memory_service`.
-    - **`function_call_id` Property:** Identifies the specific function call from the LLM that triggered this tool execution, crucial for linking authentication requests or responses back correctly.
-    - **`actions` Property:** Direct access to the `EventActions` object for this step, allowing the tool to signal state changes, auth requests, etc.
+- **使用場所：** `FunctionTool`を支える関数や、ツールの実行コールバック（`before_tool_callback`、`after_tool_callback`）に`tool_context`として渡されます。
+- **目的：** `CallbackContext`が提供するすべてに加えて、認証の処理、メモリの検索、アーティファクトの一覧表示など、ツールの実行に不可欠な特化したメソッドを提供します。
+- **主な機能（`CallbackContext`に追加）：**
+    - **認証メソッド：** 認証フローをトリガーする`request_credential(auth_config)`と、ユーザー/システムによって提供された認証情報を取得する`get_auth_response(auth_config)`。
+    - **アーティファクトの一覧表示：** セッションで利用可能なアーティファクトを発見する`list_artifacts()`。
+    - **メモリ検索：** 設定された`memory_service`にクエリを実行する`search_memory(query)`。
+    - **`function_call_id`プロパティ：** このツールの実行をトリガーしたLLMからの特定の関数呼び出しを識別し、認証要求や応答を正しくリンクするために重要です。
+    - **`actions`プロパティ：** このステップの`EventActions`オブジェクトに直接アクセスし、ツールが状態の変更、認証要求などを通知できるようにします。
 
     === "Python"
 
@@ -455,18 +496,26 @@ Here are the primary context flavors you will encounter:
         }
         ```
 
-Understanding these different context objects and when to use them is key to effectively managing state, accessing services, and controlling the flow of your ADK application. The next section will detail common tasks you can perform using these contexts.
+    === "Kotlin"
+
+        ```kotlin
+        import com.google.adk.kt.tools.ToolContext
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:tool_context_tool"
+        ```
+
+これらの異なるコンテキストオブジェクトと、それらをいつ使用するかを理解することは、ADKアプリケーションの状態を効果的に管理し、サービスにアクセスし、フローを制御するための鍵となります。
 
 
 ## コンテキストを使用した一般的なタスク
 
-Now that you understand the different context objects, let's focus on how to use them for common tasks when building your agents and tools.
+様々なコンテキストオブジェクトについて理解したところで、エージェントやツールを構築する際に、それらを使って一般的なタスクを実行する方法に焦点を当てましょう。
 
-### Access information
+### 情報へのアクセス
 
-You'll frequently need to read information stored within the context.
+コンテキスト内に保存された情報を読み取る必要が頻繁にあります。
 
-*   **Read session state:** Access data saved in previous steps or user/app-level settings. Use dictionary-like access on the `state` property.
+*   **セッション状態の読み取り：** 以前のステップで保存されたデータや、ユーザー/アプリレベルの設定にアクセスします。`state`プロパティに対して辞書のようにアクセスします。
 
     === "Python"
 
@@ -567,7 +616,18 @@ You'll frequently need to read information stored within the context.
         }
         ```
 
-*   **Get current identifiers:** Useful for logging or custom logic based on the current operation.
+    === "Kotlin"
+
+        ```kotlin
+        import com.google.adk.kt.agents.CallbackContext
+        import com.google.adk.kt.tools.ToolContext
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:accessing_state_tool"
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:accessing_state_callback"
+        ```
+
+*   **現在の識別子の取得：** ロギングや、現在の操作に基づいたカスタムロジックに便利です。
 
     === "Python"
 
@@ -620,7 +680,15 @@ You'll frequently need to read information stored within the context.
         }
         ```
 
-*   **Access the initial user input:** Refer back to the message that started the current invocation.
+    === "Kotlin"
+
+        ```kotlin
+        import com.google.adk.kt.tools.ToolContext
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:accessing_ids"
+        ```
+
+*   **最初のユーザー入力へのアクセス：** 現在の呼び出しを開始したメッセージを再参照します。
 
     === "Python"
 
@@ -690,13 +758,21 @@ You'll frequently need to read information stored within the context.
         }
         ```
 
-### Manage state
+    === "Kotlin"
 
-State is crucial for memory and data flow. When you modify state using `CallbackContext` or `ToolContext`, the changes are automatically tracked and persisted by the framework.
+        ```kotlin
+        import com.google.adk.kt.agents.CallbackContext
 
-*   **How it Works:** Writing to `callback_context.state['my_key'] = my_value` or `tool_context.state['my_key'] = my_value` adds this change to the `EventActions.state_delta` associated with the current step's event. The `SessionService` then applies these deltas when persisting the event.
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:accessing_initial_user_input"
+        ```
 
-*  **Pass data between tools**
+### 状態管理
+
+状態は、メモリとデータフローにとって非常に重要です。`CallbackContext`や`ToolContext`を使って状態を変更すると、その変更はフレームワークによって自動的に追跡され、永続化されます。
+
+*   **仕組み：** `callback_context.state['my_key'] = my_value` や `tool_context.state['my_key'] = my_value` に書き込むと、この変更が現在のステップのイベントに関連付けられた`EventActions.state_delta`に追加されます。そして、`SessionService`がイベントを永続化する際にこれらのデルタを適用します。
+
+*  **ツール間でのデータ受け渡し**
 
     === "Python"
 
@@ -786,7 +862,18 @@ State is crucial for memory and data flow. When you modify state using `Callback
         }
         ```
 
-*   **Update user preferences:**
+    === "Kotlin"
+
+        ```kotlin
+        import com.google.adk.kt.tools.ToolContext
+        import java.util.UUID
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:passing_data_tool1"
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:passing_data_tool2"
+        ```
+
+*   **ユーザー設定の更新：**
 
     === "Python"
 
@@ -840,15 +927,23 @@ State is crucial for memory and data flow. When you modify state using `Callback
         }
         ```
 
-*   **State prefixes:** While basic state is session-specific, prefixes like `app:` and `user:` can be used with persistent `SessionService` implementations (like `DatabaseSessionService` or `VertexAiSessionService`) to indicate broader scope (app-wide or user-wide across sessions). `temp:` can denote data only relevant within the current invocation.
+    === "Kotlin"
 
-### Work with artifacts
+        ```kotlin
+        import com.google.adk.kt.tools.ToolContext
 
-Use artifacts to handle files or large data blobs associated with the session. Common use case: processing uploaded documents.
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:updating_preferences"
+        ```
 
-*   **Document summarizer example flow:**
+*   **状態のプレフィックス：** 基本的な状態はセッション固有ですが、`app:`や`user:`のようなプレフィックスは、永続的な`SessionService`実装（`DatabaseSessionService`や`VertexAiSessionService`など）と共に使用して、より広いスコープ（アプリ全体またはセッションをまたいだユーザー全体）を示すことができます。`temp:`は、現在の呼び出し内でのみ関連するデータを示すために使用できます。
 
-    1.  **Ingest Reference (e.g., in a Setup Tool or Callback):** Save the *path or URI* of the document, not the entire content, as an artifact.
+### アーティファクトの操作
+
+セッションに関連付けられたファイルや大きなデータのかたまりを扱うには、アーティファクトを使用します。一般的なユースケース：アップロードされたドキュメントの処理。
+
+*   **ドキュメント要約器のフロー例：**
+
+    1.  **参照の取り込み（例：セットアップツールやコールバック内）：** ドキュメントのコンテンツ全体ではなく、*パスやURI*をアーティファクトとして保存します。
 
         === "Python"
 
@@ -938,7 +1033,16 @@ Use artifacts to handle files or large data blobs associated with the session. C
                // saveDocumentReference(context, "gs://my-bucket/docs/report.pdf")
                ```
 
-    2.  **Summarizer Tool:** Load the artifact to get the path/URI, read the actual document content using appropriate libraries, summarize, and return the result.
+        === "Kotlin"
+
+            ```kotlin
+            import com.google.adk.kt.agents.CallbackContext
+            import com.google.adk.kt.types.Part
+
+            --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:artifacts_save_ref"
+            ```
+
+    2.  **要約ツール：** アーティファクトをロードしてパス/URIを取得し、適切なライブラリを使用して実際のドキュメントコンテンツを読み取り、要約して結果を返します。
 
         === "Python"
 
@@ -1107,7 +1211,17 @@ Use artifacts to handle files or large data blobs associated with the session. C
             }
             ```
 
-*   **List Artifacts:** Discover what files are available.
+        === "Kotlin"
+
+            ```kotlin
+            import com.google.adk.kt.tools.ToolContext
+            import java.io.File
+            import java.io.FileNotFoundException
+
+            --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:artifacts_summarize"
+            ```
+
+*   **アーティファクトの一覧表示：** 利用可能なファイルを確認します。
 
     === "Python"
 
@@ -1169,13 +1283,21 @@ Use artifacts to handle files or large data blobs associated with the session. C
         }
         ```
 
-### Handle tool authentication
+    === "Kotlin"
+
+        ```kotlin
+        import com.google.adk.kt.tools.ToolContext
+
+        --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:artifacts_list"
+        ```
+
+### ツール認証の処理
 
 <div class="language-support-tag">
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
-Securely manage API keys or other credentials needed by tools.
+ツールに必要なAPIキーやその他の認証情報を安全に管理します。
 
 === "Python"
 
@@ -1345,15 +1467,15 @@ Securely manage API keys or other credentials needed by tools.
     }
     ```
 
-*Remember: `request_credential` pauses the tool and signals the need for authentication. The user/system provides credentials, and on a subsequent call, `get_auth_response` (or checking state again) allows the tool to proceed.* The `tool_context.function_call_id` is used implicitly by the framework to link the request and response.
+*注意：`request_credential`はツールを一時停止し、認証の必要性を通知します。ユーザー/システムが認証情報を提供すると、後続の呼び出しで`get_auth_response`（または状態の再確認）によってツールが続行できるようになります。* `tool_context.function_call_id`は、要求と応答をリンクするためにフレームワークによって暗黙的に使用されます。
 
-### Leveraging Memory
+### メモリの活用
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-Access relevant information from the past or external sources.
+過去や外部ソースから関連情報にアクセスします。
 
 === "Python"
 
@@ -1433,6 +1555,14 @@ Access relevant information from the past or external sources.
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.tools.ToolContext
+
+    --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:memory_search"
+    ```
+
 ### UI ウィジェットのレンダリング {#render-ui-widgets}
 
 <div class="language-support-tag">
@@ -1464,13 +1594,13 @@ Access relevant information from the past or external sources.
         return f"Widget successfully rendered with color: {color}"
     ```
 
-### Advanced: Direct `InvocationContext` Usage
+### 高度な使用方法: 直接的な `InvocationContext` の使用
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-While most interactions happen via `CallbackContext` or `ToolContext`, sometimes the agent's core logic (`_run_async_impl`/`_run_live_impl`) needs direct access.
+ほとんどのやり取りは `CallbackContext` または `ToolContext` を介して行われますが、エージェントのコアロジック（Python の `_run_async_impl` や `_run_live_impl`、または TypeScript、Java、Kotlin の `runAsyncImpl` など）で直接アクセスが必要になる場合があります。
 
 === "Python"
 
@@ -1585,15 +1715,30 @@ While most interactions happen via `CallbackContext` or `ToolContext`, sometimes
     }
     ```
 
-Setting `ctx.end_invocation = True` is a way to gracefully stop the entire request-response cycle from within the agent or its callbacks/tools (via their respective context objects which also have access to modify the underlying `InvocationContext`'s flag).
+=== "Kotlin"
 
-## Key Takeaways & Best Practices
+    ```kotlin
+    import com.google.adk.kt.agents.BaseAgent
+    import com.google.adk.kt.agents.InvocationContext
+    import com.google.adk.kt.events.Event
+    import com.google.adk.kt.types.Content
+    import com.google.adk.kt.types.Part
+    import com.google.adk.kt.types.Role
+    import kotlinx.coroutines.flow.Flow
+    import kotlinx.coroutines.flow.flow
 
-*   **Use the Right Context:** Always use the most specific context object provided (`ToolContext` in tools/tool-callbacks, `CallbackContext` in agent/model-callbacks, `ReadonlyContext` where applicable). Use the full `InvocationContext` (`ctx`) directly in `_run_async_impl` / `_run_live_impl` only when necessary.
-*   **State for Data Flow:** `context.state` is the primary way to share data, remember preferences, and manage conversational memory *within* an invocation. Use prefixes (`app:`, `user:`, `temp:`) thoughtfully when using persistent storage.
-*   **Artifacts for Files:** Use `context.save_artifact` and `context.load_artifact` for managing file references (like paths or URIs) or larger data blobs. Store references, load content on demand.
-*   **Tracked Changes:** Modifications to state or artifacts made via context methods are automatically linked to the current step's `EventActions` and handled by the `SessionService`.
+    --8<-- "examples/kotlin/snippets/context/ContextExamples.kt:advanced_invocation_context"
+    ```
+
+呼び出し終了フラグを **True** に設定することは、エージェントまたはそのコールバックやツールの内部から（基盤となる `InvocationContext` のフラグを変更する権限も持つそれぞれのコンテキストオブジェクトを介して）リクエストとレスポンスのサイクル全体を正常に停止する方法です。具体的には、Python では `ctx.end_invocation = True`、TypeScript では `ctx.endInvocation = true`、Java では `ctx.setEndInvocation(true)`、Kotlin では `context.isEndOfInvocation = true` または `context.endInvocation()` を使用します。
+
+## 要点とベストプラクティス
+
+*   **適切なコンテキストを使用する：** 常に提供される最も具体的なコンテキストオブジェクトを使用してください（ツール/ツールコールバックでは`ToolContext`、エージェント/モデルコールバックでは`CallbackContext`、該当する場合は`ReadonlyContext`）。完全な`InvocationContext`（`ctx`）は、必要な場合にのみ`_run_async_impl` / `_run_live_impl`で直接使用してください。
+*   **データフローのための状態：** `context.state`は、呼び出し*内*でデータを共有し、好みを記憶し、会話メモリを管理するための主要な方法です。永続ストレージを使用する場合は、プレフィックス（`app:`、`user:`、`temp:`）を慎重に使用してください。
+*   **ファイルのためのアーティファクト：** ファイル参照（パスやURIなど）や大きなデータのかたまりを管理するには、`context.save_artifact`と`context.load_artifact`を使用してください。参照を保存し、必要に応じてコンテンツをロードします。
+*   **追跡される変更：** コンテキストメソッドを介して状態やアーティファクトに行われた変更は、現在のステップの`EventActions`に自動的にリンクされ、`SessionService`によって処理されます。
 *   **UI のレンダリング:** `context.render_ui_widget(widget)` を使用して、リッチな UI コンポーネント（MCP アプリの iframe など）をクライアントに送信します。
-*   **Start Simple:** Focus on `state` and basic artifact usage first. Explore authentication, memory, and advanced `InvocationContext` fields (like those for live streaming) as your needs become more complex.
+*   **シンプルに始める：** まずは`state`と基本的なアーティファクトの使用に焦点を当ててください。ニーズがより複雑になるにつれて、認証、メモリ、および高度な`InvocationContext`のフィールド（ライブストリーミング用のものなど）を探求してください。
 
-By understanding and effectively using these context objects, you can build more sophisticated, stateful, and capable agents with ADK.
+これらのコンテキストオブジェクトを理解し効果的に使用することで、ADKでより洗練され、ステートフルで、有能なエージェントを構築することができます。
