@@ -1,32 +1,22 @@
-# Data handling for agent workflows
+# 에이전트 워크플로의 데이터 처리
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-Structuring and managing data between agents and graph-based nodes is critical
-for building reliable processes with ADK. This guide explains data handling
-within graph-based workflows and collaboration agents, including how information
-is transmitted and received between graph nodes. It covers the essential
-parameters for passing data, content, and state, and explains how to implement
-structured data transfer for both function and agent nodes using data format
-schemas and specific instruction syntax.
+에이전트와 그래프 기반 노드 간에 데이터를 구조화하고 관리하는 것은 ADK로 신뢰할 수 있는 프로세스를 구축하는 데 매우 중요합니다. 이 가이드는 그래프 노드 간에 정보가 전송되고 수신되는 방식을 포함하여 그래프 기반 워크플로 및 협업 에이전트 내의 데이터 처리를 설명합니다. 또한 데이터, 콘텐츠 및 상태를 전달하기 위한 필수 매개변수를 다루며, 데이터 형식 스키마와 특정 지침 구문을 사용하여 함수 노드와 에이전트 노드 모두에서 구조화된 데이터 전송을 구현하는 방법을 설명합니다.
 
-## Workflow data flow
+## 워크플로 데이터 흐름
 
-Within a graph-based workflow, nodes pass data to downstream steps through
-events. A step writes its output to a named event field, and the next step
-receives it as its typed input.
+그래프 기반 워크플로 내에서 노드는 이벤트를 통해 다운스트림 단계로 데이터를 전달합니다. 한 단계가 명명된 이벤트 필드에 출력을 기록하면, 다음 단계가 이를 타입이 지정된 입력으로 받습니다.
 
 === "Python"
 
-    In Python, data is exchanged between graph nodes using ***Events***. The key
-    parameters for node data handling are:
+    Python에서는 ***Events***를 사용하여 그래프 노드 간에 데이터를 교환합니다. 노드 데이터 처리를 위한 주요 매개변수는 다음과 같습니다:
 
-    -   **`output`**: Parameter for passing information between *nodes*.
-    -   **`message`**: Data intended as a response to a user.
-    -   **`state`**: Data automatically persisted across nodes via ***Events***
-        throughout an ADK session.
+    -   **`output`**: *노드* 간에 정보를 전달하기 위한 매개변수입니다.
+    -   **`message`**: 사용자에게 응답으로 전달할 데이터입니다.
+    -   **`state`**: ADK 세션 전반에 걸쳐 ***Events***를 통해 노드 간에 자동으로 유지되는 데이터입니다.
 
 === "TypeScript"
 
@@ -47,48 +37,36 @@ receives it as its typed input.
 
 === "Go"
 
-    In ADK Go v2.0.0, the data-passing mechanism depends on which agent style
-    you use:
+    ADK Go v2.0.0에서 데이터 전달 메커니즘은 사용하는 에이전트 스타일에 따라 달라집니다:
 
-    **workflow package** (`FunctionNode`, `AgentNode`, `DynamicNode`): nodes
-    communicate through `session.Event` fields, mirroring Python closely:
+    **workflow 패키지**(`FunctionNode`, `AgentNode`, `DynamicNode`): 노드는 Python과 유사하게 `session.Event` 필드를 통해 통신합니다:
 
-    -   **`Event.Output`**: the node's return value, set automatically by the
-        framework when a `FunctionNode` returns a non-`*genai.Content` value.
-        The successor node receives this as its typed `input` parameter.
-    -   **`Event.Routes`**: routing keys set explicitly by an emitting node to
-        select which conditional edge to follow — the Go equivalent of
-        Python's `Event(route=...)`.
-    -   **`Event.NodeInfo`**: scheduler metadata (`path`, `MessageAsOutput`,
-        `OutputFor`). Set by the workflow engine; nodes do not set this
-        directly.
+    -   **`Event.Output`**: 노드의 반환 값으로, `FunctionNode`가 `*genai.Content`가 아닌 값을 반환할 때 프레임워크에 의해 자동으로 설정됩니다. 후속 노드는 이를 타입이 지정된 `input` 매개변수로 받습니다.
+    -   **`Event.Routes`**: 따라갈 조건부 에지를 선택하기 위해 방출 노드가 명시적으로 설정하는 라우팅 키로, Python의 `Event(route=...)`에 해당합니다.
+    -   **`Event.NodeInfo`**: 스케줄러 메타데이터(`path`, `MessageAsOutput`, `OutputFor`)입니다. 워크플로 엔진에 의해 설정되며 노드가 직접 설정하지 않습니다.
 
-    **Prebuilt workflow agents** (`sequentialagent`, `parallelagent`,
-    `loopagent`): these agents communicate through session state:
+    **사전 구축된 워크플로 에이전트**(`sequentialagent`, `parallelagent`, `loopagent`): 이 에이전트들은 세션 상태를 통해 통신합니다:
 
-    -   **`OutputKey`** on `llmagent.Config`: the framework writes the agent's
-        final text response to `state[OutputKey]` after each turn.
-    -   **`ctx.Session().State().Set` / `.Get`**: write or read arbitrary
-        values from state inside custom code.
-    -   **`{key}` in `Instruction`**: the framework substitutes `state["key"]`
-        into the prompt before calling the model.
+    -   `llmagent.Config`의 **`OutputKey`**: 프레임워크가 각 턴 이후 에이전트의 최종 텍스트 응답을 `state[OutputKey]`에 기록합니다.
+    -   **`ctx.Session().State().Set` / `.Get`**: 커스텀 코드 내에서 상태에 임의의 값을 쓰거나 읽습니다.
+    -   `Instruction`의 **`{key}`**: 프레임워크가 모델을 호출하기 전에 프롬프트에 `state["key"]`를 치환합니다.
 
-    State keys may carry a prefix that controls their lifetime and scope:
+    상태 키에는 수명과 범위를 제어하는 접두사를 붙일 수 있습니다:
 
-    | Prefix constant | Prefix string | Scope |
+    | 접두사 상수 | 접두사 문자열 | 범위 |
     |---|---|---|
-    | `session.KeyPrefixApp` | `"app:"` | Shared across all users and sessions for the app |
-    | `session.KeyPrefixUser` | `"user:"` | Tied to the user, shared across their sessions |
-    | `session.KeyPrefixTemp` | `"temp:"` | Discarded after the current invocation ends |
-    | *(none)* | — | Persists for the lifetime of the session |
+    | `session.KeyPrefixApp` | `"app:"` | 앱의 모든 사용자와 세션 간에 공유됨 |
+    | `session.KeyPrefixUser` | `"user:"` | 사용자에게 귀속되며 해당 사용자의 세션 간에 공유됨 |
+    | `session.KeyPrefixTemp` | `"temp:"` | 현재 호출이 종료된 후 폐기됨 |
+    | *(없음)* | — | 세션 수명 동안 유지됨 |
 
-### Node output
+### 노드 출력
 
-Each step in a workflow produces output for its successor.
+워크플로의 각 단계는 후속 노드를 위한 출력을 생성합니다.
 
 === "Python"
 
-    Use the ***return*** or ***yield*** syntax to hand off data to the next node:
+    데이터를 다음 노드로 넘기려면 ***return*** 또는 ***yield*** 구문을 사용하세요:
 
     ```python
     from google.adk import Event
@@ -98,13 +76,7 @@ Each step in a workflow produces output for its successor.
         return Event(output=output_value) # "THE RESULT"
     ```
 
-    Use the ***return*** syntax when outputting ***Event*** data that does not
-    require additional processing. When emitting data that requires additional
-    processing, or if you are generating more than one data item, you can use
-    more than one ***yield*** command. Each ***yield*** call adds to a list of
-    data objects on the Event which is passed to the next node of a graph. A
-    ***return*** or ***yield*** command without a parameter passes a `None` value
-    to the next node.
+    추가 처리가 필요하지 않은 ***Event*** 데이터를 출력할 때는 ***return*** 구문을 사용하세요. 추가 처리가 필요한 데이터를 방출하거나 둘 이상의 데이터 항목을 생성하는 경우에는 여러 개의 ***yield*** 명령을 사용할 수 있습니다. 각 ***yield*** 호출은 그래프의 다음 노드로 전달되는 Event의 데이터 객체 목록에 추가됩니다. 매개변수 없는 ***return*** 또는 ***yield*** 명령은 다음 노드에 `None` 값을 전달합니다.
 
 === "TypeScript"
 
@@ -120,28 +92,23 @@ Each step in a workflow produces output for its successor.
 
 === "Go"
 
-    **workflow package**: a `FunctionNode` simply returns a typed Go value.
-    The framework automatically wraps the return value in a `session.Event`
-    and sets `Event.Output`. The successor node receives this value as its
-    typed `input` parameter — no manual event construction needed:
+    **workflow 패키지**: `FunctionNode`는 단순히 타입이 지정된 Go 값을 반환합니다. 프레임워크는 반환 값을 자동으로 `session.Event`로 래핑하고 `Event.Output`을 설정합니다. 후속 노드는 이 값을 타입이 지정된 `input` 매개변수로 받으므로 수동으로 이벤트를 생성할 필요가 없습니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:event-output"
     ```
 
-    **Prebuilt workflow agents**: use `OutputKey` on `llmagent.Config` to
-    save an agent's text response to session state, then reference it with
-    `{key}` in downstream agents' `Instruction` templates:
+    **사전 구축된 워크플로 에이전트**: `llmagent.Config`에서 `OutputKey`를 사용하여 에이전트의 텍스트 응답을 세션 상태에 저장한 다음, 다운스트림 에이전트의 `Instruction` 템플릿에서 `{key}`로 참조하세요:
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:output-key"
     ```
 
-### Node output: passing structured data
+### 노드 출력: 구조화된 데이터 전달
 
 === "Python"
 
-    You can pass longer, structured data in a serializable format:
+    직렬화 가능한 형식으로 더 길고 구조화된 데이터를 전달할 수 있습니다:
 
     ```python
     def my_function_node_3():
@@ -153,12 +120,9 @@ Each step in a workflow produces output for its successor.
         )
     ```
 
-    !!! warning "Caution: Event.output limitation"
+    !!! warning "주의: Event.output 제한사항"
 
-        Nodes are only allowed to emit a single ***Event.output*** data payload
-        per execution. This limitation means that while you can use more than
-        one ***yield*** in a node, having two or more ***yield*** commands with
-        an ***Event.output*** results in a runtime error.
+        노드는 실행당 단일 ***Event.output*** 데이터 페이로드만 방출할 수 있습니다. 즉, 노드에서 여러 개의 ***yield***를 사용할 수는 있지만 ***Event.output***이 포함된 ***yield*** 명령을 두 번 이상 사용하면 런타임 오류가 발생합니다.
 
 === "TypeScript"
 
@@ -170,26 +134,19 @@ Each step in a workflow produces output for its successor.
 
 === "Go"
 
-    **workflow package**: a `FunctionNode` can return any JSON-serializable
-    Go struct. The framework serializes it into `Event.Output` and
-    deserializes it back into the successor node's typed `input` parameter.
-    There is no single-payload restriction — each node has exactly one typed
-    return value:
+    **workflow 패키지**: `FunctionNode`는 JSON 직렬화가 가능한 모든 Go 구조체를 반환할 수 있습니다. 프레임워크는 이를 `Event.Output`으로 직렬화하고 후속 노드의 타입이 지정된 `input` 매개변수로 다시 역직렬화합니다. 단일 페이로드 제한은 없으며 각 노드는 정확히 하나의 타입이 지정된 반환 값을 가집니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:structured-output"
     ```
 
-    **Prebuilt workflow agents**: use multiple `OutputKey` values, one per
-    agent, to store individual fields in session state. Downstream agents
-    read each field independently via `{key}` in their `Instruction`.
+    **사전 구축된 워크플로 에이전트**: 에이전트마다 하나씩 여러 `OutputKey` 값을 사용하여 세션 상태에 개별 필드를 저장하세요. 다운스트림 에이전트는 `Instruction`에서 `{key}`를 통해 각 필드를 독립적으로 읽습니다.
 
-### Routing output
+### 라우팅 출력
 
 === "Python"
 
-    Use the `route` parameter of an ***Event*** to drive conditional edge
-    dispatch:
+    조건부 에지 디스패치를 수행하려면 ***Event***의 `route` 매개변수를 사용하세요:
 
     ```python
     def router(node_input: str):
@@ -206,22 +163,17 @@ Each step in a workflow produces output for its successor.
 
 === "Go"
 
-    **workflow package**: an emitting `FunctionNode` constructs a
-    `session.Event` directly, sets `Event.Routes` to the desired route keys,
-    and sets `Event.Output` to forward the payload to the successor. The
-    workflow engine reads `Event.Routes` at dispatch time to select the
-    matching edge:
+    **workflow 패키지**: 이벤트를 방출하는 `FunctionNode`는 `session.Event`를 직접 생성하고, `Event.Routes`를 원하는 라우트 키로 설정하며, 페이로드를 후속 노드로 전달하기 위해 `Event.Output`을 설정합니다. 워크플로 엔진은 디스패치 시점에 `Event.Routes`를 읽어 일치하는 에지를 선택합니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:routing-output"
     ```
 
-### User-facing messages
+### 사용자 대상 메시지
 
 === "Python"
 
-    Use the ***message*** parameter of an ***Event*** to send a response to a
-    user rather than pass data to the next node:
+    다음 노드로 데이터를 전달하는 대신 사용자에게 응답을 보내려면 ***Event***의 ***message*** 매개변수를 사용하세요:
 
     ```python
     async def user_message(node_input: str):
@@ -239,27 +191,17 @@ Each step in a workflow produces output for its successor.
 
 === "Go"
 
-    **workflow package**: to emit a user-visible message without advancing
-    the node's typed output, set `Event.Content` on an intermediate event
-    emitted via the `emit` callback in an `EmittingFunctionNode`. The
-    terminal return value (or `nil`) controls `Event.Output`.
+    **workflow 패키지**: 노드의 타입이 지정된 출력을 진행시키지 않고 사용자에게 표시되는 메시지를 방출하려면, `EmittingFunctionNode`의 `emit` 콜백을 통해 방출되는 중간 이벤트에 `Event.Content`를 설정하세요. 최종 반환 값(또는 `nil`)이 `Event.Output`을 제어합니다.
 
-    **Prebuilt workflow agents**: any `llmagent` step automatically emits its
-    model response as a user-facing event. For non-LLM steps, write a custom
-    `Run` function on an `agent.Agent` that yields events whose
-    `LLMResponse.Content` contains the text.
+    **사전 구축된 워크플로 에이전트**: 모든 `llmagent` 단계는 모델 응답을 사용자 대상 이벤트로 자동 방출합니다. 비 LLM 단계의 경우, 텍스트가 포함된 `LLMResponse.Content`를 가진 이벤트를 yield하는 커스텀 `Run` 함수를 `agent.Agent`에 작성하세요.
 
-### Session state and state scopes
+### 세션 상태 및 상태 범위
 
-Session state persists data across turns within a session. It is the primary
-data-sharing mechanism for the prebuilt workflow agents, and is also available
-inside tools and callbacks regardless of which agent style you use.
+세션 상태는 세션 내의 여러 턴에 걸쳐 데이터를 유지합니다. 이는 사전 구축된 워크플로 에이전트의 주요 데이터 공유 메커니즘이며, 사용하는 에이전트 스타일에 관계없이 도구와 콜백 내부에서도 사용할 수 있습니다.
 
 === "Python"
 
-    Use the ***state*** parameter of an ***Event*** to maintain values across
-    nodes. Nodes can modify state values, and the modified state values are
-    available to downstream nodes:
+    노드 간에 값을 유지하려면 ***Event***의 ***state*** 매개변수를 사용하세요. 노드는 상태 값을 수정할 수 있으며, 수정된 상태 값은 다운스트림 노드에서 사용할 수 있습니다:
 
     ```python
     async def init_state_node(attempts: int = 0):
@@ -285,12 +227,9 @@ inside tools and callbacks regardless of which agent style you use.
     )
     ```
 
-    !!! warning "Caution: `state` property data limitations"
+    !!! warning "주의: `state` 프로퍼티 데이터 제한사항"
 
-        The state parameter *should not be used to persist large amounts of
-        data* between nodes. Use artifacts or other data persistence mechanisms,
-        such as database Tools, to persist large data resources during the life
-        cycle of a Workflow.
+        state 매개변수는 노드 간에 *대량의 데이터를 유지하는 용도로 사용해서는 안 됩니다*. Workflow 수명 주기 동안 대용량 데이터 리소스를 유지하려면 아티팩트나 데이터베이스 도구와 같은 다른 데이터 영구 저장 메커니즘을 사용하세요.
 
 === "TypeScript"
 
@@ -306,38 +245,27 @@ inside tools and callbacks regardless of which agent style you use.
 
 === "Go"
 
-    State is written with `ctx.Session().State().Set(key, value)` and read
-    with `.Get(key)`. The `session` package defines prefix constants that map
-    to the same lifetime scopes as Python's state parameter. This pattern
-    applies to prebuilt workflow agents and to tools and callbacks in any
-    agent style:
+    상태는 `ctx.Session().State().Set(key, value)`로 쓰고 `.Get(key)`로 읽습니다. `session` 패키지는 Python의 state 매개변수와 동일한 수명 범위에 매핑되는 접두사 상수를 정의합니다. 이 패턴은 사전 구축된 워크플로 에이전트와 모든 에이전트 스타일의 도구 및 콜백에 적용됩니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:state-scopes"
     ```
 
-    !!! warning "Caution: state data limitations"
+    !!! warning "주의: 상태 데이터 제한사항"
 
-        Session state is a lightweight key-value store. Do not use it to persist
-        large payloads such as file contents or binary data. Use ADK artifacts
-        or external storage tools instead.
+        세션 상태는 가벼운 키-값 저장소입니다. 파일 콘텐츠나 바이너리 데이터와 같은 대용량 페이로드를 유지하는 데 사용하지 마세요. 대신 ADK 아티팩트나 외부 스토리지 도구를 사용하세요.
 
-    !!! tip "workflow package: prefer Event.Output over state"
+    !!! tip "workflow 패키지: 상태보다 Event.Output을 선호하세요"
 
-        For the `workflow` package (`FunctionNode`, `AgentNode`, `DynamicNode`),
-        pass data between nodes by returning typed values — the framework sets
-        `Event.Output` automatically. Only use `State().Set` when you need to
-        share values with tools, callbacks, or agent `Instruction` templates.
+        `workflow` 패키지(`FunctionNode`, `AgentNode`, `DynamicNode`)의 경우, 타입이 지정된 값을 반환하여 노드 간에 데이터를 전달하세요. 프레임워크가 `Event.Output`을 자동으로 설정합니다. 도구, 콜백 또는 에이전트 `Instruction` 템플릿과 값을 공유해야 할 때만 `State().Set`을 사용하세요.
 
-## Constrain node data with schemas
+## 스키마로 노드 데이터 제한하기
 
-You can set input and output data schemas to constrain the data formats
-accepted and produced by any agent node.
+입력 및 출력 데이터 스키마를 설정하여 모든 에이전트 노드가 수락하고 생성하는 데이터 형식을 제한할 수 있습니다.
 
 === "Python"
 
-    Use `input_schema` and `output_schema` with a class that extends
-    ***BaseModel*** to constrain any agent's input and output:
+    ***BaseModel***을 확장하는 클래스와 함께 `input_schema` 및 `output_schema`를 사용하여 에이전트의 입력과 출력을 제한하세요:
 
     ```python
     from google.adk import Agent
@@ -386,29 +314,19 @@ accepted and produced by any agent node.
 
 === "Go"
 
-    **workflow package**: use `workflow.NewAgentNodeTyped[Input, Output]` to
-    attach schemas to an agent node. The generic type parameters are reflected
-    into `*jsonschema.Schema` automatically — no hand-built schema construction
-    needed. The node's `Event.Output` carries the structured result to the
-    successor — no `OutputKey` or state write is needed:
+    **workflow 패키지**: `workflow.NewAgentNodeTyped[Input, Output]`을 사용하여 에이전트 노드에 스키마를 연결하세요. 제네릭 타입 매개변수가 `*jsonschema.Schema`에 자동으로 반영되므로 스키마를 수동으로 구성할 필요가 없습니다. 노드의 `Event.Output`이 구조화된 결과를 후속 노드로 전달하므로 `OutputKey`나 상태 쓰기가 필요하지 않습니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:input-output-schema"
     ```
 
-    **Prebuilt workflow agents**: set `InputSchema` and `OutputSchema` on
-    `llmagent.Config`. `OutputSchema` forces the model to reply with a JSON
-    object matching the schema (the agent cannot use tools when `OutputSchema`
-    is set). Use `OutputKey` to save the JSON string to state for downstream
-    agents to reference via `{key}` in their `Instruction`.
+    **사전 구축된 워크플로 에이전트**: `llmagent.Config`에서 `InputSchema` 및 `OutputSchema`를 설정하세요. `OutputSchema`는 모델이 스키마와 일치하는 JSON 객체로 응답하도록 강제합니다(`OutputSchema`가 설정된 경우 에이전트는 도구를 사용할 수 없습니다). 다운스트림 에이전트가 `Instruction`에서 `{key}`를 통해 참조할 수 있도록 JSON 문자열을 상태에 저장하려면 `OutputKey`를 사용하세요.
 
-## Access structured data in agents
+## 에이전트에서 구조화된 데이터에 액세스하기
 
 === "Python"
 
-    Use the curly-brace `{ }` syntax to select properties from the input
-    schema, or `< >` to select a property and also qualify it by the name
-    of the source node:
+    입력 스키마에서 프로퍼티를 선택하려면 중괄호 `{ }` 구문을 사용하고, 프로퍼티를 선택하면서 소스 노드의 이름으로 한정하려면 `< >`를 사용하세요:
 
     ```python
     class CityTime(BaseModel):
@@ -461,17 +379,10 @@ accepted and produced by any agent node.
 
 === "Go"
 
-    In ADK Go v2.0.0, a `FunctionNode` returns a typed struct and the
-    framework serializes it into `Event.Output`. The successor `AgentNode`
-    receives the struct as its user content — the fields are available to the
-    agent's `Instruction` without any `{key}` template syntax. This is the
-    direct equivalent of Python's `input_schema=CityTime` with
-    `{CityTime.time_info}` template placeholders: the struct fields are
-    delivered as typed input rather than looked up by name from state.
+    ADK Go v2.0.0에서 `FunctionNode`는 타입이 지정된 구조체를 반환하고 프레임워크는 이를 `Event.Output`으로 직렬화합니다. 후속 `AgentNode`는 구조체를 사용자 콘텐츠로 수신하므로 `{key}` 템플릿 구문 없이도 에이전트의 `Instruction`에서 필드를 사용할 수 있습니다. 이는 `{CityTime.time_info}` 템플릿 플레이스홀더와 함께 사용하는 Python의 `input_schema=CityTime`에 직접 대응되며, 구조체 필드는 상태에서 이름으로 조회되는 대신 타입이 지정된 입력으로 전달됩니다.
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:structured-output"
     ```
 
-For a complete example of this workflow, see
-[Graph-based agent workflows](/graphs/#get-started).
+이 워크플로의 전체 예제는 [그래프 기반 에이전트 워크플로](/graphs/#get-started)를 참조하세요.

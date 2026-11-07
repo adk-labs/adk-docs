@@ -1,58 +1,33 @@
-# Graph-based agent workflows
+# グラフベースのエージェントワークフロー
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-Graph-based agent workflows in ADK let you build agents with more precise control,
-creating deterministic processes that combine code logic and AI reasoning
-capabilities. Graph-based workflows allow you to define your agent logic as a
-graph of execution nodes and edges, combining AI-powered agent reasoning with
-deterministic tools and code.
+ADK のグラフベースのエージェントワークフローを使用すると、コードロジックと AI の推論能力を組み合わせた決定論的なプロセスを構築でき、より精密な制御を備えたエージェントを作成できます。グラフベースワークフローでは、エージェントのロジックを実行ノードとエッジのグラフとして定義し、AI を活用したエージェントの推論と決定論的なツールやコードを組み合わせることができます。
 
 ![Graph-based flight upgrade agent](../assets/workflow-design.svg)
 
-**Figure 1.** A graph-based agent design for flight upgrades, combining workflow
-nodes of different types, including Functions, human input, Tools, and LLM
-capabilities.
+**図 1.** 関数、人間の入力、ツール、LLM 機能など、異なる種類のワークフローノードを組み合わせた、フライトアップグレード向けのグラフベースエージェント設計です。
 
-Prebuilt ADK [template workflows](/agents/workflow-agents/),
-such as [Sequential Agents](/agents/workflow-agents/sequential-agents/),
-provide a defined process flow control only across a set of agents. You can continue to
-build standard ADK agents with long prompts, tools, and use them in graph-based
-workflow agents. When you need more precise control, workflow agent graphs give
-you more flexibility over how tasks are routed and executed. Graph-based workflows
-provide the following advantages:
+[Sequential Agents](/agents/workflow-agents/sequential-agents/) などの事前構築済みの ADK [テンプレートワークフロー](/agents/workflow-agents/)は、一連のエージェント間での定義済みのプロセスフロー制御のみを提供します。長いプロンプトやツールを備えた標準的な ADK エージェントを引き続き構築し、それらをグラフベースワークフローエージェントで使用することもできます。より精密な制御が必要な場合、ワークフローエージェントグラフを使用すると、タスクのルーティングや実行方法をより柔軟に制御できます。グラフベースワークフローには次の利点があります:
 
--   **Define precise logic:** Explicitly map out routing logic to manage
-    transitions between different nodes.
--   **Implement complex structures:** Build agent workflows that support
-    branching and state management.
--   **Run chains of functions without AI:** Call agent tools and your own
-    code without invoking a generative AI model.
--   **Enhance reliability:** Improve the predictability of your agents by
-    relying on structured node definitions rather than prompts alone.
+-   **精密なロジックの定義:** 異なるノード間の遷移を管理するルーティングロジックを明示的に設計できます。
+-   **複雑な構造の実装:** 分岐や状態管理をサポートするエージェントワークフローを構築できます。
+-   **AI なしでの関数チェーンの実行:** 生成 AI モデルを呼び出さずに、エージェントツールや独自のコードを呼び出すことができます。
+-   **信頼性の向上:** プロンプトだけに頼るのではなく、構造化されたノード定義を用いることで、エージェントの予測可能性を高められます。
 
-!!! note "Workflow styles in ADK"
+!!! note "ADK のワークフロースタイル"
 
-    ADK offers three complementary ways to compose multi-step work:
+    ADK は、マルチステップの作業を構成するための 3 つの相補的な方法を提供します:
 
-    -   **Graph-based workflows** (this section): a declarative graph of nodes
-        and edges with explicit routing — best for deterministic, structured
-        processes.
-    -   **[Dynamic workflows](/graphs/dynamic/):** programmatic orchestration
-        in your own code (loops, conditionals, recursion) — best when the
-        control flow is too complex or iterative for a static graph.
-    -   **[Prebuilt workflow agents](/agents/workflow-agents/)** (sequential,
-        parallel, loop): higher-level building blocks for common patterns
-        without assembling a graph yourself.
+    -   **グラフベースワークフロー**（このセクション）: 明示的なルーティングを備えたノードとエッジの宣言的なグラフであり、決定論的で構造化されたプロセスに最適です。
+    -   **[動的ワークフロー](/graphs/dynamic/):** 独自のコード内でのプログラムによるオーケストレーション（ループ、条件分岐、再帰）であり、制御フローが複雑すぎたり反復的であったりして静的グラフには適さない場合に最適です。
+    -   **[事前構築済みワークフローエージェント](/agents/workflow-agents/)**（順次、並列、ループ）: 自身でグラフを組み立てることなく一般的なパターンを実現できる、より高レベルのビルディングブロックです。
 
 ## はじめに
 
-This section describes how to get started with graph-based agents. The following
-example shows how to create a sequential graph-based agent workflow that
-generates a city name, looks up the current time in that city with a code
-function, and the final agent reports the information.
+このセクションでは、グラフベースエージェントの始め方を説明します。次の例では、都市名を生成し、コード関数でその都市の現在時刻を調べ、最後のエージェントがその情報を報告する順次的なグラフベースエージェントワークフローの作成方法を示します。
 
 === "Python"
 
@@ -109,54 +84,29 @@ function, and the final agent reports the information.
 
 === "Go"
 
-    In ADK Go v2.0.0, sequential workflows use the graph engine:
-    `workflow.NewFunctionNode` wraps each step, and `workflow.Chain` wires
-    the nodes into a sequential `edges` slice. The framework automatically
-    passes each node's typed return value to the next node via
-    `event.Output` — no session state writes are needed. The whole graph is
-    wrapped in `workflowagent.New`, which produces a standard `agent.Agent`.
+    ADK Go v2.0.0 では、順次ワークフローにグラフエンジンを使用します。`workflow.NewFunctionNode` が各ステップをラップし、`workflow.Chain` がノードを順次的な `edges` スライスに接続します。フレームワークは `event.Output` を介して各ノードの型付き戻り値を次のノードに自動的に渡すため、セッション状態への書き込みは不要です。グラフ全体は標準の `agent.Agent` を生成する `workflowagent.New` でラップされます。
 
     ```go
     --8<-- "examples/go/snippets/graphs/index/main.go:sequential-get-started"
     ```
 
-This sample code demonstrates how you can assemble a simple, sequential
-workflow and alternate between agent processing and code execution. While you
-could perform these steps using a single agent with a longer prompt and a tool
-call, the graph-based approach gives you precise control over the task
-execution order and the data output from each step.
+このサンプルコードでは、シンプルな順次ワークフローを組み立て、エージェント処理とコード実行を交互に行う方法を示しています。長いプロンプトとツール呼び出しを持つ単一のエージェントでもこれらのステップを実行できますが、グラフベースのアプローチを使用すると、タスクの実行順序と各ステップからのデータ出力を精密に制御できます。
 
-For more information about data handling with graph-based workflows, see
-[Data handling with workflow nodes and agents](/graphs/data-handling/).
+グラフベースワークフローでのデータ処理の詳細については、[ワークフローノードとエージェントでのデータ処理](/graphs/data-handling/)を参照してください。
 
-## Build processes with graphs
+## グラフでプロセスを構築する
 
-You can use prompt-based agents to define multiple step processes with
-descriptions of tasks and procedures using the instructions field of an ADK
-agent. However, as your instructions and procedures become longer and more
-complicated, making sure that the agent is following each step and guideline
-becomes more complicated and less reliable.
+プロンプトベースのエージェントでは、ADK エージェントの instructions フィールドにタスクや手順の説明を記述することで、マルチステップのプロセスを定義できます。しかし、指示や手順が長く複雑になるにつれて、エージェントが各ステップやガイドラインに従っていることを保証するのはより複雑になり、信頼性も低下します。
 
-Graph-based workflow agents provide a significant advantage over prompt-based
-agents by allowing you to specifically define the overall process workflow in
-code. With graph-based agent workflows, each step of the process can be defined
-as an execution ***Node*** in a graph and each node can be an AI agent, Tool, or
-your programmed code. The following diagram illustrates how a simple
-prompt-based agent would translate into a workflow agent graph:
+グラフベースワークフローエージェントは、プロセス全体のワークフローをコードで具体的に定義できるため、プロンプトベースエージェントに対して大きな利点をもたらします。グラフベースエージェントワークフローでは、プロセスの各ステップをグラフ内の実行 ***Node*** として定義でき、各ノードは AI エージェント、Tool、またはプログラムされたコードにすることができます。次の図は、シンプルなプロンプトベースエージェントがどのようにワークフローエージェントグラフに変換されるかを示しています:
 
 ![Prompt-based agent to graph-based workflow](../assets/prompts-to-graphs.svg)
 
-**Figure 2.** Structure of prompt-based agent instructions translated into a
-graph-based workflow.
+**図 2.** グラフベースワークフローに変換されたプロンプトベースエージェントの指示の構造です。
 
-Moving from prompt-based agents to graph-based workflow agents allows you to
-explicitly break out the tasks of a procedure to define a specific execution
-flow. Once defined, the agent application flows the steps in the graph,
-switching between non-deterministic AI-powered agents and deterministic code as
-needed.
+プロンプトベースエージェントからグラフベースワークフローエージェントに移行すると、手順内のタスクを明示적으로分解して、特定の実行フローを定義できます。一度定義すれば、エージェントアプリケーションはグラフ内のステップに従って進行し、必要に応じて非決定論的な AI 搭載エージェントと決定論的なコードを切り替えます。
 
-The following code sample shows how the workflow graph in Figure 2 could be
-translated into a graph-based agent:
+次のコードサンプルは、図 2 のワークフローグラフをグラフベースエージェントにどのように変換できるかを示しています:
 
 === "Python"
 
@@ -209,21 +159,13 @@ translated into a graph-based agent:
 
 === "Go"
 
-    In ADK Go v2.0.0, conditional routing uses `workflow.NewEmittingFunctionNode`
-    to set `event.Routes` and `workflow.StringRoute` edges to dispatch to the
-    matching handler — the direct equivalent of Python's `router` function and
-    dict dispatch. `workflow.Concat` merges the chain and the conditional edges
-    into a single `edges` slice passed to `workflowagent.New`.
+    ADK Go v2.0.0 では、条件付きルーティングに `workflow.NewEmittingFunctionNode` を使用して `event.Routes` を設定し、`workflow.StringRoute` エッジを使用して一致するハンドラにディスパッチします。これは Python の `router` 関数および辞書ディスパッチに直接相当します。`workflow.Concat` はチェーンと条件付きエッジを 1 つの `edges` スライスにマージして `workflowagent.New` に渡します。
 
     ```go
     --8<-- "examples/go/snippets/graphs/index/main.go:process-pipeline"
     ```
 
-This sample code demonstrates how you can compose a sequence of agents to
-define a graph with routes between a set of *nodes*, which are discrete tasks
-that can include agents, Tools, your code, and even additional workflow agents.
-For information about building advanced pipelines, see
-[Build graph routes for workflow agents](/graphs/routes/).
+このサンプルコードは、一連のエージェントを構成して、*ノード*（エージェント、ツール、独自のコード、さらには追加のワークフローエージェントを含めることができる個別のタスク）のセット間のルートを持つグラフを定義する方法を示しています。高度なパイプラインの構築については、[ワークフローエージェントのグラフルートを構築する](/graphs/routes/)を参照してください。
 
 !!! tip "すべてのエージェントに対するグローバル指示"
 
@@ -231,25 +173,12 @@ For information about building advanced pipelines, see
 
 ## 既知の制限事項 {#known-limitations}
 
-There are some known limitations with graph-based workflows. They
-are *not compatible* with the following ADK features:
+グラフベースワークフローにはいくつかの既知の制限事項があります。次の ADK 機能とは*互換性がありません*:
 
--   **Integrations:** Some third-party
-    [integrations](/integrations/) may not be compatible with graph-based
-    workflows.
+-   **インテグレーション:** 一部のサードパーティ製[インテグレーション](/integrations/)は、グラフベースワークフローと互換性がない場合があります。
 
-!!! note "Go: graph workflow API"
+!!! note "Go: グラフワークフロー API"
 
-    The `workflow` package in ADK Go v2.0.0 is the direct equivalent of the
-    Python `Workflow` class. Use `workflow.NewFunctionNode` and
-    `workflow.NewAgentNode` to define nodes, `workflow.Chain` or
-    `workflow.Concat` with `[]workflow.Edge` to wire them, and
-    `workflowagent.New` to wrap the graph as a runnable agent. Conditional
-    routing uses `workflow.StringRoute`, `workflow.IntRoute`, or
-    `workflow.BoolRoute` matched against `event.Routes`. Fan-in is handled by
-    `workflow.NewJoinNode`.
+    ADK Go v2.0.0 の `workflow` パッケージは、Python の `Workflow` クラスに直接相当します。`workflow.NewFunctionNode` と `workflow.NewAgentNode` を使用してノードを定義し、`workflow.Chain` または `[]workflow.Edge` を伴う `workflow.Concat` でそれらを接続し、`workflowagent.New` でグラフを実行可能なエージェントとしてラップします。条件付きルーティングでは、`event.Routes` に対してマッチングされる `workflow.StringRoute`、`workflow.IntRoute`、または `workflow.BoolRoute` を使用します。ファンイン（Fan-in）は `workflow.NewJoinNode` によって処理されます。
 
-    For advanced routing patterns and fan-out/join examples, see
-    [Build graph routes for workflow agents](/graphs/routes/). For prebuilt
-    higher-level alternatives (sequential, parallel, loop), see
-    [Prebuilt workflow agents](/agents/workflow-agents/).
+    高度なルーティングパターンやファンアウト/ジョインの例については、[ワークフローエージェントのグラフルートを構築する](/graphs/routes/)を参照してください。事前構築済みのより高レベルな代替手段（順次、並列、ループ）については、[事前構築済みワークフローエージェント](/agents/workflow-agents/)を参照してください。

@@ -1,21 +1,14 @@
-# Build graph routes for agent workflows
+# 에이전트 워크플로를 위한 그래프 라우트 구축
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-Graph-based workflows in ADK define agent logic as a graph of execution nodes
-and edges, allowing you to build more reliable processes that combine artificial
-intelligence (AI) reasoning and code logic. These workflows allow you to create
-logical routes of execution nodes that can encapsulate code functions,
-AI-powered agents, Tools, and human input. By explicitly mapping out routing
-logic, this approach allows you to define a specific, step-wise process workflow
-in code, providing improved precision and reliability over purely prompt-based
-agents.
+ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 에지의 그래프로 정의하므로, 인공 지능(AI) 추론과 코드 로직을 결합한 보다 신뢰할 수 있는 프로세스를 구축할 수 있습니다. 이러한 워크플로를 사용하면 코드 함수, AI 기반 에이전트, 도구 및 사람 입력을 캡슐화할 수 있는 실행 노드의 논리적 라우트를 생성할 수 있습니다. 라우팅 로직을 명시적으로 설계하는 이 접근 방식을 통해 코드에서 구체적이고 단계적인 프로세스 워크플로를 정의할 수 있으므로, 순수 프롬프트 기반 에이전트에 비해 향상된 정밀도와 신뢰성을 제공합니다.
 
 ![Task graph with conditional routing between nodes](../assets/graph-workflow-router.svg)
 
-**Figure 1.** Visualization of a task graph and the routing code to implement it.
+**그림 1.** 태스크 그래프의 시각화와 이를 구현하기 위한 라우팅 코드입니다.
 
 === "Python"
 
@@ -56,14 +49,9 @@ agents.
 
 === "Go"
 
-    ADK Go v2.0.0 provides the following approach to graph-based
-    workflows:
+    ADK Go v2.0.0은 그래프 기반 워크플로에 대해 다음과 같은 접근 방식을 제공합니다:
 
-    **Graph engine** (`workflowagent` + `workflow.Edge`): A node-and-edges
-    graph API that maps directly to Python's `Workflow(edges=[...])`.
-    Nodes are defined with `workflow.NewFunctionNode`, `workflow.NewAgentNode`,
-    or `workflow.NewDynamicNode`, edges are declared as `[]workflow.Edge`, and
-    the whole graph is wrapped in a `workflowagent.New` call:
+    **그래프 엔진**(`workflowagent` + `workflow.Edge`): Python의 `Workflow(edges=[...])`에 직접 매핑되는 노드 및 에지 그래프 API입니다. 노드는 `workflow.NewFunctionNode`, `workflow.NewAgentNode` 또는 `workflow.NewDynamicNode`로 정의되고, 에지는 `[]workflow.Edge`로 선언되며, 전체 그래프는 `workflowagent.New` 호출로 래핑됩니다:
 
     ```go
     edges := workflow.Concat(
@@ -80,27 +68,17 @@ agents.
     })
     ```
 
-The advantage of using a graph-based agent workflow is the significant increase
-in control, predictability, and reliability over prompt-based agents. By
-defining the overall process workflow in code, you gain more control over how
-tasks are routed and executed. This structured node definition improves the
-predictability of agents and enhances reliability for complex tasks that require
-defined steps and process management.
+그래프 기반 에이전트 워크플로를 사용할 때의 장점은 프롬프트 기반 에이전트에 비해 제어력, 예측 가능성 및 신뢰성이 크게 향상된다는 점입니다. 전체 프로세스 워크플로를 코드로 정의함으로써 작업이 라우팅되고 실행되는 방식을 더 세밀하게 제어할 수 있습니다. 이러한 구조화된 노드 정의는 에이전트의 예측 가능성을 높이고, 정의된 단계와 프로세스 관리가 필요한 복잡한 작업에 대한 신뢰성을 향상시킵니다.
 
-Get started with graph-based workflows in ADK by checking out
-[Graph-based agent workflows](/graphs/).
+[그래프 기반 에이전트 워크플로](/graphs/)를 확인하여 ADK에서 그래프 기반 워크플로를 시작해 보세요.
 
-## Nodes
+## 노드
 
-A graph is composed of execution nodes. These *nodes* can be ***Agents***, ADK
-***Tools***, human input tasks, or code functions you write. Nodes can take
-inputs from previously executed nodes, and emit data through ***Event***
-objects.
+그래프는 실행 노드로 구성됩니다. 이러한 *노드*는 ***Agents***, ADK ***Tools***, 사람 입력 작업 또는 직접 작성한 코드 함수가 될 수 있습니다. 노드는 이전에 실행된 노드로부터 입력을 받고 ***Event*** 객체를 통해 데이터를 방출할 수 있습니다.
 
 === "Python"
 
-    The following shows a simple ***FunctionNode*** that handles text inputs
-    and sends a text output:
+    다음은 텍스트 입력을 처리하고 텍스트 출력을 보내는 간단한 ***FunctionNode***를 보여줍니다:
 
     ```python
     from google.adk import Event
@@ -120,40 +98,29 @@ objects.
 
 === "Go"
 
-    In ADK Go v2.0.0, the primary node type is `workflow.NewFunctionNode`.
-    A `FunctionNode` wraps a plain Go function: the function returns a typed
-    value, and the framework automatically wraps it in a `session.Event`,
-    setting `event.Output`. The successor node receives this value as its
-    typed `input` parameter — no manual state writes or event construction
-    needed:
+    ADK Go v2.0.0에서 기본 노드 유형은 `workflow.NewFunctionNode`입니다. `FunctionNode`는 일반 Go 함수를 래핑합니다. 함수가 타입이 지정된 값을 반환하면 프레임워크가 이를 자동으로 `session.Event`로 래핑하고 `event.Output`을 설정합니다. 후속 노드는 이 값을 타입이 지정된 `input` 매개변수로 받으므로 수동 상태 쓰기나 이벤트 생성이 필요하지 않습니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:function-node"
     ```
 
-For more information about transferring data between nodes, see
-[Data handling for agent workflows](/graphs/data-handling/).
+노드 간 데이터 전송에 대한 자세한 내용은 [에이전트 워크플로의 데이터 처리](/graphs/data-handling/)를 참조하세요.
 
-## Workflow graphs syntax
+## 워크플로 그래프 구문
 
-You define a graph by composing workflow agents. This section provides an
-overview of the common routing patterns.
+워크플로 에이전트를 조합하여 그래프를 정의합니다. 이 섹션에서는 일반적인 라우팅 패턴의 개요를 제공합니다.
 
-!!! caution "Caution: Workflow agent limitations"
+!!! caution "주의: 워크플로 에이전트 제한사항"
 
-    You can add ***LlmAgents*** to graph-based workflows. However, they must
-    be configured for single-turn or task mode. For more information about
-    agent modes, see
-    [Build collaborative agent teams](/workflows/collaboration/#mode-configuration-and-behaviors).
+    그래프 기반 워크플로에 ***LlmAgents***를 추가할 수 있습니다. 그러나 단일 턴(single-turn) 또는 태스크(task) 모드로 구성되어야 합니다. 에이전트 모드에 대한 자세한 내용은 [협업 에이전트 팀 구축](/workflows/collaboration/#mode-configuration-and-behaviors)을 참조하세요.
 
-### Route sequences
+### 순차 라우트
 
-A sequential route runs each node once, in the listed order.
+순차 라우트는 나열된 순서대로 각 노드를 한 번씩 실행합니다.
 
 === "Python"
 
-    The `edges` array uses the `START` keyword to indicate the beginning of a
-    graph execution, with each listed node executed in sequence:
+    `edges` 배열은 그래프 실행의 시작을 나타내기 위해 `START` 키워드를 사용하며, 나열된 각 노드가 순차적으로 실행됩니다:
 
     ```python
     edges=[("START", task_A_node)]  # single node run
@@ -180,20 +147,17 @@ A sequential route runs each node once, in the listed order.
 
 === "Go"
 
-    `workflow.Chain(workflow.Start, nodeA, nodeB, nodeC)` wires nodes into a
-    sequential edge slice. Each node's typed return value is forwarded to the
-    next node via `event.Output` — no session state writes needed:
+    `workflow.Chain(workflow.Start, nodeA, nodeB, nodeC)`은 노드들을 순차적인 에지 슬라이스로 연결합니다. 각 노드의 타입이 지정된 반환 값은 `event.Output`을 통해 다음 노드로 전달되므로 세션 상태 쓰기가 필요하지 않습니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:sequential-nodes"
     ```
 
-### Route branches and conditional execution
+### 라우트 분기 및 조건부 실행
 
 === "Python"
 
-    In Python, branching is handled by a `FunctionNode` that returns an
-    `Event(route=...)` value, which the `edges` dict dispatches to different nodes.
+    Python에서 분기는 `Event(route=...)` 값을 반환하는 `FunctionNode`에 의해 처리되며, `edges` 딕셔너리가 이를 서로 다른 노드로 디스패치합니다.
 
     ```python
     from google.adk import Event, Workflow
@@ -237,18 +201,14 @@ A sequential route runs each node once, in the listed order.
 
 === "Go"
 
-    In ADK Go v2.0.0, conditional dispatch uses the `workflow` graph engine.
-    A node sets `Event.Routes` to one or more string route keys, and each
-    `workflow.Edge` selects its successor using a `workflow.Route` matcher:
+    ADK Go v2.0.0에서 조건부 디스패치는 `workflow` 그래프 엔진을 사용합니다. 노드가 `Event.Routes`를 하나 이상의 문자열 라우트 키로 설정하면, 각 `workflow.Edge`는 `workflow.Route` 매처를 사용하여 후속 노드를 선택합니다:
 
-    -   `workflow.StringRoute("category")` — matches a single string value
-    -   `workflow.IntRoute(n)` or `workflow.MultiRoute[int]{1, 2, 3}` — matches
-        integer values
-    -   `workflow.BoolRoute(true)` — matches a boolean value
-    -   `workflow.Default` — matches when no other route on the same source
-        node matches
+    -   `workflow.StringRoute("category")` — 단일 문자열 값과 일치
+    -   `workflow.IntRoute(n)` 또는 `workflow.MultiRoute[int]{1, 2, 3}` — 정수 값과 일치
+    -   `workflow.BoolRoute(true)` — 불리언 값과 일치
+    -   `workflow.Default` — 동일한 소스 노드의 다른 어떤 라우트와도 일치하지 않을 때 매칭
 
-    The following pattern is the Go equivalent of the Python router:
+    다음 패턴은 Python 라우터의 Go 버전입니다:
 
     ```go
     // classifyNode emits an Event with Routes=[]string{"BUG"},
@@ -267,9 +227,7 @@ A sequential route runs each node once, in the listed order.
     })
     ```
 
-    `workflow.EdgeBuilder` provides a fluent alternative to assembling the
-    `[]workflow.Edge` slice by hand. The builder's `Add`, `AddFanOut`, and
-    `AddFanIn` methods express the same topology with less repetition:
+    `workflow.EdgeBuilder`는 `[]workflow.Edge` 슬라이스를 수동으로 조립하는 대신 사용할 수 있는 플루언트(fluent) 대안을 제공합니다. 빌더의 `Add`, `AddFanOut`, `AddFanIn` 메서드는 반복을 줄이면서 동일한 토폴로지를 표현합니다:
 
     ```go
     eb := workflow.NewEdgeBuilder()
@@ -285,38 +243,23 @@ A sequential route runs each node once, in the listed order.
     })
     ```
 
-    For complete, runnable routing examples see:
-    [string routing](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/string),
-    [int / multi-value routing](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/int),
-    and [LLM-driven routing](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/llm).
+    실행 가능한 전체 라우팅 예제는 [문자열 라우팅](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/string), [정수 / 다중 값 라우팅](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/int) 및 [LLM 기반 라우팅](https://github.com/google/adk-go/tree/v2/examples/workflow/routing/llm)을 참조하세요.
 
-    !!! note "Prebuilt agents: encoding routing in state"
+    !!! note "사전 구축된 에이전트: 상태에 라우팅 인코딩하기"
 
-        When using `sequentialagent` / `parallelagent` / `loopagent` instead
-        of the graph engine, there is no `Event.Routes` dispatch. Encode the
-        routing decision in session state via `OutputKey` and let downstream
-        agents inspect it in their `Instruction` template, or use a `loopagent`
-        with an `Escalate`-based exit — see the
-        [loop and escalation example](#loop-and-escalation-exit) below.
+        그래프 엔진 대신 `sequentialagent` / `parallelagent` / `loopagent`를 사용하는 경우에는 `Event.Routes` 디스패치가 없습니다. `OutputKey`를 통해 세션 상태에 라우팅 결정을 인코딩하고 다운스트림 에이전트가 `Instruction` 템플릿에서 이를 검사하도록 하거나, `Escalate` 기반 종료를 사용하는 `loopagent`를 사용하세요(아래의 [루프 및 에스컬레이션 종료 예제](#loop-and-escalation-exit) 참조).
 
 ## 병렬 작업: Fan-out 및 Join 경로
 
-You can create graphs that split execution across multiple, parallel nodes, and
-typically you need to assemble the output of each node for further processing.
-This task execution pattern has two stages. The workflow first fans out when it
-starts multiple parallel tasks, and then it re-joins those paths when those
-tasks are completed before proceeding to the next step.
+여러 병렬 노드에 걸쳐 실행을 분할하는 그래프를 만들 수 있으며, 일반적으로 추가 처리를 위해 각 노드의 출력을 모아야 합니다. 이 작업 실행 패턴에는 두 단계가 있습니다. 워크플로는 먼저 여러 병렬 작업을 시작할 때 팬아웃(fan out)하고, 해당 작업들이 완료되면 다음 단계로 진행하기 전에 경로들을 다시 조인(join)합니다.
 
 ![Tasks connecting to a JoinNode](../assets/graph-joinnode.svg)
 
-**Figure 2.** The output of parallel task nodes can be assembled and joined
-before passing results to the next step.
+**그림 2.** 병렬 작업 노드의 출력을 모아서 조인한 후 결과를 다음 단계로 전달할 수 있습니다.
 
 === "Python"
 
-    You accomplish the join step by using a ***JoinNode*** object, which waits
-    for each parallel task to complete and then passes the collection of outputs
-    from these nodes to the next node.
+    각 병렬 작업이 완료될 때까지 기다린 후 이 노드들의 출력 모음을 다음 노드로 전달하는 ***JoinNode*** 객체를 사용하여 조인 단계를 수행합니다.
 
     ```python
     from google.adk.workflow import JoinNode
@@ -341,15 +284,9 @@ before passing results to the next step.
 
 === "Go"
 
-    ADK Go v2.0.0 provides `workflow.NewJoinNode` for true fan-in in the
-    graph engine: fan-out edges from `workflow.Start` (or any shared source
-    node) feed in parallel to the join node, which waits for all of them to
-    complete before emitting a `map[string]any` keyed by predecessor node name
-    to the next node.
+    ADK Go v2.0.0은 그래프 엔진에서 진정한 팬인(fan-in)을 위해 `workflow.NewJoinNode`를 제공합니다. `workflow.Start`(또는 공유 소스 노드)에서 나온 팬아웃 에지들이 병렬로 조인 노드에 입력되며, 조인 노드는 모든 노드가 완료될 때까지 기다린 후 이전 노드 이름을 키로 하는 `map[string]any`를 다음 노드로 방출합니다.
 
-    `workflow.EdgeBuilder` makes the fan-out / fan-in wiring concise with its
-    dedicated `AddFanOut` and `AddFanIn` helpers (as shown in the
-    [complex workflow example](https://github.com/google/adk-go/tree/v2/examples/workflow/complex)):
+    `workflow.EdgeBuilder`는 전용 `AddFanOut` 및 `AddFanIn` 헬퍼를 통해 팬아웃 / 팬인 연결을 간결하게 만들어 줍니다([복잡한 워크플로 예제](https://github.com/google/adk-go/tree/v2/examples/workflow/complex) 참조):
 
     ```go
     gatherNode := workflow.NewJoinNode("gather")
@@ -366,8 +303,7 @@ before passing results to the next step.
     })
     ```
 
-    The following snippet shows the complete fan-out / join pattern using
-    `workflow.NewJoinNode` and `EdgeBuilder.AddFanOut` / `AddFanIn`:
+    다음 스니펫은 `workflow.NewJoinNode`와 `EdgeBuilder.AddFanOut` / `AddFanIn`을 사용하는 전체 팬아웃 / 조인 패턴을 보여줍니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:parallel-fan-out"
@@ -379,14 +315,11 @@ before passing results to the next step.
 
 ## 중첩 워크플로
 
-When building more complex workflows, you may want to encapsulate the
-functionality for specific tasks into reusable workflows. One or more
-workflow agents can be used as a sub-agent within another workflow agent to
-accomplish this goal.
+더 복잡한 워크플로를 구축할 때 특정 작업의 기능을 재사용 가능한 워크플로로 캡슐화하고 싶을 수 있습니다. 이를 위해 하나 이상의 워크플로 에이전트를 다른 워크플로 에이전트 내의 하위 에이전트로 사용할 수 있습니다.
 
 ![Nested Workflows inside a parent Workflow](../assets/graph-workflow-nodes.svg)
 
-**Figure 3.** Nested workflow agents as sub-agents inside a parent workflow.
+**그림 3.** 상위 워크플로 내부에 하위 에이전트로 중첩된 워크플로 에이전트입니다.
 
 === "Python"
 
@@ -406,15 +339,9 @@ accomplish this goal.
     )
     ```
 
-    #### Nested workflow data output
+    #### 중첩 워크플로 데이터 출력
 
-    Output for nested Workflow objects works slightly differently from
-    individual nodes. When the nested workflow completes one of its nodes, it
-    transmits data to the next node in the nested workflow's graph *and* the
-    system bubbles up the Event for that node to the parent workflow for
-    process traceability. When the nested workflow completes the last node in
-    its process, the parent node extracts data from the final leaf nodes and
-    emits it as the output of the nested workflow.
+    중첩된 Workflow 객체의 출력은 개별 노드와 약간 다르게 작동합니다. 중첩 워크플로가 노드 중 하나를 완료하면 중첩 워크플로 그래프의 다음 노드로 데이터를 전송하며, *동시에* 시스템은 프로세스 추적성을 위해 해당 노드의 Event를 상위 워크플로로 전달(bubble up)합니다. 중첩 워크플로가 프로세스의 마지막 노드를 완료하면 상위 노드는 최종 리프 노드에서 데이터를 추출하여 중첩 워크플로의 출력으로 방출합니다.
 
 === "TypeScript"
 
@@ -428,14 +355,9 @@ accomplish this goal.
 
 === "Go"
 
-    ADK Go v2.0.0 supports nested workflows in two complementary ways:
+    ADK Go v2.0.0은 두 가지 상호 보완적인 방식으로 중첩 워크플로를 지원합니다:
 
-    **Graph engine** (`workflowagent` + `workflow.Edge`): A `workflowagent`
-    created with `workflowagent.New` is itself an `agent.Agent`, so it can
-    be wrapped with `workflow.NewAgentNode` and used as a node inside another
-    workflow's `edges` slice. The inner workflow runs to completion as a single
-    node from the outer graph's perspective, and its terminal output is emitted
-    as the node output on the outer graph's edge:
+    **그래프 엔진**(`workflowagent` + `workflow.Edge`): `workflowagent.New`로 생성된 `workflowagent`는 그 자체로 `agent.Agent`이므로 `workflow.NewAgentNode`로 래핑하여 다른 워크플로의 `edges` 슬라이스 내부에서 노드로 사용할 수 있습니다. 외부 그래프의 관점에서 내부 워크플로는 단일 노드로 완료될 때까지 실행되며, 최종 출력은 외부 그래프 에지의 노드 출력으로 방출됩니다:
 
     ```go
     innerNode, _ := workflow.NewAgentNode(innerWorkflowAgent, workflow.NodeConfig{})
@@ -447,9 +369,7 @@ accomplish this goal.
     })
     ```
 
-    The following snippet shows both the inner and outer graph construction.
-    `workflow.NewAgentNode` wraps the inner `workflowagent` so it can be
-    placed in the outer graph's `workflow.Chain`:
+    다음 스니펫은 내부 및 외부 그래프 구성을 모두 보여줍니다. `workflow.NewAgentNode`는 외부 그래프의 `workflow.Chain`에 배치할 수 있도록 내부 `workflowagent`를 래핑합니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:nested-workflows"
@@ -457,12 +377,7 @@ accomplish this goal.
 
 ## 루프 및 에스컬레이션 종료
 
-A loop repeats a set of steps until a termination condition is met. In Python
-this is expressed as a back-edge in the `edges` graph that routes back to an
-earlier node. In ADK Go v2.0.0, the graph engine supports the same pattern
-directly: add an edge from a downstream node back to an earlier node with a
-route condition, and the engine re-activates the target node with a fresh
-lifecycle on each iteration.
+루프는 종료 조건이 충족될 때까지 일련의 단계를 반복합니다. Python에서는 이전 노드로 다시 라우팅되는 `edges` 그래프의 역방향 에지(back-edge)로 표현됩니다. ADK Go v2.0.0에서도 그래프 엔진이 동일한 패턴을 직접 지원합니다. 라우트 조건과 함께 다운스트림 노드에서 이전 노드로 돌아가는 에지를 추가하면, 엔진이 각 반복마다 새로운 수명 주기로 대상 노드를 다시 활성화합니다.
 
 === "Python"
 
@@ -500,10 +415,7 @@ lifecycle on each iteration.
 
 === "Go"
 
-    The following example uses the graph engine with `workflow.EdgeBuilder`.
-    The critic node returns a verdict, a router node sets `Event.Routes`, and
-    a back-edge from the refiner to the critic creates the loop. When the
-    critic is satisfied it routes to the terminal `done` node instead:
+    다음 예제는 `workflow.EdgeBuilder`와 함께 그래프 엔진을 사용합니다. 비평(critic) 노드가 판정을 반환하면 라우터 노드가 `Event.Routes`를 설정하고, 개선(refiner) 노드에서 비평 노드로 이어지는 역방향 에지가 루프를 생성합니다. 비평 노드가 만족하면 대신 최종 `done` 노드로 라우팅합니다:
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:loop-escalate"
