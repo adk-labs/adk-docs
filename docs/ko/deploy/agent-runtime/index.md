@@ -53,4 +53,4 @@ ADK 에이전트 프로젝트를 Agent Runtime에 배포하면 다음 내용이 
 
 === "Go"
 
-    Go로 배포할 때는 전용 ADK API 서버가 포함*됩니다*.
+    Go로 배포할 때는 Agent Runtime의 `:query` 및 `:streamQuery` 메서드를 제공하는 ADK `agentengine` 런처가 포함됩니다. ADK API 서버나 ADK 웹 사용자 인터페이스는 포함되지 *않습니다*.

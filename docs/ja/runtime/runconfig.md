@@ -312,7 +312,9 @@ ADK エージェントは、対話型のエージェント体験を作成する�
   無制限の呼び出しを意味しますが、本番環境では推奨されません。使用する言語の最大整数(Python では
   `sys.maxsize`、Kotlin では `Int.MAX_VALUE`)を渡すとエラーになります。
 - `save_input_blobs_as_artifacts`: `True` の場合、input blob(例: uploaded file)を debugging と
-  auditing 用の run artifact として保存します。
+  auditing 用の run artifact として保存します。Python では `SaveFilesAsArtifactsPlugin` が推奨されるため
+  非推奨(deprecated)となっています。Go では、`agent.RunConfig` の `SaveInputBlobsAsArtifacts`
+  フィールドを `true` に設定します。この設定を有効にするには、ランナーにアーティファクトサービスが必要です。
 - `custom_metadata`: invocation に添付される任意 metadata の `dict[str, Any]` です。tracing や
   logging に便利です。
 - `service_tier`: 実行時のモデル呼び出しに対するサービング容量を選択します。ADK Python のみに対応しており、

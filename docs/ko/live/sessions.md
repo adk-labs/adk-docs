@@ -71,7 +71,7 @@ run_config = RunConfig(
 live_request_queue = LiveRequestQueue()
 ```
 
-`user_id`와 `session_id`는 개발자가 정의하는 임의의 문자열입니다. `session_id=None`을 전달하면 ADK가 UUID를 생성합니다. 동일한 식별자로 `run_live()`를 호출하기 전에 세션이 반드시 존재해야 하며, 그렇지 않으면 `run_live()`에서 `ValueError: Session not found`가 발생합니다.
+`user_id`와 `session_id`는 개발자가 정의하는 임의의 문자열입니다. `session_id=None`을 전달하면 ADK가 UUID를 생성합니다. 동일한 식별자로 `run_live()`를 호출하기 전에 세션이 반드시 존재해야 하며, 그렇지 않으면 `run_live()`에서 `ValueError`의 하위 클래스인 `SessionNotFoundError`가 발생합니다. 예외를 발생시키는 대신 ADK가 누락된 세션을 생성하도록 하려면 `Runner(..., auto_create_session=True)`로 러너를 구성하세요.
 
 !!! warning "세션당 하나의 큐"
 
@@ -87,7 +87,10 @@ class LiveRequest(BaseModel):
     blob: Optional[Blob] = None                  # 오디오/비디오 바이트
     activity_start: Optional[ActivityStart] = None  # 수동 턴 시작
     activity_end: Optional[ActivityEnd] = None      # 수동 턴 종료
+    audio_stream_end: bool = False               # 더 이상 들어오는 오디오 없음
     close: bool = False                          # 정상 종료 신호
+    partial: bool = False                        # 콘텐츠가 턴을 종료하지 않음
+    state_delta: Optional[dict[str, Any]] = None # 적용할 세션 상태
 ```
 
 `content`와 `blob`은 상호 배타적입니다. `LiveRequest` 객체를 직접 구성하기보다 편의 메서드를 사용하세요. 올바른 필드를 설정하고 상호 배타적 제약 조건을 유지해 줍니다.
@@ -150,7 +153,7 @@ async for event in runner.run_live(
 | 수동 닫기 | `live_request_queue.close()` | 예 (Graceful) |
 | 워크플로 완료 | 라이브 워크플로의 마지막 에이전트가 `task_completed()` 호출 | 예 (Graceful) |
 | 세션 타임아웃 | Live API 지속 시간 한도 도달 (압축 미사용 시) | 연결 닫힘 |
-| 조기 종료 | 도구 또는 콜백에서 `end_invocation` 설정 | 예 (Graceful) |
+| 조기 종료 | 호출 컨텍스트에 `end_invocation`이 설정됨 (예: 콘텐츠를 반환하는 `before_agent_callback`에 의해) | 예 (Graceful) |
 | 오류 | 연결 실패 또는 처리되지 않은 예외 | 아니요 |
 
 오류가 발생하더라도 세션이 끝나면 항상 `close()`를 호출하세요. 이를 건너뛰면 Live API에 정상 종료 신호가 전달되지 않아 타임아웃될 때까지 [동시 세션 할당량](#concurrent-sessions)을 차지하는 "좀비" 세션이 남을 수 있습니다.

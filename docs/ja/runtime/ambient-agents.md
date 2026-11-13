@@ -210,6 +210,8 @@ Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエ
     go run event_processing_agent.go web api pubsub
     ```
 
+    Go サーバーの場合は、次のリクエストの URL として `http://localhost:8080/api/apps/event_processor/trigger/pubsub` を使用してください。
+
 **2.テスト イベントを送信します:**
 
 ```bash
@@ -381,9 +383,15 @@ Eventarc トリガー エンドポイント プロセス
 
 === "Go"
 
-    |設定 |デフォルト |旗 |
+    |設定 |デフォルト |フラグ |
     | :------ | :------ | :------------------- |
-    |最大同時呼び出し数 | 10 | `--trigger_max_concurrent_runs` |
+    |最大同時呼び出し数 | 100 | `--trigger_max_concurrent_runs` |
+
+    デフォルトでは、ADK Go は最大 100 件の同時呼び出しを許可し、ADK Python は 10 件を許可します。
+
+    !!! note "ADK Go における Pub/Sub トリガーの同時実行性"
+
+        ADK Go v2.3.0 から v2.5.0 では、Pub/Sub トリガーに `--trigger_max_concurrent_runs` が適用されないため、Pub/Sub イベントは同時実行制限なしで実行されます。Pub/Sub の同時実行数を制限するには、ADK Go v2.6.0 以降を使用してください。
 
 同時実行制限に達すると、受信リクエストはキューに入れられて処理されます。
 スロットが利用可能になるにつれて。同時実行制御はプロセスごとに行われます。デプロイする場合
@@ -400,7 +408,7 @@ Eventarc トリガー エンドポイント プロセス
 === "Go"
 
     ```bash
-    go run event_processing_agent.go web api pubsub --trigger_max_concurrent_runs=5
+    go run event_processing_agent.go web api eventarc --trigger_max_concurrent_runs=5
     ```
 
 ### バックオフによる自動再試行
@@ -419,11 +427,13 @@ Eventarc トリガー エンドポイント プロセス
 
 === "Go"
 
-    |設定 |デフォルト |旗 |
+    |設定 |デフォルト |フラグ |
     | :------ | :------ | :------------------- |
     |最大再試行回数 | 3 | `--trigger_max_retries` |
     |ベース バックオフ遅延 | 1.0秒 | `--trigger_base_delay` |
-    |最大バックオフ遅延 | 30.0秒 | `--trigger_max_delay` |
+    |最大バックオフ遅延 | 10.0秒 | `--trigger_max_delay` |
+
+    デフォルトでは、ADK Go はバックオフ遅延の上限を 10 秒とし、ADK Python は 30 秒とします。
 
 すべての再試行が完了すると、エンドポイントは HTTP 500 を返し、シグナルを送信します。
 Pub/Sub または Eventarc を使用して、より高いレベルで配信を再試行します。
@@ -510,17 +520,20 @@ ADK ではなくサービス:
 
 === "Go"
 
-    対応するトリガー フラグを使用してトリガーを有効にして、エージェントを Cloud Run にデプロイします（すべての設定にはトリガー タイプの接頭辞が付いています）
+    `adkgo` CLI と各トリガーのフラグを使用して、エージェントを Cloud Run にデプロイします:
 
     ```bash
-    adk deploy cloud_run \
-      --project=$GOOGLE_CLOUD_PROJECT \
-      --region=$GOOGLE_CLOUD_LOCATION \
+    ./adkgo deploy cloudrun \
+      -p $GOOGLE_CLOUD_PROJECT \
+      -r $GOOGLE_CLOUD_LOCATION \
+      -s $SERVICE_NAME \
+      -e ./main.go \
       --pubsub \
-      --pubsub_max_concurrent_runs=5 \
       --eventarc \
       --eventarc_max_concurrent_runs=5
     ```
+
+    ADK Go は `/api` パスプレフィックス配下でトリガーエンドポイントを提供するため、push サブスクリプションと Eventarc トリガーは `/api/apps/{app_name}/trigger/pubsub` および `/api/apps/{app_name}/trigger/eventarc` を指すように設定してください。
 
 導入後、適切な GCP インフラストラクチャをエージェントのインフラストラクチャに接続します。
 トリガーエンドポイント:

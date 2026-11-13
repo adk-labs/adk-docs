@@ -1,11 +1,17 @@
 # 순차적 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 `SequentialAgent`는 하위 에이전트를 목록에 명시된 순서대로 실행하는 [워크플로우 에이전트](index.md)입니다.
 실행이 고정된, 엄격한 순서로 이루어져야 할 때 `SequentialAgent`를 사용하세요.
+
+!!! warning "지원 중단됨(Deprecated): 그래프 기반 워크플로 사용"
+
+    ADK Python, TypeScript, Go 및 Kotlin에서 템플릿 워크플로는
+    [그래프 기반 워크플로](/ko/graphs/)와
+    [동적 워크플로](/ko/graphs/dynamic/)를 포함한 더 유연한 워크플로 구조로 대체되었습니다.
 
 ### 예시
 
@@ -33,7 +39,7 @@
 이런 경우 `SequentialAgent`가 완벽하게 들어맞습니다.
 
 ```py
-SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAgent])
+SequentialAgent(name="CodePipelineAgent", sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAgent])
 ```
 
 이를 통해 코드가 작성되고, *그 다음* 검토되고, *마지막으로* 리팩터링되는 엄격하고 신뢰할 수 있는 순서를 보장합니다. **각 하위 에이전트의 출력은 [출력 키(Output Key)](../llm-agents.md#data-handling)를 통해 상태(state)에 저장되어 다음 에이전트로 전달됩니다.**
@@ -48,6 +54,11 @@ SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAg
         --8<-- "examples/python/snippets/agents/workflow-agents/sequential_agent_code_development_agent.py:init"
         ```
 
+    === "TypeScript"
+        ```typescript
+        --8<-- "examples/typescript/snippets/agents/workflow-agents/sequential_agent_code_development_agent.ts:init"
+        ```
+
     === "Go"
         ```go
         --8<-- "examples/go/snippets/agents/workflow-agents/sequential/main.go:init"
@@ -58,13 +69,10 @@ SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAg
         --8<-- "examples/java/snippets/src/main/java/agents/workflow/SequentialAgentExample.java:init"
         ```
 
-## TypeScript 예제 보강
-
-영어 원문에 포함된 TypeScript 순차 에이전트 예제를 아래에 함께 제공합니다.
-
-```typescript
---8<-- "examples/typescript/snippets/agents/workflow-agents/sequential_agent_code_development_agent.ts:init"
-```
+    === "Kotlin"
+        ```kotlin
+        --8<-- "examples/kotlin/snippets/agents/workflow-agents/SequentialAgentExample.kt:init"
+        ```
 
 !!! tip "모든 에이전트를 위한 전역 지침"
 

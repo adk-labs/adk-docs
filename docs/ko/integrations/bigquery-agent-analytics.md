@@ -333,7 +333,7 @@ LIMIT 20;
         from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryAgentAnalyticsPlugin, BigQueryLoggerConfig
         from google.adk.agents import Agent
         from google.adk.models.google_llm import Gemini
-        from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+        from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 
         # --- OpenTelemetry note (no setup required for BQAA) ---
@@ -1725,9 +1725,9 @@ LLM 호출이 예외로 실패할 때 기록됩니다. 오류 메시지가 캡�
 에이전트의 내부 상태 변경(예: 도구가 업데이트한 커스텀 애플리케이션 상태)을
 추적합니다.
 
-!!! note "내장 마스킹"
+!!! note "기본 제공 수정"
 
-    Python은 `temp:` 상태 값을 `[REDACTED]`로 바꿉니다. Go는 로깅 전에 `state_delta`에서 최상위 소문자 `temp:` 항목을 제거하며 아무것도 남지 않으면 `STATE_DELTA` 행을 내보내지 않습니다. 구조화된 콘텐츠 및 속성의 기타 `temp:` 값은 `[REDACTED]`로 바뀝니다. 자세한 내용은 [기본 제공 수정](#built-in-redaction)을 참고하세요.
+    `temp:` 접두사가 붙은 상태 키는 로깅된 `state_delta`에서 자동으로 `[REDACTED]`로 수정됩니다. 수정되는 키 이름과 상태 범위에 대한 자세한 내용은 [기본 제공 수정](#built-in-redaction)을 참고하세요.
 
 ```json
 {
@@ -2385,7 +2385,7 @@ from google.adk.plugins.bigquery_agent_analytics_plugin import (
     BigQueryAgentAnalyticsPlugin,
     BigQueryLoggerConfig,
 )
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # --- Configuration ---
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id")

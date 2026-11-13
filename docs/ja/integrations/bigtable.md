@@ -23,6 +23,16 @@ Bigtable 連携を提供するツールセットは次のとおりです:
 
 これらは `BigtableToolset` ツールセットとして提供されています。
 
+## インストール
+
+Bigtable ツールは、ベースの `google-adk` インストールには含まれない Google Cloud クライアント ライブラリに依存しています。`gcp` extra を指定してインストールしてください:
+
+```bash
+pip install "google-adk[gcp]"
+```
+
+## エージェントでの使用
+
 ```py
 --8<-- "examples/python/snippets/tools/built-in-tools/bigtable.py"
 ```

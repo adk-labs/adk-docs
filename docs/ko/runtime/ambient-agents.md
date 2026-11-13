@@ -210,6 +210,8 @@ Pub/Sub 및 Eventarc는 이벤트를 HTTP POST 요청으로 에이전트에 전�
     go run event_processing_agent.go web api pubsub
     ```
 
+    Go 서버의 경우 다음 요청에서 URL로 `http://localhost:8080/api/apps/event_processor/trigger/pubsub`를 사용하세요.
+
 **2. 테스트 이벤트 보내기:**
 
 ```bash
@@ -383,7 +385,13 @@ Eventarc 트리거 엔드포인트 프로세스
 
     | 설정 | 기본값 | 플래그 |
     | :------ | :------ | :------------------- |
-    | 최대 동시 호출 | 10 | `--trigger_max_concurrent_runs` |
+    | 최대 동시 호출 | 100 | `--trigger_max_concurrent_runs` |
+
+    기본적으로 ADK Go는 최대 100개의 동시 호출을 허용하며, ADK Python은 10개를 허용합니다.
+
+    !!! note "ADK Go의 Pub/Sub 트리거 동시성"
+
+        ADK Go v2.3.0부터 v2.5.0까지는 Pub/Sub 트리거에 `--trigger_max_concurrent_runs`를 적용하지 않으므로 Pub/Sub 이벤트가 동시성 제한 없이 실행됩니다. Pub/Sub 동시성을 제한하려면 ADK Go v2.6.0 이상을 사용하세요.
 
 동시성 제한에 도달하면 들어오는 요청이 대기열에 추가되어 처리됩니다.
 슬롯을 사용할 수 있게 되면 동시성 제어는 프로세스별로 이루어집니다. 배포하는 경우
@@ -400,7 +408,7 @@ Eventarc 트리거 엔드포인트 프로세스
 === "Go"
 
     ```bash
-    go run event_processing_agent.go web api pubsub --trigger_max_concurrent_runs=5
+    go run event_processing_agent.go web api eventarc --trigger_max_concurrent_runs=5
     ```
 
 ### 백오프를 사용한 자동 재시도
@@ -423,7 +431,9 @@ Eventarc 트리거 엔드포인트 프로세스
     | :------ | :------ | :------------------- |
     | 최대 재시도 횟수 | 3 | `--trigger_max_retries` |
     | 기본 백오프 지연 | 1.0초 | `--trigger_base_delay` |
-    | 최대 백오프 지연 | 30.0초 | `--trigger_max_delay` |
+    | 최대 백오프 지연 | 10.0초 | `--trigger_max_delay` |
+
+    기본적으로 ADK Go는 백오프 지연을 최대 10초로 제한하며, ADK Python은 최대 30초로 제한합니다.
 
 모든 재시도가 소진되면 엔드포인트는 HTTP 500을 반환하고 신호를 보냅니다.
 Pub/Sub 또는 Eventarc를 사용하여 더 높은 수준에서 전송을 재시도합니다.
@@ -510,17 +520,20 @@ ADK가 아닌 서비스:
 
 === "Go"
 
-    해당 트리거 플래그를 사용하여 트리거가 활성화된 Cloud Run에 에이전트를 배포합니다(모든 설정에는 트리거 유형이 앞에 붙습니다).
+    `adkgo` CLI와 각 트리거용 플래그를 사용하여 에이전트를 Cloud Run에 배포합니다:
 
     ```bash
-    adk deploy cloud_run \
-      --project=$GOOGLE_CLOUD_PROJECT \
-      --region=$GOOGLE_CLOUD_LOCATION \
+    ./adkgo deploy cloudrun \
+      -p $GOOGLE_CLOUD_PROJECT \
+      -r $GOOGLE_CLOUD_LOCATION \
+      -s $SERVICE_NAME \
+      -e ./main.go \
       --pubsub \
-      --pubsub_max_concurrent_runs=5 \
       --eventarc \
       --eventarc_max_concurrent_runs=5
     ```
+
+    ADK Go는 `/api` 경로 접두사 아래에서 트리거 엔드포인트를 제공하므로, 푸시 구독과 Eventarc 트리거가 `/api/apps/{app_name}/trigger/pubsub` 및 `/api/apps/{app_name}/trigger/eventarc`를 가리키도록 설정하세요.
 
 배포 후 적절한 GCP 인프라를 에이전트의 인프라에 연결하세요.
 트리거 끝점:

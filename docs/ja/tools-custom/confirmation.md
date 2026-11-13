@@ -1,7 +1,7 @@
 # ADK ツールの操作確認の取得
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span><span class="lst-preview">プレビュー</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 一部のエージェント ワークフローでは、意思決定、検証、セキュリティ、または一般的な監視のために確認が必要です。このような場合、ワークフローを続行する前に人間または監視システムから応答を取得する必要があります。Agent Development Kit (ADK) の*ツール確認 (Tool Confirmation)* 機能を使用すると、ADK ツールはその実行を一時停止し、ユーザーまたは他のシステムと対話して確認を取得したり、構造化データを収集したりしてから続行できます。ADK ツールでツール確認を次の方法で使用できます。
@@ -9,9 +9,8 @@
 -   **[ブール値の確認 (Boolean Confirmation)](#boolean-confirmation):** 確認フラグまたはプロバイダーを使用してツールを構成できます。このオプションは、はい/いいえの確認応答のためにツールを一時停止します。
 -   **[高度な確認 (Advanced Confirmation)](#advanced-confirmation):** 構造化データの応答が必要なシナリオでは、確認を説明するテキスト プロンプトと期待される応答を使用してツールを構成できます。
 
-!!! example "プレビュー"
-    ツール確認機能はプレビュー段階であり、いくつかの[既知の制限事項](#known-limitations)があります。
-    皆様からの[フィードバック](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=tool%20confirmation)をお待ちしております。
+!!! example "TypeScript、Go、Kotlin では実験的機能"
+    ツール確認機能は、ADK TypeScript、ADK Go、および ADK Kotlin では実験的機能です。すべての言語について、[既知の制限事項](#known-limitations)を参照してください。
 
 リクエストがユーザーに伝達される方法を構成でき、システムは ADK サーバーの REST API を介して送信された[リモート応答](#remote-response)を使用することもできます。ADK Web ユーザー インターフェースで確認機能を使用すると、図 1 に示すように、エージェント ワークフローに入力を求めるダイアログ ボックスが表示されます。
 

@@ -32,7 +32,7 @@ LLMがツールを正しく使用するには、明確に定義された関数�
 ##### 必須パラメーター
 
 === "Python"
-    パラメーターは、型ヒントがあるが**デフォルト値がない**場合に**必須**と見なされます。LLMは、ツールを呼び出すときにこの引数の値を指定する必要があります。パラメーターの説明は、関数のdocstringから取得されます。
+    パラメーターは、型ヒントがあるが**デフォルト値がない**場合に**必須**と見なされます。LLMは、ツールを呼び出すときにこの引数の値を指定する必要があります。ADK はパラメーターごとの個別の説明は出力せず、docstring 全体がツールの単一のトップレベル `description` になるため、各パラメーターの説明は docstring 内に記述してください。
 
     ???+ "例：必須パラメーター"
         ```python
@@ -73,7 +73,7 @@ LLMがツールを正しく使用するには、明確に定義された関数�
 ##### オプションのパラメーター
 
 === "Python"
-    パラメーターは、**デフォルト値**を指定した場合に**オプション**と見なされます。これは、オプションの引数を定義するための標準的なPythonの方法です。`typing.Optional[SomeType]`または`| None`構文（Python 3.10以降）を使用して、パラメーターをオプションとしてマークすることもできます。
+    パラメーターは、**デフォルト値**を指定した場合にのみ**オプション**と見なされます。このアプローチは、オプションの引数を定義するための標準的な Python の方法です。`typing.Optional[SomeType]` または `| None` 構文（Python 3.10 以降）でパラメーターに型注釈を付けるだけでは、オプションには**なりません**。デフォルト値がない場合、パラメーターは必須のままになります。
 
     デフォルト値は、本当にオプションである値にだけ使用してください。モデルが
     ユーザーリクエストから導き出すべき情報や、ユーザーに確認すべき情報には
@@ -117,7 +117,7 @@ LLMがツールを正しく使用するには、明確に定義された関数�
     ここでは、`unit`と`days`はオプションです。LLMはそれらを提供することを選択できますが、必須ではありません。
 
 ##### `typing.Optional`を使用したオプションのパラメーター
-`typing.Optional[SomeType]`または`| None`構文（Python 3.10以降）を使用して、パラメーターをオプションとしてマークすることもできます。これは、パラメーターが`None`になる可能性があることを示します。`None`のデフォルト値と組み合わせると、標準のオプションパラメーターのように動作します。
+パラメーターが `None` になり得ることを示すには、`typing.Optional[SomeType]` または `| None` 構文（Python 3.10 以降）を使用します。標準的なオプションパラメーターにするにはデフォルト値の `None` と組み合わせてください。型注釈だけではパラメーターは必須のままになります。
 
 ???+ "例：`typing.Optional`"
     === "Python"
@@ -138,125 +138,36 @@ LLMがツールを正しく使用するには、明確に定義された関数�
             return {"status": "success", "message": f"{username}のプロファイルが作成されました。"}
         ```
 
+##### Pydantic モデルのパラメーター
+
+`pydantic.BaseModel` のサブクラス、または `list[Model]`、`Optional[Model]`、モデルのユニオンでパラメーターに型注釈を付けます。ADK はツール宣言内にモデルのスキーマをネストし、関数が実行される前に LLM が渡したオブジェクトを対象クラスのインスタンスに変換します。
+
+???+ "例：Pydantic モデルのパラメーター"
+    === "Python"
+
+        ```python
+        import pydantic
+
+        class UserProfile(pydantic.BaseModel):
+            """A user's profile."""
+
+            name: str
+            age: int
+
+        def create_user(profile: UserProfile):
+            """
+            Creates a user account.
+
+            Args:
+                profile (UserProfile): The profile to create the account from.
+            """
+            # 'profile' receives a UserProfile instance, not a dict.
+            return {"status": "success", "name": profile.name}
+        ```
+
 ##### 可変長引数（`*args`および`**kwargs`）
+
 他の目的で関数シグネチャに`*args`（可変長位置引数）および`**kwargs`（可変長キーワード引数）を含めることはできますが、LLMのツールスキーマを生成する際に**ADKフレームワークによって無視されます**。LLMはそれらを認識せず、引数を渡すことはできません。LLMから期待するすべてのデータについては、明示的に定義されたパラメーターに依存するのが最善です。
-
-##### JSON スキーマ ツール宣言の構成
-
-Python 版 ADK は、モデルの関数宣言に Pydantic を使用して関数シグネチャから JSON スキーマを生成します。この機能（`JSON_SCHEMA_FOR_FUNC_DECL`）は**デフォルトで有効**です。
-
-!!! example "試験的機能"
-    
-    JSON スキーマ ツール宣言（`JSON_SCHEMA_FOR_FUNC_DECL`）は、Python 版 ADK の試験的機能です。この機能はデフォルトで有効になっていますが、その動作や API は変更される可能性があり、アクティブな間、ADK は `[EXPERIMENTAL]` 警告を出力します。
-
-###### オプション 1: コマンドライン経由で設定
-
-エージェントプロセスを起動する前に、ターミナルで適切な環境変数を設定します。
-
-=== "macOS/Linux"
-
-    ```bash
-    export ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
-    ```
-    
-=== "Windows (コマンドプロンプト)"
-
-    ```cmd
-    set ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
-    ```
-    
-=== "Windows (PowerShell)"
-
-    ```powershell
-    $env:ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL="1"
-    ```
-
-JSON スキーマの生成を無効にして以前の `Schema` ベースの宣言動作にフォールバックするには:
-
-=== "macOS/Linux"
-
-    ```bash
-    export ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
-    ```
-
-=== "Windows (コマンドプロンプト)"
-
-    ```cmd
-    set ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
-    ```
-
-=== "Windows (PowerShell)"
-
-    ```powershell
-    $env:ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL="1"
-    ```
-
-###### オプション 2: Python コード内で設定
-
-ツールやエージェントを作成する前に、ADK の `override_feature_enabled` 関数を使用します。
-
-```python
-import asyncio
-from google.adk.features import FeatureName, override_feature_enabled
-from google.adk.agents import Agent
-from google.adk.tools import FunctionTool
-
-# この機能はデフォルトで有効になっているため、以前の動作にフォールバックするには False を渡します。
-override_feature_enabled(FeatureName.JSON_SCHEMA_FOR_FUNC_DECL, False)
-
-def get_current_weather(location: str, unit: str = "celsius") -> str:
-    """指定された場所の現在の天気を取得します。
-    
-    Args:
-        location: 都市と州（例: San Francisco, CA）
-        unit: 温度の単位（'celsius' または 'fahrenheit'）
-    """
-    return f"Weather in {location}: 22° {unit.capitalize()}"
-
-async def main():
-    weather_tool = FunctionTool(func=get_current_weather)
-    
-    agent = Agent(
-        model="gemini-2.5-flash",
-        name="my_agent",
-        instruction="You are a helpful assistant.",
-        tools=[weather_tool]
-    )
-    # 実行ロジック
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
-あるいは、エージェントコンポーネントを初期化する前にスクリプト内で環境変数を設定します。
-
-```python
-import os
-import asyncio
-
-os.environ["ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL"] = "1"
-
-from google.adk.agents import Agent
-from google.adk.tools import FunctionTool
-
-def get_current_weather(location: str) -> str:
-    """指定された場所の現在の天気を取得します。"""
-    return f"Weather in {location}: 20°C"
-
-async def main():
-    weather_tool = FunctionTool(func=get_current_weather)
-    
-    agent = Agent(
-        model="gemini-2.5-flash",
-        name="my_agent",
-        instruction="You are a helpful assistant.",
-        tools=[weather_tool]
-    )
-    # 実行ロジック
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
 
 #### 戻り値の型
 
@@ -515,7 +426,7 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
     --8<-- "examples/kotlin/snippets/tools/function-tools/LongRunningTool.kt:call_reimbursement_tool"
     ```
 
-??? "Pythonの完全な例：ファイル処理シミュレーション"
+??? "Pythonの完全な例：払い戻し承認"
 
     ```py
     --8<-- "examples/python/snippets/tools/function-tools/human_in_the_loop.py"
@@ -523,9 +434,9 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
 
 #### この例の主な側面
 
-- **`LongRunningFunctionTool`**: 提供されたメソッド/関数をラップします。フレームワークは、生成された更新と最終的な戻り値を連続したFunctionResponsesとして送信することを処理します。
-- **エージェントの指示**: LLMにツールを使用し、ユーザーの更新のために受信するFunctionResponseストリーム（進行状況と完了）を理解するように指示します。
-- **最終的な戻り値**: 関数は最終的な結果の辞書を返し、完了を示すために最後のFunctionResponseで送信されます。
+- **`LongRunningFunctionTool`**: 提供されたメソッド/関数をラップし、長時間実行としてマークします。フレームワークは他の関数ツールと同様にこの関数を 1 回だけ呼び出し、ジェネレーターから `yield` された値は消費しません。
+- **エージェントの指示**: LLM にツールを使用させ、その後にエージェントクライアントから送信される進行状況および完了の `FunctionResponse` を解釈してユーザーへの更新を行うよう指示します。
+- **初期の戻り値**: 関数が返した値は最初の `FunctionResponse` として送信され、関数が何も返さないか空の値を返した場合は送信されません。それ以降のすべての進行状況または完了の更新は、エージェントクライアントが送信する `FunctionResponse` です。
 - **Kotlin には `LongRunningFunctionTool` クラスがありません**: 関数に `@Tool(isLongRunning = true)` をアノテーションするか、`BaseTool` サブクラスに `isLongRunning = true` を渡します。
 - **Kotlin のターン数**: 上記のツールは `Unit` ではなく値を返すため、再開不可能な (non-resumable) アプリはそのプレースホルダーをモデルに送信し、2 回目に呼び出して中間応答でターン 1 を終了します。再開可能な (resumable) アプリは、2 回目のモデル呼び出しを行わずに、関数呼び出しで一時停止します。`Unit` を返すと、プレースホルダー応答が完全に抑制され、どちらのモードでも関数呼び出しでターンが終了します。
 
@@ -562,6 +473,9 @@ Pythonでは、関数を`LongRunningFunctionTool`でラップします。Javaで
     AgentTool.create(agent)
     ```
 
+!!! note "Python: `single_turn` サブエージェントの検討"
+
+    ADK Python における標準的なインライン委任では、サブエージェントを `AgentTool` でラップするよりも、サブエージェントに `mode="single_turn"` を設定して `sub_agents=[...]` でアタッチすることを推奨します。ADK はサブエージェントをツールとして公開し、親のセッション内でインライン実行します。詳細は [協調エージェントチームを構築する](/ja/workflows/collaboration/) を参照してください。
 
 ### カスタマイズ
 

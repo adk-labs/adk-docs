@@ -14,11 +14,11 @@
 
 먼저, 에이전트가 *무엇*이며 *어떤 목적*을 갖는지 설정해야 합니다.
 
-*   **`name` (필수):** 모든 에이전트는 고유한 문자열 식별자가 필요합니다. 이 `name`은 내부 작업, 특히 에이전트들이 서로를 참조하거나 작업을 위임해야 하는 다중 에이전트 시스템에서 매우 중요합니다. 에이전트의 기능을 반영하는 설명적인 이름(예: `customer_support_router`, `billing_inquiry_agent`)을 선택하세요. `user`와 같은 예약된 이름은 피해야 합니다.
+*   **`name` (필수):** 모든 에이전트는 고유한 문자열 식별자가 필요합니다. 이 `name`은 내부 작업, 특히 에이전트들이 서로를 참조하거나 작업을 위임해야 하는 다중 에이전트 시스템에서 매우 중요합니다. 에이전트의 기능을 반영하는 설명적인 이름(예: `customer_support_router`, `billing_inquiry_agent`)을 선택하세요. Python에서 이름은 유효한 Python 식별자여야 하며, ADK는 예약된 이름인 `user`를 거부합니다.
 
 *   **`description` (선택 사항, 다중 에이전트에 권장):** 에이전트의 기능에 대한 간결한 요약을 제공합니다. 이 설명은 주로 *다른* LLM 에이전트가 이 에이전트에게 작업을 라우팅해야 할지 결정하는 데 사용됩니다. 동료 에이전트와 구별될 수 있도록 구체적으로 작성하세요(예: "결제 에이전트"가 아닌 "현재 청구서에 대한 문의 처리").
 
-*   **`model` (필수):** 이 에이전트의 추론을 구동할 기본 LLM을 지정합니다. 이는 `"gemini-flash-latest"`와 같은 문자열 식별자입니다. 모델 선택은 에이전트의 능력, 비용, 성능에 영향을 미칩니다. 사용 가능한 옵션과 고려 사항은 [모델](/ko/agents/models/) 페이지를 참고하세요.
+*   **`model` (Python에서는 선택 사항):** 이 에이전트의 추론을 구동할 기본 LLM을 지정합니다. 이는 `"gemini-flash-latest"`와 같은 문자열 식별자이거나 `BaseLlm` 인스턴스입니다. `model`을 생략하면 에이전트는 `SequentialAgent`, `ParallelAgent`, `LoopAgent` 또는 커스텀 `BaseAgent`와 같이 `LlmAgent`가 아닌 상위 에이전트를 건너뛰고 가장 가까운 `LlmAgent` 상위 에이전트의 모델을 상속합니다. 모델을 설정한 상위 에이전트가 없으면 [기본 모델 구성](#configure-a-default-model)에 설명된 내장 기본 모델로 폴백합니다. 모델 선택은 에이전트의 능력, 비용, 성능에 영향을 미칩니다. 사용 가능한 옵션과 고려 사항은 [모델](/ko/agents/models/) 페이지를 참고하세요.
 
 === "Python"
 
@@ -100,7 +100,7 @@
     1. 사용자 쿼리에서 국가 이름을 식별합니다.
     2. `get_capital_city` 도구를 사용하여 수도를 찾습니다.
     3. 사용자에게 수도를 명확하게 언급하며 응답합니다.
-    예시 쿼리: "{country}의 수도는 어디인가요?"
+    예시 쿼리: "프랑스의 수도는 어디인가요?"
     예시 응답: "프랑스의 수도는 파리입니다."
     """,
         # tools는 다음에 추가됩니다
@@ -120,7 +120,7 @@
             1. 사용자 쿼리에서 국가 이름을 식별합니다.
             2. \`getCapitalCity\` 도구를 사용하여 수도를 찾습니다.
             3. 사용자에게 수도를 명확하게 언급하며 응답합니다.
-            예시 쿼리: "{country}의 수도는 어디인가요?"
+            예시 쿼리: "프랑스의 수도는 어디인가요?"
             예시 응답: "프랑스의 수도는 파리입니다."
             `,
         // tools는 다음에 추가됩니다
@@ -149,7 +149,7 @@
                 1. 사용자 쿼리에서 국가 이름을 식별합니다.
                 2. `get_capital_city` 도구를 사용하여 수도를 찾습니다.
                 3. 사용자에게 수도를 명확하게 언급하며 응답합니다.
-                예시 쿼리: "{country}의 수도는 어디인가요?"
+                예시 쿼리: "프랑스의 수도는 어디인가요?"
                 예시 응답: "프랑스의 수도는 파리입니다."
                 """)
             // tools는 다음에 추가됩니다
@@ -170,7 +170,7 @@ Python에서 Model Context Protocol(MCP) 서버로부터 에이전트 지침을 
 *   **`tools` (선택 사항):** 에이전트가 사용할 수 있는 도구 목록을 제공합니다. 목록의 각 항목은 다음 중 하나일 수 있습니다:
     *   네이티브 함수 또는 메서드 (`FunctionTool`로 래핑됨). Python ADK는 네이티브 함수를 자동으로 `FunctionTool`로 래핑하지만, Java에서는 `FunctionTool.create(...)`를 사용하여 명시적으로 메서드를 래핑해야 합니다.
     *   `BaseTool`을 상속하는 클래스의 인스턴스.
-    *   다른 에이전트의 인스턴스 (`AgentTool`, 에이전트 간 위임 가능 - [다중 에이전트](../workflows/patterns.md) 참조).
+    *   다른 에이전트를 래핑하여 에이전트 간 위임을 가능하게 하는 `AgentTool`. 자세한 내용은 [커스텀 에이전트 워크플로](/ko/agents/custom-agents/#delegation)를 참고하세요. Python에서는 `AgentTool(agent=...)` 구문을 직접 사용하는 대신, 에이전트에 `mode='single_turn'`을 설정하고 `sub_agents`에 추가하여 인라인 도구로 자동 노출하는 방식을 권장합니다.
 
 LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 가져옴), 그리고 매개변수 스키마를 사용하여 대화와 명령에 따라 어떤 도구를 호출할지 결정합니다.
 
@@ -284,7 +284,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 
 `generate_content_config`를 사용하여 기본 LLM이 응답을 생성하는 방식을 조정할 수 있습니다.
 
-*   **`generate_content_config` (선택 사항):** [`google.genai.types.GenerateContentConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.GenerateContentConfig)의 인스턴스를 전달하여 `temperature`(무작위성), `max_output_tokens`(응답 길이), `top_p`, `top_k` 및 안전 설정과 같은 매개변수를 제어합니다.
+*   **`generate_content_config` (선택 사항):** [`google.genai.types.GenerateContentConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.GenerateContentConfig)의 인스턴스를 전달하여 `temperature`(무작위성), `max_output_tokens`(응답 길이), `top_p`, `top_k` 및 안전 설정과 같은 매개변수를 제어합니다. Python에서는 `generate_content_config`에 `tools`, `system_instruction`, `response_schema` 또는 `http_options.base_url`을 설정하면 ADK가 `ValueError`를 발생시킵니다. 처음 세 항목은 에이전트의 `tools`, `instruction`, `output_schema` 필드를 통해 설정하고, 기본 URL은 모델이나 해당 클라이언트에 설정하세요.
 
 === "Python"
 
@@ -345,11 +345,41 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
             .build();
     ```
 
+### 기본 모델 구성 {#configure-a-default-model}
+
+<div class="language-support-tag" title="">
+   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.22.0</span>
+</div>
+
+`set_default_model` 클래스 메서드를 사용하여 모든 `LlmAgent` 인스턴스에 대한 시스템 전체 기본 모델을 설정할 수 있습니다. 에이전트를 생성할 때 모델을 지정하지 않으면 ADK의 내장 기본 모델로 폴백합니다. 이 설정을 사용하면 중복된 모델 지정을 피하고 모든 에이전트의 모델을 한 번에 쉽게 변경할 수 있습니다.
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import LlmAgent
+
+    # 모든 에이전트에 대해 새 기본 모델 설정
+    LlmAgent.set_default_model("gemini-flash-latest")
+
+    # 이 에이전트는 이제 기본적으로 "gemini-flash-latest"를 사용합니다
+    agent_with_default_model = LlmAgent(
+        name="default_model_agent",
+        instruction="당신은 도움이 되는 어시스턴트입니다."
+    )
+
+    # 특정 에이전트에 대해서는 기본값을 재정의할 수 있습니다
+    specific_agent = LlmAgent(
+        name="specific_model_agent",
+        model="gemini-pro-latest",
+        instruction="당신은 창의적인 작가입니다."
+    )
+    ```
+
 ### 데이터 구조화 (`input_schema`, `output_schema`, `output_key`) {#data-handling}
 
 `LLM Agent`와 구조화된 데이터 교환이 필요한 시나리오를 위해 ADK는 스키마 정의를 사용하여 예상 입력 및 원하는 출력 형식을 정의하는 메커니즘을 제공합니다.
 
-*   **`input_schema` (선택 사항):** 예상 입력 구조를 나타내는 스키마를 정의합니다. 설정된 경우, 이 에이전트에 전달되는 사용자 메시지 내용은 이 스키마를 준수하는 JSON 문자열이어야 합니다. 명령은 사용자나 이전 에이전트를 그에 맞게 안내해야 합니다.
+*   **`input_schema` (선택 사항):** 이 에이전트가 *도구로* 호출될 때 예상되는 입력 구조를 나타내는 스키마를 정의합니다. Python에서 `AgentTool`은 호출 에이전트의 인수를 스키마에 대해 검증하고 그 결과를 이 에이전트의 입력으로 전달합니다. 에이전트에 직접 전송되는 사용자 메시지에는 이 스키마가 적용되지 않습니다.
 
 *   **`output_schema` (선택 사항):** 원하는 출력 구조를 나타내는 스키마를 정의합니다. 설정된 경우, 에이전트의 최종 응답은 이 스키마를 준수하는 JSON 문자열이어야 합니다.
     *   Python에서 지원되는 스키마 유형은 다음과 같습니다.
@@ -358,18 +388,16 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
         *   `dict`
         *   `google.genai.types.Schema`
 
-!!! warning "경고: `output_schema`와 `tools` 함께 사용"
+!!! note "`output_schema`와 `tools` 함께 사용"
 
-    동일한 LLM 요청에서 `output_schema`와 `tools`를 함께 사용하는 방식은 [Gemini 3.0](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#structured-output)을 포함한 특정 모델에서만 지원됩니다.
-    다른 모델의 경우, ADK는 구조화된 출력을 수집하기 위해 [`set_model_response` 함수 도구](https://github.com/google/adk-python/blob/main/src/google/adk/tools/set_model_response_tool.py)로 폴백하지만 안정적으로 작동하지 않을 수 있습니다.
-    이런 경우에는 출력 형식을 별도로 처리하는 서브 에이전트를 사용하는 것을 고려하세요.
+    Python에서 ADK는 동일한 에이전트에서 `output_schema`와 `tools`를 함께 지원합니다. 에이전트가 작업하는 동안 도구는 계속 사용할 수 있으며, 스키마는 최종 응답에만 적용됩니다. Google Cloud의 Gemini 모델 및 응답 스키마를 지원하는 제공업체의 `LiteLlm` 모델과 같이 일부 모델은 단일 요청에서 두 가지를 모두 허용하므로 ADK가 이를 직접 전달합니다. 그 외 모델의 경우 ADK는 [`set_model_response` 함수 도구](https://github.com/google/adk-python/blob/main/src/google/adk/tools/set_model_response_tool.py)를 추가하고 모델이 해당 도구를 통해 최종 답변을 반환하도록 지시하지만, 안정적으로 작동하지 않을 수 있습니다. 이러한 경우에는 출력 형식을 별도로 처리하는 하위 에이전트를 사용하는 것을 고려하세요.
 
-*   **`output_key` (선택 사항):** 문자열 키를 제공합니다. 설정된 경우, 에이전트의 *최종* 응답 텍스트 내용은 이 키 아래 세션의 상태 사전에 자동으로 저장됩니다. 이는 에이전트 간 또는 워크플로 단계 간에 결과를 전달하는 데 유용합니다.
-    *   Python에서는 `session.state[output_key] = agent_response_text`와 같이 보일 수 있습니다.
+*   **`output_key` (선택 사항):** 문자열 키를 제공합니다. 설정된 경우, 에이전트의 *최종* 응답이 이 키 아래 세션의 상태 사전에 자동으로 저장됩니다. 이는 에이전트 간 또는 워크플로 단계 간에 결과를 전달하는 데 유용합니다.
+    *   Python에서는 `session.state[output_key] = agent_response_text`와 같이 보일 수 있습니다. `output_schema`도 함께 설정된 경우, ADK는 먼저 스키마에 대해 응답을 파싱하고 응답 텍스트 대신 파싱된 값을 저장합니다. `BaseModel` 스키마는 `dict`로 저장되고, `list[BaseModel]` 스키마는 `list[dict]`로 저장됩니다.
     *   Java에서는 `session.state().put(outputKey, agentResponseText)`와 같습니다.
     *   Golang에서는 콜백 핸들러 내에서 `ctx.State().Set(output_key, agentResponseText)`와 같습니다.
 
-    `output_schema`도 함께 설정된 경우 텍스트 대신 *파싱된* 응답이 저장됩니다(Python에서는 `dict`, Java 및 Kotlin에서는 `Map`).
+    Java 및 Kotlin에서는 `output_schema`가 함께 설정된 경우 텍스트 대신 *파싱된* 응답이 `Map`으로 저장됩니다.
 
 !!! note "Java 및 Kotlin에서의 스키마 유효성 검사"
 
@@ -395,7 +423,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
         instruction="""당신은 수도 정보 에이전트입니다. 국가가 주어지면 수도를 포함하는 JSON 객체로만 응답하세요. 형식: {"capital": "capital_name"}""",
         output_schema=CapitalOutput, # JSON 출력 강제
         output_key="found_capital"  # 결과를 state['found_capital']에 저장
-        # 여기서는 tools=[get_capital_city]를 효과적으로 사용할 수 없음
+        # tools=[...]는 output_schema와 함께 결합할 수 있습니다. 위의 참고 사항을 확인하세요
     )
     ```
 
@@ -610,6 +638,127 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
     ....
     ```
 
+내장 플래너 사용 예시:
+
+```python
+from dotenv import load_dotenv
+
+
+import asyncio
+import os
+
+from google.genai import types
+from google.adk.agents.llm_agent import LlmAgent
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.adk.artifacts.in_memory_artifact_service import InMemoryArtifactService # Optional
+from google.adk.planners import BasePlanner, BuiltInPlanner, PlanReActPlanner
+from google.adk.models import LlmRequest
+
+from google.genai.types import ThinkingConfig
+from google.genai.types import GenerateContentConfig
+
+import datetime
+from zoneinfo import ZoneInfo
+
+APP_NAME = "weather_app"
+USER_ID = "1234"
+SESSION_ID = "session1234"
+
+def get_weather(city: str) -> dict:
+    """Retrieves the current weather report for a specified city.
+
+    Args:
+        city (str): The name of the city for which to retrieve the weather report.
+
+    Returns:
+        dict: status and result or error msg.
+    """
+    if city.lower() == "new york":
+        return {
+            "status": "success",
+            "report": (
+                "The weather in New York is sunny with a temperature of 25 degrees"
+                " Celsius (77 degrees Fahrenheit)."
+            ),
+        }
+    else:
+        return {
+            "status": "error",
+            "error_message": f"Weather information for '{city}' is not available.",
+        }
+
+
+def get_current_time(city: str) -> dict:
+    """Returns the current time in a specified city.
+
+    Args:
+        city (str): The name of the city for which to retrieve the current time.
+
+    Returns:
+        dict: status and result or error msg.
+    """
+
+    if city.lower() == "new york":
+        tz_identifier = "America/New_York"
+    else:
+        return {
+            "status": "error",
+            "error_message": (
+                f"Sorry, I don't have timezone information for {city}."
+            ),
+        }
+
+    tz = ZoneInfo(tz_identifier)
+    now = datetime.datetime.now(tz)
+    report = (
+        f'The current time in {city} is {now.strftime("%Y-%m-%d %H:%M:%S %Z%z")}'
+    )
+    return {"status": "success", "report": report}
+
+# Step 1: Create a ThinkingConfig
+thinking_config = ThinkingConfig(
+    include_thoughts=True,   # Ask the model to include its thoughts in the response
+    thinking_budget=256      # Limit the 'thinking' to 256 tokens (adjust as needed)
+)
+print("ThinkingConfig:", thinking_config)
+
+# Step 2: Instantiate BuiltInPlanner
+planner = BuiltInPlanner(
+    thinking_config=thinking_config
+)
+print("BuiltInPlanner created.")
+
+# Step 3: Wrap the planner in an LlmAgent
+agent = LlmAgent(
+    model="gemini-flash-latest",  # Set your model name
+    name="weather_and_time_agent",
+    instruction="You are an agent that returns time and weather",
+    planner=planner,
+    tools=[get_weather, get_current_time]
+)
+
+# Session and Runner
+session_service = InMemorySessionService()
+session = asyncio.run(
+    session_service.create_session(app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID)
+)
+runner = Runner(agent=agent, app_name=APP_NAME, session_service=session_service)
+
+# Agent Interaction
+def call_agent(query):
+    content = types.Content(role='user', parts=[types.Part(text=query)])
+    events = runner.run(user_id=USER_ID, session_id=SESSION_ID, new_message=content)
+
+    for event in events:
+        print(f"\nDEBUG EVENT: {event}\n")
+        if event.is_final_response() and event.content and event.content.parts:
+            final_answer = event.content.parts[0].text.strip()
+            print("\n🟢 FINAL ANSWER\n", final_answer, "\n")
+
+call_agent("If it's raining in New York right now, what is the current temperature?")
+```
+
 ### 코드 실행
 
 <div class="language-support-tag">
@@ -617,12 +766,6 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 </div>
 
 *   **`code_executor` (선택 사항):** `BaseCodeExecutor` 인스턴스를 제공하여 에이전트가 LLM의 응답에서 발견된 코드 블록을 실행할 수 있도록 합니다. ([도구/내장 도구](../tools/built-in-tools.md) 참조).
-
-내장 플래너 사용 예시:
-```python
-# (주석 생략, 원문 코드와 동일)
-...
-```
 
 ## 종합 예시
 

@@ -1,7 +1,7 @@
 # 앱: 워크플로 관리 클래스
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v1.4.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v1.4.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.4.0</span>
 </div>
 
 ***앱*** 클래스는 전체 에이전트 개발 키트(ADK) 에이전트 워크플로의 최상위 컨테이너입니다. ***루트 에이전트***별로 그룹화된 에이전트 모음의 수명 주기, 구성 및 상태를 관리하도록 설계되었습니다. **앱** 클래스는 에이전트 워크플로의 전체 운영 인프라에 대한 우려 사항을 개별 에이전트의 작업 지향적 추론과 분리합니다.
@@ -97,6 +97,32 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
         .build();
     ```
 
+=== "Kotlin"
+
+    ```kotlin title="Agent.kt"
+    import com.google.adk.kt.agents.Instruction
+    import com.google.adk.kt.agents.LlmAgent
+    import com.google.adk.kt.apps.App
+    import com.google.adk.kt.models.Gemini
+
+    val rootAgent =
+        LlmAgent(
+            model = Gemini(name = "gemini-flash-latest"),
+            name = "greeter_agent",
+            description = "An agent that provides a friendly greeting.",
+            instruction = Instruction("Reply with Hello, World!"),
+        )
+
+    val app =
+        App(
+            appName = "agents",
+            rootAgent = rootAgent,
+            // Optionally include App-level features:
+            // plugins, resumabilityConfig, eventsCompactionConfig,
+            // contextCacheConfig
+        )
+    ```
+
 !!! tip "권장: `app` 변수 이름 사용"
 
     에이전트 프로젝트 코드에서 ***앱*** 객체를 변수 이름 `app`으로 설정하여 ADK 명령줄 인터페이스 실행기 도구와 호환되도록 합니다.
@@ -180,6 +206,36 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin title="Main.kt"
+    import com.google.adk.kt.runners.InMemoryRunner
+    import com.google.adk.kt.types.Content
+    import com.google.adk.kt.types.Role
+    import kotlinx.coroutines.runBlocking
+
+    // Set a Runner using the application object defined in Agent.kt
+    val runner = InMemoryRunner(app = app)
+
+    fun main() =
+        runBlocking {
+            try {
+                runner
+                    .runAsync(
+                        userId = "user",
+                        sessionId = "session-1",
+                        newMessage = Content.fromText(Role.USER, "Hello there!"),
+                    ).collect { event ->
+                        if (event.isFinalResponse && event.content != null) {
+                            println("Response: ${event.contentText()}")
+                        }
+                    }
+            } catch (e: Exception) {
+                println("An error occurred during agent execution: $e")
+            }
+        }
+    ```
+
 !!! note "`Runner.run_debug()`에 대한 버전 요구 사항"
 
     `Runner.run_debug()` 명령에는 ADK Python v1.18.0 이상이 필요합니다. 더 많은 설정 코드가 필요한 `Runner.run()`을 사용할 수도 있습니다. 자세한 내용은 다음을 참고하세요.
@@ -203,6 +259,14 @@ ADK 워크플로에서 ***앱*** 객체를 정의하는 것은 선택 사항이�
 === "Java"
 
     `AppMain.java` 코드로 App 에이전트를 실행하려면 빌드 도구(예: Gradle `application` 플러그인)를 사용하세요.
+
+    ```console
+    ./gradlew run
+    ```
+
+=== "Kotlin"
+
+    `Main.kt` 코드로 App 에이전트를 실행하려면 빌드 도구(예: Gradle `application` 플러그인)를 사용하세요.
 
     ```console
     ./gradlew run

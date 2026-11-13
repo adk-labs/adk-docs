@@ -11,15 +11,17 @@ catalog_tags: ["code", "google"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
-`built_in_code_execution` ツールを使うと、エージェントがコードを実行できます。
-特に Gemini 2 以降のモデル利用時に有効です。これによりモデルは
-計算、データ操作、小規模スクリプト実行などのタスクを実行できます。
+Gemini API のコード実行機能を使うと、モデルは計算、データ操作、小規模スクリプトの実行などのタスクを実行できます。この機能は Gemini 2 以降のモデルで利用可能です。
 
 !!! warning "警告: 1 エージェント 1 ツール制限"
 
     このツールは、1 つのエージェントインスタンス内で ***単独でのみ*** 使用できます。
     この制限と回避策の詳細は
     [ADK ツールの制限事項](/tools/limitations/#one-tool-one-agent)を参照してください。
+
+## はじめに
+
+次のコード例は、ADK エージェントにおけるこの機能の基本的な実装を示しています:
 
 === "Python"
 

@@ -1,7 +1,7 @@
 # 에이전트 구성을 사용하여 에이전트 빌드
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-preview">실험적</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span>
 </div>
 
 ADK 에이전트 구성 기능을 사용하면 코드를 작성하지 않고도 ADK 워크플로를 빌드할 수 있습니다. 에이전트 구성은 에이전트에 대한 간략한 설명이 포함된 YAML 형식 텍스트 파일을 사용하므로 누구나 ADK 에이전트를 조립하고 실행할 수 있습니다. 다음은 기본 에이전트 구성 정의의 간단한 예입니다.
@@ -15,8 +15,8 @@ instruction: 사용자의 다양한 질문에 답변하는 에이전트입니다
 
 에이전트 구성 파일을 사용하여 함수, 도구, 하위 에이전트 등을 통합할 수 있는 더 복잡한 에이전트를 빌드할 수 있습니다. 이 페이지에서는 에이전트 구성 기능을 사용하여 ADK 워크플로를 빌드하고 실행하는 방법을 설명합니다. 에이전트 구성 형식에서 지원하는 구문 및 설정에 대한 자세한 내용은 [에이전트 구성 구문 참조](/ko/api-reference/agentconfig/)를 참고하세요.
 
-!!! example "실험용"
-    에이전트 구성 기능은 실험용이며 [알려진 제한 사항](#known-limitations)이 있습니다. [피드백](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=agent%20config)을 환영합니다!
+!!! example "Java에서 실험적 기능"
+    에이전트 구성 기능은 ADK Java에서 실험적 기능입니다. 모든 언어에 대한 내용은 [알려진 제한 사항](#known-limitations)을 참고하세요. [피드백](https://github.com/google/adk-java/issues/new?template=feature_request.md&labels=agent%20config)을 환영합니다!
 
 ## 시작하기
 
@@ -27,7 +27,7 @@ instruction: 사용자의 다양한 질문에 답변하는 에이전트입니다
 Google Agent Development Kit 라이브러리를 설치하고 Gemini API와 같은 생성형 AI 모델에 대한 액세스 키를 제공해야 합니다. 이 섹션에서는 에이전트 구성 파일로 에이전트를 실행하기 전에 설치하고 구성해야 하는 사항에 대한 세부 정보를 제공합니다.
 
 !!! note
-    에이전트 구성 기능은 현재 Gemini 모델만 지원합니다. 추가 기능 제한에 대한 자세한 내용은 [알려진 제한 사항](#known-limitations)을 참고하세요.
+    에이전트 구성의 `model:` 키는 Gemini 모델 이름과 같은 모델 이름 문자열을 받습니다. `LiteLlm`과 같이 생성자 인수가 필요한 모델을 사용하려면 Python에서 `BaseLlm` 인스턴스를 생성하고 `model_code:` 키에서 이를 참조하세요. 추가 기능 제한에 대한 자세한 내용은 [알려진 제한 사항](#known-limitations)을 참고하세요.
 
 에이전트 구성과 함께 사용하도록 ADK를 설정하려면:
 
@@ -204,9 +204,14 @@ sub_agents:
 
 ## 알려진 제한 사항 {#known-limitations}
 
-에이전트 구성 기능은 실험용이며 다음과 같은 제한 사항이 있습니다.
+에이전트 구성 기능에는 다음과 같은 제한 사항이 있습니다.
 
--   **모델 지원:** 현재 Gemini 모델만 지원됩니다. 타사 모델과의 통합은 진행 중입니다.
+-   **모델 지원:** `model:` 키는 모델 이름 문자열만 허용합니다. `LiteLlm`과 같이 생성자 인수가 필요한 모델을 사용하려면 Python에서 모델을 생성한 후 `model_code:` 키에서 참조하세요. `model_code:` 키는 `name:` 하위 키가 `BaseLlm` 인스턴스의 정규화된 이름인 매핑을 받습니다.
+
+        model_code:
+          name: my_library.clients.my_litellm
+
+    `model:` 키와 `model_code:` 키는 동시에 설정할 수 없습니다.
 -   **프로그래밍 언어:** 에이전트 구성 기능은 현재 도구 및 프로그래밍 코드가 필요한 기타 기능에 대해 Python 및 Java 코드를 지원합니다.
 -   **ADK 도구 지원:** 다음 ADK 도구는 에이전트 구성 기능에서 지원되지만 *모든 도구가 완전히 지원되는 것은 아닙니다*.
     -   `google_search`

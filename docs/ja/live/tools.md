@@ -267,11 +267,15 @@ async def query_sales_database(region: str) -> AsyncGenerator[str, None]:
 
 ## ツール実行コンテキスト
 
-ツールやコールバックは、状態、履歴、アーティファクトのために `InvocationContext` を受け取ります。[エージェントコンテキスト](../context/index.md) で解説されているように、これはすべての ADK エージェントで同様に機能しますが、ライブセッションでは重要な違いが 1 つあります。**1 つの `InvocationContext` が `run_live()` ループ全体にわたって存続します**。これは `run_live()` を呼び出したときに作成され、セッションが終了するまですべてのエージェントやすべてのターンにわたって存続します。リクエスト/レスポンス型のエージェントでは呼び出し（invocation）は単一のターンですが、ライブセッションでは会話全体を指します。
+<div class="language-support-tag">
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span>
+</div>
+
+状態、履歴、アーティファクトのために、ツールは `ToolContext` を受け取り、コールバックは `CallbackContext` を受け取ります。[エージェントコンテキスト](../context/index.md) で解説されているように、どちらもすべての ADK エージェントで同様に機能しますが、ライブセッションでは重要な違いが 1 つあります。**基盤となる `InvocationContext` が `run_live()` ループ全体にわたって存続します**。これは `run_live()` を呼び出したときに作成され、セッションが終了するまですべてのエージェントやすべてのターンにわたって存続します。リクエスト/レスポンス型のエージェントでは呼び出し（invocation）は単一のターンですが、ライブセッションでは会話全体を指します。
 
 ライブツールで最も頻繁に使用される 2 つのフィールドは次のとおりです。
 
 | フィールド | 取得できる内容 |
 | :---- | :---- |
-| `context.run_config` | セッションの [設定](configuration.md) — レスポンスモダリティ、文字起こし、制限 |
-| `context.end_invocation` | `True` に設定すると、ストリーミングセッション全体を即座に終了 |
+| `tool_context.run_config` | セッションの [設定](configuration.md) — レスポンスモダリティ、文字起こし、制限 |
+| `tool_context.state` | セッション状態。直接変更すると ADK がその変更を永続化します |

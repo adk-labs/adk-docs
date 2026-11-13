@@ -103,13 +103,13 @@ GKE Code Executor ツールを使って ADK プロジェクトを正しくデプ
     - **Job Mode:** **Jobs** の作成・監視・削除、**ConfigMaps** の管理、
       **Pods** の一覧取得と **logs** の読み取りが必要です。Job Mode 向けの
       完全ですぐ使える設定については、
-      [deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/gke_agent_sandbox/deployment_rbac.yaml)
+      [deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/integrations/gke_agent_sandbox/deployment_rbac.yaml)
       サンプルを参照してください。
     - **Sandbox Mode:** Agent Sandbox がデプロイされている名前空間内で
       **SandboxClaim** および **Sandbox** リソースを作成、取得、監視、削除する
       権限が必要です。
 - 適切な extras を含めてクライアントライブラリをインストールします:
-  `pip install google-adk[gke]`
+  `pip install google-adk[extensions]`
 
 ## 構成パラメータ
 
@@ -137,8 +137,9 @@ GKE Code Executor ツールを使って ADK プロジェクトを正しくデプ
     ```python
     from google.adk.agents import LlmAgent
     from google.adk.code_executors import GkeCodeExecutor
-    from google.adk.code_executors import CodeExecutionInput
+    from google.adk.code_executors.code_execution_utils import CodeExecutionInput
     from google.adk.agents.invocation_context import InvocationContext
+    from google.adk.sessions import InMemorySessionService, Session
 
     # Sandbox Mode 用の実行器を初期化
     # 名前空間には SandboxClaims と Sandbox への RBAC 権限が必要です
@@ -150,7 +151,12 @@ GKE Code Executor ツールを使って ADK プロジェクトを正しくデプ
     )
 
     # 直接実行の例:
-    ctx = InvocationContext()
+    # InvocationContext には session_service、invocation_id、session が必要です。
+    ctx = InvocationContext(
+        session_service=InMemorySessionService(),
+        invocation_id="demo-invocation",
+        session=Session(id="demo-session", app_name="demo", user_id="demo-user"),
+    )
     result = gke_sandbox_executor.execute_code(ctx, CodeExecutionInput(code="print('Hello from Sandbox Mode')"))
     print(result.stdout)
 
@@ -170,6 +176,7 @@ GKE Code Executor ツールを使って ADK プロジェクトを正しくデプ
     from google.adk.code_executors import GkeCodeExecutor
     from google.adk.code_executors.code_execution_utils import CodeExecutionInput
     from google.adk.agents.invocation_context import InvocationContext
+    from google.adk.sessions import InMemorySessionService, Session
 
     # Job Mode 用の実行器を初期化
     # 名前空間には Jobs、ConfigMaps、Pods、Logs への RBAC 権限が必要です
@@ -182,7 +189,12 @@ GKE Code Executor ツールを使って ADK プロジェクトを正しくデプ
     )
 
     # 直接実行の例:
-    ctx = InvocationContext()
+    # InvocationContext には session_service、invocation_id、session が必要です。
+    ctx = InvocationContext(
+        session_service=InMemorySessionService(),
+        invocation_id="demo-invocation",
+        session=Session(id="demo-session", app_name="demo", user_id="demo-user"),
+    )
     result = gke_executor.execute_code(ctx, CodeExecutionInput(code="print('Hello from Job Mode')"))
     print(result.stdout)
 

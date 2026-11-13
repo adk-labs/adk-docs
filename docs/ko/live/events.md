@@ -98,13 +98,15 @@ async for event in runner.run_live(...):
 - `partial=True`: 이전 이벤트 이후의 새로운 텍스트만 포함.
 - `partial=False`: 이 세그먼트의 전체 병합된 텍스트 포함.
 
-ADK가 청크를 자동으로 누적해주므로(`StreamingResponseAggregator`), `partial=False` 이벤트는 이미 이전 `partial=True` 청크들의 합계를 담고 있습니다. 실시간 타이핑 효과가 필요하지 않다면 partial 이벤트를 무시하고 `partial=False`에서만 동작하도록 처리하세요.
+ADK가 라이브 연결 내부([`GeminiLlmConnection.receive()`](https://github.com/google/adk-python/blob/main/src/google/adk/models/gemini_llm_connection.py))에서 청크를 자동으로 누적해주므로, `partial=False` 이벤트는 이미 이전 `partial=True` 청크들의 합계를 담고 있습니다. 실시간 타이핑 효과가 필요하지 않다면 partial 이벤트를 무시하고 `partial=False`에서만 동작하도록 처리하세요.
+
+이 플래그들은 각각 `Optional[bool]` 타입이며 기본값은 `None`이므로, `False`와 직접 비교하기보다 플래그가 참(truthy)인지 확인하세요:
 
 ```text
-Event 1: partial=True,  text="Hello",       turn_complete=False
-Event 2: partial=True,  text=" world",      turn_complete=False
-Event 3: partial=False, text="Hello world", turn_complete=False
-Event 4: partial=False, text="",            turn_complete=True
+Event 1: partial=True,  text="Hello",       turn_complete=None
+Event 2: partial=True,  text=" world",      turn_complete=None
+Event 3: partial=False, text="Hello world", turn_complete=None
+Event 4: partial=None,  content=None,       turn_complete=True
 ```
 
 `partial=False` 상태는 턴당 여러 번(예: 문장마다 한 번씩) 발생할 수 있으며, `turn_complete=True`는 마지막 세그먼트 이후 자체 이벤트로 한 번만 전달됩니다.

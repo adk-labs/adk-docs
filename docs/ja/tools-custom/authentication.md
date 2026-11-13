@@ -39,10 +39,13 @@ ADK のヘルパー関数と独自コードで認証を管理する場合は、�
 
 ## フレームワークの構成要素
 
-ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方式の処理と資格情報データの管理における中核です。
+ADK フレームワークでは、***AuthScheme***、***AuthCredential***、および ***BaseCredentialService*** が認証方式の処理と資格情報データの管理における中核コンポーネントです。
 
-*   `AuthScheme`: ヘッダー内の API キーや OAuth 2.0 Bearer トークンのように、API がどの認証資格情報を期待するかを定義します。ADK は OpenAPI 3.0 と同じ認証スキームをサポートしており、`APIKey`、`HTTPBearer`、`OAuth2`、`OpenIdConnectWithConfig` のような具体的なクラスを使います。各 OpenAPI 資格情報タイプの詳細は [OpenAPI ドキュメント: 認証](https://swagger.io/docs/specification/v3_0/authentication/) を参照してください。
-*   `AuthCredential`: アプリケーションの OAuth クライアント ID やシークレット、API キー値のように、認証プロセスを *開始* するために必要な *初期* 情報を保持します。このクラスのインスタンスには、`API_KEY`、`OAUTH2`、`SERVICE_ACCOUNT` などの資格情報タイプを示す `auth_type` が含まれます。
+*   ***AuthScheme***: ヘッダー内の API キーや OAuth 2.0 Bearer トークンのように、API が *どのように* 認証資格情報を期待するかを定義します。ADK は OpenAPI 3.0 と同じ認証スキームをサポートしており、***APIKey***、***HTTPBearer***、***OAuth2***、***OpenIdConnectWithConfig*** のような具体的なクラスを使います。最初の 3 つは `fastapi.openapi.models` からインポートされた OpenAPI モデルであり、***OpenIdConnectWithConfig*** のみが ADK の `google.adk.auth` で定義されています。各 OpenAPI 資格情報タイプの詳細は [OpenAPI ドキュメント: 認証](https://swagger.io/docs/specification/v3_0/authentication/) を参照してください。
+
+*   ***AuthCredential***: アプリケーションの OAuth クライアント ID やシークレット、API キー値のように、認証プロセスを *開始* するために必要な *初期* 情報を保持します。このクラスのインスタンスには、`API_KEY`、`OAUTH2`、`SERVICE_ACCOUNT` などの資格情報タイプを示す **auth_type** が含まれます。
+
+*   ***BaseCredentialService***: 交換済みの資格情報を ADK が *どこに* 保存するかを制御します。`Runner(credential_service=...)` でランナーに実装を渡してください。ADK は `google.adk.auth.credential_service.in_memory_credential_service` の `InMemoryCredentialService` と、`google.adk.auth.credential_service.session_state_credential_service` の `SessionStateCredentialService` を提供しています。資格情報をセッション状態に保存する場合は、セッションストレージが保存時に暗号化（encryption at rest）されており、信頼できないクライアントに公開されていないことを確認してください。このコンポーネントは実験的であり、将来のリリースで変更される可能性があります。
 
 一般的な認証フローは、ツールを構成するときにこれらの詳細を渡すことから始まります。その後 ADK は、ツールが API を呼び出す前に、初期資格情報、たとえばアクセストークンを自動的に交換しようとします。OAuth 同意のようにユーザー操作が必要なフローでは、ADK が `エージェントクライアント` アプリケーションとともに特定の対話プロセスを開始します。
 
@@ -62,7 +65,7 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
 *   [***OpenAPIToolset***](/ja/tools-custom/openapi-tools/): 初期化時に `auth_scheme` と `auth_credential` を設定します。
 *   [***APIHubToolset***](/ja/integrations/apigee-api-hub/): API が認証を必要とする場合は、初期化時に `auth_scheme` と `auth_credential` を設定します。
 *   [***ApplicationIntegrationToolset***](/ja/integrations/application-integration/): API が認証を必要とする場合は、初期化時に `auth_scheme` と `auth_credential` を設定します。
-*   [***GoogleApiToolset***](/ja/integrations/google-api-toolsets/): このツールセット専用の認証メソッドを使用します。
+*   [***Google Apps Toolset***](/ja/integrations/google-api-toolsets/): このツールセット専用の認証メソッドを使用します。
 
 他の事前構築済みツールや統合の認証詳細については、[ADK Integrations](/ja/integrations/) カタログを参照してください。
 
@@ -70,7 +73,7 @@ ADK フレームワークでは、`AuthScheme` と `AuthCredential` が認証方
 
 ## 認証済みツールを使用したエージェントアプリケーションの構築
 
-このセクションでは、エージェントアプリケーション内で認証が必要な既存のツール（`RestApiTool/ OpenAPIToolset`、`APIHubToolset`、`GoogleApiToolSet`のツールなど）を使用することに焦点を当てます。主な責任は、ツールを構成し、対話型認証フローのクライアント側部分（ツールで必要な場合）を処理することです。
+このセクションでは、エージェントアプリケーション内で認証が必要な既存のツール（`RestApiTool/ OpenAPIToolset`、`APIHubToolset`、`Google Apps Toolset` のツールなど）を使用することに焦点を当てます。主な責任は、ツールを構成し、対話型認証フローのクライアント側部分（ツールで必要な場合）を処理することです。
 
 ### 認証によるツールの構成
 
@@ -311,7 +314,7 @@ sample_toolset = OpenAPIToolset(
 
 ##### ServiceAccount 構成パラメータ
 
-* `service_account_credential` (オプション): サービスアカウントの JSON キーファイルへのパスまたは辞書を提供します。ローカルまたは Google Cloud の外で実行する場合に使用します。
+* `service_account_credential`: `ServiceAccountCredential` オブジェクト、またはサービスアカウントの JSON キーファイルの内容を保持する辞書を指定します。ローカルまたは Google Cloud の外で実行する場合に使用します。この設定は、`use_default_credential` が `True` に設定されていない限り必須です。
   
 * `use_default_credential` (オプション): アプリケーションのデフォルト認証情報 (ADC) を使用するには True に設定します。エージェントがすでに Cloud Run や Cloud Functions などの Google Cloud 内で実行されている場合は、ローカルのキーファイルが不要になるため推奨されます。
   
@@ -319,28 +322,31 @@ sample_toolset = OpenAPIToolset(
   
 * `audience` (`use_id_token=True` の場合必須): 呼び出すサービスの URL（例: `https://my-service.run.app`）です。これは、トークンがその特定の宛先に対してのみ有効であることを保証するセキュリティバインディングです。
   
-* `scopes` (オプション): Drive や BigQuery などの Google Cloud API 用のアクセストークンを要求する場合にのみ使用します。プライベートサービス認証に ID トークンを使用する場合は、これを設定する必要はありません。
+* `scopes`: Drive や BigQuery などの Google Cloud API 用のアクセストークンを要求する場合にこの設定を使用します。`service_account_credential` でアクセストークンを要求する場合は必須です。プライベートサービス認証に ID トークンを使用する場合は、これを設定する必要はありません。`use_default_credential=True` の場合、`scopes` のデフォルトは広範な `cloud-platform` スコープになるため、本番環境へのデプロイではツールに必要なスコープのみを設定してください。
 
-!!! tip "`use_id_token` と `audience` のペアリング"
+!!! warning "`use_id_token` と `audience` のペアリング"
 
-    常に `use_id_token=True` と `audience` を組み合わせて使用してください。片方だけを提供し、もう片方を提供しない場合、ADK は誤った設定を防ぐためにエラーを発生させます。
+    常に `use_id_token=True` と `audience` を組み合わせて使用してください。`audience` を指定せずに `use_id_token=True` を設定すると、ADK はエラーを発生させます。逆に `audience` のみを単独で設定すると、ADK は `audience` のセキュリティバインディングを暗黙的に無視し、ID トークンではなくアクセストークンを要求します。
 
 #### 外部アクセストークンの使用
 
 `external_access_token_key` 機能を使用すると、エージェントは新しい認証フローを開始する代わりに、フロントエンド アプリケーションから渡されたトークンなど、ランタイム環境から提供された既存のアクセストークンを使用できます。
 構成すると、認証情報マネージャーは標準の OAuth フローをスキップします。代わりに、エージェントの `tool_context.state` からキーを取得し、トークンを直接認証に使用します。
+このフィールドは、`BigQueryCredentialsConfig`、`SpannerCredentialsConfig`、`PubSubCredentialsConfig`、`GCSCredentialsConfig` などの Google サービスツールセットの認証情報構成に設定してください。
 この構成パラメータの使用は相互に排他的であり、同じ構成ブロックに `credentials`、`client_id`、`client_secret`、または `scopes` パラメータを含めることはできません。
 
 使用しているツールセットの認証情報構成でキーを設定します。次の例ではBigQueryを使用します。
  
 ```python
 from google.adk.integrations.bigquery import BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset
 
-# セッション状態から "my_frontend_token" を探すようにツールセットを構成
+# Configure the toolset to look for "my_frontend_token" in the session state
 credentials_config = BigQueryCredentialsConfig(
-    # 本番コードに認証キーをハードコードしないでください
+    # Do not hardcode authentication keys in production code
     external_access_token_key="my_frontend_token"
 )
+bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 ```
 
 #### 認証要求フロー
@@ -583,7 +589,7 @@ if auth_request_function_call_id and auth_config:
 * 更新された`AuthConfig`の情報（コードを含むコールバックURLを含む）を使用して、プロバイダーのトークンエンドポイントとOAuth **トークン交換**を実行し、アクセストークン（および場合によってはリフレッシュトークン）を取得します。
 * ADKは、セッション状態に設定することで、これらのトークンを内部的に利用可能にします。
 * ADKは、元のツール呼び出し（最初に認証の欠落により失敗した呼び出し）を**自動的に再試行**します。
-* 今回、ツールは有効なトークン（`tool_context.get_auth_response()`を介して）を見つけ、認証されたAPI呼び出しを正常に実行します。
+* 今回、ツールは有効なトークン（`tool_context.get_auth_response(auth_config)`を介して）を見つけ、認証されたAPI呼び出しを正常に実行します。
 * エージェントはツールから実際の結果を受信し、ユーザーへの最終的な応答を生成します。
 
 ---
@@ -596,6 +602,10 @@ if auth_request_function_call_id and auth_config:
 
 このセクションでは、新しいADKツールを作成する際に、カスタムPython関数*内*で認証ロジックを実装することに焦点を当てます。例として`FunctionTool`を実装します。
 
+!!! tip "資格情報の自動処理"
+
+    `google.adk.tools.authenticated_function_tool` にある実験的な `AuthenticatedFunctionTool` は `AuthConfig` を受け取り、すぐに使用できる資格情報を `credential` 引数として関数に渡します。
+
 ### 前提条件
 
 関数シグネチャには[`tool_context: ToolContext`](../tools-custom/index.md#tool-context)が*必須*です。ADKはこのオブジェクトを自動的に挿入し、状態および認証メカニズムへのアクセスを提供します。
@@ -604,8 +614,8 @@ if auth_request_function_call_id and auth_config:
 from google.adk.tools import FunctionTool, ToolContext
 from typing import Dict
 
-def my_authenticated_tool_function(param1: str, ..., tool_context: ToolContext) -> dict:
-    # ... ロジック ...
+def my_authenticated_tool_function(param1: str, tool_context: ToolContext) -> dict:
+    # ... your logic ...
     pass
 
 my_tool = FunctionTool(func=my_authenticated_tool_function)
@@ -618,7 +628,7 @@ my_tool = FunctionTool(func=my_authenticated_tool_function)
 
 **ステップ1：キャッシュされた有効な資格情報を確認する**
 
-ツール関数内で、まずこのセッションの以前の実行から有効な資格情報（アクセストークン/リフレッシュトークンなど）がすでに保存されているかどうかを確認します。現在のセッションの資格情報は`tool_context.invocation_context.session.state`（状態の辞書）に保存する必要があります。`tool_context.invocation_context.session.state.get(credential_name, None)`をチェックして、既存の資格情報の存在を確認します。
+ツール関数内で、まずこのセッションの以前の実行から有効な資格情報（アクセストークンやリフレッシュトークンなど）がすでに保存されているかどうかを確認します。現在のセッションの資格情報は、状態の辞書である `tool_context.state` に保存します。`tool_context.state.get(credential_name, None)` で既存の資格情報の有無を確認します。
 
 ```py
 from google.oauth2.credentials import Credentials
@@ -655,7 +665,7 @@ else:
 
 **ステップ2：クライアントからの認証応答を確認する**
 
-* ステップ1で有効な資格情報が得られなかった場合は、クライアントが`exchanged_credential = tool_context.get_auth_response()`を呼び出して対話型フローを完了したかどうかを確認します。
+* ステップ1で有効な資格情報が得られなかった場合は、`exchanged_credential = tool_context.get_auth_response(auth_config)`を呼び出してクライアントが対話型フローを完了したかどうかを確認します。
 * これにより、クライアントから返された更新済みの`exchanged_credential`オブジェクト（`auth_response_uri`にコールバックURLが含まれています）が返されます。
 
 ```py
@@ -687,15 +697,16 @@ if exchanged_credential:
 有効な資格情報（ステップ1）と認証応答（ステップ2）が見つからない場合、ツールはOAuthフローを開始する必要があります。AuthSchemeと初期AuthCredentialを定義し、`tool_context.request_credential()`を呼び出します。認証が必要であることを示す応答を返します。
 
 ```py
-# ツールで構成されたauth_schemeとauth_credentialを使用します。
+# Use auth_scheme and auth_credential configured in the tool.
 
-  tool_context.request_credential(AuthConfig(
-    auth_scheme=auth_scheme,
-    raw_auth_credential=auth_credential,
-  ))
-  return {'pending': true, 'message': 'ユーザー認証を待っています。'}
+def my_authenticated_tool_function(tool_context: ToolContext) -> dict:
+    tool_context.request_credential(AuthConfig(
+        auth_scheme=auth_scheme,
+        raw_auth_credential=auth_credential,
+    ))
+    return {'pending': True, 'message': 'Awaiting user authentication.'}
 
-# request_credentialを設定すると、ADKは保留中の認証イベントを検出します。実行を一時停止し、エンドユーザーにログインを求めます。
+# By setting request_credential, ADK detects a pending authentication event. It pauses execution and ask end user to login.
 ```
 
 **ステップ4：認証コードをトークンに交換する**

@@ -23,11 +23,11 @@ Freeplay の主な利点:
 
 Freeplay と ADK は互いに補完し合っています。ADK は強力で表現力豊かなエージェントオーケストレーションフレームワークを提供し、Freeplay はオブザーバビリティ、プロンプト管理、評価、テストのためにプラグインします。Freeplay と統合すると、Freeplay UI またはコードからプロンプトと評価を更新できるため、チームの誰もが貢献できます。
 
-デモを見るには、[ここをクリック](https://www.loom.com/share/82f41ffde94949beb941cb191f53c3ec?sid=997aff3c-daa3-40ab-93a9-fdaf87ea2ea1)してください。
+<iframe width="672" height="378" src="https://www.youtube.com/embed/AV2zCkp4aYM?si=HVuOJFLMEkkpocF7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## はじめに
 
-以下は、Freeplay と ADK を使い始めるためのガイドです。完全なサンプル ADK エージェントリポジトリは[こちら](https://github.com/228Labs/freeplay-google-demo)にあります。
+以下は、Freeplay と ADK を使い始めるためのガイドです。ADK エージェントリポジトリで完全な[コードサンプル](https://github.com/228Labs/freeplay-google-demo)も確認できます。
 
 ### Freeplay アカウントの作成
 
@@ -78,11 +78,11 @@ __all__ = ["app"]
 
 Freeplay のオブザーバビリティ機能を使用すると、エージェントが本番環境でどのように動作しているかを明確に把握できます。個々のエージェントトレースを掘り下げて、各ステップを理解し、問題を診断できます。
 
-![トレースの詳細](https://228labs.com/freeplay-google-demo/images/trace_detail.png)
+![トレースの詳細](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/trace_detail.png)
 
 Freeplay のフィルタリング機能を使用して、関心のあるセグメント全体でデータを検索およびフィルタリングすることもできます。
 
-![フィルター](https://228labs.com/freeplay-google-demo/images/filter.png)
+![フィルター](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/filter.png)
 
 ## プロンプト管理 (オプション)
 
@@ -92,7 +92,7 @@ ADK とともに Freeplay のプロンプト管理機能を利用するには、
 
 まず、[プロンプト] -> [プロンプトテンプレートの作成] に移動して、Freeplay でプロンプトを定義します。
 
-![プロンプト](https://228labs.com/freeplay-google-demo/images/prompt.png)
+![プロンプト](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/prompt.png)
 
 プロンプトテンプレートを作成するときは、次のセクションで説明するように、3 つの要素を追加する必要があります。
 
@@ -112,7 +112,7 @@ ADK とともに Freeplay のプロンプト管理機能を利用するには、
 
 [新しいメッセージ] をクリックし、役割を [履歴] に変更します。これにより、過去のメッセージが存在する場合に渡されるようになります。
 
-![プロンプトエディター](https://228labs.com/freeplay-google-demo/images/prompt_editor.png)
+![プロンプトエディター](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/prompt_editor.png)
 
 これで、コードで ```FreeplayLLMAgent``` を使用できます。
 
@@ -136,7 +136,7 @@ root_agent = FreeplayLLMAgent(
 
 Freeplay を使用すると、Freeplay Web アプリケーションから[評価](https://docs.freeplay.ai/docs/evaluations)を定義、バージョン管理、実行できます。[評価] -> [新しい評価] に移動して、プロンプトまたはエージェントの評価を定義できます。
 
-![Freeplay での新しい評価の作成](https://228labs.com/freeplay-google-demo/images/eval_create.png)
+![Freeplay での新しい評価の作成](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/eval_create.png)
 
 これらの評価は、オンライン監視とオフライン評価の両方で実行するように構成できます。オフライン評価用のデータセットは、Freeplay にアップロードするか、ログの例から保存できます。
 
@@ -144,14 +144,14 @@ Freeplay を使用すると、Freeplay Web アプリケーションから[評価
 
 Freeplay にデータが流れ始めたら、これらのログを使用して、繰り返しテストする[データセット](https://docs.freeplay.ai/docs/datasets)の構築を開始できます。本番ログを使用して、ゴールデンデータセットまたは変更を加えるときにテストするために使用できる障害ケースのコレクションを作成します。
 
-![テストケースの保存](https://228labs.com/freeplay-google-demo/images/save_test_case.png)
+![テストケースの保存](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/save_test_case.png)
 
 ## バッチテスト
 
 エージェントを反復処理する際に、[プロンプト](https://docs.freeplay.ai/docs/component-level-test-runs)レベルと[エンドツーエンド](https://docs.freeplay.ai/docs/end-to-end-test-runs)エージェントレベルの両方でバッチテスト (つまり、オフライン実験) を実行できます。これにより、複数の異なるモデルまたはプロンプトの変更を比較し、エージェントの実行全体で変更を直接比較して定量化できます。
 
-ADK を使用して Freeplay でバッチテストを実行するためのコード例は[こちら](https://github.com/228Labs/freeplay-google-demo/blob/main/examples/example_test_run.py)です。Google ADK を使用して Freeplay でバッチテストを実行するためのコード例は[こちら](https://github.com/228Labs/freeplay-google-demo/blob/main/examples/example_test_run.py)です。
+完全な実装については、ADK を使用して Freeplay でバッチテストを実行するバッチテストの[コード例](https://github.com/freeplayai/freeplay-google-demo/blob/main/examples/example_test_run.py)を参照してください。
 
 ## 今すぐサインアップ
 
-[Freeplay](https://app.freeplay.ai/signup) にアクセスしてアカウントにサインアップし、[こちら](https://github.com/228Labs/freeplay-google-demo)で完全な Freeplay <> ADK 統合を確認してください。
+[Freeplay](https://app.freeplay.ai/signup) にアクセスしてアカウントにサインアップし、完全な [Freeplay <> ADK 統合](https://github.com/freeplayai/freeplay-google-demo/tree/main)デモを確認してください。

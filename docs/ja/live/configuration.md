@@ -14,7 +14,7 @@
 
 | パラメータ | 型 | 目的 | 参照 |
 |---|---|---|---|
-| **response_modalities** | list[str] | 出力形式。ライブエージェントは `AUDIO` を使用する必要がある（ライブモデルは `TEXT` をサポートしていない） | [詳細](#response-modes) |
+| **response_modalities** | list[Modality] | 出力形式。ライブエージェントは `AUDIO` を使用する必要がある（ライブモデルは `TEXT` をサポートしていない） | [詳細](#response-modes) |
 | **streaming_mode** | StreamingMode | `run_async()` パスでのチャンク配信または単一配信。`run_live()` では読み取られない | [詳細](#streamingmode-bidi-or-sse) |
 | **session_resumption** | SessionResumptionConfig | 自動再接続を有効化 | [詳細](sessions.md#session-resumption) |
 | **context_window_compression** | ContextWindowCompressionConfig | セッション期間を無制限に延長 | [詳細](sessions.md#context-window-compression) |
@@ -55,7 +55,7 @@ run_config = RunConfig(
 
 ## レスポンスモード（Response modes）
 
-`response_modalities` 設定は出力形式を制御し、セッションには正確に 1 つの形式が設定されます。**ライブエージェントの場合、値は常に `["AUDIO"]` です。** ADK がサポートするすべての [ライブモデル](models.md#live-models) はそれ以外のモダリティを受け付けないためです。未設定のままにすると ADK が自動的に設定するため、ほとんどのライブアプリケーションではこのフィールドを直接操作する必要はありません。
+`response_modalities` 設定は出力形式を制御し、セッションには正確に 1 つの形式が設定されます。**ライブエージェントの場合、値は常に `["AUDIO"]` です。** ADK がサポートするすべての [ライブモデル](models.md#live-models) はそれ以外のモダリティを受け付けないためです。未設定のままにすると ADK が自動的に設定するため、ほとんどのライブアプリケーションではこのフィールドを直接操作する必要はありません。このフィールドの型は `list[Modality]` であり、これらの例全体で使用されているプレーンな文字列も受け付けます。
 
 !!! warning "`response_modalities=["TEXT"]` からの移行"
 

@@ -321,26 +321,30 @@ curl -X GET http://localhost:8000/list-apps
 
 セッションは、特定のユーザーとエージェントとの対話の状態とイベント履歴を保存します。
 
-#### セッションの作成または更新
+#### セッションの更新
 
-新しいセッションを作成するか、既存のセッションを更新します。指定されたIDを持つセッションがすでに存在する場合、その状態は提供された新しい状態で上書きされます。
+既存のセッションを更新します。
 
-*   **メソッド:** `POST`
+ADK Go は v2.4.0 以降でこのエンドポイントを提供します。リクエストボディの `stateDelta` フィールドはセッションスコープのキーのみを変更でき、`stateDelta` が `app:`、`user:`、または `temp:` プレフィックス付きのキーを変更するとサーバーは HTTP 400 を返します。
+
+*   **メソッド:** `PATCH`
 *   **パス:** `/apps/{app_name}/users/{user_id}/sessions/{session_id}`
 
 **リクエストボディ**
 ```json
 {
-  "key1": "value1",
-  "key2": 42
+  "stateDelta": {
+    "key1": "value1",
+    "key2": 42
+  }
 }
 ```
 
 **リクエスト例**
 ```shell
-curl -X POST http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_abc \
+curl -X PATCH http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_abc \
   -H "Content-Type: application/json" \
-  -d '{"visit_count": 5}'
+  -d '{"stateDelta":{"visit_count": 5}}'
 ```
 
 **レスポンス例**

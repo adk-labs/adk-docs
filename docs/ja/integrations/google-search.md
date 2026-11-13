@@ -11,7 +11,7 @@ catalog_tags: ["search","google"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
-`google_search` ツールを使うと、エージェントは Google Search を利用して Web 検索を実行できます。`google_search` ツールは Gemini 2 モデルとのみ互換です。ツールの詳細は [Google Search グラウンディングの理解](/ja/grounding/google_search_grounding/) を参照してください。
+`google_search` ツールを使うと、エージェントは Google Search を利用して Web 検索を実行できます。`google_search` ツールは Gemini モデルとのみ互換です。ツールの詳細は [Google Search グラウンディングの理解](/ja/grounding/google_search_grounding/) を参照してください。
 
 !!! warning "`google_search` ツール使用時の追加要件"
     Google Search によるグラウンディングを使用して、応答に Search 提案が含まれる場合、プロダクション環境およびアプリケーションで Search 提案を表示する必要があります。

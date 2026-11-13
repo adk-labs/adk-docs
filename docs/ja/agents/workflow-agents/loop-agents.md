@@ -1,12 +1,18 @@
 # ループエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 `LoopAgent`は、サブエージェントをループ（つまり反復的）で実行するワークフローエージェントです。指定された反復回数、または終了条件が満たされるまで、**一連のエージェントを繰り返し実行します**。
 
 コードの修正など、ワークフローに繰り返しや反復的な改善が含まれる場合に`LoopAgent`を使用します。
+
+!!! warning "非推奨: グラフベース ワークフローを使用してください"
+
+    ADK Python、TypeScript、Go、および Kotlin では、テンプレート ワークフローは
+    [グラフベース ワークフロー](/ja/graphs/) や
+    [動的ワークフロー](/ja/graphs/dynamic/) などのより柔軟なワークフロー構造に置き換えられました。
 
 ### 例
 
@@ -23,8 +29,8 @@
 
     _重要なのは_、`LoopAgent`自体はいつループを停止するかを本質的に決定_しない_ということです。無限ループを防ぐために、終了メカニズムを実装する_必要があります_。一般的な戦略は次のとおりです。
 
-    *   **最大反復回数 (Max Iterations)**: `LoopAgent`に最大反復回数を設定します。**ループはその回数だけ反復した後に終了します**。
-    *   **サブエージェントからの通知 (Escalation from sub-agent)**: 1つ以上のサブエージェントが条件（例：「ドキュメントの品質は十分か？」「合意に達したか？」）を評価するように設計します。条件が満たされた場合、サブエージェントは終了を通知（例：カスタムイベントの発行、共有コンテキストでのフラグ設定、特定の値の返却など）できます。
+    *   **最大反復回数 (Max Iterations)**: `LoopAgent`に最大反復回数を設定します。**ループはその回数だけ反復した後に終了します**。Pythonでは、`max_iterations`のデフォルトは`None`であり、これはエスカレーションが発生した場合にのみループが停止することを意味します。
+    *   **サブエージェントからの通知 (Escalation from sub-agent)**: 1つ以上のサブエージェントが条件（例：「ドキュメントの品質は十分か？」「合意に達したか？」）を評価するように設計します。条件が満たされた場合、サブエージェントはアクションで`escalate`を`true`に設定したイベントを送出することで終了を通知します。Pythonでは、カスタムエージェントが`actions=EventActions(escalate=True)`を指定した`Event`をyieldし、コールバックでは`callback_context.actions.escalate = True`を設定し、ツールでは`tool_context.actions.escalate = True`を設定します。組み込みの`exit_loop`ツールは、このフラグを自動的に設定します。
 
 ![Loop Agent](../../assets/loop-agent.png)
 
@@ -36,16 +42,21 @@
 *   **批評家エージェント (Critic Agent):** 下書きを批評し、改善点を特定する`LlmAgent`です。
 
     ```py
-    LoopAgent(sub_agents=[WriterAgent, CriticAgent], max_iterations=5)
+    LoopAgent(name="RefinementLoop", sub_agents=[WriterAgent, CriticAgent], max_iterations=5)
     ```
 
-この設定では、`LoopAgent`が反復プロセスを管理します。`Critic Agent`は、**ドキュメントが満足のいく品質レベルに達したときに「STOP」信号を返すように設計**することで、それ以上の反復を防ぐことができます。あるいは、`max_iterations`パラメータを使用してプロセスを固定回数に制限したり、停止決定を行うための外部ロジックを実装したりすることもできます。**ループは最大5回実行**され、反復的な改善が無限に続かないように保証します。
+この設定では、`LoopAgent`が反復プロセスを管理します。`CriticAgent`には**`exit_loop`などのエスカレーションツールを付与し、ドキュメントが満足のいく品質レベルに達した時点でそれを呼び出す**ようにすることで、それ以上の反復を防ぐことができます。あるいは、`max_iterations`パラメータを使用してプロセスを固定回数に制限したり、停止決定を行うための外部ロジックを実装したりすることもできます。**ループは最大5回実行**され、反復的な改善が無限に続かないように保証します。
 
 ???+ "全コード"
 
     === "Python"
         ```py
         --8<-- "examples/python/snippets/agents/workflow-agents/loop_agent_doc_improv_agent.py:init"
+        ```
+
+    === "TypeScript"
+        ```typescript
+        --8<-- "examples/typescript/snippets/agents/workflow-agents/loop_agent_doc_improv_agent.ts:init"
         ```
 
     === "Go"
@@ -58,13 +69,10 @@
         --8<-- "examples/java/snippets/src/main/java/agents/workflow/LoopAgentExample.java:init"
         ```
 
-## TypeScript の例の補足
-
-英語原文に含まれている TypeScript のループエージェント例を以下にも掲載します。
-
-```typescript
---8<-- "examples/typescript/snippets/agents/workflow-agents/loop_agent_doc_improv_agent.ts:init"
-```
+    === "Kotlin"
+        ```kotlin
+        --8<-- "examples/kotlin/snippets/agents/workflow-agents/LoopAgentDocImprovAgent.kt:init"
+        ```
 
 !!! tip "すべてのエージェントに対するグローバル指示"
 

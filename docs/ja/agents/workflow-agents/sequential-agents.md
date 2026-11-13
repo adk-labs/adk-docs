@@ -1,11 +1,17 @@
 # シーケンシャルエージェント
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 `SequentialAgent` は、サブエージェントをリストで指定された順序で実行する[ワークフローエージェント](index.md)です。
 実行を固定的で厳密な順序で行いたい場合に `SequentialAgent` を使用します。
+
+!!! warning "非推奨: グラフベース ワークフローを使用してください"
+
+    ADK Python、TypeScript、Go、および Kotlin では、テンプレート ワークフローは
+    [グラフベース ワークフロー](/ja/graphs/) や
+    [動的ワークフロー](/ja/graphs/dynamic/) などのより柔軟なワークフロー構造に置き換えられました。
 
 ### 例
 
@@ -33,7 +39,7 @@
 このような場合に `SequentialAgent` は最適です。
 
 ```py
-SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAgent])
+SequentialAgent(name="CodePipelineAgent", sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAgent])
 ```
 
 これにより、コードが記述され、*次に*レビューされ、*最後に*リファクタリングされるという、厳密で信頼性の高い順序が保証されます。**各サブエージェントからの出力は、[出力キー (Output Key)](../llm-agents.md#data-handling) を介して状態 (state) に保存され、次のエージェントに渡されます。**
@@ -48,6 +54,11 @@ SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAg
         --8<-- "examples/python/snippets/agents/workflow-agents/sequential_agent_code_development_agent.py:init"
         ```
 
+    === "TypeScript"
+        ```typescript
+        --8<-- "examples/typescript/snippets/agents/workflow-agents/sequential_agent_code_development_agent.ts:init"
+        ```
+
     === "Go"
         ```go
         --8<-- "examples/go/snippets/agents/workflow-agents/sequential/main.go:init"
@@ -58,13 +69,10 @@ SequentialAgent(sub_agents=[CodeWriterAgent, CodeReviewerAgent, CodeRefactorerAg
         --8<-- "examples/java/snippets/src/main/java/agents/workflow/SequentialAgentExample.java:init"
         ```
 
-## TypeScript の例の補足
-
-英語原文に含まれている TypeScript のシーケンシャルエージェント例を以下にも掲載します。
-
-```typescript
---8<-- "examples/typescript/snippets/agents/workflow-agents/sequential_agent_code_development_agent.ts:init"
-```
+    === "Kotlin"
+        ```kotlin
+        --8<-- "examples/kotlin/snippets/agents/workflow-agents/SequentialAgentExample.kt:init"
+        ```
 
 !!! tip "すべてのエージェントに対するグローバル指示"
 

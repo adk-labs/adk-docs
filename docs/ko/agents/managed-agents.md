@@ -15,12 +15,13 @@ Managed agents(관리형 에이전트)를 사용하면 ADK 흐름 내에서 Mana
 - **퍼스트 파티 기본 제공 에이전트:** ready-made 에이전트(예: Antigravity 에이전트)의 `agent_id`를 참조하여 연결합니다.
 - **내장된 서버 사이드 실행:** 웹 검색 및 코드 실행과 같은 기능이 서버의 관리형 샌드박스에서 실행되므로 로컬 샌드박스를 프로비저닝하거나 보호할 필요가 없습니다.
 - **클라이언트 사이드 함수 선언 없음:** 서버 사이드 도구가 관리형 에이전트에서 구성되므로 로컬에서 선언하거나 실행하지 않습니다.
+- **인라인 도구로 구성 가능:** `mode='single_turn'`을 설정하고 관리형 에이전트를 상위 `LlmAgent`의 `sub_agents`에 추가하세요. 그러면 ADK가 이를 인라인 단일 턴 도구로 자동 노출하며, 이는 `AgentTool`로 래핑하는 것보다 권장되는 대안입니다.
 
 ## 직접 빌드하는 것과 Managed agents를 사용하는 것의 비교
 
 Managed agents와 ADK 에이전트는 서로 다른 문제를 해결합니다. 둘 사이의 선택은 주로 기본 제공 기능의 유용함과 미세 제어 기능 간의 절충안입니다.
 
-- **Managed agents**는 강력한 에이전트를 즉시 사용할 수 있도록 제공하지만 유연성이 제한됩니다. 도구 세트가 미리 정의된 서버 사이드 방식이고 에이전트는 관리형 환경에서만 실행되며 클라이언트 사이드 도구 또는 MCP 도구는 지원되지 않습니다.
+- **Managed agents**는 강력한 에이전트를 즉시 사용할 수 있도록 제공하지만 유연성이 제한됩니다. 도구 세트가 미리 정의된 서버 사이드 방식이고 에이전트는 관리형 환경에서만 실행되며, 서버 사이드 원격 MCP 서버는 지원되지만 클라이언트 실행 도구는 지원되지 않습니다.
 - **ADK 에이전트**(예: [`LlmAgent`](/ko/agents/llm-agents/))는 모델, 지침, 도구(커스텀 함수 도구 및 MCP 도구 포함) 및 실행 위치에 대한 미세 제어 기능을 제공합니다.
 
 ## 사전 준비 사항
@@ -83,19 +84,19 @@ Managed agents와 ADK 에이전트는 서로 다른 문제를 해결합니다. �
 
 ### 로컬 세션 vs 원격 상태
 
-`ManagedAgent`는 로컬에 거의 상태를 유지하지 않습니다. ADK 세션은 생성하는 이벤트에서 오직 두 가지 값, 즉 `previous_interaction_id`와 샌드박스 `environment_id`만을 유지합니다. 각 새 턴에서 에이전트는 이전 세션 이벤트를 스캔하여 두 값을 모두 복구한 다음 재사용하므로 대화와 샌드박스가 계속 유지됩니다.
+`ManagedAgent`는 로컬에 거의 상태를 유지하지 않습니다. ADK 세션은 생성하는 이벤트에서 오직 두 가지 값, 즉 `interaction_id`와 샌드박스 `environment_id`만을 유지합니다. 각 새 턴에서 에이전트는 이전 세션 이벤트를 스캔하여 두 값을 모두 복구한 다음 백엔드로 다시 전송하므로 대화와 샌드박스가 계속 유지됩니다.
 
 그 외 모든 것은 서버 사이드에 상주합니다. Managed Agents API는 샌드박스 환경과 전체 상호작용 기록을 소유하며, 로컬 세션이 아닌 해당 원격 상호작용이 대화를 계속하기 위한 정보의 소스(source of truth)가 됩니다. 응답 텍스트는 로컬 ADK 이벤트와 원격 상호작용 기록 모두에 나타나지만, ADK는 원격 상태를 복구하고 재사용하는 데 필요한 ID만 저장하며 이전 턴을 다시 전송하지는 않습니다.
 
 ## 제한 사항
 
 - **위치 고정 (Agent Platform만 해당):** Agent Platform 백엔드의 경우, Managed Agents API는 현재 `global` 위치에서만 제공됩니다. 리전 엔드포인트는 오류를 발생시킵니다.
-- **서버 사이드 도구 전용:** 클라이언트 실행 도구(Python 함수, 호출 가능 객체) 및 MCP 도구는 지원되지 않으며 `NotImplementedError`를 발생시킵니다.
+- **서버 사이드 도구 전용:** 클라이언트 실행 도구(Python 함수, 호출 가능 객체) 및 원시 `types.Tool` MCP 구성(`types.Tool.mcp_servers`)은 지원되지 않으며 `NotImplementedError`를 발생시킵니다. 서버 사이드 원격 MCP 서버는 지원되며, `tools`에 `google.adk.tools.RemoteMcpServer` 사양으로 선언하면 됩니다.
 - **스트리밍 전용:** 에이전트는 스트리밍 상호작용(`stream=True`)을 사용합니다. 백그라운드 폴링 실행 및 엄격한 비스트리밍 연결은 아직 완전하게 지원되지 않습니다.
 - **백엔드 차이:** Gemini API와 Agent Platform 백엔드는 현재 약간 다른 동작 패턴을 보입니다. 사용하려는 특정 백엔드를 대상으로 테스트하세요.
 
 ## 다음 단계
 
-- **샘플:** [Managed Agent Basic](https://github.com/google/adk-python/tree/main/contributing/samples/managed_agent/basic) 및 [Managed Agent Code Execution](https://github.com/google/adk-python/tree/main/contributing/samples/managed_agent/code_execution).
+- **샘플:** [Managed Agent Basic](https://github.com/google/adk-python/tree/main/contributing/samples/managed_agent/basic), [Managed Agent Code Execution](https://github.com/google/adk-python/tree/main/contributing/samples/managed_agent/code_execution), [Managed Agent Remote MCP](https://github.com/google/adk-python/tree/main/contributing/samples/managed_agent/remote_mcp), [Managed Agent Single Turn](https://github.com/google/adk-python/tree/main/contributing/samples/managed_agent/single_turn) 및 [Managed Agent System Instruction](https://github.com/google/adk-python/tree/main/contributing/samples/managed_agent/system_instruction).
 - **백엔드 설명서:** [Gemini API Agents](https://ai.google.dev/gemini-api/docs/agents) 및 [Agent Platform Managed Agents](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/managed-agents).
 - **관련 ADK 주제:** [에이전트용 모델](/ko/agents/models/), [다중 에이전트 워크플로](/ko/workflows/), 및 [커스텀 도구](/ko/tools-custom/).

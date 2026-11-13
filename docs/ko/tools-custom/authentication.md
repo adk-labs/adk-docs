@@ -39,10 +39,13 @@ ADK 헬퍼 함수와 자체 코드로 인증을 직접 관리하려면 다음 �
 
 ## 프레임워크 구성 요소
 
-ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 처리하고 자격 증명 데이터를 관리하는 핵심 구성 요소입니다.
+ADK 프레임워크에서 ***AuthScheme***, ***AuthCredential***, ***BaseCredentialService***는 인증 방법을 처리하고 자격 증명 데이터를 관리하는 핵심 구성 요소입니다.
 
-*   `AuthScheme`: 헤더의 API 키나 OAuth 2.0 Bearer 토큰처럼 API가 어떤 방식의 인증 자격 증명을 기대하는지를 정의합니다. ADK는 OpenAPI 3.0과 같은 인증 스킴을 지원하며, `APIKey`, `HTTPBearer`, `OAuth2`, `OpenIdConnectWithConfig` 같은 구체적 클래스를 사용합니다. 각 OpenAPI 자격 증명 유형에 대한 자세한 내용은 [OpenAPI 문서: 인증](https://swagger.io/docs/specification/v3_0/authentication/)을 참고하세요.
-*   `AuthCredential`: 애플리케이션의 OAuth 클라이언트 ID나 시크릿, API 키 값처럼 인증 절차를 *시작*하는 데 필요한 *초기* 정보를 담습니다. 이 클래스의 인스턴스에는 자격 증명 유형을 지정하는 `auth_type`이 포함되며, 예를 들어 `API_KEY`, `OAUTH2`, `SERVICE_ACCOUNT`가 있습니다.
+*   ***AuthScheme***: 헤더의 API 키나 OAuth 2.0 Bearer 토큰처럼 API가 *어떤 방식*의 인증 자격 증명을 기대하는지를 정의합니다. ADK는 OpenAPI 3.0과 동일한 인증 스킴을 지원하며, ***APIKey***, ***HTTPBearer***, ***OAuth2***, ***OpenIdConnectWithConfig*** 같은 구체적 클래스를 사용합니다. 앞의 세 가지는 `fastapi.openapi.models`에서 가져온 OpenAPI 모델이며, ***OpenIdConnectWithConfig***만 ADK의 `google.adk.auth`에 정의되어 있습니다. 각 OpenAPI 자격 증명 유형에 대한 자세한 내용은 [OpenAPI 문서: 인증](https://swagger.io/docs/specification/v3_0/authentication/)을 참고하세요.
+
+*   ***AuthCredential***: 애플리케이션의 OAuth 클라이언트 ID나 시크릿, API 키 값처럼 인증 절차를 *시작*하는 데 필요한 *초기* 정보를 담습니다. 이 클래스의 인스턴스에는 자격 증명 유형을 지정하는 **auth_type**이 포함되며, 예를 들어 `API_KEY`, `OAUTH2`, `SERVICE_ACCOUNT`가 있습니다.
+
+*   ***BaseCredentialService***: 자격 증명이 교환된 후 ADK가 이를 *어디에* 저장할지 제어합니다. `Runner(credential_service=...)`를 통해 러너에 구현체를 전달하세요. ADK는 `google.adk.auth.credential_service.in_memory_credential_service`의 `InMemoryCredentialService`와 `google.adk.auth.credential_service.session_state_credential_service`의 `SessionStateCredentialService`를 제공합니다. 자격 증명을 세션 상태에 저장하는 경우, 세션 저장소가 저장 시 암호화(encryption at rest)되어 있고 신뢰할 수 없는 클라이언트에 노출되지 않는지 확인하세요. 이 구성 요소는 실험적이며 향후 릴리스에서 변경될 수 있습니다.
 
 일반적인 인증 흐름은 도구를 구성할 때 이런 세부 정보를 제공하는 것으로 시작됩니다. 그러면 ADK는 도구가 API를 호출하기 전에 초기 자격 증명, 예를 들어 액세스 토큰을 자동으로 교환하려고 시도합니다. OAuth 동의처럼 사용자 상호작용이 필요한 흐름에서는 ADK가 `에이전트 클라이언트` 애플리케이션과 함께 특정 대화형 절차를 시작합니다.
 
@@ -62,7 +65,7 @@ ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 �
 *   [***OpenAPIToolset***](/ko/tools-custom/openapi-tools/): 초기화 시 `auth_scheme`과 `auth_credential`을 설정합니다.
 *   [***APIHubToolset***](/ko/integrations/apigee-api-hub/): API가 인증을 요구하는 경우 초기화 시 `auth_scheme`과 `auth_credential`을 설정합니다.
 *   [***ApplicationIntegrationToolset***](/ko/integrations/application-integration/): API가 인증을 요구하는 경우 초기화 시 `auth_scheme`과 `auth_credential`을 설정합니다.
-*   [***GoogleApiToolset***](/ko/integrations/google-api-toolsets/): 이 도구 세트의 전용 인증 메서드를 사용합니다.
+*   [***Google Apps Toolset***](/ko/integrations/google-api-toolsets/): 이 도구 세트의 전용 인증 메서드를 사용합니다.
 
 다른 사전 구축 도구와 통합에 대한 추가 인증 정보는 [ADK 통합](/ko/integrations/) 카탈로그를 참고하세요.
 
@@ -70,7 +73,7 @@ ADK 프레임워크에서 `AuthScheme`과 `AuthCredential`은 인증 방법을 �
 
 ## 인증된 도구를 사용하여 에이전트 애플리케이션 빌드
 
-이 섹션에서는 에이전트 애플리케이션 내에서 인증이 필요한 기존 도구(예: `RestApiTool/ OpenAPIToolset`, `APIHubToolset`, `GoogleApiToolSet`의 도구)를 사용하는 데 중점을 둡니다. 주요 책임은 도구를 구성하고 대화형 인증 흐름의 클라이언트 측 부분(도구에서 필요한 경우)을 처리하는 것입니다.
+이 섹션에서는 에이전트 애플리케이션 내에서 인증이 필요한 기존 도구(예: `RestApiTool/ OpenAPIToolset`, `APIHubToolset`, `Google Apps Toolset`의 도구)를 사용하는 데 중점을 둡니다. 주요 책임은 도구를 구성하고 대화형 인증 흐름의 클라이언트 측 부분(도구에서 필요한 경우)을 처리하는 것입니다.
 
 ### 인증을 사용하여 도구 구성
 
@@ -311,7 +314,7 @@ sample_toolset = OpenAPIToolset(
 
 ##### ServiceAccount 구성 파라미터
 
-* `service_account_credential` (선택사항): 서비스 계정 JSON 키 파일의 경로 또는 딕셔너리를 제공합니다. 로컬 또는 Google Cloud 외부에서 실행할 때 사용합니다.
+* `service_account_credential`: `ServiceAccountCredential` 객체 또는 서비스 계정 JSON 키 파일의 내용을 담은 딕셔너리를 제공합니다. 로컬 또는 Google Cloud 외부에서 실행할 때 사용합니다. 이 설정은 `use_default_credential`이 `True`로 설정되지 않은 경우 필수입니다.
   
 * `use_default_credential` (선택사항): 애플리케이션 기본 자격 증명(ADC)을 사용하려면 True로 설정합니다. 에이전트가 이미 Cloud Run이나 Cloud Functions와 같은 Google Cloud 내에서 실행 중인 경우 로컬 키 파일이 필요 없어 권장됩니다.
   
@@ -319,28 +322,31 @@ sample_toolset = OpenAPIToolset(
   
 * `audience` (`use_id_token=True`인 경우 필수): 호출하는 서비스의 URL(예: `https://my-service.run.app`)입니다. 이는 토큰이 해당 특정 대상에 대해서만 유효하도록 보장하는 보안 바인딩입니다.
   
-* `scopes` (선택사항): Drive 또는 BigQuery와 같은 Google Cloud API용 액세스 토큰을 요청할 때만 사용합니다. 비공개 서비스 인증을 위해 ID 토큰을 사용하는 경우에는 설정할 필요가 없습니다.
+* `scopes`: Drive 또는 BigQuery와 같은 Google Cloud API용 액세스 토큰을 요청할 때 이 설정을 사용합니다. `service_account_credential`로 액세스 토큰을 요청할 때는 필수입니다. 비공개 서비스 인증을 위해 ID 토큰을 사용하는 경우에는 설정할 필요가 없습니다. `use_default_credential=True`인 경우 `scopes`는 광범위한 `cloud-platform` 범위로 기본 설정되므로, 프로덕션 배포에서는 도구에 필요한 범위만 설정하세요.
 
-!!! tip "`use_id_token`과 `audience` 쌍 설정"
+!!! warning "`use_id_token`과 `audience` 쌍 설정"
 
-    항상 `use_id_token=True`와 `audience`를 함께 사용하세요. 하나만 제공하고 다른 하나는 제공하지 않으면 ADK는 우발적인 구성 오류를 방지하기 위해 오류를 발생시킵니다.
+    항상 `use_id_token=True`와 `audience`를 함께 사용하세요. `audience` 없이 `use_id_token=True`를 설정하면 ADK가 오류를 발생시킵니다. `audience`만 단독으로 설정하면 ADK는 `audience` 보안 바인딩을 조용히 무시하고 ID 토큰 대신 액세스 토큰을 요청합니다.
 
 #### 외부 액세스 토큰 사용
 
 `external_access_token_key` 기능을 사용하면 에이전트가 새로운 인증 흐름을 시작하는 대신 프론트엔드 애플리케이션에서 전달된 토큰과 같이 런타임 환경에서 제공하는 기존 액세스 토큰을 사용할 수 있습니다.
 구성되면 자격 증명 관리자는 표준 OAuth 흐름을 건너끕니다. 대신 에이전트의 `tool_context.state`에서 키를 검색하여 토큰을 직접 인증에 사용합니다.
+이 필드는 `BigQueryCredentialsConfig`, `SpannerCredentialsConfig`, `PubSubCredentialsConfig` 또는 `GCSCredentialsConfig`와 같은 Google 서비스 도구 세트의 자격 증명 구성에 설정하세요.
 이 구성 매개변수의 사용은 상호 배타적이며, 동일한 구성 블록에 `credentials`, `client_id`, `client_secret` 또는 `scopes` 매개변수를 포함할 수 없습니다.
 
 사용 중인 도구 세트의 자격 증명 구성에 키를 설정합니다. 다음 예시에서는 BigQuery를 사용합니다:
 
 ```python
 from google.adk.integrations.bigquery import BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset
 
-# 세션 상태에서 "my_frontend_token"을 찾도록 도구 세트 구성
+# Configure the toolset to look for "my_frontend_token" in the session state
 credentials_config = BigQueryCredentialsConfig(
-    # 프로덕션 코드에 인증 키를 하드코딩하지 마세요
+    # Do not hardcode authentication keys in production code
     external_access_token_key="my_frontend_token"
 )
+bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 ```
 
 #### 인증 요청 흐름
@@ -583,7 +589,7 @@ if auth_request_function_call_id and auth_config:
 * 업데이트된 `AuthConfig`의 정보(코드가 포함된 콜백 URL 포함)를 사용하여 공급자의 토큰 엔드포인트와 OAuth **토큰 교환**을 수행하여 액세스 토큰(및 잠재적으로 새로 고침 토큰)을 얻습니다.
 * ADK는 내부적으로 세션 상태에 설정하여 이러한 토큰을 사용할 수 있도록 합니다.
 * ADK는 원래 도구 호출(처음에 인증 누락으로 실패한 호출)을 **자동으로 재시도**합니다.
-* 이번에는 도구가 유효한 토큰(`tool_context.get_auth_response()`를 통해)을 찾아 인증된 API 호출을 성공적으로 실행합니다.
+* 이번에는 도구가 유효한 토큰(`tool_context.get_auth_response(auth_config)`를 통해)을 찾아 인증된 API 호출을 성공적으로 실행합니다.
 * 에이전트는 도구에서 실제 결과를 수신하고 사용자에게 최종 응답을 생성합니다.
 
 ---
@@ -596,6 +602,10 @@ if auth_request_function_call_id and auth_config:
 
 이 섹션에서는 새 ADK 도구를 만들 때 사용자 지정 Python 함수 *내부*에서 인증 논리를 구현하는 데 중점을 둡니다. 예제로 `FunctionTool`을 구현합니다.
 
+!!! tip "자동 자격 증명 처리"
+
+    `google.adk.tools.authenticated_function_tool`의 실험적 기능인 `AuthenticatedFunctionTool`은 `AuthConfig`를 받아 바로 사용할 수 있는 자격 증명을 `credential` 인수로 함수에 전달합니다.
+
 ### 전제 조건
 
 함수 서명에는 [`tool_context: ToolContext`](../tools-custom/index.md#tool-context)가 *반드시* 포함되어야 합니다. ADK는 이 객체를 자동으로 주입하여 상태 및 인증 메커니즘에 대한 액세스를 제공합니다.
@@ -604,8 +614,8 @@ if auth_request_function_call_id and auth_config:
 from google.adk.tools import FunctionTool, ToolContext
 from typing import Dict
 
-def my_authenticated_tool_function(param1: str, ..., tool_context: ToolContext) -> dict:
-    # ... 로직 ...
+def my_authenticated_tool_function(param1: str, tool_context: ToolContext) -> dict:
+    # ... your logic ...
     pass
 
 my_tool = FunctionTool(func=my_authenticated_tool_function)
@@ -618,7 +628,7 @@ my_tool = FunctionTool(func=my_authenticated_tool_function)
 
 **1단계: 캐시되고 유효한 자격 증명 확인:**
 
-도구 함수 내에서 먼저 이 세션의 이전 실행에서 유효한 자격 증명(예: 액세스/새로 고침 토큰)이 이미 저장되어 있는지 확인합니다. 현재 세션에 대한 자격 증명은 `tool_context.invocation_context.session.state`(상태 사전)에 저장해야 합니다. `tool_context.invocation_context.session.state.get(credential_name, None)`을 확인하여 기존 자격 증명의 존재 여부를 확인합니다.
+도구 함수 내에서 먼저 이 세션의 이전 실행에서 액세스 토큰이나 새로 고침 토큰과 같은 유효한 자격 증명이 이미 저장되어 있는지 확인합니다. 현재 세션에 대한 자격 증명은 상태 딕셔너리인 `tool_context.state`에 저장하세요. `tool_context.state.get(credential_name, None)`으로 기존 자격 증명이 있는지 확인합니다.
 
 ```py
 from google.oauth2.credentials import Credentials
@@ -655,7 +665,7 @@ else:
 
 **2단계: 클라이언트의 인증 응답 확인**
 
-* 1단계에서 유효한 자격 증명을 얻지 못한 경우 `exchanged_credential = tool_context.get_auth_response()`를 호출하여 클라이언트가 대화형 흐름을 방금 완료했는지 확인합니다.
+* 1단계에서 유효한 자격 증명을 얻지 못한 경우 `exchanged_credential = tool_context.get_auth_response(auth_config)`를 호출하여 클라이언트가 대화형 흐름을 방금 완료했는지 확인합니다.
 * 그러면 클라이언트가 다시 보낸 업데이트된 `exchanged_credential` 객체(콜백 URL이 `auth_response_uri`에 포함됨)가 반환됩니다.
 
 ```py
@@ -687,15 +697,16 @@ if exchanged_credential:
 유효한 자격 증명(1단계)과 인증 응답(2단계)이 없는 경우 도구는 OAuth 흐름을 시작해야 합니다. AuthScheme 및 초기 AuthCredential을 정의하고 `tool_context.request_credential()`을 호출합니다. 인증이 필요함을 나타내는 응답을 반환합니다.
 
 ```py
-# 도구에 구성된 auth_scheme 및 auth_credential 사용.
+# Use auth_scheme and auth_credential configured in the tool.
 
-  tool_context.request_credential(AuthConfig(
-    auth_scheme=auth_scheme,
-    raw_auth_credential=auth_credential,
-  ))
-  return {'pending': true, 'message': '사용자 인증 대기 중.'}
+def my_authenticated_tool_function(tool_context: ToolContext) -> dict:
+    tool_context.request_credential(AuthConfig(
+        auth_scheme=auth_scheme,
+        raw_auth_credential=auth_credential,
+    ))
+    return {'pending': True, 'message': 'Awaiting user authentication.'}
 
-# request_credential을 설정하면 ADK는 보류 중인 인증 이벤트를 감지합니다. 실행을 일시 중지하고 최종 사용자에게 로그인을 요청합니다.
+# By setting request_credential, ADK detects a pending authentication event. It pauses execution and ask end user to login.
 ```
 
 **4단계: 승인 코드를 토큰으로 교환**

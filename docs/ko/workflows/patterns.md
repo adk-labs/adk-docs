@@ -16,6 +16,15 @@ ADK에서 다중 에이전트 시스템은 종종 계층 구조를 형성하는 
 
 다음 섹션에서는 이러한 다중 에이전트 시스템을 효과적으로 구축하고 관리할 수 있게 해주는 에이전트 계층 구조, 워크플로 에이전트, 상호작용 메커니즘과 같은 핵심 ADK 기본 요소(primitives)를 자세히 설명합니다.
 
+!!! note "Python 및 TypeScript: 템플릿 워크플로 에이전트 지원 중단(Deprecated)"
+
+    Python 및 TypeScript에서 `SequentialAgent`, `ParallelAgent`,
+    `LoopAgent`는 지원 중단(deprecated)되었습니다. 인스턴스를 생성하면 지원 중단
+    경고가 발생하며, 해당 클래스들은 향후 릴리스에서 제거될 예정입니다. 아래 예시는
+    여전히 실행됩니다. 새로운 코드에서는 이러한 패턴을
+    [그래프 기반 워크플로](/ko/graphs/)로 표현하세요. 단, `Workflow`는 아직
+    `LlmAgent`의 하위 에이전트로 사용할 수 없습니다.
+
 ## 1. 에이전트 구성을 위한 ADK 기본 요소 { #adk-primitives-for-agent-composition }
 
 ADK는 다중 에이전트 시스템 내에서 상호작용을 구조화하고 관리할 수 있도록 하는 핵심 구성 요소인 기본 요소(primitives)를 제공합니다.
@@ -35,12 +44,25 @@ ADK는 다중 에이전트 시스템 내에서 상호작용을 구조화하고 �
 
     ```python
     # 개념 예시: 계층 구조 정의
-    from google.adk.agents import LlmAgent, BaseAgent
-    
+    from typing import AsyncGenerator
+    from google.adk.agents import BaseAgent, LlmAgent
+    from google.adk.agents.invocation_context import InvocationContext
+    from google.adk.events import Event
+
+
+    class TaskExecutor(BaseAgent):
+        """비-LLM 로직을 가진 커스텀 에이전트입니다."""
+
+        async def _run_async_impl(
+            self, ctx: InvocationContext
+        ) -> AsyncGenerator[Event, None]:
+            yield Event(author=self.name)
+
+
     # 개별 에이전트 정의
     greeter = LlmAgent(name="Greeter", model="gemini-flash-latest")
-    task_doer = BaseAgent(name="TaskExecutor") # 커스텀 비-LLM 에이전트
-    
+    task_doer = TaskExecutor(name="TaskExecutor")  # 커스텀 비-LLM 에이전트
+
     # 부모 에이전트를 생성하고 sub_agents를 통해 자식 할당
     coordinator = LlmAgent(
         name="Coordinator",
@@ -51,7 +73,7 @@ ADK는 다중 에이전트 시스템 내에서 상호작용을 구조화하고 �
             task_doer
         ]
     )
-    
+
     # 프레임워크가 자동으로 설정:
     # assert greeter.parent_agent == coordinator
     # assert task_doer.parent_agent == coordinator
@@ -138,6 +160,13 @@ ADK는 다중 에이전트 시스템 내에서 상호작용을 구조화하고 �
 ### 1.2. 오케스트레이터로서의 워크플로 에이전트 { #workflow-agents-as-orchestrators }
 
 ADK는 자체적으로 작업을 수행하지 않고 `sub_agents`의 실행 흐름을 조율(orchestrate)하는 `BaseAgent`에서 파생된 특수 에이전트를 포함합니다.
+
+!!! note "Python 및 TypeScript에서 지원 중단됨(Deprecated)"
+
+    Python 및 TypeScript에서 `SequentialAgent`, `ParallelAgent`,
+    `LoopAgent`는 `Workflow`를 대신 사용하도록 지원 중단(deprecated)되었습니다.
+    인스턴스를 생성하면 지원 중단 경고가 발생하며, 해당 클래스들은 향후 릴리스에서 제거될 예정입니다.
+    `Workflow`는 `LlmAgent`의 하위 에이전트로 사용할 수 없습니다.
 
 * **[`SequentialAgent`](../agents/workflow-agents/sequential-agents.md):** `sub_agents`를 나열된 순서대로 하나씩 실행합니다.
     * **컨텍스트:** *동일한* [`InvocationContext`](../runtime/index.md)를 순차적으로 전달하여 에이전트가 공유 상태를 통해 쉽게 결과를 전달할 수 있도록 합니다.
@@ -381,7 +410,7 @@ ADK는 자체적으로 작업을 수행하지 않고 `sub_agents`의 실행 흐�
 
 동일한 호출 내에서 작동하여 `InvocationContext`를 통해 동일한 [`Session`](../sessions/session.md) 객체를 공유하는 에이전트들이 수동적으로 통신하는 가장 기본적인 방법입니다.
 
-* **메커니즘:** 한 에이전트(또는 그 도구/콜백)가 값을 쓰고(`context.state['data_key'] = processed_data`), 후속 에이전트가 이를 읽습니다(`data = context.state.get('data_key')`). 상태 변경은 [`CallbackContext`](../callbacks/index.md)를 통해 추적됩니다.
+* **메커니즘:** 한 에이전트(또는 그 도구/콜백)가 값을 쓰고(`context.state['data_key'] = processed_data`), 후속 에이전트가 이를 읽습니다(`data = context.state.get('data_key')`). [`CallbackContext`](../callbacks/index.md) 또는 `ToolContext`를 통한 상태 변경은 이벤트의 `state_delta`로 기록되어 세션 서비스에 의해 영구 저장됩니다.
 * **편의성:** [`LlmAgent`](../agents/llm-agents.md)의 `output_key` 속성은 에이전트의 최종 응답 텍스트(또는 구조화된 출력)를 지정된 상태 키에 자동으로 저장합니다.
 * **특성:** 비동기적, 수동적 통신. `SequentialAgent`에 의해 조율되는 파이프라인이나 `LoopAgent` 반복 간 데이터 전달에 이상적입니다.
 * **참고:** [상태 관리](../sessions/state.md)
@@ -526,8 +555,9 @@ ADK는 자체적으로 작업을 수행하지 않고 `sub_agents`의 실행 흐�
     ```python
     # 개념 설정: 도구로서의 에이전트
     from google.adk.agents import LlmAgent, BaseAgent
+    from google.adk.events import Event
     from google.adk.tools import agent_tool
-    from pydantic import BaseModel
+    from google.genai import types
     
     # 대상 에이전트 정의 (LlmAgent 또는 커스텀 BaseAgent 가능)
     class ImageGeneratorAgent(BaseAgent): # 예제 커스텀 에이전트
@@ -538,7 +568,12 @@ ADK는 자체적으로 작업을 수행하지 않고 `sub_agents`의 실행 흐�
             prompt = ctx.session.state.get("image_prompt", "기본 프롬프트")
             # ... 이미지 바이트 생성 ...
             image_bytes = b"..."
-            yield Event(author=self.name, content=types.Content(parts=[types.Part.from_bytes(image_bytes, "image/png")]))
+            yield Event(
+                author=self.name,
+                content=types.Content(
+                    parts=[types.Part.from_bytes(data=image_bytes, mime_type="image/png")]
+                ),
+            )
     
     image_agent = ImageGeneratorAgent()
     image_tool = agent_tool.AgentTool(agent=image_agent) # 에이전트 래핑
@@ -1168,7 +1203,7 @@ ADK의 구성 기본 요소를 결합하여 다중 에이전트 협업을 위한
     * **상호작용:** 실행을 일시 중지하고 외부 시스템(예: UI, 티켓팅 시스템)에 요청을 보내 인간의 입력을 기다리는 커스텀 **도구**를 사용하여 구현할 수 있습니다. 그런 다음 도구는 인간의 응답을 에이전트에게 반환합니다.
     * **워크플로:** **LLM 기반 위임**(`transfer_to_agent`)을 사용하여 외부 워크플로를 트리거하는 개념적 "인간 에이전트"를 대상으로 하거나, `LlmAgent` 내에서 커스텀 도구를 사용할 수 있습니다.
     * **상태/콜백:** 상태는 인간을 위한 작업 세부 정보를 보유할 수 있으며, 콜백은 상호작용 흐름을 관리할 수 있습니다.
-    * **참고:** ADK에는 내장된 "인간 에이전트" 유형이 없으므로 커스텀 통합이 필요합니다.
+    * **참고:** ADK에는 *Human Agent* 에이전트 유형이 없지만, 일시 중지 로직을 직접 구현할 필요는 없습니다. [그래프 워크플로 노드](/ko/graphs/human-input/)에서 `RequestInput` 이벤트를 반환(yield)하거나, 예/아니오 승인을 위해 `FunctionTool`에서 [도구 확인](/ko/tools-custom/confirmation/#boolean-confirmation)을 활성화하세요. 커스텀 힌트를 제공하거나 구조화된 데이터를 수집하려면 도구 내부에서 [고급 확인](/ko/tools-custom/confirmation/#advanced-confirmation)을 사용하세요. 언어별 지원 여부는 해당 페이지를 참고하세요.
 
 === "Python"
 
@@ -1270,7 +1305,7 @@ ADK의 구성 기본 요소를 결합하여 다중 에이전트 협업을 위한
     --8<-- "examples/go/snippets/agents/multi-agent/main.go:human-in-loop-pattern"
     ```
 
-#### Human in the Loop with Policy
+#### 정책을 사용한 Human-in-the-Loop
 
 보다 구조화된 Human-in-the-Loop 구현 방법은 `PolicyEngine`을 사용하는 것입니다. 이 접근 방식은 도구가 실행되기 전에 사용자 확인 단계를 트리거할 수 있는 정책을 정의할 수 있게 해줍니다. `SecurityPlugin`은 도구 호출을 가로채고 `PolicyEngine`을 참조한 뒤, 정책에 따라 자동으로 사용자 확인을 요청합니다. 이 패턴은 거버넌스와 보안 규칙을 강제하는 데 더 강력합니다.
 
@@ -1317,7 +1352,7 @@ ADK의 구성 기본 요소를 결합하여 다중 에이전트 협업을 위한
     });
     ```
 
-    전체 코드 샘플은 [여기](https://github.com/google/blob/main/examples/typescript/snippets/agents/workflow-agents/hitl_confirmation_agent.ts)에서 볼 수 있습니다.
+    전체 구현은 [코드 샘플](https://github.com/google/adk-docs/blob/main/examples/typescript/snippets/agents/workflow-agents/hitl_confirmation_agent.ts)을 참고하세요.
 
 ### 패턴 결합
 

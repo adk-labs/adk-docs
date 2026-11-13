@@ -16,6 +16,14 @@ ADKにおいて、マルチエージェントシステムとは、しばしば�
 
 以下のセクションでは、これらのマルチエージェントシステムを効果的に構築および管理できるようにする、エージェント階層、ワークフローエージェント、インタラクションメカニズムといったADKのコアプリミティブについて詳しく説明します。
 
+!!! note "Python および TypeScript: テンプレートワークフローエージェントは非推奨です"
+
+    Python および TypeScript では、`SequentialAgent`、`ParallelAgent`、および
+    `LoopAgent` は非推奨（deprecated）です。これらを構築すると非推奨の警告が出力され、
+    今後のリリースでクラスが削除される予定です。以下の例は引き続き動作します。
+    新しいコードでは、これらのパターンを[グラフベースのワークフロー](/ja/graphs/)で表現してください。
+    なお、`Workflow` はまだ `LlmAgent` のサブエージェントとしては使用できません。
+
 ## 1. エージェント構成のためのADKプリミティブ { #adk-primitives-for-agent-composition }
 
 ADKは、マルチエージェントシステム内のインタラクションを構造化し管理することを可能にする、コアとなる構成要素（プリミティブ）を提供します。
@@ -35,12 +43,25 @@ ADKは、マルチエージェントシステム内のインタラクション�
 
     ```python
     # 概念例：階層の定義
-    from google.adk.agents import LlmAgent, BaseAgent
-    
+    from typing import AsyncGenerator
+    from google.adk.agents import BaseAgent, LlmAgent
+    from google.adk.agents.invocation_context import InvocationContext
+    from google.adk.events import Event
+
+
+    class TaskExecutor(BaseAgent):
+        """非LLMロジックを持つカスタムエージェント。"""
+
+        async def _run_async_impl(
+            self, ctx: InvocationContext
+        ) -> AsyncGenerator[Event, None]:
+            yield Event(author=self.name)
+
+
     # 個々のエージェントを定義
     greeter = LlmAgent(name="Greeter", model="gemini-flash-latest")
-    task_doer = BaseAgent(name="TaskExecutor") # カスタムの非LLMエージェント
-    
+    task_doer = TaskExecutor(name="TaskExecutor")  # カスタムの非LLMエージェント
+
     # 親エージェントを作成し、sub_agents経由で子を割り当て
     coordinator = LlmAgent(
         name="Coordinator",
@@ -51,7 +72,7 @@ ADKは、マルチエージェントシステム内のインタラクション�
             task_doer
         ]
     )
-    
+
     # フレームワークが自動的に設定：
     # assert greeter.parent_agent == coordinator
     # assert task_doer.parent_agent == coordinator
@@ -61,13 +82,30 @@ ADKは、マルチエージェントシステム内のインタラクション�
 
     ```typescript
     // 概念例：階層の定義
-    import { LlmAgent, BaseAgent } from '@google/adk';
+    import { LlmAgent, BaseAgent, InvocationContext } from '@google/adk';
+    import type { Event, createEventActions } from '@google/adk';
+
+    class TaskExecutorAgent extends BaseAgent {
+      async *runAsyncImpl(context: InvocationContext): AsyncGenerator<Event, void, void> {
+        yield {
+          id: 'event-1',
+          invocationId: context.invocationId,
+          author: this.name,
+          content: { parts: [{ text: 'Task completed!' }] },
+          actions: createEventActions(),
+          timestamp: Date.now(),
+        };
+      }
+      async *runLiveImpl(context: InvocationContext): AsyncGenerator<Event, void, void> {
+        this.runAsyncImpl(context);
+      }
+    }
 
     // 個々のエージェントを定義
     const greeter = new LlmAgent({ name: "Greeter", model: "gemini-flash-latest" });
-    const taskDoer = new BaseAgent({ name: "TaskExecutor" }); // カスタムの非LLMエージェント
+    const taskDoer = new TaskExecutorAgent({ name: "TaskExecutor" }); // カスタムの非LLMエージェント
 
-    // 親エージェントを作成し、sub_agents経由で子を割り当て
+    // 親エージェントを作成し、subAgents経由で子を割り当て
     const coordinator = new LlmAgent({
         name: "Coordinator",
         model: "gemini-flash-latest",
@@ -79,8 +117,8 @@ ADKは、マルチエージェントシステム内のインタラクション�
     });
 
     // フレームワークが自動的に設定：
-    // assert greeter.parentAgent == coordinator
-    // assert taskDoer.parentAgent == coordinator
+    // console.assert(greeter.parentAgent === coordinator);
+    // console.assert(taskDoer.parentAgent === coordinator);
     ```
 
 === "Java"
@@ -121,6 +159,13 @@ ADKは、マルチエージェントシステム内のインタラクション�
 ### 1.2. オーケストレーターとしてのワークフローエージェント { #workflow-agents-as-orchestrators }
 
 ADKには、自身でタスクを実行するのではなく、`sub_agents`の実行フローを調整（オーケストレート）する`BaseAgent`から派生した特殊なエージェントが含まれています。
+
+!!! note "Python および TypeScript では非推奨"
+
+    Python および TypeScript では、`SequentialAgent`、`ParallelAgent`、および
+    `LoopAgent` は `Workflow` に置き換えられ、非推奨（deprecated）となっています。これらを構築すると
+    非推奨の警告が出力され、今後のリリースでクラスが削除される予定です。
+    `Workflow` は `LlmAgent` のサブエージェントとして使用できません。
 
 * **[`SequentialAgent`](../agents/workflow-agents/sequential-agents.md):** `sub_agents`をリストされた順に一つずつ実行します。
     * **コンテキスト:** *同じ*[`InvocationContext`](../runtime/index.md)を順次渡すことで、エージェントが共有ステートを介して結果を簡単に渡せるようにします。
@@ -337,7 +382,7 @@ ADKには、自身でタスクを実行するのではなく、`sub_agents`の�
 
 同じ呼び出し内で動作し、`InvocationContext`を介して同じ[`Session`](../sessions/session.md)オブジェクトを共有するエージェントが、受動的に通信するための最も基本的な方法です。
 
-* **メカニズム:** あるエージェント（またはそのツール/コールバック）が値を書き込み（`context.state['data_key'] = processed_data`）、後続のエージェントがそれを読み取ります（`data = context.state.get('data_key')`）。ステートの変更は[`CallbackContext`](../callbacks/index.md)を介して追跡されます。
+* **メカニズム:** あるエージェント（またはそのツール/コールバック）が値を書き込み（`context.state['data_key'] = processed_data`）、後続のエージェントがそれを読み取ります（`data = context.state.get('data_key')`）。[`CallbackContext`](../callbacks/index.md)または`ToolContext`を介したステートの変更は、イベントの`state_delta`として記録され、セッションサービスによって永続化されます。
 * **利便性:** [`LlmAgent`](../agents/llm-agents.md)の`output_key`プロパティは、エージェントの最終的な応答テキスト（または構造化出力）を指定されたステートキーに自動的に保存します。
 * **性質:** 非同期で受動的な通信。`SequentialAgent`によって調整されるパイプラインや、`LoopAgent`のイテレーション間でデータを渡すのに理想的です。
 * **参照:** [ステート管理](../sessions/state.md)
@@ -515,8 +560,9 @@ ADKには、自身でタスクを実行するのではなく、`sub_agents`の�
     ```python
     # 概念設定：ツールとしてのエージェント
     from google.adk.agents import LlmAgent, BaseAgent
+    from google.adk.events import Event
     from google.adk.tools import agent_tool
-    from pydantic import BaseModel
+    from google.genai import types
     
     # ターゲットエージェントを定義（LlmAgentまたはカスタムBaseAgent）
     class ImageGeneratorAgent(BaseAgent): # カスタムエージェントの例
@@ -527,7 +573,12 @@ ADKには、自身でタスクを実行するのではなく、`sub_agents`の�
             prompt = ctx.session.state.get("image_prompt", "デフォルトのプロンプト")
             # ... 画像バイトを生成 ...
             image_bytes = b"..."
-            yield Event(author=self.name, content=types.Content(parts=[types.Part.from_bytes(image_bytes, "image/png")]))
+            yield Event(
+                author=self.name,
+                content=types.Content(
+                    parts=[types.Part.from_bytes(data=image_bytes, mime_type="image/png")]
+                ),
+            )
     
     image_agent = ImageGeneratorAgent()
     image_tool = agent_tool.AgentTool(agent=image_agent) # エージェントをラップ
@@ -1222,7 +1273,7 @@ ADKの構成プリミティブを組み合わせることで、マルチエー�
     * **インタラクション:** 実行を一時停止し、外部システム（UI、チケットシステムなど）にリクエストを送信して人間の入力を待つカスタム**ツール**を使用して実装できます。ツールはその後、人間の応答をエージェントに返します。
     * **ワークフロー:** **LLM駆動の委任**（`transfer_to_agent`）を使用して、外部ワークフローをトリガーする概念的な「ヒューマンエージェント」をターゲットにするか、`LlmAgent`内でカスタムツールを使用できます。
     * **ステート/コールバック:** ステートは人間のためのタスク詳細を保持でき、コールバックはインタラクションフローを管理できます。
-    * **注:** ADKには組み込みの「ヒューマンエージェント」タイプがないため、カスタム統合が必要です。
+    * **注:** ADKには*Human Agent*というエージェントタイプはありませんが、一時停止の仕組みを自分で実装する必要はありません。[グラフワークフローノード](/ja/graphs/human-input/)から`RequestInput`イベントをyieldするか、はい/いいえの承認のために`FunctionTool`で[ツール確認](/ja/tools-custom/confirmation/#boolean-confirmation)を有効にしてください。カスタムヒントを提供したり構造化データを収集したりする場合は、ツール内で[高度な確認](/ja/tools-custom/confirmation/#advanced-confirmation)を使用してください。言語ごとのサポートについては、各ページを参照してください。
 
 === "Python"
 
@@ -1351,6 +1402,55 @@ ADKの構成プリミティブを組み合わせることで、マルチエー�
     
     --8<-- "examples/go/snippets/agents/multi-agent/main.go:human-in-loop-pattern"
     ```
+
+#### ポリシーを使用したヒューマン・イン・ザ・ループ
+
+より高度で構造化されたヒューマン・イン・ザ・ループの実装方法として、`PolicyEngine`を使用する方法があります。このアプローチでは、ツールが実行される前にユーザーによる確認ステップをトリガーできるポリシーを定義できます。`SecurityPlugin`がツール呼び出しをインターセプトして`PolicyEngine`に問い合わせ、ポリシーで指定されている場合は自動的にユーザーの確認を要求します。このパターンは、ガバナンスやセキュリティルールを適用する上でより堅牢です。
+
+仕組みは次のとおりです。
+
+1.  **`SecurityPlugin`**: このプラグインを`Runner`に追加します。すべてのツール呼び出しのインターセプターとして機能します。
+2.  **`BasePolicyEngine`**: このインターフェースを実装するカスタムクラスを作成します。その`evaluate()`メソッドに、ツール呼び出しに確認が必要かどうかを判断するロジックを記述します。
+3.  **`PolicyOutcome.CONFIRM`**: `evaluate()`メソッドがこの結果を返すと、`SecurityPlugin`はツールの実行を一時停止し、`getAskUserConfirmationFunctionCalls`を使用して特別な`FunctionCall`を生成します。
+4.  **アプリケーション側の処理**: アプリケーションコードがこの特別な関数呼び出しを受け取り、確認リクエストをユーザーに提示します。
+5.  **ユーザーの確認**: ユーザーが確認すると、アプリケーションは`FunctionResponse`をエージェントに送り返し、それによって`SecurityPlugin`は元のツール実行を続行できるようになります。
+
+!!! Note "TypeScriptでの推奨パターン"
+    ポリシーベースのパターンは、TypeScriptでヒューマン・イン・ザ・ループワークフローを実装する際の推奨アプローチです。他のADK言語でのサポートは今後のリリースで予定されています。
+
+以下は、カスタムの`PolicyEngine`を使用して、任意のツールを実行する前にユーザー確認を要求する概念例です。
+
+=== "TypeScript"
+
+    ```typescript
+    const rootAgent = new LlmAgent({
+      name: 'weather_time_agent',
+      model: 'gemini-flash-latest',
+      description:
+          'Agent to answer questions about the time and weather in a city.',
+      instruction:
+          'You are a helpful agent who can answer user questions about the time and weather in a city.',
+      tools: [getWeatherTool],
+    });
+
+    class CustomPolicyEngine implements BasePolicyEngine {
+      async evaluate(_context: ToolCallPolicyContext): Promise<PolicyCheckResult> {
+        // Default permissive implementation
+        return Promise.resolve({
+          outcome: PolicyOutcome.CONFIRM,
+          reason: 'Needs confirmation for tool call',
+        });
+      }
+    }
+
+    const runner = new InMemoryRunner({
+        agent: rootAgent,
+        appName,
+        plugins: [new SecurityPlugin({policyEngine: new CustomPolicyEngine()})]
+    });
+    ```
+
+    完全な実装については、[コードサンプル](https://github.com/google/adk-docs/blob/main/examples/typescript/snippets/agents/workflow-agents/hitl_confirmation_agent.ts)を参照してください。
 
 これらのパターンは、マルチエージェントシステムを構築するための出発点を提供します。特定のアプリケーションに最も効果的なアーキテクチャを作成するために、必要に応じてこれらを組み合わせることができます。
 

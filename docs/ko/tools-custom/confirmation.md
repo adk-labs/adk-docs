@@ -1,7 +1,7 @@
 # ADK 도구에 대한 작업 확인 (Action Confirmation)
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span><span class="lst-preview">실험적</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 일부 에이전트 워크플로는 의사 결정, 검증, 보안 또는 일반적인 감독을 위해 확인이 필요합니다. 이러한 경우 워크플로를 진행하기 전에 사람이나 감독 시스템으로부터 응답을 받아야 합니다. ADK(Agent Development Kit)의 *도구 확인(Tool Confirmation)* 기능을 사용하면 ADK 도구의 실행을 일시 중지하고 사용자 또는 다른 시스템과 상호작용하여 확인을 받거나 구조화된 데이터를 수집한 후 계속 진행할 수 있습니다. ADK 도구에서 도구 확인을 다음과 같은 방식으로 사용할 수 있습니다:
@@ -9,9 +9,8 @@
 -   **[불리언 확인 (Boolean Confirmation)](#boolean-confirmation):** 확인 플래그 또는 프로바이더로 도구를 구성할 수 있습니다. 이 옵션은 예/아니오 확인 응답을 위해 도구를 일시 중지합니다.
 -   **[고급 확인 (Advanced Confirmation)](#advanced-confirmation):** 구조화된 데이터 응답이 필요한 시나리오의 경우 확인을 설명하는 텍스트 프롬프트와 예상되는 응답을 도구에 구성할 수 있습니다.
 
-!!! example "실험적 기능"
-    도구 확인 기능은 실험적이며 몇 가지 [알려진 제한사항](#known-limitations)이 있습니다.
-    여러분의 [피드백](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=tool%20confirmation)을 환영합니다!
+!!! example "TypeScript, Go 및 Kotlin에서 실험적 기능"
+    도구 확인 기능은 ADK TypeScript, ADK Go 및 ADK Kotlin에서 실험적으로 제공됩니다. 모든 언어에 대해서는 [알려진 제한사항](#known-limitations)을 참고하세요.
 
 요청이 사용자에게 전달되는 방식을 구성할 수 있으며, 시스템은 ADK 서버의 REST API를 통해 전송된 [원격 응답](#remote-response)을 사용할 수도 있습니다. ADK 웹 사용자 인터페이스에서 확인 기능을 사용할 때 에이전트 워크플로는 그림 1과 같이 입력을 요청하는 대화 상자를 사용자에게 표시합니다:
 

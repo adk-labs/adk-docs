@@ -152,23 +152,32 @@
 
 === "Python"
 
-    다음 코드 샘플은 ***response schema***를 포함하여 워크플로 노드에서 ***RequestInput*** 객체를 생성하는 방법을 보여줍니다:
+    도구가 실행되기 전에 정적 예/아니요 승인을 받으려면 도구를 ***FunctionTool***로 래핑하고 `require_confirmation=True`를 설정하거나, 사용자 지정 힌트 메시지를 사용하려면 도구 내부에서 `tool_context.request_confirmation()`을 호출하세요. ADK는 `require_confirmation=True` 경로에서만 호출 거부를 자동으로 처리하므로, 자체적으로 확인을 요청하는 도구는 한 번만 요청하기 위한 `tool_context.tool_confirmation`과 거부를 처리하기 위한 `tool_confirmation.confirmed`를 모두 확인해야 합니다:
 
     ```python
-    async def initial_prompt(ctx: Context):
-       """Ask the user for itinerary information"""
-       input_message = """
-           This is an interactive concierge workflow tasked with making you a great
-           itinerary for you in your city of choice. If you give some details about
-           yourself or what you are generally looking for I can better personalize
-           your itinerary.
-           For example, input your:
-               City (Required),
-               Age,
-               Hobby,
-               Example of attraction you liked
-       """
-       yield RequestInput(message=input_message, response_schema=str)
+    from google.adk.agents import Agent
+    from google.adk.tools import FunctionTool, ToolContext
+
+    def book_flight(flight_id: str) -> str:
+       """Books the selected flight."""
+       ...
+
+    def refund(amount: float, tool_context: ToolContext) -> str:
+       """Refunds an order."""
+       if not tool_context.tool_confirmation:
+           tool_context.request_confirmation(
+               hint=f"Approve a refund of {amount}?"
+           )
+           return "Waiting for approval."
+       elif not tool_context.tool_confirmation.confirmed:
+           return "Refund rejected by user."
+       ...
+
+    root_agent = Agent(
+       name="concierge",
+       model="gemini-flash-latest",
+       tools=[FunctionTool(book_flight, require_confirmation=True), refund],
+    )
     ```
 
 === "TypeScript"
@@ -192,3 +201,5 @@
     ```go
     --8<-- "examples/go/snippets/graphs/human-input/main.go:hitl-with-hint"
     ```
+
+동적 확인 및 클라이언트의 응답 방법을 포함한 전체 도구 확인 워크플로는 [ADK 도구에 대한 작업 확인 받기](/ko/tools-custom/confirmation/)를 참조하세요.

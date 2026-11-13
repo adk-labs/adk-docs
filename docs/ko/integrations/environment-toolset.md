@@ -8,7 +8,7 @@ catalog_tags: ["code", "google"]
 # ADK용 Environment Toolset
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.29.0</span><span class="lst-preview">실험적</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.29.0</span>
 </div>
 
 특히 코딩과 파일 작업처럼 여러 에이전트 요청에 걸쳐 유지되는
@@ -18,11 +18,6 @@ ADK의 ***EnvironmentToolset*** 클래스는 에이전트가 환경과 상호작
 Environment Toolset은 ADK 에이전트와 함께 사용할 로컬 또는 원격 실행 환경을
 구성하고 활용하기 위한 일반 프레임워크로 설계되었습니다.
 ADK는 [***LocalEnvironment***](#local-environment) 구현을 이 프레임워크용으로 제공합니다.
-
-!!! example "실험적 기능"
-    Environment Toolset 기능은 실험적이며 변경될 수 있습니다.
-    의견이 있다면
-    [피드백](https://github.com/google/adk-python/issues/new?template=feature_request.md)을 보내 주세요.
 
 ## 시작하기
 

@@ -8,7 +8,7 @@ catalog_tags: ["code", "google"]
 # ADK 向け Environment Toolset
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.29.0</span><span class="lst-preview">実験的</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.29.0</span>
 </div>
 
 特にコーディングやファイル操作のように、複数のエージェント要求にまたがって
@@ -19,11 +19,6 @@ Environment Toolset は、ADK エージェントで使用するローカルま�
 構成・利用するための汎用フレームワークとして設計されています。
 ADK はこのフレームワーク向けに [***LocalEnvironment***](#local-environment)
 実装を提供しています。
-
-!!! example "Experimental"
-    Environment Toolset 機能は experimental であり、変更される可能性があります。
-    フィードバックがあれば
-    [こちら](https://github.com/google/adk-python/issues/new?template=feature_request.md)からお送りください。
 
 ## はじめに
 

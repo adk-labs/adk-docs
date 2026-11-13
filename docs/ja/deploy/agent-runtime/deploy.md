@@ -132,6 +132,21 @@ Google Cloud とコーディング環境が準備できたら、デプロイす�
     └── main.go
     ```
 
+    `main.go` では、`full.NewLauncher()` の代わりに `google.golang.org/adk/v2/cmd/launcher/agentengine` パッケージのランチャーを使用してエージェントを実行し、`GOOGLE_CLOUD_AGENT_ENGINE_ID` 環境変数から取得した Agent Runtime のリソース ID を渡す必要があります。
+
+    ```go
+    import "google.golang.org/adk/v2/cmd/launcher/agentengine"
+
+    // ...
+
+    l := agentengine.NewLauncher(os.Getenv("GOOGLE_CLOUD_AGENT_ENGINE_ID"))
+    if err = l.Execute(ctx, config, os.Args[1:]); err != nil {
+        log.Fatalf("Run failed: %v\n\n%s", err, l.CommandLineSyntax())
+    }
+    ```
+
+    完全な例については、ADK Go リポジトリの [examples/agentengine](https://github.com/google/adk-go/tree/v2.5.0/examples/agentengine) を参照してください。
+
 ## エージェントをデプロイする {#deploy-agent}
 
 `adk deploy` コマンド ライン ツールを使用して、端末からデプロイできます。これ
@@ -186,7 +201,10 @@ Google Cloud とコーディング環境が準備できたら、デプロイす�
     -p, --project_name string       GCP Project Name
     -r, --region string             GCP Region
     -d, --source_dir string         Directory to archive, defaults to current working directory
+        --agent_engine_id string    ID of the Agent Engine instance to update if it exists
     ```
+
+    新しいインスタンスを作成する代わりに既存の Agent Runtime インスタンスへ再デプロイするには、`--agent_engine_id` でその `RESOURCE_ID` を渡します。
 
 ### デプロイコマンドの出力
 

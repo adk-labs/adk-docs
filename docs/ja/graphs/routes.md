@@ -1,7 +1,7 @@
 # エージェントワークフローのグラフルートを構築する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span><span class="lst-kotlin">Kotlin v1.5.0</span>
 </div>
 
 ADK のグラフベースワークフローは、エージェントロジックを実行ノードとエッジのグラフとして定義し、人工知能（AI）の推論とコードロジックを組み合わせたより信頼性の高いプロセスを構築できるようにします。これらのワークフローにより、コード関数、AI 搭載エージェント、ツール、人間の入力をカプセル化できる実行ノードの論理的なルートを作成できます。ルーティングロジックを明示的にマッピングすることで、コード内で具体的なステップごとのプロセスワークフローを定義でき、純粋なプロンプトベースのエージェントよりも高い精度と信頼性を実現できます。
@@ -68,6 +68,18 @@ ADK のグラフベースワークフローは、エージェントロジック�
     })
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    val rootAgent = workflow("routing_workflow") {
+        chain(Start, processMessage, router).route {
+            "output-1" then response1
+            "output-2" then response2
+            "output-3" then response3
+        }
+    }
+    ```
+
 グラフベースのエージェントワークフローを使用する利点は、プロンプトベースのエージェントと比較して制御性、予測可能性、信頼性が大幅に向上することです。プロセス全体のワークフローをコードで定義することで、タスクのルーティングや実行方法をより細かく制御できます。この構造化されたノード定義により、エージェントの予測可能性が向上し、定義されたステップやプロセス管理を必要とする複雑なタスクの信頼性が高まります。
 
 ADK でグラフベースワークフローを始めるには、[グラフベースのエージェントワークフロー](/graphs/)を確認してください。
@@ -104,6 +116,14 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
     --8<-- "examples/go/snippets/graphs/routes/main.go:function-node"
     ```
 
+=== "Kotlin"
+
+    ADK Kotlin では、`node()` ファクトリが `(context, input)` を受け取りノードの出力を返す suspend ブロックから `FunctionNode` を作成します。型引数が入力および出力ポートの型を設定し、後続ノードは戻り値を型付き入力として受け取ります。ワークフロー API は実験的機能であるため、ファイルでは `@file:OptIn(ExperimentalWorkflowApi::class)` でオプトインします:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/FunctionNode.kt:function-node"
+    ```
+
 ノード間でのデータ転送の詳細については、[エージェントワークフローのデータ処理](/graphs/data-handling/)を参照してください。
 
 ## ワークフローグラフの構文
@@ -112,7 +132,7 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
 
 !!! caution "注意: ワークフローエージェントの制限事項"
 
-    グラフベースワークフローに ***LlmAgents*** を追加できます。ただし、それらはシングルターンモードまたはタスクモードで構成する必要があります。エージェントモードの詳細については、[協調エージェントチームの構築](/workflows/collaboration/#mode-configuration-and-behaviors)を参照してください。
+    グラフベースワークフローに ***LlmAgents*** を追加できます。グラフノードとして使用されるエージェントはデフォルトで `single_turn` モードになります。`chat` モードのエージェントは、ノード入力ではなく会話履歴を消費するため、`START` の直後にのみ許可されます。エージェントモードの詳細については、[協調エージェントチームの構築](/workflows/collaboration/#mode-configuration-and-behaviors)を参照してください。
 
 ### ルートシーケンス
 
@@ -151,6 +171,14 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:sequential-nodes"
+    ```
+
+=== "Kotlin"
+
+    `workflow { }` ブロック内では、`chain(Start, taskANode, taskBNode, taskCNode)` がノードを順番に接続し、`Start.then(taskANode)` が単一ノードを実行します。各ノードの戻り値は次のノードに入力として渡されます:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/Sequence.kt:sequence"
     ```
 
 ### ルート分岐と条件付き実行
@@ -249,6 +277,14 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
 
         グラフエンジンの代わりに `sequentialagent` / `parallelagent` / `loopagent` を使用する場合、`Event.Routes` によるディスパッチはありません。`OutputKey` を介してルーティングの決定をセッション状態にエンコードし、ダウンストリームエージェントが `Instruction` テンプレート内でそれを検査できるようにするか、`Escalate` ベースの終了を伴う `loopagent` を使用してください（以下の[ループとエスカレーション終了の例](#loop-and-escalation-exit)を参照）。
 
+=== "Kotlin"
+
+    ノードは `context.routes` を設定してルートを選択し、`route { }` ブロックが各ルート値をそれを処理するノードにマッピングします。ルート値には文字列（`Route.Tag`）、整数（`Route.Num`）、またはブール値（`Route.Flag`）を使用できます。`otherwise(node)` エントリは、同じソースノード上の他のどのルートにも一致しない場合にマッチします。分岐のターゲットには任意のノードを指定できます。この例では、`taskBNode` は `LlmAgent`、`taskCNode` は関数ノードです。
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/Branches.kt:branches"
+    ```
+
 ## 並行タスク: Fan-out および Join パス
 
 複数の並列ノードに実行を分割するグラフを作成でき、通常はさらなる処理のために各ノードの出力を集約する必要があります。このタスク実行パターンには 2 つの段階があります。ワークフローはまず複数の並列タスクを開始するときにファンアウト（fan out）し、それらのタスクが完了したときに次のステップに進む前にそれらのパスを再結合（join）します。
@@ -309,6 +345,14 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
     --8<-- "examples/go/snippets/graphs/routes/main.go:parallel-fan-out"
     ```
 
+=== "Kotlin"
+
+    `then(a, b, c)` は並行して実行されるノードにファンアウトし、`joinTo` がそれらを `JoinNode` に接続します。ジョインはすべての先行ノードが完了するのを待ち、先行ノード名をキーとするマップを後続ノードに渡します:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/FanOutJoin.kt:fan-out-join"
+    ```
+
 !!! warning "警告: JoinNode に接続するノードは出力を生成する必要があります"
 
     `JoinNode` は、すべての先行ノードが終了した後にのみ解放されます。結合に供給するすべてのノードが独自の出力を生成することを確認し、失敗する可能性のあるノードには[再試行構成](/ja/graphs/retry/)を設定してください。出力を生成せずに終了した先行ノードがあると、そのブランチの値が結合に存在しなくなり、その結果のエラーは原因となったノードから離れたダウンストリームで発生します。
@@ -343,6 +387,8 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
 
     ネストされた Workflow オブジェクトの出力は、個々のノードとは少し異なる動作をします。ネストされたワークフローがいずれかのノードを完了すると、ネストされたワークフローのグラフ内の次のノードにデータを送信し、*同時に*システムはプロセスのトレーサビリティのためにそのノードの Event を親ワークフローに伝播（bubble up）します。ネストされたワークフローがそのプロセスの最後のノードを完了すると、親ノードは最終的なリーフノードからデータを抽出し、ネストされたワークフローの出力として発行します。
 
+    ワークフローには、出力を生成する終端（ターミナル）ノードが最大でも *1 つ*しかあってはなりません。たとえば 2 つの並列ブランチの末端など、2 つ以上の終端ノードが出力を生成すると、ワークフローは `ValueError` で失敗します。グラフが単一の終端出力で終わるように、それらのブランチを ***JoinNode*** でマージしてください。
+
 === "TypeScript"
 
     `Workflow` 自体がノードであるため、再利用可能なサブプロセスをカプセル化するために、別のワークフローの edges 内で使用できます。
@@ -375,6 +421,14 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
     --8<-- "examples/go/snippets/graphs/routes/main.go:nested-workflows"
     ```
 
+=== "Kotlin"
+
+    `Workflow` 自体がノードであるため、再利用可能なサブプロセスをカプセル化するために別のワークフローのエッジ内で使用できます。内側のワークフローが終了すると、その終端ノードの出力がネストされたワークフローノードの出力になります:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/NestedWorkflow.kt:nested-workflow"
+    ```
+
 ## ループとエスカレーションの終了
 
 ループは、終了条件が満たされるまで一連のステップを繰り返します。Python では、これは前のノードに戻る `edges` グラフ内のバックエッジ（back-edge）として表現されます。ADK Go v2.0.0 でも、グラフエンジンが同じパターンを直接サポートしています。ルート条件を伴うエッジをダウンストリームノードから前のノードへ追加すると、エンジンは各イテレーションで新しいライフサイクルをもってターゲットノードを再アクティブ化します。
@@ -386,24 +440,27 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
 
 
     def router(node_input: str):
-        """Route to task B or C based on node_input."""
+        """Exit the loop when the task is done, otherwise iterate again."""
         if condition(node_input):
-            return Event(route="RUN_TASK_C")
-        return Event(route="RUN_TASK_B")
+            return Event(route="DONE")
+        return Event(route="RETRY")
 
     root_agent = Workflow(
-        name="routing_workflow",
+        name="looping_workflow",
         edges=[
             ("START", task_A_node, router),
             (router,
               {
-                "RUN_TASK_B": task_B_node,
-                "RUN_TASK_C": task_C_node,
+                # Back-edge: re-runs task_A_node for another iteration.
+                "RETRY": task_A_node,
+                "DONE": final_task_node,
               },
             ),
         ],
     )
     ```
+
+    サイクルには、少なくとも 1 つのルーティングされた（条件付き）エッジが含まれている必要があります。無条件エッジのみで構成されるサイクルは、`Workflow` のビルド時に拒否されます。
 
 === "TypeScript"
 
@@ -419,6 +476,14 @@ ADK でグラフベースワークフローを始めるには、[グラフベー
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:loop-escalate"
+    ```
+
+=== "Kotlin"
+
+    ループはバックエッジ（back-edge）です。`refine.then(critic)` がダウンストリームノードを前のノードにルーティングし直し、エンジンは各イテレーションで新しいライフサイクルをもってそのノードを再アクティブ化します。批評（critic）ノードが `DONE` ルートを選択するとループが終了します:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/LoopEscalation.kt:loop-escalation"
     ```
 
 !!! warning "警告: 制限のないグラフサイクル"

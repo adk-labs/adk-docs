@@ -1,7 +1,7 @@
 # エージェント設定でエージェントを構築する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span><span class="lst-preview">実験的</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-java">Java v0.3.0</span>
 </div>
 
 ADKエージェント設定機能を使用すると、コードを記述することなくADKワークフローを構築できます。エージェント設定は、エージェントの簡単な説明を含むYAML形式のテキストファイルを使用するため、誰でもADKエージェントを組み立てて実行できます。以下は、基本的なエージェント設定定義の簡単な例です。
@@ -15,8 +15,8 @@ instruction: ユーザーのさまざまな質問に回答するエージェン�
 
 エージェント設定ファイルを使用して、関数、ツール、サブエージェントなどを組み込むことができる、より複雑なエージェントを構築できます。このページでは、エージェント設定機能を使用してADKワークフローを構築および実行する方法について説明します。エージェント設定形式でサポートされている構文と設定の詳細については、[エージェント設定構文リファレンス](/ja/api-reference/agentconfig/)を参照してください。
 
-!!! example "実験的"
-    エージェント設定機能は実験的なものであり、いくつかの[既知の制限](#known-limitations)があります。[フィードバック](https://github.com/google/adk-python/issues/new?template=feature_request.md&labels=agent%20config)を歓迎します！
+!!! example "Javaでは実験的"
+    エージェント設定機能は、ADK Javaでは実験的な機能です。すべての言語に関する制限については、[既知の制限](#known-limitations)を参照してください。[フィードバック](https://github.com/google/adk-java/issues/new?template=feature_request.md&labels=agent%20config)を歓迎します！
 
 ## はじめに
 
@@ -27,7 +27,7 @@ instruction: ユーザーのさまざまな質問に回答するエージェン�
 Google Agent Development Kitライブラリをインストールし、Gemini APIなどの生成AIモデルのアクセスキーを提供する必要があります。このセクションでは、エージェント設定ファイルでエージェントを実行する前にインストールおよび構成する必要があるものについて詳しく説明します。
 
 !!! note
-    エージェント設定機能は現在、Geminiモデルのみをサポートしています。追加の機能制限の詳細については、[既知の制限](#known-limitations)を参照してください。
+    エージェント設定の`model:`キーには、Geminiモデル名などのモデル名文字列を指定します。`LiteLlm`のようにコンストラクタ引数を必要とするモデルを使用するには、Pythonで`BaseLlm`インスタンスを構築し、`model_code:`キーからそれを参照してください。追加の機能制限の詳細については、[既知の制限](#known-limitations)を参照してください。
 
 エージェント設定で使用するためにADKをセットアップするには：
 
@@ -204,9 +204,14 @@ sub_agents:
 
 ## 既知の制限 {#known-limitations}
 
-エージェント設定機能は実験的なものであり、次の制限が含まれています。
+エージェント設定機能には、次の制限があります。
 
--   **モデルのサポート:** 現在、Geminiモデルのみがサポートされています。サードパーティモデルとの統合は進行中です。
+-   **モデルのサポート:** `model:`キーはモデル名文字列のみを受け入れます。`LiteLlm`のようにコンストラクタ引数を必要とするモデルを使用するには、Pythonでそれを構築し、`model_code:`キーから参照してください。`model_code:`キーは、`name:`サブキーに`BaseLlm`インスタンスの完全修飾名を指定するマッピングを受け取ります。
+
+        model_code:
+          name: my_library.clients.my_litellm
+
+    `model:`キーと`model_code:`キーの両方を同時に設定することはできません。
 -   **プログラミング言語:** エージェント設定機能は現在、ツールやプログラミングコードを必要とするその他の機能に対してPython と Java コードをサポートしています。
 -   **ADKツールのサポート:** 次のADKツールはエージェント設定機能でサポートされていますが、*すべてのツールが完全にサポートされているわけではありません*。
     -   `google_search`

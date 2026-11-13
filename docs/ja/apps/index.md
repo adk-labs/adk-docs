@@ -1,7 +1,7 @@
 # アプリ: ワークフロー管理クラス
 
 <div class="language-support-tag">
-    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v1.4.0</span><span class="lst-java">Java v0.1.0</span>
+    <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v1.4.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.4.0</span>
 </div>
 
 ***App***クラスは、Agent Development Kit（ADK）エージェントワークフロー全体の上位コンテナです。***ルートエージェント***によってグループ化されたエージェントのコレクションのライフサイクル、構成、および状態を管理するように設計されています。**App**クラスは、エージェントワークフローの全体的な運用インフラストラクチャの懸念事項を、個々のエージェントのタスク指向の推論から分離します。
@@ -97,6 +97,32 @@ ADKワークフローで***App***オブジェクトを定義することはオ�
         .build();
     ```
 
+=== "Kotlin"
+
+    ```kotlin title="Agent.kt"
+    import com.google.adk.kt.agents.Instruction
+    import com.google.adk.kt.agents.LlmAgent
+    import com.google.adk.kt.apps.App
+    import com.google.adk.kt.models.Gemini
+
+    val rootAgent =
+        LlmAgent(
+            model = Gemini(name = "gemini-flash-latest"),
+            name = "greeter_agent",
+            description = "An agent that provides a friendly greeting.",
+            instruction = Instruction("Reply with Hello, World!"),
+        )
+
+    val app =
+        App(
+            appName = "agents",
+            rootAgent = rootAgent,
+            // Optionally include App-level features:
+            // plugins, resumabilityConfig, eventsCompactionConfig,
+            // contextCacheConfig
+        )
+    ```
+
 !!! tip "推奨：`app`変数名を使用する"
 
     エージェントプロジェクトコードで、***App***オブジェクトを変数名`app`に設定して、ADKコマンドラインインターフェイスランナーツールと互換性があるようにします。
@@ -180,6 +206,36 @@ ADKワークフローで***App***オブジェクトを定義することはオ�
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin title="Main.kt"
+    import com.google.adk.kt.runners.InMemoryRunner
+    import com.google.adk.kt.types.Content
+    import com.google.adk.kt.types.Role
+    import kotlinx.coroutines.runBlocking
+
+    // Set a Runner using the application object defined in Agent.kt
+    val runner = InMemoryRunner(app = app)
+
+    fun main() =
+        runBlocking {
+            try {
+                runner
+                    .runAsync(
+                        userId = "user",
+                        sessionId = "session-1",
+                        newMessage = Content.fromText(Role.USER, "Hello there!"),
+                    ).collect { event ->
+                        if (event.isFinalResponse && event.content != null) {
+                            println("Response: ${event.contentText()}")
+                        }
+                    }
+            } catch (e: Exception) {
+                println("An error occurred during agent execution: $e")
+            }
+        }
+    ```
+
 !!! note "`Runner.run_debug()`のバージョン要件"
 
     `Runner.run_debug()`コマンドには、ADK Python v1.18.0以降が必要です。より多くのセットアップコードが必要な`Runner.run()`を使用することもできます。詳細については、次を参照してください。
@@ -203,6 +259,14 @@ ADKワークフローで***App***オブジェクトを定義することはオ�
 === "Java"
 
     `AppMain.java` コードで App エージェントを実行するには、ビルドツール（例: Gradle `application` プラグイン）を使用します。
+
+    ```console
+    ./gradlew run
+    ```
+
+=== "Kotlin"
+
+    `Main.kt` コードで App エージェントを実行するには、ビルドツール（例: Gradle `application` プラグイン）を使用します。
 
     ```console
     ./gradlew run

@@ -1,7 +1,7 @@
 # 에이전트 워크플로를 위한 그래프 라우트 구축
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span><span class="lst-kotlin">Kotlin v1.5.0</span>
 </div>
 
 ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 에지의 그래프로 정의하므로, 인공 지능(AI) 추론과 코드 로직을 결합한 보다 신뢰할 수 있는 프로세스를 구축할 수 있습니다. 이러한 워크플로를 사용하면 코드 함수, AI 기반 에이전트, 도구 및 사람 입력을 캡슐화할 수 있는 실행 노드의 논리적 라우트를 생성할 수 있습니다. 라우팅 로직을 명시적으로 설계하는 이 접근 방식을 통해 코드에서 구체적이고 단계적인 프로세스 워크플로를 정의할 수 있으므로, 순수 프롬프트 기반 에이전트에 비해 향상된 정밀도와 신뢰성을 제공합니다.
@@ -68,6 +68,18 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
     })
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    val rootAgent = workflow("routing_workflow") {
+        chain(Start, processMessage, router).route {
+            "output-1" then response1
+            "output-2" then response2
+            "output-3" then response3
+        }
+    }
+    ```
+
 그래프 기반 에이전트 워크플로를 사용할 때의 장점은 프롬프트 기반 에이전트에 비해 제어력, 예측 가능성 및 신뢰성이 크게 향상된다는 점입니다. 전체 프로세스 워크플로를 코드로 정의함으로써 작업이 라우팅되고 실행되는 방식을 더 세밀하게 제어할 수 있습니다. 이러한 구조화된 노드 정의는 에이전트의 예측 가능성을 높이고, 정의된 단계와 프로세스 관리가 필요한 복잡한 작업에 대한 신뢰성을 향상시킵니다.
 
 [그래프 기반 에이전트 워크플로](/graphs/)를 확인하여 ADK에서 그래프 기반 워크플로를 시작해 보세요.
@@ -104,6 +116,14 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
     --8<-- "examples/go/snippets/graphs/routes/main.go:function-node"
     ```
 
+=== "Kotlin"
+
+    ADK Kotlin에서는 `node()` 팩토리가 `(context, input)`을 받아 노드의 출력을 반환하는 일시 중단(suspending) 블록으로부터 `FunctionNode`를 생성합니다. 타입 인수는 입력 및 출력 포트 타입을 설정하며, 후속 노드는 반환된 값을 타입이 지정된 입력으로 받습니다. 워크플로 API는 실험적 기능이므로 파일에서 `@file:OptIn(ExperimentalWorkflowApi::class)`로 옵트인합니다:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/FunctionNode.kt:function-node"
+    ```
+
 노드 간 데이터 전송에 대한 자세한 내용은 [에이전트 워크플로의 데이터 처리](/graphs/data-handling/)를 참조하세요.
 
 ## 워크플로 그래프 구문
@@ -112,7 +132,7 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 
 !!! caution "주의: 워크플로 에이전트 제한사항"
 
-    그래프 기반 워크플로에 ***LlmAgents***를 추가할 수 있습니다. 그러나 단일 턴(single-turn) 또는 태스크(task) 모드로 구성되어야 합니다. 에이전트 모드에 대한 자세한 내용은 [협업 에이전트 팀 구축](/workflows/collaboration/#mode-configuration-and-behaviors)을 참조하세요.
+    그래프 기반 워크플로에 ***LlmAgents***를 추가할 수 있습니다. 그래프 노드로 사용되는 에이전트는 기본적으로 `single_turn` 모드로 설정되며, `chat` 모드 에이전트는 노드 입력 대신 대화 기록을 소비하므로 `START` 바로 뒤에만 허용됩니다. 에이전트 모드에 대한 자세한 내용은 [협업 에이전트 팀 구축](/workflows/collaboration/#mode-configuration-and-behaviors)을 참조하세요.
 
 ### 순차 라우트
 
@@ -151,6 +171,14 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:sequential-nodes"
+    ```
+
+=== "Kotlin"
+
+    `workflow { }` 블록 내부에서 `chain(Start, taskANode, taskBNode, taskCNode)`는 노드를 순서대로 연결하고, `Start.then(taskANode)`는 단일 노드를 실행합니다. 각 노드의 반환 값은 다음 노드에 입력으로 전달됩니다:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/Sequence.kt:sequence"
     ```
 
 ### 라우트 분기 및 조건부 실행
@@ -249,6 +277,14 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 
         그래프 엔진 대신 `sequentialagent` / `parallelagent` / `loopagent`를 사용하는 경우에는 `Event.Routes` 디스패치가 없습니다. `OutputKey`를 통해 세션 상태에 라우팅 결정을 인코딩하고 다운스트림 에이전트가 `Instruction` 템플릿에서 이를 검사하도록 하거나, `Escalate` 기반 종료를 사용하는 `loopagent`를 사용하세요(아래의 [루프 및 에스컬레이션 종료 예제](#loop-and-escalation-exit) 참조).
 
+=== "Kotlin"
+
+    노드는 `context.routes`를 설정하여 라우트를 선택하고, `route { }` 블록이 각 라우트 값을 처리할 노드에 매핑합니다. 라우트 값은 문자열(`Route.Tag`), 정수(`Route.Num`), 또는 불리언(`Route.Flag`)일 수 있습니다. `otherwise(node)` 항목은 동일한 소스 노드의 다른 어떤 라우트와도 일치하지 않을 때 매칭됩니다. 브랜치 대상은 어떤 노드든 될 수 있습니다. 이 예제에서 `taskBNode`는 `LlmAgent`이고 `taskCNode`는 함수 노드입니다.
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/Branches.kt:branches"
+    ```
+
 ## 병렬 작업: Fan-out 및 Join 경로
 
 여러 병렬 노드에 걸쳐 실행을 분할하는 그래프를 만들 수 있으며, 일반적으로 추가 처리를 위해 각 노드의 출력을 모아야 합니다. 이 작업 실행 패턴에는 두 단계가 있습니다. 워크플로는 먼저 여러 병렬 작업을 시작할 때 팬아웃(fan out)하고, 해당 작업들이 완료되면 다음 단계로 진행하기 전에 경로들을 다시 조인(join)합니다.
@@ -309,6 +345,14 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
     --8<-- "examples/go/snippets/graphs/routes/main.go:parallel-fan-out"
     ```
 
+=== "Kotlin"
+
+    `then(a, b, c)`는 동시에 실행되는 노드들로 팬아웃(fan out)하고, `joinTo`가 이들을 `JoinNode`에 연결합니다. 조인은 모든 이전 노드가 완료될 때까지 대기한 뒤, 이전 노드 이름을 키로 하는 맵을 후속 노드에 전달합니다:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/FanOutJoin.kt:fan-out-join"
+    ```
+
 !!! warning "주의: JoinNode로 연결되는 노드는 반드시 출력을 생성해야 합니다"
 
     `JoinNode`는 모든 이전 노드가 완료된 후에만 해제됩니다. 조인으로 연결되는 모든 노드가 자체 출력을 생성하는지 확인하고, 실패할 수 있는 모든 노드에 [재시도 구성](/ko/graphs/retry/)을 연결하세요. 출력을 생성하지 않고 완료된 이전 노드가 있으면 조인에 해당 브랜치의 값이 남지 않으며, 결과적인 실패는 문제를 유발한 노드에서 떨어진 다운스트림에서 발생합니다.
@@ -343,6 +387,8 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 
     중첩된 Workflow 객체의 출력은 개별 노드와 약간 다르게 작동합니다. 중첩 워크플로가 노드 중 하나를 완료하면 중첩 워크플로 그래프의 다음 노드로 데이터를 전송하며, *동시에* 시스템은 프로세스 추적성을 위해 해당 노드의 Event를 상위 워크플로로 전달(bubble up)합니다. 중첩 워크플로가 프로세스의 마지막 노드를 완료하면 상위 노드는 최종 리프 노드에서 데이터를 추출하여 중첩 워크플로의 출력으로 방출합니다.
 
+    워크플로에는 출력을 생성하는 터미널(종단) 노드가 최대 *하나*만 있어야 합니다. 예를 들어 두 병렬 브랜치의 끝처럼 둘 이상의 터미널 노드가 출력을 생성하면 워크플로는 `ValueError`로 실패합니다. 그래프가 단일 터미널 출력으로 끝나도록 ***JoinNode***로 해당 브랜치들을 병합하세요.
+
 === "TypeScript"
 
     `Workflow` 자체가 하나의 노드이므로, 재사용 가능한 하위 프로세스를 캡슐화하기 위해 다른 워크플로의 edges 내부에서 워크플로를 노드로 사용할 수 있습니다:
@@ -375,6 +421,14 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
     --8<-- "examples/go/snippets/graphs/routes/main.go:nested-workflows"
     ```
 
+=== "Kotlin"
+
+    `Workflow` 자체가 하나의 노드이므로, 재사용 가능한 하위 프로세스를 캡슐화하기 위해 다른 워크플로의 에지 내부에서 사용할 수 있습니다. 내부 워크플로가 끝나면 터미널 노드의 출력이 중첩 워크플로 노드의 출력이 됩니다:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/NestedWorkflow.kt:nested-workflow"
+    ```
+
 ## 루프 및 에스컬레이션 종료
 
 루프는 종료 조건이 충족될 때까지 일련의 단계를 반복합니다. Python에서는 이전 노드로 다시 라우팅되는 `edges` 그래프의 역방향 에지(back-edge)로 표현됩니다. ADK Go v2.0.0에서도 그래프 엔진이 동일한 패턴을 직접 지원합니다. 라우트 조건과 함께 다운스트림 노드에서 이전 노드로 돌아가는 에지를 추가하면, 엔진이 각 반복마다 새로운 수명 주기로 대상 노드를 다시 활성화합니다.
@@ -386,24 +440,27 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 
 
     def router(node_input: str):
-        """Route to task B or C based on node_input."""
+        """Exit the loop when the task is done, otherwise iterate again."""
         if condition(node_input):
-            return Event(route="RUN_TASK_C")
-        return Event(route="RUN_TASK_B")
+            return Event(route="DONE")
+        return Event(route="RETRY")
 
     root_agent = Workflow(
-        name="routing_workflow",
+        name="looping_workflow",
         edges=[
             ("START", task_A_node, router),
             (router,
               {
-                "RUN_TASK_B": task_B_node,
-                "RUN_TASK_C": task_C_node,
+                # Back-edge: re-runs task_A_node for another iteration.
+                "RETRY": task_A_node,
+                "DONE": final_task_node,
               },
             ),
         ],
     )
     ```
+
+    사이클에는 라우팅된(조건부) 에지가 최소 하나 이상 포함되어야 합니다. 무조건 에지로만 이루어진 사이클은 `Workflow`를 빌드할 때 거부됩니다.
 
 === "TypeScript"
 
@@ -419,6 +476,14 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 
     ```go
     --8<-- "examples/go/snippets/graphs/routes/main.go:loop-escalate"
+    ```
+
+=== "Kotlin"
+
+    루프는 역방향 에지(back-edge)입니다. `refine.then(critic)`이 다운스트림 노드를 이전 노드로 다시 라우팅하며, 엔진은 각 반복마다 새로운 라이프사이클로 해당 노드를 다시 활성화합니다. 비평(critic) 노드가 `DONE` 라우트를 선택하면 루프가 종료됩니다:
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/routes/LoopEscalation.kt:loop-escalation"
     ```
 
 !!! warning "주의: 제한 없는 그래프 순환"

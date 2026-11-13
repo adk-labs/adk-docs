@@ -71,7 +71,7 @@ run_config = RunConfig(
 live_request_queue = LiveRequestQueue()
 ```
 
-`user_id` と `session_id` は開発者が定義する任意の文字列です。`session_id=None` を渡すと ADK が UUID を生成します。同じ識別子で `run_live()` を呼び出す前にセッションが存在している必要があります。そうでない場合、`run_live()` は `ValueError: Session not found` を発生させます。
+`user_id` と `session_id` は開発者が定義する任意の文字列です。`session_id=None` を渡すと ADK が UUID を生成します。同じ識別子で `run_live()` を呼び出す前にセッションが存在している必要があります。そうでない場合、`run_live()` は `ValueError` のサブクラスである `SessionNotFoundError` を発生させます。例外を発生させる代わりに ADK に不足しているセッションを作成させるには、`Runner(..., auto_create_session=True)` でランナーを構築してください。
 
 !!! warning "セッションごとに 1 つのキュー"
 
@@ -87,7 +87,10 @@ class LiveRequest(BaseModel):
     blob: Optional[Blob] = None                  # 音声/動画のバイト列
     activity_start: Optional[ActivityStart] = None  # 手動のターン開始
     activity_end: Optional[ActivityEnd] = None      # 手動のターン終了
+    audio_stream_end: bool = False               # これ以上の音声入力がないことを通知
     close: bool = False                          # 正常終了シグナル
+    partial: bool = False                        # コンテンツでターンを終了しない
+    state_delta: Optional[dict[str, Any]] = None # 適用するセッション状態
 ```
 
 `content` と `blob` は相互に排他的です。`LiveRequest` オブジェクトを自分で構築するのではなく、便利なヘルパーメソッドを使用してください。適切なフィールドが設定され、排他制約が維持されます。
@@ -150,7 +153,7 @@ async for event in runner.run_live(
 | 手動クローズ | `live_request_queue.close()` | はい |
 | ワークフロー完了 | ライブワークフロー内の最後のエージェントが `task_completed()` を呼び出す | はい |
 | セッションタイムアウト | Live API の継続時間上限に到達（圧縮なしの場合） | 接続切断 |
-| 早期終了 | ツールまたはコールバックによって `end_invocation` が設定される | はい |
+| 早期終了 | 呼び出しコンテキストで `end_invocation` が設定される（例: コンテンツを返す `before_agent_callback` による設定） | はい |
 | エラー | 接続障害または未処理の例外 | いいえ |
 
 エラーが発生した場合でも、セッションが終了したら必ず `close()` を呼び出してください。これを怠ると Live API に正常終了シグナルが送られず、タイムアウトするまで [同時実行セッションの割り当て](#concurrent-sessions) を占有する「ゾンビ」セッションが残る可能性があります。

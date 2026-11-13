@@ -54,4 +54,4 @@ Agent Development Kit（ADK）は、開発者がAI搭載エージェントを迅
     [:octicons-arrow-right-24: ADK への移行](migrate.md) <br>
 </div>
 
-技術概要から始めるには、この[リンク](about.md)を確認してください。
+始めるには、[技術概要](about.md)を参照してください。

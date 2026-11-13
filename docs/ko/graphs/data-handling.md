@@ -76,7 +76,7 @@
         return Event(output=output_value) # "THE RESULT"
     ```
 
-    추가 처리가 필요하지 않은 ***Event*** 데이터를 출력할 때는 ***return*** 구문을 사용하세요. 추가 처리가 필요한 데이터를 방출하거나 둘 이상의 데이터 항목을 생성하는 경우에는 여러 개의 ***yield*** 명령을 사용할 수 있습니다. 각 ***yield*** 호출은 그래프의 다음 노드로 전달되는 Event의 데이터 객체 목록에 추가됩니다. 매개변수 없는 ***return*** 또는 ***yield*** 명령은 다음 노드에 `None` 값을 전달합니다.
+    추가 처리가 필요하지 않은 ***Event*** 데이터를 출력할 때는 ***return*** 구문을 사용하세요. 추가 처리가 필요한 데이터를 방출하거나 둘 이상의 데이터 항목을 생성하는 경우에는 여러 개의 ***yield*** 명령을 사용할 수 있습니다. 각 ***yield*** 호출은 개별 ***Event***를 방출하지만, 그중 하나의 이벤트만 `output`을 포함할 수 있으며 그 단일 값이 그래프의 다음 노드가 받는 값이 됩니다. 매개변수 없는 ***return*** 또는 ***yield*** 명령은 다음 노드에 `None` 값을 전달합니다.
 
 === "TypeScript"
 
@@ -211,7 +211,7 @@
           },
       )
 
-    async def task_attempt_node(node_input: Content, attempts: int):
+    async def task_attempt_node(node_input, attempts: int):
       yield Event(
           state={
               "attempts": attempts + 1,
@@ -219,7 +219,7 @@
       )
 
     async def read_state_node(ctx: Context):
-      print(f"attempts state: {ctx.state}") # attempts state: attempts: 1
+      print(f"attempts state: {ctx.state['attempts']}") # attempts state: 1
 
     root_agent = Workflow(
         name="root_agent",
@@ -268,6 +268,8 @@
     ***BaseModel***을 확장하는 클래스와 함께 `input_schema` 및 `output_schema`를 사용하여 에이전트의 입력과 출력을 제한하세요:
 
     ```python
+    from datetime import date
+
     from google.adk import Agent
     from pydantic import BaseModel
 
@@ -276,6 +278,16 @@
         destination: str      # Airport code "CDG"
         departure_date: date  # date(2026, 3, 15)
         passengers: int = 1   # Number of passengers
+
+    class Flight(BaseModel):
+        carrier: str
+        price: float
+
+    def search_flights_api(
+        origin: str, destination: str, departure_date: date, passengers: int
+    ) -> list[dict]:
+        """Look up flights with your own flight-search provider."""
+        ...
 
     class FlightSearchOutput(BaseModel):
         flights: list[Flight]
@@ -326,43 +338,36 @@
 
 === "Python"
 
-    입력 스키마에서 프로퍼티를 선택하려면 중괄호 `{ }` 구문을 사용하고, 프로퍼티를 선택하면서 소스 노드의 이름으로 한정하려면 `< >`를 사용하세요:
+    에이전트에서 `input_schema`를 사용하여 이전 노드의 구조화된 출력을 검증하고 에이전트의 입력으로 전달하세요. 지침(instruction)에서 해당 입력의 필드를 이름으로 참조합니다:
 
     ```python
     class CityTime(BaseModel):
         time_info: str  # time information
         city: str       # city name
 
-    def lookup_time_function(city: str):
+    def lookup_time_function(node_input: str):
         """Simulate returning the current time in the specified city."""
-        return Event(output=CityTime(time_info='10:10 AM', city=city))
+        return Event(output=CityTime(time_info='10:10 AM', city=node_input))
 
     city_report_agent = Agent(
         name="city_report_agent",
         model="gemini-flash-latest",
         input_schema=CityTime,
-
-        # data selection based on class and parameter
-        # instruction="""
-        #     Return a sentence in the following format:
-        #     It is {CityTime.time_info} in {CityTime.city} right now.
-        # """,
-
-        # more restrictive data selection based on source node name
         instruction="""
-            Return a sentence in the following format:
-            It is <CityTime.time_info from lookup_time_function> in
-            <CityTime.city from lookup_time_function> right now.
+            You receive a CityTime with time_info and city fields. Reply with a
+            single sentence stating that it is that time in that city right now.
         """,
     )
 
     root_agent = Workflow(
         name="root_agent",
         edges=[
-            (START, city_generator_agent, lookup_time_function, city_report_agent)
+            ("START", city_generator_agent, lookup_time_function, city_report_agent)
         ],
     )
     ```
+
+    지침(`instruction`)이 지원하는 중괄호 `{key}` 플레이스홀더는 노드 입력이 아니라 *세션 상태*에서 치환되므로, `{CityTime.time_info}`와 같은 플레이스홀더는 프롬프트에 그대로 남습니다. 값을 지침에 템플릿으로 넣으려면 먼저 `output_key` 또는 `Event(state=...)`를 사용해 상태에 기록한 뒤 `{time_info}`로 참조하세요.
 
 === "TypeScript"
 
@@ -379,7 +384,7 @@
 
 === "Go"
 
-    ADK Go v2.0.0에서 `FunctionNode`는 타입이 지정된 구조체를 반환하고 프레임워크는 이를 `Event.Output`으로 직렬화합니다. 후속 `AgentNode`는 구조체를 사용자 콘텐츠로 수신하므로 `{key}` 템플릿 구문 없이도 에이전트의 `Instruction`에서 필드를 사용할 수 있습니다. 이는 `{CityTime.time_info}` 템플릿 플레이스홀더와 함께 사용하는 Python의 `input_schema=CityTime`에 직접 대응되며, 구조체 필드는 상태에서 이름으로 조회되는 대신 타입이 지정된 입력으로 전달됩니다.
+    ADK Go v2.0.0에서 `FunctionNode`는 타입이 지정된 구조체를 반환하고 프레임워크는 이를 `Event.Output`으로 직렬화합니다. 후속 `AgentNode`는 구조체를 사용자 콘텐츠로 수신하므로 `{key}` 템플릿 구문 없이도 에이전트의 `Instruction`에서 필드를 사용할 수 있습니다. 이는 Python의 `input_schema=CityTime`에 직접 대응되며, 두 언어 모두에서 구조체 필드는 상태에서 이름으로 조회되는 대신 타입이 지정된 입력으로 전달됩니다.
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:structured-output"

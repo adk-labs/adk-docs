@@ -23,7 +23,7 @@ LiteRT-LM GitHub 저장소의 [지침](https://github.com/google-ai-edge/LiteRT-
 
 #### 모델 다운로드
 
-서버를 시작하기 전에 모델을 다운로드해야 합니다. `lit`을 사용하여 LiteRT-LM 모델을 다운로드하려면 _Hugging Face_ 사용자 액세스 토큰이 필요합니다. _Hugging Face_ 계정 토큰은 [여기](https://huggingface.co/settings/tokens)에서 얻을 수 있습니다.
+서버를 시작하기 전에 모델을 다운로드해야 합니다. `lit`을 사용하여 LiteRT-LM 모델을 다운로드하려면 _Hugging Face_ 사용자 액세스 토큰이 필요합니다. _Hugging Face_ 웹사이트에서 [액세스 토큰](https://huggingface.co/settings/tokens)을 발급받을 수 있습니다.
 
 다운로드 가능한 모델 목록을 보려면 `lit list` 명령을 사용합니다.
 

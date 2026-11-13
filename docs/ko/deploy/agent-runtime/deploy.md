@@ -132,6 +132,21 @@ Google Cloud와 코딩 환경이 준비되면 배포 준비가 완료됩니다.
     └── main.go
     ```
 
+    `main.go`에서는 `full.NewLauncher()` 대신 `google.golang.org/adk/v2/cmd/launcher/agentengine` 패키지의 런처로 에이전트를 실행해야 하며, 이때 `GOOGLE_CLOUD_AGENT_ENGINE_ID` 환경 변수에서 가져온 Agent Runtime 리소스 ID를 전달해야 합니다.
+
+    ```go
+    import "google.golang.org/adk/v2/cmd/launcher/agentengine"
+
+    // ...
+
+    l := agentengine.NewLauncher(os.Getenv("GOOGLE_CLOUD_AGENT_ENGINE_ID"))
+    if err = l.Execute(ctx, config, os.Args[1:]); err != nil {
+        log.Fatalf("Run failed: %v\n\n%s", err, l.CommandLineSyntax())
+    }
+    ```
+
+    전체 예제는 ADK Go 저장소의 [examples/agentengine](https://github.com/google/adk-go/tree/v2.5.0/examples/agentengine)을 참고하세요.
+
 ## 에이전트 배포 {#deploy-agent}
 
 `adk deploy` 명령줄 도구를 사용하여 터미널에서 배포할 수 있습니다. 이
@@ -186,7 +201,10 @@ Google Cloud와 코딩 환경이 준비되면 배포 준비가 완료됩니다.
     -p, --project_name string       GCP Project Name
     -r, --region string             GCP Region
     -d, --source_dir string         Directory to archive, defaults to current working directory
+        --agent_engine_id string    ID of the Agent Engine instance to update if it exists
     ```
+
+    새 인스턴스를 만드는 대신 기존 Agent Runtime 인스턴스에 다시 배포하려면 `--agent_engine_id`에 해당 `RESOURCE_ID`를 전달하세요.
 
 ### 배포 명령 출력
 

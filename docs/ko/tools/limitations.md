@@ -5,11 +5,13 @@
 
 ## 에이전트당 도구 1개 제한 {#one-tool-one-agent}
 
-!!! note "ADK Python v1.15.0 이하의 Search에만 해당"
+!!! note "ADK Python: 내장 Search 우회 방법은 옵트인(opt-in) 방식입니다"
 
-    이 제한은 ADK Python v1.15.0 이하에서 Google Search 및 Vertex AI Search
-    도구를 사용할 때만 적용됩니다. ADK Python v1.16.0 이상에서는
-    이 제한을 제거하는 내장 우회 방법이 제공됩니다.
+    ADK Python v1.16.0 이상에서는 Google Search 및 Agent Search 도구에 대해
+    이 제한을 우회할 수 있지만 기본적으로 활성화되어 있지는 않습니다.
+    `bypass_multi_tools_limit=True`를 지정하여 도구를 직접 생성해야 하며,
+    `google.adk.tools`에서 내보내는 공유 `google_search` 인스턴스는 이 플래그가
+    꺼진 상태로 제공됩니다. 아래 우회 방법 #2를 참고하세요.
 
 일반적으로 하나의 에이전트에 여러 도구를 사용할 수 있지만,
 특정 도구를 에이전트 안에서 사용하면 같은 에이전트에서 다른 도구를
@@ -47,7 +49,7 @@
                 .build();
     ```
 
-### 우회 방법 #1: AgentTool.create() 메서드
+### 우회 방법 #1: 에이전트를 AgentTool로 감싸기
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript (v0.6.1+)</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>
@@ -145,6 +147,8 @@
     }
     ```
 
+ADK Python에서 `AgentTool`은 래핑된 에이전트의 그라운딩 메타데이터를 호출하는 에이전트로 다시 전달하지 않습니다. 해당 메타데이터를 세션 상태의 `temp:_adk_grounding_metadata` 키 아래에 저장하려면 `AgentTool`에 `propagate_grounding_metadata=True`를 설정하세요. ADK는 상위 에이전트에 `google_search_agent`라는 이름의 도구가 있을 때만 이를 상위 에이전트 자체 응답에 첨부하며, 이 도구는 아래 우회 방법 #2가 자동으로 생성해 주는 도구입니다.
+
 ### 우회 방법 #2: bypass_multi_tools_limit
 
 <div class="language-support-tag">
@@ -155,14 +159,16 @@ ADK Python은 `GoogleSearchTool` 및 `VertexAiSearchTool`에 대해
 이 제한을 우회하는 내장 방법을 제공합니다
 (`bypass_multi_tools_limit=True`로 활성화).
 자세한 내용은
-[built_in_multi_tools](https://github.com/google/adk-python/tree/main/contributing/samples/built_in_multi_tools)
+[built_in_multi_tools](https://github.com/google/adk-python/tree/main/contributing/samples/tools/built_in_multi_tools)
 샘플 에이전트를 참고하세요.
+
+예를 들어 `google.adk.tools.google_search_tool`에서 가져온 `GoogleSearchTool(bypass_multi_tools_limit=True)`처럼 직접 생성한 도구 인스턴스에 플래그를 설정하세요. `google.adk.tools`에서 내보내는 공유 `google_search` 인스턴스는 이 플래그가 꺼진 상태로 유지됩니다. 이 우회 기능은 에이전트의 `tools` 목록에 항목이 두 개 이상 있거나 다른 에이전트로 제어권을 이전할 수 있을 때 적용됩니다.
 
 !!! warning
 
-    내장 도구는 하위 에이전트에서 사용할 수 없습니다.
-    단, ADK Python에서는 위 우회 방법이 적용되는
-    `GoogleSearchTool` 및 `VertexAiSearchTool`은 예외입니다.
+    내장 도구는 하위 에이전트 내에서 사용할 수 없습니다. ADK Python에서는
+    하위 에이전트가 `bypass_multi_tools_limit=True`로 도구를 생성한 경우에만
+    `GoogleSearchTool` 및 `VertexAiSearchTool`이 예외적으로 허용됩니다.
 
 예를 들어, 아래와 같이 하위 에이전트에서 내장 도구를 사용하는 방식은
 **지원되지 않습니다**.

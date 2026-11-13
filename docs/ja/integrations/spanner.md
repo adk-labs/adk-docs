@@ -8,13 +8,10 @@ catalog_tags: ["data","google"]
 # ADK用 Google Cloud Spanner ツール
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span><span class="lst-preview">プレビュー</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.11.0</span>
 </div>
 
 [Google Cloud Spanner](https://cloud.google.com/spanner) は、SQL とベクトル検索をサポートするフルマネージドの分散型データベースです。ADK Spanner ツールを使用すると、エージェントはデータベース スキーマを探索し、SQL クエリを実行し、Spanner データに対してベクトル類似性検索を実行できます。
-
-!!! example "プレビュー"
-    この機能はプレビュー段階であり、将来のリリースで更新される可能性があります。
 
 ## 利用可能なツール
 
@@ -29,6 +26,14 @@ catalog_tags: ["data","google"]
 - **`query_result_mode`**: `execute_sql` ツールがデータベース クエリ結果を返す形式を決定します。このパラメータを `QueryResultMode.DICT_LIST` に設定すると、結果をディクショナリのリストとして返すようにツールが構成されます。`QueryResultMode` は `google.adk.tools.spanner.settings` からインポートします。
 - **`similarity_search`**: テキスト クエリを使用して Spanner で類似性検索を実行します。
 
+## インストール
+
+Spanner ツールは、ベースの `google-adk` インストールには含まれない Google Cloud クライアント ライブラリに依存しています。`gcp` extra を指定してインストールしてください。
+
+```bash
+pip install "google-adk[gcp]"
+```
+
 ## エージェントでの使用
 
 ```py
@@ -42,6 +47,7 @@ catalog_tags: ["data","google"]
 次の例では、Spanner テーブルをベクトル ストアとして構成し、`vector_store_similarity_search` ツールを RAG エージェントに接続します。
 
 ```py
+import google.auth
 from google.adk.agents import LlmAgent
 from google.adk.tools.spanner import SpannerCredentialsConfig, SpannerToolset
 from google.adk.tools.spanner.settings import (
@@ -72,8 +78,10 @@ my_tool_settings = SpannerToolSettings(
     vector_store_settings=my_vector_store_settings,
 )
 
-# 2. Spanner ツールセットを初期化
-credentials_config = SpannerCredentialsConfig()
+# 2. Spanner ツールセットを初期化します。SpannerCredentialsConfig には認証情報、
+# 外部アクセストークンキー、またはクライアント ID とシークレットが必要です。
+credentials, _ = google.auth.default()
+credentials_config = SpannerCredentialsConfig(credentials=credentials)
 my_spanner_toolset = SpannerToolset(
     credentials_config=credentials_config,
     spanner_tool_settings=my_tool_settings,

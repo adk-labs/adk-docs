@@ -313,7 +313,9 @@ ADK 에이전트는 대화형 에이전트 경험을 생성하기 위해 [라이
   호출을 의미하지만 production에서는 권장하지 않습니다. 사용하는 언어의 가장 큰 정수(Python에서는
   `sys.maxsize`, Kotlin에서는 `Int.MAX_VALUE`)를 전달하면 오류가 발생합니다.
 - `save_input_blobs_as_artifacts`: `True`이면 input blob(예: uploaded file)을 debugging과
-  auditing용 run artifact로 저장합니다.
+  auditing용 run artifact로 저장합니다. Python에서는 `SaveFilesAsArtifactsPlugin`으로 대체되어
+  지원 중단(deprecated)되었습니다. Go에서는 `agent.RunConfig`의 `SaveInputBlobsAsArtifacts`
+  필드를 `true`로 설정하세요. 이 설정이 적용되려면 러너에 아티팩트 서비스가 필요합니다.
 - `custom_metadata`: invocation에 첨부되는 임의 metadata의 `dict[str, Any]`입니다. tracing
   또는 logging에 유용합니다.
 - `service_tier`: 실행의 모델 호출을 위한 서빙 용량을 선택합니다. ADK Python 전용이며,

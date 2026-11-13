@@ -6,11 +6,13 @@
 
 ## エージェントごとのツール 1 個制限 {#one-tool-one-agent}
 
-!!! note "ADK Python v1.15.0 以下の Search のみ"
+!!! note "ADK Python: 組み込みの Search 回避策はオプトイン方式です"
 
-    この制限は、ADK Python v1.15.0 以下で Google Search と Vertex AI Search
-    ツールを使う場合にのみ適用されます。ADK Python v1.16.0 以降では、
-    この制限を解消する組み込みの回避策が提供されています。
+    ADK Python v1.16.0 以降では、Google Search および Agent Search ツールに対して
+    この制限を回避できますが、デフォルトでは有効になっていません。
+    `bypass_multi_tools_limit=True` を指定してツールを自分で構築する必要があります。
+    `google.adk.tools` からエクスポートされている共有の `google_search` インスタンスでは、
+    このフラグはオフのままです。以下の回避策 #2 を参照してください。
 
 一般に、1 つのエージェントで複数ツールを使用できますが、
 特定のツールをエージェント内で使う場合、そのエージェントでは他ツールを
@@ -48,7 +50,7 @@
                 .build();
     ```
 
-### 回避策 #1: AgentTool.create() メソッド
+### 回避策 #1: エージェントを AgentTool でラップする
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript (v0.6.1+)</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>
@@ -146,6 +148,8 @@
     }
     ```
 
+ADK Python では、`AgentTool` はラップされたエージェントのグラウンディング メタデータを呼び出し元のエージェントに返しません。そのメタデータをセッション ステートの `temp:_adk_grounding_metadata` キーの下に保存するには、`AgentTool` に `propagate_grounding_metadata=True` を設定してください。ADK は、親エージェントが `google_search_agent` という名前のツール（以下の回避策 #2 が自動的に作成するツール）を持っている場合にのみ、親エージェント自身の応答にそのメタデータを添付します。
+
 ### 回避策 #2: bypass_multi_tools_limit
 
 <div class="language-support-tag">
@@ -156,14 +160,16 @@ ADK Python には `GoogleSearchTool` と `VertexAiSearchTool` について
 この制限を回避する組み込み機能があります
 （`bypass_multi_tools_limit=True` で有効化）。
 詳細は
-[built_in_multi_tools](https://github.com/google/adk-python/tree/main/contributing/samples/built_in_multi_tools)
+[built_in_multi_tools](https://github.com/google/adk-python/tree/main/contributing/samples/tools/built_in_multi_tools)
 サンプルエージェントを参照してください。
+
+たとえば、`google.adk.tools.google_search_tool` からインポートした `GoogleSearchTool(bypass_multi_tools_limit=True)` のように、自分で構築するツール インスタンスにフラグを設定してください。`google.adk.tools` からエクスポートされている共有の `google_search` インスタンスではフラグはオフのままです。このバイパスは、エージェントの `tools` リストに複数のエントリがある場合、または別のエージェントに制御を転送できる場合に有効になります。
 
 !!! warning
 
-    組み込みツールはサブエージェント内では使用できません。
-    ただし、上記回避策がある ADK Python の
-    `GoogleSearchTool` と `VertexAiSearchTool` は例外です。
+    組み込みツールはサブエージェント内では使用できません。ADK Python では、
+    サブエージェントが `bypass_multi_tools_limit=True` を指定してツールを構築した場合に限り、
+    `GoogleSearchTool` と `VertexAiSearchTool` が例外となります。
 
 たとえば、次のようにサブエージェント内で組み込みツールを使う方法は
 **サポートされていません**。

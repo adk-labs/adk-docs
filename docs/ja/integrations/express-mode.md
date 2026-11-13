@@ -89,7 +89,7 @@ session_service = VertexAiSessionService(agent_engine_id=APP_ID)
 
 ## `VertexAiMemoryBankService`によるメモリ管理 {#memory-bank}
 
-[`VertexAiMemoryBankService`](../sessions/memory.md#memory-bank) は Vertex AI ExpressモードのAPIキーと互換性があります。プロジェクトやロケーションを指定せずにメモリオブジェクトを初期化できます。
+[`VertexAiMemoryBankService`](../sessions/memory.md#memory-bank) クラスは Agent Platform Express モードの API キーと互換性があります。プロジェクトやロケーションを指定せずにメモリオブジェクトを初期化できます。
 
 ```py
 # 必要なライブラリ: pip install google-adk[gcp]

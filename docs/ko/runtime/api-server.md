@@ -321,26 +321,30 @@ curl -X GET http://localhost:8000/list-apps
 
 세션은 특정 사용자가 에이전트와 상호 작용하는 동안의 상태와 이벤트 기록을 저장합니다.
 
-#### 세션 생성 또는 업데이트
+#### 세션 업데이트
 
-새 세션을 생성하거나 기존 세션을 업데이트합니다. 지정된 ID를 가진 세션이 이미 존재하는 경우, 해당 상태는 제공된 새 상태로 덮어쓰여집니다.
+기존 세션을 업데이트합니다.
 
-*   **메서드:** `POST`
+ADK Go는 v2.4.0 이상에서 이 엔드포인트를 제공합니다. 요청 본문의 `stateDelta` 필드는 세션 범위 키만 변경할 수 있으며, `stateDelta`가 `app:`, `user:` 또는 `temp:` 접두사가 붙은 키를 변경하는 경우 서버는 HTTP 400을 반환합니다.
+
+*   **메서드:** `PATCH`
 *   **경로:** `/apps/{app_name}/users/{user_id}/sessions/{session_id}`
 
 **요청 본문**
 ```json
 {
-  "key1": "value1",
-  "key2": 42
+  "stateDelta": {
+    "key1": "value1",
+    "key2": 42
+  }
 }
 ```
 
 **요청 예시**
 ```shell
-curl -X POST http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_abc \
+curl -X PATCH http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_abc \
   -H "Content-Type: application/json" \
-  -d '{"visit_count": 5}'
+  -d '{"stateDelta":{"visit_count": 5}}'
 ```
 
 **응답 예시**

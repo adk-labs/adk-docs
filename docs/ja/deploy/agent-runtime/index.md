@@ -53,4 +53,4 @@ ADK エージェント プロジェクトをエージェント ランタイム�
 
 === "Go"
 
-    Go でデプロイする場合、専用の ADK API サーバーが*含まれます*。
+    Go でデプロイする場合、Agent Runtime の `:query` および `:streamQuery` メソッドを提供する ADK `agentengine` ランチャーが含まれます。ADK API サーバーや ADK Web ユーザーインターフェースは*含まれません*。

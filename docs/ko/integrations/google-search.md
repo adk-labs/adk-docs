@@ -11,7 +11,7 @@ catalog_tags: ["search","google"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
 </div>
 
-`google_search` 도구를 사용하면 에이전트가 Google Search를 이용해 웹 검색을 수행할 수 있습니다. `google_search` 도구는 Gemini 2 모델과만 호환됩니다. 도구에 대한 자세한 내용은 [Google Search grounding 이해하기](/ko/grounding/google_search_grounding/)를 참고하세요.
+`google_search` 도구를 사용하면 에이전트가 Google Search를 이용해 웹 검색을 수행할 수 있습니다. `google_search` 도구는 Gemini 모델과만 호환됩니다. 도구에 대한 자세한 내용은 [Google Search grounding 이해하기](/ko/grounding/google_search_grounding/)를 참고하세요.
 
 !!! warning "`google_search` 도구 사용 시 추가 요구 사항"
     Google Search로 그라운딩을 사용하고 응답에서 Search 제안을 받는 경우, 프로덕션 및 애플리케이션에서 해당 Search 제안을 반드시 표시해야 합니다.

@@ -23,11 +23,11 @@ Freeplay의 주요 이점:
 
 Freeplay와 ADK는 서로를 보완합니다. ADK는 강력하고 표현력이 풍부한 에이전트 오케스트레이션 프레임워크를 제공하는 반면 Freeplay는 관측 가능성, 프롬프트 관리, 평가 및 테스트를 위해 연결됩니다. Freeplay와 통합하면 Freeplay UI 또는 코드에서 프롬프트와 평가를 업데이트할 수 있으므로 팀의 모든 사람이 기여할 수 있습니다.
 
-데모를 보려면 [여기를 클릭](https://www.loom.com/share/82f41ffde94949beb941cb191f53c3ec?sid=997aff3c-daa3-40ab-93a9-fdaf87ea2ea1)하십시오.
+<iframe width="672" height="378" src="https://www.youtube.com/embed/AV2zCkp4aYM?si=HVuOJFLMEkkpocF7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## 시작하기
 
-다음은 Freeplay 및 ADK 시작 가이드입니다. 전체 샘플 ADK 에이전트 리포지토리는 [여기](https://github.com/228Labs/freeplay-google-demo)에서 찾을 수 있습니다.
+다음은 Freeplay 및 ADK 시작 가이드입니다. ADK 에이전트 리포지토리에서 전체 [코드 샘플](https://github.com/228Labs/freeplay-google-demo)을 확인할 수도 있습니다.
 
 ### Freeplay 계정 만들기
 
@@ -78,11 +78,11 @@ __all__ = ["app"]
 
 Freeplay의 관측 가능성 기능은 프로덕션에서 에이전트가 어떻게 작동하는지에 대한 명확한 보기를 제공합니다. 개별 에이전트 추적을 자세히 살펴 각 단계를 이해하고 문제를 진단할 수 있습니다.
 
-![추적 세부 정보](https://228labs.com/freeplay-google-demo/images/trace_detail.png)
+![추적 세부 정보](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/trace_detail.png)
 
 Freeplay의 필터링 기능을 사용하여 관심 있는 모든 세그먼트에서 데이터를 검색하고 필터링할 수도 있습니다.
 
-![필터](https://228labs.com/freeplay-google-demo/images/filter.png)
+![필터](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/filter.png)
 
 ## 프롬프트 관리(선택 사항)
 
@@ -92,7 +92,7 @@ ADK와 함께 Freeplay의 프롬프트 관리 기능을 활용하려면 Freeplay
 
 먼저 프롬프트 -> 프롬프트 템플릿 만들기로 이동하여 Freeplay에서 프롬프트를 정의합니다.
 
-![프롬프트](https://228labs.com/freeplay-google-demo/images/prompt.png)
+![프롬프트](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/prompt.png)
 
 프롬프트 템플릿을 만들 때 다음 섹션에 설명된 대로 3가지 요소를 추가해야 합니다.
 
@@ -112,7 +112,7 @@ ADK와 함께 Freeplay의 프롬프트 관리 기능을 활용하려면 Freeplay
 
 새 메시지를 클릭하고 역할을 '기록'으로 변경합니다. 이렇게 하면 과거 메시지가 있을 때 전달됩니다.
 
-![프롬프트 편집기](https://228labs.com/freeplay-google-demo/images/prompt_editor.png)
+![프롬프트 편집기](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/prompt_editor.png)
 
 이제 코드에서 ```FreeplayLLMAgent```를 사용할 수 있습니다.
 
@@ -136,7 +136,7 @@ root_agent = FreeplayLLMAgent(
 
 Freeplay를 사용하면 Freeplay 웹 애플리케이션에서 [평가](https://docs.freeplay.ai/docs/evaluations)를 정의, 버전 관리 및 실행할 수 있습니다. 평가 -> "새 평가"로 이동하여 프롬프트 또는 에이전트에 대한 평가를 정의할 수 있습니다.
 
-![Freeplay에서 새 평가 만들기](https://228labs.com/freeplay-google-demo/images/eval_create.png)
+![Freeplay에서 새 평가 만들기](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/eval_create.png)
 
 이러한 평가는 온라인 모니터링 및 오프라인 평가 모두에 대해 실행되도록 구성할 수 있습니다. 오프라인 평가용 데이터 세트는 Freeplay에 업로드하거나 로그 예제에서 저장할 수 있습니다.
 
@@ -144,14 +144,14 @@ Freeplay를 사용하면 Freeplay 웹 애플리케이션에서 [평가](https://
 
 Freeplay로 데이터가 흐르기 시작하면 이러한 로그를 사용하여 반복적으로 테스트할 [데이터 세트](https://docs.freeplay.ai/docs/datasets)를 구축하기 시작할 수 있습니다. 프로덕션 로그를 사용하여 골든 데이터 세트 또는 변경 사항을 적용할 때 테스트하는 데 사용할 수 있는 실패 사례 모음을 만듭니다.
 
-![테스트 케이스 저장](https://228labs.com/freeplay-google-demo/images/save_test_case.png)
+![테스트 케이스 저장](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/save_test_case.png)
 
 ## 일괄 테스트
 
 에이전트를 반복하면서 [프롬프트](https://docs.freeplay.ai/docs/component-level-test-runs) 및 [엔드투엔드](https://docs.freeplay.ai/docs/end-to-end-test-runs) 에이전트 수준 모두에서 일괄 테스트(즉, 오프라인 실험)를 실행할 수 있습니다. 이를 통해 여러 다른 모델 또는 프롬프트 변경 사항을 비교하고 전체 에이전트 실행에서 변경 사항을 정면으로 정량화할 수 있습니다.
 
-ADK를 사용하여 Freeplay에서 일괄 테스트를 실행하는 코드 예제는 [여기](https://github.com/228Labs/freeplay-google-demo/blob/main/examples/example_test_run.py)에 있습니다. Google ADK를 사용하여 Freeplay에서 일괄 테스트를 실행하는 코드 예제는 [여기](https://github.com/228Labs/freeplay-google-demo/blob/main/examples/example_test_run.py)에 있습니다.
+전체 구현은 ADK로 Freeplay에서 일괄 테스트를 실행하는 일괄 테스트 [코드 예제](https://github.com/freeplayai/freeplay-google-demo/blob/main/examples/example_test_run.py)를 참고하세요.
 
 ## 지금 가입
 
-[Freeplay](https://app.freeplay.ai/signup)로 이동하여 계정에 가입하고 [여기](https://github.com/228Labs/freeplay-google-demo)에서 전체 Freeplay <> ADK 통합을 확인하십시오.
+[Freeplay](https://app.freeplay.ai/signup)로 이동하여 계정에 가입하고 전체 [Freeplay <> ADK 통합](https://github.com/freeplayai/freeplay-google-demo/tree/main) 데모를 확인해 보세요.

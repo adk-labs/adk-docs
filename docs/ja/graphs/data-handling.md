@@ -76,7 +76,7 @@
         return Event(output=output_value) # "THE RESULT"
     ```
 
-    追加処理を必要としない ***Event*** データを出力する場合は、***return*** 構文を使用します。追加処理が必要なデータを発行する場合や、複数のデータ項目を生成する場合は、複数の ***yield*** コマンドを使用できます。各 ***yield*** 呼び出しは、グラフの次のノードに渡される Event 上のデータオブジェクトのリストに追加されます。パラメータなしの ***return*** または ***yield*** コマンドは、次のノードに `None` 値を渡します。
+    追加処理を必要としない ***Event*** データを出力する場合は、***return*** 構文を使用します。追加処理が必要なデータを発行する場合や、複数のデータ項目を生成する場合は、複数の ***yield*** コマンドを使用できます。各 ***yield*** 呼び出しは個別の ***Event*** を発行しますが、それらのイベントのうち `output` を持てるのは 1 つだけであり、その単一の値がグラフの次のノードに渡されます。パラメータなしの ***return*** または ***yield*** コマンドは、次のノードに `None` 値を渡します。
 
 === "TypeScript"
 
@@ -211,7 +211,7 @@
           },
       )
 
-    async def task_attempt_node(node_input: Content, attempts: int):
+    async def task_attempt_node(node_input, attempts: int):
       yield Event(
           state={
               "attempts": attempts + 1,
@@ -219,7 +219,7 @@
       )
 
     async def read_state_node(ctx: Context):
-      print(f"attempts state: {ctx.state}") # attempts state: attempts: 1
+      print(f"attempts state: {ctx.state['attempts']}") # attempts state: 1
 
     root_agent = Workflow(
         name="root_agent",
@@ -268,6 +268,8 @@
     ***BaseModel*** を拡張するクラスとともに `input_schema` と `output_schema` を使用して、エージェントの入力と出力を制約します:
 
     ```python
+    from datetime import date
+
     from google.adk import Agent
     from pydantic import BaseModel
 
@@ -276,6 +278,16 @@
         destination: str      # Airport code "CDG"
         departure_date: date  # date(2026, 3, 15)
         passengers: int = 1   # Number of passengers
+
+    class Flight(BaseModel):
+        carrier: str
+        price: float
+
+    def search_flights_api(
+        origin: str, destination: str, departure_date: date, passengers: int
+    ) -> list[dict]:
+        """Look up flights with your own flight-search provider."""
+        ...
 
     class FlightSearchOutput(BaseModel):
         flights: list[Flight]
@@ -326,43 +338,36 @@
 
 === "Python"
 
-    入力スキーマからプロパティを選択するには中括弧 `{ }` 構文を使用し、プロパティを選択しつつソースノードの名前で修飾するには `< >` を使用します:
+    エージェントで `input_schema` を使用して先行ノードの構造化出力を検証し、エージェントの入力として渡します。instruction 内では、その入力のフィールドを名前で参照します:
 
     ```python
     class CityTime(BaseModel):
         time_info: str  # time information
         city: str       # city name
 
-    def lookup_time_function(city: str):
+    def lookup_time_function(node_input: str):
         """Simulate returning the current time in the specified city."""
-        return Event(output=CityTime(time_info='10:10 AM', city=city))
+        return Event(output=CityTime(time_info='10:10 AM', city=node_input))
 
     city_report_agent = Agent(
         name="city_report_agent",
         model="gemini-flash-latest",
         input_schema=CityTime,
-
-        # data selection based on class and parameter
-        # instruction="""
-        #     Return a sentence in the following format:
-        #     It is {CityTime.time_info} in {CityTime.city} right now.
-        # """,
-
-        # more restrictive data selection based on source node name
         instruction="""
-            Return a sentence in the following format:
-            It is <CityTime.time_info from lookup_time_function> in
-            <CityTime.city from lookup_time_function> right now.
+            You receive a CityTime with time_info and city fields. Reply with a
+            single sentence stating that it is that time in that city right now.
         """,
     )
 
     root_agent = Workflow(
         name="root_agent",
         edges=[
-            (START, city_generator_agent, lookup_time_function, city_report_agent)
+            ("START", city_generator_agent, lookup_time_function, city_report_agent)
         ],
     )
     ```
+
+    `instruction` がサポートする中括弧 `{key}` プレースホルダは、ノード入力からではなく*セッション状態*から置換されるため、`{CityTime.time_info}` のようなプレースホルダはそのままプロンプトに残ります。値を instruction にテンプレートとして埋め込むには、まず `output_key` または `Event(state=...)` を使って状態に書き込み、`{time_info}` として参照してください。
 
 === "TypeScript"
 
@@ -379,7 +384,7 @@
 
 === "Go"
 
-    ADK Go v2.0.0 では、`FunctionNode` が型付き構造体を返し、フレームワークがそれを `Event.Output` にシリアライズします。後続の `AgentNode` はその構造体をユーザーコンテンツとして受け取るため、`{key}` テンプレート構文なしでエージェントの `Instruction` からフィールドを利用できます。これは `{CityTime.time_info}` テンプレートプレースホルダを伴う Python の `input_schema=CityTime` に直接相当し、構造体フィールドは状態から名前で検索されるのではなく、型付き入力として配信されます。
+    ADK Go v2.0.0 では、`FunctionNode` が型付き構造体を返し、フレームワークがそれを `Event.Output` にシリアライズします。後続の `AgentNode` はその構造体をユーザーコンテンツとして受け取るため、`{key}` テンプレート構文なしでエージェントの `Instruction` からフィールドを利用できます。これは Python の `input_schema=CityTime` に直接相当し、どちらの言語でも構造体フィールドは状態から名前で検索されるのではなく、型付き入力として配信されます。
 
     ```go
     --8<-- "examples/go/snippets/graphs/data-handling/main.go:structured-output"

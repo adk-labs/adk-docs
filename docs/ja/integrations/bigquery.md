@@ -31,6 +31,14 @@ BigQuery 統合を提供するツールセットは次のとおりです。
 
     BigQuery のロケーションを選択するには、`google.adk.integrations.bigquery.config` の `BigQueryToolConfig(location="US")` をツールセットの `bigquery_tool_config` として渡します。データセットに一致する[ロケーション](https://cloud.google.com/bigquery/docs/locations)を選択してください。未設定のままにすると、BigQuery がロケーションを決定します。
 
+## インストール
+
+BigQuery ツールは、ベースの `google-adk` インストールには含まれない Google Cloud クライアント ライブラリに依存しています。`gcp` extra を指定してインストールしてください。
+
+```bash
+pip install "google-adk[gcp]"
+```
+
 ## 認証
 
 `BigQueryToolset` は `BigQueryCredentialsConfig` を介して複数の認証メカニズムをサポートしています。

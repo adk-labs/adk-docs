@@ -1,12 +1,18 @@
 # 루프 에이전트
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
 `LoopAgent`는 하위 에이전트를 루프(즉, 반복적으로)로 실행하는 워크플로우 에이전트입니다. 이 에이전트는 명시된 반복 횟수만큼 또는 종료 조건이 충족될 때까지 **에이전트 시퀀스를 반복적으로 실행합니다**.
 
 코드 수정과 같이 워크플로우에 반복이나 반복적인 개선이 포함될 때 `LoopAgent`를 사용하세요.
+
+!!! warning "지원 중단됨(Deprecated): 그래프 기반 워크플로 사용"
+
+    ADK Python, TypeScript, Go 및 Kotlin에서 템플릿 워크플로는
+    [그래프 기반 워크플로](/ko/graphs/)와
+    [동적 워크플로](/ko/graphs/dynamic/)를 포함한 더 유연한 워크플로 구조로 대체되었습니다.
 
 ### 예시
 
@@ -23,8 +29,8 @@
 
     _매우 중요한 점은_, `LoopAgent` 자체는 언제 루프를 멈출지 본질적으로 결정하지 않는다는 것입니다. 무한 루프를 방지하기 위해 _반드시_ 종료 메커니즘을 구현해야 합니다. 일반적인 전략은 다음과 같습니다.
 
-    *   **최대 반복 횟수(Max Iterations)**: `LoopAgent`에 최대 반복 횟수를 설정합니다. **루프는 해당 횟수만큼 반복된 후 종료됩니다**.
-    *   **하위 에이전트의 종료 신호(Escalation from sub-agent)**: 하나 이상의 하위 에이전트가 특정 조건("문서 품질이 충분히 좋은가?", "합의에 도달했는가?")을 평가하도록 설계합니다. 조건이 충족되면, 하위 에이전트는 종료 신호(예: 커스텀 이벤트 발생, 공유 컨텍스트에 플래그 설정, 특정 값 반환 등)를 보낼 수 있습니다.
+    *   **최대 반복 횟수(Max Iterations)**: `LoopAgent`에 최대 반복 횟수를 설정합니다. **루프는 해당 횟수만큼 반복된 후 종료됩니다**. Python에서 `max_iterations`의 기본값은 `None`이며, 이는 에스컬레이션(escalation)이 발생할 때만 루프가 중지됨을 의미합니다.
+    *   **하위 에이전트의 종료 신호(Escalation from sub-agent)**: 하나 이상의 하위 에이전트가 특정 조건(예: "문서 품질이 충분히 좋은가?", "합의에 도달했는가?")을 평가하도록 설계합니다. 조건이 충족되면 하위 에이전트는 액션에서 `escalate`를 `true`로 설정하는 이벤트를 발행하여 종료 신호를 보냅니다. Python에서는 커스텀 에이전트가 `actions=EventActions(escalate=True)`가 포함된 `Event`를 yield하고, 콜백에서는 `callback_context.actions.escalate = True`를 설정하며, 도구에서는 `tool_context.actions.escalate = True`를 설정합니다. 내장 `exit_loop` 도구를 사용하면 이 플래그가 자동으로 설정됩니다.
 
 ![Loop Agent](../../assets/loop-agent.png)
 
@@ -36,16 +42,21 @@
 *   **비평 에이전트(Critic Agent):** 초안을 비평하고 개선할 부분을 식별하는 `LlmAgent`입니다.
 
     ```py
-    LoopAgent(sub_agents=[WriterAgent, CriticAgent], max_iterations=5)
+    LoopAgent(name="RefinementLoop", sub_agents=[WriterAgent, CriticAgent], max_iterations=5)
     ```
 
-이 설정에서 `LoopAgent`는 반복적인 프로세스를 관리합니다. `Critic Agent`는 **문서가 만족스러운 품질 수준에 도달했을 때 "STOP" 신호를 반환하도록 설계**하여 추가적인 반복을 막을 수 있습니다. 또는, `max_iterations` 매개변수를 사용하여 프로세스를 고정된 횟수로 제한하거나, 중지 결정을 내리기 위한 외부 로직을 구현할 수도 있습니다. **루프는 최대 5번 실행**되어 반복적인 개선이 무한정 계속되지 않도록 보장합니다.
+이 설정에서 `LoopAgent`는 반복적인 프로세스를 관리합니다. `CriticAgent`에 **`exit_loop`와 같은 에스컬레이션 도구를 제공하여 문서가 만족스러운 품질 수준에 도달했을 때 이를 호출하도록 설정**하면 추가적인 반복을 방지할 수 있습니다. 또는, `max_iterations` 매개변수를 사용하여 프로세스를 고정된 횟수로 제한하거나, 중지 결정을 내리기 위한 외부 로직을 구현할 수도 있습니다. **루프는 최대 5번 실행**되어 반복적인 개선이 무한정 계속되지 않도록 보장합니다.
 
 ???+ "전체 코드"
 
     === "Python"
         ```py
         --8<-- "examples/python/snippets/agents/workflow-agents/loop_agent_doc_improv_agent.py:init"
+        ```
+
+    === "TypeScript"
+        ```typescript
+        --8<-- "examples/typescript/snippets/agents/workflow-agents/loop_agent_doc_improv_agent.ts:init"
         ```
 
     === "Go"
@@ -58,13 +69,10 @@
         --8<-- "examples/java/snippets/src/main/java/agents/workflow/LoopAgentExample.java:init"
         ```
 
-## TypeScript 예제 보강
-
-영어 원문에 포함된 TypeScript 루프 에이전트 예제를 아래에 함께 제공합니다.
-
-```typescript
---8<-- "examples/typescript/snippets/agents/workflow-agents/loop_agent_doc_improv_agent.ts:init"
-```
+    === "Kotlin"
+        ```kotlin
+        --8<-- "examples/kotlin/snippets/agents/workflow-agents/LoopAgentDocImprovAgent.kt:init"
+        ```
 
 !!! tip "모든 에이전트를 위한 전역 지침"
 

@@ -93,12 +93,12 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
     - **Job Mode:** **Jobs** 생성, 감시, 삭제 권한과 **ConfigMaps** 관리 권한,
       **Pods** 목록 조회 및 **logs** 읽기 권한이 필요합니다. Job Mode용 완전한
       즉시 사용 가능한 설정은
-      [deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/gke_agent_sandbox/deployment_rbac.yaml)
+      [deployment_rbac.yaml](https://github.com/google/adk-python/blob/main/contributing/samples/integrations/gke_agent_sandbox/deployment_rbac.yaml)
       샘플을 참고하세요.
     - **Sandbox Mode:** Agent Sandbox가 배포된 네임스페이스 안에서 **SandboxClaim**
       및 **Sandbox** 리소스를 생성, 조회, 감시, 삭제할 수 있는 권한이 필요합니다.
 - 적절한 extras를 포함해 클라이언트 라이브러리를 설치하세요:
-  `pip install google-adk[gke]`
+  `pip install google-adk[extensions]`
 
 ## 구성 파라미터
 
@@ -126,8 +126,9 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
     ```python
     from google.adk.agents import LlmAgent
     from google.adk.code_executors import GkeCodeExecutor
-    from google.adk.code_executors import CodeExecutionInput
+    from google.adk.code_executors.code_execution_utils import CodeExecutionInput
     from google.adk.agents.invocation_context import InvocationContext
+    from google.adk.sessions import InMemorySessionService, Session
 
     # Sandbox Mode용 실행기 초기화
     # 네임스페이스에는 SandboxClaims 및 Sandbox에 대한 RBAC 권한이 있어야 합니다.
@@ -139,7 +140,12 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
     )
 
     # 직접 실행 예시:
-    ctx = InvocationContext()
+    # InvocationContext에는 session_service, invocation_id 및 session이 필요합니다.
+    ctx = InvocationContext(
+        session_service=InMemorySessionService(),
+        invocation_id="demo-invocation",
+        session=Session(id="demo-session", app_name="demo", user_id="demo-user"),
+    )
     result = gke_sandbox_executor.execute_code(ctx, CodeExecutionInput(code="print('Hello from Sandbox Mode')"))
     print(result.stdout)
 
@@ -159,6 +165,7 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
     from google.adk.code_executors import GkeCodeExecutor
     from google.adk.code_executors.code_execution_utils import CodeExecutionInput
     from google.adk.agents.invocation_context import InvocationContext
+    from google.adk.sessions import InMemorySessionService, Session
 
     # Job Mode용 실행기 초기화
     # 네임스페이스에는 Jobs, ConfigMaps, Pods, Logs에 대한 RBAC 권한이 있어야 합니다.
@@ -171,7 +178,12 @@ GKE Code Executor 도구를 사용해 ADK 프로젝트를 성공적으로 배포
     )
 
     # 직접 실행 예시:
-    ctx = InvocationContext()
+    # InvocationContext에는 session_service, invocation_id 및 session이 필요합니다.
+    ctx = InvocationContext(
+        session_service=InMemorySessionService(),
+        invocation_id="demo-invocation",
+        session=Session(id="demo-session", app_name="demo", user_id="demo-user"),
+    )
     result = gke_executor.execute_code(ctx, CodeExecutionInput(code="print('Hello from Job Mode')"))
     print(result.stdout)
 

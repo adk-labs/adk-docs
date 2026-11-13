@@ -1,7 +1,7 @@
 # クイックスタート: A2A経由でリモートエージェントを公開する
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-preview">実験的</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
 このクイックスタートでは、開発者にとって最も一般的な出発点である**「エージェントがあります。他のエージェントがA2A経由で私のエージェントを使用できるように公開するにはどうすればよいですか？」**について説明します。これは、さまざまなエージェントが連携して対話する必要がある複雑なマルチエージェントシステムを構築するために不可欠です。
@@ -295,14 +295,6 @@ adk Webサーバーを開くには、[http://localhost:8000](http://localhost:80
 *   **`before_agent`**: エージェントがリクエスト処理を開始する前に実行されます。受信した `RequestContext` を検査または変更できます。
 *   **`after_event`**: ADK イベントが A2A イベントへ変換された *後で* 実行されます。キューへ入る前の出力イベントを変更したり、`None` を返してイベントを除外したりできます。
 *   **`after_agent`**: エージェントの処理が終了し、最終イベントが準備された後に実行されます。送信前の終端ステータスイベント（例: `completed` や `failed`）を検査または変更する用途で使います。
-
-!!! tip "実験的機能の警告を抑制"
-
-    `ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS` 環境変数を `true` に設定すると、実験的な A2A 機能に関連する警告を抑制できます。これらの機能を意図して使用しており、ログをすっきりさせたい場合に役立ちます:
-
-    ```bash
-    export ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS=true
-    ```
 
 ### アプリケーションのライフサイクルの管理
 

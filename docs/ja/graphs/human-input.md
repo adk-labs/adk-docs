@@ -152,23 +152,32 @@
 
 === "Python"
 
-    次のコードサンプルは、***response schema*** を含む ***RequestInput*** オブジェクトをワークフローノード内で構築する方法を示しています。
+    ツールが実行される前に静的なはい/いいえの承認を求めるには、ツールを ***FunctionTool*** でラップして `require_confirmation=True` を設定します。カスタムヒントメッセージを表示するには、ツール内から `tool_context.request_confirmation()` を呼び出します。ADK が自動的に呼び出しを拒否するのは `require_confirmation=True` の経路のみであるため、独自に確認を求めるツールは、1 回だけ確認を求めるための `tool_context.tool_confirmation` と、拒否を処理するための `tool_confirmation.confirmed` の両方を確認する必要があります:
 
     ```python
-    async def initial_prompt(ctx: Context):
-       """Ask the user for itinerary information"""
-       input_message = """
-           This is an interactive concierge workflow tasked with making you a great
-           itinerary for you in your city of choice. If you give some details about
-           yourself or what you are generally looking for I can better personalize
-           your itinerary.
-           For example, input your:
-               City (Required),
-               Age,
-               Hobby,
-               Example of attraction you liked
-       """
-       yield RequestInput(message=input_message, response_schema=str)
+    from google.adk.agents import Agent
+    from google.adk.tools import FunctionTool, ToolContext
+
+    def book_flight(flight_id: str) -> str:
+       """Books the selected flight."""
+       ...
+
+    def refund(amount: float, tool_context: ToolContext) -> str:
+       """Refunds an order."""
+       if not tool_context.tool_confirmation:
+           tool_context.request_confirmation(
+               hint=f"Approve a refund of {amount}?"
+           )
+           return "Waiting for approval."
+       elif not tool_context.tool_confirmation.confirmed:
+           return "Refund rejected by user."
+       ...
+
+    root_agent = Agent(
+       name="concierge",
+       model="gemini-flash-latest",
+       tools=[FunctionTool(book_flight, require_confirmation=True), refund],
+    )
     ```
 
 === "TypeScript"
@@ -192,3 +201,5 @@
     ```go
     --8<-- "examples/go/snippets/graphs/human-input/main.go:hitl-with-hint"
     ```
+
+動的な確認やクライアントの応答方法を含むツール確認ワークフロー全体については、[ADK ツールのアクション確認を取得する](/ja/tools-custom/confirmation/)を参照してください。

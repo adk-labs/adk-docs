@@ -327,7 +327,7 @@ LIMIT 20;
         from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryAgentAnalyticsPlugin, BigQueryLoggerConfig
         from google.adk.agents import Agent
         from google.adk.models.google_llm import Gemini
-        from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+        from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 
         # --- OpenTelemetry note (no setup required for BQAA) ---
@@ -1741,7 +1741,7 @@ LLM 呼び出しが例外で失敗したときに記録されます。エラー�
 
 !!! note "組み込みの墨消し"
 
-    Python は `temp:` の状態値を `[REDACTED]` に置き換えます。Go はログ記録前に `state_delta` からトップレベルの小文字の `temp:` エントリを削除し、何も残らない場合は `STATE_DELTA` 行を出力しません。構造化されたコンテンツや属性内のその他の `temp:` 値は `[REDACTED]` に置き換えられます。詳しくは [組み込みの墨消し](#built-in-redaction) を参照してください。
+    `temp:` プレフィックスが付いた状態キーは、ログ記録される `state_delta` 内で自動的に `[REDACTED]` に墨消しされます。墨消しされるキー名と状態スコープの詳細については、[組み込みの墨消し](#built-in-redaction)を参照してください。
 
 ```json
 {
@@ -2400,7 +2400,7 @@ from google.adk.plugins.bigquery_agent_analytics_plugin import (
     BigQueryAgentAnalyticsPlugin,
     BigQueryLoggerConfig,
 )
-from google.adk.tools.bigquery import BigQueryToolset, BigQueryCredentialsConfig
+from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig
 
 # --- Configuration ---
 PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "your-gcp-project-id")

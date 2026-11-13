@@ -1,17 +1,18 @@
 # ADK 에이전트를 위한 OpenAI 모델
 
 <div class="language-support-tag">
-   <span class="lst-supported">ADK에서 지원</span><span class="lst-go">Go v2.1.0</span><span class="lst-preview">실험적 기능</span>
+   <span class="lst-supported">ADK에서 지원</span><span class="lst-go">Go v2.1.0</span><span class="lst-kotlin">Kotlin v1.4.0</span>
 </div>
-
-!!! example "실험적 기능"
-
-    `openaimodel` 패키지는 실험적 기능이며 향후 동작이 변경되거나 제거될 수 있습니다. 여러분의 [피드백](https://github.com/google/adk-go/issues/new?template=feature_request.md)을 환영합니다!
 
 ADK에서 OpenAI 모델을 사용할 수 있습니다. 연결하는 방법은 사용하는 언어에 따라 다릅니다.
 
 - **Go — 기본 지원:** ADK Go는 OpenAI Responses API 또는 [Chat Completions API](#chat-completions-api)를 타겟팅하여 `model.LLM` 인터페이스를 구현하는 `openaimodel` 패키지를 직접 제공합니다. [시작하기](#get-started)를 참고하세요.
 - **Python — LiteLLM 경유:** ADK Python은 LiteLLM 커넥터를 통해 OpenAI 모델(및 기타 다양한 제공업체)에 액세스합니다. [LiteLLM](/ko/agents/models/litellm/)을 참고하세요.
+- **Kotlin — 기본 지원:** ADK Kotlin은 OpenAI Chat Completions API를 타겟팅하는 `com.google.adk.kt.models.openai`의 `ChatCompletions` 모델을 제공합니다. [시작하기](#get-started)를 참고하세요.
+
+!!! example "Go에서의 실험적 기능"
+
+    OpenAI 모델 지원 기능은 ADK Go에서 실험적 기능입니다. 제한 사항이 있을 수 있으며 동작이 변경될 수 있습니다.
 
 ## 시작하기 {#get-started}
 
@@ -88,10 +89,31 @@ ADK에서 OpenAI 모델을 사용할 수 있습니다. 연결하는 방법은 �
 
         실행 가능한 전체 샘플은 ADK Go 저장소의 [examples/openai/completions/](https://github.com/google/adk-go/tree/main/examples/openai/completions)를 참고하세요.
 
+=== "Kotlin"
+
+    ```kotlin
+    import com.google.adk.kt.agents.Instruction
+    import com.google.adk.kt.agents.LlmAgent
+    import com.google.adk.kt.models.openai.ChatCompletions
+
+    // Instantiate the model on the Chat Completions API
+    val llm = ChatCompletions(name = "gpt-4o-mini", apiKey = System.getenv("OPENAI_API_KEY"))
+
+    // Create the agent
+    val agent =
+      LlmAgent(
+        name = "openai_agent",
+        model = llm,
+        instruction = Instruction("You are a helpful AI assistant."),
+      )
+    ```
+
+    실행 가능한 전체 샘플은 ADK Kotlin 저장소의 [examples/.../chatcompletions/](https://github.com/google/adk-kotlin/tree/v1.5.0/examples/src/main/kotlin/com/google/adk/kt/examples/chatcompletions)를 참고하세요.
+
 ## Chat Completions API {#chat-completions-api}
 
 <div class="language-support-tag">
-   <span class="lst-supported">ADK에서 지원</span><span class="lst-go">Go v2.5.0</span><span class="lst-preview">실험적 기능</span>
+   <span class="lst-supported">ADK에서 지원</span><span class="lst-go">Go v2.5.0</span><span class="lst-kotlin">Kotlin v1.4.0</span><span class="lst-preview">실험적 기능</span>
 </div>
 
 기본적으로 `openaimodel`은 OpenAI [Responses API](https://platform.openai.com/docs/api-reference/responses)(`POST /v1/responses`)로 요청을 보냅니다. 거의 모든 OpenAI 호환 제공업체는 [Chat Completions API](https://platform.openai.com/docs/api-reference/chat)(`POST /v1/chat/completions`)를 구현하며, 일부는 이 API만 구현합니다. 이를 사용하려면 [시작하기](#get-started) 아래의 Chat Completions API 탭에 표시된 대로 `ClientConfig`의 `API` 필드를 `openaimodel.APIChatCompletions`로 설정하세요. 에이전트, 도구 및 러너는 두 API 모두에서 동일한 방식으로 작동합니다.

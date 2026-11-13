@@ -23,6 +23,16 @@ catalog_tags: ["data", "google"]
 
 이 도구들은 `BigtableToolset` 툴셋으로 패키징되어 있습니다.
 
+## 설치
+
+Bigtable 도구는 기본 `google-adk` 설치에 포함되지 않는 Google Cloud 클라이언트 라이브러리에 의존합니다. `gcp` extra와 함께 설치하세요:
+
+```bash
+pip install "google-adk[gcp]"
+```
+
+## 에이전트와 함께 사용
+
 ```py
 --8<-- "examples/python/snippets/tools/built-in-tools/bigtable.py"
 ```

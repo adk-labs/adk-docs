@@ -267,11 +267,15 @@ async def query_sales_database(region: str) -> AsyncGenerator[str, None]:
 
 ## 도구 실행 컨텍스트
 
-도구 또는 콜백은 상태, 기록, 아티팩트를 위해 `InvocationContext`를 수신합니다. 이는 [에이전트 컨텍스트](../context/index.md)에 설명된 대로 모든 ADK 에이전트에서 동일하게 작동하지만, 라이브 세션에서는 중요한 차이점이 있습니다: **하나의 `InvocationContext`가 전체 `run_live()` 루프에 걸쳐 유지됩니다**. `run_live()`를 호출할 때 생성되어 세션이 끝날 때까지 모든 에이전트와 모든 턴에 걸쳐 유지됩니다. 요청/응답 에이전트에서 호출(invocation)은 단일 턴이지만, 라이브 세션에서는 대화 전체를 의미합니다.
+<div class="language-support-tag">
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span>
+</div>
+
+상태, 기록 및 아티팩트를 위해 도구는 `ToolContext`를 수신하고 콜백은 `CallbackContext`를 수신합니다. 둘 다 [에이전트 컨텍스트](../context/index.md)에 설명된 대로 모든 ADK 에이전트에서 동일하게 작동하지만, 라이브 세션에서는 중요한 차이점이 하나 있습니다: **내부 `InvocationContext`가 전체 `run_live()` 루프에 걸쳐 유지됩니다**. 이는 `run_live()`를 호출할 때 생성되어 세션이 끝날 때까지 모든 에이전트와 모든 턴에 걸쳐 유지됩니다. 요청/응답 에이전트에서 호출(invocation)은 단일 턴이지만, 라이브 세션에서는 대화 전체를 의미합니다.
 
 라이브 도구에서 가장 자주 사용되는 두 필드는 다음과 같습니다:
 
 | 필드 | 제공 내용 |
-|---|---|
-| `context.run_config` | 세션의 [구성](configuration.md) — 응답 모달리티, 전사, 제한 |
-| `context.end_invocation` | `True`로 설정하면 전체 스트리밍 세션이 즉시 종료됨 |
+| :---- | :---- |
+| `tool_context.run_config` | 세션의 [구성](configuration.md) — 응답 모달리티, 전사, 제한 |
+| `tool_context.state` | 세션 상태; 직접 수정하면 ADK가 변경 사항을 영구 저장함 |

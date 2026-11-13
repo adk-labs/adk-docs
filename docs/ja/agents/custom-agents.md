@@ -46,6 +46,7 @@
       *   **シグネチャ:** `async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:`
       *   **非同期ジェネレーター:** `async def`関数であり、`AsyncGenerator`を返す必要があります。これにより、サブエージェントや自身のロジックによって生成されたイベントを`yield`でランナーに返すことができます。
       *   **`ctx` (InvocationContext):** 重要な実行時情報、特に`ctx.session.state`へのアクセスを提供します。これは、カスタムエージェントがオーケストレーションするステップ間でデータを共有する主要な方法です。
+      *   **ライブ音声および動画の実行:** `_run_async_impl`メソッドは非ライブ実行（`run_async()`）のみを対象としています。`run_live()`をサポートするには、同じシグネチャを持つ`_run_live_impl`もオーバーライドしてください。このオーバーライドがない場合、ライブ実行は`NotImplementedError`を送出します。
 
 === "Go"
 
@@ -184,9 +185,757 @@
 
 通常、カスタムエージェントは他のエージェント（`LlmAgent`、`LoopAgent`など）をオーケストレーションします。
 
-*   **初期化:** 通常、これらのサブエージェントのインスタンスをカスタムエージェントのコンストラクタに渡し、インスタンスフィールド/属性として格納します（例: `this.story_generator = story_generator_instance` または `self.story_generator = story_generator_instance`）。これにより、カスタムエージェントの中核となる非同期実行ロジック（`_run_async_impl`メソッドなど）内からアクセス可能になります。
+*   **初期化:** 通常、これらのサブエージェントのインスタンスをカスタムエージェントのコンストラクタに渡し、インスタンスフィールド/属性として格納します（例: `this.story_generator = story_generator_instance` または `self.story_generator = story_generator_instance`）。これにより、カスタムエージェントの中核となる非同期実行ロジック（`_run_async_impl`メソッドなど）内からアクセス可能になります。Pythonでは、`BaseAgent`は`extra='forbid'`で構成されたPydanticモデルであるため、保持する各サブエージェントを`story_generator: LlmAgent`のような型注釈付きのクラスレベルフィールドとして宣言し、`super().__init__(...)`に渡す必要があります。`__init__`で未宣言の属性を代入すると`ValueError`が発生します。
 *   **サブエージェントリスト:** `super()`コンストラクタを使用して`BaseAgent`を初期化する際に、`sub agents`リストを渡すべきです。このリストは、このカスタムエージェントの直接の階層に属するエージェントをADKフレームワークに伝えます。これは、中核となる実行ロジック（`_run_async_impl`）が`self.xxx_agent`を介してエージェントを直接呼び出す場合でも、ライフサイクル管理、イントロスペクション、そして将来のルーティング機能などのフレームワーク機能にとって重要です。カスタムロジックがトップレベルで直接呼び出すエージェントを含めてください。
 *   **状態:** 前述の通り、`ctx.session.state`は、サブエージェント（特に`output key`を使用する`LlmAgent`）が結果をオーケストレーターに返し、オーケストレーターが必要な入力を渡すための標準的な方法です。
+
+## エージェントベースのワークフロープリミティブ
+
+以下のセクションでは、これらのマルチエージェントシステムを効果的に構築および管理できるようにする、エージェント階層、ワークフローエージェント、インタラクションメカニズムといったADKのコアプリミティブについて詳しく説明します。ADKは、マルチエージェントシステム内のインタラクションを構造化し管理することを可能にする、コアとなる構成要素（プリミティブ）を提供します。
+
+!!! Note
+
+    プリミティブの特定のパラメータ名やメソッド名は、SDKの言語によって若干異なる場合があります（例：Pythonの`sub_agents`、Javaの`subAgents`）。詳細については、各言語のAPIドキュメントを参照してください。
+
+### エージェント階層：親エージェントとサブエージェント
+
+マルチエージェントシステムの構成の基礎は、`BaseAgent`で定義された親子関係です。
+
+* **階層の確立:** 親エージェントの初期化時に`sub_agents`引数にエージェントインスタンスのリストを渡すことで、ツリー構造を作成します。ADKは初期化中に各子エージェントに`parent_agent`属性を自動的に設定します。
+* **単一の親ルール:** エージェントインスタンスは、サブエージェントとして一度しか追加できません。2番目の親を割り当てようとすると`ValueError`が発生します。
+* **重要性:** この階層は[ワークフローエージェント](#workflow-agents-as-orchestrators)のスコープを定義し、LLM駆動の委任の潜在的なターゲットに影響を与えます。`agent.parent_agent`を使用して階層をナビゲートしたり、`agent.find_agent(name)`を使用して子孫エージェントを見つけたりできます。
+
+=== "Python"
+
+    ```python
+    # 概念例：階層の定義
+    from typing import AsyncGenerator
+
+    from google.adk.agents import LlmAgent, BaseAgent
+    from google.adk.agents.invocation_context import InvocationContext
+    from google.adk.events import Event
+
+
+    # カスタムの非LLMエージェントは _run_async_impl を実装する必要があります。
+    # BaseAgent を直接インスタンス化すると、実行時に NotImplementedError が送出されます。
+    class TaskExecutor(BaseAgent):
+        async def _run_async_impl(
+            self, ctx: InvocationContext
+        ) -> AsyncGenerator[Event, None]:
+            yield Event(author=self.name)
+
+
+    # 個々のエージェントを定義
+    greeter = LlmAgent(name="Greeter", model="gemini-flash-latest")
+    task_doer = TaskExecutor(name="TaskExecutor") # カスタムの非LLMエージェント
+
+
+    # 親エージェントを作成し、sub_agents経由で子を割り当て
+    coordinator = LlmAgent(
+        name="Coordinator",
+        model="gemini-flash-latest",
+        description="挨拶とタスクを調整します。",
+        sub_agents=[ # ここでsub_agentsを割り当て
+            greeter,
+            task_doer
+        ]
+    )
+
+
+    # フレームワークが自動的に設定：
+    # assert greeter.parent_agent == coordinator
+    # assert task_doer.parent_agent == coordinator
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 概念例：階層の定義
+    import { LlmAgent, BaseAgent, InvocationContext } from '@google/adk';
+    import type { Event, createEventActions } from '@google/adk';
+
+    class TaskExecutorAgent extends BaseAgent {
+      async *runAsyncImpl(context: InvocationContext): AsyncGenerator<Event, void, void> {
+        yield {
+          id: 'event-1',
+          invocationId: context.invocationId,
+          author: this.name,
+          content: { parts: [{ text: 'Task completed!' }] },
+          actions: createEventActions(),
+          timestamp: Date.now(),
+        };
+      }
+      async *runLiveImpl(context: InvocationContext): AsyncGenerator<Event, void, void> {
+        this.runAsyncImpl(context);
+      }
+    }
+
+    // 個々のエージェントを定義
+    const greeter = new LlmAgent({name: 'Greeter', model: 'gemini-flash-latest'});
+    const taskDoer = new TaskExecutorAgent({name: 'TaskExecutor'}); // カスタムの非LLMエージェント
+
+    // 親エージェントを作成し、subAgents経由で子を割り当て
+    const coordinator = new LlmAgent({
+        name: 'Coordinator',
+        model: 'gemini-flash-latest',
+        description: '挨拶とタスクを調整します。',
+        subAgents: [ // ここでsubAgentsを割り当て
+            greeter,
+            taskDoer
+        ],
+    });
+
+    // フレームワークが自動的に設定：
+    // console.assert(greeter.parentAgent === coordinator);
+    // console.assert(taskDoer.parentAgent === coordinator);
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "google.golang.org/adk/v2/agent"
+        "google.golang.org/adk/v2/agent/llmagent"
+    )
+
+    --8<-- "examples/go/snippets/agents/multi-agent/main.go:hierarchy"
+    ```
+
+=== "Java"
+
+    ```java
+    // 概念例：階層の定義
+    import com.google.adk.agents.SequentialAgent;
+    import com.google.adk.agents.LlmAgent;
+
+
+    // 個々のエージェントを定義
+    LlmAgent greeter = LlmAgent.builder().name("Greeter").model("gemini-flash-latest").build();
+    SequentialAgent taskDoer = SequentialAgent.builder().name("TaskExecutor").subAgents(...).build(); // シーケンシャルエージェント
+
+
+    // 親エージェントを作成し、sub_agentsを割り当て
+    LlmAgent coordinator = LlmAgent.builder()
+        .name("Coordinator")
+        .model("gemini-flash-latest")
+        .description("挨拶とタスクを調整します")
+        .subAgents(greeter, taskDoer) // ここでsub_agentsを割り当て
+        .build();
+
+
+    // フレームワークが自動的に設定：
+    // assert greeter.parentAgent().equals(coordinator);
+    // assert taskDoer.parentAgent().equals(coordinator);
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:custom_agent"
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:hierarchy"
+    ```
+
+### オーケストレーターとしてのワークフローエージェント {#workflow-agents-as-orchestrators}
+
+ADKには、自身でタスクを実行するのではなく、`sub_agents`の実行フローを調整（オーケストレート）する`BaseAgent`から派生した特殊なエージェントが含まれています。
+
+!!! note "Python および TypeScript では非推奨"
+
+    Python および TypeScript では、`SequentialAgent`、`ParallelAgent`、および
+    `LoopAgent` は `Workflow` に置き換えられ、非推奨（deprecated）となっています。これらを構築すると
+    非推奨の警告が出力され、今後のリリースでクラスが削除される予定です。
+    `Workflow` は `LlmAgent` のサブエージェントとして使用できません。
+
+* **[`SequentialAgent`](workflow-agents/sequential-agents.md):** `sub_agents`をリストされた順に一つずつ実行します。
+    * **コンテキスト:** *同じ*[`InvocationContext`](../runtime/index.md)を順次渡すことで、エージェントが共有ステートを介して結果を簡単に渡せるようにします。
+
+=== "Python"
+
+    ```python
+    # 概念例：シーケンシャルパイプライン
+    from google.adk.agents import SequentialAgent, LlmAgent
+
+    step1 = LlmAgent(name="Step1_Fetch", output_key="data") # 出力をstate['data']に保存
+    step2 = LlmAgent(name="Step2_Process", instruction="{data}からのデータを処理します。")
+
+    pipeline = SequentialAgent(name="MyPipeline", sub_agents=[step1, step2])
+    # pipelineが実行されると、Step2はStep1が設定したstate['data']にアクセスできます。
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 概念例：シーケンシャルパイプライン
+    import { SequentialAgent, LlmAgent } from '@google/adk';
+
+    const step1 = new LlmAgent({name: 'Step1_Fetch', outputKey: 'data'}); // 出力をstate['data']に保存
+    const step2 = new LlmAgent({name: 'Step2_Process', instruction: 'Process data from {data}.'});
+
+    const pipeline = new SequentialAgent({name: 'MyPipeline', subAgents: [step1, step2]});
+    // pipelineが実行されると、Step2はStep1が設定したstate['data']にアクセスできます。
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "google.golang.org/adk/v2/agent"
+        "google.golang.org/adk/v2/agent/llmagent"
+        "google.golang.org/adk/v2/agent/workflowagents/sequentialagent"
+    )
+
+    --8<-- "examples/go/snippets/agents/multi-agent/main.go:sequential-pipeline"
+    ```
+
+=== "Java"
+
+    ```java
+    // 概念例：シーケンシャルパイプライン
+    import com.google.adk.agents.SequentialAgent;
+    import com.google.adk.agents.LlmAgent;
+
+    LlmAgent step1 = LlmAgent.builder().name("Step1_Fetch").outputKey("data").build(); // 出力をstate.get("data")に保存
+    LlmAgent step2 = LlmAgent.builder().name("Step2_Process").instruction("Process data from {data}.").build();
+
+    SequentialAgent pipeline = SequentialAgent.builder().name("MyPipeline").subAgents(step1, step2).build();
+    // pipelineが実行されると、Step2はStep1が設定したstate.get("data")にアクセスできます。
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:sequential_pipeline"
+    ```
+
+* **[`ParallelAgent`](workflow-agents/parallel-agents.md):** `sub_agents`を並列で実行します。サブエージェントからのイベントはインターリーブされる可能性があります。
+    * **コンテキスト:** 各子エージェントの`InvocationContext.branch`を変更し（例：`ParentBranch.ChildName`）、別個のコンテキストパスを提供します。これは一部のメモリー実装で履歴を分離するのに役立ちます。
+    * **ステート:** ブランチが異なっていても、すべての並列の子は*同じ共有*`session.state`にアクセスし、初期ステートの読み取りと結果の書き込みができます（競合状態を避けるために別個のキーを使用）。
+
+=== "Python"
+
+    ```python
+    # 概念例：並列実行
+    from google.adk.agents import ParallelAgent, LlmAgent
+
+    fetch_weather = LlmAgent(name="WeatherFetcher", output_key="weather")
+    fetch_news = LlmAgent(name="NewsFetcher", output_key="news")
+
+    gatherer = ParallelAgent(name="InfoGatherer", sub_agents=[fetch_weather, fetch_news])
+    # gathererが実行されると、WeatherFetcherとNewsFetcherが同時に実行されます。
+    # 後続のエージェントはstate['weather']とstate['news']を読み取ることができます。
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 概念例：並列実行
+    import { ParallelAgent, LlmAgent } from '@google/adk';
+
+    const fetchWeather = new LlmAgent({name: 'WeatherFetcher', outputKey: 'weather'});
+    const fetchNews = new LlmAgent({name: 'NewsFetcher', outputKey: 'news'});
+
+    const gatherer = new ParallelAgent({name: 'InfoGatherer', subAgents: [fetchWeather, fetchNews]});
+    // gathererが実行されると、WeatherFetcherとNewsFetcherが同時に実行されます。
+    // 後続のエージェントはstate['weather']とstate['news']を読み取ることができます。
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "google.golang.org/adk/v2/agent"
+        "google.golang.org/adk/v2/agent/llmagent"
+        "google.golang.org/adk/v2/agent/workflowagents/parallelagent"
+    )
+
+    --8<-- "examples/go/snippets/agents/multi-agent/main.go:parallel-execution"
+    ```
+
+=== "Java"
+
+    ```java
+    // 概念例：並列実行
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.agents.ParallelAgent;
+
+
+    LlmAgent fetchWeather = LlmAgent.builder()
+        .name("WeatherFetcher")
+        .outputKey("weather")
+        .build();
+
+
+    LlmAgent fetchNews = LlmAgent.builder()
+        .name("NewsFetcher")
+        .instruction("news")
+        .build();
+
+
+    ParallelAgent gatherer = ParallelAgent.builder()
+        .name("InfoGatherer")
+        .subAgents(fetchWeather, fetchNews)
+        .build();
+
+
+    // gathererが実行されると、WeatherFetcherとNewsFetcherが同時に実行されます。
+    // 後続のエージェントはstate['weather']とstate['news']を読み取ることができます。
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:parallel_execution"
+    ```
+
+  * **[`LoopAgent`](workflow-agents/loop-agents.md):** `sub_agents`をループ内で順次実行します。
+      * **終了:** オプションの`max_iterations`に達した場合、またはいずれかのサブエージェントが`Event Actions`に`escalate=True`を含む[`Event`](../events/index.md)を返した場合にループは停止します。
+      * **コンテキストとステート:** 各イテレーションで*同じ*`InvocationContext`を渡すことで、ステートの変更（カウンター、フラグなど）がループ間で持続するようにします。
+
+=== "Python"
+
+      ```python
+      # 概念例：条件付きループ
+      from google.adk.agents import LoopAgent, LlmAgent, BaseAgent
+      from google.adk.events import Event, EventActions
+      from google.adk.agents.invocation_context import InvocationContext
+      from typing import AsyncGenerator
+
+      class CheckCondition(BaseAgent): # ステートを確認するカスタムエージェント
+          async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+              status = ctx.session.state.get("status", "pending")
+              is_done = (status == "completed")
+              yield Event(author=self.name, actions=EventActions(escalate=is_done)) # 完了したらエスカレート
+
+      process_step = LlmAgent(name="ProcessingStep") # state['status']を更新する可能性のあるエージェント
+
+      poller = LoopAgent(
+          name="StatusPoller",
+          max_iterations=10,
+          sub_agents=[process_step, CheckCondition(name="Checker")]
+      )
+      # pollerが実行されると、Checkerがエスカレートするまで（state['status'] == 'completed'）、
+      # または10回のイテレーションが経過するまで、process_stepとCheckerを繰り返し実行します。
+      ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 概念例：条件付きループ
+    import { LoopAgent, LlmAgent, BaseAgent, InvocationContext } from '@google/adk';
+    import type { Event, createEventActions, EventActions } from '@google/adk';
+
+    class CheckConditionAgent extends BaseAgent { // ステートを確認するカスタムエージェント
+        async *runAsyncImpl(ctx: InvocationContext): AsyncGenerator<Event> {
+            const status = ctx.session.state['status'] || 'pending';
+            const isDone = status === 'completed';
+            yield createEvent({ author: 'check_condition', actions: createEventActions({ escalate: isDone }) });
+        }
+
+        async *runLiveImpl(ctx: InvocationContext): AsyncGenerator<Event> {
+            // 未実装
+        }
+    };
+
+    const processStep = new LlmAgent({name: 'ProcessingStep'}); // state['status']を更新する可能性のあるエージェント
+
+    const poller = new LoopAgent({
+        name: 'StatusPoller',
+        maxIterations: 10,
+        // sub_agentsをループ内で順次実行
+        subAgents: [processStep, new CheckConditionAgent ({name: 'Checker'})]
+    });
+    // pollerが実行されると、Checkerがエスカレートするまで（state['status'] === 'completed'）、
+    // または10回のイテレーションが経過するまで、processStepとCheckerを繰り返し実行します。
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "iter"
+        "google.golang.org/adk/v2/agent"
+        "google.golang.org/adk/v2/agent/llmagent"
+        "google.golang.org/adk/v2/agent/workflowagents/loopagent"
+        "google.golang.org/adk/v2/session"
+    )
+
+    --8<-- "examples/go/snippets/agents/multi-agent/main.go:loop-with-condition"
+    ```
+
+=== "Java"
+
+    ```java
+    // 概念例：条件付きループ
+    // ステートを確認し、エスカレートする可能性のあるカスタムエージェント
+    public static class CheckConditionAgent extends BaseAgent {
+      public CheckConditionAgent(String name, String description) {
+        super(name, description, List.of(), null, null);
+      }
+
+      @Override
+      protected Flowable<Event> runAsyncImpl(InvocationContext ctx) {
+        String status = (String) ctx.session().state().getOrDefault("status", "pending");
+        boolean isDone = "completed".equalsIgnoreCase(status);
+
+        // 条件が満たされた場合、エスカレート（ループを抜ける）を知らせるイベントを発行します。
+        // 未完了の場合、escalateフラグはfalseまたは存在せず、ループは継続します。
+        Event checkEvent = Event.builder()
+                .author(name())
+                .id(Event.generateEventId()) // イベントに一意のIDを付与することが重要
+                .actions(EventActions.builder().escalate(isDone).build()) // 完了したらエスカレート
+                .build();
+        return Flowable.just(checkEvent);
+      }
+    }
+
+    // state.put("status")を更新する可能性のあるエージェント
+    LlmAgent processingStepAgent = LlmAgent.builder().name("ProcessingStep").build();
+    // 条件をチェックするためのカスタムエージェントインスタンス
+    CheckConditionAgent conditionCheckerAgent = new CheckConditionAgent(
+        "ConditionChecker",
+        "ステータスが'completed'かどうかをチェックします。"
+    );
+    LoopAgent poller = LoopAgent.builder().name("StatusPoller").maxIterations(10).subAgents(processingStepAgent, conditionCheckerAgent).build();
+    // pollerが実行されると、Checkerがエスカレートするまで（state.get("status") == "completed"）、
+    // または10回のイテレーションが経過するまで、processingStepAgentとconditionCheckerAgentを繰り返し実行します。
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:check_condition_agent"
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:loop_with_condition"
+    ```
+
+### インタラクションと通信メカニズム
+
+システム内のエージェントは、しばしば互いにデータを交換したり、アクションをトリガーしたりする必要があります。ADKはこれを以下の方法で容易にします。
+
+#### 共有セッションステート
+
+同じ呼び出し内で動作し、`InvocationContext`を介して同じ[`Session`](/ja/sessions/session/)オブジェクトを共有するエージェントが、受動的に通信するための最も基本的な方法です。
+
+* **メカニズム:** あるエージェント（またはそのツール/コールバック）が値を書き込み（`context.state['data_key'] = processed_data`）、後続のエージェントがそれを読み取ります（`data = context.state.get('data_key')`）。Pythonでは、[`CallbackContext`](../callbacks/index.md)と`ToolContext`は同じデルタ認識（delta-aware）コンテキストクラスであり、`context.state`へのすべての書き込みはエージェントが送出するイベント上の`state_delta`として記録されます。
+* **利便性:** [`LlmAgent`](llm-agents.md)の`output_key`プロパティは、エージェントの最終的な応答テキスト（または構造化出力）を指定されたステートキーに自動的に保存します。
+* **性質:** 非同期で受動的な通信。`SequentialAgent`によって調整されるパイプラインや、`LoopAgent`のイテレーション間でデータを渡すのに理想的です。
+* **参照:** [ステート管理](../sessions/state.md)
+
+!!! note "呼び出しコンテキストと`temp:`ステート"
+    親エージェントがサブエージェントを呼び出すとき、同じ`InvocationContext`を渡します。これは、それらが同じ一時的な（`temp:`）ステートを共有することを意味し、現在のターンにのみ関連するデータを渡すのに理想的です。
+
+=== "Python"
+
+    ```python
+    # 概念例：output_keyの使用とステートの読み取り
+    from google.adk.agents import LlmAgent, SequentialAgent
+
+
+    agent_A = LlmAgent(name="AgentA", instruction="フランスの首都を見つけてください。", output_key="capital_city")
+    agent_B = LlmAgent(name="AgentB", instruction="{capital_city}に保存されている都市について教えてください。")
+
+
+    pipeline = SequentialAgent(name="CityInfo", sub_agents=[agent_A, agent_B])
+    # AgentAが実行され、「Paris」をstate['capital_city']に保存します。
+    # AgentBが実行され、そのinstructionプロセッサがstate['capital_city']を読み取って「Paris」を取得します。
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 概念例：outputKeyの使用とステートの読み取り
+    import { LlmAgent, SequentialAgent } from '@google/adk';
+
+    const agentA = new LlmAgent({name: 'AgentA', instruction: 'Find the capital of France.', outputKey: 'capital_city'});
+    const agentB = new LlmAgent({name: 'AgentB', instruction: 'Tell me about the city stored in {capital_city}.'});
+
+    const pipeline = new SequentialAgent({name: 'CityInfo', subAgents: [agentA, agentB]});
+    // AgentAが実行され、「Paris」をstate['capital_city']に保存します。
+    // AgentBが実行され、そのinstructionプロセッサがstate['capital_city']を読み取って「Paris」を取得します。
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "google.golang.org/adk/v2/agent"
+        "google.golang.org/adk/v2/agent/llmagent"
+        "google.golang.org/adk/v2/agent/workflowagents/sequentialagent"
+    )
+
+    --8<-- "examples/go/snippets/agents/multi-agent/main.go:output-key-state"
+    ```
+
+=== "Java"
+
+    ```java
+    // 概念例：outputKeyの使用とステートの読み取り
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.agents.SequentialAgent;
+
+
+    LlmAgent agentA = LlmAgent.builder()
+        .name("AgentA")
+        .instruction("Find the capital of France.")
+        .outputKey("capital_city")
+        .build();
+
+
+    LlmAgent agentB = LlmAgent.builder()
+        .name("AgentB")
+        .instruction("Tell me about the city stored in {capital_city}.")
+        .outputKey("capital_city")
+        .build();
+
+
+    SequentialAgent pipeline = SequentialAgent.builder().name("CityInfo").subAgents(agentA, agentB).build();
+    // AgentAが実行され、「Paris」をstate('capital_city')に保存します。
+    // AgentBが実行され、そのinstructionプロセッサがstate.get("capital_city")を読み取って「Paris」を取得します。
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:output_key_state"
+    ```
+
+#### LLMによる委任とエージェント移譲 {#delegation}
+
+[`LlmAgent`](llm-agents.md)の理解力を活用して、階層内の他の適切なエージェントにタスクを動的にルーティングします。
+
+* **メカニズム:** エージェントのLLMが特定の関数呼び出しを生成します: `transfer_to_agent(agent_name='target_agent_name')`。
+* **処理:** サブエージェントが存在するか、移譲が禁止されていない場合にデフォルトで使用される`AutoFlow`がこの呼び出しを捕捉します。`root_agent.find_agent()`を使用してターゲットエージェントを特定し、`InvocationContext`を更新して実行の焦点を切り替えます。
+* **要件:** 呼び出し元の`LlmAgent`には、いつ移譲するかについての明確な`instructions`が必要であり、潜在的なターゲットエージェントには、LLMが情報に基づいた決定を下せるように、明確な`description`が必要です。移譲のスコープ（親、サブエージェント、兄弟）は`LlmAgent`で設定できます。
+* **性質:** LLMの解釈に基づく、動的で柔軟なルーティング。
+
+=== "Python"
+
+    ```python
+    # 概念設定：LLM移譲
+    from google.adk.agents import LlmAgent
+
+
+    booking_agent = LlmAgent(name="Booker", description="フライトとホテルの予約を処理します。")
+    info_agent = LlmAgent(name="Info", description="一般情報を提供し、質問に答えます。")
+
+
+    coordinator = LlmAgent(
+        name="Coordinator",
+        model="gemini-flash-latest",
+        instruction="あなたはアシスタントです。予約タスクはBookerに、情報要求はInfoに委任してください。",
+        description="メインのコーディネーター。",
+        # AutoFlowは通常、ここで暗黙的に使用されます
+        sub_agents=[booking_agent, info_agent]
+    )
+    # coordinatorが「フライトを予約して」というリクエストを受け取ると、そのLLMは次を生成するべきです：
+    # FunctionCall(name='transfer_to_agent', args={'agent_name': 'Booker'})
+    # その後、ADKフレームワークは実行をbooking_agentにルーティングします。
+    ```
+
+=== "TypeScript"
+
+    ```typescript
+    // 概念設定：LLM移譲
+    import { LlmAgent } from '@google/adk';
+
+    const bookingAgent = new LlmAgent({name: 'Booker', description: 'フライトとホテルの予約を処理します。'});
+    const infoAgent = new LlmAgent({name: 'Info', description: '一般情報を提供し、質問に答えます。'});
+
+    const coordinator = new LlmAgent({
+        name: 'Coordinator',
+        model: 'gemini-flash-latest',
+        instruction: 'あなたはアシスタントです。予約タスクはBookerに、情報要求はInfoに委任してください。',
+        description: 'メインのコーディネーター。',
+        // AutoFlowは通常、ここで暗黙的に使用されます
+        subAgents: [bookingAgent, infoAgent]
+    });
+    // coordinatorが「フライトを予約して」というリクエストを受け取ると、そのLLMは次を生成するべきです：
+    // {functionCall: {name: 'transfer_to_agent', args: {agent_name: 'Booker'}}}
+    // その後、ADKフレームワークは実行をbookingAgentにルーティングします。
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "google.golang.org/adk/v2/agent/llmagent"
+    )
+
+    --8<-- "examples/go/snippets/agents/multi-agent/main.go:llm-transfer"
+    ```
+
+=== "Java"
+
+    ```java
+    // 概念設定：LLM移譲
+    import com.google.adk.agents.LlmAgent;
+
+
+    LlmAgent bookingAgent = LlmAgent.builder()
+        .name("Booker")
+        .description("フライトとホテルの予約を処理します。")
+        .build();
+
+
+    LlmAgent infoAgent = LlmAgent.builder()
+        .name("Info")
+        .description("一般情報を提供し、質問に答えます。")
+        .build();
+
+
+    // コーディネーターエージェントを定義
+    LlmAgent coordinator = LlmAgent.builder()
+        .name("Coordinator")
+        .model("gemini-flash-latest") // または希望のモデル
+        .instruction("あなたはアシスタントです。予約タスクはBookerに、情報要求はInfoに委任してください。")
+        .description("メインのコーディネーター。")
+        // AutoFlowは、subAgentsが存在し、移譲が禁止されていないため、
+        // デフォルトで（暗黙的に）使用されます。
+        .subAgents(bookingAgent, infoAgent)
+        .build();
+
+    // coordinatorが「フライトを予約して」というリクエストを受け取ると、そのLLMは次を生成するべきです：
+    // FunctionCall.builder.name("transferToAgent").args(ImmutableMap.of("agent_name", "Booker")).build()
+    // その後、ADKフレームワークは実行をbookingAgentにルーティングします。
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:llm_transfer"
+    ```
+
+#### `AgentTool`による明示的な呼び出し
+
+[`LlmAgent`](llm-agents.md)が他の`BaseAgent`インスタンスを呼び出し可能な関数や[ツール](/ja/tools-custom/)として扱うことを可能にします。
+
+* **メカニズム:** ターゲットエージェントインスタンスを`AgentTool`でラップし、親`LlmAgent`の`tools`リストに含めます。`AgentTool`はLLMに対応する関数宣言を生成します。
+* **処理:** 親のLLMが`AgentTool`をターゲットとする関数呼び出しを生成すると、フレームワークは`AgentTool.run_async`を実行します。このメソッドはターゲットエージェントを実行し、その最終応答をキャプチャし、ステート/アーティファクトの変更を親のコンテキストに転送し、応答をツールの結果として返します。
+* **性質:** 他のツールと同様に、同期的（親のフロー内）、明示的、制御された呼び出し。
+* **(注：** `AgentTool`は明示的にインポートして使用する必要があります)。
+
+=== "Python"
+
+    ```python
+    # 概念設定：ツールとしてのエージェント
+    from google.adk import Event
+    from google.adk.agents import LlmAgent, BaseAgent
+    from google.adk.tools import agent_tool
+    from google.genai import types
+    from pydantic import BaseModel
+
+
+    # ターゲットエージェントを定義（LlmAgentまたはカスタムBaseAgent）
+    class ImageGeneratorAgent(BaseAgent): # カスタムエージェントの例
+        name: str = "ImageGen"
+        description: str = "プロンプトに基づいて画像を生成します。"
+        # ... 内部ロジック ...
+        async def _run_async_impl(self, ctx): # 簡略化された実行ロジック
+            prompt = ctx.session.state.get("image_prompt", "default prompt")
+            # ... 画像バイトを生成 ...
+            image_bytes = b"..."
+            yield Event(author=self.name, content=types.Content(parts=[types.Part.from_bytes(data=image_bytes, mime_type="image/png")]))
+
+
+    image_agent = ImageGeneratorAgent()
+    image_tool = agent_tool.AgentTool(agent=image_agent) # エージェントをラップ
+
+
+    # 親エージェントがAgentToolを使用
+    artist_agent = LlmAgent(
+        name="Artist",
+        model="gemini-flash-latest",
+        instruction="プロンプトを作成し、ImageGenツールを使って画像を生成してください。",
+        tools=[image_tool] # AgentToolを含める
+    )
+    # ArtistのLLMがプロンプトを生成し、次を呼び出します：
+    # FunctionCall(name='ImageGen', args={'image_prompt': '帽子をかぶった猫'})
+    # フレームワークがimage_tool.run_async(...)を呼び出し、それがImageGeneratorAgentを実行します。
+    # 結果の画像Partは、ツール結果としてArtistエージェントに返されます。
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "fmt"
+        "iter"
+        "google.golang.org/adk/v2/agent"
+        "google.golang.org/adk/v2/agent/llmagent"
+        "google.golang.org/adk/v2/model"
+        "google.golang.org/adk/v2/session"
+        "google.golang.org/adk/v2/tool"
+        "google.golang.org/adk/v2/tool/agenttool"
+        "google.golang.org/genai"
+    )
+
+    --8<-- "examples/go/snippets/agents/multi-agent/main.go:agent-as-tool"
+    ```
+
+=== "Java"
+
+    ```java
+    // 概念設定：ツールとしてのエージェント
+    import com.google.adk.agents.BaseAgent;
+    import com.google.adk.agents.LlmAgent;
+    import com.google.adk.tools.AgentTool;
+
+    // カスタムエージェントの例（LlmAgentまたはカスタムBaseAgent）
+    public class ImageGeneratorAgent extends BaseAgent  {
+
+      public ImageGeneratorAgent(String name, String description) {
+        super(name, description, List.of(), null, null);
+      }
+
+      // ... 内部ロジック ...
+      @Override
+      protected Flowable<Event> runAsyncImpl(InvocationContext invocationContext) { // 簡略化された実行ロジック
+        invocationContext.session().state().get("image_prompt");
+        // 画像バイトを生成
+        // ...
+
+        Event responseEvent = Event.builder()
+            .author(this.name())
+            .content(Content.fromParts(Part.fromText("\b...")))
+            .build();
+
+        return Flowable.just(responseEvent);
+      }
+
+      @Override
+      protected Flowable<Event> runLiveImpl(InvocationContext invocationContext) {
+        return null;
+      }
+    }
+
+    // AgentToolを使用してエージェントをラップ
+    ImageGeneratorAgent imageAgent = new ImageGeneratorAgent("image_agent", "画像を生成します");
+    AgentTool imageTool = AgentTool.create(imageAgent);
+
+    // 親エージェントがAgentToolを使用
+    LlmAgent artistAgent = LlmAgent.builder()
+            .name("Artist")
+            .model("gemini-flash-latest")
+            .instruction(
+                    "あなたはアーティストです。画像の詳細なプロンプトを作成し、" +
+                            "'ImageGen'ツールを使って画像を生成してください。" +
+                            "'ImageGen'ツールは、画像プロンプトを含む'request'という名前の単一の文字列引数を期待します。" +
+                            "ツールは'result'フィールドに'image_base64'、'mime_type'、'status'を含むJSON文字列を返します。"
+            )
+            .description("生成ツールを使用して画像を作成できるエージェントです。")
+            .tools(imageTool) // AgentToolを含める
+            .build();
+
+    // ArtistのLLMがプロンプトを生成し、次を呼び出します：
+    // FunctionCall(name='ImageGen', args={'imagePrompt': '帽子をかぶった猫'})
+    // フレームワークがimageTool.runAsync(...)を呼び出し、それがImageGeneratorAgentを実行します。
+    // 結果の画像Partは、ツール結果としてArtistエージェントに返されます。
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:agent_as_tool"
+    ```
 
 ## デザインパターン例： `StoryFlowAgent`
 
@@ -325,7 +1074,7 @@
 
 ---
 
-## 完全なコード例
+### Storyflow エージェントのコード一覧 {#storyflow-agent-code-listing}
 
 ???+ "Storyflowエージェント"
 
@@ -334,6 +1083,13 @@
         ```python
         # StoryFlowAgentの例の完全な実行可能コード
         --8<-- "examples/python/snippets/agents/custom-agent/storyflow_agent.py"
+        ```
+
+    === "TypeScript"
+
+        ```typescript
+        // StoryFlowAgentの例の完全な実行可能コード
+        --8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts"
         ```
     
     === "Go"
@@ -350,67 +1106,9 @@
         --8<-- "examples/java/snippets/src/main/java/agents/StoryFlowAgentExample.java:full_code"
         ```
 
-## Kotlin の例の補足
+## TypeScript の例の補足
 
-英語原文に追加された Kotlin のカスタム/マルチエージェント例を以下にも掲載します。
-
-### カスタムエージェント定義
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:custom_agent"
-```
-
-### エージェント階層
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:hierarchy"
-```
-
-### 順次パイプライン
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:sequential_pipeline"
-```
-
-### 並列実行
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:parallel_execution"
-```
-
-### 条件確認エージェント
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:check_condition_agent"
-```
-
-### 条件付きループ
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:loop_with_condition"
-```
-
-### outputKey と状態
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:output_key_state"
-```
-
-### LLM によるエージェント転送
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:llm_transfer"
-```
-
-### ツールとしてのエージェント
-
-```kotlin
---8<-- "examples/kotlin/snippets/agents/multi-agent/MultiAgentExample.kt:agent_as_tool"
-```
-
-## TypeScript と Go の例の補足
-
-英語原文に含まれている TypeScript の StoryFlow 例と Go のマルチエージェント例を以下にも掲載します。
+英語原文に含まれている TypeScript の StoryFlow 例を以下にも掲載します。
 
 ### TypeScript: 初期化
 
@@ -434,52 +1132,4 @@
 
 ```typescript
 --8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts:story_flow_agent"
-```
-
-### TypeScript: 完全なコード
-
-```typescript
---8<-- "examples/typescript/snippets/agents/custom-agent/storyflow_agent.ts"
-```
-
-### Go: エージェント階層
-
-```go
---8<-- "examples/go/snippets/agents/multi-agent/main.go:hierarchy"
-```
-
-### Go: 順次パイプライン
-
-```go
---8<-- "examples/go/snippets/agents/multi-agent/main.go:sequential-pipeline"
-```
-
-### Go: 並列実行
-
-```go
---8<-- "examples/go/snippets/agents/multi-agent/main.go:parallel-execution"
-```
-
-### Go: 条件付きループ
-
-```go
---8<-- "examples/go/snippets/agents/multi-agent/main.go:loop-with-condition"
-```
-
-### Go: outputKey と状態
-
-```go
---8<-- "examples/go/snippets/agents/multi-agent/main.go:output-key-state"
-```
-
-### Go: LLM による転送
-
-```go
---8<-- "examples/go/snippets/agents/multi-agent/main.go:llm-transfer"
-```
-
-### Go: ツールとしてのエージェント
-
-```go
---8<-- "examples/go/snippets/agents/multi-agent/main.go:agent-as-tool"
 ```

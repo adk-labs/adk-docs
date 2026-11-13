@@ -1,7 +1,7 @@
 # グラフベースのエージェントワークフロー
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span><span class="lst-kotlin">Kotlin v1.5.0</span>
 </div>
 
 ADK のグラフベースのエージェントワークフローを使用すると、コードロジックと AI の推論能力を組み合わせた決定論的なプロセスを構築でき、より精密な制御を備えたエージェントを作成できます。グラフベースワークフローでは、エージェントのロジックを実行ノードとエッジのグラフとして定義し、AI を活用したエージェントの推論と決定論的なツールやコードを組み合わせることができます。
@@ -9,6 +9,10 @@ ADK のグラフベースのエージェントワークフローを使用する�
 ![Graph-based flight upgrade agent](../assets/workflow-design.svg)
 
 **図 1.** 関数、人間の入力、ツール、LLM 機能など、異なる種類のワークフローノードを組み合わせた、フライトアップグレード向けのグラフベースエージェント設計です。
+
+!!! example "Kotlin では実験的機能"
+
+    グラフベースのエージェントワークフロー機能は ADK Kotlin では実験的機能です。制限事項がある可能性があり、動作が変更される場合があります。
 
 [Sequential Agents](/agents/workflow-agents/sequential-agents/) などの事前構築済みの ADK [テンプレートワークフロー](/agents/workflow-agents/)は、一連のエージェント間での定義済みのプロセスフロー制御のみを提供します。長いプロンプトやツールを備えた標準的な ADK エージェントを引き続き構築し、それらをグラフベースワークフローエージェントで使用することもできます。より精密な制御が必要な場合、ワークフローエージェントグラフを使用すると、タスクのルーティングや実行方法をより柔軟に制御できます。グラフベースワークフローには次の利点があります:
 
@@ -56,8 +60,9 @@ ADK のグラフベースのエージェントワークフローを使用する�
         name="city_report_agent",
         model="gemini-flash-latest",
         input_schema=CityTime,
-        instruction="""Output following line:
-        It is {CityTime.time_info} in {CityTime.city} right now.""",
+        instruction="""You receive a CityTime with time_info and city fields.
+        Output a single line stating that it is that time in that city right
+        now.""",
     )
 
     def completed_message_function(node_input: str):
@@ -76,7 +81,7 @@ ADK のグラフベースのエージェントワークフローを使用する�
 
 === "TypeScript"
 
-    ADK TypeScript v2.0.0 では、`Workflow` は `edges` 配列を受け取ります。各行には順番に実行するノードがリストされます。`node()` 関数は、関数、エージェント、ツール、または別の `Workflow` をグラフノードとしてラップし、ノードの名前と `inputSchema` および `outputSchema` の契約を設定します。スキーマには Zod オブジェクトまたは genai の `Schema` を使用します。各ノードの戻り値は次のノードに入力として渡されるため、セッション状態 (session state) への書き込みは不要です。
+    ADK TypeScript では、`Workflow` は `edges` 配列を受け取ります。各行には順番に実行するノードがリストされます。`node()` 関数は、関数、エージェント、ツール、または別の `Workflow` をグラフノードとしてラップし、ノードの名前と `inputSchema` および `outputSchema` の契約を設定します。スキーマには Zod オブジェクトまたは genai の `Schema` を使用します。各ノードの戻り値は次のノードに入力として渡されるため、セッション状態 (session state) への書き込みは不要です。
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/index/get_started.ts:get-started"
@@ -84,10 +89,18 @@ ADK のグラフベースのエージェントワークフローを使用する�
 
 === "Go"
 
-    ADK Go v2.0.0 では、順次ワークフローにグラフエンジンを使用します。`workflow.NewFunctionNode` が各ステップをラップし、`workflow.Chain` がノードを順次的な `edges` スライスに接続します。フレームワークは `event.Output` を介して各ノードの型付き戻り値を次のノードに自動的に渡すため、セッション状態への書き込みは不要です。グラフ全体は標準の `agent.Agent` を生成する `workflowagent.New` でラップされます。
+    ADK Go では、順次ワークフローにグラフエンジンを使用します。`workflow.NewFunctionNode` が各ステップをラップし、`workflow.Chain` がノードを順次的な `edges` スライスに接続します。フレームワークは `event.Output` を介して各ノードの型付き戻り値を次のノードに自動的に渡すため、セッション状態への書き込みは不要です。グラフ全体は標準の `agent.Agent` を生成する `workflowagent.New` でラップされます。
 
     ```go
     --8<-- "examples/go/snippets/graphs/index/main.go:sequential-get-started"
+    ```
+
+=== "Kotlin"
+
+    ADK Kotlin では、`workflow` ビルダーがグラフのエッジを宣言し、`chain` が `Start` と各ノードを順番に接続します。`LlmAgent` はそれ自体がノードであるため、そのままグラフに配置できます。`node()` 関数はコードステップを型付きノードとしてラップし、`inputSchema` および `outputSchema` の契約を設定できます。各ノードの出力は次のノードに入力として渡されるため、セッション状態への書き込みは不要です。
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/index/GetStarted.kt:get-started"
     ```
 
 このサンプルコードでは、シンプルな順次ワークフローを組み立て、エージェント処理とコード実行を交互に行う方法を示しています。長いプロンプトとツール呼び出しを持つ単一のエージェントでもこれらのステップを実行できますが、グラフベースのアプローチを使用すると、タスクの実行順序と各ステップからのデータ出力を精密に制御できます。
@@ -151,7 +164,7 @@ ADK のグラフベースのエージェントワークフローを使用する�
 
 === "TypeScript"
 
-    ADK TypeScript v2.0.0 では、ルーターノードは `createEvent({route})` で作成された `route` 値を含むイベントを返します。2つ目の edge の行では、各ルート値をそれを処理するノードにマッピングします。`route` に配列を設定すると、一致するすべてのブランチにディスパッチされるため、この例の分類器は複数のカテゴリを返すことができます。`DEFAULT_ROUTE` 設定は、どのブランチにも一致しなかったすべての値をキャッチします。
+    ADK TypeScript では、ルーターノードは `createEvent({route})` で作成された `route` 値を含むイベントを返します。2つ目の edge の行では、各ルート値をそれを処理するノードにマッピングします。`route` に配列を設定すると、一致するすべてのブランチにディスパッチされるため、この例の分類器は複数のカテゴリを返すことができます。`DEFAULT_ROUTE` 設定は、どのブランチにも一致しなかったすべての値をキャッチします。
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/index/process_pipeline.ts:process-pipeline"
@@ -159,10 +172,18 @@ ADK のグラフベースのエージェントワークフローを使用する�
 
 === "Go"
 
-    ADK Go v2.0.0 では、条件付きルーティングに `workflow.NewEmittingFunctionNode` を使用して `event.Routes` を設定し、`workflow.StringRoute` エッジを使用して一致するハンドラにディスパッチします。これは Python の `router` 関数および辞書ディスパッチに直接相当します。`workflow.Concat` はチェーンと条件付きエッジを 1 つの `edges` スライスにマージして `workflowagent.New` に渡します。
+    ADK Go では、条件付きルーティングに `workflow.NewEmittingFunctionNode` を使用して `event.Routes` を設定し、`workflow.StringRoute` エッジを使用して一致するハンドラにディスパッチします。これは Python の `router` 関数および辞書ディスパッチに直接相当します。`workflow.Concat` はチェーンと条件付きエッジを 1 つの `edges` スライスにマージして `workflowagent.New` に渡します。
 
     ```go
     --8<-- "examples/go/snippets/graphs/index/main.go:process-pipeline"
+    ```
+
+=== "Kotlin"
+
+    ADK Kotlin では、ルーターノードは `context.routes` を設定してルートを選択し、`route { }` ブロックが各ルート値を処理するノードにマッピングします。複数のルートを選択すると一致するすべてのブランチにディスパッチされるため、この例の分類器は複数のカテゴリを返すことができます。
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/index/ProcessPipeline.kt:process-pipeline"
     ```
 
 このサンプルコードは、一連のエージェントを構成して、*ノード*（エージェント、ツール、独自のコード、さらには追加のワークフローエージェントを含めることができる個別のタスク）のセット間のルートを持つグラフを定義する方法を示しています。高度なパイプラインの構築については、[ワークフローエージェントのグラフルートを構築する](/graphs/routes/)を参照してください。
@@ -179,6 +200,8 @@ ADK のグラフベースのエージェントワークフローを使用する�
 
 !!! note "Go: グラフワークフロー API"
 
-    ADK Go v2.0.0 の `workflow` パッケージは、Python の `Workflow` クラスに直接相当します。`workflow.NewFunctionNode` と `workflow.NewAgentNode` を使用してノードを定義し、`workflow.Chain` または `[]workflow.Edge` を伴う `workflow.Concat` でそれらを接続し、`workflowagent.New` でグラフを実行可能なエージェントとしてラップします。条件付きルーティングでは、`event.Routes` に対してマッチングされる `workflow.StringRoute`、`workflow.IntRoute`、または `workflow.BoolRoute` を使用します。ファンイン（Fan-in）は `workflow.NewJoinNode` によって処理されます。
+    ADK Go の `workflow` パッケージは、Python の `Workflow` クラスに直接相当します。`workflow.NewFunctionNode` と `workflow.NewAgentNode` を使用してノードを定義し、`workflow.Chain` または `[]workflow.Edge` を伴う `workflow.Concat` でそれらを接続し、`workflowagent.New` でグラフを実行可能なエージェントとしてラップします。条件付きルーティングでは、`event.Routes` に対してマッチングされる `workflow.StringRoute`、`workflow.IntRoute`、または `workflow.BoolRoute` を使用します。ファンイン（Fan-in）は `workflow.NewJoinNode` によって処理されます。
 
-    高度なルーティングパターンやファンアウト/ジョインの例については、[ワークフローエージェントのグラフルートを構築する](/graphs/routes/)を参照してください。事前構築済みのより高レベルな代替手段（順次、並列、ループ）については、[事前構築済みワークフローエージェント](/agents/workflow-agents/)を参照してください。
+## 次のステップ
+
+高度なルーティングパターンやファンアウト/ジョインの例については、[ワークフローエージェントのグラフルートを構築する](/graphs/routes/)を参照してください。事前構築済みのより高レベルな代替手段（順次、並列、ループ）については、[事前構築済みワークフローエージェント](/agents/workflow-agents/)を参照してください。

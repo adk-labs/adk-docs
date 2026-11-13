@@ -1,7 +1,7 @@
 # 그래프 기반 에이전트 워크플로
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span><span class="lst-kotlin">Kotlin v1.5.0</span>
 </div>
 
 ADK의 그래프 기반 에이전트 워크플로를 사용하면 더 정밀한 제어를 갖춘 에이전트를 구축하여, 코드 로직과 AI 추론 기능을 결합한 결정론적 프로세스를 만들 수 있습니다. 그래프 기반 워크플로를 사용하면 에이전트 로직을 실행 노드와 에지의 그래프로 정의하여, AI 기반 에이전트 추론과 결정론적 도구 및 코드를 결합할 수 있습니다.
@@ -9,6 +9,10 @@ ADK의 그래프 기반 에이전트 워크플로를 사용하면 더 정밀한 
 ![Graph-based flight upgrade agent](../assets/workflow-design.svg)
 
 **그림 1.** 함수, 사람 입력, 도구, LLM 기능 등 다양한 유형의 워크플로 노드를 결합한 항공편 업그레이드용 그래프 기반 에이전트 설계입니다.
+
+!!! example "Kotlin에서 실험적 기능"
+
+    그래프 기반 에이전트 워크플로 기능은 ADK Kotlin에서 실험적 기능입니다. 제한사항이 있을 수 있으며 동작이 변경될 수 있습니다.
 
 [순차 에이전트](/agents/workflow-agents/sequential-agents/)와 같은 사전 구축된 ADK [템플릿 워크플로](/agents/workflow-agents/)는 에이전트 집합 간의 정의된 프로세스 흐름 제어만 제공합니다. 긴 프롬프트와 도구를 사용하는 표준 ADK 에이전트를 계속 구축하고 이를 그래프 기반 워크플로 에이전트에서 사용할 수 있습니다. 더 정밀한 제어가 필요한 경우, 워크플로 에이전트 그래프를 통해 작업이 라우팅되고 실행되는 방식을 더 유연하게 제어할 수 있습니다. 그래프 기반 워크플로는 다음과 같은 장점을 제공합니다:
 
@@ -56,8 +60,9 @@ ADK의 그래프 기반 에이전트 워크플로를 사용하면 더 정밀한 
         name="city_report_agent",
         model="gemini-flash-latest",
         input_schema=CityTime,
-        instruction="""Output following line:
-        It is {CityTime.time_info} in {CityTime.city} right now.""",
+        instruction="""You receive a CityTime with time_info and city fields.
+        Output a single line stating that it is that time in that city right
+        now.""",
     )
 
     def completed_message_function(node_input: str):
@@ -76,7 +81,7 @@ ADK의 그래프 기반 에이전트 워크플로를 사용하면 더 정밀한 
 
 === "TypeScript"
 
-    ADK TypeScript v2.0.0에서 `Workflow`는 `edges` 배열을 받습니다. 각 행에는 순서대로 실행할 노드가 나열됩니다. `node()` 함수는 함수, 에이전트, 도구 또는 다른 `Workflow`를 그래프 노드로 래핑하며 노드의 이름과 `inputSchema` 및 `outputSchema` 계약을 설정합니다. 스키마는 Zod 객체 또는 genai `Schema`입니다. 각 노드의 반환 값은 다음 노드의 입력으로 전달되므로 세션 상태(session state)에 별도로 기록할 필요가 없습니다.
+    ADK TypeScript에서 `Workflow`는 `edges` 배열을 받습니다. 각 행에는 순서대로 실행할 노드가 나열됩니다. `node()` 함수는 함수, 에이전트, 도구 또는 다른 `Workflow`를 그래프 노드로 래핑하며 노드의 이름과 `inputSchema` 및 `outputSchema` 계약을 설정합니다. 스키마는 Zod 객체 또는 genai `Schema`입니다. 각 노드의 반환 값은 다음 노드의 입력으로 전달되므로 세션 상태(session state)에 별도로 기록할 필요가 없습니다.
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/index/get_started.ts:get-started"
@@ -84,10 +89,18 @@ ADK의 그래프 기반 에이전트 워크플로를 사용하면 더 정밀한 
 
 === "Go"
 
-    ADK Go v2.0.0에서 순차 워크플로는 그래프 엔진을 사용합니다. `workflow.NewFunctionNode`가 각 단계를 래핑하고, `workflow.Chain`이 노드들을 순차적인 `edges` 슬라이스로 연결합니다. 프레임워크는 `event.Output`을 통해 각 노드의 타입이 지정된 반환 값을 다음 노드로 자동 전달하므로 세션 상태에 별도로 쓸 필요가 없습니다. 전체 그래프는 표준 `agent.Agent`를 생성하는 `workflowagent.New`로 래핑됩니다.
+    ADK Go에서 순차 워크플로는 그래프 엔진을 사용합니다. `workflow.NewFunctionNode`가 각 단계를 래핑하고, `workflow.Chain`이 노드들을 순차적인 `edges` 슬라이스로 연결합니다. 프레임워크는 `event.Output`을 통해 각 노드의 타입이 지정된 반환 값을 다음 노드로 자동 전달하므로 세션 상태에 별도로 쓸 필요가 없습니다. 전체 그래프는 표준 `agent.Agent`를 생성하는 `workflowagent.New`로 래핑됩니다.
 
     ```go
     --8<-- "examples/go/snippets/graphs/index/main.go:sequential-get-started"
+    ```
+
+=== "Kotlin"
+
+    ADK Kotlin에서는 `workflow` 빌더가 그래프의 에지를 선언하고, `chain`이 `Start`와 각 노드를 순서대로 연결합니다. `LlmAgent`는 그 자체로 노드이므로 그래프에 바로 들어갑니다. `node()` 함수는 코드 단계를 타입이 지정된 노드로 래핑하며 `inputSchema` 및 `outputSchema` 계약을 설정할 수 있습니다. 각 노드의 출력은 다음 노드의 입력으로 전달되므로 세션 상태에 기록할 필요가 없습니다.
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/index/GetStarted.kt:get-started"
     ```
 
 이 샘플 코드는 간단한 순차 워크플로를 조립하고 에이전트 처리와 코드 실행을 번갈아 수행하는 방법을 보여줍니다. 긴 프롬프트와 도구 호출을 가진 단일 에이전트를 사용하여 이 단계들을 수행할 수도 있지만, 그래프 기반 접근 방식은 작업 실행 순서와 각 단계의 데이터 출력을 정밀하게 제어할 수 있게 해 줍니다.
@@ -151,7 +164,7 @@ ADK의 그래프 기반 에이전트 워크플로를 사용하면 더 정밀한 
 
 === "TypeScript"
 
-    ADK TypeScript v2.0.0에서 라우터 노드는 `createEvent({route})`로 생성된 `route` 값을 담은 이벤트를 반환합니다. 두 번째 edge 행은 각 라우트 값을 이를 처리하는 노드에 매핑합니다. `route`를 배열로 설정하면 일치하는 모든 브랜치로 디스패치되므로, 이 예제의 분류기는 둘 이상의 카테고리를 반환할 수 있습니다. `DEFAULT_ROUTE` 설정은 어떤 브랜치와도 일치하지 않는 모든 값을 처리합니다.
+    ADK TypeScript에서 라우터 노드는 `createEvent({route})`로 생성된 `route` 값을 담은 이벤트를 반환합니다. 두 번째 edge 행은 각 라우트 값을 이를 처리하는 노드에 매핑합니다. `route`를 배열로 설정하면 일치하는 모든 브랜치로 디스패치되므로, 이 예제의 분류기는 둘 이상의 카테고리를 반환할 수 있습니다. `DEFAULT_ROUTE` 설정은 어떤 브랜치와도 일치하지 않는 모든 값을 처리합니다.
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/index/process_pipeline.ts:process-pipeline"
@@ -159,10 +172,18 @@ ADK의 그래프 기반 에이전트 워크플로를 사용하면 더 정밀한 
 
 === "Go"
 
-    ADK Go v2.0.0에서 조건부 라우팅은 `workflow.NewEmittingFunctionNode`를 사용하여 `event.Routes`를 설정하고 `workflow.StringRoute` 에지를 사용하여 일치하는 핸들러로 디스패치하며, 이는 Python의 `router` 함수 및 딕셔너리 디스패치에 직접 대응됩니다. `workflow.Concat`은 체인과 조건부 에지를 하나의 `edges` 슬라이스로 병합하여 `workflowagent.New`에 전달합니다.
+    ADK Go에서 조건부 라우팅은 `workflow.NewEmittingFunctionNode`를 사용하여 `event.Routes`를 설정하고 `workflow.StringRoute` 에지를 사용하여 일치하는 핸들러로 디스패치하며, 이는 Python의 `router` 함수 및 딕셔너리 디스패치에 직접 대응됩니다. `workflow.Concat`은 체인과 조건부 에지를 하나의 `edges` 슬라이스로 병합하여 `workflowagent.New`에 전달합니다.
 
     ```go
     --8<-- "examples/go/snippets/graphs/index/main.go:process-pipeline"
+    ```
+
+=== "Kotlin"
+
+    ADK Kotlin에서 라우터 노드는 `context.routes`를 설정하여 라우트를 선택하고, `route { }` 블록이 각 라우트 값을 처리할 노드에 매핑합니다. 둘 이상의 라우트를 선택하면 일치하는 모든 브랜치로 디스패치되므로, 이 예제의 분류기는 둘 이상의 카테고리를 반환할 수 있습니다.
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/graphs/index/ProcessPipeline.kt:process-pipeline"
     ```
 
 이 샘플 코드는 에이전트 시퀀스를 구성하여 *노드*(에이전트, 도구, 자체 코드, 심지어 추가 워크플로 에이전트까지 포함할 수 있는 개별 작업) 집합 간의 라우트를 가진 그래프를 정의하는 방법을 보여줍니다. 고급 파이프라인을 구축하는 방법에 대한 자세한 내용은 [워크플로 에이전트를 위한 그래프 라우트 구축](/graphs/routes/)을 참조하세요.
@@ -179,6 +200,8 @@ ADK의 그래프 기반 에이전트 워크플로를 사용하면 더 정밀한 
 
 !!! note "Go: 그래프 워크플로 API"
 
-    ADK Go v2.0.0의 `workflow` 패키지는 Python `Workflow` 클래스에 직접 대응됩니다. `workflow.NewFunctionNode` 및 `workflow.NewAgentNode`를 사용하여 노드를 정의하고, `workflow.Chain` 또는 `[]workflow.Edge`와 함께 `workflow.Concat`을 사용하여 노드들을 연결하며, `workflowagent.New`를 사용하여 그래프를 실행 가능한 에이전트로 래핑하세요. 조건부 라우팅은 `event.Routes`와 매칭되는 `workflow.StringRoute`, `workflow.IntRoute` 또는 `workflow.BoolRoute`를 사용합니다. 팬인(Fan-in)은 `workflow.NewJoinNode`로 처리됩니다.
+    ADK Go의 `workflow` 패키지는 Python `Workflow` 클래스에 직접 대응됩니다. `workflow.NewFunctionNode` 및 `workflow.NewAgentNode`를 사용하여 노드를 정의하고, `workflow.Chain` 또는 `[]workflow.Edge`와 함께 `workflow.Concat`을 사용하여 노드들을 연결하며, `workflowagent.New`를 사용하여 그래프를 실행 가능한 에이전트로 래핑하세요. 조건부 라우팅은 `event.Routes`와 매칭되는 `workflow.StringRoute`, `workflow.IntRoute` 또는 `workflow.BoolRoute`를 사용합니다. 팬인(Fan-in)은 `workflow.NewJoinNode`로 처리됩니다.
 
-    고급 라우팅 패턴과 팬아웃/조인 예제는 [워크플로 에이전트를 위한 그래프 라우트 구축](/graphs/routes/)을 참조하세요. 사전 구축된 상위 수준의 대안(순차, 병렬, 루프)은 [사전 구축된 워크플로 에이전트](/agents/workflow-agents/)를 참조하세요.
+## 다음 단계
+
+고급 라우팅 패턴과 팬아웃/조인 예제는 [워크플로 에이전트를 위한 그래프 라우트 구축](/graphs/routes/)을 참조하세요. 사전 구축된 상위 수준의 대안(순차, 병렬, 루프)은 [사전 구축된 워크플로 에이전트](/agents/workflow-agents/)를 참조하세요.

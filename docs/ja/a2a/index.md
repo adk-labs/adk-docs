@@ -1,10 +1,13 @@
-# Agent2Agent（A2A）プロトコルとADK
+# ADK向けAgent2Agent（A2A）プロトコル
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span><span class="lst-preview">実験的</span>
+  <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-go">Go</span><span class="lst-java">Java</span>
 </div>
 
 Agent Development Kit（ADK）を使用すると、[Agent2Agent（A2A）プロトコル](https://a2a-protocol.org/)を使用してさまざまなエージェントが連携および対話する必要がある複雑なマルチエージェントシステムを構築できます。このセクションでは、エージェントが安全かつ効率的に通信および連携できる強力なマルチエージェントシステムを構築するための包括的なガイドを提供します。
+
+!!! example "GoおよびJavaでは実験的"
+    A2Aのサポートは、ADK Go、ADK Java、およびADK Kotlinでは実験的です。
 
 ADKのA2A機能については、以下のガイドをご覧ください。
 

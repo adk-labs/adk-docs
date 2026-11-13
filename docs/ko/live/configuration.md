@@ -14,7 +14,7 @@
 
 | 매개변수 | 타입 | 목적 | 참조 |
 |---|---|---|---|
-| **response_modalities** | list[str] | 출력 형식. 라이브 에이전트는 반드시 `AUDIO`를 사용해야 함 — 라이브 모델은 `TEXT`를 지원하지 않음 | [세부정보](#response-modes) |
+| **response_modalities** | list[Modality] | 출력 형식. 라이브 에이전트는 반드시 `AUDIO`를 사용해야 함 — 라이브 모델은 `TEXT`를 지원하지 않음 | [세부정보](#response-modes) |
 | **streaming_mode** | StreamingMode | `run_async()` 경로에서의 청크 또는 단일 샷 전달; `run_live()`에서는 읽히지 않음 | [세부정보](#streamingmode-bidi-or-sse) |
 | **session_resumption** | SessionResumptionConfig | 자동 재연결 활성화 | [세부정보](sessions.md#session-resumption) |
 | **context_window_compression** | ContextWindowCompressionConfig | 무제한 세션 지속 시간 지원 | [세부정보](sessions.md#context-window-compression) |
@@ -55,7 +55,7 @@ run_config = RunConfig(
 
 ## 응답 모달리티 (Response modes)
 
-`response_modalities` 설정은 출력 형식을 제어하며, 세션당 정확히 하나의 형식을 가집니다. **라이브 에이전트의 경우 값은 항상 `["AUDIO"]`입니다.** ADK가 지원하는 모든 [라이브 모델](models.md#live-models)은 다른 모달리티를 지원하지 않기 때문입니다. 값을 설정하지 않으면 ADK가 자동으로 채워주므로 대부분의 라이브 애플리케이션에서는 이 필드를 직접 다룰 필요가 없습니다.
+`response_modalities` 설정은 출력 형식을 제어하며, 세션당 정확히 하나의 형식을 가집니다. **라이브 에이전트의 경우 값은 항상 `["AUDIO"]`입니다.** ADK가 지원하는 모든 [라이브 모델](models.md#live-models)은 다른 모달리티를 지원하지 않기 때문입니다. 값을 설정하지 않으면 ADK가 자동으로 채워주므로 대부분의 라이브 애플리케이션에서는 이 필드를 직접 다룰 필요가 없습니다. 이 필드의 타입은 `list[Modality]`이며, 이 문서의 예제 전반에서 사용되는 일반 문자열도 허용합니다.
 
 !!! warning "`response_modalities=["TEXT"]` 마이그레이션 안내"
 

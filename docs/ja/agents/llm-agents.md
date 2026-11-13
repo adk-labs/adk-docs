@@ -14,11 +14,11 @@
 
 まず、エージェントが*何であるか*、そして*何のためにあるのか*を確立する必要があります。
 
-*   **`name` (必須):** 全てのエージェントには一意の文字列識別子が必要です。この`name`は内部操作、特にエージェント同士が互いを参照したりタスクを委任したりする必要があるマルチエージェントシステムにおいて非常に重要です。エージェントの機能を反映した説明的な名前（例: `customer_support_router`, `billing_inquiry_agent`）を選択してください。`user`のような予約名は避けてください。
+*   **`name` (必須):** 全てのエージェントには一意の文字列識別子が必要です。この`name`は内部操作、特にエージェント同士が互いを参照したりタスクを委任したりする必要があるマルチエージェントシステムにおいて非常に重要です。エージェントの機能を反映した説明的な名前（例: `customer_support_router`, `billing_inquiry_agent`）を選択してください。Pythonでは、名前は有効なPython識別子である必要があり、ADKは予約名の`user`を拒否します。
 
 *   **`description` (任意、マルチエージェントで推奨):** エージェントの能力に関する簡潔な要約を提供します。この説明は主に、*他の*LLMエージェントがこのエージェントにタスクをルーティングすべきかどうかを判断するために使用されます。同僚と区別できるように、具体的に記述してください（例: 「請求エージェント」ではなく、「現在の請求書に関する問い合わせを処理します」）。
 
-*   **`model` (必須):** このエージェントの推論を支える基盤となるLLMを指定します。これは`"gemini-flash-latest"`のような文字列識別子です。モデルの選択は、エージェントの能力、コスト、パフォーマンスに影響します。利用可能なオプションと考慮事項については、[モデル](/ja/agents/models/)ページを参照してください。
+*   **`model` (Pythonでは任意):** このエージェントの推論を支える基盤となるLLMを指定します。これは`"gemini-flash-latest"`のような文字列識別子、または`BaseLlm`インスタンスのいずれかです。`model`を省略すると、エージェントは`SequentialAgent`、`ParallelAgent`、`LoopAgent`、カスタム`BaseAgent`など、`LlmAgent`ではない親をスキップして、最も近い`LlmAgent`の祖先のモデルを継承します。どの祖先もモデルを設定していない場合、エージェントは[デフォルトモデルの設定](#configure-a-default-model)で説明されている組み込みのデフォルトモデルにフォールバックします。モデルの選択は、エージェントの能力、コスト、パフォーマンスに影響します。利用可能なオプションと考慮事項については、[モデル](/ja/agents/models/)ページを参照してください。
 
 === "Python"
 
@@ -88,7 +88,7 @@
     1. ユーザーのクエリから国名を特定します。
     2. `get_capital_city` ツールを使用して首都を見つけます。
     3. ユーザーに首都を明確に述べて応答します。
-    クエリ例: 「{country}の首都は何ですか？」
+    クエリ例: 「フランスの首都は何ですか？」
     応答例: 「フランスの首都はパリです。」
     """,
         # tools は次に追加します
@@ -117,7 +117,7 @@
                 1. ユーザーのクエリから国名を特定します。
                 2. `get_capital_city` ツールを使用して首都を見つけます。
                 3. ユーザーに首都を明確に述べて応答します。
-                クエリ例: 「{country}の首都は何ですか？」
+                クエリ例: 「フランスの首都は何ですか？」
                 応答例: 「フランスの首都はパリです。」
                 """)
             // tools は次に追加します
@@ -138,7 +138,7 @@ Python で Model Context Protocol（MCP）サーバーからエージェント�
 *   **`tools` (任意):** エージェントが使用できるツールのリストを提供します。リストの各項目は、次のいずれかです：
     *   ネイティブ関数またはメソッド（`FunctionTool`としてラップ）。Python ADKはネイティブ関数を自動的に`FunctionTool`にラップしますが、Javaでは`FunctionTool.create(...)`を使用してメソッドを明示的にラップする必要があります。
     *   `BaseTool`を継承するクラスのインスタンス。
-    *   別のエージェントのインスタンス（`AgentTool`、エージェント間の委任を可能にする - [マルチエージェント](../workflows/patterns.md)参照）。
+    *   別のエージェントをラップしてエージェント間の委任を可能にする`AgentTool`。詳細については、[カスタムエージェントワークフロー](/ja/agents/custom-agents/#delegation)を参照してください。Pythonでは、`AgentTool(agent=...)`構文を直接使用する代わりに、エージェントに`mode='single_turn'`を設定して`sub_agents`に追加し、インラインツールとして自動的に公開する方法が推奨されます。
 
 LLMは、関数/ツール名、説明（docstringや`description`フィールドから）、およびパラメータスキーマを使用して、会話と指示に基づいてどのツールを呼び出すかを決定します。
 
@@ -211,7 +211,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 
 `generate_content_config`を使用して、基盤となるLLMが応答を生成する方法を調整できます。
 
-*   **`generate_content_config` (任意):** [`google.genai.types.GenerateContentConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.GenerateContentConfig)のインスタンスを渡して、`temperature`（ランダム性）、`max_output_tokens`（応答の長さ）、`top_p`、`top_k`、およびセーフティセッティングなどのパラメータを制御します。
+*   **`generate_content_config` (任意):** [`google.genai.types.GenerateContentConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.GenerateContentConfig)のインスタンスを渡して、`temperature`（ランダム性）、`max_output_tokens`（応答の長さ）、`top_p`、`top_k`、およびセーフティセッティングなどのパラメータを制御します。Pythonでは、`generate_content_config`に`tools`、`system_instruction`、`response_schema`、または`http_options.base_url`を設定すると、ADKは`ValueError`を送出します。最初の3つは代わりにエージェントの`tools`、`instruction`、`output_schema`フィールドを通じて設定し、ベースURLはモデルまたはそのクライアントに設定してください。
 
 === "Python"
 
@@ -272,11 +272,41 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
             .build();
     ```
 
+### デフォルトモデルの設定 {#configure-a-default-model}
+
+<div class="language-support-tag" title="">
+   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.22.0</span>
+</div>
+
+`set_default_model`クラスメソッドを使用して、すべての`LlmAgent`インスタンスに対してシステム全体のデフォルトモデルを設定できます。エージェントの作成時にモデルを指定しない場合、ADKの組み込みのデフォルトモデルにフォールバックします。この設定により、重複するモデル指定を省き、すべてのエージェントのモデルを一度に簡単に変更できます。
+
+=== "Python"
+
+    ```python
+    from google.adk.agents import LlmAgent
+
+    # すべてのエージェントに新しいデフォルトモデルを設定
+    LlmAgent.set_default_model("gemini-flash-latest")
+
+    # このエージェントはデフォルトで "gemini-flash-latest" を使用します
+    agent_with_default_model = LlmAgent(
+        name="default_model_agent",
+        instruction="あなたは親切なアシスタントです。"
+    )
+
+    # 特定のエージェントに対してデフォルトを上書きすることも可能です
+    specific_agent = LlmAgent(
+        name="specific_model_agent",
+        model="gemini-pro-latest",
+        instruction="あなたは創造的な作家です。"
+    )
+    ```
+
 ### データの構造化 (`input_schema`, `output_schema`, `output_key`) {#data-handling}
 
 `LLM Agent`との構造化されたデータ交換を必要とするシナリオのために、ADKはスキーマ定義を使用して期待される入力と望ましい出力フォーマットを定義するメカニズムを提供します。
 
-*   **`input_schema` (任意):** 期待される入力構造を表すスキーマを定義します。設定されている場合、このエージェントに渡されるユーザーメッセージの内容は、このスキーマに準拠したJSON文字列でなければなりません。あなたの指示は、ユーザーまたは先行するエージェントをそれに従ってガイドする必要があります。
+*   **`input_schema` (任意):** このエージェントが*ツールとして*呼び出されたときに期待される入力構造を表すスキーマを定義します。Pythonでは、`AgentTool`が呼び出し元エージェントの引数をスキーマに照らして検証し、その結果をこのエージェントの入力として渡します。このスキーマは、エージェントに直接送信されるユーザーメッセージには適用されません。
 
 *   **`output_schema` (任意):** 望ましい出力構造を表すスキーマを定義します。設定されている場合、エージェントの最終応答は、このスキーマに準拠したJSON文字列でなければなりません。
     *   Python でサポートされているスキーマタイプは次のとおりです。
@@ -285,18 +315,16 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
         *   `dict`
         *   `google.genai.types.Schema`
 
-!!! warning "警告: `output_schema` と `tools` の併用"
+!!! note "`output_schema` と `tools` の併用"
 
-    同じ LLM リクエストで `output_schema` と `tools` を併用できるのは、[Gemini 3.0](https://ai.google.dev/gemini-api/docs/function-calling?example=meeting#structured-output) を含む一部のモデルに限られます。
-    それ以外のモデルでは、ADK は構造化出力を収集するために [`set_model_response` 関数ツール](https://github.com/google/adk-python/blob/main/src/google/adk/tools/set_model_response_tool.py) にフォールバックしますが、安定して動作しない可能性があります。
-    そのような場合は、出力フォーマットを別途処理する sub-agent の利用を検討してください。
+    Pythonでは、ADKは同じエージェント上での`output_schema`と`tools`の併用をサポートしています。エージェントの動作中はツールを引き続き利用でき、スキーマは最終応答にのみ適用されます。Google Cloud上のGeminiモデルや、レスポンススキーマをサポートするプロバイダの`LiteLlm`モデルなど、一部のモデルは1回のリクエストで両方を受け入れるため、ADKはそれらをそのまま渡します。それ以外のモデルでは、ADKは[`set_model_response` 関数ツール](https://github.com/google/adk-python/blob/main/src/google/adk/tools/set_model_response_tool.py)を追加し、そのツールを通じて最終回答を返すようにモデルに指示しますが、安定して動作しない場合があります。そのような場合は、出力フォーマットを別途処理するサブエージェントの利用を検討してください。
 
-*   **`output_key` (任意):** 文字列キーを提供します。設定されている場合、エージェントの*最終*応答のテキスト内容は、このキーの下でセッションの状態辞書に自動的に保存されます。これは、エージェント間やワークフローのステップ間で結果を渡すのに便利です。
-    *   Pythonでは、`session.state[output_key] = agent_response_text`のようになります。
+*   **`output_key` (任意):** 文字列キーを提供します。設定されている場合、エージェントの*最終*応答が、このキーの下でセッションの状態辞書に自動的に保存されます。これは、エージェント間やワークフローのステップ間で結果を渡すのに便利です。
+    *   Pythonでは、`session.state[output_key] = agent_response_text`のようになります。`output_schema`も設定されている場合、ADKはまず応答をスキーマに照らしてパースし、応答テキストの代わりにパースされた値を保存します。`BaseModel`スキーマは`dict`として保存され、`list[BaseModel]`スキーマは`list[dict]`として保存されます。
     *   Javaでは、`session.state().put(outputKey, agentResponseText)`です。
     *   Golangでは、コールバックハンドラ内で`ctx.State().Set(output_key, agentResponseText)`となります。
 
-    `output_schema` も設定されている場合、テキストの代わりに*パースされた*応答が保存されます（Python では `dict`、Java および Kotlin では `Map`）。
+    JavaおよびKotlinでは、`output_schema`も設定されている場合、テキストの代わりに*パースされた*応答が`Map`として保存されます。
 
 !!! note "Java および Kotlin でのスキーマ検証"
 
@@ -322,7 +350,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
         instruction="""あなたは首都情報エージェントです。国が与えられたら、首都を含むJSONオブジェクトのみで応答してください。フォーマット: {"capital": "capital_name"}""",
         output_schema=CapitalOutput, # JSON出力を強制
         output_key="found_capital"  # 結果を state['found_capital'] に保存
-        # ここでは tools=[get_capital_city] を効果的に使用できない
+        # tools=[...] は output_schema と併用可能です。上記の注記を参照してください
     )
     ```
 
@@ -481,6 +509,127 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
     ....
     ```
 
+組み込みプランナーの使用例：
+
+```python
+from dotenv import load_dotenv
+
+
+import asyncio
+import os
+
+from google.genai import types
+from google.adk.agents.llm_agent import LlmAgent
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.adk.artifacts.in_memory_artifact_service import InMemoryArtifactService # Optional
+from google.adk.planners import BasePlanner, BuiltInPlanner, PlanReActPlanner
+from google.adk.models import LlmRequest
+
+from google.genai.types import ThinkingConfig
+from google.genai.types import GenerateContentConfig
+
+import datetime
+from zoneinfo import ZoneInfo
+
+APP_NAME = "weather_app"
+USER_ID = "1234"
+SESSION_ID = "session1234"
+
+def get_weather(city: str) -> dict:
+    """Retrieves the current weather report for a specified city.
+
+    Args:
+        city (str): The name of the city for which to retrieve the weather report.
+
+    Returns:
+        dict: status and result or error msg.
+    """
+    if city.lower() == "new york":
+        return {
+            "status": "success",
+            "report": (
+                "The weather in New York is sunny with a temperature of 25 degrees"
+                " Celsius (77 degrees Fahrenheit)."
+            ),
+        }
+    else:
+        return {
+            "status": "error",
+            "error_message": f"Weather information for '{city}' is not available.",
+        }
+
+
+def get_current_time(city: str) -> dict:
+    """Returns the current time in a specified city.
+
+    Args:
+        city (str): The name of the city for which to retrieve the current time.
+
+    Returns:
+        dict: status and result or error msg.
+    """
+
+    if city.lower() == "new york":
+        tz_identifier = "America/New_York"
+    else:
+        return {
+            "status": "error",
+            "error_message": (
+                f"Sorry, I don't have timezone information for {city}."
+            ),
+        }
+
+    tz = ZoneInfo(tz_identifier)
+    now = datetime.datetime.now(tz)
+    report = (
+        f'The current time in {city} is {now.strftime("%Y-%m-%d %H:%M:%S %Z%z")}'
+    )
+    return {"status": "success", "report": report}
+
+# Step 1: Create a ThinkingConfig
+thinking_config = ThinkingConfig(
+    include_thoughts=True,   # Ask the model to include its thoughts in the response
+    thinking_budget=256      # Limit the 'thinking' to 256 tokens (adjust as needed)
+)
+print("ThinkingConfig:", thinking_config)
+
+# Step 2: Instantiate BuiltInPlanner
+planner = BuiltInPlanner(
+    thinking_config=thinking_config
+)
+print("BuiltInPlanner created.")
+
+# Step 3: Wrap the planner in an LlmAgent
+agent = LlmAgent(
+    model="gemini-flash-latest",  # Set your model name
+    name="weather_and_time_agent",
+    instruction="You are an agent that returns time and weather",
+    planner=planner,
+    tools=[get_weather, get_current_time]
+)
+
+# Session and Runner
+session_service = InMemorySessionService()
+session = asyncio.run(
+    session_service.create_session(app_name=APP_NAME, user_id=USER_ID, session_id=SESSION_ID)
+)
+runner = Runner(agent=agent, app_name=APP_NAME, session_service=session_service)
+
+# Agent Interaction
+def call_agent(query):
+    content = types.Content(role='user', parts=[types.Part(text=query)])
+    events = runner.run(user_id=USER_ID, session_id=SESSION_ID, new_message=content)
+
+    for event in events:
+        print(f"\nDEBUG EVENT: {event}\n")
+        if event.is_final_response() and event.content and event.content.parts:
+            final_answer = event.content.parts[0].text.strip()
+            print("\n🟢 FINAL ANSWER\n", final_answer, "\n")
+
+call_agent("If it's raining in New York right now, what is the current temperature?")
+```
+
 ### コード実行
 
 <div class="language-support-tag">
@@ -488,12 +637,6 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 </div>
 
 *   **`code_executor` (任意):** `BaseCodeExecutor`インスタンスを提供して、エージェントがLLMの応答で見つかったコードブロックを実行できるようにします。（[ツール/組み込みツール](../tools/built-in-tools.md)参照）。
-
-組み込みプランナーの使用例：
-```python
-# (コメント省略、原文コードと同じ)
-...
-```
 
 ## まとめ：例
 

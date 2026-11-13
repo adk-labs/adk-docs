@@ -31,6 +31,14 @@ BigQuery 연동을 제공하는 도구 모음은 다음과 같습니다:
 
     BigQuery 위치를 선택하려면 `google.adk.integrations.bigquery.config`의 `BigQueryToolConfig(location="US")`를 툴셋의 `bigquery_tool_config`로 전달하세요. 데이터셋과 일치하는 [위치](https://cloud.google.com/bigquery/docs/locations)를 선택해야 하며, 설정하지 않으면 BigQuery가 위치를 결정합니다.
 
+## 설치 (Installation)
+
+BigQuery 도구는 기본 `google-adk` 설치에 포함되지 않는 Google Cloud 클라이언트 라이브러리에 의존합니다. `gcp` extra와 함께 설치하세요:
+
+```bash
+pip install "google-adk[gcp]"
+```
+
 ## 인증 (Authentication)
 
 `BigQueryToolset`은 `BigQueryCredentialsConfig`를 통해 여러 인증 방식을 지원합니다.

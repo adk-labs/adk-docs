@@ -54,4 +54,4 @@
     [:octicons-arrow-right-24: ADK로 마이그레이션](migrate.md) <br>
 </div>
 
-기술 개요부터 시작하려면 이 [링크](about.md)를 확인하세요.
+시작하려면 [기술 개요](about.md)를 참고하세요.

@@ -23,7 +23,7 @@ LiteRT-LM GitHub リポジトリの [手順](https://github.com/google-ai-edge/L
 
 #### モデルのダウンロード
 
-サーバーを起動する前に、モデルをダウンロードする必要があります。`lit` を使用して LiteRT-LM モデルをダウンロードするには、_Hugging Face_ ユーザー アクセス トークンが必要です。_Hugging Face_ アカウント トークンは [こちら](https://huggingface.co/settings/tokens) から取得できます。
+サーバーを起動する前に、モデルをダウンロードする必要があります。`lit` を使用して LiteRT-LM モデルをダウンロードするには、_Hugging Face_ ユーザー アクセス トークンが必要です。_Hugging Face_ のウェブサイトで[アクセス トークン](https://huggingface.co/settings/tokens)を取得できます。
 
 ダウンロード可能なモデルのリストを表示するには、`lit list` コマンドを使用します。
 

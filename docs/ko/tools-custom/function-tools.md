@@ -32,7 +32,7 @@ ADK 프레임워크는 이름, docstring, 매개변수, 유형 힌트 및 기본
 ##### 필수 매개변수
 
 === "Python"
-    매개변수는 유형 힌트가 있지만 **기본값이 없는** 경우 **필수**로 간주됩니다. LLM은 도구를 호출할 때 이 인수에 대한 값을 제공해야 합니다. 매개변수의 설명은 함수의 docstring에서 가져옵니다.
+    매개변수는 유형 힌트가 있지만 **기본값이 없는** 경우 **필수**로 간주됩니다. LLM은 도구를 호출할 때 이 인수에 대한 값을 제공해야 합니다. ADK는 매개변수별 설명을 별도로 내보내지 않으며, 전체 docstring이 도구의 단일 최상위 `description`이 되므로 각 매개변수를 docstring 안에 설명하세요.
 
     ???+ "예: 필수 매개변수"
         ```python
@@ -73,7 +73,7 @@ ADK 프레임워크는 이름, docstring, 매개변수, 유형 힌트 및 기본
 ##### 선택적 매개변수
 
 === "Python"
-    매개변수는 **기본값**을 제공하는 경우 **선택 사항**으로 간주됩니다. 이것이 선택적 인수를 정의하는 표준 Python 방식입니다. `typing.Optional[SomeType]` 또는 `| None` 구문(Python 3.10 이상)을 사용하여 매개변수를 선택 사항으로 표시할 수도 있습니다.
+    매개변수는 **기본값**을 제공하는 경우에만 **선택 사항**으로 간주됩니다. 이 접근 방식은 선택적 인수를 정의하는 표준 Python 방식입니다. `typing.Optional[SomeType]` 또는 `| None` 구문(Python 3.10 이상)으로 매개변수에 어노테이션을 추가하는 것만으로는 선택 사항이 되지 **않습니다**. 기본값이 없으면 매개변수는 계속 필수로 유지됩니다.
 
     기본값은 실제로 선택 사항인 값에만 사용하세요. 모델이 사용자 요청에서
     추론해야 하거나 사용자에게 물어봐야 하는 정보에는 기본값을 추가하지 마세요.
@@ -116,7 +116,7 @@ ADK 프레임워크는 이름, docstring, 매개변수, 유형 힌트 및 기본
     여기서 `unit`과 `days`는 선택 사항입니다. LLM은 이를 제공하도록 선택할 수 있지만 필수는 아닙니다.
 
 ##### `typing.Optional`을 사용한 선택적 매개변수
-`typing.Optional[SomeType]` 또는 `| None` 구문(Python 3.10 이상)을 사용하여 매개변수를 선택 사항으로 표시할 수도 있습니다. 이는 매개변수가 `None`일 수 있음을 나타냅니다. `None`의 기본값과 결합하면 표준 선택적 매개변수처럼 동작합니다.
+매개변수가 `None`일 수 있음을 나타내려면 `typing.Optional[SomeType]` 또는 `| None` 구문(Python 3.10 이상)을 사용하세요. 표준 선택적 매개변수로 만들려면 이를 기본값 `None`과 함께 사용해야 하며, 어노테이션만으로는 매개변수가 필수로 남습니다.
 
 ???+ "예: `typing.Optional`"
     === "Python"
@@ -137,125 +137,36 @@ ADK 프레임워크는 이름, docstring, 매개변수, 유형 힌트 및 기본
             return {"status": "success", "message": f"{username}에 대한 프로필이 생성되었습니다."}
         ```
 
+##### Pydantic 모델 매개변수
+
+`pydantic.BaseModel` 서브클래스나 `list[Model]`, `Optional[Model]`, 또는 모델의 유니온으로 매개변수에 어노테이션을 추가하세요. ADK는 도구 선언 내부에 모델의 스키마를 중첩하고, 함수가 실행되기 전에 LLM이 제공한 객체를 해당 클래스의 인스턴스로 변환합니다.
+
+???+ "예: Pydantic 모델 매개변수"
+    === "Python"
+
+        ```python
+        import pydantic
+
+        class UserProfile(pydantic.BaseModel):
+            """A user's profile."""
+
+            name: str
+            age: int
+
+        def create_user(profile: UserProfile):
+            """
+            Creates a user account.
+
+            Args:
+                profile (UserProfile): The profile to create the account from.
+            """
+            # 'profile' receives a UserProfile instance, not a dict.
+            return {"status": "success", "name": profile.name}
+        ```
+
 ##### 가변 매개변수(`*args` 및 `**kwargs`)
+
 다른 목적으로 함수 서명에 `*args`(가변 위치 인수) 및 `**kwargs`(가변 키워드 인수)를 포함할 수 있지만 LLM에 대한 도구 스키마를 생성할 때 **ADK 프레임워크에서 무시**됩니다. LLM은 이를 인식하지 못하며 인수를 전달할 수 없습니다. LLM에서 예상하는 모든 데이터에 대해 명시적으로 정의된 매개변수를 사용하는 것이 가장 좋습니다.
-
-##### JSON 스키마 도구 선언 구성
-
-Python용 ADK는 모델 함수 선언을 위해 Pydantic을 사용하여 함수 서명에서 JSON 스키마를 생성합니다. 이 기능(`JSON_SCHEMA_FOR_FUNC_DECL`)은 **기본적으로 활성화**되어 있습니다.
-
-!!! example "실험적 기능"
-    
-    JSON 스키마 도구 선언(`JSON_SCHEMA_FOR_FUNC_DECL`)은 Python용 ADK의 실험적 기능입니다. 이 기능은 기본적으로 활성화되어 있지만 동작 및 API가 변경될 수 있으며, 활성화된 동안 ADK는 `[EXPERIMENTAL]` 경고를 출력합니다.
-
-###### 옵션 1: 명령줄을 통해 구성
-
-에이전트 프로세스를 시작하기 전에 터미널에서 적절한 환경 변수를 설정합니다.
-
-=== "macOS/Linux"
-
-    ```bash
-    export ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
-    ```
-    
-=== "Windows (명령 프롬프트)"
-
-    ```cmd
-    set ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
-    ```
-    
-=== "Windows (PowerShell)"
-
-    ```powershell
-    $env:ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL="1"
-    ```
-
-JSON 스키마 생성을 비활성화하고 이전의 `Schema` 기반 선언 동작으로 대체(fallback)하려면 다음을 설정합니다.
-
-=== "macOS/Linux"
-
-    ```bash
-    export ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
-    ```
-
-=== "Windows (명령 프롬프트)"
-
-    ```cmd
-    set ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL=1
-    ```
-
-=== "Windows (PowerShell)"
-
-    ```powershell
-    $env:ADK_DISABLE_JSON_SCHEMA_FOR_FUNC_DECL="1"
-    ```
-
-###### 옵션 2: Python 코드에서 구성
-
-도구와 에이전트를 만들기 전에 ADK의 `override_feature_enabled` 함수를 사용합니다.
-
-```python
-import asyncio
-from google.adk.features import FeatureName, override_feature_enabled
-from google.adk.agents import Agent
-from google.adk.tools import FunctionTool
-
-# 이 기능은 기본적으로 활성화되어 있으므로 이전 동작으로 돌아가려면 False를 전달합니다.
-override_feature_enabled(FeatureName.JSON_SCHEMA_FOR_FUNC_DECL, False)
-
-def get_current_weather(location: str, unit: str = "celsius") -> str:
-    """Get the current weather for a given location.
-    
-    Args:
-        location: The city and state, e.g. San Francisco, CA
-        unit: Temperature unit ('celsius' or 'fahrenheit')
-    """
-    return f"Weather in {location}: 22° {unit.capitalize()}"
-
-async def main():
-    weather_tool = FunctionTool(func=get_current_weather)
-    
-    agent = Agent(
-        model="gemini-2.5-flash",
-        name="my_agent",
-        instruction="You are a helpful assistant.",
-        tools=[weather_tool]
-    )
-    # 실행 로직
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
-
-또는 에이전트 구성 요소를 초기화하기 전에 스크립트에서 환경 변수를 설정할 수도 있습니다.
-
-```python
-import os
-import asyncio
-
-os.environ["ADK_ENABLE_JSON_SCHEMA_FOR_FUNC_DECL"] = "1"
-
-from google.adk.agents import Agent
-from google.adk.tools import FunctionTool
-
-def get_current_weather(location: str) -> str:
-    """Get the current weather for a given location."""
-    return f"Weather in {location}: 20°C"
-
-async def main():
-    weather_tool = FunctionTool(func=get_current_weather)
-    
-    agent = Agent(
-        model="gemini-2.5-flash",
-        name="my_agent",
-        instruction="You are a helpful assistant.",
-        tools=[weather_tool]
-    )
-    # 실행 로직
-
-if __name__ == "__main__":
-    asyncio.run(main())
-```
 
 #### 반환 유형
 
@@ -514,7 +425,7 @@ Python에서는 함수를 `LongRunningFunctionTool`로 래핑합니다. Java에�
     --8<-- "examples/kotlin/snippets/tools/function-tools/LongRunningTool.kt:call_reimbursement_tool"
     ```
 
-??? "Python 전체 예: 파일 처리 시뮬레이션"
+??? "Python 전체 예: 비용 환급 승인"
 
     ```py
     --8<-- "examples/python/snippets/tools/function-tools/human_in_the_loop.py"
@@ -522,9 +433,9 @@ Python에서는 함수를 `LongRunningFunctionTool`로 래핑합니다. Java에�
 
 #### 이 예의 주요 측면
 
-- **`LongRunningFunctionTool`**: 제공된 메서드/함수를 래핑합니다. 프레임워크는 생성된 업데이트와 최종 반환 값을 순차적인 FunctionResponses로 보내는 것을 처리합니다.
-- **에이전트 지침**: LLM에 도구를 사용하고 사용자 업데이트를 위해 들어오는 FunctionResponse 스트림(진행률 대 완료)을 이해하도록 지시합니다.
-- **최종 반환**: 함수는 최종 결과 사전을 반환하며, 이는 완료를 나타내기 위해 마지막 FunctionResponse에서 전송됩니다.
+- **`LongRunningFunctionTool`**: 제공된 메서드/함수를 래핑하고 장기 실행으로 표시합니다. 프레임워크는 다른 함수 도구와 마찬가지로 이 함수를 한 번만 호출하며 제너레이터에서 `yield`된 값은 소비하지 않습니다.
+- **에이전트 지침**: LLM이 도구를 사용하고, 이후 에이전트 클라이언트가 보내는 진행 상황 및 완료 `FunctionResponse`를 해석하여 사용자에게 업데이트하도록 지시합니다.
+- **초기 반환**: 함수가 반환하는 값은 무엇이든 첫 번째 `FunctionResponse`로 전송되며, 함수가 아무것도 반환하지 않거나 빈 값을 반환하면 응답을 내보내지 않습니다. 이후의 모든 진행 상황 또는 완료 업데이트는 에이전트 클라이언트가 보내는 `FunctionResponse`입니다.
 - **Kotlin에는 `LongRunningFunctionTool` 클래스가 없음**: 함수에 `@Tool(isLongRunning = true)`을 어노테이션하거나 `BaseTool` 서브클래스에 `isLongRunning = true`를 전달합니다.
 - **Kotlin 턴 수**: 위 도구는 `Unit` 대신 값을 반환하므로, 재개할 수 없는(non-resumable) 앱은 해당 플레이스홀더를 모델에 보내고 두 번째로 호출하여 중간 응답으로 턴 1을 종료합니다. 재개 가능한(resumable) 앱은 두 번째 모델 호출 없이 함수 호출에서 일시 중지됩니다. `Unit`을 반환하면 플레이스홀더 응답이 완전히 억제되어 어느 모드에서든 함수 호출에서 턴이 종료됩니다.
 
@@ -561,6 +472,9 @@ Python에서는 함수를 `LongRunningFunctionTool`로 래핑합니다. Java에�
     AgentTool.create(agent)
     ```
 
+!!! note "Python: `single_turn` 하위 에이전트 사용 고려"
+
+    ADK Python의 표준 인라인 위임에서는 에이전트를 `AgentTool`로 래핑하는 대신 하위 에이전트에 `mode="single_turn"`을 설정하고 `sub_agents=[...]`로 연결하는 방식을 권장합니다. ADK는 하위 에이전트를 도구로 노출하고 상위 에이전트의 세션 내에서 인라인으로 실행합니다. 자세한 내용은 [에이전트 협업](/ko/workflows/collaboration/)을 참고하세요.
 
 ### 사용자 지정
 

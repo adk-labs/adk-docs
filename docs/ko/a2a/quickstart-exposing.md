@@ -1,7 +1,7 @@
 # 빠른 시작: A2A를 통해 원격 에이전트 노출하기
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-preview">실험적</span>
+  <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 이 빠른 시작 가이드는 모든 개발자의 가장 일반적인 출발점인 **"에이전트가 있는데, 다른 에이전트들이 A2A를 통해 내 에이전트를 사용할 수 있도록 어떻게 노출하나요?"**에 대해 다룹니다. 이는 서로 다른 에이전트들이 협력하고 상호 작용해야 하는 복잡한 다중 에이전트 시스템을 구축하는 데 매우 중요합니다.
@@ -279,14 +279,6 @@ adk 웹 서버를 열려면 [http://localhost:8000](http://localhost:8000)으로
 *   **`before_agent`**: 에이전트가 요청 처리를 시작하기 전에 실행됩니다. 들어오는 `RequestContext`를 검사하거나 수정할 수 있습니다.
 *   **`after_event`**: ADK 이벤트가 A2A 이벤트로 변환된 *뒤에* 실행됩니다. 큐에 넣기 전의 출력 이벤트를 수정하거나, `None`을 반환해 이벤트를 필터링하고 삭제할 수 있습니다.
 *   **`after_agent`**: 에이전트 실행이 끝나고 최종 이벤트가 준비된 뒤 실행됩니다. 전송되기 전에 최종 상태 이벤트(예: `completed`, `failed`)를 검사하거나 수정할 때 사용합니다.
-
-!!! tip "실험적 경고 비활성화"
-
-    `ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS` 환경 변수를 `true`로 설정하면 실험적 A2A 기능과 관련된 경고를 비활성화할 수 있습니다. 해당 기능을 인지하고 사용 중이며 로그를 깔끔하게 유지하려는 개발자에게 유용합니다:
-
-    ```bash
-    export ADK_SUPPRESS_A2A_EXPERIMENTAL_FEATURE_WARNINGS=true
-    ```
 
 ### 애플리케이션 수명 주기 관리
 

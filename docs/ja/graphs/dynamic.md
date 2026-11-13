@@ -89,15 +89,18 @@ ADK の動的ワークフローは*ノード*で構成されます。使用可�
     次のコードスニペットは、***@node*** アノテーションを*使用しない*同等のコードを示しています:
 
     ```python
+    from typing import Any
+
+    from google.adk.workflow import FunctionNode
+
     # base function
-    def my_function_node(node_input: Any):
+    def hello_world(node_input: Any):
         return "Hello World"
 
     # FunctionNode wrapper with options
-    success_node = FunctionNode(
-        my_function_node,
-        name="hello",
-        rerun_on_resume=True,
+    my_function_node = FunctionNode(
+        func=hello_world,
+        name="hello_node",
     )
     ```
 
@@ -186,7 +189,7 @@ ADK の動的ワークフローでは、ノードの主要なオーケストレ�
 
 ## データ処理
 
-ADK で動的ワークフローを使用する場合、`ctx.run_node`（Go では `workflow.RunNode`）が子ノードの出力を直接返すため、データ転送のためにセッション状態キーを手動で読み書きする必要がなく、[グラフベースワークフロー](/graphs/)よりもデータの受け渡しがシンプルになります。
+ADK で動的ワークフローを使用する場合、子ノードを実行するとそのノードの出力が呼び出し元に直接返されるため、データ転送のためにセッション状態キーを手動で読み書きする必要がなく、[グラフベースワークフロー](/graphs/)よりもデータの受け渡しがシンプルになります。
 
 === "Python"
 
@@ -195,9 +198,9 @@ ADK で動的ワークフローを使用する場合、`ctx.run_node`（Go で�
     from google.adk.workflow import node
 
     @node(rerun_on_resume=True)
-    async def editorial_workflow(ctx: Context, user_request: str):
+    async def editorial_workflow(ctx: Context, node_input: str):
         # Agent Node generates output
-        raw_draft = await ctx.run_node(draft_agent, user_request)
+        raw_draft = await ctx.run_node(draft_agent, node_input)
 
         # Function Node formats text
         formatted_text = await ctx.run_node(format_function_node, raw_draft)
@@ -218,9 +221,9 @@ ADK で動的ワークフローを使用する場合、`ctx.run_node`（Go で�
         city: str       # city name
 
     @node
-    def city_time_function(city: str):
+    def city_time_function(node_input: str):
         """Simulate returning the current time in a specified city."""
-        return CityTime(time_info="10:10 AM", city=city)
+        return CityTime(time_info="10:10 AM", city=node_input)
 
     city_report_agent = Agent(
         name="city_report_agent",
@@ -229,7 +232,7 @@ ADK で動的ワークフローを使用する場合、`ctx.run_node`（Go で�
         instruction="""output the data provided by the previous node.""",
     )
 
-    @node # workflow node
+    @node(rerun_on_resume=True) # workflow node
     async def city_workflow(ctx: Context):
         city_time = await ctx.run_node(city_time_function, "Paris")
         report_text = await ctx.run_node(city_report_agent, city_time)
@@ -270,7 +273,7 @@ ADK の動的ワークフローは、反復ループやより複雑な分岐ロ�
     次のコードスニペットは、エージェント、関数ノード、および 2 番目のエージェントを含む動的ワークフローを示しています:
 
     ```python
-    @node # workflow node
+    @node(rerun_on_resume=True) # workflow node
     async def city_workflow(ctx: Context):
         city = await ctx.run_node(city_generator_agent)
         city_time = await ctx.run_node(city_time_function, city)
@@ -312,7 +315,7 @@ ADK の動的ワークフローは、反復ループやより複雑な分岐ロ�
     )
 
     @node(name="lint_reviewer")
-    async def compile_lint_check(ctx: Context, code: str):
+    async def compile_lint_check(ctx: Context, node_input: str):
         # Simulate API call or lint check
         class Response:
             findings = ""
@@ -325,9 +328,9 @@ ADK の動的ワークフローは、反復ループやより複雑な分岐ロ�
             Based on compile & lint review: {findings}""",
     )
 
-    @node # workflow node
-    async def code_workflow(ctx: Context, user_request: str):
-      code = await ctx.run_node(coder_agent, user_request)
+    @node(rerun_on_resume=True) # workflow node
+    async def code_workflow(ctx: Context, node_input: str):
+      code = await ctx.run_node(coder_agent, node_input)
       check_resp = await ctx.run_node(compile_lint_check, code)
 
       while check_resp.findings:
@@ -367,18 +370,23 @@ ADK の動的ワークフローは並列実行をサポートできます。
     import asyncio
     from typing import Any
     from google.adk import Context
-    from google.adk.workflow import BaseNode, node
+    from google.adk.workflow import node
+
+
+    @node
+    def worker_node(node_input: Any):
+        """Processes a single item."""
+        return f"done {node_input}"
 
 
     @node(rerun_on_resume=True)
-    async def parallel_supervisor(
-        ctx: Context, node_input: list[Any], real_node: BaseNode
-    ):
-        """Runs a worker node in parallel for each item in the input list."""
+    async def parallel_supervisor(ctx: Context, node_input: list[Any]):
+        """Runs worker_node in parallel for each item in the input list."""
         tasks = []
         for item in node_input:
-            # ctx.run_node returns a future. Append instead of awaiting immediately.
-            tasks.append(ctx.run_node(real_node, item))
+            # ctx.run_node returns a coroutine. Append instead of awaiting
+            # immediately, and use a sub-branch to isolate each run's events.
+            tasks.append(ctx.run_node(worker_node, item, use_sub_branch=True))
 
         # Collect all results in parallel
         results = await asyncio.gather(*tasks)
@@ -493,9 +501,22 @@ ADK フレームワークは、親 ID とカウンターに基づいて子ノー
     from typing import Any
     import asyncio
 
+    class Product(BaseModel):
+      sku: str
+      quantity: int
+
     class Order(BaseModel):
       order_id: str
       cart_items: list[Product]
+
+    async def get_orders() -> list[Order]:
+      """Fetch the orders to process from your own data source."""
+      ...
+
+    @node
+    async def process_order(node_input: Order):
+      """Processes a single order."""
+      return f"processed {node_input.order_id}"
 
     @node(rerun_on_resume=True)
     async def process_all_orders(ctx: Context, node_input: Any):
