@@ -43,7 +43,7 @@ Agent Development Kit (ADK) において、*コンテキスト*とは、エー�
         session_id="session456",
         new_message=user_message
     ):
-        print(event.stringify_content())
+        print(event.content)
 
     # As a developer, you work with the context objects provided in method arguments.
     ```
@@ -128,10 +128,10 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 
 - **`Context`**: エージェントのライフサイクルおよびモデルのコールバックで使用されます。セッション状態の読み書き、アーティファクトの管理、メモリサービスへのデータ挿入のための堅牢な機能セットを提供します。
 
-- **`ToolContext`**: ツールの実行およびツール関連のコールバック用に調整されています。Context の機能に加えて、認証フロー、メモリ検索、アーティファクト検出のための特殊なメソッドが含まれています。
+- **`ToolContext`**: ツールの実行およびツール関連のコールバックで使用されます。ツール指向のメソッド（`request_credential`、`request_confirmation`）はツール呼び出しが進行中の間のみ機能し、ツール呼び出し外では `function_call_id` は `None` になります。
 
 !!! note
-    **互換性について**: Python と TypeScript では、`CallbackContext` と `ToolContext` は `Context` タイプに置き換えられました。`CallbackContext` クラスは、後方互換性を確保するための `Context` のエイリアスとして維持されます。既存のコードベースで `CallbackContext` に遭遇することがあるかもしれませんが、統合された完全な機能セットを利用するために、新規開発では **`Context` クラスを使用することをお勧めします**。
+    **互換性について**: Python と TypeScript では、`CallbackContext` と `ToolContext` は `Context` タイプに置き換えられました。Python では、どちらの名前も後方互換性のために維持されている `Context` 自体のエイリアスです。既存のコードベースで `CallbackContext` や `ToolContext` に遭遇することがあるかもしれませんが、統合された完全な機能セットを利用するために、新規開発では **`Context` クラスを使用することをお勧めします**。
 
 ### `InvocationContext`
 - **使用場所:** エージェントのコア実装メソッド（`_run_async_impl`、`_run_live_impl`）内で `ctx` 引数として直接受け取ります。
@@ -144,7 +144,7 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
         ```python
         # Agent implementation receiving InvocationContext
         from google.adk.agents import BaseAgent
-        from google.adk.agents.invocation_context import InvocationContext
+        from google.adk.agents import InvocationContext
         from google.adk.events import Event
         from typing import AsyncGenerator
 
@@ -227,7 +227,7 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 ### `ReadonlyContext`
 - **使用場所：** 基本情報への読み取りアクセスのみが必要で、変更が許可されていないシナリオ（例：`InstructionProvider`関数）で提供されます。他のコンテキストのベースクラスでもあります。
 - **目的：** 基本的なコンテキスト詳細の安全な読み取り専用ビューを提供します。
-- **主な内容：** `invocation_id`、`agent_name`、および現在の`state`の読み取り専用*ビュー*。
+- **主な内容：** `invocation_id`、`agent_name`、`user_id`、`user_content`、`session`、`run_config`、`get_credential(key)`（Python）、および現在の`state`の読み取り専用*ビュー*。
 
     === "Python"
 
@@ -301,7 +301,7 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 - **目的：** *特にコールバック内で*、状態の検査と変更、アーティファクトとの対話、および呼び出し詳細へのアクセスを容易にします。
 - **主な機能（`ReadonlyContext`に追加）：**
     - **変更可能な`state`プロパティ：** セッション状態の読み取りと書き込みを許可します。ここで行われた変更（`callback_context.state['key'] = value`）は追跡され、コールバック後にフレームワークによって生成されるイベントに関連付けられます。
-    - **アーティファクトメソッド：** 設定された`artifact_service`と対話するための`load_artifact(filename)`および`save_artifact(filename, part)`メソッド。
+    - **アーティファクトメソッド：** 設定された`artifact_service`と対話するための`load_artifact(filename)`および`save_artifact(filename, part)`メソッド（Python ではどちらも `async`）。
     - 直接の`user_content`アクセス。
 
 !!! note
@@ -394,12 +394,13 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 
 ### `ToolContext`
 - **使用場所：** `FunctionTool`を支える関数や、ツールの実行コールバック（`before_tool_callback`、`after_tool_callback`）に`tool_context`として渡されます。
-- **目的：** `CallbackContext`が提供するすべてに加えて、認証の処理、メモリの検索、アーティファクトの一覧表示など、ツールの実行に不可欠な特化したメソッドを提供します。
-- **主な機能（`CallbackContext`に追加）：**
-    - **認証メソッド：** 認証フローをトリガーする`request_credential(auth_config)`と、ユーザー/システムによって提供された認証情報を取得する`get_auth_response(auth_config)`。
-    - **アーティファクトの一覧表示：** セッションで利用可能なアーティファクトを発見する`list_artifacts()`。
-    - **メモリ検索：** 設定された`memory_service`にクエリを実行する`search_memory(query)`。
-    - **`function_call_id`プロパティ：** このツールの実行をトリガーしたLLMからの特定の関数呼び出しを識別し、認証要求や応答を正しくリンクするために重要です。
+- **目的：** 認証の処理、メモリの検索、アーティファクトの一覧表示など、ツールの実行に不可欠なメソッドを公開します。Python では、`CallbackContext` と `ToolContext` は `Context` のエイリアスであるため、これらのメンバーはどの `Context` オブジェクトでも利用可能です。以下でツール専用と記されたメンバーは、ツール呼び出しが進行中でない限り `ValueError` を送出します。`ReadonlyContext` と `InvocationContext` にはこれらのメンバーはありません。
+- **主な機能：**
+    - **認証メソッド：** 認証フローをトリガーする`request_credential(auth_config)` *(ツール専用)* と、ユーザー/システムによって提供された認証情報を取得する`get_auth_response(auth_config)`。
+    - **ツールの確認：** ツール呼び出しを一時停止し、続行する前にユーザーに確認を求める`request_confirmation(hint=..., payload=...)` *(ツール専用)*。
+    - **アーティファクトの一覧表示：** セッションで利用可能なアーティファクトを発見する`list_artifacts()`（Python では `async`）。
+    - **メモリ検索：** 設定された`memory_service`にクエリを実行する`search_memory(query)`（Python では `async`）。
+    - **`function_call_id`プロパティ：** このツールの実行をトリガーしたLLMからの特定の関数呼び出しを識別し（ツール呼び出しが進行中でない場合は `None`）、認証要求や応答を正しくリンクするために重要です。
     - **`actions`プロパティ：** このステップの`EventActions`オブジェクトに直接アクセスし、ツールが状態の変更、認証要求などを通知できるようにします。
 
     === "Python"
@@ -423,9 +424,10 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
             # Use the API key...
             print(f"Tool executing for query '{query}' using API key. Invocation: {tool_context.invocation_id}")
 
-            # Optionally search memory or list artifacts
-            # relevant_docs = tool_context.search_memory(f"info related to {query}")
-            # available_files = tool_context.list_artifacts()
+            # Optionally search memory or list artifacts (both are async, so declare
+            # the tool function `async def`)
+            # relevant_docs = await tool_context.search_memory(f"info related to {query}")
+            # available_files = await tool_context.list_artifacts()
 
             return {"result": f"Data for {query} fetched."}
         ```
@@ -534,10 +536,11 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
             # ... rest of tool logic ...
 
         # Example: In a Callback function
-        from google.adk.agents.context import Context
+        from google.adk.agents import Context
 
-        def my_callback(context: Context, **kwargs):
-            last_tool_result = context.state.get("temp:last_api_result") # Read temporary state
+        # The framework passes callbacks by keyword first, so use this canonical parameter name.
+        def my_callback(callback_context: Context, **kwargs):
+            last_tool_result = callback_context.state.get("temp:last_api_result") # Read temporary state
             if last_tool_result:
                 print(f"Found temporary result from last tool: {last_tool_result}")
             # ... callback logic ...
@@ -694,12 +697,13 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 
         ```python
         # Example: In a Callback
-        from google.adk.agents.context import Context
+        from google.adk.agents import Context
 
-        def check_initial_intent(context: Context, **kwargs):
+        # The framework passes callbacks by keyword first, so use this canonical parameter name.
+        def check_initial_intent(callback_context: Context, **kwargs):
             initial_text = "N/A"
-            if context.user_content and context.user_content.parts:
-                initial_text = context.user_content.parts[0].text or "Non-text input"
+            if callback_context.user_content and callback_context.user_content.parts:
+                initial_text = callback_context.user_content.parts[0].text or "Non-text input"
 
             print(f"This invocation started with user input: '{initial_text}'")
 
@@ -949,7 +953,7 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 
                ```python
                # Example: In a callback or initial tool
-               from google.adk.agents.context import Context # Or ToolContext
+               from google.adk.agents import Context # Or ToolContext
                from google.genai import types
 
                async def save_document_reference(context: Context, file_path: str) -> None:
@@ -967,7 +971,7 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
                        print(f"Unexpected error saving artifact reference: {e}")
 
                # Example usage:
-               # save_document_reference(context, "gs://my-bucket/docs/report.pdf")
+               # await save_document_reference(context, "gs://my-bucket/docs/report.pdf")
                ```
 
         === "TypeScript"
@@ -1607,7 +1611,7 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
     ```python
     # Example: Inside agent's _run_async_impl
     from google.adk.agents import BaseAgent
-    from google.adk.agents.invocation_context import InvocationContext
+    from google.adk.agents import InvocationContext
     from google.adk.events import Event
     from google.genai import types
     from typing import AsyncGenerator
@@ -1624,13 +1628,13 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
                 print("Critical error detected, ending invocation.")
                 ctx.end_invocation = True # Signal framework to stop processing
                 yield Event(
-                author=self.name,
-                invocation_id=ctx.invocation_id,
-                content=types.Content(
-                    role="model",
-                    parts=[types.Part(text="Stopping due to critical error.")],
-                ),
-            )
+                    author=self.name,
+                    invocation_id=ctx.invocation_id,
+                    content=types.Content(
+                        role="model",
+                        parts=[types.Part.from_text(text="Stopping due to critical error.")],
+                    ),
+                )
                 return # Stop this agent's execution
 
             # ... Normal agent processing ...
@@ -1734,9 +1738,9 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 
 ## 要点とベストプラクティス
 
-*   **適切なコンテキストを使用する：** 常に提供される最も具体的なコンテキストオブジェクトを使用してください（ツール/ツールコールバックでは`ToolContext`、エージェント/モデルコールバックでは`CallbackContext`、該当する場合は`ReadonlyContext`）。完全な`InvocationContext`（`ctx`）は、必要な場合にのみ`_run_async_impl` / `_run_live_impl`で直接使用してください。
+*   **適切なコンテキストを使用する：** 渡されたコンテキストオブジェクトを使用してください。Python と TypeScript では `CallbackContext` と `ToolContext` が `Context` に置き換えられたため、新しいコードでは `Context` を優先して使用します。変更が許可されない場所では、制限されたビューである `ReadonlyContext` が渡されます。完全な`InvocationContext`（`ctx`）は、必要な場合にのみ`_run_async_impl` / `_run_live_impl`で直接使用してください。
 *   **データフローのための状態：** `context.state`は、呼び出し*内*でデータを共有し、好みを記憶し、会話メモリを管理するための主要な方法です。永続ストレージを使用する場合は、プレフィックス（`app:`、`user:`、`temp:`）を慎重に使用してください。
-*   **ファイルのためのアーティファクト：** ファイル参照（パスやURIなど）や大きなデータのかたまりを管理するには、`context.save_artifact`と`context.load_artifact`を使用してください。参照を保存し、必要に応じてコンテンツをロードします。
+*   **ファイルのためのアーティファクト：** ファイル参照（パスやURIなど）や大きなデータのかたまりを管理するには、`context.save_artifact`と`context.load_artifact`を使用してください（Python ではどちらも `async` であるため、`await` する必要があります）。参照を保存し、必要に応じてコンテンツをロードします。
 *   **追跡される変更：** コンテキストメソッドを介して状態やアーティファクトに行われた変更は、現在のステップの`EventActions`に自動的にリンクされ、`SessionService`によって処理されます。
 *   **UI のレンダリング:** `context.render_ui_widget(widget)` を使用して、リッチな UI コンポーネント（MCP アプリの iframe など）をクライアントに送信します。
 *   **シンプルに始める：** まずは`state`と基本的なアーティファクトの使用に焦点を当ててください。ニーズがより複雑になるにつれて、認証、メモリ、および高度な`InvocationContext`のフィールド（ライブストリーミング用のものなど）を探求してください。

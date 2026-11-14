@@ -16,7 +16,7 @@
 |---|---|
 | `content.parts[].text` | 텍스트 파트 — 라이브 세션에서는 생각 요약(thought summary) 및 기타 발화되지 않는 내용 |
 | `content.parts[].inline_data` | 재생을 위한 원시 오디오 바이트 (임시 데이터) |
-| `content.parts[].file_data` | 아티팩트에 저장된 오디오에 대한 참조 (`save_live_blob=True`인 경우) |
+| `content.parts[].file_data` | 아티팩트에 저장된 오디오에 대한 참조 (`save_live_blob=True`인 경우); ADK Python 2.14 이상에서는 사용자의 이미지 프레임에 대한 참조도 포함 |
 | `content.parts[].function_call` / `function_response` | 도구 호출 및 결과 (ADK가 자동으로 실행) |
 | `input_transcription` / `output_transcription` | 텍스트 형태의 사용자와 모델 발화 내용 |
 | `partial` | 증분 청크인 경우 `True`, 병합된 결과인 경우 `False` |
@@ -68,7 +68,7 @@ async for event in runner.run_live(...):
                 await play_audio(part.inline_data.data)
 ```
 
-`inline_data`는 일시적이며 영구 저장되지 않습니다. [`save_live_blob=True`](configuration.md#save_live_blob)를 설정하면 ADK가 오디오를 아티팩트 서비스의 파일로 집계하고, 나중에 오디오를 검색할 수 있도록 원시 바이트 대신 `file_data` 참조를 제공합니다. 형식과 재생 방법은 [오디오 및 비디오](audio-video.md)를 참고하세요.
+`inline_data`는 일시적이며 영구 저장되지 않습니다. [`save_live_blob=True`](configuration.md#save_live_blob)를 설정하면 ADK가 오디오를 아티팩트 서비스의 파일로 집계하고, 나중에 오디오(및 ADK Python 2.14 이상에서는 사용자의 이미지 프레임)를 검색할 수 있도록 원시 바이트에 추가로 `file_data` 참조를 제공합니다. 세션에는 참조만 저장됩니다. 형식과 재생 방법은 [오디오 및 비디오](audio-video.md)를 참고하세요.
 
 ### 음성 전사(Transcription)
 

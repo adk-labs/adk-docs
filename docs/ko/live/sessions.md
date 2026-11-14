@@ -173,7 +173,7 @@ finally:
 
 `run_live()`가 종료되면 일부 이벤트만 ADK `Session`에 유지됩니다:
 
-- **저장됨:** 최종(non-partial) 전사, 사용량 메타데이터, 함수 호출 및 응답, 대부분의 제어 이벤트. 오디오 파일은 [`save_live_blob`](configuration.md#save_live_blob)이 `True`인 경우에만 저장됩니다.
+- **저장됨:** 최종(non-partial) 전사, 사용량 메타데이터, 함수 호출 및 응답, 대부분의 제어 이벤트. 오디오 파일은 [`save_live_blob`](configuration.md#save_live_blob)이 `True`인 경우에만 저장되며, ADK Python 2.14 이상에서는 사용자의 이미지 프레임도 마찬가지로 저장됩니다.
 - **임시 데이터:** 원시 오디오 바이트(`inline_data`) 및 부분 전사는 실시간 재생 및 표시를 위해 yield되지만 저장되지 않습니다.
 
 ## ADK Session 대 Live API session

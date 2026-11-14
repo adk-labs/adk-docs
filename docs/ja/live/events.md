@@ -16,7 +16,7 @@
 |---|---|
 | `content.parts[].text` | テキストパート — ライブセッションでは思考の要約（thought summary）やその他の非発話コンテンツ |
 | `content.parts[].inline_data` | 再生用の一時的な生オーディオバイト列 |
-| `content.parts[].file_data` | アーティファクトに保存された音声への参照（`save_live_blob=True` の場合） |
+| `content.parts[].file_data` | アーティファクトに保存された音声への参照（`save_live_blob=True` の場合）。ADK Python 2.14 以降ではユーザーの画像フレームへの参照も含む |
 | `content.parts[].function_call` / `function_response` | ツール呼び出しと結果（ADK が自動的に実行） |
 | `input_transcription` / `output_transcription` | テキストとしてのユーザーおよびモデルの発話 |
 | `partial` | 増分チャンクの場合は `True`、マージされた結果の場合は `False` |
@@ -68,7 +68,7 @@ async for event in runner.run_live(...):
                 await play_audio(part.inline_data.data)
 ```
 
-`inline_data` は一時的なものであり、永続化されません。[`save_live_blob=True`](configuration.md#save_live_blob) を設定すると、ADK はアーティファクトサービス内のファイルに音声をまとめ、後から音声を取得できるように生バイトの代わりに（追加ではなく）`file_data` 参照を提供します。フォーマットと再生方法については、[音声と動画](audio-video.md) を参照してください。
+`inline_data` は一時的なものであり、永続化されません。[`save_live_blob=True`](configuration.md#save_live_blob) を設定すると、ADK はアーティファクトサービス内のファイルに音声をまとめ、後から音声（および ADK Python 2.14 以降ではユーザーの画像フレーム）を取得できるように生バイトに加えて `file_data` 参照を提供します。セッションには参照のみが保存されます。フォーマットと再生方法については、[音声と動画](audio-video.md) を参照してください。
 
 ### 文字起こし（Transcription）
 

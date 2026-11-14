@@ -20,7 +20,7 @@
 | **context_window_compression** | ContextWindowCompressionConfig | セッション期間を無制限に延長 | [詳細](sessions.md#context-window-compression) |
 | **history_config** | HistoryConfig | 過去の会話履歴をライブサーバーに再生（リプレイ）する方法を制御 | [詳細](#history_config) |
 | **max_llm_calls** | int | セッションあたりの LLM 呼び出し総数を制限 | [詳細](#max_llm_calls) |
-| **save_live_blob** | bool | 音声/動画ストリームを永続化 | [詳細](#save_live_blob) |
+| **save_live_blob** | bool | 音声を永続化（ADK Python 2.14 以降ではユーザーの画像フレームも保存） | [詳細](#save_live_blob) |
 | **custom_metadata** | dict[str, Any] | 呼び出しイベントにカスタムメタデータを添付 | [詳細](#custom_metadata) |
 | **speech_config** | SpeechConfig | 音声と言語の設定 | [音声と言語](#voice-and-language) |
 | **input_audio_transcription** | AudioTranscriptionConfig | ユーザー音声を文字起こし | [音声の文字起こし](#audio-transcription) |
@@ -103,7 +103,7 @@ run_config = RunConfig(
     max_llm_calls=500,  # デフォルト: 500 (暴走ループを防止)
                         # 0 または負数 = 無制限 (注意して使用)
 
-    # デバッグ/コンプライアンスのために音声/動画アーティファクトを保存
+    # デバッグ/コンプライアンスのために音声（および ADK Python 2.14+ では画像フレーム）を保存
     save_live_blob=True,  # デフォルト: False
 
     # イベントにカスタムメタデータを添付
@@ -119,9 +119,9 @@ run_config = RunConfig(
 
 ### save_live_blob
 
-`save_live_blob=True` を設定すると、セッションの音声を [セッションサービス](../sessions/index.md) には参照として、[アーティファクトサービス](../artifacts/index.md) にはファイルとして永続化します。名前に反して、現在永続化されるのは**音声のみ**であり、動画は保存されません。
+`save_live_blob=True` を設定すると、セッションの音声を [セッションサービス](../sessions/index.md) には参照として、[アーティファクトサービス](../artifacts/index.md) にはファイルとして永続化します。ADK Python 2.14 以降では、カメラや画面共有のフレームなど、ユーザーが送信した画像フレームも永続化されます。ADK Python 2.13 以前では、*音声のみが保存されます*。名前に反して、モデルが生成した動画出力はいずれのバージョンでも永続化されません。
 
-音声動作のデバッグや、規制された環境での監査証跡のために有効にしてください。それ以外の場合は無効のままにしておくことをお勧めします。16 kHz PCM 入力は 2 つのサービスに書き込まれるため、**セッションあたり 1 分間に約 1.92 MB** を消費し、音声ワークロードでは急速に容量が累積します。本番環境で必要な場合は、すべてのセッションではなく一部のセッションをサンプリングし、アーティファクトサービスに保持ポリシー（retention policy）を設定してください。ADK はこれらを自動的に期限切れにしません。
+音声および視覚データの処理のデバッグや、規制された環境での監査証跡のためにこの機能を有効にし、それ以外の場合は無効にしてください。音声の場合、16 kHz PCM 入力は**セッションあたり 1 分間に約 1.92 MB** を消費します。ADK Python 2.14 以降では、画像フレームによってデータ負荷がさらに増加します。たとえば、約 100 KB のフレームを 1 FPS で送信すると、1 分あたり約 6 MB 追加されます。音声や動画のワークロードでは、このデータは急速に累積します。本番環境でこのデータが必要な場合は、すべてのセッションではなく一部のセッションをサンプリングし、アーティファクトサービスに保持ポリシー（retention policy）を設定してください。ADK エージェントはこれらを自動的に期限切れにしません。保存された音声や画像フレームには個人情報が含まれる可能性があるため、記録されていることをユーザーに通知し、プライバシー義務に従って保存データを適切に取り扱ってください。
 
 !!! warning "`save_live_audio` は非推奨です"
 

@@ -20,7 +20,7 @@
 | **context_window_compression** | ContextWindowCompressionConfig | 무제한 세션 지속 시간 지원 | [세부정보](sessions.md#context-window-compression) |
 | **history_config** | HistoryConfig | 이전 대화 기록이 라이브 서버에 재생되는 방식 제어 | [세부정보](#history_config) |
 | **max_llm_calls** | int | 세션당 총 LLM 호출 수 제한 | [세부정보](#max_llm_calls) |
-| **save_live_blob** | bool | 오디오/비디오 스트림 영구 저장 | [세부정보](#save_live_blob) |
+| **save_live_blob** | bool | 오디오 영구 저장 (ADK Python 2.14 이상에서는 사용자의 이미지 프레임도 함께 저장) | [세부정보](#save_live_blob) |
 | **custom_metadata** | dict[str, Any] | 호출 이벤트에 커스텀 메타데이터 첨부 | [세부정보](#custom_metadata) |
 | **speech_config** | SpeechConfig | 음성 및 언어 구성 | [음성 및 언어](#voice-and-language) |
 | **input_audio_transcription** | AudioTranscriptionConfig | 사용자 음성 전사 | [오디오 전사](#audio-transcription) |
@@ -103,7 +103,7 @@ run_config = RunConfig(
     max_llm_calls=500,  # 기본값: 500 (무한 루프 방지)
                         # 0 또는 음수 = 무제한 (주의해서 사용)
 
-    # 디버깅/컴플라이언스를 위한 오디오/비디오 아티팩트 저장
+    # 디버깅/컴플라이언스를 위한 오디오(및 ADK Python 2.14+에서는 이미지 프레임) 저장
     save_live_blob=True,  # 기본값: False
 
     # 이벤트에 커스텀 메타데이터 첨부
@@ -119,9 +119,9 @@ run_config = RunConfig(
 
 ### save_live_blob
 
-`save_live_blob=True`는 세션의 오디오를 [세션 서비스](../sessions/index.md)에는 참조로, [아티팩트 서비스](../artifacts/index.md)에는 파일로 유지합니다. 이름과 달리 현재는 **오디오만 유지**되며 비디오는 저장되지 않습니다.
+`save_live_blob=True`는 세션의 오디오를 [세션 서비스](../sessions/index.md)에는 참조로, [아티팩트 서비스](../artifacts/index.md)에는 파일로 유지합니다. ADK Python 2.14 이상에서는 카메라나 화면 공유 프레임과 같이 사용자가 전송한 이미지 프레임도 함께 유지하며, ADK Python 2.13 이하에서는 *오디오만 저장*됩니다. 이름과 달리 모델이 생성한 비디오 출력은 어떤 버전에서도 유지되지 않습니다.
 
-음성 동작을 디버깅하거나 규제 대상 환경의 감사 추적을 위해 활성화하세요. 그렇지 않은 경우에는 비활성화 상태로 두는 것이 좋습니다. 16 kHz PCM 입력은 두 서비스에 기록될 때 **세션당 분당 약 1.92 MB**를 차지하며, 음성 워크로드에서는 용량이 빠르게 누적됩니다. 프로덕션 환경에서 필요한 경우 모든 세션 대신 일부 세션만 샘플링하고 아티팩트 서비스에 보존 정책(retention policy)을 설정하세요. ADK는 이를 자동으로 만료시키지 않습니다.
+오디오 및 시각적 데이터 처리를 디버깅하거나 규제 대상 환경의 감사 추적을 위해 이 기능을 활성화하고, 그렇지 않은 경우에는 비활성화하세요. 오디오의 경우 16 kHz PCM 입력은 **세션당 분당 약 1.92 MB**를 차지합니다. ADK Python 2.14 이상에서는 이미지 프레임이 데이터 부하를 더합니다. 예를 들어 약 100 KB 크기의 프레임을 1 FPS로 전송하면 분당 약 6 MB가 추가됩니다. 음성 또는 비디오 워크로드에서는 이 데이터가 빠르게 누적됩니다. 프로덕션 환경에서 이 데이터가 필요한 경우 모든 세션 대신 일부 세션만 샘플링하고 아티팩트 서비스에 보존 정책(retention policy)을 설정하세요. ADK 에이전트는 이를 자동으로 만료시키지 않습니다. 저장된 오디오와 이미지 프레임에는 개인 정보가 포함될 수 있으므로 사용자에게 녹음 및 기록 사실을 고지하고 개인정보 보호 의무에 따라 저장된 데이터를 처리하세요.
 
 !!! warning "`save_live_audio`는 지원 중단(deprecated)되었습니다"
 

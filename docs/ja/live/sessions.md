@@ -173,7 +173,7 @@ finally:
 
 `run_live()` が終了すると、一部のイベントのみが ADK `Session` に永続化されます。
 
-- **保存されるもの：** 最終的な（非部分的な）文字起こし、使用量メタデータ、関数呼び出しとレスポンス、ほとんどの制御イベント。音声ファイルは [`save_live_blob`](configuration.md#save_live_blob) が `True` の場合のみ保存されます。
+- **保存されるもの：** 最終的な（非部分的な）文字起こし、使用量メタデータ、関数呼び出しとレスポンス、ほとんどの制御イベント。音声ファイルは [`save_live_blob`](configuration.md#save_live_blob) が `True` の場合のみ保存されます（ADK Python 2.14 以降ではユーザーの画像フレームも同様に保存されます）。
 - **一時的なもの：** 生の音声バイト列（`inline_data`）および部分的な文字起こし。リアルタイムの再生や表示のために yield されますが、保存はされません。
 
 ## ADK Session と Live API session の違い
