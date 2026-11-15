@@ -68,7 +68,7 @@ async for event in runner.run_live(...):
                 await play_audio(part.inline_data.data)
 ```
 
-`inline_data`는 일시적이며 영구 저장되지 않습니다. [`save_live_blob=True`](configuration.md#save_live_blob)를 설정하면 ADK가 오디오를 아티팩트 서비스의 파일로 집계하고, 나중에 오디오(및 ADK Python 2.14 이상에서는 사용자의 이미지 프레임)를 검색할 수 있도록 원시 바이트에 추가로 `file_data` 참조를 제공합니다. 세션에는 참조만 저장됩니다. 형식과 재생 방법은 [오디오 및 비디오](audio-video.md)를 참고하세요.
+`inline_data`는 일시적(ephemeral) 데이터이므로 영구 저장되지 않습니다. [`save_live_blob=True`](configuration.md#save_live_blob)로 설정하면 ADK가 오디오 스트림을 모아 아티팩트 서비스에 파일로 저장하고, 나중에 오디오(및 ADK Python 2.14 이상에서는 사용자의 이미지 프레임)를 조회할 수 있도록 원시 바이트(`inline_data`)와 함께 `file_data` 참조도 함께 전달합니다. 세션에는 이 참조만 저장됩니다. 오디오 포맷과 재생 방식은 [오디오 및 비디오](audio-video.md)를 참고하세요.
 
 ### 음성 전사(Transcription)
 

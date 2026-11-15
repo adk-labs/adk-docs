@@ -122,16 +122,16 @@ ADK는 에이전트의 환경, 상태 및 리소스를 관리하는 중앙 메�
 이러한 특정 컨텍스트 유형을 사용하면 ADK는 세션 상태, 메모리 또는 자격 증명과 같은 필요한 정보에 필요한 시간과 장소에 에이전트가 정확히 액세스할 수 있도록 보장합니다.
 마주하게 될 주요 컨텍스트 유형은 다음과 같습니다.
 
-- **`InvocationContext`**: 서비스 참조 및 수명 주기 관리를 포함하여 전체 호출에 대한 포괄적인 뷰를 제공하기 위해 핵심 에이전트 실행(`_run_async_impl`, `_run_live_impl`) 중에 사용됩니다.
+- **`InvocationContext`**: 핵심 에이전트 실행(`_run_async_impl`, `_run_live_impl`) 단계에서 사용되며, 서비스 참조와 라이프사이클 제어를 포함한 호출 전반의 상태에 접근할 수 있습니다.
 
-- **`ReadonlyContext`**: 명령 공급자(instruction provider) 내와 같이 변경이 불가능한 시나리오에서 사용되는 기본적인 컨텍스트 정보의 가볍고 제한적인 뷰입니다.
+- **`ReadonlyContext`**: `InstructionProvider` 함수 내부처럼 상태 변경이 허용되지 않는 곳에서 사용되는 경량 읽기 전용 뷰입니다.
 
-- **`Context`**: 에이전트 수명 주기 및 모델 콜백에서 사용됩니다. 세션 상태 읽기/쓰기, 아티팩트 관리 및 메모리 서비스에 데이터 주입을 위한 견고한 기능 세트를 제공합니다.
+- **`Context`**: 에이전트 라이프사이클 콜백 및 모델 콜백에서 사용됩니다. 세션 상태 읽기/쓰기, 아티팩트 관리, 메모리 서비스 데이터 추가 등 핵심 기능을 통합 제공합니다.
 
-- **`ToolContext`**: 도구 실행 및 도구 관련 콜백에서 사용됩니다. 도구 지향 메서드(`request_credential`, `request_confirmation`)는 도구 호출이 진행 중일 때만 작동하며, 도구 호출 외부에서는 `function_call_id`가 `None`입니다.
+- **`ToolContext`**: 도구 실행 함수 및 도구 콜백에서 사용됩니다. 도구 전용 메서드(`request_credential`, `request_confirmation`)는 도구 호출이 실행 중일 때만 동작하며, 도구 호출 외부에서는 `function_call_id`가 `None`입니다.
 
 !!! note
-    **호환성 정보**: Python 및 TypeScript에서 `CallbackContext`와 `ToolContext`는 `Context` 유형으로 대체되었습니다. Python에서는 두 이름 모두 하위 호환성을 위해 유지되는 `Context` 자체의 별칭(alias)입니다. 기존 코드베이스에서 `CallbackContext` 또는 `ToolContext`를 만날 수 있지만, 통합된 모든 기능 세트를 활용하려면 모든 신규 개발에 **`Context` 클래스를 사용해야 합니다**.
+    **호환성 안내**: Python 및 TypeScript에서는 `CallbackContext`와 `ToolContext`가 `Context` 타입으로 통합되었습니다. Python에서는 하위 호환성을 위해 두 이름 모두 `Context`의 별칭(alias)으로 유지됩니다. 기존 코드베이스에서 `CallbackContext`나 `ToolContext`를 볼 수 있지만, 신규 개발 시에는 통합 인터페이스를 제공하는 **`Context` 클래스를 사용하는 것을 권장합니다**.
 
 ### `InvocationContext`
 - **사용 위치:** 에이전트의 핵심 구현 메서드(`_run_async_impl`, `_run_live_impl`) 내에서 `ctx` 인자로 직접 받습니다.
@@ -393,15 +393,15 @@ ADK는 에이전트의 환경, 상태 및 리소스를 관리하는 중앙 메�
     ```
 
 ### `ToolContext`
-- **사용 위치:** `FunctionTool`을 지원하는 함수와 도구 실행 콜백(`before_tool_callback`, `after_tool_callback`)에 `tool_context`로 전달됩니다.
-- **목적:** 인증 처리, 메모리 검색, 아티팩트 목록 조회와 같이 도구 실행에 필수적인 메서드를 노출합니다. Python에서는 `CallbackContext`와 `ToolContext`가 `Context`의 별칭이므로 어떤 `Context` 객체에서도 이 멤버들을 사용할 수 있습니다. 아래에서 도구 전용으로 표시된 멤버들은 도구 호출이 진행 중이지 않으면 `ValueError`를 발생시킵니다. `ReadonlyContext`와 `InvocationContext`에는 이러한 멤버가 없습니다.
+- **사용 위치:** `FunctionTool`로 래핑된 도구 함수와 도구 실행 콜백(`before_tool_callback`, `after_tool_callback`)에 `tool_context` 인자로 전달됩니다.
+- **목적:** 인증 처리, 메모리 검색, 아티팩트 목록 조회 등 도구 실행에 필요한 메서드를 제공합니다. Python에서는 `CallbackContext`와 `ToolContext`가 모두 `Context`의 별칭이므로 어떤 `Context` 인스턴스에서든 이 멤버들에 접근할 수 있습니다. 단, 아래에 *도구 전용*으로 표시된 메서드는 도구 호출 중이 아닐 때 호출하면 `ValueError`가 발생합니다. `ReadonlyContext`와 `InvocationContext`에는 해당 멤버가 포함되어 있지 않습니다.
 - **주요 기능:**
-    - **인증 메서드:** 인증 흐름을 트리거하는 `request_credential(auth_config)` *(도구 전용)*와 사용자/시스템이 제공한 자격 증명을 검색하는 `get_auth_response(auth_config)`.
-    - **도구 확인:** 도구 호출을 일시 중지하고 계속 진행하기 전에 사용자에게 확인을 요청하는 `request_confirmation(hint=..., payload=...)` *(도구 전용)*.
-    - **아티팩트 목록 조회:** 세션에서 사용 가능한 아티팩트를 찾는 `list_artifacts()` (Python에서는 `async`).
-    - **메모리 검색:** 설정된 `memory_service`에 질의하는 `search_memory(query)` (Python에서는 `async`).
-    - **`function_call_id` 속성:** 이 도구 실행을 트리거한 LLM의 특정 함수 호출을 식별하며(도구 호출이 진행 중이지 않을 때는 `None`), 인증 요청이나 응답을 올바르게 연결하는 데 중요합니다.
-    - **`actions` 속성:** 이 단계의 `EventActions` 객체에 직접 접근하여 도구가 상태 변경, 인증 요청 등을 신호할 수 있게 합니다.
+    - **인증 메서드:** 인증 플로우를 시작하는 `request_credential(auth_config)` *(도구 전용)* 및 사용자/시스템이 전달한 인증 응답을 조회하는 `get_auth_response(auth_config)`.
+    - **도구 실행 승인(Tool Confirmation):** 도구 실행을 일시 중지하고 계속 진행하기 전에 사용자 승인을 요청하는 `request_confirmation(hint=..., payload=...)` *(도구 전용)*.
+    - **아티팩트 목록 조회:** 현재 세션에 저장된 아티팩트 목록을 조회하는 `list_artifacts()` (Python에서는 `async`).
+    - **메모리 검색:** 구성된 `memory_service`를 검색하는 `search_memory(query)` (Python에서는 `async`).
+    - **`function_call_id` 속성:** 현재 도구 실행을 트리거한 LLM의 함수 호출 ID입니다(도구 호출 외부에서는 `None`). 인증 요청과 응답을 매핑할 때 사용됩니다.
+    - **`actions` 속성:** 현재 단계의 `EventActions` 객체에 직접 접근하여 상태 변경이나 인증 요청 등을 프레임워크에 전달합니다.
 
     === "Python"
 
@@ -943,7 +943,7 @@ ADK는 에이전트의 환경, 상태 및 리소스를 관리하는 중앙 메�
 
 ### 아티팩트 작업
 
-세션과 관련된 파일이나 큰 데이터 덩어리를 처리하려면 아티팩트를 사용하세요. 일반적인 사용 사례: 업로드된 문서 처리.
+세션과 연결된 파일이나 대용량 데이터 블롭(blob)을 다룰 때는 아티팩트를 사용하세요. 대표적인 활용 사례는 업로드된 문서 처리입니다.
 
 *   **문서 요약기 예제 흐름:**
 
@@ -1738,9 +1738,9 @@ ADK는 에이전트의 환경, 상태 및 리소스를 관리하는 중앙 메�
 
 ## 핵심 요약 및 모범 사례
 
-*   **올바른 컨텍스트 사용:** 전달받은 컨텍스트 객체를 사용하세요. Python 및 TypeScript에서는 `CallbackContext`와 `ToolContext`가 `Context`로 대체되었으므로 새 코드에서는 `Context`를 우선 사용하고, 변경이 허용되지 않는 곳에서는 제한된 뷰인 `ReadonlyContext`가 제공됩니다. 전체 `InvocationContext`(`ctx`)는 `_run_async_impl` / `_run_live_impl`에서 꼭 필요할 때만 직접 사용하세요.
-*   **데이터 흐름을 위한 상태:** `context.state`는 호출 *내에서* 데이터를 공유하고, 선호도를 기억하며, 대화 메모리를 관리하는 주요 방법입니다. 영구 저장소를 사용할 때는 접두사(`app:`, `user:`, `temp:`)를 신중하게 사용하세요.
-*   **파일을 위한 아티팩트:** 파일 참조(경로나 URI 등)나 큰 데이터 덩어리를 관리할 때는 `context.save_artifact`와 `context.load_artifact`를 사용하세요(Python에서는 둘 다 `async`이므로 `await`해야 함). 참조를 저장하고, 필요할 때 내용을 로드하세요.
+*   **올바른 컨텍스트 사용:** 프레임워크가 전달하는 컨텍스트 객체를 그대로 사용하세요. Python과 TypeScript에서는 `CallbackContext`와 `ToolContext`가 `Context`로 통합되었으므로 새 코드에서는 `Context`를 사용하고, 상태 변경이 금지된 지점에서는 읽기 전용 뷰인 `ReadonlyContext`를 사용합니다. 전체 `InvocationContext`(`ctx`)는 `_run_async_impl` / `_run_live_impl` 구현 시 꼭 필요한 경우에만 직접 다루세요.
+*   **데이터 흐름을 위한 상태:** `context.state`는 단일 호출 *내에서* 데이터를 주고받고 사용자 설정과 대화 상태를 유지하는 기본 수단입니다. 영구 세션 스토리지를 사용할 때는 스코프 접두사(`app:`, `user:`, `temp:`)를 목적에 맞게 구분해 사용하세요.
+*   **파일을 위한 아티팩트:** 파일 참조(경로나 URI 등)나 대용량 데이터 블롭(blob)을 다룰 때는 `context.save_artifact`와 `context.load_artifact`를 사용하세요(Python에서는 두 메서드 모두 `async`이므로 반드시 `await`해야 함). 상태에는 참조만 가볍게 저장하고 실제 콘텐츠는 필요할 때 로드하는 패턴을 권장합니다.
 *   **추적되는 변경 사항:** 컨텍스트 메서드를 통해 상태나 아티팩트를 수정하면 현재 단계의 `EventActions`에 자동으로 연결되고 `SessionService`에 의해 처리됩니다.
 *   **UI 렌더링:** `context.render_ui_widget(widget)`을 사용하여 풍부한 UI 구성요소(예: MCP 앱 iframe)를 클라이언트로 전송하세요.
 *   **단순하게 시작:** 먼저 `state`와 기본적인 아티팩트 사용에 집중하세요. 필요가 더 복잡해지면 인증, 메모리, 그리고 고급 `InvocationContext` 필드(라이브 스트리밍용 필드 등)를 탐색하세요.

@@ -128,7 +128,7 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 
 - **`Context`**: エージェントのライフサイクルおよびモデルのコールバックで使用されます。セッション状態の読み書き、アーティファクトの管理、メモリサービスへのデータ挿入のための堅牢な機能セットを提供します。
 
-- **`ToolContext`**: ツールの実行およびツール関連のコールバックで使用されます。ツール指向のメソッド（`request_credential`、`request_confirmation`）はツール呼び出しが進行中の間のみ機能し、ツール呼び出し外では `function_call_id` は `None` になります。
+- **`ToolContext`**: ツールの実行およびツール関連のコールバックで使用されます。ツール専用メソッド（`request_credential`、`request_confirmation`）はツール呼び出しの実行中のみ動作し、ツール呼び出し外では `function_call_id` は `None` になります。
 
 !!! note
     **互換性について**: Python と TypeScript では、`CallbackContext` と `ToolContext` は `Context` タイプに置き換えられました。Python では、どちらの名前も後方互換性のために維持されている `Context` 自体のエイリアスです。既存のコードベースで `CallbackContext` や `ToolContext` に遭遇することがあるかもしれませんが、統合された完全な機能セットを利用するために、新規開発では **`Context` クラスを使用することをお勧めします**。
@@ -397,7 +397,7 @@ ADK は、エージェントの環境、状態、およびリソースを管理�
 - **目的：** 認証の処理、メモリの検索、アーティファクトの一覧表示など、ツールの実行に不可欠なメソッドを公開します。Python では、`CallbackContext` と `ToolContext` は `Context` のエイリアスであるため、これらのメンバーはどの `Context` オブジェクトでも利用可能です。以下でツール専用と記されたメンバーは、ツール呼び出しが進行中でない限り `ValueError` を送出します。`ReadonlyContext` と `InvocationContext` にはこれらのメンバーはありません。
 - **主な機能：**
     - **認証メソッド：** 認証フローをトリガーする`request_credential(auth_config)` *(ツール専用)* と、ユーザー/システムによって提供された認証情報を取得する`get_auth_response(auth_config)`。
-    - **ツールの確認：** ツール呼び出しを一時停止し、続行する前にユーザーに確認を求める`request_confirmation(hint=..., payload=...)` *(ツール専用)*。
+    - **ツール実行の確認（Tool Confirmation）：** ツール呼び出しを一時停止し、続行する前にユーザーに承認を求める`request_confirmation(hint=..., payload=...)` *(ツール専用)*。
     - **アーティファクトの一覧表示：** セッションで利用可能なアーティファクトを発見する`list_artifacts()`（Python では `async`）。
     - **メモリ検索：** 設定された`memory_service`にクエリを実行する`search_memory(query)`（Python では `async`）。
     - **`function_call_id`プロパティ：** このツールの実行をトリガーしたLLMからの特定の関数呼び出しを識別し（ツール呼び出しが進行中でない場合は `None`）、認証要求や応答を正しくリンクするために重要です。
