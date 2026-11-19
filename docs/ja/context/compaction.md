@@ -28,32 +28,54 @@ ADK エージェントは実行されながら、ユーザーの指示、取得�
 - **`token_threshold`**: 到達時にテール保持（tail-retention）圧縮を自動的にトリガーするトークンの安全制限です。
 - **`event_retention_size`**: 圧縮がトリガーされたときに、要約されていない「生」の形式で維持される最近のイベント/やり取りの数です。これにより、直近の会話コンテキストと代名詞の参照解決が維持されます。
 
-プロジェクトにこれを実装するには、次の構成を使用します。
+プロジェクトでトークンベースの圧縮を実装するには、次の構成を使用します。
 
-```python
-# 1. google.adk ネームスペースを使用するようにインポートパスを修正
-from google.adk.apps.app import App, EventsCompactionConfig
-from google.adk.agents import Agent
+=== "Python"
 
-# 2. ルートエージェントの初期化（App セットアップに必須）
-root_agent = Agent(
-    name="my_root_agent",
-    description="Main coordinating agent for the workflow."
-)
+    ```python
+    # 1. google.adk ネームスペースを使用するようにインポートパスを修正
+    from google.adk.apps.app import App, EventsCompactionConfig
+    from google.adk.agents import Agent
 
-# 3. トークンベースの構成: 優先/事前呼び出しレイヤーの有効化
-compaction_config = EventsCompactionConfig(
-    token_threshold=4000,     # 実際のトークン数がこれを超えたときに圧縮をトリガー
-    event_retention_size=5    # トークン制限に達したときにそのまま維持する最近の生のイベント数
-)
+    # 2. ルートエージェントの初期化（App セットアップに必須）
+    root_agent = Agent(
+        name="my_root_agent",
+        description="Main coordinating agent for the workflow."
+    )
 
-# 4. 必須の name および root_agent フィールド、および構成オブジェクトを使用して登録
-app = App(
-    name="my_compacting_agent_app",
-    root_agent=root_agent,
-    events_compaction_config=compaction_config
-)
-```
+    # 3. トークンベースの構成: 優先/事前呼び出しレイヤーの有効化
+    compaction_config = EventsCompactionConfig(
+        token_threshold=4000,     # 実際のトークン数がこれを超えたときに圧縮をトリガー
+        event_retention_size=5    # トークン制限に達したときにそのまま維持する最近の生のイベント数
+    )
+
+    # 4. 必須の name および root_agent フィールド、および構成オブジェクトを使用して登録
+    app = App(
+        name="my_compacting_agent_app",
+        root_agent=root_agent,
+        events_compaction_config=compaction_config
+    )
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "google.golang.org/adk/v2/runner"
+        "google.golang.org/adk/v2/session/compaction"
+    )
+
+    // 両方のフィールドを設定しない場合、runner.New はエラーを返します。
+    r, err := runner.New(runner.Config{
+        AppName:        "my_compacting_agent_app",
+        Agent:          rootAgent,
+        SessionService: sessionService,
+        Compaction: &compaction.Config{
+            TokenThreshold:     4000, // プロンプトがこのトークン数に達すると圧縮を実行します。
+            EventRetentionSize: 5,    // 要約せずにそのまま保持する最近のイベント数です。
+        },
+    })
+    ```
 
 ## スライディングウィンドウの圧縮
 
@@ -163,7 +185,7 @@ compaction_config = EventsCompactionConfig(
     })
     ```
 
-構成されると、ADK `Runner`はセッションが間隔に達するたびにバックグラウンドで圧縮プロセスを処理します。Python では、`Runner(app=app, session_service=...)` のように構成済みの `App` をランナーに渡してください。`App` を作成しただけでは圧縮は有効になりません。
+構成が完了すると、セッションが設定された間隔またはトークンしきい値に達するたびに、ADK の `Runner` が圧縮プロセスを自動的に処理します。
 
 ## コンテキスト圧縮の例
 

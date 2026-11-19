@@ -241,20 +241,19 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
     === "Go"
 
           ```go
-          import "google.golang.org/adk/session"
+          import "google.golang.org/adk/v2/session/vertexai"
 
-          // 2. VertexAIService
           // 실행 전, 환경이 인증되었는지 확인하세요:
           // gcloud auth application-default login
-          // export GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
-          // export GOOGLE_CLOUD_LOCATION="your-gcp-location"
 
-          modelName := "gemini-flash-latest" // 원하는 모델로 교체하세요
-          vertexService, err := session.VertexAIService(ctx, modelName)
+          sessionService, err := vertexai.NewSessionService(ctx, vertexai.VertexAIServiceConfig{
+              ProjectID: "your-gcp-project-id",
+              Location:  "us-central1",
+              // 숫자 형식의 추론 엔진(reasoning engine) ID입니다.
+              ReasoningEngine: "1234567890",
+          })
           if err != nil {
-            log.Printf("VertexAIService를 초기화할 수 없었습니다 (gcloud 프로젝트가 설정되지 않은 경우 예상되는 동작입니다): %v", err)
-          } else {
-            fmt.Println("VertexAIService를 성공적으로 초기화했습니다.")
+              log.Fatal(err)
           }
           ```
 
@@ -363,14 +362,14 @@ ADK 에이전트에서 Google Cloud에 연결하는 방법에 대한 자세한 �
 
 #### 동시성 및 잠금 (Concurrency and locking)
 
-`DatabaseSessionService`는 2계층 잠금 아키텍처를 통해 동시 작업 중에 데이터 무결성을 보장합니다.
+Python에서 `DatabaseSessionService`는 2계층 잠금 아키텍처를 통해 동시 작업 중 데이터 무결성을 보장합니다.
 
 * **프로세스 내 잠금 (In-Process locking):** 서비스는 내부의 프로세스 내 잠금을 사용하여 동일한 세션에 대한 `append_event` 호출을 직렬화합니다. 이는 동일한 프로세스 내에서 여러 요청이 동일한 세션을 동시에 업데이트하려고 할 때 발생할 수 있는 경합 조건(race condition)을 방지합니다.
 * **행 수준 잠금 (Row-Level locking):** PostgreSQL, MySQL, MariaDB의 경우, 서비스는 행 수준 잠금(`SELECT ... FOR UPDATE` 사용)을 사용하여 여러 프로세스나 복제본(replica)이 동일한 세션을 동시에 업데이트하려고 할 때 발생할 수 있는 경합 조건을 방지합니다.
 
 !!! warning "비동기 드라이버 요구사항"
 
-    `DatabaseSessionService`는 비동기 데이터베이스 드라이버가 필요합니다. SQLite를 사용할 때는 연결 문자열에서 `sqlite` 대신 `sqlite+aiosqlite`를 사용해야 합니다.
+    Python에서 `DatabaseSessionService`는 비동기 데이터베이스 드라이버가 필요합니다. SQLite를 사용할 때는 연결 문자열에서 `sqlite` 대신 `sqlite+aiosqlite`를 사용해야 합니다.
     PostgreSQL, MySQL과 같은 다른 데이터베이스의 경우 `asyncpg`(PostgreSQL) 또는 `aiomysql`(MySQL)처럼 비동기 호환 드라이버를 사용하고 있는지 확인하세요.
 
 !!! note "ADK Python v1.22.0에서 세션 데이터베이스 스키마 변경"

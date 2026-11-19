@@ -1,16 +1,12 @@
 # Gemini 모델을 사용한 지연 스케줄링
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK에서 지원됨</span><span class="lst-python">Python v2.10.0</span><span class="lst-preview">프리뷰</span>
+  <span class="lst-supported">ADK에서 지원됨</span><span class="lst-python">Python v2.10.0</span>
 </div>
 
 에이전트 워크로드마다 지연 시간(latency) 요구 사항이 다릅니다. 대화형 어시스턴트는 즉시 응답해야 하지만, 요약 작업, 대량 평가 실행 또는 문서 처리 파이프라인은 여유 용량을 기다릴 수 있습니다. 지연 스케줄링(Deferred scheduling)을 사용하면 ADK 에이전트가 대화형 용량을 두고 경쟁하는 대신 [할인된 요금](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing)으로 오프피크(off-peak) 용량에서 실행되도록 이러한 모델 호출을 대기열에 넣을 수 있습니다.
 
 `RunConfig`의 `service_tier` 설정을 사용하여 실행(run) 단위로 지연 스케줄링을 요청할 수 있습니다. 이 설정은 모델이나 에이전트가 아닌 실행 설정의 일부이므로, 하나의 에이전트 정의로 대화형 요청과 배치 워크로드를 모두 처리할 수 있습니다.
-
-!!! example "프리뷰: 지연 용량 사용에는 허용 목록(allowlist) 액세스가 필요합니다"
-
-    이 Google Cloud 기능은 프리뷰(Preview) 기능이며, 지연 용량에서 요청을 실행하려면 Google Cloud 프로젝트가 허용 목록에 등록되어 있어야 합니다. 자세한 내용은 [자율 에이전트 스케줄링(Autonomous agent scheduling)](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/efficiency/autonomous-scheduling)을 참고하세요.
 
 ## 시작하기
 
@@ -192,7 +188,6 @@ HTTP 요청은 전체 대기열 대기 시간 동안 연결을 열어 두므로,
 
 지연 스케줄링에는 다음 제한 사항이 적용됩니다.
 
-*   **허용 목록 액세스:** 지연 용량을 사용하려면 Google Cloud 프로젝트가 허용 목록에 등록되어 있어야 합니다.
 *   **Gemini 및 Interactions API 전용:** 지연 스케줄링은 `use_interactions_api=True`를 설정한 `Gemini` 모델에서만 작동합니다. 커스텀 `BaseLlm` 서브클래스를 포함한 다른 모든 모델은 이 등급을 무시합니다.
 *   **스트리밍과 호환되지 않음:** `RunConfig(service_tier=ServiceTier.DEFERRED, streaming_mode=StreamingMode.SSE)`를 생성하면 `pydantic.ValidationError`가 발생합니다.
 *   **`ManagedAgent` 클래스는 등급을 무시함:** 자체 인터랙션 루프를 실행하며 `service_tier`를 읽지 않습니다.
@@ -220,6 +215,7 @@ use_interactions_api=True on the model to apply the tier.
 
 ## 추가 리소스
 
+*   [자율 에이전트 스케줄링(Autonomous agent scheduling)](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/efficiency/autonomous-scheduling)
 *   [Gemini Interactions API](index.md#interactions-api)
 *   [런타임 설정](/ko/runtime/runconfig/)
 *   [Interactions API 코드 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/models/interactions_api)

@@ -28,32 +28,54 @@ ADK 에이전트는 실행되면서 사용자 지침(instruction), 조회된 데
 - **`token_threshold`**: 도달 시 테일 유지(tail-retention) 압축을 자동으로 트리거할 토큰 임계값입니다.
 - **`event_retention_size`**: 압축 실행 시 요약하지 않고 원본(raw) 상태 그대로 남겨둘 최근 이벤트 수입니다. 직전 대화 맥락과 대명사 참조 해석(pronoun resolution)을 자연스럽게 유지해 줍니다.
 
-프로젝트에서 이를 구현하려면 다음 구성을 사용하세요.
+프로젝트에서 토큰 기반 압축을 구현하려면 다음 구성을 사용하세요.
 
-```python
-# 1. google.adk 네임스페이스를 사용하도록 가져오기 경로 수정
-from google.adk.apps.app import App, EventsCompactionConfig
-from google.adk.agents import Agent
+=== "Python"
 
-# 2. 루트 에이전트 초기화 (App 설정에 필수)
-root_agent = Agent(
-    name="my_root_agent",
-    description="Main coordinating agent for the workflow."
-)
+    ```python
+    # 1. google.adk 네임스페이스를 사용하도록 가져오기 경로 수정
+    from google.adk.apps.app import App, EventsCompactionConfig
+    from google.adk.agents import Agent
 
-# 3. 토큰 기반 구성: 우선순위/사전 호출 레이어 활성화
-compaction_config = EventsCompactionConfig(
-    token_threshold=4000,     # 실제 토큰 수가 이를 초과할 때 압축 트리거
-    event_retention_size=5    # 토큰 한도 도달 시 원본 그대로 유지할 최근 이벤트 수
-)
+    # 2. 루트 에이전트 초기화 (App 설정에 필수)
+    root_agent = Agent(
+        name="my_root_agent",
+        description="Main coordinating agent for the workflow."
+    )
 
-# 4. 필수 name 및 root_agent 필드와 구성 객체를 사용하여 등록
-app = App(
-    name="my_compacting_agent_app",
-    root_agent=root_agent,
-    events_compaction_config=compaction_config
-)
-```
+    # 3. 토큰 기반 구성: 우선순위/사전 호출 레이어 활성화
+    compaction_config = EventsCompactionConfig(
+        token_threshold=4000,     # 실제 토큰 수가 이를 초과할 때 압축 트리거
+        event_retention_size=5    # 토큰 한도 도달 시 원본 그대로 유지할 최근 이벤트 수
+    )
+
+    # 4. 필수 name 및 root_agent 필드와 구성 객체를 사용하여 등록
+    app = App(
+        name="my_compacting_agent_app",
+        root_agent=root_agent,
+        events_compaction_config=compaction_config
+    )
+    ```
+
+=== "Go"
+
+    ```go
+    import (
+        "google.golang.org/adk/v2/runner"
+        "google.golang.org/adk/v2/session/compaction"
+    )
+
+    // 두 필드를 모두 설정하지 않으면 runner.New가 오류를 반환합니다.
+    r, err := runner.New(runner.Config{
+        AppName:        "my_compacting_agent_app",
+        Agent:          rootAgent,
+        SessionService: sessionService,
+        Compaction: &compaction.Config{
+            TokenThreshold:     4000, // 프롬프트가 이 토큰 수에 도달하면 압축을 실행합니다.
+            EventRetentionSize: 5,    // 원본 그대로 유지할 최근 이벤트 수입니다.
+        },
+    })
+    ```
 
 ## 슬라이딩 윈도우 압축
 
@@ -163,7 +185,7 @@ compaction_config = EventsCompactionConfig(
     })
     ```
 
-구성을 마치면 세션이 지정된 주기에 도달할 때마다 ADK `Runner`가 백그라운드에서 자동으로 압축을 수행합니다. Python에서는 `Runner(app=app, session_service=...)`처럼 설정이 포함된 `App` 인스턴스를 `Runner`에 전달해야 하며, `App` 객체를 생성하는 것만으로는 압축이 활성화되지 않습니다.
+구성을 마치면 세션이 설정된 주기나 토큰 임계값에 도달할 때마다 ADK `Runner`가 자동으로 압축을 수행합니다.
 
 ## 컨텍스트 압축 예시
 

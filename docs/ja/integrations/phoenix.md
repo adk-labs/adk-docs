@@ -12,7 +12,7 @@ catalog_tags: ["observability", "evaluation"]
 
 [Arize Phoenix](https://arize.com/phoenix/) は、ローカル開発、オープンソース ワークフロー、セルフホスト トレース向けの [Arize AI](https://arize.com/) によるオープンソースの可観測性および評価プラットフォームです。Google ADK アプリケーションに包括的なトレーシングと評価機能を提供します。始めるには、[無料アカウント](https://arize.com/phoenix/)にサインアップしてください。
 
-AI ネイティブ チームやエンタープライズ向けに構築されたフル機能の本番プラットフォームについては、マネージド クラウドまたはエンタープライズ セルフホスト デプロイとして利用可能な [Arize AX ADK 統合](/integrations/arize-ax/) を使用してください。Arize の [エージェント評価ガイド](https://arize.com/guides/ai-agent-handbook/agent-evaluation/) および [LLM 評価ガイド](https://arize.com/resources/llm-evaluation/) では、トレースがエージェントや LLM アプリケーションの評価ワークフローをどのようにサポートするかを示しています。
+AI ネイティブ チームやエンタープライズ向けに構築されたフル機能の本番プラットフォームについては、マネージド クラウドまたはエンタープライズ セルフホスト デプロイとして利用可能な [Arize AX ADK 統合](/integrations/arize-ax/) を使用してください。Arize の [エージェント評価ガイド](https://arize.com/ai-agents/agent-evaluation/) および [LLM 評価ガイド](https://arize.com/resources/llm-evaluation/) では、トレースがエージェントや LLM アプリケーションの評価ワークフローをどのようにサポートするかを示しています。
 
 ## 概要
 

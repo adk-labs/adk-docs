@@ -12,7 +12,7 @@ catalog_tags: ["observability", "evaluation"]
 
 [Arize Phoenix](https://arize.com/phoenix/)는 로컬 개발, 오픈소스 워크플로, 셀프 호스팅 트레이싱을 위한 [Arize AI](https://arize.com/)의 오픈소스 관측성 및 평가 플랫폼입니다. Google ADK 애플리케이션을 위한 포괄적인 추적 및 평가 기능을 제공합니다. 시작하려면 [무료 계정](https://arize.com/phoenix/)에 가입하세요.
 
-AI 네이티브 팀과 엔터프라이즈를 위해 구축된 전체 기능을 갖춘 프로덕션 플랫폼이 필요한 경우, 관리형 클라우드 또는 엔터프라이즈 셀프 호스팅 배포로 제공되는 [Arize AX ADK 연동](/integrations/arize-ax/)을 사용하세요. Arize의 [에이전트 평가 가이드](https://arize.com/guides/ai-agent-handbook/agent-evaluation/)와 [LLM 평가 가이드](https://arize.com/resources/llm-evaluation/)에서는 트레이스가 에이전트 및 LLM 애플리케이션의 평가 워크플로를 지원하는 방법을 설명합니다.
+AI 네이티브 팀과 엔터프라이즈를 위해 구축된 전체 기능을 갖춘 프로덕션 플랫폼이 필요한 경우, 관리형 클라우드 또는 엔터프라이즈 셀프 호스팅 배포로 제공되는 [Arize AX ADK 연동](/integrations/arize-ax/)을 사용하세요. Arize의 [에이전트 평가 가이드](https://arize.com/ai-agents/agent-evaluation/)와 [LLM 평가 가이드](https://arize.com/resources/llm-evaluation/)에서는 트레이스가 에이전트 및 LLM 애플리케이션의 평가 워크플로를 지원하는 방법을 설명합니다.
 
 ## 개요
 

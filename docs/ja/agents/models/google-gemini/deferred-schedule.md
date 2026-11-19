@@ -1,16 +1,12 @@
 # Gemini モデルでの遅延スケジューリング
 
 <div class="language-support-tag">
-  <span class="lst-supported">ADK でのサポート</span><span class="lst-python">Python v2.10.0</span><span class="lst-preview">プレビュー</span>
+  <span class="lst-supported">ADK でのサポート</span><span class="lst-python">Python v2.10.0</span>
 </div>
 
 エージェントのワークロードによって、レイテンシの要件は異なります。対話型アシスタントは即座に応答する必要がありますが、要約ジョブ、一括評価の実行、ドキュメント処理パイプラインなどは、空き容量を待つことができます。遅延スケジューリング（Deferred scheduling）を使用すると、ADK エージェントは対話用の容量を奪い合うのではなく、[割引料金](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing)でオフピーク容量で実行されるようにモデル呼び出しをキューに入れることができます。
 
 `RunConfig` の `service_tier` 設定を使用して、実行（run）ごとに遅延スケジューリングをリクエストできます。この設定はモデルやエージェントではなく実行設定の一部であるため、1 つのエージェント定義で対話型リクエストとバッチワークロードの両方に対応できます。
-
-!!! example "プレビュー: 遅延容量の利用には許可リスト（allowlist）への登録が必要です"
-
-    この Google Cloud 機能はプレビュー機能であり、遅延容量でリクエストを実行するには Google Cloud プロジェクトが許可リストに登録されている必要があります。詳細については、[自律型エージェントのスケジューリング（Autonomous agent scheduling）](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/efficiency/autonomous-scheduling)をご覧ください。
 
 ## はじめに
 
@@ -192,7 +188,6 @@ HTTP リクエストはキューの待機時間全体にわたって接続を開
 
 遅延スケジューリングには次の制限事項が適用されます。
 
-*   **許可リストによるアクセス:** 遅延容量を使用するには、Google Cloud プロジェクトが許可リストに登録されている必要があります。
 *   **Gemini および Interactions API のみ:** 遅延スケジューリングは、`use_interactions_api=True` を設定した `Gemini` モデルでのみ機能します。カスタム `BaseLlm` サブクラスを含む他のすべてのモデルでは、ティアは無視されます。
 *   **ストリーミングとの非互換性:** `RunConfig(service_tier=ServiceTier.DEFERRED, streaming_mode=StreamingMode.SSE)` を構築すると、`pydantic.ValidationError` が発生します。
 *   **`ManagedAgent` クラスはティアを無視します:** 独自のインタラクションループを実行するため、`service_tier` を読み取りません。
@@ -220,6 +215,7 @@ use_interactions_api=True on the model to apply the tier.
 
 ## 追加リソース
 
+*   [自律型エージェントのスケジューリング（Autonomous agent scheduling）](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/efficiency/autonomous-scheduling)
 *   [Gemini Interactions API](index.md#interactions-api)
 *   [ランタイム設定](/ja/runtime/runconfig/)
 *   [Interactions API コードサンプル](https://github.com/google/adk-python/tree/main/contributing/samples/models/interactions_api)

@@ -240,20 +240,19 @@ ADKは、ニーズに最も適したストレージバックエンドを選択�
     === "Go"
 
           ```go
-          import "google.golang.org/adk/v2/session"
+          import "google.golang.org/adk/v2/session/vertexai"
 
-          // 2. VertexAIService
           // 実行前に、環境が認証されていることを確認してください：
           // gcloud auth application-default login
-          // export GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
-          // export GOOGLE_CLOUD_LOCATION="your-gcp-location"
 
-          modelName := "gemini-flash-latest" // 希望のモデルに置き換えてください
-          vertexService, err := session.VertexAIService(ctx, modelName)
+          sessionService, err := vertexai.NewSessionService(ctx, vertexai.VertexAIServiceConfig{
+              ProjectID: "your-gcp-project-id",
+              Location:  "us-central1",
+              // 数値形式の推論エンジン（Reasoning Engine）ID です。
+              ReasoningEngine: "1234567890",
+          })
           if err != nil {
-            log.Printf("VertexAIServiceを初期化できませんでした（gcloudプロジェクトが設定されていない場合は想定内の動作です）: %v", err)
-          } else {
-            fmt.Println("VertexAIServiceの初期化に成功しました。")
+              log.Fatal(err)
           }
           ```
 
@@ -363,14 +362,14 @@ ADK エージェントから Google Cloud への接続に関する詳細につ�
 
 #### 同時実行とロック (Concurrency and locking)
 
-`DatabaseSessionService` は、2層のロックアーキテクチャを通じて、同時実行操作中のデータ整合性を保証します。
+Python の `DatabaseSessionService` は、2 層のロックアーキテクチャを通じて、同時実行操作中のデータ整合性を保証します。
 
 * **プロセス内ロック (In-Process locking):** 同一セッションに対する `append_event` 呼び出しをシリアライズするために、内部のプロセス内ロックを使用します。これにより、同一プロセス内で複数のリクエストが同時に同一セッションを更新しようとしたときの競合状態（race condition）を防ぎます。
 * **行レベルロック (Row-Level locking):** PostgreSQL、MySQL、MariaDB の場合、行レベルロック（`SELECT ... FOR UPDATE` 経由）を使用して、複数のプロセスやレプリカが同時に同一セッションを更新しようとしたときの競合状態を防ぎます。
 
 !!! warning "注意: `DatabaseSessionService` には非同期DBドライバーが必要"
 
-    `DatabaseSessionService` を使う場合は、非同期対応のデータベースドライバーが必要です。
+    Python で `DatabaseSessionService` を使う場合は、非同期対応のデータベースドライバーが必要です。
     SQLite を使うときは、接続文字列に `sqlite` ではなく `sqlite+aiosqlite` を指定してください。
     PostgreSQL や MySQL でも、`asyncpg` や `aiomysql` のような非同期互換ドライバーを使う必要があります。
 
