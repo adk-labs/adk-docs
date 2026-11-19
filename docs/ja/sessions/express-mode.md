@@ -4,10 +4,10 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-`VertexAiSessionService` または `VertexAiMemoryBankService` の利用に興味があるものの、Google Cloudプロジェクトをお持ちでない場合は、Vertex AI Expressモードに登録することで、無料でこれらのサービスにアクセスして試すことができます。対象となる***gmail***アカウントで[こちら](https://console.cloud.google.com/expressmode)から登録できます。Vertex AI Expressモードの詳細については、[概要ページ](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)をご覧ください。
+`VertexAiSessionService` または `VertexAiMemoryBankService` の利用に興味があるものの、Google Cloud プロジェクトをお持ちでない場合は、Vertex AI Express モードに登録することで、無料でこれらのサービスにアクセスして試すことができます。対象となる Gmail アカウントで[こちら](https://console.cloud.google.com/expressmode)から登録できます。Vertex AI Express モードの詳細については、[概要ページ](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)をご覧ください。
 登録後、[APIキー](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview#api-keys)を取得すれば、ローカルのADKエージェントでVertex AIセッションおよびメモリサービスを使い始めることができます！
 
-!!! info Vertex AI Expressモードの制限事項
+!!! info "Vertex AI Express モードの制限事項"
 
     Vertex AI Expressモードは、無料利用枠にいくつかの制限があります。無料のExpressモードプロジェクトは90日間のみ有効で、限られた割り当てで一部のサービスのみが利用可能です。例えば、エージェントエンジン（Agent Engine）の数は10個に制限されており、エージェントエンジンへのデプロイは有料利用枠専用です。割り当て制限を解除し、Vertex AIのすべてのサービスを利用するには、Expressモードプロジェクトに請求先アカウントを追加してください。
 
@@ -74,7 +74,7 @@ session_service = VertexAiSessionService(agent_engine_id=APP_ID)
 # session = await session_service.create_session(app_name=APP_ID, user_id= ...)
 ```
 
-!!! info セッションサービスの割り当て
+!!! info "セッションサービスの割り当て"
 
     無料のExpressモードプロジェクトの場合、`VertexAiSessionService` には以下の割り当てがあります：
 
@@ -101,7 +101,7 @@ memory_service = VertexAiMemoryBankService(agent_engine_id=APP_ID)
 # memory = await memory_service.add_session_to_memory(session)
 ```
 
-!!! info メモリサービスの割り当て
+!!! info "メモリサービスの割り当て"
 
     無料のExpressモードプロジェクトの場合、`VertexAiMemoryBankService` には以下の割り当てがあります：
 

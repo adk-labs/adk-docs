@@ -11,11 +11,11 @@ ADK 에이전트를 [GitLab.com](https://gitlab.com/) 또는 자체 관리형(Se
   표준 텍스트 검색과 달리 코드의 로직과 의도를 질의하여 복잡한 구현을 빠르게 이해할 수 있습니다.
 
 - **머지 리퀘스트 검토 가속화 (Accelerate Merge Request Reviews)**: 코드 변경 사항을 즉시 파악합니다.
-  전체 머지 리퀘스트 컨텍스트를 검색하고, 특정 diff를 분석하고, 커밋 기록을 검토하여
+  전체 머지 리퀘스트 컨텍스트를 조회하고, 특정 변경분(diff)을 분석하며, 커밋 기록을 검토하여
   팀에 더 빠르고 의미 있는 피드백을 제공합니다.
 
 - **CI/CD 파이프라인 문제 해결 (Troubleshoot CI/CD Pipelines)**: 채팅 화면을 벗어나지 않고 빌드 실패를 진단합니다.
-  파이프라인 상태를 검사하고 상세 작업(job) 로그를 검색하여 특정 머지 리퀘스트나 커밋이
+  파이프라인 상태를 점검하고 상세 작업(job) 로그를 조회하여 특정 머지 리퀘스트나 커밋이
   검사에 실패한 정확한 원인을 파악합니다.
 
 ## 필수 조건 (Prerequisites)
@@ -72,15 +72,15 @@ ADK 에이전트를 [GitLab.com](https://gitlab.com/) 또는 자체 관리형(Se
 ---- | -----------
 `get_mcp_server_version` | GitLab MCP 서버의 현재 버전을 반환합니다.
 `create_issue` | GitLab 프로젝트에 새 이슈를 생성합니다.
-`get_issue` | 특정 GitLab 이슈에 대한 상세 정보를 검색합니다.
+`get_issue` | 특정 GitLab 이슈에 대한 상세 정보를 조회합니다.
 `create_merge_request` | 프로젝트에 머지 리퀘스트를 생성합니다.
-`get_merge_request` | 특정 GitLab 머지 리퀘스트에 대한 상세 정보를 검색합니다.
-`get_merge_request_commits` | 특정 머지 리퀘스트의 커밋 목록을 검색합니다.
-`get_merge_request_diffs` | 특정 머지 리퀘스트의 diff(차이)를 검색합니다.
-`get_merge_request_pipelines` | 특정 머지 리퀘스트의 파이프라인을 검색합니다.
-`get_pipeline_jobs` | 특정 CI/CD 파이프라인의 작업(job)을 검색합니다.
-`gitlab_search` | 검색 API를 사용하여 전체 GitLab 인스턴스에서 용어를 검색합니다.
-`semantic_code_search` | 프로젝트 내에서 관련 코드 스니펫을 검색합니다.
+`get_merge_request` | 특정 GitLab 머지 리퀘스트에 대한 상세 정보를 조회합니다.
+`get_merge_request_commits` | 특정 머지 리퀘스트의 커밋 목록을 조회합니다.
+`get_merge_request_diffs` | 특정 머지 리퀘스트의 변경분(diff)을 조회합니다.
+`get_merge_request_pipelines` | 특정 머지 리퀘스트의 파이프라인을 조회합니다.
+`get_pipeline_jobs` | 특정 CI/CD 파이프라인의 작업(job) 목록을 조회합니다.
+`gitlab_search` | 검색 API를 사용하여 전체 GitLab 인스턴스에서 키워드를 검색합니다.
+`semantic_code_search` | 프로젝트 내에서 관련 코드 스니펫을 시맨틱 검색합니다.
 
 ## 추가 리소스 (Additional resources)
 

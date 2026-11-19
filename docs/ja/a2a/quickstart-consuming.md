@@ -91,7 +91,7 @@ adk api_server --a2a --port 8001 contributing/samples/a2a_basic/remote_a2a
 ??? note "なぜポート8001を使用するのですか？"
     このクイックスタートでは、ローカルでテストする場合、エージェントはlocalhostを使用するため、公開されたエージェント（リモートのプライムエージェント）のA2Aサーバーの`port`は、利用側エージェントのポートとは異なる必要があります。利用側エージェントと対話する`adk web`のデフォルトポートは`8000`であるため、A2Aサーバーは別のポート`8001`を使用して作成されます。
 
-実行すると、次のようなものが表示されます。
+実行すると、次のような出力が表示されます。
 
 ``` shell
 INFO:     Started server process [56558]
@@ -100,11 +100,11 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
 ```
   
-### 3. リモートエージェントの必須エージェントカード（`agent-card.json`）に注意してください { #look-out-for-the-required-agent-card-agent-json-of-the-remote-agent }
+### 3. リモートエージェントに必要なエージェントカード（`agent-card.json`）を確認する { #look-out-for-the-required-agent-card-agent-json-of-the-remote-agent }
 
 A2Aプロトコルでは、各エージェントが何をするかを記述したエージェントカードが必要です。
 
-他の誰かがすでにエージェントで利用しようとしているリモートA2Aエージェントを構築している場合は、エージェントカード（`agent-card.json`）があることを確認する必要があります。
+自分のエージェントから利用したいリモートA2Aエージェントを他の開発者がすでに構築している場合は、そのエージェントにエージェントカード（`agent-card.json`）が用意されていることを確認してください。
 
 このサンプルでは、`check_prime_agent`にはすでにエージェントカードが提供されています。
 
@@ -142,7 +142,7 @@ A2Aプロトコルでは、各エージェントが何をするかを記述し�
 
 #### 仕組み
 
-メインエージェントは`RemoteA2aAgent()`関数を使用してリモートエージェント（この例では`prime_agent`）を利用します。以下に示すように、`RemoteA2aAgent()`には`name`、`description`、および`agent_card`のURLが必要です。
+メインエージェントは `RemoteA2aAgent` クラスを使用してリモートエージェント（この例では `prime_agent`）を利用します。以下に示すように、`RemoteA2aAgent` には `name`、`description`、および `agent_card` の URL が必要です。
 
 ```python title="a2a_basic/agent.py"
 <...code truncated...>
@@ -165,7 +165,7 @@ prime_agent = RemoteA2aAgent(
 !!! note "新しい A2A 統合を使う"
     `use_legacy=False` を設定すると、エージェントはリモートエージェントへ [A2A 拡張](a2a-extension.md) を送信するため、新しい ADK-A2A 統合を使用します。
 
-次に、エージェントで`RemoteA2aAgent`を単純に使用できます。この場合、`prime_agent`は以下の`root_agent`のサブエージェントの1つとして使用されます。
+あとは、エージェント内で `RemoteA2aAgent` をそのまま使用できます。この場合、`prime_agent` は以下の `root_agent` のサブエージェントの1つとして使用されます。
 
 ```python title="a2a_basic/agent.py"
 from google.adk.agents.llm_agent import Agent
@@ -222,7 +222,7 @@ root_agent = Agent(
 
 `request_interceptors` のリストを注入して、A2A リクエストへミドルウェアロジックを追加できます。
 
-*   **`before_request`**: エージェントがリクエスト処理を開始する前に実行されます。`A2AMessage` を変更したり、ADK `Event` を返してリクエストを即座に中止し、そのイベントを呼び出し元へ返したりできます。
+*   **`before_request`**: エージェントがリクエスト処理を開始する前に実行されます。`A2AMessage` を変更したり、ADK `Event` を返してリクエストを即座に早期終了し、そのイベントを呼び出し元へ返したりできます。
 *   **`after_request`**: エージェントがリクエストを処理した後に実行されます。生成された ADK `Event` を変更したり、`None` を返してイベントを完全に除外したりできます。
 
 #### リクエストパラメータ設定
@@ -287,6 +287,6 @@ prime_agent = RemoteA2aAgent(
 
 ## 次のステップ
 
-A2Aサーバー経由でリモートエージェントを使用するエージェントを作成したので、次のステップは別のエージェントからそれに接続する方法を学ぶことです。
+A2Aサーバー経由でリモートエージェントを利用するエージェントを作成できました。次のステップは、独自のエージェントを公開して他のエージェントから接続できるようにする方法を学ぶことです。
 
 - [**A2Aクイックスタート（公開）**](./quickstart-exposing.md)：他のエージェントがA2Aプロトコル経由で既存のエージェントを使用できるように公開する方法を学びます。

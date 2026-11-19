@@ -4,8 +4,8 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-`RunConfig` は、streaming mode、speech setting、LLM call limit、live agent option など、
-エージェントのランタイム動作を制御します。デフォルト動作を上書きするには、
+`RunConfig` は、ストリーミングモード、音声設定、LLM 呼び出し回数の上限、ライブエージェントのオプションなど、
+エージェントのランタイム動作を制御します。デフォルトの動作を上書きするには、
 `RunConfig` を `runner.run_async()` または `runner.run_live()` に渡します。
 
 === "Python"
@@ -70,13 +70,10 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
-Long-running session では、どれだけの history を load するか、context window を圧縮するかを
-制御できます。
+長時間実行されるセッションでは、読み込む履歴の量やコンテキストウィンドウを圧縮するかどうかを制御できます。
 
-- `get_session_config`: session を load するときに取得する event を制限します。 invocation ごとに
-  event history 全体を load しないよう、`num_recent_events` または `after_timestamp` を使います。これらのフィルターは保存されたイベントを削除することなく、読み込まれるビューのみを制限します。新しいイベントは保存された履歴に追加され、読み込まれたビューから除外された過去のイベントもそのまま保持されます。
-- `context_window_compression`: LLM input の context window compression を有効にします。
-  session が model context limit に近づく場合に便利です。
+- `get_session_config`: セッションの読み込み時に取得するイベントを制限します。呼び出し（invocation）のたびにイベント履歴全体を読み込まないよう、`num_recent_events` または `after_timestamp` を使用します。これらのフィルターは保存されたイベントを削除することなく、読み込まれるビューのみを制限します。新しいイベントは保存された履歴に追加され、読み込まれたビューから除外された過去のイベントもそのまま保持されます。
+- `context_window_compression`: LLM 入力に対するコンテキストウィンドウ圧縮を有効にします。セッションがモデルのコンテキスト上限に近づく場合に便利です。
 - `model_input_context`: 今回の呼び出しにのみ LLM リクエストに追加される `types.Content` のリスト。ランナーはこれをセッションに永続化しないため、会話履歴を変更せずにターンごとのコンテキストを提供できます。
 - `include_thoughts_from_other_agents`: 他のエージェントの思考（thought）パートを LLM コンテキストに含めるかどうかを制御します。デフォルトでは無効です。
 
@@ -93,18 +90,16 @@ Long-running session では、どれだけの history を load するか、conte
 
 ## テキスト応答オプション { #enable-streaming }
 
-エージェントがテキスト モードで応答する方法を、生成されるにつれて単語ごとに配信するか、または 1 つの完全な応答として配信するかを、以下で説明する ***Streaming Mode*** パラメータで制御できます:
+エージェントがテキストモードで応答する方法（生成されるにつれて順次配信するか、1 つの完全なレスポンスとして配信するか）を、以下で説明する `streaming_mode` パラメータで制御できます:
 
-- **`StreamingMode.NONE`** (デフォルト): runner は turn ごとに 1 つの完全なレスポンスを返します。CLI tool、batch processing、synchronous workflow に適しています。
-- **`StreamingMode.SSE`**: Server-Sent Events streaming です。LLM が生成している間、runner が partial event を yield し、typewriter-style UI や real-time chat display を実現できます。
+- **`StreamingMode.NONE`**（デフォルト）: ランナーはターンごとに 1 つの完全なレスポンスを返します。CLI ツール、バッチ処理、同期ワークフローに適しています。
+- **`StreamingMode.SSE`**: Server-Sent Events（SSE）ストリーミングです。LLM が生成している間にランナーが部分的なイベント（partial event）を順次返すため、タイプライター風の UI やリアルタイムのチャット表示を実現できます。
 
-音声の入力と出力を含むデータの双方向ストリーミングを可能にする ***Streaming Mode*** パラメータのもう 1 つの設定があります。この機能には、シンプルなエージェントを超える追加の設定が必要です。詳細については、[ライブおよび音声エージェント](../live/index.md) を参照してください。
+`streaming_mode` パラメータには、音声の入出力を含むデータの双方向ストリーミングを有効にするもう 1 つの設定（`StreamingMode.BIDI`）もあります。この機能には、シンプルなエージェント以上の追加設定が必要です。詳細については、[ライブおよび音声エージェント](../live/index.md)を参照してください。
 
-`StreamingMode.SSE` とともに `support_cfc=True` を設定すると、Compositional Function Calling(CFC)
-を有効にできます。CFC により、model は function call を動的に構成して実行でき、内部では
-Live API を使用します。
+`StreamingMode.SSE` と併せて `support_cfc=True` を設定すると、Compositional Function Calling（CFC）を有効にできます。CFC により、モデルは関数呼び出し（Function Calling）を動的に構成して実行でき、内部では Live API を使用します。
 
-!!! example "Experimental"
+!!! example "実験的機能（Experimental）"
     CFC サポートは実験的であり、将来のリリースで API や動作が変更される可能性があります。
 
 === "Python"
@@ -164,8 +159,7 @@ Live API を使用します。
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-java">Java</span>
 </div>
 
-Voice-enabled agent では、speech synthesis、audio transcription、response modality を
-設定します。
+音声対応エージェントでは、音声合成、音声の文字起こし（トランスクリプション）、およびレスポンスモダリティを設定します。
 
 !!! tip "ライブエージェント"
 
@@ -259,7 +253,7 @@ ADK エージェントは、対話型のエージェント体験を作成する�
 - **[設定: プロアクティブおよび感情的な対話](../live/configuration.md#proactivity-and-affective-dialog)**: ネイティブ オーディオ会話機能とそれをサポートするモデル。
 
 `tool_thread_pool_config` 設定は例外です。これは Live API の関心事というよりもランタイムの関心事であるため、ここに残されています。イベントループがユーザーの中断に応答し続けられるよう、ツール実行をバックグラウンドスレッドプールで実行します。
-すべてのパラメータがすべての言語で利用できるわけではありません。言語別の詳細は [API reference](#api-reference) を参照してください。
+すべてのパラメータがすべての言語で利用できるわけではありません。言語別の詳細は [API リファレンス](#api-reference) を参照してください。
 
 === "Python"
 
@@ -272,10 +266,10 @@ ADK エージェントは、対話型のエージェント体験を作成する�
     )
     ```
 
-    !!! note "Thread pool and the GIL"
-        Thread pool は blocking I/O と、GIL を release する C extension(例:
-        `time.sleep()`、network call、numpy)に役立ちます。純粋な Python CPU-bound code には
-        役立ちません。GIL が Python bytecode の真の並列実行を妨げるためです。
+    !!! note "スレッドプールと GIL"
+        スレッドプールは、ブロッキング I/O や GIL を解放する C 拡張機能（例:
+        `time.sleep()`、ネットワーク呼び出し、NumPy）に対して有効です。一方、GIL が
+        Python バイトコードの真の並列実行を妨げるため、純粋な Python の CPU バウンドなコードには効果がありません。
 
 === "TypeScript"
 
@@ -306,27 +300,19 @@ ADK エージェントは、対話型のエージェント体験を作成する�
 
 ## ランタイム制限とデバッグの設定
 
-次のパラメータで runtime guardrail と debugging を制御します。
+次のパラメータでランタイムのガードレールとデバッグを制御します。
 
-- `max_llm_calls`: run ごとの LLM call 合計数を制限します(デフォルト: 500)。0 または負の値は
-  無制限の呼び出しを意味しますが、本番環境では推奨されません。使用する言語の最大整数(Python では
-  `sys.maxsize`、Kotlin では `Int.MAX_VALUE`)を渡すとエラーになります。
-- `save_input_blobs_as_artifacts`: `True` の場合、input blob(例: uploaded file)を debugging と
-  auditing 用の run artifact として保存します。Python では `SaveFilesAsArtifactsPlugin` が推奨されるため
-  非推奨(deprecated)となっています。Go では、`agent.RunConfig` の `SaveInputBlobsAsArtifacts`
-  フィールドを `true` に設定します。この設定を有効にするには、ランナーにアーティファクトサービスが必要です。
-- `custom_metadata`: invocation に添付される任意 metadata の `dict[str, Any]` です。tracing や
-  logging に便利です。
-- `service_tier`: 実行時のモデル呼び出しに対するサービング容量を選択します。ADK Python のみに対応しており、
-  Interactions API を使用する Gemini モデルにのみ適用されます。`ServiceTier.DEFERRED` は各モデル呼び出しを
-  オフピーク容量で実行するようにキューに入れ、`StreamingMode.SSE` と組み合わせることはできません。
-  詳細については、[遅延スケジューリング（Deferred scheduling）](/agents/models/google-gemini/deferred-schedule/)をご覧ください。
+- `max_llm_calls`: 1 回の実行あたりの LLM 呼び出しの合計数を制限します（デフォルト: 500）。0 または負の値を指定すると無制限になりますが、本番環境では推奨されません。使用する言語の最大整数値（Python では `sys.maxsize`、Kotlin では `Int.MAX_VALUE`）を渡すとエラーが発生します。
+- `save_input_blobs_as_artifacts`: `True` の場合、入力 Blob（アップロードされたファイルなど）をデバッグおよび監査用の実行アーティファクトとして保存します。Python では `SaveFilesAsArtifactsPlugin` の使用が推奨されるため、非推奨（deprecated）となっています。Go では、`agent.RunConfig` の `SaveInputBlobsAsArtifacts` フィールドを `true` に設定します。この設定を有効にするには、ランナーにアーティファクトサービスが構成されている必要があります。
+- `custom_metadata`: 呼び出し（invocation）に添付される任意のメタデータの `dict[str, Any]` です。トレーシングやロギングに便利です。
+- `service_tier`: 実行時のモデル呼び出しに対するサービング容量を選択します。ADK Python のみに対応しており、Interactions API を使用する Gemini モデルにのみ適用されます。`ServiceTier.DEFERRED` は各モデル呼び出しをオフピーク容量で実行するようにキューに入れ、`StreamingMode.SSE` と組み合わせることはできません。詳細については、[遅延スケジューリング（Deferred scheduling）](/agents/models/google-gemini/deferred-schedule/)をご覧ください。
 
-## API reference
+## API リファレンス {#api-reference}
 
-field、type、default の完全な一覧は、各言語の API reference を参照してください。
+フィールド、型、デフォルト値の完全な一覧については、各言語の API リファレンスを参照してください。
 
-- [Python API reference](../api-reference/python/google-adk.html#google.adk.agents.RunConfig)
-- [TypeScript API reference](../api-reference/typescript/interfaces/RunConfig.html)
-- [Go API reference](https://pkg.go.dev/google.golang.org/adk/v2/agent#RunConfig)
-- [Java API reference](../api-reference/java/com/google/adk/agents/RunConfig.html)
+- [Python API リファレンス](../api-reference/python/google-adk.html#google.adk.agents.RunConfig)
+- [TypeScript API リファレンス](../api-reference/typescript/interfaces/RunConfig.html)
+- [Go API リファレンス](https://pkg.go.dev/google.golang.org/adk/v2/agent#RunConfig)
+- [Java API リファレンス](../api-reference/java/com/google/adk/agents/RunConfig.html)
+- [Kotlin API リファレンス](../api-reference/kotlin/google-adk-kotlin-core/com.google.adk.kt.agents/-run-config/index.html)

@@ -39,7 +39,7 @@ cd examples/a2a_server
 --8<-- "examples/java/snippets/src/main/java/a2a/A2aExposingSnippet.java:a2a-launcher"
 ```
 
-앱은 HTTP로 마운트된 `/a2a/remote/v1/message:send` 경로로 들어오는 JSON-RPC 호출을 자동으로 처리하고, 일부 내용, 기록, 컨텍스트를 직접 `BaseAgent` 흐름으로 전달합니다.
+앱은 HTTP로 마운트된 `/a2a/remote/v1/message:send` 경로로 들어오는 JSON-RPC 호출을 자동으로 처리하고, 메시지 파트(parts), 대화 기록, 컨텍스트를 `BaseAgent` 실행 흐름으로 직접 전달합니다.
 
 ### 3. Remote A2A Agent 서버 시작하기 { #start-the-remote-a2a-agent-server }
 
@@ -83,4 +83,4 @@ curl -X POST http://localhost:9090 \
 
 이제 A2A를 통해 에이전트를 노출했습니다. 다음 단계는 다른 에이전트 오케스트레이터에서 이를 네이티브로 소비하는 방법을 배우는 것입니다.
 
-- [**A2A 빠른 시작(소비) for Java**](./quickstart-consuming-java.md): 에이전트 오케스트레이터 래퍼가 노출된 서비스에 하향 연결하는 방법을 알아봅니다.
+- [**A2A 빠른 시작(소비) for Java**](./quickstart-consuming-java.md): 에이전트 오케스트레이터 래퍼가 외부에 공개된 하위(downstream) 서비스에 연결하는 방법을 알아봅니다.

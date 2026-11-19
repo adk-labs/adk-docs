@@ -1,11 +1,11 @@
-# 순차적 에이전트
+# 순차 에이전트
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-`SequentialAgent`는 하위 에이전트를 목록에 명시된 순서대로 실행하는 [워크플로우 에이전트](index.md)입니다.
-실행이 고정된, 엄격한 순서로 이루어져야 할 때 `SequentialAgent`를 사용하세요.
+`SequentialAgent`는 하위 에이전트를 목록에 명시된 순서대로 실행하는 [워크플로 에이전트](index.md)입니다.
+실행이 고정된 엄격한 순서로 이루어져야 할 때 `SequentialAgent`를 사용하세요.
 
 !!! warning "지원 중단됨(Deprecated): 그래프 기반 워크플로 사용"
 
@@ -17,7 +17,7 @@
 
 *   두 가지 도구, 즉 `페이지 콘텐츠 가져오기(Get Page Contents)`와 `페이지 요약하기(Summarize Page)`를 사용하여 모든 웹페이지를 요약할 수 있는 에이전트를 구축한다고 가정해 봅시다. 에이전트는 항상 `페이지 요약하기`를 호출하기 전에 `페이지 콘텐츠 가져오기`를 호출해야 하므로(`아무것도 없는 상태에서 요약할 수는 없으므로!`), `SequentialAgent`를 사용하여 에이전트를 구축해야 합니다.
 
-다른 [워크플로우 에이전트](index.md)와 마찬가지로 `SequentialAgent`는 LLM으로 구동되지 않으므로 실행 방식이 결정적(deterministic)입니다. 하지만 워크플로우 에이전트는 내부 로직이 아닌 실행(즉, 순차 실행)에만 관여합니다. 워크플로우 에이전트의 도구나 하위 에이전트는 LLM을 활용할 수도 있고, 그렇지 않을 수도 있습니다.
+다른 [워크플로 에이전트](index.md)와 마찬가지로 `SequentialAgent`는 LLM으로 구동되지 않으므로 실행 방식이 결정적(deterministic)입니다. 즉, 워크플로 에이전트는 개별 작업의 내부 추론이 아니라 실행 흐름 제어(순차 실행)만 담당합니다. 워크플로 에이전트의 도구나 하위 에이전트는 LLM을 활용할 수도 있고, 그렇지 않을 수도 있습니다.
 
 ### 작동 방식
 

@@ -4,7 +4,7 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-各`Session`（私たちの会話スレッド）内で、**`state`**属性は、その特定のインタラクションのためのエージェント専用のスクラッチパッド（一時的な作業スペース）のように機能します。`session.events`が完全な履歴を保持するのに対し、`session.state`はエージェントが会話の*最中に*必要な動的な詳細を保存し、更新する場所です。
+各 `Session`（会話スレッド）内で、**`state`** 属性は、その特定のインタラクションのためのエージェント専用のスクラッチパッド（一時的な作業領域）のように機能します。`session.events` が完全な履歴を保持するのに対し、`session.state` はエージェントが会話の*最中に*必要な動的な詳細を保存し、更新する場所です。
 
 ## `session.state`とは何か？
 
@@ -21,7 +21,7 @@
 
     * データは`key: value`として保存されます。
     * **キー（Keys）：** 常に文字列（`str`）です。明確な名前を使用してください（例：`'departure_city'`、`'user:language_preference'`）。
-    * **値（Values）：** **シリアライズ可能**である必要があります。これは、`SessionService`によって簡単に保存およびロードできることを意味します。文字列、数値、ブール値、そして*これらの基本型のみ*を含む単純なリストや辞書など、特定の言語（Python/Go/Java）の基本型に固執してください。（正確な詳細についてはAPIドキュメントを参照してください）。
+    * **値（Values）：** **シリアライズ可能**である必要があります。これは、`SessionService` によって簡単に保存およびロードできることを意味します。文字列、数値、ブール値、そして*これらの基本型のみ*を含む単純なリストや辞書など、各言語（Python/TypeScript/Go/Java/Kotlin）の基本型を使用してください。（正確な詳細については API ドキュメントを参照してください）。
     * **⚠️ 複雑なオブジェクトを避ける：** **シリアライズ不可能なオブジェクト**（カスタムクラスのインスタンス、関数、接続など）を状態に直接保存しないでください。必要であれば、単純な識別子を保存し、複雑なオブジェクトは他の場所で取得してください。
 
 2. **可変性：変化する**
@@ -35,8 +35,8 @@
       * `InMemorySessionService`：**永続的ではない。** 再起動時に状態は失われます。
       * `DatabaseSessionService` / `VertexAiSessionService`：**永続的。** 状態は確実に保存されます。
 
-!!! 注
-    プリミティブの特定のパラメータやメソッド名は、SDK言語によって若干異なる場合があります（例：Pythonでは`session.state['current_intent'] = 'book_flight'`、Goでは`context.State().Set("current_intent", "book_flight")`、Javaでは`session.state().put("current_intent", "book_flight)`）。詳細については、言語固有のAPIドキュメントを参照してください。
+!!! note "注"
+    プリミティブの特定のパラメータやメソッド名は、SDK 言語によって若干異なる場合があります（例：Python では `session.state['current_intent'] = 'book_flight'`、Go では `context.State().Set("current_intent", "book_flight")`、Java では `session.state().put("current_intent", "book_flight")`、TypeScript では `context.state.set("current_intent", "book_flight")`）。詳細については、言語固有の API ドキュメントを参照してください。
 
 ### プレフィックスによる状態の整理：スコープが重要
 
@@ -54,7 +54,7 @@
     * **スコープ：** `user_id`に関連付けられ、そのユーザーの（同じ`app_name`内の）*すべての*セッションで共有されます。
     * **永続性：** `Database`または`VertexAI`で永続的です。（`InMemory`によって保存されますが、再起動時に失われます）。
     * **ユースケース：** ユーザーの好み（例：`'user:theme'`）、プロファイルの詳細（例：`'user:name'`）。
-    * **セッションなしでの読み取り:** Python では、`await session_service.get_user_state(app_name=..., user_id=...)` が `user:` プレフィックスを削除したユーザー スコープ キーを返すため、セッションが存在する前に読み取ることができます。`VertexAiSessionService` は例外で、Agent Runtime API がセッションから独立してユーザー状態を公開しないため、常に `NotImplementedError` を発生させます。そこでは代わりに `list_sessions` でセッションを列挙し、各結果に対して `get_session` を呼び出してください。
+    * **セッションなしでの読み取り:** Python では、`await session_service.get_user_state(app_name=..., user_id=...)` が `user:` プレフィックスを削除したユーザースコープのキーを返すため、セッションが存在する前に読み取ることができます。`VertexAiSessionService` は例外で、Agent Runtime API がセッションとは独立してユーザー状態を提供していないため、常に `NotImplementedError` を発生させます。その場合は代わりに `list_sessions` でセッションを列挙し、各結果に対して `get_session` を呼び出してください。
     * **例：** `session.state['user:preferred_language'] = 'fr'`
 
 * **`app:` プレフィックス（アプリ状態）：**
@@ -125,9 +125,15 @@
     // "猫についての短い物語を、テーマは friendship に焦点を当てて書いてください。"
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_templating"
+    ```
+
 #### 重要な考慮事項
 
-* キーの存在：指示文字列で参照するキーがsession.stateに存在することを確認してください。キーが見つからない場合、エージェントはエラーをスローします。存在するかもしれないし、しないかもしれないキーを使用するには、キーの後に疑問符(?)を含めることができます(例: {topic?})。
+* キーの存在：指示文字列で参照するキーが `session.state` に存在することを確認してください。キーが見つからない場合、エージェントはエラーをスローします。存在するかどうか不確定なキーを使用するには、キーの後に疑問符（`?`）を付けることができます（例: `{topic?}`）。
 * データ型：キーに関連付けられた値は、文字列または簡単に文字列に変換できる型である必要があります。
 * リテラル波括弧：`{key}` 構文は、単一の波括弧の中にある有効な Python 識別子を状態変数プレースホルダーとして解釈します。JSON の例やテンプレート構文のようにリテラルの波括弧が必要な場合は、文字列ではなく `InstructionProvider` 関数を使用してください。
 
@@ -205,6 +211,12 @@
         .name("template_helper_agent")
         .instruction(myInstructionProvider)
         .build();
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_provider"
     ```
 
 `InstructionProvider` を使いながら指示に状態を挿入したい場合は、`inject_session_state` ユーティリティ関数を使用できます。有効な状態変数名に一致する `{key}` プレースホルダーだけが置換され、それ以外のテキスト（有効な識別子に一致しない内容を含む波括弧も含む）はそのまま残ります。
@@ -340,7 +352,7 @@
     --8<-- "examples/go/snippets/sessions/state_example/state_example.go:greeting"
     ```
 
-裏側では、`Runner`は`output_key`を使用して、`state_delta`を持つ必要な`EventActions`を作成し、`append_event`を呼び出します。
+内部では、エージェント自身が `output_key` を使用して、生成するイベントの `EventActions` 内の `state_delta` にレスポンスを書き込みます。その後、`Runner` がそのイベントを `SessionService` の `append_event` に渡し、デルタが適用されます。
 
 **2. 標準的な方法：`EventActions.state_delta`（複雑な更新用）**
 
@@ -410,11 +422,17 @@
     --8<-- "examples/java/snippets/src/main/java/state/ManualStateUpdateExample.java:full_code"
     ```
 
-**3. `CallbackContext`または`ToolContext`経由（コールバックとツールに推奨）**
+=== "Kotlin"
 
-*(注: TypeScript では、これは統合された `Context` 型で行います。)*
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/StateExample.kt:full_example"
+    ```
 
-エージェントのコールバック（例：`on_before_agent_call`、`on_after_agent_call`）やツール関数内で状態を変更する場合、関数に提供される`CallbackContext`または`ToolContext`の`state`属性を使用するのが最善です。
+**3. `CallbackContext` または `ToolContext` 経由（コールバックとツールに推奨）**
+
+*(注: Python と TypeScript では、`CallbackContext` と `ToolContext` は単一の `Context` 型に統合されており、Python では互換性のために両方の名前がエイリアスとして引き続き使用できます。)*
+
+`before_agent_callback` や `after_agent_callback` などのエージェントコールバック内、またはツール関数内で状態を変更する場合は、関数に渡される `CallbackContext` または `ToolContext` の `state` 属性を使用するのが最善です。
 
 *   `callback_context.state['my_key'] = my_value`
 *   `tool_context.state['my_key'] = my_value`
@@ -495,13 +513,19 @@
     }
     ```
 
-**`append_event`の役割：**
+=== "Kotlin"
 
-* `Event`を`session.events`に追加します。
-* イベントの`actions`から`state_delta`を読み取ります。
-* サービスの種類に基づいてプレフィックスと永続性を正しく処理しながら、これらの変更を`SessionService`によって管理される状態に適用します。
-* セッションの`last_update_time`を更新します。
-* 同時更新に対するスレッドセーフティを保証します。
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/StateExample.kt:state_updates_context"
+    ```
+
+**`append_event` の役割：**
+
+* `Event` を `session.events` に追加します。
+* イベントの `actions` から `state_delta` を読み取ります。
+* サービスの種類に基づいてプレフィックスと永続性を正しく処理しながら、これらの変更を `SessionService` によって管理される状態に適用します。
+* セッションの `last_update_time` を更新します。
+* サービスがサポートしている場合は、同一セッションに対する同時更新をシリアライズします（`DatabaseSessionService` はセッション単位のロックを取得しますが、`InMemorySessionService` はマルチスレッドでの使用に対して安全ではありません）。
 
 ### ⚠️ 直接的な状態変更に関する警告
 
@@ -516,7 +540,7 @@
 3. **スレッドセーフではない：** 競合状態や更新の損失につながる可能性があります。
 4. **タイムスタンプ/ロジックを無視する：** `last_update_time`を更新したり、関連するイベントロジックをトリガーしたりしません。
 
-**推奨事項：** `output_key`、`EventActions.state_delta`（イベントを手動で作成する場合）、またはそれぞれのスコープ内にあるときに`CallbackContext`や`ToolContext`オブジェクト、あるいは TypeScript の統合 `Context` オブジェクトの`state`プロパティを変更することで状態を更新する方法に固執してください。これらの方法は、信頼性が高く、追跡可能で、永続的な状態管理を保証します。`session.state`への直接アクセス（`SessionService`から取得したセッションから）は、状態を*読み取る*場合にのみ使用してください。
+**推奨事項：** `output_key`、`EventActions.state_delta`（イベントを手動で作成する場合）、またはそれぞれのスコープ内にあるときに `CallbackContext` や `ToolContext` オブジェクト（TypeScript では統合された `Context` オブジェクト）の `state` プロパティを変更することで状態を更新する方法を使用してください。これらの方法は、信頼性が高く、追跡可能で、永続的な状態管理を保証します。`SessionService` から取得したセッションの `session.state` への直接アクセスは、状態を*読み取る*場合にのみ使用してください。
 
 ### 状態設計のベストプラクティス再確認
 
@@ -525,31 +549,3 @@
 * **記述的なキーとプレフィックス：** 明確な名前と適切なプレフィックス（`user:`、`app:`、`temp:`、またはなし）を使用してください。
 * **浅い構造：** 可能な限り深いネストは避けてください。
 * **標準的な更新フロー：** `append_event`に依存してください。
-
-## Kotlin の状態例の補足
-
-英語原文に追加された Kotlin の状態管理例を以下にも掲載します。
-
-### 指示文テンプレート
-
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_templating"
-```
-
-### 指示文プロバイダー
-
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_provider"
-```
-
-### 完全な例
-
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/StateExample.kt:full_example"
-```
-
-### コンテキストからの状態更新
-
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/StateExample.kt:state_updates_context"
-```

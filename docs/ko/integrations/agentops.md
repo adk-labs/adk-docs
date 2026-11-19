@@ -10,20 +10,20 @@ catalog_tags: ["observability"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-**단 두 줄의 코드**만으로 [AgentOps](https://www.agentops.ai)는 에이전트에 대한 세션 재생, 메트릭 및 모니터링을 제공합니다.
+**단 두 줄의 코드**만으로 [AgentOps](https://www.agentops.ai)는 에이전트에 대한 세션 리플레이, 메트릭 및 모니터링을 제공합니다.
 
 ## ADK에 AgentOps를 사용하는 이유는 무엇인가요?
 
 관측 가능성은 대화형 AI 에이전트를 개발하고 배포하는 데 있어 핵심적인 측면입니다. 이를 통해 개발자는 에이전트의 성능, 사용자와의 상호 작용 방식, 외부 도구 및 API 사용 방식을 이해할 수 있습니다.
 
-AgentOps를 통합함으로써 개발자는 ADK 에이전트의 동작, LLM 상호 작용 및 도구 사용에 대한 깊은 통찰력을 얻을 수 있습니다.
+AgentOps를 통합함으로써 개발자는 ADK 에이전트의 동작, LLM 상호 작용 및 도구 사용에 대한 깊은 인사이트를 얻을 수 있습니다.
 
-Google ADK에는 자체 OpenTelemetry 기반 추적 시스템이 포함되어 있으며, 이는 주로 개발자에게 에이전트 내의 기본 실행 흐름을 추적할 수 있는 방법을 제공하는 것을 목표로 합니다. AgentOps는 다음과 같은 기능을 갖춘 전용의 보다 포괄적인 관측 가능성 플랫폼을 제공하여 이를 향상시킵니다.
+Google ADK에는 에이전트 내부의 기본 실행 흐름을 추적하기 위한 OpenTelemetry 기반 트레이싱 시스템이 기본 포함되어 있습니다. AgentOps는 다음과 같은 기능을 갖춘 전용 종합 관측 가능성 플랫폼을 제공하여 이를 한층 강화합니다.
 
-*   **통합 추적 및 재생 분석:** ADK 및 AI 스택의 다른 구성 요소에서 추적을 통합합니다.
-*   **풍부한 시각화:** 에이전트 실행 흐름, LLM 호출 및 도구 성능을 시각화하는 직관적인 대시보드.
-*   **상세한 디버깅:** 특정 스팬으로 드릴다운하고, 프롬프트, 완료, 토큰 수 및 오류를 봅니다.
-*   **LLM 비용 및 지연 시간 추적:** 지연 시간, 비용(토큰 사용량 기준)을 추적하고 병목 현상을 식별합니다.
+*   **통합 트레이싱 및 리플레이 분석:** ADK를 비롯한 AI 스택의 여러 구성 요소에서 발생한 트레이스를 하나로 통합합니다.
+*   **풍부한 시각화:** 에이전트 실행 흐름, LLM 호출 및 도구 성능을 시각화하는 직관적인 대시보드를 제공합니다.
+*   **상세한 디버깅:** 특정 스팬으로 드릴다운하여 프롬프트, 생성 응답(completion), 토큰 수 및 오류를 확인합니다.
+*   **LLM 비용 및 지연 시간 추적:** 지연 시간(latency)과 비용(토큰 사용량 기준)을 추적하고 병목 구간을 식별합니다.
 *   **간소화된 설정:** 단 몇 줄의 코드로 시작할 수 있습니다.
 
 ![AgentOps 에이전트 관측 가능성 대시보드](https://raw.githubusercontent.com/AgentOps-AI/agentops/refs/heads/main/docs/images/external/app_screenshots/overview.png)
@@ -42,7 +42,7 @@ AgentOps를 ADK 애플리케이션에 통합하는 것은 간단합니다.
     ```
 
 2. **API 키 생성**
-    여기에서 사용자 API 키를 생성하세요: [API 키 생성](https://app.agentops.ai/settings/projects) 그리고 환경을 구성하세요:
+    [API 키 생성](https://app.agentops.ai/settings/projects) 페이지에서 사용자 API 키를 발급받고 환경을 구성합니다.
 
     환경 변수에 API 키를 추가하세요:
     ```
@@ -81,29 +81,29 @@ AgentOps를 ADK 애플리케이션에 통합하는 것은 간단합니다.
 
 초기화되면 AgentOps는 ADK 에이전트를 자동으로 계측하기 시작합니다.
 
-**이것이 ADK 에이전트의 모든 원격 측정 데이터를 캡처하는 데 필요한 전부입니다.**
+**이 설정만으로 ADK 에이전트의 모든 텔레메트리(telemetry) 데이터를 수집할 수 있습니다.**
 
 ## AgentOps가 ADK를 계측하는 방법
 
-AgentOps는 ADK의 기본 원격 측정과 충돌하지 않고 원활한 관측 가능성을 제공하기 위해 정교한 전략을 사용합니다.
+AgentOps는 ADK의 기본 텔레메트리와 충돌하지 않고 원활한 관측 가능성을 제공하기 위해 정교한 전략을 사용합니다.
 
-1.  **ADK의 기본 원격 측정 무력화:**
-    AgentOps는 ADK를 감지하고 ADK의 내부 OpenTelemetry 추적기(일반적으로 `trace.get_tracer('gcp.vertex.agent')`)를 지능적으로 패치합니다. 이를 `NoOpTracer`로 교체하여 원격 측정 스팬을 생성하려는 ADK 자체의 시도를 효과적으로 무력화합니다. 이렇게 하면 중복 추적을 방지하고 AgentOps가 관측 가능성 데이터의 신뢰할 수 있는 소스가 될 수 있습니다.
+1.  **ADK의 기본 텔레메트리 비활성화:**
+    AgentOps는 ADK를 감지하고 ADK의 내부 OpenTelemetry 트레이서(일반적으로 `trace.get_tracer('gcp.vertex.agent')`)를 지능적으로 패치합니다. 이를 `NoOpTracer`로 교체하여 ADK 자체가 별도의 텔레메트리 스팬을 생성하지 않도록 비활성화합니다. 이렇게 하면 중복 트레이스를 방지하고 AgentOps가 관측 가능성 데이터의 단일 기준 소스가 됩니다.
 
 2.  **AgentOps 제어 스팬 생성:**
-    AgentOps는 주요 ADK 메서드를 래핑하여 논리적 스팬 계층을 생성함으로써 제어권을 갖습니다.
+    AgentOps는 주요 ADK 메서드를 래핑하여 논리적인 스팬 계층 구조를 생성하고 제어합니다.
 
     *   **에이전트 실행 스팬 (예: `adk.agent.MySequentialAgent`):**
         ADK 에이전트(`BaseAgent`, `SequentialAgent` 또는 `LlmAgent` 등)가 `run_async` 메서드를 시작하면 AgentOps는 해당 에이전트 실행에 대한 부모 스팬을 시작합니다.
 
     *   **LLM 상호 작용 스팬 (예: `adk.llm.gemini-pro`):**
-        에이전트가 LLM을 호출할 때(ADK의 `BaseLlmFlow._call_llm_async`를 통해) AgentOps는 일반적으로 LLM 모델의 이름을 딴 전용 자식 스팬을 생성합니다. 이 스팬은 요청 세부 정보(프롬프트, 모델 매개변수)를 캡처하고 완료 시(ADK의 `_finalize_model_response_event`를 통해) 완료, 토큰 사용량 및 종료 이유와 같은 응답 세부 정보를 기록합니다.
+        에이전트가 LLM을 호출할 때(ADK의 `BaseLlmFlow._call_llm_async`를 통해) AgentOps는 일반적으로 LLM 모델의 이름을 딴 전용 자식 스팬을 생성합니다. 이 스팬은 요청 세부 정보(프롬프트, 모델 매개변수)를 캡처하고 완료 시(ADK의 `_finalize_model_response_event`를 통해) 생성 응답(completion), 토큰 사용량 및 종료 사유와 같은 응답 세부 정보를 기록합니다.
 
     *   **도구 사용 스팬 (예: `adk.tool.MyCustomTool`):**
         에이전트가 도구를 사용할 때(ADK의 `functions.__call_tool_async`를 통해) AgentOps는 도구의 이름을 딴 단일의 포괄적인 자식 스팬을 생성합니다. 이 스팬에는 도구의 입력 매개변수와 반환하는 결과가 포함됩니다.
 
 3.  **풍부한 속성 수집:**
-    AgentOps는 ADK의 내부 데이터 추출 로직을 재사용합니다. ADK의 특정 원격 측정 함수(예: `google.adk.telemetry.trace_tool_call`, `trace_call_llm`)를 패치합니다. 이러한 함수에 대한 AgentOps 래퍼는 ADK가 수집하는 상세 정보를 가져와 *현재 활성 AgentOps 스팬*에 속성으로 첨부합니다.
+    AgentOps는 ADK의 내부 데이터 추출 로직을 재사용합니다. ADK의 특정 텔레메트리 함수(예: `google.adk.telemetry.trace_tool_call`, `trace_call_llm`)를 패치하며, 이러한 함수에 대한 AgentOps 래퍼는 ADK가 수집하는 상세 정보를 가져와 *현재 활성 AgentOps 스팬*에 속성으로 첨부합니다.
 
 ## AgentOps에서 ADK 에이전트 시각화하기
 
@@ -121,9 +121,9 @@ ADK 애플리케이션을 AgentOps로 계측하면 AgentOps 대시보드에서 �
     *   **대규모 언어 모델**에 대한 호출은 추가로 중첩된 자식 스팬(예: `adk.llm.<model_name>`)을 생성하여 프롬프트 세부 정보, 응답 및 토큰 사용량을 캡처합니다.
     *   **도구 호출**은 또한 별개의 자식 스팬(예: `adk.tool.<your_tool_name>`)을 생성하여 매개변수와 결과를 보여줍니다.
 
-이렇게 하면 스팬의 폭포수가 생성되어 ADK 애플리케이션의 각 단계에 대한 순서, 기간 및 세부 정보를 볼 수 있습니다. LLM 프롬프트, 완료, 토큰 수, 도구 입/출력 및 에이전트 이름과 같은 모든 관련 속성이 캡처되어 표시됩니다.
+이를 통해 스팬이 워터폴(waterfall) 형태로 구성되므로 ADK 애플리케이션의 각 단계별 실행 순서, 소요 시간 및 세부 정보를 한눈에 확인할 수 있습니다. LLM 프롬프트, 생성 응답(completion), 토큰 수, 도구 입출력 및 에이전트 이름과 같은 모든 관련 속성이 캡처되어 표시됩니다.
 
-실용적인 데모를 위해 Google ADK 및 AgentOps를 사용하는 사람 승인 워크플로를 보여주는 샘플 Jupyter Notebook을 탐색할 수 있습니다.
+실용적인 데모를 위해 Google ADK와 AgentOps를 활용한 사람 승인(Human Approval) 워크플로를 보여주는 샘플 Jupyter Notebook을 살펴볼 수 있습니다:
 [GitHub의 Google ADK 사람 승인 예제](https://github.com/AgentOps-AI/agentops/blob/main/examples/google_adk/human_approval.ipynb).
 
 이 예제는 도구 사용이 포함된 다단계 에이전트 프로세스가 AgentOps에서 어떻게 시각화되는지 보여줍니다.

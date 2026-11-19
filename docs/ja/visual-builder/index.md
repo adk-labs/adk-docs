@@ -55,7 +55,7 @@ Visual Builderツールは、エージェントを構築するためのドラッ
     *   [**ループエージェント (Loop Agent):**](/ja/agents/workflow-agents/loop-agents/) 特定の条件が満たされるまでサブエージェントを繰り返し実行するワークフローエージェントです。
     *   [**パラレルエージェント (Parallel Agent):**](/ja/agents/workflow-agents/parallel-agents/) 複数のサブエージェントを並行して実行するワークフローエージェントです。
 *   **ツール (Tools)**
-    *   [**事前構築済みツール (Prebuilt tools):**](/ja/tools/built-in-tools/) ADKが提供する限られたツールセットをエージェントに追加できます。
+    *   [**事前構築済みツール (Prebuilt tools):**](/ja/tools/built-in-tools/) ADKが提供する組み込みツールセットをエージェントに追加できます。
     *   [**カスタムツール (Custom tools):**](/ja/tools-custom/) カスタムツールを独自に構築してワークフローに追加できます。
 *   **コンポーネント (Components)**
     *   [**コールバック (Callbacks)**](/ja/callbacks/) エージェントワークフローイベントの開始時と終了時にエージェントの動作を変更できるフロー制御コンポーネントです。

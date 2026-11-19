@@ -6,9 +6,9 @@
 
 `LlmAgent`(종종 `Agent`로 축약)는 ADK의 핵심 구성 요소로, 애플리케이션의 "사고" 부분을 담당합니다. `LlmAgent`는 대규모 언어 모델(LLM)의 강력한 성능을 활용하여 추론, 자연어 이해, 의사 결정, 응답 생성, 도구와 상호 작용을 수행합니다.
 
-미리 정의된 실행 경로를 따르는 결정적인(deterministic) [워크플로 에이전트](workflow-agents/index.md)와 달리, `LlmAgent`의 행동은 비결정적(non-deterministic)입니다. LLM을 사용하여 명령과 컨텍스트를 해석하고, 동적으로 진행 방법을 결정하거나, 어떤 도구를 사용할지(사용한다면), 또는 다른 에이전트에게 제어를 넘길지 결정합니다.
+미리 정의된 실행 경로를 따르는 결정적인(deterministic) [워크플로 에이전트](workflow-agents/index.md)와 달리, `LlmAgent`의 행동은 비결정적(non-deterministic)입니다. LLM을 사용하여 지침과 컨텍스트를 해석하고, 동적으로 진행 방법을 결정하거나, 어떤 도구를 사용할지(사용한다면), 또는 다른 에이전트에게 제어를 넘길지 결정합니다.
 
-효과적인 `LlmAgent`를 구축하려면 에이전트의 정체성을 정의하고, 명령을 통해 행동을 명확하게 안내하며, 필요한 도구와 기능을 갖추는 것이 포함됩니다.
+효과적인 `LlmAgent`를 구축하려면 에이전트의 정체성을 정의하고, 지침을 통해 동작을 명확하게 안내하며, 필요한 도구와 기능을 갖추어야 합니다.
 
 ## 에이전트의 정체성과 목적 정의하기
 
@@ -63,9 +63,9 @@
             .build();
     ```
 
-## 에이전트 안내하기: 명령 (`instruction`)
+## 에이전트 안내하기: 지침 (`instruction`)
 
-`instruction` 매개변수는 `LlmAgent`의 행동을 형성하는 데 있어 아마도 가장 중요한 요소일 것입니다. 이는 에이전트에게 다음을 알려주는 문자열(또는 문자열을 반환하는 함수)입니다:
+`instruction` 매개변수는 `LlmAgent`의 동작을 결정하는 가장 중요한 요소입니다. 에이전트에 다음 사항을 알려주는 문자열(또는 문자열을 반환하는 함수)을 전달합니다:
 
 *   핵심 과업 또는 목표.
 *   성격 또는 페르소나 (예: "당신은 도움이 되는 어시스턴트입니다," "당신은 재치 있는 해적입니다").
@@ -73,16 +73,16 @@
 *   `tools`를 어떻게 그리고 언제 사용해야 하는지. 각 도구의 목적과 호출되어야 하는 상황을 설명하여 도구 자체의 설명을 보충해야 합니다.
 *   원하는 출력 형식 (예: "JSON으로 응답하세요," "글머리 기호 목록으로 제공하세요").
 
-**효과적인 명령을 위한 팁:**
+**효과적인 지침 작성을 위한 팁:**
 
 *   **명확하고 구체적으로 작성:** 모호함을 피하세요. 원하는 행동과 결과를 명확하게 기술하세요.
-*   **마크다운 사용:** 복잡한 명령의 가독성을 높이기 위해 제목, 목록 등을 사용하세요.
-*   **예시 제공 (Few-Shot):** 복잡한 작업이나 특정 출력 형식의 경우, 명령에 직접 예시를 포함하세요.
+*   **마크다운 사용:** 복잡한 지침의 가독성을 높이기 위해 제목, 목록 등을 사용하세요.
+*   **예시 제공 (Few-Shot):** 복잡한 작업이나 특정 출력 형식의 경우, 지침에 직접 예시를 포함하세요.
 *   **도구 사용 안내:** 도구를 나열만 하지 말고, 에이전트가 *언제* 그리고 *왜* 사용해야 하는지 설명하세요.
 
 **상태(State):**
 
-*   명령은 문자열 템플릿이며, `{var}` 구문을 사용하여 동적 값을 명령에 삽입할 수 있습니다.
+*   지침은 문자열 템플릿이며, `{var}` 구문을 사용하여 동적 값을 지침에 삽입할 수 있습니다.
 *   `{var}`는 `var`라는 이름의 상태 변수 값을 삽입하는 데 사용됩니다.
 *   `{artifact.var}`는 `var`라는 이름의 아티팩트(artifact) 텍스트 내용을 삽입하는 데 사용됩니다.
 *   상태 변수나 아티팩트가 존재하지 않으면 에이전트는 오류를 발생시킵니다. 오류를 무시하려면 변수 이름 뒤에 `?`를 붙여 `{var?}`와 같이 사용할 수 있습니다.
@@ -170,9 +170,9 @@ Python에서 Model Context Protocol(MCP) 서버로부터 에이전트 지침을 
 *   **`tools` (선택 사항):** 에이전트가 사용할 수 있는 도구 목록을 제공합니다. 목록의 각 항목은 다음 중 하나일 수 있습니다:
     *   네이티브 함수 또는 메서드 (`FunctionTool`로 래핑됨). Python ADK는 네이티브 함수를 자동으로 `FunctionTool`로 래핑하지만, Java에서는 `FunctionTool.create(...)`를 사용하여 명시적으로 메서드를 래핑해야 합니다.
     *   `BaseTool`을 상속하는 클래스의 인스턴스.
-    *   다른 에이전트를 래핑하여 에이전트 간 위임을 가능하게 하는 `AgentTool`. 자세한 내용은 [커스텀 에이전트 워크플로](/ko/agents/custom-agents/#delegation)를 참고하세요. Python에서는 `AgentTool(agent=...)` 구문을 직접 사용하는 대신, 에이전트에 `mode='single_turn'`을 설정하고 `sub_agents`에 추가하여 인라인 도구로 자동 노출하는 방식을 권장합니다.
+    *   다른 에이전트를 래핑하여 에이전트 간 위임을 가능하게 하는 `AgentTool`. 자세한 내용은 [커스텀 에이전트 워크플로](/ko/agents/custom-agents/#delegation)를 참고하세요. Python에서는 `AgentTool(agent=...)` 구문을 직접 사용하는 대신, 에이전트에 `mode='single_turn'`을 설정하고 `sub_agents`에 추가하여 인라인 도구로 자동 제공하는 방식을 권장합니다.
 
-LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 가져옴), 그리고 매개변수 스키마를 사용하여 대화와 명령에 따라 어떤 도구를 호출할지 결정합니다.
+LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 가져옴), 그리고 매개변수 스키마를 사용하여 대화와 지침에 따라 어떤 도구를 호출할지 결정합니다.
 
 === "Python"
 
@@ -377,7 +377,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 
 ### 데이터 구조화 (`input_schema`, `output_schema`, `output_key`) {#data-handling}
 
-`LLM Agent`와 구조화된 데이터 교환이 필요한 시나리오를 위해 ADK는 스키마 정의를 사용하여 예상 입력 및 원하는 출력 형식을 정의하는 메커니즘을 제공합니다.
+`LlmAgent`와 구조화된 데이터 교환이 필요한 시나리오를 위해 ADK는 스키마 정의를 사용하여 예상 입력 및 원하는 출력 형식을 정의하는 메커니즘을 제공합니다.
 
 *   **`input_schema` (선택 사항):** 이 에이전트가 *도구로* 호출될 때 예상되는 입력 구조를 나타내는 스키마를 정의합니다. Python에서 `AgentTool`은 호출 에이전트의 인수를 스키마에 대해 검증하고 그 결과를 이 에이전트의 입력으로 전달합니다. 에이전트에 직접 전송되는 사용자 메시지에는 이 스키마가 적용되지 않습니다.
 
@@ -392,7 +392,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 
     Python에서 ADK는 동일한 에이전트에서 `output_schema`와 `tools`를 함께 지원합니다. 에이전트가 작업하는 동안 도구는 계속 사용할 수 있으며, 스키마는 최종 응답에만 적용됩니다. Google Cloud의 Gemini 모델 및 응답 스키마를 지원하는 제공업체의 `LiteLlm` 모델과 같이 일부 모델은 단일 요청에서 두 가지를 모두 허용하므로 ADK가 이를 직접 전달합니다. 그 외 모델의 경우 ADK는 [`set_model_response` 함수 도구](https://github.com/google/adk-python/blob/main/src/google/adk/tools/set_model_response_tool.py)를 추가하고 모델이 해당 도구를 통해 최종 답변을 반환하도록 지시하지만, 안정적으로 작동하지 않을 수 있습니다. 이러한 경우에는 출력 형식을 별도로 처리하는 하위 에이전트를 사용하는 것을 고려하세요.
 
-*   **`output_key` (선택 사항):** 문자열 키를 제공합니다. 설정된 경우, 에이전트의 *최종* 응답이 이 키 아래 세션의 상태 사전에 자동으로 저장됩니다. 이는 에이전트 간 또는 워크플로 단계 간에 결과를 전달하는 데 유용합니다.
+*   **`output_key` (선택 사항):** 문자열 키를 제공합니다. 설정된 경우, 에이전트의 *최종* 응답이 이 키 아래 세션 상태 딕셔너리에 자동으로 저장됩니다. 이는 에이전트 간 또는 워크플로 단계 간에 결과를 전달하는 데 유용합니다.
     *   Python에서는 `session.state[output_key] = agent_response_text`와 같이 보일 수 있습니다. `output_schema`도 함께 설정된 경우, ADK는 먼저 스키마에 대해 응답을 파싱하고 응답 텍스트 대신 파싱된 값을 저장합니다. `BaseModel` 스키마는 `dict`로 저장되고, `list[BaseModel]` 스키마는 `list[dict]`로 저장됩니다.
     *   Java에서는 `session.state().put(outputKey, agentResponseText)`와 같습니다.
     *   Golang에서는 콜백 핸들러 내에서 `ctx.State().Set(output_key, agentResponseText)`와 같습니다.
@@ -502,7 +502,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 
     `format` 필드는 해당 필드의 타입에 대해 모델이 허용하는 값만 허용합니다. 허용되는 값은 Gemini [`Schema` 레퍼런스](https://ai.google.dev/api/caching#Schema)를 참고하세요.
 
-    `default` 필드는 JSON 네이티브 값을 포함해야 합니다. ADK 자체의 `Json`은 이를 직렬화하지만, 컨텍스트 `Any` 직렬 변환기가 없는 커스텀 직렬 변환기는 직렬화하지 못합니다.
+    `default` 필드는 JSON 네이티브 값을 포함해야 합니다. ADK 자체의 `Json`은 이를 직렬화하지만, 컨텍스트 기반 `Any` 직렬화기(serializer)가 없는 커스텀 직렬화기는 직렬화하지 못합니다.
 
 ### 컨텍스트 관리 (`include_contents`)
 
@@ -510,7 +510,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 
 *   **`include_contents` (선택 사항, 기본값: `'default'`):** `contents`(기록)가 LLM으로 전송될지 여부를 결정합니다.
     *   `'default'`: 에이전트는 관련 대화 기록을 수신합니다.
-    *   `'none'`: 에이전트는 이전 `contents`를 받지 않습니다. 현재 명령과 *현재* 턴에 제공된 입력에만 기반하여 작동합니다 (상태 비저장 작업이나 특정 컨텍스트 강제에 유용).
+    *   `'none'`: 에이전트는 이전 `contents`를 받지 않습니다. 현재 지침과 *현재* 턴에 제공된 입력에만 기반하여 작동합니다 (상태 비저장 작업이나 특정 컨텍스트 강제에 유용).
 
 === "Python"
 
@@ -568,7 +568,7 @@ LLM은 함수/도구 이름, 설명(docstring이나 `description` 필드에서 �
 
 *   **`BuiltInPlanner`:** 모델의 내장 계획 기능(예: Gemini의 사고 기능)을 활용합니다. 자세한 내용과 예시는 [Gemini Thinking](https://ai.google.dev/gemini-api/docs/thinking)을 참고하세요.
 
-    여기서 `thinking_budget` 매개변수는 응답 생성 시 사용할 사고 토큰 수를 모델에 안내합니다. `include_thoughts` 매개변수는 모델이 원시적인 생각과 내부 추론 과정을 응답에 포함할지 여부를 제어합니다.
+    여기서 `thinking_budget` 매개변수는 응답 생성 시 사용할 사고 토큰 수를 모델에 안내합니다. `include_thoughts` 매개변수는 모델이 가공되지 않은 사고 내용(raw thoughts)과 내부 추론 과정을 응답에 포함할지 여부를 제어합니다.
 
     ```python
     from google.adk import Agent
@@ -815,7 +815,7 @@ _(이 예시는 핵심 개념을 보여줍니다. 더 복잡한 에이전트는 
 --8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:identity"
 ```
 
-### 지시문 구성
+### 지침 구성
 
 ```kotlin
 --8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:instruction"

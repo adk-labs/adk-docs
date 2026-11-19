@@ -5,7 +5,7 @@
 </div>
 
 ADK는 평가 결과를 기반으로 에이전트를 자동으로 최적화할 수 있는 확장 가능한 프레임워크를 제공합니다.
-기본적으로 `adk optimize` 명령을 사용해, 기본 옵티마이저로 ADK 평가 결과를 기반으로 간단한 에이전트를 빠르게 최적화할 수 있습니다.
+별도 설정 없이 바로 `adk optimize` 명령과 기본 제공 옵티마이저를 사용해 ADK 평가 결과를 바탕으로 간단한 에이전트를 빠르게 최적화할 수 있습니다.
 더 복잡한 사용 사례에서는 사용자 지정 eval 데이터를 사용하는 샘플러를 개발하거나, 새로운 최적화 전략을 직접 구현할 수 있습니다.
 
 ### 정의
@@ -146,7 +146,7 @@ Optimized root agent instructions:
 adk optimize [OPTIONS] AGENT_MODULE_FILE_PATH
 ```
 
-* `AGENT_MODULE_FILE_PATH`: 파일이 아닌 에이전트 디렉토리의 경로로, 해당 디렉토리의 `__init__.py`가 `agent`라는 이름의 모듈을 노출합니다.
+* `AGENT_MODULE_FILE_PATH`: 파일이 아닌 에이전트 디렉터리의 경로로, 해당 디렉터리의 `__init__.py`가 `agent`라는 이름의 모듈을 제공해야 합니다.
 `agent` 모듈에는 반드시 `root_agent`가 있어야 합니다.
 올바른 설정 예시는 [`hello_world`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world) 에이전트를 참고하세요.
 * `--sampler_config_file_path PATH`: 샘플러 구성 파일 경로입니다.
@@ -159,7 +159,9 @@ adk optimize [OPTIONS] AGENT_MODULE_FILE_PATH
 기본값은 `INFO`입니다.
 사용 가능한 옵션은 `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`입니다.
 
-ADK는 adk optimize 명령줄을 사용하여 실행할 수 있는 몇 가지 샘플러와 에이전트 옵티마이저를 제공합니다. 사용 가능한 옵션은 다음과 같습니다.
+## 사용 가능한 샘플러 및 에이전트 옵티마이저
+
+ADK는 `adk optimize` 명령줄로 실행할 수 있는 여러 샘플러와 에이전트 옵티마이저를 제공합니다. 사용 가능한 옵션은 다음과 같습니다.
 
 ### `LocalEvalSampler` {#localevalsampler}
 
@@ -193,7 +195,7 @@ ADK는 adk optimize 명령줄을 사용하여 실행할 수 있는 몇 가지 �
 * `optimizer_model` (선택): 평가 결과를 분석하고 에이전트를 최적화하는 데 사용하는 모델입니다.
 기본값은 `"gemini-flash-latest"`입니다.
 * `model_configuration` (선택): 옵티마이저 모델의 구성입니다.
-기본값은 1만 토큰 think budget을 가진 구성입니다.
+기본값은 1만 토큰의 사고 예산(thinking budget)을 가진 구성입니다.
 * `max_metric_calls` (선택): 최적화 중 실행할 평가의 최대 횟수입니다.
 기본값은 100입니다.
 * `reflection_minibatch_size` (선택): 한 번에 에이전트 지침을 업데이트할 때 사용할 예시 수입니다.
@@ -212,13 +214,13 @@ ADK는 adk optimize 명령줄을 사용하여 실행할 수 있는 몇 가지 �
 3. **비판 (Critique)**: 기본 최적화 대규모 언어 모델(LLM)(기본값은 Gemini-2.5-flash)이 현재 프롬프트와 함께 과거 평가 점수를 분석하여 특정 동작상의 약점이나 공백을 찾아냅니다.
 4. **재작성 (Rewrite)**: 최적화 모델은 발견된 약점을 해결하도록 맞춤화된 시스템 프롬프트의 업데이트된 변형을 생성합니다. 이 새로운 프롬프트는 다음 반복에 직접 입력됩니다.
 
-**참고:** 최적화 루프는 기존 에이전트 인스턴스를 즉석에서 변경(mutate)하지 않습니다. 완료되면 프로세스 중에 추출된 가장 높은 점수를 받은 에이전트 변형을 포함하는 `OptimizerResult`를 반환합니다.
+**참고:** 최적화 루프는 기존 에이전트 인스턴스를 제자리에서 직접 변경(in-place mutate)하지 않습니다. 완료되면 프로세스 중에 도출된 가장 높은 점수의 에이전트 변형을 포함하는 `OptimizerResult`를 반환합니다.
 
 ### 구성
 
 `SimplePromptOptimizerConfig` 인스턴스를 옵티마이저에 전달하여 루프의 동작을 구성합니다.
 
-| 매개변수 | 유형 | 기본값 | 설명 |
+| 매개변수 | 타입 | 기본값 | 설명 |
 | :---- | :---- | :---- | :---- |
 | `num_iterations` | int | *필수* | 실행할 최적화 라운드의 총 횟수입니다. |
 | `batch_size` | int | *필수* | 각 개별 반복 중에 샘플러가 처리하는 평가 샘플 케이스의 수입니다. |
@@ -273,9 +275,9 @@ ADK는 샘플러에서 옵티마이저로 평가 데이터를 전달하는 흐�
   * `optimized_agents` 목록을 포함해야 합니다. 이 목록의 요소는 `AgentWithScores` 또는 그 하위 클래스여야 합니다.
   여러 메트릭에 걸쳐 에이전트의 최적성을 측정하는 경우, 파레토 프런티어를 나타내기 위해 여러 항목이 필요할 수 있습니다.
 
-후보 최적화 에이전트에 대한 세부 메트릭을 노출하기 위해 `AgentWithScores`의 자체 하위 클래스를 만들 수 있습니다.
+후보 최적화 에이전트에 대한 세부 메트릭을 제공하기 위해 `AgentWithScores`의 자체 하위 클래스를 만들 수 있습니다.
 예를 들어 정확성, 안전성, 정렬성 등을 별도로 점수화하고 싶을 수 있습니다.
-마찬가지로 `OptimizerResult`의 자체 하위 클래스를 만들어, 옵티마이저의 최적화 프로세스 전반에 대한 메트릭(평가된 후보 수, 총 평가 수 등)을 노출할 수 있습니다.
+마찬가지로 `OptimizerResult`의 자체 하위 클래스를 만들어, 옵티마이저의 최적화 프로세스 전반에 대한 메트릭(평가된 후보 수, 총 평가 수 등)을 제공할 수 있습니다.
 
 ## 새 샘플러와 에이전트 옵티마이저 만들기 및 사용하기
 

@@ -20,7 +20,7 @@ instruction: 사용자의 다양한 질문에 답변하는 에이전트입니다
 
 ## 시작하기
 
-이 섹션에서는 설치 설정, 에이전트 빌드 및 에이전트 실행을 포함하여 ADK 및 에이전트 구성 기능을 사용하여 에이전트 빌드를 설정하고 시작하는 방법을 설명합니다.
+이 섹션에서는 설치 및 환경 설정부터 에이전트 빌드, 실행까지 ADK 에이전트 구성 기능을 시작하는 방법을 설명합니다.
 
 ### 설정
 
@@ -43,7 +43,7 @@ Google Agent Development Kit 라이브러리를 설치하고 Gemini API와 같�
 
 ### 에이전트 빌드
 
-`adk create` 명령어를 사용하여 에이전트 구성으로 에이전트를 빌드하여 에이전트용 프로젝트 파일을 만들고 생성된 `root_agent.yaml` 파일을 편집합니다.
+`adk create` 명령어로 에이전트 프로젝트 파일을 생성한 뒤, 생성된 `root_agent.yaml` 파일을 편집하여 에이전트를 빌드합니다.
 
 에이전트 구성과 함께 사용할 ADK 프로젝트를 만들려면:
 
@@ -174,7 +174,7 @@ tools:
 
 ### 하위 에이전트 예시
 
-다음 예시는 구성 파일의 `sub_agents:` 섹션에 두 개의 하위 에이전트와 `tools:` 섹션에 예시 도구가 정의된 에이전트를 보여줍니다. 이 에이전트는 사용자가 원하는 것을 결정하고 요청을 해결하기 위해 하위 에이전트 중 하나에 위임합니다. 하위 에이전트는 에이전트 구성 YAML 파일을 사용하여 정의됩니다.
+다음 예시는 구성 파일의 `sub_agents:` 섹션에 두 개의 하위 에이전트와 `tools:` 섹션에 예시 도구가 정의된 에이전트를 보여줍니다. 이 에이전트는 사용자의 요청 의도를 파악하고 요청을 처리할 하위 에이전트 중 하나에 작업을 위임합니다. 각 하위 에이전트는 에이전트 구성 YAML 파일로 정의됩니다.
 
 ```
 # yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
@@ -222,12 +222,12 @@ sub_agents:
     -   `get_user_choice`
     -   `enterprise_web_search`
     -   `load_web_page`: 웹 페이지에 액세스하려면 정규화된 경로가 필요합니다.
--   **에이전트 유형 지원:** `LangGraphAgent` 및 `A2aAgent` 유형은 아직 지원되지 않습니다.
     -   `AgentTool`
     -   `LongRunningFunctionTool`
     -   `VertexAiSearchTool`
     -   `McpToolset`
     -   `ExampleTool`
+-   **에이전트 유형 지원:** `LangGraphAgent` 및 `A2aAgent` 유형은 아직 지원되지 않습니다.
 
 ## 다음 단계
 

@@ -1,25 +1,23 @@
 ---
 catalog_title: Apigee API Hub
-catalog_description: Apigee API hub の文書化された API をツールとして変換
+catalog_description: Apigee API Hub のドキュメント化された API をツールに変換します
 catalog_icon: /integrations/assets/apigee.png
 catalog_tags: ["connectors", "google"]
 ---
 
-# ADK 用 Apigee API Hub ツール
+# ADK 向け Apigee API Hub ツール
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
-**ApiHubToolset** を使うと、Apigee API Hub の文書化された API を
-数行のコードでツール化できます。このセクションでは、API への安全な接続のための認証設定を含め、
-ステップごとの手順を示します。
+**ApiHubToolset** を使うと、Apigee API Hub のドキュメント化された API を数行のコードでツールに変換できます。このガイドでは、API へ安全に接続するための認証設定を含め、ステップバイステップの手順を説明します。
 
 **前提条件**
 
 1. [ADK をインストール](/ja/get-started/installation/)
 2. [Google Cloud CLI](https://cloud.google.com/sdk/docs/install?db=bigtable-docs#installation_instructions) のインストール
-3. 文書化済み（OpenAPI 仕様）API を持つ [Apigee API Hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub) インスタンス
+3. ドキュメント化済み（OpenAPI 仕様）の API を持つ [Apigee API Hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub) インスタンス
 4. プロジェクト構成を設定し、必要なファイルを作成
 
 ```console
@@ -32,11 +30,11 @@ project_root_folder
      `__ tool.py
 ```
 
-## API Hub Toolset を作成
+## API Hub Toolset を作成する
 
-注意: このチュートリアルにはエージェント作成が含まれます。既にエージェントがある場合は、いくつかの手順のみ実施してください。
+注意: このチュートリアルにはエージェントの作成手順も含まれています。すでにエージェントがある場合は、該当する手順のみ実施してください。
 
-1. APIHubToolset が API Hub API から仕様を取得できるよう、アクセストークンを取得します。
+1. `APIHubToolset` が API Hub API から仕様を取得できるよう、アクセストークンを取得します。
    ターミナルで次のコマンドを実行してください。
 
     ```shell
@@ -56,9 +54,9 @@ project_root_folder
 
 3. `tools.py` に `APIHubToolset` でツールを作成します。
 
-   API が認証を必要とする場合は、ツールへ認証を設定する必要があります。以下のコードは
-   API キーの設定例です。ADK はトークンベース認証（API Key、Bearer token）、サービスアカウント、
-   OpenID Connect をサポートします。将来的に各種 OAuth2 フローのサポートを追加予定です。
+   API が認証を必要とする場合は、ツールの認証を設定する必要があります。以下のコードサンプルは
+   API キーの設定方法を示しています。ADK はトークンベース認証（API キー、Bearer トークン）、サービスアカウント、
+   OpenID Connect をサポートしています。今後、各種 OAuth2 フローのサポートも追加予定です。
 
     ```py
     from google.adk.tools.openapi_tool.auth.auth_helpers import token_to_scheme_credential
@@ -85,7 +83,7 @@ project_root_folder
 
    `apihub_resource_name` は、API で使用している OpenAPI Spec の ID が分かる場合、
    `` `projects/my-project-id/locations/us-west1/apis/my-api-id/versions/version-id/specs/spec-id` `` を使用します。
-   ツールセットに API から最初に利用可能な spec を自動で取得させる場合は
+   ツールセットに API から利用可能な最初の仕様（spec）を自動取得させる場合は、
    `` `projects/my-project-id/locations/us-west1/apis/my-api-id` `` を使用します。
 
 4. `agent.py` を作成し、作成したツールをエージェント定義に追加します。
@@ -102,7 +100,7 @@ project_root_folder
     )
     ```
 
-5. `__init__.py` を設定してエージェントを公開します。
+5. `__init__.py` を設定してエージェントを公開（エクスポート）します。
 
     ```py
     from . import agent
@@ -115,4 +113,4 @@ project_root_folder
     adk web
     ```
 
-   次に [http://localhost:8000](http://localhost:8000) にアクセスし、Web UI からエージェントを試験運用します。
+   次に [http://localhost:8000](http://localhost:8000) にアクセスし、Web UI からエージェントを試してみましょう。

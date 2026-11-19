@@ -12,7 +12,7 @@ ADK エージェントは実行されながら、ユーザーの指示、取得�
 
 `EventsCompactionConfig` 内で、以下の戦略を使用してセッションのデータを管理できます。
 
-- **トークンベース (基本)**: 消費された実際のトークン量に基づいてクリーンアップをトリガーします。これは絶対的なセーフティネットとして機能し、ユーザーが大量のコードブロックを貼り付けたり大容量のファイルをアップロードしたりするような、予測不可能なワークロードに最適です。
+- **トークンベース (優先)**: 消費された実際のトークン量に基づいてクリーンアップをトリガーします。これは絶対的なセーフティネットとして機能し、ユーザーが大量のコードブロックを貼り付けたり大容量のファイルをアップロードしたりするような、予測不可能なワークロードに最適です。
 - **スライディングウィンドウ (ターンベース)**: 固定された会話ターン数の後にクリーンアップをトリガーします。これは、規則的で予測可能なテキストチャットに有用です。
 
 両方の圧縮戦略を構成した場合、システムはトークンベースの圧縮を優先します。セッションの長さが定義されたトークンしきい値を超えると、システムはトークンベースの圧縮をトリガーし、そのターンにおけるスライディングウィンドウ圧縮はスキップします。
@@ -23,10 +23,10 @@ ADK エージェントは実行されながら、ユーザーの指示、取得�
 
 ### 構成設定
 
-App オブジェクトに `EventsCompactionConfig` 設定を追加して、エージェントワークフローにトークンベースの圧縮を追加します。以下を指定する必要があります。
+`App` オブジェクトに `EventsCompactionConfig` 設定を追加して、エージェントワークフローにトークンベースの圧縮を追加します。以下を指定する必要があります。
 
 - **`token_threshold`**: 到達時にテール保持（tail-retention）圧縮を自動的にトリガーするトークンの安全制限です。
-- **`event_retention_size`**: 圧縮がトリガーされたときに、要約されていない「生」の形式で維持される最近のイベント/やり取りの数です。これにより、即時の会話コンテキストと代名詞の解決が維持されます。
+- **`event_retention_size`**: 圧縮がトリガーされたときに、要約されていない「生」の形式で維持される最近のイベント/やり取りの数です。これにより、直近の会話コンテキストと代名詞の参照解決が維持されます。
 
 プロジェクトにこれを実装するには、次の構成を使用します。
 
@@ -69,7 +69,7 @@ compaction_config = EventsCompactionConfig(
 
 ## コンテキスト圧縮の設定
 
-App オブジェクト（Python/Java/Kotlin）にイベント圧縮設定を追加するか、`LlmAgent`（TypeScript）で `contextCompactors` を構成するか、ランナー構成（Go）で `Compaction` を設定することで、エージェントワークフローにコンテキスト圧縮を追加できます。設定の一部として、次のサンプルコードのように圧縮間隔と重複サイズ（Python/Java）、圧縮間隔と任意の重複サイズ（Go）、またはトークンしきい値とイベント保持サイズ（TypeScript/Kotlin/Go）を指定する必要があります。
+`App` オブジェクト（Python/Java/Kotlin）にイベント圧縮設定を追加するか、`LlmAgent`（TypeScript）で `contextCompactors` を構成するか、ランナー構成（Go）で `Compaction` を設定することで、エージェントワークフローにコンテキスト圧縮を追加できます。設定の一部として、次のサンプルコードのように圧縮間隔と重複サイズ（Python/Java）、圧縮間隔と任意の重複サイズ（Go）、またはトークンしきい値とイベント保持サイズ（TypeScript/Kotlin/Go）を指定する必要があります。
 
 === "Python"
 
@@ -325,4 +325,4 @@ App オブジェクト（Python/Java/Kotlin）にイベント圧縮設定を追�
     })
     ```
 
-サマライザーを調整することで、圧縮器の動作をさらに細かく制御できます。Python、Java、および Kotlin では `LlmEventSummarizer` のプロンプトテンプレートをカスタマイズできます（プロパティ名は Python では `prompt_template`、Java と Kotlin では `promptTemplate` です）。TypeScript では `LlmSummarizer` の `prompt` をカスタマイズできます。Go では `LLMSummarizerConfig` で `PromptTemplate` を設定します（`{conversation_history}` プレースホルダーを含める必要があります）。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) または [`LlmSummarizer` コード](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts) を参照してください。
+サマライザーを調整することで、コンパクターの動作をさらに細かく制御できます。Python、Java、および Kotlin では `LlmEventSummarizer` のプロンプトテンプレートをカスタマイズできます（プロパティ名は Python では `prompt_template`、Java と Kotlin では `promptTemplate` です）。TypeScript では `LlmSummarizer` の `prompt` をカスタマイズできます。Go では `LLMSummarizerConfig` で `PromptTemplate` を設定します（`{conversation_history}` プレースホルダーを含める必要があります）。詳細については、[`LlmEventSummarizer`コード](https://github.com/google/adk-python/blob/main/src/google/adk/apps/llm_event_summarizer.py#L60) または [`LlmSummarizer` コード](https://github.com/google/adk-js/blob/main/core/src/context/summarizers/llm_summarizer.ts) を参照してください。

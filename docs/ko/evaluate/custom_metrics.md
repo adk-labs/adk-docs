@@ -10,7 +10,7 @@
 
 사용자 지정 메트릭은 주어진 평가 케이스에서 에이전트의 성능을 평가하고
 [`EvaluationResult`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/evaluator.py)를 반환하는 Python 함수입니다. 이 함수는 [`EvalMetric`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/eval_metrics.py),
-평가 실행 중 에이전트가 생성한 [`Invocation`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/eval_case.py) 객체 목록, 그리고 선택적으로 기대되는 invocation 목록 또는 평가 케이스에 정의된
+평가 실행 중 에이전트가 생성한 [`Invocation`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/eval_case.py) 객체 목록, 그리고 선택적으로 예상 호출(invocation) 목록 또는 평가 케이스에 정의된
 [`ConversationScenario`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/eval_case.py)를 받습니다.
 
 각 `Invocation` 객체는 사용자와 에이전트 사이의 한 턴 상호작용을 나타내며, 해당 턴의 도구 궤적, 중간 응답, 최종 응답 같은 정보를 포함합니다.
@@ -92,7 +92,7 @@ def check_final_response_exact_match(
 
 사용자 지정 메트릭이 API 호출 같은 비동기 호출을 수행해야 한다면 `async` 함수로 정의할 수 있습니다.
 
-다음은 가짜 비동기 profanity checker API를 사용해 에이전트 응답에 비속어가 포함되어 있는지 확인하는 사용자 지정 메트릭 함수의 예시입니다.
+다음은 비동기 비속어 검사기(profanity checker) 모의(fake) API를 사용해 에이전트 응답에 비속어가 포함되어 있는지 확인하는 사용자 지정 메트릭 함수의 예시입니다.
 
 ```python
 import asyncio
@@ -162,7 +162,7 @@ async def check_for_profanity(
 
 1.  사용자 지정 메트릭을 평가 `criteria` 중 하나로 추가합니다. 키는 메트릭 이름이고, 값은 통과 임계값입니다.
 2.  `EvalConfig`에 `custom_metrics` 객체를 추가합니다. 이 객체 안에 각 사용자 지정 메트릭 항목을 넣고, 키는 메트릭 이름(`criteria`의 이름과 일치)이며 값은 `code_config`를 포함한 객체입니다.
-3.  `code_config` 객체에는 문자열 형태의 `name` 필드가 있어야 하며, 이는 사용자 지정 메트릭 함수로 가는 Python import 경로를 나타냅니다. 형식은 `my.module.my_function`입니다.
+3.  `code_config` 객체에는 문자열 형태의 `name` 필드가 있어야 하며, 이는 사용자 지정 메트릭 함수의 Python 임포트(import) 경로를 나타냅니다. 형식은 `my.module.my_function`입니다.
 
 ### `EvalConfig` 예시
 
@@ -188,7 +188,7 @@ async def check_for_profanity(
 }
 ```
 
-이 구성을 사용하면 `adk eval --config_file_path=<path_to_this_config>`를 실행할 때 ADK는 각 eval case에 대해 `check_final_response_exact_match`를 실행하고, 반환된 점수가 0.8 이상인지 확인해 `my_check_final_response_exact_match` 기준을 통과 또는 실패로 표시합니다.
+이 구성을 사용하면 `adk eval --config_file_path=<path_to_this_config>`를 실행할 때 ADK는 각 평가 케이스에 대해 `check_final_response_exact_match`를 실행하고, 반환된 점수가 0.8 이상인지 확인해 `my_check_final_response_exact_match` 기준을 통과 또는 실패로 표시합니다.
 
 ### 메트릭 정보 제공
 

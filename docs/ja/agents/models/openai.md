@@ -133,7 +133,7 @@ ADK では OpenAI モデルを使用できます。接続方法は言語によ�
 - テキスト生成（ストリーミングおよび非ストリーミング）
 - 関数（ツール）呼び出し (Function tool calling)
 - `OutputSchema` (JSON スキーマ) を介した構造化出力
-- 推論トークン計算を含む推論モデル（例: o-シリーズ）
+- 推論トークンのカウントを含む推論モデル（例: o-シリーズ）
 - トークン Logprob
 
 ## 制限事項
@@ -141,7 +141,7 @@ ADK では OpenAI モデルを使用できます。接続方法は言語によ�
 - **テキストのみ** — マルチモーダル入力（画像、音声、ファイル）はサポートされていません。
 - **関数ツールのみ** — 組み込みツール（Google 検索、コード実行など）はサポートされていません。
 - **構造化出力は OpenAI 厳格モード（Strict mode）を使用** — `OutputSchema` に宣言されたすべてのフィールドは必須（required）として扱われます。
-- 一部の `GenerateContentConfig` オプションは黙って無視されるのではなくエラーを返します: `TopK`、複数候補（multiple candidates）、リクエスト ラベル、およびセーフティ設定。また、Responses API は停止シーケンス（stop sequences）、頻度/存在ペナルティ、およびシード（seed）も拒否しますが、これらは [Chat Completions API](#chat-completions-api) でサポートされています。
+- 一部の `GenerateContentConfig` オプションは警告なしで無視されるのではなくエラーを返します: `TopK`、複数候補（multiple candidates）、リクエスト ラベル、およびセーフティ設定。また、Responses API は停止シーケンス（stop sequences）、頻度/存在ペナルティ、およびシード（seed）も拒否しますが、これらは [Chat Completions API](#chat-completions-api) でサポートされています。
 
 ## 構成オプション
 

@@ -1,6 +1,6 @@
 ---
 catalog_title: Dapr
-catalog_description: 人間の承認と安全なバージョニングを備えた durable、long-running、self-recovering エージェント
+catalog_description: 人間の承認と安全なバージョニングを備えた、永続的かつ長時間実行可能な自己復旧型エージェント
 catalog_icon: /integrations/assets/dapr.png
 catalog_tags: ["resilience"]
 ---
@@ -11,50 +11,31 @@ catalog_tags: ["resilience"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
-[Dapr](https://dapr.io) は、ADK エージェントを障害に強くする分散 workflow
-orchestration engine です。LLM 呼び出しとツール実行は、自動リトライと復旧を
-備えた Dapr
+[Dapr](https://dapr.io) は、ADK エージェントを障害に強くする分散ワークフローオーケストレーションエンジンです。LLM 呼び出しとツール実行は、自動リトライと復旧を備えた Dapr
 [Workflow](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-overview/)
-activity として実行されます。何かが失敗すると、エージェントは中断したまさにその
-場所から自動的に再開します。
+アクティビティとして実行されます。障害が発生しても、エージェントは中断した箇所から自動的に処理を再開します。
 
 ## ユースケース
 
 Dapr プラグインはエージェントに次の機能を提供します。
 
-- **Durable execution:** 進行状況を失いません。エージェントが crash または stall
-  した場合、Dapr は最後に成功した activity から自動復旧し、[手動再開](/ja/runtime/resume/)
-  は不要です。
-- **組み込みリトライと backoff:** LLM provider や tool API の一時的な障害を処理する
-  ため、exponential backoff 付きの構成可能な [retry
-  policy](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-features-concepts/#retry-policies)
-  を提供します。
-- **Long-running と ambient agent:** Dapr の persistent state store を基盤に、数時間、
-  数日、または無期限に実行されるエージェントとツールをサポートします。
-- **ポータブルなインフラ:** エージェントコードを変更せずに、Redis、GCP Firestore、
-  PostgreSQL、DynamoDB、Cosmos DB など 15 以上のデータベースと [さらに多くの state
-  store](https://docs.dapr.io/reference/components-reference/supported-state-stores/)を
-  差し替えられます。Dapr の pluggable component model により、ローカル開発から
-  任意のクラウドへ移行できます。
-- **可観測性とデバッグ:** Dapr workflow API でエージェント実行の各ステップを調査し、
-  Dapr の組み込み [OpenTelemetry
-  integration](https://docs.dapr.io/operations/observability/tracing/tracing-overview/)
-  を通じて trace と metric を出力します。
+- **永続的実行（Durable execution）:** 進行状況を失いません。エージェントがクラッシュまたは停止（ストール）した場合でも、Dapr は最後に成功したアクティビティから自動的に復旧するため、[手動再開](/ja/runtime/resume/)は不要です。
+- **組み込みリトライとバックオフ:** LLM プロバイダーやツール API の一時的な障害に対処するため、指数バックオフ付きの構成可能な[リトライポリシー](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-features-concepts/#retry-policies)を提供します。
+- **長時間実行エージェントとアンビエントエージェント:** Dapr の永続ステートストアを基盤に、数時間、数日、または無期限に実行されるエージェントとツールをサポートします。
+- **ポータブルなインフラ:** エージェントコードを変更せずに、Redis、GCP Firestore、PostgreSQL、DynamoDB、Cosmos DB など 15 以上のデータベースと[さらに多くのステートストア](https://docs.dapr.io/reference/components-reference/supported-state-stores/)を差し替えられます。Dapr のプラガブルなコンポーネントモデルにより、ローカル開発から任意のクラウドへそのまま移行できます。
+- **可観測性とデバッグ:** Dapr ワークフロー API でエージェント実行の各ステップを検査し、Dapr 組み込みの [OpenTelemetry 統合](https://docs.dapr.io/operations/observability/tracing/tracing-overview/)を通じてトレースとメトリクスを出力します。
 
 ## 前提条件
 
 - Python 3.11+
 - [Gemini API キー](https://aistudio.google.com/app/api-keys)、または任意の
   [サポート対象モデル](/ja/agents/models/)
-- Dapr CLI と runtime のインストール（[インストール
-  ガイド](https://docs.dapr.io/getting-started/install-dapr-cli/)）
-- workflow persistence 用に構成された Dapr [state store
-  component](https://docs.dapr.io/reference/components-reference/supported-state-stores/)
+- Dapr CLI とランタイムのインストール（[インストールガイド](https://docs.dapr.io/getting-started/install-dapr-cli/)）
+- ワークフローの永続化用に構成された Dapr [ステートストアコンポーネント](https://docs.dapr.io/reference/components-reference/supported-state-stores/)
 
 ## インストール
 
-Dapr 用の [Diagrid Agent package](https://pypi.org/project/diagrid/) をインストールします。
-このパッケージには ADK extension が含まれています。
+ADK 拡張機能が含まれている Dapr 用の [Diagrid Agent パッケージ](https://pypi.org/project/diagrid/)をインストールします。
 
 ```bash
 pip install diagrid
@@ -70,12 +51,9 @@ dapr init
 
 ### 基本設定
 
-この統合は、各 LLM 呼び出しと各ツール実行が durable Dapr Workflow activity として
-実行されるように ADK エージェントをラップします。runner は workflow 登録を処理し、
-Dapr workflow runtime を起動し、エージェントを呼び出すための async interface を
-公開します。
+この統合は、各 LLM 呼び出しと各ツール実行が永続的な Dapr Workflow アクティビティとして実行されるように ADK エージェントをラップします。ランナーはワークフローの登録を処理し、Dapr ワークフローランタイムを起動して、エージェントを呼び出すための非同期インターフェースを提供します。
 
-**エージェントと runner を定義**
+**エージェントとランナーを定義**
 
 通常どおり ADK エージェントを作成し、`DaprWorkflowAgentRunner` に渡します。
 
@@ -136,8 +114,7 @@ if __name__ == "__main__":
 
 **Dapr でエージェントを実行**
 
-Dapr Workflow は lightweight sidecar と構成済み state store を使用します。次の
-コマンドで Dapr をローカル実行し、エージェントを一緒に起動します。
+Dapr Workflow は軽量なサイドカーと構成済みのステートストアを使用します。次のコマンドで Dapr をローカル実行し、エージェントを一緒に起動します。
 
 ```bash
 dapr run --app-id weather-agent -- python3 agent.py
@@ -145,17 +122,11 @@ dapr run --app-id weather-agent -- python3 agent.py
 
 !!! note
 
-    デフォルトでは、Dapr は Dapr とともにインストールされた Redis component を
-    使用します。場所は `~/.dapr/components/statestore.yaml` です。使用する state
-    store を変更するには [supported state
-    stores](https://docs.dapr.io/reference/components-reference/supported-state-stores/)
-    を参照してください。
+    デフォルトでは、Dapr とともにインストールされた Redis コンポーネント（`~/.dapr/components/statestore.yaml`）が使用されます。使用するステートストアを変更するには、[サポートされているステートストア](https://docs.dapr.io/reference/components-reference/supported-state-stores/)を参照してください。
 
-### Crash recovery
+### クラッシュリカバリ
 
-エージェントをホストするプロセスが実行途中で crash した場合、アプリが再起動すると
-Dapr は最後に成功した activity から workflow を自動再開します。カスタム replay
-ロジックは不要です。
+エージェントをホストするプロセスが実行途中でクラッシュした場合でも、アプリが再起動すると Dapr は最後に成功したアクティビティからワークフローを自動再開します。カスタムのリプレイロジックは不要です。
 
 ```python
 # First run: process crashes after tool 1 completes.
@@ -171,45 +142,31 @@ async for event in runner.run_async(
         print(event["final_response"])
 ```
 
-`session_id` と workflow instance ID が安定しているため、同じアプリを Dapr とともに
-再起動すると、sidecar が進行中の workflow を引き継いで完了まで進めます。手動再開は
-不要です。
+`session_id` とワークフローインスタンス ID が安定しているため、同じアプリを Dapr とともに再起動すると、サイドカーが実行中のワークフローを引き継いで完了まで進めます。手動再開は不要です。
 
 ## 仕組み
 
-プラグインは ADK エージェントループを Dapr Workflow に変換し、各ステップを
-checkpoint、retry、自動 replay 可能にします。
+このプラグインは ADK エージェントループを Dapr Workflow に変換し、各ステップでチェックポイント保存、リトライ、自動リプレイを可能にします。
 
-- **LLM 呼び出し**は Dapr Workflow
-  [activity](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-features-concepts/#workflow-activities)
-  として実行されます。呼び出しが失敗したり worker が crash したりすると、Dapr は
-  構成済み retry policy に従ってリトライするか、最後に成功した activity から
-  workflow を replay し、resilience を高め token spend を削減します。
-- **ツール実行**は、ツール呼び出しごとに 1 つの独立した activity として実行されます。
-  workflow は Dapr の `when_all` primitive を使って並列ツール呼び出しを fan out し、
-  完了を待ってから LLM を再呼び出しします。
-- **Workflow state**（message、tool call、tool result）は各 activity の後に
-  serialize され、構成済み Dapr state store に保存されます。そのため、state store
-  にアクセスできる任意の replica が実行を引き継げます。
-- **Deterministic orchestration:** `agent_workflow` 関数には deterministic control
-  flow のみが含まれます。すべての side effect（LLM 呼び出し、ツール呼び出し）は
-  activity 内で発生し、これは replay safety のために Dapr Workflow が要求する
-  モデルです。
+- **LLM 呼び出し**は Dapr Workflow [アクティビティ](https://docs.dapr.io/developing-applications/building-blocks/workflow/workflow-features-concepts/#workflow-activities)として実行されます。呼び出しが失敗したりワーカーがクラッシュしたりすると、Dapr は構成済みのリトライポリシーに従ってリトライするか、最後に成功したアクティビティからワークフローをリプレイすることで、レジリエンスを高めつつトークン消費を削減します。
+- **ツール実行**は、ツール呼び出しごとに 1 つの独立したアクティビティとして実行されます。ワークフローは Dapr の `when_all` プリミティブを使って並列ツール呼び出しをファンアウトし、完了を待ってから LLM を再呼び出しします。
+- **ワークフロー状態**（メッセージ、ツール呼び出し、ツール結果）は各アクティビティの後にシリアライズされ、構成済みの Dapr ステートストアに保存されます。そのため、ステートストアにアクセスできる任意のレプリカが実行を引き継げます。
+- **決定論的オーケストレーション:** `agent_workflow` 関数には決定論的な制御フローのみが含まれます。すべての副作用（LLM 呼び出し、ツール呼び出し）はアクティビティ内で発生します。これはリプレイの安全性を確保するために Dapr Workflow が要求するモデルです。
 
 ## 機能
 
-| Capability | Description |
+| 機能 | 説明 |
 | --- | --- |
-| Durable tool execution | 各 ADK ツールが Dapr Workflow activity として実行され、失敗時には自動 retry、backoff、replay が適用されます |
-| Parallel tool calls | 単一 LLM 応答の複数ツール呼び出しが activity として同時に dispatch され、次の LLM ステップの前に join されます |
-| Portable state stores | コード変更なしで Dapr component により Redis、GCP Firestore、PostgreSQL、Cosmos DB など複数の state store を切り替えます |
-| Long-running agents | workflow は数時間、数日、または無期限に実行でき、state は完了まで Dapr state store に保持されます |
-| Observability | すべての LLM 呼び出しとツール実行は workflow activity であり、Dapr の OpenTelemetry integration で trace し、workflow API で調査できます |
-| Kubernetes-native | Dapr sidecar injection を使用して、同じエージェントをコード変更なしで Kubernetes にデプロイします |
+| 永続的なツール実行 | 各 ADK ツールが Dapr Workflow アクティビティとして実行され、失敗時には自動リトライ、バックオフ、リプレイが適用されます |
+| 並列ツール呼び出し | 単一の LLM レスポンスからの複数のツール呼び出しがアクティビティとして並行ディスパッチされ、次の LLM ステップの前に結合されます |
+| ポータブルなステートストア | コードを変更せずに、Dapr コンポーネントを通じて Redis、GCP Firestore、PostgreSQL、Cosmos DB など複数のステートストアを切り替えられます |
+| 長時間実行エージェント | ワークフローは数時間、数日、または無期限に実行でき、状態は完了まで Dapr ステートストアに保持されます |
+| 可観測性 | すべての LLM 呼び出しとツール実行はワークフローアクティビティとして実行され、Dapr の OpenTelemetry 統合によるトレースやワークフロー API による検査が可能です |
+| Kubernetes ネイティブ | Dapr のサイドカーインジェクションを使用して、同じエージェントをコード変更なしで Kubernetes にデプロイできます |
 
 ## 追加リソース
 
-- [Dapr Workflow documentation](https://docs.dapr.io/developing-applications/building-blocks/workflow/) - Dapr workflow building block の完全な reference
-- [Diagrid Agent SDK on GitHub](https://github.com/diagridio/python-ai) - Dapr ADK 統合のソースコード
+- [Dapr Workflow ドキュメント](https://docs.dapr.io/developing-applications/building-blocks/workflow/) - Dapr ワークフロービルディングブロックの完全なリファレンス
+- [GitHub の Diagrid Agent SDK](https://github.com/diagridio/python-ai) - Dapr ADK 統合のソースコード
 - [Dapr Community Discord](https://bit.ly/dapr-discord) - 質問、バグ報告、コミュニティでの議論
-- [Supported state stores](https://docs.dapr.io/reference/components-reference/supported-state-stores/) - Dapr Workflow と互換性のある state store component 一覧
+- [サポートされているステートストア](https://docs.dapr.io/reference/components-reference/supported-state-stores/) - Dapr Workflow と互換性のあるステートストアコンポーネント一覧

@@ -19,7 +19,7 @@ catalog_tags: ["mcp"]
 ## 사용 사례
 
 - **결제 운영 자동화**: 대화형 명령으로 결제 링크 생성,
-  환불 처리, payment intent 목록 조회를 수행합니다.
+  환불 처리, 결제 인텐트(PaymentIntent) 목록 조회를 수행합니다.
 
 - **인보이스 처리 간소화**: 개발 환경을 벗어나지 않고
   인보이스 생성/확정, 라인 아이템 추가, 미수금 추적을 수행합니다.
@@ -27,10 +27,10 @@ catalog_tags: ["mcp"]
 - **비즈니스 인사이트 확보**: 계정 잔액 조회, 상품/가격 목록 조회,
   Stripe 리소스 검색으로 데이터 기반 의사결정을 수행합니다.
 
-## 사전 준비 사항
+## 사전 요구사항
 
 - [Stripe 계정](https://dashboard.stripe.com/register) 생성
-- Stripe Dashboard에서 [Restricted API key](https://dashboard.stripe.com/apikeys) 생성
+- Stripe 대시보드에서 [제한된 API 키(Restricted API key)](https://dashboard.stripe.com/apikeys) 생성
 
 ## 에이전트와 함께 사용
 
@@ -166,43 +166,43 @@ catalog_tags: ["mcp"]
 
 !!! tip "모범 사례"
 
-    도구 실행에 대한 사람 승인(human confirmation)을 활성화하고,
+    도구 실행 승인(Tool Confirmation)을 활성화하고,
     프롬프트 인젝션 위험을 줄이기 위해 Stripe MCP 서버를 다른 MCP 서버와 함께 사용할 때는
     특히 주의하세요.
 
 ## 사용 가능한 도구
 
-Resource | Tool | API
+리소스 | 도구 | API 작업
 -------- | ---- | ----
-Account | `get_stripe_account_info` | Retrieve account
-Balance | `retrieve_balance` | Retrieve balance
-Coupon | `create_coupon` | Create coupon
-Coupon | `list_coupons` | List coupons
-Customer | `create_customer` | Create customer
-Customer | `list_customers` | List customers
-Dispute | `list_disputes` | List disputes
-Dispute | `update_dispute` | Update dispute
-Invoice | `create_invoice` | Create invoice
-Invoice | `create_invoice_item` | Create invoice item
-Invoice | `finalize_invoice` | Finalize invoice
-Invoice | `list_invoices` | List invoices
-Payment Link | `create_payment_link` | Create payment link
-PaymentIntent | `list_payment_intents` | List PaymentIntents
-Price | `create_price` | Create price
-Price | `list_prices` | List prices
-Product | `create_product` | Create product
-Product | `list_products` | List products
-Refund | `create_refund` | Create refund
-Subscription | `cancel_subscription` | Cancel subscription
-Subscription | `list_subscriptions` | List subscriptions
-Subscription | `update_subscription` | Update subscription
-Others | `search_stripe_resources` | Search Stripe resources
-Others | `fetch_stripe_resources` | Fetch Stripe object
-Others | `search_stripe_documentation` | Search Stripe knowledge
+계정(Account) | `get_stripe_account_info` | 계정 정보 조회
+잔액(Balance) | `retrieve_balance` | 잔액 조회
+쿠폰(Coupon) | `create_coupon` | 쿠폰 생성
+쿠폰(Coupon) | `list_coupons` | 쿠폰 목록 조회
+고객(Customer) | `create_customer` | 고객 생성
+고객(Customer) | `list_customers` | 고객 목록 조회
+분쟁(Dispute) | `list_disputes` | 분쟁 목록 조회
+분쟁(Dispute) | `update_dispute` | 분쟁 업데이트
+인보이스(Invoice) | `create_invoice` | 인보이스 생성
+인보이스(Invoice) | `create_invoice_item` | 인보이스 항목 생성
+인보이스(Invoice) | `finalize_invoice` | 인보이스 확정
+인보이스(Invoice) | `list_invoices` | 인보이스 목록 조회
+결제 링크(Payment Link) | `create_payment_link` | 결제 링크 생성
+PaymentIntent | `list_payment_intents` | PaymentIntent 목록 조회
+가격(Price) | `create_price` | 가격 생성
+가격(Price) | `list_prices` | 가격 목록 조회
+상품(Product) | `create_product` | 상품 생성
+상품(Product) | `list_products` | 상품 목록 조회
+환불(Refund) | `create_refund` | 환불 생성
+구독(Subscription) | `cancel_subscription` | 구독 취소
+구독(Subscription) | `list_subscriptions` | 구독 목록 조회
+구독(Subscription) | `update_subscription` | 구독 업데이트
+기타 | `search_stripe_resources` | Stripe 리소스 검색
+기타 | `fetch_stripe_resources` | Stripe 객체 조회
+기타 | `search_stripe_documentation` | Stripe 문서 검색
 
 ## 추가 리소스
 
-- [Stripe MCP Server Documentation](https://docs.stripe.com/mcp)
-- [Stripe MCP Server on GitHub](https://github.com/stripe/ai/tree/main/tools/modelcontextprotocol)
-- [Build on Stripe with LLMs](https://docs.stripe.com/building-with-llms)
-- [Add Stripe to your agentic workflows](https://docs.stripe.com/agents)
+- [Stripe MCP 서버 문서](https://docs.stripe.com/mcp)
+- [GitHub의 Stripe MCP 서버](https://github.com/stripe/ai/tree/main/tools/modelcontextprotocol)
+- [LLM으로 Stripe 기반 서비스 구축하기](https://docs.stripe.com/building-with-llms)
+- [에이전트 워크플로에 Stripe 추가하기](https://docs.stripe.com/agents)

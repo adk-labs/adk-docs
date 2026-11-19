@@ -4,11 +4,11 @@ catalog_description: LLM アプリケーション向けに本番運用レベル�
 catalog_icon: /integrations/assets/arize.png
 catalog_tags: ["observability", "evaluation"]
 ---
-# Arize AX によるエージェントの可観測性
+# ADK 向け Arize AX 可観測性（Observability）
 
-[Arize AX](https://arize.com/products/ax/) は、本番運用チーム、AI ネイティブ企業、エンタープライズ向けの [Arize AI](https://arize.com/) によるフル機能の AI 可観測性および評価プラットフォームです。マネージド クラウドまたはエンタープライズ向けセルフホスト デプロイとして利用可能で、Google ADK アプリケーション向けに包括的なトレース、評価、モニタリング機能を提供します。始めるには、[無料アカウント](https://app.arize.com/auth/join)に登録してください。
+[Arize AX](https://arize.com/products/ax/) は、本番運用チーム、AI ネイティブ企業、エンタープライズ向けの [Arize AI](https://arize.com/) によるフル機能の AI 可観測性および評価プラットフォームです。マネージドクラウドまたはエンタープライズ向けセルフホストデプロイとして利用でき、Google ADK アプリケーション向けに包括的なトレース、評価、モニタリング機能を提供します。始めるには、[無料アカウント](https://app.arize.com/auth/join)に登録してください。
 
-ローカル開発、実験、または単一コンテナでのセルフホスト向けのオープンソース パスについては、[Arize Phoenix ADK 統合](/integrations/phoenix/) を確認してください。Arize の [エージェント評価ガイド](https://arize.com/guides/ai-agent-handbook/agent-evaluation/) および [LLM 評価ガイド](https://arize.com/resources/llm-evaluation/) では、チームがトレースを使用してエージェントの決定、ツール呼び出し、モデルの動作を評価する方法が説明されています。
+ローカル開発、実験、または単一コンテナでのセルフホストにオープンソース版を利用したい場合は、[Arize Phoenix ADK 連携](/integrations/phoenix/)を確認してください。Arize の[エージェント評価ガイド](https://arize.com/guides/ai-agent-handbook/agent-evaluation/)および [LLM 評価ガイド](https://arize.com/resources/llm-evaluation/)では、トレースを使用してエージェントの意思決定、ツール呼び出し、モデルの動作を評価する方法を解説しています。
 
 ## 概要
 
@@ -16,10 +16,10 @@ Arize AX は [OpenInference インストルメンテーション](https://github
 
 -   **エージェントのやり取りをトレース** - すべてのエージェント実行、ツール呼び出し、モデルリクエスト、レスポンスをコンテキストとメタデータ付きで自動的にキャプチャ
 -   **パフォーマンスを評価** - カスタムまたは事前構築済みの評価器を使用してエージェントの動作を評価し、エージェント構成をテストする実験を実行
--   **本番環境でモニタリング** - リアルタイム ダッシュボードとアラートを設定してパフォーマンスを追跡
+-   **本番環境でモニタリング** - リアルタイムダッシュボードとアラートを設定してパフォーマンスを追跡
 -   **問題をデバッグ** - 詳細なトレースを分析して、ボトルネック、失敗したツール呼び出し、予期しないエージェント動作をすばやく特定
 
-![エージェント トレース](https://storage.googleapis.com/arize-phoenix-assets/assets/images/google-adk-traces.png)
+![エージェントトレース](https://storage.googleapis.com/arize-phoenix-assets/assets/images/google-adk-traces.png)
 
 ## インストール
 
@@ -58,7 +58,7 @@ from openinference.instrumentation.google_adk import GoogleADKInstrumentor
 GoogleADKInstrumentor().instrument(tracer_provider=tracer_provider)
 ```
 
-## 観測する
+## 観測（Observe）
 
 トレース設定が完了すると、すべての Google ADK SDK リクエストが可観測性と評価のために Arize AX にストリーミングされます。
 

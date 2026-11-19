@@ -417,14 +417,14 @@ adk deploy gke [OPTIONS] AGENT_PATH
 
 ### 인수 및 옵션
 
-| 인수         | 설명                                                          | 필수 |
-| ------------ | ------------------------------------------------------------- | ---- |
-| AGENT_PATH   | 에이전트 루트 디렉토리의 로컬 파일 경로입니다.                | 예   |
-| --project    | GKE 클러스터가 위치한 Google Cloud 프로젝트 ID입니다.          | 예   |
-| --cluster_name | GKE 클러스터의 이름입니다.                                    | 예   |
-| --region     | 클러스터의 Google Cloud 리전입니다 (예: us-central1).         | 예   |
-| --with_ui    | 에이전트의 백엔드 API와 동반 프론트엔드 사용자 인터페이스를 모두 배포합니다. | 아니요 |
-| --log_level  | 배포 프로세스의 로깅 수준을 설정합니다. 옵션: debug, info, warning, error. | 아니요 |
+| 인수         | 설명                                                          | 필수 여부 |
+| ------------ | ------------------------------------------------------------- | --------- |
+| AGENT_PATH   | 에이전트 루트 디렉토리의 로컬 파일 경로입니다.                | 예        |
+| --project    | GKE 클러스터가 위치한 Google Cloud 프로젝트 ID입니다.          | 예        |
+| --cluster_name | GKE 클러스터의 이름입니다.                                    | 예        |
+| --region     | 클러스터의 Google Cloud 리전입니다 (예: us-central1).         | 예        |
+| --with_ui    | 에이전트의 백엔드 API와 동반 프론트엔드 사용자 인터페이스를 모두 배포합니다. | 아니요    |
+| --log_level  | 배포 프로세스의 로깅 수준을 설정합니다. 옵션: debug, info, warning, error. | 아니요    |
 
 ### 작동 방식
 `adk deploy gke` 명령어를 실행하면 ADK가 다음 단계를 자동으로 수행합니다.
@@ -439,7 +439,7 @@ adk deploy gke [OPTIONS] AGENT_PATH
 
 `Deployment`는 GKE에 Artifact Registry에서 컨테이너 이미지를 가져와 하나 이상의 파드에서 실행하도록 지시합니다.
 
-`Service`는 에이전트를 위한 안정적인 네트워크 엔드포인트를 생성합니다. 기본적으로 이것은 LoadBalancer 서비스이며, 에이전트를 인터넷에 노출시키기 위해 공용 IP 주소를 프로비저닝합니다.
+`Service`는 에이전트를 위한 안정적인 네트워크 엔드포인트를 생성합니다. 기본적으로 LoadBalancer 서비스로 생성되며, 외부 인터넷에서 에이전트에 접근할 수 있도록 공인 IP 주소를 프로비저닝합니다.
 
 ### 사용 예시
 다음은 `~/agents/multi_tool_agent/`에 위치한 에이전트를 test라는 GKE 클러스터에 배포하는 실제 예시입니다.
@@ -508,7 +508,7 @@ adk-default-service-name   LoadBalancer   34.118.228.70   34.63.153.253   80:325
 
     #### 애플리케이션 URL 설정
 
-    예제 URL을 배포된 Cloud Run 서비스의 실제 URL로 교체하세요.
+    배포된 GKE 서비스의 외부 IP 주소를 애플리케이션 URL로 설정합니다.
 
     ```bash
     export APP_URL=$(kubectl get service adk-agent -o jsonpath='{.status.loadBalancer.ingress[0].ip}')

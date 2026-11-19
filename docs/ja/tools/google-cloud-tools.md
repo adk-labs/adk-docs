@@ -91,7 +91,7 @@ project_root_folder
     ツールセットがAPIから利用可能な最初の仕様を自動的に取得するようにしたい場合は、
     `` `projects/my-project-id/locations/us-west1/apis/my-api-id` `` を使用します。
 
-4.  エージェントファイルAgent.pyを作成し、作成したツールをエージェントの定義に追加します。
+4.  エージェントファイル `agent.py` を作成し、作成したツールをエージェントの定義に追加します。
 
     ```py
     from google.adk.agents.llm_agent import LlmAgent
@@ -224,7 +224,7 @@ Workflowsの両方に共通）。
 
 #### 開始する前に
 
-**注：** *ExecuteConnection*統合は、通常、特定のリージョンでApplication Integrationをプロビ저닝할 때 자동으로 생성됩니다。 *ExecuteConnection*이 [통합 목록](https://console.cloud.google.com/integrations/list)에 없는 경우、다음 단계에 따라 생성해야 합니다。
+**注：** *ExecuteConnection* 統合は通常、特定のリージョンで Application Integration をプロビジョニングした際に自動的に作成されます。*ExecuteConnection* が[統合の一覧](https://console.cloud.google.com/integrations/list)に存在しない場合は、次の手順に従って作成する必要があります。
 
 1.  Integration Connectorsからコネクタを使用するには、「QUICK SETUP」ボタンをクリックして、接続と同じリージョンでApplication Integrationを[プロビジョニング](https://console.cloud.google.com/integrations)する必要があります。
 

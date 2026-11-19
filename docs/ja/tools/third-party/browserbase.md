@@ -65,7 +65,7 @@ hide:
 `browserbase_stagehand_navigate` | ブラウザーで任意のURLに移動します
 `browserbase_stagehand_act` | 自然言語を使用してWebページでアクションを実行します
 `browserbase_stagehand_extract` | 現在のページからすべてのテキストコンテンツを抽出します（CSSとJavaScriptを除外）
-`browserbase_stagehand_observe` | Webページ上の実行可能な要素を監視して見つけます
+`browserbase_stagehand_observe` | Webページ上の操作可能な要素を検出して特定します
 `browserbase_screenshot` | 現在のページのPNGスクリーンショットをキャプチャします
 `browserbase_stagehand_get_url` | ブラウザーページの現在のURLを取得します
 `browserbase_session_create` | 完全に初期化されたStagehandを使用してBrowserbaseでクラウドブラウザーセッションを作成または再利用します

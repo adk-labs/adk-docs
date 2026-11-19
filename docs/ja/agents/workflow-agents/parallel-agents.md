@@ -6,7 +6,7 @@
 
 `ParallelAgent`は、サブエージェントを*並列(concurrently)*で実行する[ワークフローエージェント](index.md)です。これにより、タスクが独立して実行可能なワークフローを劇的に高速化します。
 
-`ParallelAgent`は次の場合に使用します：速度を優先し、独立したリソース集約型のタスクを伴うシナリオでは、`ParallelAgent`が効率的な並列実行を促進します。**サブエージェントが依存関係なしで動作する場合、タスクを並列に実行でき**、全体の処理時間を大幅に短縮できます。
+速度が重視され、独立したリソース集約型のタスクを伴うシナリオでは、`ParallelAgent` によって効率的な並列実行が可能になります。**サブエージェントが依存関係なしで動作する場合、タスクを並列に実行でき**、全体の処理時間を大幅に短縮できます。
 
 他の[ワークフローエージェント](index.md)と同様に、`ParallelAgent`はLLMによって駆動されないため、その実行方法は決定論的（deterministic）です。ただし、ワークフローエージェントが関与するのはその実行（つまり、サブエージェントを並列実行すること）のみであり、内部ロジックではありません。ワークフローエージェントのツールやサブエージェントは、LLMを利用する場合もあれば、しない場合もあります。
 
@@ -74,9 +74,9 @@
          --8<-- "examples/kotlin/snippets/agents/workflow-agents/ParallelAgentWebResearch.kt:init"
         ```
 
-## TypeScript の例の補足
+## TypeScript の実装例
 
-英語原文に含まれている TypeScript のパラレルエージェント例を以下にも掲載します。
+TypeScript での `ParallelAgent` の実装例を以下に示します。
 
 ```typescript
 --8<-- "examples/typescript/snippets/agents/workflow-agents/parallel_agent_web_research.ts:init"

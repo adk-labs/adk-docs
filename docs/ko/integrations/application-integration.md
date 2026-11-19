@@ -15,14 +15,14 @@ catalog_tags: ["google", "connectors"]
 Salesforce, ServiceNow, JIRA, SAP 등을 포함한
 Integration Connectors의 100개 이상 사전 구축 커넥터를 통해
 에이전트에 엔터프라이즈 애플리케이션에 대한
-안전하고 거버넌스된 접근 권한을 원활하게 제공할 수 있습니다.
+거버넌스가 적용된 안전한 접근 권한을 원활하게 제공할 수 있습니다.
 
 온프레미스와 SaaS 애플리케이션을 모두 지원합니다.
 또한 기존 Application Integration 프로세스 자동화를
 Application Integration 워크플로를 ADK 에이전트의 도구로 제공하는 방식으로
 에이전트 기반 워크플로(agentic workflows)로 전환할 수 있습니다.
 
-Application Integration 내 federated search를 사용하면
+Application Integration의 통합 검색(federated search)을 사용하면
 ADK 에이전트로 여러 엔터프라이즈 애플리케이션과 데이터 소스를
 동시에 질의할 수 있습니다.
 
@@ -34,7 +34,7 @@ ADK 에이전트로 여러 엔터프라이즈 애플리케이션과 데이터 �
 
 ### 1. ADK 설치
 
-[installation guide](/ko/get-started/installation/)의 단계에 따라
+[설치 가이드](/ko/get-started/installation/)의 단계에 따라
 Agent Development Kit를 설치합니다.
 
 ### 2. CLI 설치
@@ -63,8 +63,8 @@ gcloud auth application-default set-quota-project <project-id>
 을 만들 수 있습니다.
 
 템플릿 라이브러리에서
-[Connection Tool](https://console.cloud.google.com/integrations/templates/connection-tool/locations/global)
-을 import하고 publish합니다.
+[Connection Tool](https://console.cloud.google.com/integrations/templates/connection-tool/locations/global)을
+가져와(import) 게시(publish)합니다.
 
 **참고**: Integration Connectors의 커넥터를 사용하려면,
 연결(connection)과 같은 리전에 Application Integration을 프로비저닝해야 합니다.
@@ -84,7 +84,7 @@ gcloud auth application-default set-quota-project <project-id>
           └── tools.py
       ```
 
-    에이전트 실행 시 `project_root_folder`에서 `adk web`를 실행해야 합니다.
+    에이전트 실행 시 `project_root_folder`에서 `adk web`을 실행해야 합니다.
 
 === "Java"
 
@@ -250,7 +250,7 @@ Integration Connectors용 Application Integration Toolset을 만들려면 다음
     )
     ```
 
-3. `__init__.py`를 구성해 에이전트를 노출합니다:
+3. `__init__.py`를 구성해 에이전트를 공개합니다:
 
     ```py
     from . import agent
@@ -387,14 +387,14 @@ Integration Connectors용 Application Integration Toolset을 만들려면 다음
             }
         ```
 
-**참고:** 연결에서 지원되는 entity/actions 목록은
+**참고:** 연결에서 지원되는 엔티티(entity) 및 작업(action) 목록은
         Connector API `listActions`, `listEntityTypes`로 확인하세요.
 
-### 3. 에이전트 노출
+### 3. 에이전트 공개
 
 === "Python"
 
-    `__init__.py`를 구성해 에이전트를 노출하려면 다음 코드를 사용합니다:
+    `__init__.py`를 구성해 에이전트를 공개하려면 다음 코드를 사용합니다:
 
       ```py
           from . import agent

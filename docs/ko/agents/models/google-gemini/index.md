@@ -81,7 +81,7 @@ ADK는 [코드 실행](/tools/gemini-api/code-execution/),
 
 ## Gemini 모델 인증
 
-이 섹션에서는 Google AI Studio를 통한 빠른 개발 또는 Google Cloud Vertex AI를 통한 엔터프라이즈 응용에서 Gemini 모델 인증을 다룹니다. ADK 내에서 Google의 대표 모델을 사용하기 위한 가장 직접적인 방법입니다.
+이 섹션에서는 Google AI Studio를 통한 빠른 개발 또는 Google Cloud Vertex AI를 통한 엔터프라이즈 애플리케이션 개발에서 Gemini 모델 인증을 다룹니다. ADK 내에서 Google의 대표 모델을 사용하기 위한 가장 직접적인 방법입니다.
 
 **통합 방식:** 아래 중 하나로 인증을 완료하면 `LlmAgent`의 `model` 매개변수에
 모델 식별자 문자열을 직접 전달할 수 있습니다.
@@ -192,15 +192,15 @@ Vertex AI의 Gemini는 엔터프라이즈급 기능, 보안, 규정 준수 제�
 
 다음 방법 중 하나로 완화할 수 있습니다.
 
-1.  사용하려는 모델에 대한 쿼터 상한을 높여달라고 요청합니다.
+1.  사용하려는 모델에 대한 할당량(quota) 상한 상향을 요청합니다.
 
 2.  클라이언트 측 재시도를 활성화합니다. 재시도는 일시적인 할당량 문제 시 대기 후 자동으로 요청을 다시 보내어 완화할 수 있습니다.
 
     재시도 옵션을 지정하는 방법은 두 가지입니다.
 
-    **옵션 1:** 에이전트에 직접 `generate_content_config`로 재시도 옵션을 설정합니다.
+    **옵션 1:** 에이전트의 `generate_content_config`에 재시도 옵션을 설정합니다.
 
-    이 옵션은 이 모델 어댑터 인스턴스를 직접 직접 생성하는 경우에 적합합니다.
+    모델 이름을 문자열로 전달하여 ADK가 모델 어댑터를 생성하도록 맡기는 경우에 이 옵션을 사용합니다.
 
     === "Python"
 
@@ -244,9 +244,9 @@ Vertex AI의 Gemini는 엔터프라이즈급 기능, 보안, 규정 준수 제�
             .build();
         ```
 
-    **옵션 2:** 모델 어댑터의 재시도 옵션을 설정합니다.
+    **옵션 2:** 모델 어댑터에 재시도 옵션을 설정합니다.
 
-    이 옵션은 이 모델 어댑터 인스턴스를 직접 생성하는 경우에 적합합니다.
+    `Gemini` 모델 어댑터 인스턴스를 직접 생성하는 경우에 이 옵션을 사용합니다.
 
     === "Python"
 
@@ -346,8 +346,7 @@ Interactions API를 활성화하면 각 실행에 대한 서빙 등급(serving t
 
 ### 알려진 제한
 
-Interactions API는 [Google Search](/ko/tools/built-in-tools/#google-search)와 같은
-커스텀 함수 호출 도구와 내장 도구를 동일 에이전트에서 함께 사용할 수 **없습니다**.
+Interactions API에서는 [Google Search](/ko/tools/built-in-tools/#google-search)와 같은 내장 도구와 커스텀 함수 호출 도구를 동일한 에이전트에서 함께 사용할 수 **없습니다**.
 `bypass_multi_tools_limit` 매개변수를 사용해 내장 도구를 커스텀 도구로 동작하도록 설정하여 제한을 우회할 수 있습니다.
 
 === "Python"
@@ -365,5 +364,4 @@ Interactions API는 [Google Search](/ko/tools/built-in-tools/#google-search)와 
     GoogleSearchTool.INSTANCE;
     ```
 
-이 예제에서 이 옵션은 내장 google_search을 함수 호출 도구(구글서치 에이전트 도구인
-GoogleSearchAgentTool)로 변환하므로, 커스텀 함수 도구와 함께 사용할 수 있습니다.
+이 예제에서 이 옵션은 내장 `google_search`를 `GoogleSearchAgentTool` 기반의 함수 호출 도구로 변환하므로, 커스텀 함수 도구와 함께 사용할 수 있습니다.

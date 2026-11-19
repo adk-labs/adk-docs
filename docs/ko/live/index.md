@@ -6,7 +6,7 @@
 
 ADK는 라이브 및 음성 에이전트를 구축하기 위한 프레임워크입니다. 라이브 에이전트는 사용자와 열린 양방향 연결을 유지합니다. 메시지를 보내고 답장을 기다리는 대신 사용자와 에이전트가 동시에 말하고, 듣고, 응답하며, 실제 대화에서 사람들이 서로 말을 끊는 것처럼 사용자가 에이전트의 말을 중간에 끊을(interrupt) 수 있습니다. 라이브 에이전트는 텍스트, 오디오, 비디오 입력을 수락하고 텍스트 또는 음성으로 응답합니다.
 
-라이브 에이전트는 다른 모든 곳에서 사용하는 동일한 에이전트, 도구, 세션 추상화로 구축된 ADK 에이전트입니다. 개발자는 에이전트의 동작을 정의하고, ADK는 그 아래에서 실시간 연결, 도구 실행, 세션 상태를 관리합니다. [음성 대 음성(speech-to-speech)](architectures/speech-to-speech.md) 모델을 사용하여 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api) 위에서 라이브 에이전트를 엔드투엔드로 실행하거나, [캐스케이드 파이프라인](architectures/cascade.md)에서 음성-텍스트 변환(STT), 임의의 텍스트 LLM, 텍스트-음성 변환(TTS)을 순차적으로 연결하여 실행할 수 있습니다.
+라이브 에이전트는 다른 모든 곳에서 사용하는 동일한 에이전트, 도구, 세션 추상화로 구축된 ADK 에이전트입니다. 개발자는 에이전트의 동작을 정의하고, ADK는 내부적으로 실시간 연결, 도구 실행, 세션 상태를 관리합니다. [음성 대 음성(speech-to-speech)](architectures/speech-to-speech.md) 모델을 사용하여 [Gemini Live API](https://ai.google.dev/gemini-api/docs/live-api)에서 라이브 에이전트를 엔드투엔드로 실행하거나, [캐스케이드 파이프라인](architectures/cascade.md)에서 음성-텍스트 변환(STT), 임의의 텍스트 LLM, 텍스트-음성 변환(TTS)을 순차적으로 연결하여 실행할 수 있습니다.
 
 <div class="video-grid">
   <div class="video-item">
@@ -72,7 +72,7 @@ ADK에서 "스트리밍"은 세 가지 서로 다른 기능을 의미하며, 잘
 | **토큰 단위 스트리밍** | 텍스트가 단어 단위로 도착하지만, 추가 전송 전에 완료를 기다림. | 불가 | 응답성 높은 텍스트 채팅을 원할 때. | `StreamingMode.SSE` ([구성](configuration.md#streamingmode-bidi-or-sse)) |
 | **양방향 스트리밍** | 열린 단일 연결을 통해 양측이 동시에 말하고, 듣고, 응답함. | **가능** | 음성 또는 비디오 대화를 구축할 때. | `runner.run_live()` — 현재 문서들 |
 
-현재 문서들은 세 번째 행에 대해 다룹니다.
+이 섹션의 문서들은 세 번째 행(양방향 스트리밍)을 다룹니다.
 
 ```mermaid
 sequenceDiagram
@@ -87,7 +87,7 @@ sequenceDiagram
 
 ## 왜 ADK로 라이브 에이전트를 구축해야 할까요?
 
-Live API는 스트리밍 프로토콜을 제공합니다. ADK는 그 주변의 모든 것을 제공하므로 스트리밍 인프라 대신 에이전트 동작 작성에 집중할 수 있습니다.
+Live API는 스트리밍 프로토콜을 제공합니다. ADK는 그 외에 필요한 모든 기능을 제공하므로 스트리밍 인프라 대신 에이전트 동작 작성에 집중할 수 있습니다.
 
 | | 순수 Live API (`google-genai`) | ADK |
 |---|---|---|
@@ -96,7 +96,7 @@ Live API는 스트리밍 프로토콜을 제공합니다. ADK는 그 주변의 �
 | 이벤트 | 커스텀 구조 | [통합 이벤트 모델](events.md) |
 | 비동기 조율 | 수동 | [`LiveRequestQueue` + `run_live()`](sessions.md) |
 | 세션 지속성 | 수동 | [SQL, Agent Platform, 인메모리](../sessions/index.md) |
-| 멀티 에이전트 | 미제공 | [워크플로, 서브에이전트, 전송](workflows.md) |
+| 멀티 에이전트 | 미제공 | [워크플로, 서브 에이전트, 에이전트 전환(transfer)](workflows.md) |
 
 ## 데모 및 리소스
 

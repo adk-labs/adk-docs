@@ -4,68 +4,48 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.29.0</span><span class="lst-go">Go v1.1.0</span>
 </div>
 
-エージェントワークフローを実行するとき、人間の入力を待つのではなく、イベントや
-新しいデータの到着に応じてワークフローを起動したい場合があります。ADK エージェントは、
-イベントに応答して作業を実行するトリガーを構成できます。これを *アンビエントエージェント*
-と呼びます。これらのエージェントはバックグラウンドプロセスとして実行され、データを処理し、
-イベントを監視し、人間の介入なしに非同期で応答できます。アンビエントエージェントは
-次の用途に使用できます。
+エージェントワークフローを実行するとき、人間の入力を待つのではなく、イベントや新しいデータの到着に応じてワークフローを起動したい場合があります。ADK エージェントには、イベントに応答して処理を実行するトリガーを構成できます。これを *アンビエントエージェント* と呼びます。これらのエージェントはバックグラウンドプロセスとして実行され、人間の介入なしにデータの処理、イベントの監視、非同期での応答を行えます。アンビエントエージェントは次の用途に活用できます。
 
-- **クラウド イベントに反応します。** ファイルがアップロードされたときにファイルを処理します。
-  [Cloud Storage](https://cloud.google.com/storage)、データベースに応答します
-  変更を行うか、監査ログエントリを処理します。
-- **キューからのメッセージを処理します。** 受信したサポート チケットを分析します。
-  コンテンツの管理、ドキュメントの分類、アイテムの到着時の QA の実行などを行います。
-- **スケジュールに従って実行します。** 日次レポートを生成し、定期的に監視を実行します。
-  定期的にチェックしたり、バッチ ジョブを処理したりできます。
-- **インフラストラクチャを監視します。** 全体にわたる継続的なイベント ストリームに反応します。
-  インフラストラクチャを構築し、変更に自律的に対応します。
+- **クラウドイベントへの反応:** [Cloud Storage](https://cloud.google.com/storage) にファイルがアップロードされたときの処理、データベースの変更への応答、監査ログエントリの処理などを行います。
+- **キューからのメッセージ処理:** 受信したサポートチケットの分析、コンテンツのモデレーション、ドキュメントの分類、アイテム到着時の QA の実行などを行います。
+- **スケジュール実行:** 日次レポートの生成、定期的な監視チェックの実行、一定間隔でのバッチジョブ処理などを行います。
+- **インフラストラクチャの監視:** インフラストラクチャ全体の継続的なイベントストリームに反応し、変更に対して自律的に対処します。
 
 ## アンビエントエージェントから結果を取得する
 
-アンビエント エージェントは人間の介入なしで実行されるため、アンビエント エージェントをルーティングする必要があります。
-通知チャネルに出力します。一般的なパターンは次のとおりです。
+アンビエントエージェントは人間の介入なしで実行されるため、その出力を通知チャネルにルーティングする必要があります。一般的なパターンは次のとおりです。
 
-- **[Structured logging](../observability/logging.md).** JSON ログを書き込み、
-  [Cloud Monitoring](https://cloud.google.com/monitoring/support/notification-options)を構成する
-  電子メール、Slack、PagerDuty 経由で通知するアラート。
-- **[Pub/Sub](https://cloud.google.com/pubsub).** 結果をトピックに公開する
-  ダウンストリーム サービスが利用できるようになります。
-- **[Application Integration](https://cloud.google.com/application-integration/docs/listen-pub-sub-topic-send-email).**
-  エージェントの出力を電子メール、Jira、またはその他のシステムにルーティングします。
+- **[構造化ロギング（Structured logging）](../observability/logging.md):** JSON ログを出力し、メール、Slack、PagerDuty 経由で通知する [Cloud Monitoring](https://cloud.google.com/monitoring/support/notification-options) アラートを構成します。
+- **[Pub/Sub](https://cloud.google.com/pubsub):** ダウンストリームのサービスが利用できるように、結果をトピックにパブリッシュ（発行）します。
+- **[Application Integration](https://cloud.google.com/application-integration/docs/listen-pub-sub-topic-send-email):** エージェントの出力をメール、Jira、その他のシステムにルーティングします。
 
 ## アンビエントエージェントを構築する方法
 
 ADK は 2 つのアプローチを提供します。
 
-| | [`/run`](api-server.md) |トリガーエンドポイント |
+| | [`/run`](api-server.md) | トリガーエンドポイント |
 | :--- | :--- | :--- |
-| **イベント ソース** |任意 (Pub/Sub、Webhook、cron、カスタム サービス) | [Cloud Pub/Sub](https://cloud.google.com/pubsub)、[Eventarc](https://cloud.google.com/eventarc) ([Standard](https://cloud.google.com/eventarc/standard/docs/overview) および [Advanced](https://cloud.google.com/eventarc/advanced/docs/overview)) |
-| **ペイロード解析** |あなたがそれを処理します |自動 (Base64 デコード、CloudEvent 解析) |
-| **セッションの作成** | `--auto_create_session` を有効にする |自動 (イベントごとに 1 つ) |
-| **セッション ストレージ** |構成済みの [`SessionService`](../sessions/session/index.md) |構成済みの [`SessionService`](../sessions/session/index.md) |
-| **同時実行制御** |あなたがそれを処理します |制限を設定可能な組み込みセマフォ |
-| **再試行ロジック** |あなたがそれを処理します |一時的なエラーに対するジッターを伴う指数バックオフ |
-| **こんな用途に最適** |カスタム統合、GCP 以外のソース | GCP ネイティブのイベントドリブン ワークロード |
+| **イベントソース** | 任意（Pub/Sub、Webhook、cron、カスタムサービス） | [Cloud Pub/Sub](https://cloud.google.com/pubsub)、[Eventarc](https://cloud.google.com/eventarc)（[Standard](https://cloud.google.com/eventarc/standard/docs/overview) および [Advanced](https://cloud.google.com/eventarc/advanced/docs/overview)） |
+| **ペイロード解析** | 開発者側で実装 | 自動（Base64 デコード、CloudEvent 解析） |
+| **セッションの作成** | `--auto_create_session` を有効化 | 自動（イベントごとに 1 つ） |
+| **セッションストレージ** | 構成済みの [`SessionService`](../sessions/session/index.md) | 構成済みの [`SessionService`](../sessions/session/index.md) |
+| **同時実行制御** | 開発者側で実装 | 上限を設定可能な組み込みセマフォ |
+| **再試行ロジック** | 開発者側で実装 | 一時的なエラーに対するジッター付き指数バックオフ |
+| **適した用途** | カスタム統合、Google Cloud 以外のソース | Google Cloud ネイティブのイベント駆動型ワークロード |
 
 ## `/run` を使用する
 
-を完全に制御する必要がある場合は、[`/run`](api-server.md) エンドポイントを使用します。
-統合を行っているか、GCP 以外のイベント ソースを使用しています。有効にする
-`--auto_create_session` セッションが自動的に作成されるようにする
-イベントの到着時に `/run` を呼び出すために任意の HTTP クライアントを接続します。
+統合処理を完全に制御したい場合や、Google Cloud 以外のイベントソースを扱う場合は、[`/run`](api-server.md) エンドポイントを使用します。セッションが自動的に作成されるように `--auto_create_session` を有効にし、イベント到着時に任意の HTTP クライアントから `/run` を呼び出します。
 
 ```bash
 adk api_server --auto_create_session path/to/your/agent
 ```
 
-このパターンは、HTTP リクエストを実行できるあらゆるイベント ソースで機能します。
+このパターンは、HTTP リクエストを送信できるあらゆるイベントソースで利用できます。
 
 ??? "例: 受信 Webhook の処理"
 
-    次の [Cloud Run function](https://cloud.google.com/functions/docs/writing/write-event-driven-functions)
-    外部サービス (GitHub など) から Webhook を受信し、
-    それをエージェントに転送します。
+    次の [Cloud Run function](https://cloud.google.com/functions/docs/writing/write-event-driven-functions) は、外部サービス（GitHub など）から Webhook を受信し、エージェントに転送します。
 
     ```python
     import json
@@ -115,39 +95,29 @@ adk api_server --auto_create_session path/to/your/agent
 
 ## トリガーエンドポイントの使用
 
-イベント ソースが Pub/Sub または Eventarc であり、
-ADK にペイロードの解析、セッションの作成、同時実行性、および再試行を処理させたい。
+イベントソースが Pub/Sub または Eventarc であり、ペイロードの解析、セッションの作成、同時実行制御、再試行を ADK に任せたい場合は、トリガーエンドポイントを使用します。
 
 ### イベントの処理方法
 
-Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエージェントに配信します。
-トリガー エンドポイントがイベントを受信すると、次の処理が行われます。
+Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエージェントに配信します。トリガーエンドポイントがイベントを受信すると、次の処理が行われます。
 
-1. **ソース形式 (Pub/Sub プッシュ メッセージ) に従って **リクエストを解析します**
-   またはクラウドイベント)。
-2. **ペイロードをデコードします。** Base64 でエンコードされたメッセージ データがデコードされ、
-   可能、JSON として解析されます。
-3. 生成された UUID を使用して **セッションを自動的に作成**します。 `/run`とは異なります
-   エンドポイントの場合、`--auto_create_session` — トリガーを有効にする必要はありません
-   エンドポイントは常にイベントごとに新しいセッションを作成します。
-4. **デコードされたイベントをユーザー メッセージとして使用してエージェントを実行します**。
-5. **ステータス コードを返します。** `200` 応答は、Pub/Sub または Eventarc に次のことを伝えます。
-   イベントは正常に処理されました。 `500` 応答は失敗を示します。
-   イベント ソースは、再試行ポリシーに基づいて配信を再試行します。
+1. **リクエストの解析:** ソース形式（Pub/Sub push メッセージまたは CloudEvent）に従ってリクエストを解析します。
+2. **ペイロードのデコード:** Base64 エンコードされたメッセージデータをデコードし、可能な場合は JSON として解析します。
+3. **セッションの自動作成:** 生成された UUID を使用してセッションを自動作成します。`/run` エンドポイントとは異なり、`--auto_create_session` を有効にする必要はありません。トリガーエンドポイントは常にイベントごとに新しいセッションを作成します。
+4. **エージェントの実行:** デコードされたイベントをユーザーメッセージとしてエージェントを実行します。
+5. **ステータスコードの返却:** `200` レスポンスは、イベントが正常に処理されたことを Pub/Sub または Eventarc に伝えます。`500` レスポンスは処理失敗を示し、イベントソースは再試行ポリシーに基づいて配信を再試行します。
 
 ### サポートされているソース
 
-|出典 |エンドポイント |説明 |
+| ソース | エンドポイント | 説明 |
 | :----- | :------- | :---------- |
-| **パブ/サブ** | `/apps/{app_name}/trigger/pubsub` | [Pub/Sub push subscription](https://cloud.google.com/pubsub/docs/push) からメッセージを受信します。 |
-| **イヴェンターク** | `/apps/{app_name}/trigger/eventarc` | [Eventarc](https://cloud.google.com/eventarc) ([Standard](https://cloud.google.com/eventarc/standard/docs/overview) または [Advanced](https://cloud.google.com/eventarc/advanced/docs/overview)) によって配信された [CloudEvents](https://cloudevents.io/) を受信し、構造化コンテンツ モードとバイナリ コンテンツ モードの両方をサポートします。 |
+| **Pub/Sub** | `/apps/{app_name}/trigger/pubsub` | [Pub/Sub push サブスクリプション](https://cloud.google.com/pubsub/docs/push)からメッセージを受信します。 |
+| **Eventarc** | `/apps/{app_name}/trigger/eventarc` | [Eventarc](https://cloud.google.com/eventarc)（[Standard](https://cloud.google.com/eventarc/standard/docs/overview) または [Advanced](https://cloud.google.com/eventarc/advanced/docs/overview)）によって配信された [CloudEvents](https://cloudevents.io/) を受信し、構造化コンテンツモードとバイナリコンテンツモードの両方をサポートします。 |
 
 ### エージェントの例
 
 === "Python"
-    次のエージェントは、トリガー エンドポイントからのイベントを処理します。それは、
-    `parse_event` イベントデータと属性を抽出して分析するツール
-    内容。
+    次のエージェントは、トリガーエンドポイントからのイベントを処理します。`parse_event` ツールを使用してイベントデータと属性を抽出し、その内容を分析します。
 
     ???+ "エージェントコード(`event_processing_agent/agent.py`)"
 
@@ -156,7 +126,7 @@ Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエ
         ```
 
 === "Go"
-    次のエージェントは、トリガー エンドポイントからのイベントを処理します。イベントデータと属性を抽出し、内容を解析します。
+    次のエージェントは、トリガーエンドポイントからのイベントを処理します。イベントデータと属性を抽出し、内容を分析します。
 
     ???+ "エージェントコード(`event_processing_agent.go`)"
 
@@ -168,17 +138,15 @@ Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエ
 
 === "Python"
 
-    トリガー エンドポイントはデフォルトでは無効になっています。それらを有効にするには、
-    `--trigger_sources` フラグ:
+    トリガーエンドポイントはデフォルトでは無効になっています。有効にするには `--trigger_sources` フラグを使用します:
 
     ```shell
     adk api_server --trigger_sources "pubsub,eventarc" path/to/your/agent
     ```
 
-    運用環境の場合、トリガーをプログラムで有効にできます。
-    カスタム FastAPI エントリ ポイント:
+    本番環境へのデプロイでは、カスタム FastAPI エントリポイントでプログラムからトリガーを有効にできます:
 
-    ???+ "展開エントリ ポイント (`main.py`)"
+    ???+ "デプロイ用エントリポイント (`main.py`)"
 
         === "Python"
             ```python
@@ -187,8 +155,7 @@ Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエ
 
 === "Go"
 
-    トリガー エンドポイントはデフォルトでは無効になっています。それらを有効にするには、
-    対応するトリガーフラグ:
+    トリガーエンドポイントはデフォルトでは無効になっています。有効にするには対応するトリガーフラグを指定します:
 
     ```shell
     go run agent.go web api pubsub eventarc
@@ -196,7 +163,7 @@ Pub/Sub と Eventarc は、イベントを HTTP POST リクエストとしてエ
 
 ### ローカルで試してみる
 
-**1.トリガーを有効にしてサーバーを起動します:**
+**1. トリガーを有効にしてサーバーを起動します:**
 
 === "Python"
 
@@ -238,19 +205,17 @@ Base64 値は `{"order_id": "1234", "status": "new"}` にデコードされま�
 
 ### パラメータのマッピング
 
-`/run` エンドポイントでは、`app_name`、`user_id`、および
-`session_id`。トリガー エンドポイントはこれらを自動的に取得します。
+`/run` エンドポイントでは `app_name`、`user_id`、および `session_id` を指定する必要がありますが、トリガーエンドポイントはこれらを自動的に導出します。
 
-|パラメータ |出典 |
+| パラメータ | 取得元 |
 | :-------- | :----- |
-| `app_name` | URL パスから抽出 (`/apps/{app_name}/trigger/...`) |
-| `session_id` |イベントごとに自動生成される UUID |
-| `user_id` | Pub/Sub: `subscription` フィールド。 Eventarc: `source` または `ce-source` ヘッダー。 |
+| `app_name` | URL パス（`/apps/{app_name}/trigger/...`）から抽出 |
+| `session_id` | イベントごとに自動生成される UUID |
+| `user_id` | Pub/Sub: `subscription` フィールド。Eventarc: `source` または `ce-source` ヘッダー。 |
 
 ### メッセージ形式
 
-すべてのトリガー エンドポイントは、受信イベントを一貫した JSON に正規化します。
-ユーザーメッセージとしてエージェントに渡す前に構造を変更します。
+すべてのトリガーエンドポイントは、受信イベントを一貫した JSON 構造に正規化してから、ユーザーメッセージとしてエージェントに渡します。
 
 ```json
 {
@@ -259,27 +224,22 @@ Base64 値は `{"order_id": "1234", "status": "new"}` にデコードされま�
 }
 ```
 
-- **`data`**: デコードされたイベント ペイロード。元データがJSONの場合は、
-  構造化オブジェクトに解析されます。それ以外の場合は、プレーン文字列として渡されます。
-- **`attributes`**: イベント ソースからのキーと値のメタデータ (Pub/Sub など)
-  メッセージ属性または CloudEvents ヘッダー (`ce-type`、`ce-source` など)。
+- **`data`**: デコードされたイベントペイロード。元データが JSON の場合は構造化オブジェクトに解析され、それ以外の場合はプレーン文字列として渡されます。
+- **`attributes`**: イベントソースからのキー・バリュー形式のメタデータ（Pub/Sub メッセージ属性や、`ce-type`、`ce-source` などの CloudEvents ヘッダーなど）。
 
-エージェントはこの JSON 文字列を入力メッセージとして受け取り、それを解析して次のようにできます。
-データと属性を抽出します。
+エージェントはこの JSON 文字列を入力メッセージとして受け取り、解析してデータと属性を抽出できます。
 
-### パブリッシュ/サブスクライブ
+### Pub/Sub
 
-Pub/Sub トリガー エンドポイントは、
-[Pub/Sub push subscription](https://cloud.google.com/pubsub/docs/push)。使ってください
-アプリケーションまたはサービスがトピックにメッセージをパブリッシュするとき、たとえば次のようになります。
+Pub/Sub トリガーエンドポイントは、[Pub/Sub push サブスクリプション](https://cloud.google.com/pubsub/docs/push)からのメッセージを処理します。アプリケーションやサービスがトピックにメッセージをパブリッシュ（発行）する場合に使用します。例:
 
-- サポート ポータルは、トリアージとルーティングのために受信したチケットを公開します。
-- コンテンツ パイプラインは、分類またはモデレーションのためにドキュメントを送信します。
-- 監視サービスは、自動分析のためにアラートを発行します。
+- サポートポータルが、トリアージとルーティングのために受信チケットをパブリッシュする。
+- コンテンツパイプラインが、分類やモデレーションのためにドキュメントを送信する。
+- 監視サービスが、自動分析のためにアラートをパブリッシュする。
 
 #### リクエスト形式
 
-Pub/Sub プッシュ サブスクリプションは、次の形式でリクエストを送信します。
+Pub/Sub push サブスクリプションは次の形式でリクエストを送信します。
 
 ```json
 {
@@ -293,37 +253,28 @@ Pub/Sub プッシュ サブスクリプションは、次の形式でリクエ�
 }
 ```
 
-`data` フィールドは Base64 でエンコードされます。トリガーエンドポイントがそれをデコードします
-自動的に。
+`data` フィールドは Base64 エンコードされています。トリガーエンドポイントはこれを自動的にデコードします。
 
-#### 応答
+#### レスポンス
 
-| HTTP ステータス |意味 |
+| HTTP ステータス | 意味 |
 | :---------- | :------ |
-| **200** |イベントは正常に処理されました。 Pub/Sub はメッセージを確認します。 |
-| **400** |無効なリクエスト (不正な Base64 エンコーディング)。メッセージは再試行されません。 |
-| **500** |処理が失敗しました (一時的または非一時的なエージェント エラー)。 Pub/Sub は、[retry policy](https://cloud.google.com/pubsub/docs/handling-failures) に基づいて配信を再試行します。繰り返し失敗するメッセージをキャッチするように [dead-letter queue](https://cloud.google.com/pubsub/docs/dead-letter-topics) を構成します。 |
+| **200** | イベントが正常に処理されました。Pub/Sub はメッセージを確認応答（ack）します。 |
+| **400** | 無効なリクエスト（不正な Base64 エンコーディング）。メッセージは再試行されません。 |
+| **500** | 処理に失敗しました（一時的または永続的なエージェントエラー）。Pub/Sub は[再試行ポリシー](https://cloud.google.com/pubsub/docs/handling-failures)に基づいて配信を再試行します。繰り返し失敗するメッセージを捕捉するために[デッドレターキュー](https://cloud.google.com/pubsub/docs/dead-letter-topics)を構成してください。 |
 
-### イヴェンターク
+### Eventarc
 
-Eventarc トリガー エンドポイント プロセス
-[CloudEvents](https://cloud.google.com/eventarc/docs/cloudevents) によって配信されました
-[Eventarc](https://cloud.google.com/eventarc)、両方
-[Standard](https://cloud.google.com/eventarc/standard/docs/overview)と
-[Advanced](https://cloud.google.com/eventarc/advanced/docs/overview) エディション。
-これを使用して、Google Cloud 全体のイベントに対応します。たとえば、次のようになります。
+Eventarc トリガーエンドポイントは、[Eventarc](https://cloud.google.com/eventarc)（[Standard](https://cloud.google.com/eventarc/standard/docs/overview) と [Advanced](https://cloud.google.com/eventarc/advanced/docs/overview) の両エディション）によって配信される [CloudEvents](https://cloud.google.com/eventarc/docs/cloudevents) を処理します。Google Cloud 全体のイベントに応答するために使用します。例:
 
-- ファイルが [Cloud Storage](https://cloud.google.com/storage) にアップロードされます (文書の分類、要約、またはデータの抽出)。
-- レコードが [BigQuery](https://cloud.google.com/bigquery) に書き込まれます (異常検出の実行またはアラートの生成)。
-- [Audit Log](https://cloud.google.com/logging/docs/audit) エントリが作成されます (ポリシー違反または不審なアクティビティにフラグを立てます)。
+- [Cloud Storage](https://cloud.google.com/storage) にファイルがアップロードされたとき（ドキュメントの分類、要約、データ抽出）。
+- [BigQuery](https://cloud.google.com/bigquery) にレコードが書き込まれたとき（異常検知の実行やアラート生成）。
+- [監査ログ（Audit Log）](https://cloud.google.com/logging/docs/audit)のエントリが作成されたとき（ポリシー違反や不審なアクティビティの検出）。
 
-両方のコンテンツ モードがサポートされています。
+両方のコンテンツモードがサポートされています。
 
-- **バイナリ コンテンツ モード** (Eventarc のデフォルト): CloudEvents 属性が送信されます
-  `ce-*` HTTP ヘッダーとして保存され、本文にはイベント データ (通常は
-  Pub/Sub メッセージ ラッパー)。
-- **構造化コンテンツ モード**: すべての CloudEvents 属性とデータは
-  JSON本体。
+- **バイナリコンテンツモード**（Eventarc のデフォルト）: CloudEvents 属性は `ce-*` HTTP ヘッダーとして送信され、ボディにはイベントデータ（通常は Pub/Sub メッセージラッパー）が含まれます。
+- **構造化コンテンツモード**: すべての CloudEvents 属性とデータが JSON ボディに含まれます。
 
 ??? "curlでテストする（構造化モード）"
 
@@ -360,32 +311,30 @@ Eventarc トリガー エンドポイント プロセス
       }'
     ```
 
-#### 応答
+#### レスポンス
 
-| HTTP ステータス |意味 |
+| HTTP ステータス | 意味 |
 | :---------- | :------ |
-| **200** |イベントは正常に処理されました。 Eventarc は配送を確認します。 |
-| **500** |処理に失敗しました。 Eventarc は、再試行ポリシーに基づいて配信を再試行します。 |
+| **200** | イベントが正常に処理されました。Eventarc は配信を確認応答（ack）します。 |
+| **500** | 処理に失敗しました。Eventarc は再試行ポリシーに基づいて配信を再試行します。 |
 
 ## 構成
 
 ### 同時実行制御
 
-トリガーエンドポイントはセマフォを使用して同時エージェントの数を制限します
-呼び出し。これにより、エージェントが LLM モデルの割り当てを超過するのを防ぎます。
-イベントのバースト中に。
+トリガーエンドポイントはセマフォを使用して、同時に実行されるエージェント呼び出しの数を制限します。これにより、イベントのバースト発生時にエージェントが LLM モデルのクォータ（割り当て上限）を超過するのを防ぎます。
 
 === "Python"
 
-    |設定 |デフォルト |環境変数 |
+    | 設定 | デフォルト | 環境変数 |
     | :------ | :------ | :------------------- |
-    |最大同時呼び出し数 | 10 | `ADK_TRIGGER_MAX_CONCURRENT` |
+    | 最大同時呼び出し数 | 10 | `ADK_TRIGGER_MAX_CONCURRENT` |
 
 === "Go"
 
-    |設定 |デフォルト |フラグ |
+    | 設定 | デフォルト | フラグ |
     | :------ | :------ | :------------------- |
-    |最大同時呼び出し数 | 100 | `--trigger_max_concurrent_runs` |
+    | 最大同時呼び出し数 | 100 | `--trigger_max_concurrent_runs` |
 
     デフォルトでは、ADK Go は最大 100 件の同時呼び出しを許可し、ADK Python は 10 件を許可します。
 
@@ -393,10 +342,7 @@ Eventarc トリガー エンドポイント プロセス
 
         ADK Go v2.3.0 から v2.5.0 では、Pub/Sub トリガーに `--trigger_max_concurrent_runs` が適用されないため、Pub/Sub イベントは同時実行制限なしで実行されます。Pub/Sub の同時実行数を制限するには、ADK Go v2.6.0 以降を使用してください。
 
-同時実行制限に達すると、受信リクエストはキューに入れられて処理されます。
-スロットが利用可能になるにつれて。同時実行制御はプロセスごとに行われます。デプロイする場合
-複数の Cloud Run インスタンス。各インスタンスは独自の独立したインスタンスを維持します。
-セマフォ。
+同時実行数の上限に達すると、受信リクエストはキューに入れられ、スロットが空き次第順次処理されます。同時実行制御はプロセス単位で行われます。複数の Cloud Run インスタンスをデプロイした場合、各インスタンスがそれぞれ独立したセマフォを保持します。
 
 === "Python"
 
@@ -413,102 +359,68 @@ Eventarc トリガー エンドポイント プロセス
 
 ### バックオフによる自動再試行
 
-トリガーエンドポイントには、次のような一時的なエラーに対する再試行ロジックが組み込まれています。
-`429 RESOURCE_EXHAUSTED` の応答。一時的なエラーが検出されると、
-リクエストは指数バックオフとジッターを伴って再試行されます。
+トリガーエンドポイントには、`429 RESOURCE_EXHAUSTED` レスポンスなどの一時的なエラーに対する再試行ロジックが組み込まれています。一時的なエラーが検出されると、ジッター付きの指数バックオフでリクエストが再試行されます。
 
 === "Python"
 
-    |設定 |デフォルト |環境変数 |
+    | 設定 | デフォルト | 環境変数 |
     | :------ | :------ | :------------------- |
-    |最大再試行回数 | 3 | `ADK_TRIGGER_MAX_RETRIES` |
-    |ベース バックオフ遅延 | 1.0秒 | `ADK_TRIGGER_RETRY_BASE_DELAY` |
-    |最大バックオフ遅延 | 30.0秒 | `ADK_TRIGGER_RETRY_MAX_DELAY` |
+    | 最大再試行回数 | 3 | `ADK_TRIGGER_MAX_RETRIES` |
+    | ベースバックオフ遅延 | 1.0s | `ADK_TRIGGER_RETRY_BASE_DELAY` |
+    | 最大バックオフ遅延 | 30.0s | `ADK_TRIGGER_RETRY_MAX_DELAY` |
 
 === "Go"
 
-    |設定 |デフォルト |フラグ |
+    | 設定 | デフォルト | フラグ |
     | :------ | :------ | :------------------- |
-    |最大再試行回数 | 3 | `--trigger_max_retries` |
-    |ベース バックオフ遅延 | 1.0秒 | `--trigger_base_delay` |
-    |最大バックオフ遅延 | 10.0秒 | `--trigger_max_delay` |
+    | 最大再試行回数 | 3 | `--trigger_max_retries` |
+    | ベースバックオフ遅延 | 1.0s | `--trigger_base_delay` |
+    | 最大バックオフ遅延 | 10.0s | `--trigger_max_delay` |
 
     デフォルトでは、ADK Go はバックオフ遅延の上限を 10 秒とし、ADK Python は 30 秒とします。
 
-すべての再試行が完了すると、エンドポイントは HTTP 500 を返し、シグナルを送信します。
-Pub/Sub または Eventarc を使用して、より高いレベルで配信を再試行します。
-非一時的なエラーは、再試行せずにすぐに失敗します。
+すべての再試行を使い果たすと、エンドポイントは HTTP 500 を返し、上位レベルで配信を再試行するよう Pub/Sub または Eventarc に通知します。一時的でないエラーは再試行されず、即座に失敗します。
 
-### エラー処理と災害復旧
+### エラー処理と障害復旧
 
-トリガーベースのワークロードの災害復旧は、トリガーによって処理されます。
-ADK ではなくサービス:
+トリガーベースのワークロードにおける障害復旧は、ADK ではなくトリガー元のサービスによって処理されます。
 
-- エージェントがクラッシュするかエラーを返した場合、Pub/Sub または Eventarc は機能しません。
-  確認応答を受信し、メッセージを自動的に再配信します。
-- 最大再試行回数に達すると、未処理のメッセージは次の場所に移動します。
-  [dead-letter queue (DLQ)](https://cloud.google.com/pubsub/docs/dead-letter-topics)
-  構成されている場合。
-- 再配信のたびに新しいセッションが作成されます。トリガーのワークロードはステートレスです
-  設計上。
+- エージェントがクラッシュするかエラーを返した場合、Pub/Sub または Eventarc は確認応答（ack）を受信しないため、メッセージを自動的に再配信します。
+- 最大再試行回数に達すると、未処理のメッセージは（構成されている場合）[デッドレターキュー（DLQ）](https://cloud.google.com/pubsub/docs/dead-letter-topics)に移動します。
+- 再配信のたびに新しいセッションが作成されます。トリガーワークロードは設計上ステートレスです。
 
 ### タイムアウトに関する考慮事項
 
-すべてのトリガー エンドポイントは同期的に処理し、エージェントが次の処理を行うのを待ちます。
-応答を返す前に完了してください。これは設計によるもので、HTTP を維持します。
-リクエストアライブにより、ホスティングインフラストラクチャが
-エージェントがまだ動作している間にプロセスを実行してください。同期応答コード
-(200 または 500) により、Pub/Sub と Eventarc が正しく認識できるようになります。
-成功するか、再試行をトリガーします。
+すべてのトリガーエンドポイントは同期的に処理を行い、エージェントの実行が完了してからレスポンスを返します。これは意図的な設計です。HTTP リクエストを接続状態に保つことで、エージェントの実行中にホスティングインフラストラクチャがプロセスを終了してしまうのを防ぎます。また、同期的なレスポンスコード（200 または 500）によって、Pub/Sub や Eventarc が処理成功を正しく認識したり再試行をトリガーしたりできるようになります。
 
-最大処理時間はアップストリーム サービスによって制御されます。
+最大処理時間はアップストリームのサービスによって決まります。
 
-|サービス |最大タイムアウト |
+| サービス | 最大タイムアウト |
 | :------ | :---------- |
-| Pub/Sub プッシュ | 10 分 (期限確認) |
-|イブンターク | 10 分 ([Standard](https://cloud.google.com/eventarc/standard/docs/overview) はトランスポートとして Pub/Sub を使用します。[Advanced](https://cloud.google.com/eventarc/advanced/docs/overview) はパイプライン経由で配信します) |
+| Pub/Sub push | 10 分（確認応答期限） |
+| Eventarc | 10 分（[Standard](https://cloud.google.com/eventarc/standard/docs/overview) はトランスポートとして Pub/Sub を使用、[Advanced](https://cloud.google.com/eventarc/advanced/docs/overview) はパイプライン経由で配信） |
 
-トリガー エンドポイントは、10 分以内に完了するエージェント向けに設計されています。
-これは、個々のイベントの処理、検証の実行、
-ドキュメントを分類し、結果をダウンストリーム サービスに書き込みます。
+トリガーエンドポイントは、10 分以内に完了するエージェント向けに設計されています。個々のイベントの処理、検証の実行、ドキュメントの分類、ダウンストリームサービスへの結果の書き込みなどに適しています。
 
-!!! warning "長期にわたって実行されるエージェント"
-    トリガー エンドポイントは、10 を超える時間がかかるエージェントには適していません。
-    完了までに数分。長時間実行されるワークロードの場合は、次を使用します。
-    [Pub/Sub pull subscriptions](https://cloud.google.com/pubsub/docs/pull)、
-    [Cloud Run Jobs](https://cloud.google.com/run/docs/create-jobs)、または
-    代わりにワーカー プール アーキテクチャを使用します。
+!!! warning "長時間実行されるエージェント"
+    トリガーエンドポイントは、完了までに 10 分以上かかるエージェントには適していません。長時間実行されるワークロードには、代わりに [Pub/Sub pull サブスクリプション](https://cloud.google.com/pubsub/docs/pull)、[Cloud Run ジョブ](https://cloud.google.com/run/docs/create-jobs)、またはワーカープールアーキテクチャを使用してください。
 
 ### セッションのライフサイクル
 
-セッションは、他のすべての ADK エントリ ポイントと同じパターンに従います。彼らは
-設定されたものを通じて作成されました
-[`SessionService`](../sessions/session/index.md)。デフォルトでは、ADK は
-`InMemorySessionService`、トリガーセッションを一時的にします: ごとに作成されます
-イベントが発生し、処理後に破棄されます。
+セッションは、他のすべての ADK エントリポイントと同じパターンに従い、構成された [`SessionService`](../sessions/session/index.md) を通じて作成されます。デフォルトでは ADK は `InMemorySessionService` を使用するため、トリガーセッションはエフェメラル（一時的）となり、イベントごとに作成されて処理完了後に破棄されます。
 
-永続的な `SessionService` (たとえば、`DatabaseSessionService`) を構成する場合、
-トリガーセッションは自動的に保存されます。これは監査に役立ちます。
-イベント駆動型ワークロードのデバッグと事後分析。
+永続的な `SessionService`（`DatabaseSessionService` など）を構成すると、トリガーセッションは自動的に永続化されます。これはイベント駆動型ワークロードの監査、デバッグ、および事後分析に役立ちます。
 
 ## デプロイ
 
-以下の例では、[Cloud Run](https://cloud.google.com/run) を
-導入対象。現在、Cloud Run が推奨プラットフォームです。
-トリガーエンドポイントを備えたアンビエントエージェントを展開します。
+以下の例では、デプロイ先として [Cloud Run](https://cloud.google.com/run) を使用します。現在、トリガーエンドポイントを備えたアンビエントエージェントのデプロイには Cloud Run が推奨プラットフォームです。
 
 !!! note "認証とセキュリティ"
-    トリガー エンドポイントは、ADK Web サーバー内の標準 HTTP ルートです。
-    認証とセキュリティは展開レベルで適用されます。
-    他の ADK エンドポイントと同じです。認証を有効にして導入した場合
-    (推奨)、すべてのエンドポイントに有効な認証情報が必要です。 GCP サービス
-    [service account](https://cloud.google.com/iam/docs/service-accounts) を使用して認証する
-    アイデンティティ。詳細については、各サービスのドキュメントを参照してください。
+    トリガーエンドポイントは ADK Web サーバー内の標準的な HTTP ルートです。認証とセキュリティは、他の ADK エンドポイントと同様にデプロイレベルで適用されます。認証を有効にしてデプロイした場合（推奨）、すべてのエンドポイントで有効な認証情報が必要です。Google Cloud サービスは[サービスアカウント](https://cloud.google.com/iam/docs/service-accounts) ID を使用して認証します。詳細については、各サービスのドキュメントを参照してください。
 
 === "Python"
 
-    を使用してトリガーを有効にしてエージェントを Cloud Run にデプロイします。
-    `--trigger_sources` フラグ:
+    `--trigger_sources` フラグを使用してトリガーを有効にし、エージェントを Cloud Run にデプロイします:
 
     ```bash
     adk deploy cloud_run \
@@ -535,22 +447,16 @@ ADK ではなくサービス:
 
     ADK Go は `/api` パスプレフィックス配下でトリガーエンドポイントを提供するため、push サブスクリプションと Eventarc トリガーは `/api/apps/{app_name}/trigger/pubsub` および `/api/apps/{app_name}/trigger/eventarc` を指すように設定してください。
 
-導入後、適切な GCP インフラストラクチャをエージェントのインフラストラクチャに接続します。
-トリガーエンドポイント:
+デプロイ後、適切な Google Cloud インフラストラクチャをエージェントのトリガーエンドポイントに接続します:
 
-- **Pub/Sub**: [push subscription](https://cloud.google.com/pubsub/docs/push) を作成します
-  `/apps/{app_name}/trigger/pubsub` を指します。
-- **Eventarc**: [Eventarc Standard trigger](https://docs.cloud.google.com/eventarc/standard/docs/event-providers-targets) を作成します
-  または [Eventarc Advanced pipeline](https://cloud.google.com/eventarc/advanced/docs/overview)
-  `/apps/{app_name}/trigger/eventarc` にルーティングします。
-- **クラウド スケジューラ**: [scheduler job](https://cloud.google.com/scheduler/docs/creating) を作成します
-  cron スケジュールで Pub/Sub トピックに公開します。
+- **Pub/Sub**: `/apps/{app_name}/trigger/pubsub` を指す [push サブスクリプション](https://cloud.google.com/pubsub/docs/push)を作成します。
+- **Eventarc**: `/apps/{app_name}/trigger/eventarc` にルーティングする [Eventarc Standard トリガー](https://docs.cloud.google.com/eventarc/standard/docs/event-providers-targets)または [Eventarc Advanced パイプライン](https://cloud.google.com/eventarc/advanced/docs/overview)を作成します。
+- **Cloud Scheduler**: cron スケジュールに従って Pub/Sub トピックにパブリッシュ（発行）する[スケジューラジョブ](https://cloud.google.com/scheduler/docs/creating)を作成します。
 
-完全な展開については、[Deploy to Cloud Run](../deploy/cloud-run.md) を参照してください。
-指示。
+完全なデプロイ手順については、[Cloud Run へのデプロイ](../deploy/cloud-run.md)を参照してください。
 
-## 次は何ですか?
+## 次のステップ
 
-- [deploy your agent to Cloud Run](../deploy/cloud-run.md) の方法を学ぶ
-- インタラクティブなエージェント呼び出しについては、[API server endpoints](api-server.md) を参照してください。
-- [Pub/Sub toolset](../integrations/pubsub.md) を使用して、エージェントにメッセージのパブリッシュとプルの機能を与えます
+- [エージェントを Cloud Run にデプロイする](../deploy/cloud-run.md)方法を学ぶ
+- インタラクティブなエージェント呼び出しについては、[API サーバーエンドポイント](api-server.md)を参照する
+- [Pub/Sub ツールセット](../integrations/pubsub.md)を使用して、エージェントにメッセージのパブリッシュおよび pull 機能を付与する

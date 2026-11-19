@@ -51,9 +51,9 @@ ADK 에이전트를 Google Cloud에 연결할 때 몇 가지 인증 옵션이 �
         export GOOGLE_CLOUD_LOCATION="cloud-location"   # 예: us-central1
         ```
 
-!!! note "`GOOGLE_GENAI_USE_ENTERPRISE`는 이전에 `GOOGLE_GENAI_USE_ENTERPRISE`였습니다"
+!!! note "`GOOGLE_GENAI_USE_ENTERPRISE`는 이전에 `GOOGLE_GENAI_USE_VERTEXAI`였습니다"
 
-    이 두 변수 이름은 동일한 기능을 수행합니다. 만약 `GOOGLE_GENAI_USE_ENTERPRISE`를 설정했으나 에이전트가 Agent Platform에 연결되지 않는다면 이전 버전의 ADK를 사용 중인 것입니다. 대신 `GOOGLE_GENAI_USE_ENTERPRISE`를 사용하거나 더 최신 버전의 ADK로 업데이트하세요.
+    이 두 변수 이름은 동일한 기능을 수행합니다. 만약 `GOOGLE_GENAI_USE_ENTERPRISE`를 설정했으나 에이전트가 Agent Platform에 연결되지 않는다면 이전 버전의 ADK를 사용 중인 것입니다. 대신 `GOOGLE_GENAI_USE_VERTEXAI`를 사용하거나 더 최신 버전의 ADK로 업데이트하세요.
 
 ### 프로덕션용 서비스 계정 {#service-account}
 
@@ -75,7 +75,7 @@ ADK 에이전트를 Google Cloud에 연결할 때 몇 가지 인증 옵션이 �
 
 ### 테스트용 Agent Platform 익스프레스 모드 {#express-mode}
 
-Express Mode는 복잡한 gcloud 인증 없이 프로토타이핑을 위해 API 키 기반의 단순화된 설정을 제공합니다.
+Express Mode는 전체 `gcloud` 인증 설정 없이 빠른 프로토타이핑을 수행할 수 있도록 API 키 기반의 간소화된 설정을 제공합니다.
 
 1. API 키를 얻기 위해 [Express Mode](https://console.cloud.google.com/expressmode)에 가입합니다.
 2. 다음 환경 변수를 설정합니다.

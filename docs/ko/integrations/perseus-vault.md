@@ -11,7 +11,7 @@ catalog_tags: ["data"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[`adk-perseus-vault-memory`](https://pypi.org/project/adk-perseus-vault-memory/) 통합은 ADK 에이전트를 영구적인 세션 간 메모리 백엔드인 Perseus Vault에 연결합니다. SQLite 데이터베이스가 내장된 단일 Rust 바이너리로 지원되며, **클라우드 의존성이 전혀 없고** 모든 것이 로컬에서 실행됩니다. 메모리는 AES-256-GCM으로 유휴 상태일 때 암호화되며, 검색은 FTS5 키워드 매칭과 밀집 벡터(dense vector) 검색을 결합합니다.
+[`adk-perseus-vault-memory`](https://pypi.org/project/adk-perseus-vault-memory/) 통합은 ADK 에이전트를 영구적인 세션 간 메모리 백엔드인 Perseus Vault에 연결합니다. SQLite 데이터베이스가 내장된 단일 Rust 바이너리로 지원되며, **클라우드 의존성이 전혀 없고** 모든 것이 로컬에서 실행됩니다. 메모리는 저장 시(at rest) AES-256-GCM으로 암호화되며, 검색은 FTS5 키워드 매칭과 밀집 벡터(dense vector) 검색을 결합합니다.
 
 ## 사용 사례
 
@@ -55,11 +55,11 @@ runner = Runner(
 )
 ```
 
-세션이 완료된 후 `await memory_service.add_session_to_memory(session)`을 호출하여 세션을 보존합니다. 에이전트는 나중 세션에서 `load_memory` 도구를 통해 기억을 검색합니다. 전체 입력 및 검색 흐름은 [ADK 메모리](/ko/sessions/memory/)를 참고하세요.
+세션이 완료된 후 `await memory_service.add_session_to_memory(session)`을 호출하여 세션을 영구 저장합니다. 이후 세션에서 에이전트는 `load_memory` 도구를 통해 메모리를 불러옵니다. 전체 수집(ingestion) 및 조회 흐름은 [ADK 메모리](/ko/sessions/memory/)를 참고하세요.
 
 ### Perseus 라이브 컨텍스트 (선택사항)
 
-실시간 워크스페이스 인식을 하려면 `perseus` extra를 설치하세요.
+실시간 워크스페이스 인식을 하려면 `perseus` 부가 패키지(extra)를 설치하세요.
 
 ```bash
 pip install adk-perseus-vault-memory[perseus]
@@ -100,14 +100,14 @@ session = await runner.session_service.create_session(
 
 | 메서드 | 설명 |
 |---|---|
-| `add_session_to_memory(session)` | 전체 세션의 이벤트를 유지 보존 |
+| `add_session_to_memory(session)` | 전체 세션의 이벤트를 영구 저장 |
 | `add_events_to_memory(...)` | 증분 이벤트 델타 추가 |
 | `add_memory(...)` | 명시적인 메모리 엔트리 저장 |
 | `search_memory(...)` | 메모리 전반에 걸친 FTS5 키워드 검색 |
 
 ## 백엔드 비교
 
-| 백엔드 | 의존성 | 유휴 암호화 | 검색 | 호스팅 |
+| 백엔드 | 의존성 | 저장 데이터 암호화(At-rest) | 검색 | 호스팅 |
 |---|---|---|---|---|
 | **InMemoryMemoryService** | 없음 | 영구 저장되지 않음 | 키워드 | 로컬 (임시) |
 | **VertexAiMemoryBankService** | Google Cloud | Google 관리형 | 시맨틱 (Gemini) | Google Cloud |

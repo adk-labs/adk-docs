@@ -25,7 +25,7 @@ ADKエージェントで使用できる以下のサードパーティ製ツー�
     </div>
     <div class="tool-card-content">
       <h3>Bright Data</h3>
-      <p>Webのための単一のMCP - AIを実際のWebデータに接続します</p>
+      <p>Web向けの統合MCP — AIをリアルタイムのWebデータに接続します</p>
     </div>
   </a>
 

@@ -12,8 +12,8 @@ hide:
 
 컴퓨터 사용 모델에 대한 자세한 내용은 Gemini API [컴퓨터 사용](https://ai.google.dev/gemini-api/docs/computer-use) 또는 Google Cloud Vertex AI API [컴퓨터 사용](https://cloud.google.com/vertex-ai/generative-ai/docs/computer-use)을 참고하세요.
 
-!!! example "미리보기 출시"
-    컴퓨터 사용 모델 및 도구는 미리보기 출시입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참고하세요.
+!!! example "프리뷰 기능"
+    컴퓨터 사용 모델 및 도구는 프리뷰(Preview) 단계입니다. 자세한 내용은 [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참고하세요.
 
 ## 설정
 
@@ -64,7 +64,7 @@ hide:
 
 ## 도구 사용
 
-에이전트에 도구로 추가하여 컴퓨터 사용 도구 세트를 사용합니다. 도구를 구성할 때 에이전트가 컴퓨터를 사용하는 인터페이스를 정의하는 `BaseComputer` 클래스의 구현을 제공해야 합니다. 다음 예에서는 이 목적을 위해 `PlaywrightComputer` 클래스가 정의됩니다. 이 구현에 대한 코드는 [computer_use](https://github.com/google/adk-python/blob/main/contributing/samples/computer_use/playwright.py) 에이전트 샘플 프로젝트의 `playwright.py` 파일에서 찾을 수 있습니다.
+컴퓨터 사용 도구 세트는 에이전트에 도구로 추가하여 사용합니다. 도구를 구성할 때는 에이전트가 컴퓨터를 제어하기 위한 인터페이스를 정의하는 `BaseComputer` 클래스의 구현체를 제공해야 합니다. 다음 예시에서는 이를 위해 `PlaywrightComputer` 클래스를 정의하여 사용합니다. 이 구현 코드는 [computer_use](https://github.com/google/adk-python/blob/main/contributing/samples/computer_use/playwright.py) 에이전트 샘플 프로젝트의 `playwright.py` 파일에서 확인할 수 있습니다.
 
 ```python
 from google.adk import Agent

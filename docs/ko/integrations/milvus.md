@@ -120,7 +120,7 @@ export MILVUS_TOKEN="your-token"
 
 === "RAG 도구 세트"
 
-    `MilvusVectorStore`를 사용하여 텍스트를 인덱싱한 다음 `MilvusToolset`을 통해 노출시킵니다.
+    `MilvusVectorStore`를 사용하여 텍스트를 인덱싱한 다음 `MilvusToolset`을 통해 제공합니다.
 
     ```python
     from adk_milvus import MilvusToolset

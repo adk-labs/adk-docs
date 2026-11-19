@@ -6,7 +6,7 @@
 
 `LlmAgent`（しばしば`Agent`と略されます）はADKにおけるコアコンポーネントであり、アプリケーションの「思考」部分として機能します。大規模言語モデル（LLM）の能力を活用して、推論、自然言語の理解、意思決定、応答の生成、ツールとの対話を行います。
 
-事前に定義された実行パスに従う決定論的な[ワークフローエージェント](workflow-agents/index.md)とは異なり、`LlmAgent`の振る舞いは非決定的です。LLMを使用して指示とコンテキストを解釈し、動的に処理方法を決定したり、どのツールを使用するか（もし使用する場合）、あるいは他のエージェントに制御を移すかを判断します。
+事前に定義された実行パスに従う決定論的な[ワークフローエージェント](workflow-agents/index.md)とは異なり、`LlmAgent`の振る舞いは非決定的です。LLMを使用して指示とコンテキストを解釈し、進め方や使用するツール（必要な場合）、あるいは他のエージェントへ制御を移すかどうかを動的に判断します。
 
 効果的な`LlmAgent`を構築するには、そのアイデンティティを定義し、指示を通じてその振る舞いを明確にガイドし、必要なツールと能力を備えさせることが含まれます。
 
@@ -16,7 +16,7 @@
 
 *   **`name` (必須):** 全てのエージェントには一意の文字列識別子が必要です。この`name`は内部操作、特にエージェント同士が互いを参照したりタスクを委任したりする必要があるマルチエージェントシステムにおいて非常に重要です。エージェントの機能を反映した説明的な名前（例: `customer_support_router`, `billing_inquiry_agent`）を選択してください。Pythonでは、名前は有効なPython識別子である必要があり、ADKは予約名の`user`を拒否します。
 
-*   **`description` (任意、マルチエージェントで推奨):** エージェントの能力に関する簡潔な要約を提供します。この説明は主に、*他の*LLMエージェントがこのエージェントにタスクをルーティングすべきかどうかを判断するために使用されます。同僚と区別できるように、具体的に記述してください（例: 「請求エージェント」ではなく、「現在の請求書に関する問い合わせを処理します」）。
+*   **`description` (任意、マルチエージェントで推奨):** エージェントの能力に関する簡潔な要約を提供します。この説明は主に、*他の*LLMエージェントがこのエージェントにタスクをルーティングすべきかどうかを判断するために使用されます。他のエージェント（ピアエージェント）と区別できるように、具体的に記述してください（例: 「請求エージェント」ではなく、「現在の請求書に関する問い合わせを処理します」）。
 
 *   **`model` (Pythonでは任意):** このエージェントの推論を支える基盤となるLLMを指定します。これは`"gemini-flash-latest"`のような文字列識別子、または`BaseLlm`インスタンスのいずれかです。`model`を省略すると、エージェントは`SequentialAgent`、`ParallelAgent`、`LoopAgent`、カスタム`BaseAgent`など、`LlmAgent`ではない親をスキップして、最も近い`LlmAgent`の祖先のモデルを継承します。どの祖先もモデルを設定していない場合、エージェントは[デフォルトモデルの設定](#configure-a-default-model)で説明されている組み込みのデフォルトモデルにフォールバックします。モデルの選択は、エージェントの能力、コスト、パフォーマンスに影響します。利用可能なオプションと考慮事項については、[モデル](/ja/agents/models/)ページを参照してください。
 
@@ -53,7 +53,7 @@
 
 ## エージェントのガイド：指示 (`instruction`)
 
-`instruction`パラメータは、`LlmAgent`の振る舞いを形成する上で、おそらく最も重要な要素です。これは、エージェントに以下のことを伝える文字列（または文字列を返す関数）です：
+`instruction`パラメータは、`LlmAgent`の振る舞いを形成する上で最も重要な要素の一つです。これはエージェントに次の内容を伝える文字列（または文字列を返す関数）です。
 
 *   その中核となるタスクや目標。
 *   その性格やペルソナ（例：「あなたは親切なアシスタントです」、「あなたは機知に富んだ海賊です」）。
@@ -138,7 +138,7 @@ Python で Model Context Protocol（MCP）サーバーからエージェント�
 *   **`tools` (任意):** エージェントが使用できるツールのリストを提供します。リストの各項目は、次のいずれかです：
     *   ネイティブ関数またはメソッド（`FunctionTool`としてラップ）。Python ADKはネイティブ関数を自動的に`FunctionTool`にラップしますが、Javaでは`FunctionTool.create(...)`を使用してメソッドを明示的にラップする必要があります。
     *   `BaseTool`を継承するクラスのインスタンス。
-    *   別のエージェントをラップしてエージェント間の委任を可能にする`AgentTool`。詳細については、[カスタムエージェントワークフロー](/ja/agents/custom-agents/#delegation)を参照してください。Pythonでは、`AgentTool(agent=...)`構文を直接使用する代わりに、エージェントに`mode='single_turn'`を設定して`sub_agents`に追加し、インラインツールとして自動的に公開する方法が推奨されます。
+    *   別のエージェントをラップしてエージェント間の委任を可能にする`AgentTool`。詳細については、[カスタムエージェントワークフロー](/ja/agents/custom-agents/#delegation)を参照してください。Pythonでは、`AgentTool(agent=...)`構文を直接使用する代わりに、エージェントに`mode='single_turn'`を設定して`sub_agents`に追加し、インラインツールとして自動的に提供する方法が推奨されます。
 
 LLMは、関数/ツール名、説明（docstringや`description`フィールドから）、およびパラメータスキーマを使用して、会話と指示に基づいてどのツールを呼び出すかを決定します。
 
@@ -211,7 +211,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 
 `generate_content_config`を使用して、基盤となるLLMが応答を生成する方法を調整できます。
 
-*   **`generate_content_config` (任意):** [`google.genai.types.GenerateContentConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.GenerateContentConfig)のインスタンスを渡して、`temperature`（ランダム性）、`max_output_tokens`（応答の長さ）、`top_p`、`top_k`、およびセーフティセッティングなどのパラメータを制御します。Pythonでは、`generate_content_config`に`tools`、`system_instruction`、`response_schema`、または`http_options.base_url`を設定すると、ADKは`ValueError`を送出します。最初の3つは代わりにエージェントの`tools`、`instruction`、`output_schema`フィールドを通じて設定し、ベースURLはモデルまたはそのクライアントに設定してください。
+*   **`generate_content_config` (任意):** [`google.genai.types.GenerateContentConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.GenerateContentConfig)のインスタンスを渡して、`temperature`（ランダム性）、`max_output_tokens`（応答の長さ）、`top_p`、`top_k`、およびセーフティ設定などのパラメータを制御します。Pythonでは、`generate_content_config`に`tools`、`system_instruction`、`response_schema`、または`http_options.base_url`を設定すると、ADKは`ValueError`を送出します。最初の3つは代わりにエージェントの`tools`、`instruction`、`output_schema`フィールドを通じて設定し、ベースURLはモデルまたはそのクライアントに設定してください。
 
 === "Python"
 
@@ -304,7 +304,7 @@ LLMは、関数/ツール名、説明（docstringや`description`フィールド
 
 ### データの構造化 (`input_schema`, `output_schema`, `output_key`) {#data-handling}
 
-`LLM Agent`との構造化されたデータ交換を必要とするシナリオのために、ADKはスキーマ定義を使用して期待される入力と望ましい出力フォーマットを定義するメカニズムを提供します。
+`LlmAgent` との構造化されたデータ交換を必要とするシナリオのために、ADKはスキーマ定義を使用して期待される入力と望ましい出力フォーマットを定義するメカニズムを提供します。
 
 *   **`input_schema` (任意):** このエージェントが*ツールとして*呼び出されたときに期待される入力構造を表すスキーマを定義します。Pythonでは、`AgentTool`が呼び出し元エージェントの引数をスキーマに照らして検証し、その結果をこのエージェントの入力として渡します。このスキーマは、エージェントに直接送信されるユーザーメッセージには適用されません。
 
@@ -676,9 +676,9 @@ call_agent("If it's raining in New York right now, what is the current temperatu
 *   **コールバック:** `before_model_callback`、`after_model_callback`などを使用して、実行ポイント（モデル呼び出しの前後、ツール呼び出しの前後）をインターセプトします。[コールバック](../callbacks/types-of-callbacks.md)を参照してください。
 *   **マルチエージェント制御:** 計画（`planner`）、エージェント転送の制御（`disallow_transfer_to_parent`, `disallow_transfer_to_peers`）、およびアプリ内のすべてのエージェントに対する一貫したアイデンティティとルール（`GlobalInstructionPlugin`、または Go の `GlobalInstruction`）を含む、エージェント対話の高度な戦略。[マルチエージェント](../workflows/patterns.md)を参照してください。
 
-## Kotlin の例の補足
+## Kotlin の実装例
 
-英語原文に追加された Kotlin の `LlmAgent` 例を以下にも掲載します。
+Kotlin での `LlmAgent` の実装例を以下に示します。
 
 ### 基本的な識別情報
 
@@ -716,9 +716,9 @@ call_agent("If it's raining in New York right now, what is the current temperatu
 --8<-- "examples/kotlin/snippets/agents/llm-agent/CapitalAgent.kt:full_example"
 ```
 
-## コード実行例の補足
+## コード実行の実装例
 
-英語原文に含まれているコード実行例を以下にも掲載します。
+コード実行機能を使用するエージェントの実装例を以下に示します。
 
 ### Python
 

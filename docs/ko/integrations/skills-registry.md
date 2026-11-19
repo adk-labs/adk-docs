@@ -15,8 +15,8 @@ Agent Development Kit(ADK)의 **Google Cloud Skill Registry** 통합을 사용�
 개발자가 중앙 저장소에 카탈로그화된 원격 Skills를 동적으로 검색, 발견,
 가져올 수 있습니다.
 
-초기화 시 사용 가능한 모든 skill을 에이전트 컨텍스트 창에 정적으로 주입하는
-대신, Skill Registry는 **필요할 때 대상만 가져오는 검색**을 가능하게 합니다.
+초기화 시 사용 가능한 모든 skill을 에이전트 컨텍스트 윈도우에 정적으로 주입하는
+대신, Skill Registry는 **필요할 때 대상만 가져오는 조회(on-demand targeted retrieval)**를 가능하게 합니다.
 특화된 기능 카탈로그가 수백 또는 수천 개의 skill로 확장되더라도, 에이전트는
 사용자 의도에 따라 필요한 정확한 지침과 도구만 동적으로 발견, 다운로드,
 활성화할 수 있습니다. Skills Registry 서비스에 대한 자세한 내용은
@@ -32,7 +32,7 @@ Agent Development Kit(ADK)의 **Google Cloud Skill Registry** 통합을 사용�
 
 ## 사용 사례
 
-*   **컨텍스트 창 최적화**: 사용자 프롬프트에 실제로 필요한 경우에만 skill의
+*   **컨텍스트 윈도우 최적화**: 사용자 프롬프트에 실제로 필요한 경우에만 skill의
     시스템 지침과 도구를 로드해 중요한 토큰을 절약합니다.
 *   **엔터프라이즈 재사용성**: 여러 애플리케이션의 에이전트가 사용할 수 있는
     공유 및 비공개 skill의 중앙 관리 저장소를 구축합니다.
@@ -111,7 +111,7 @@ agent = Agent(
 
 ## 작동 방식
 
-원격 registry로 `SkillToolset`을 구성하면 ADK는 skill 수명 주기를 관리하는
+원격 registry로 `SkillToolset`을 구성하면 ADK는 skill 라이프사이클을 관리하는
 두 가지 기본 제공 도구를 에이전트에 자동으로 제공합니다.
 
 ```mermaid

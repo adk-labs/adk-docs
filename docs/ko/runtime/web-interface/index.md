@@ -138,12 +138,12 @@ ADK 웹 인터페이스의 주요 기능:
 
     `adk web` 명령의 주요 옵션입니다. 사용 가능한 모든 옵션을 보려면 `adk web --help`를 실행하세요.
 
-    | Option | Description | Default |
+    | 옵션 | 설명 | 기본값 |
     |--------|-------------|---------|
     | `--port` | 서버 실행 포트 | `8000` |
     | `--host` | 호스트 바인딩 주소 | `127.0.0.1` |
     | `--session_service_uri` | 사용자 지정 세션 저장소 URI | `<agents_dir>/<agent>/.adk/session.db`에 위치한 에이전트별 SQLite |
-    | `--artifact_service_uri` | 사용자 지정 아티팩트 저장소 URI | `<agents_dir>/<agent>/.adk/artifacts`에 위치한 에이전트별 디렉토리 |
+    | `--artifact_service_uri` | 사용자 지정 아티팩트 저장소 URI | `<agents_dir>/<agent>/.adk/artifacts`에 위치한 에이전트별 디렉터리 |
     | `--reload/--no-reload` | 코드 변경 시 자동 리로드 활성화 | `true` |
 
     로컬 `.adk` 폴더 대신 인메모리 세션 및 아티팩트 서비스로 대체하려면 `--no_use_local_storage`를 전달하세요.
@@ -158,11 +158,11 @@ ADK 웹 인터페이스의 주요 기능:
 
     `adk web` 명령의 주요 옵션입니다. 사용 가능한 모든 옵션을 보려면 `adk web --help`를 실행하세요.
 
-    | Option | Description | Default |
+    | 옵션 | 설명 | 기본값 |
     |--------|-------------|---------|
     | `--port` | 서버 실행 포트 | `8000` |
     | `--host` | 호스트 바인딩 주소 | `127.0.0.1` |
-    | `--session_service_uri` | 사용자 지정 세션 저장소 URI | In-memory |
+    | `--session_service_uri` | 사용자 지정 세션 저장소 URI | 인메모리 |
     | `--artifact_service_uri` | 사용자 지정 아티팩트 저장소 URI | 로컬 `.adk/artifacts` |
     | `--reload/--no-reload` | 코드 변경 시 자동 리로드 활성화 | `true` |
 
@@ -176,7 +176,7 @@ ADK 웹 인터페이스의 주요 기능:
 
     !!! note "Go 플래그는 Python/TypeScript와 다릅니다"
 
-        Go 웹 론처는 Python이나 TypeScript의 `adk web`과 동일한 플래그를 사용하지 않습니다. `--host`, `--session_service_uri`, `--artifact_service_uri`, `--reload`와 같은 옵션은 제공되지 않습니다. 세션 및 아티팩트 서비스는 명령줄 플래그가 아닌 `launcher.Config`를 구성할 때 Go 코드에서 설정됩니다.
+        Go 웹 런처는 Python이나 TypeScript의 `adk web`과 동일한 플래그를 사용하지 않습니다. `--host`, `--session_service_uri`, `--artifact_service_uri`, `--reload`와 같은 옵션은 제공되지 않습니다. 세션 및 아티팩트 서비스는 명령줄 플래그가 아닌 `launcher.Config`를 구성할 때 Go 코드에서 설정됩니다.
 
     플래그는 `web`, `api`, `webui` 하위 명령으로 나뉩니다. 관련 하위 명령 키워드 뒤에 플래그를 전달하세요.
 

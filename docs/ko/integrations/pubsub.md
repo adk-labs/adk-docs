@@ -1,6 +1,6 @@
 ---
 catalog_title: Pub/Sub 도구
-catalog_description: Google Cloud Pub/Sub에서 메시지를 게시, pull, acknowledge 합니다
+catalog_description: Google Cloud Pub/Sub에서 메시지를 발행(publish), 수신(pull), 확인(acknowledge)합니다
 catalog_icon: /integrations/assets/pubsub.png
 catalog_tags: ["google"]
 ---
@@ -13,7 +13,7 @@ catalog_tags: ["google"]
 
 `PubSubToolset`을 사용하면 에이전트가
 [Google Cloud Pub/Sub](https://cloud.google.com/pubsub)
-서비스와 상호작용하여 메시지를 게시(publish), pull, acknowledge할 수 있습니다.
+서비스와 상호작용하여 메시지를 발행(publish), 수신(pull), 확인(acknowledge)할 수 있습니다.
 
 ## 사전 준비 사항
 
@@ -21,7 +21,7 @@ catalog_tags: ["google"]
 
 1.  Google Cloud 프로젝트에서 **Pub/Sub API를 활성화**합니다.
 2.  **인증 및 권한 부여**: 에이전트를 실행하는 주체(예: 사용자, 서비스 계정)가 Pub/Sub 작업 수행에 필요한 IAM 권한이 있어야 합니다. Pub/Sub 역할에 대한 자세한 내용은 [Pub/Sub 액세스 제어 문서](https://cloud.google.com/pubsub/docs/access-control)를 참고하세요.
-3.  **토픽 또는 구독 생성**: 메시지 게시를 위한 [토픽 생성](https://cloud.google.com/pubsub/docs/create-topic)과 메시지 수신을 위한 [구독 생성](https://cloud.google.com/pubsub/docs/create-subscription)이 필요합니다.
+3.  **토픽 또는 구독 생성**: 메시지 발행을 위한 [토픽 생성](https://cloud.google.com/pubsub/docs/create-topic)과 메시지 수신을 위한 [구독 생성](https://cloud.google.com/pubsub/docs/create-subscription)이 필요합니다.
 
 
 ## 사용 방법
@@ -35,20 +35,20 @@ catalog_tags: ["google"]
 
 ### `publish_message`
 
-Pub/Sub 토픽에 메시지를 게시합니다.
+Pub/Sub 토픽에 메시지를 발행(publish)합니다.
 
-| Parameter      | Type                | Description                                                                                             |
+| 매개변수 | 타입 | 설명 |
 | -------------- | ------------------- | ------------------------------------------------------------------------------------------------------- |
 | `topic_name`   | `str`               | Pub/Sub 토픽 이름(예: `projects/my-project/topics/my-topic`)입니다.                            |
-| `message`      | `str`               | 게시할 메시지 내용입니다.                                                                         |
+| `message`      | `str`               | 발행할 메시지 내용입니다.                                                                         |
 | `attributes`   | `dict[str, str]`    | (선택 사항) 메시지에 첨부할 속성입니다.                                                         |
-| `ordering_key` | `str`               | (선택 사항) 메시지의 정렬 키입니다. 이 값을 설정하면 메시지가 순서대로 게시됩니다. |
+| `ordering_key` | `str`               | (선택 사항) 메시지의 정렬 키입니다. 이 값을 설정하면 메시지가 순서대로 발행됩니다. |
 
 ### `pull_messages`
 
-Pub/Sub 구독에서 메시지를 pull합니다.
+Pub/Sub 구독에서 메시지를 수신(pull)합니다.
 
-| Parameter           | Type    | Description                                                                                                 |
+| 매개변수 | 타입 | 설명 |
 | ------------------- | ------- | ----------------------------------------------------------------------------------------------------------- |
 | `subscription_name` | `str`   | Pub/Sub 구독 이름(예: `projects/my-project/subscriptions/my-sub`)입니다.                      |
 | `max_messages`      | `int`   | (선택 사항) pull할 최대 메시지 수입니다. 기본값은 `1`입니다.                                         |
@@ -56,9 +56,9 @@ Pub/Sub 구독에서 메시지를 pull합니다.
 
 ### `acknowledge_messages`
 
-Pub/Sub 구독의 하나 이상의 메시지를 acknowledge합니다.
+Pub/Sub 구독의 하나 이상의 메시지를 확인(acknowledge)합니다.
 
-| Parameter           | Type          | Description                                                                                       |
+| 매개변수 | 타입 | 설명 |
 | ------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
 | `subscription_name` | `str`         | Pub/Sub 구독 이름(예: `projects/my-project/subscriptions/my-sub`)입니다.            |
 | `ack_ids`           | `list[str]`   | acknowledge할 acknowledgment ID 목록입니다.                                                      |

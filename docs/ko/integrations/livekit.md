@@ -64,7 +64,7 @@ async def open_the_door(door_id: str, tool_context: ToolContext) -> str:
 
 ## 시작하기
 
-- `livekit` 엑스트라가 포함된 [ADK](https://adk.dev) >= 2.9.0.
+- `livekit` 부가 패키지(extra)가 포함된 [ADK](https://adk.dev) >= 2.9.0.
 - [라이브 모델](../live/models.md)을 위한 인증 정보.
 - 자체 호스팅 또는 LiveKit Cloud 상의 LiveKit 서버. 둘 다 동일한 API를 제공하므로 동일한 워커 코드가 두 환경 모두에서 실행됩니다. 로컬 개발의 경우 `livekit-server --dev`를 실행합니다.
 - 환경 변수로 설정된 `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`.
@@ -134,7 +134,7 @@ server = AgentServer(port=int(os.environ["PORT"]))
 
 프로덕션에서 워커가 사용하는 포트가 8081이므로 `--port=8081`로 배포해도 동일하게 동작합니다. 또한 워커는 통화 사이에 유휴(idle) 상태를 유지하므로 디스패치를 계속 수락할 수 있도록 `--no-cpu-throttling` 및 `--min-instances=1` 옵션으로 실행하세요.
 
-디스패치된 각 작업은 자체 프로세스에서 실행되므로 내구성 있는 [세션 서비스](../sessions/index.md)를 사용하세요. `InMemoryRunner` 클래스는 통화 간에 아무것도 유지하지 않습니다.
+디스패치된 각 작업은 자체 프로세스에서 실행되므로 내구성 있는 [세션 서비스](../sessions/index.md)를 사용하세요. `InMemoryRunner` 클래스는 통화 간에 어떤 데이터도 영구 저장하지 않습니다.
 
 ## 추가 리소스
 

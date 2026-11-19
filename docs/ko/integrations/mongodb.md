@@ -267,7 +267,7 @@ MongoDB Atlas 클러스터와 연결합니다. 이 통합을 통해 에이전트
 
 ### 환경 변수
 
-Variable | Description
+변수 | 설명
 -------- | -----------
 `MDB_MCP_CONNECTION_STRING` | 데이터베이스 접근용 MongoDB 연결 문자열
 `MDB_MCP_API_CLIENT_ID` | Atlas 도구용 Atlas API client ID

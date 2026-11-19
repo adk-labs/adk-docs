@@ -237,14 +237,14 @@ ADK 에이전트를 트랜잭션 이메일 서비스인 [Mailgun](https://www.ma
 `get_logs` | 이메일 이벤트 로그 조회
 `get_stats` | 도메인, 태그, 제공자, 기기, 국가별 집계 통계 조회
 
-### Suppressions
+### 발송 제한 목록(Suppressions)
 
 도구 | 설명
 ---- | -----------
 `get_bounces` | 반송 이메일 주소 조회
 `get_unsubscribes` | 수신 거부 이메일 주소 조회
 `get_complaints` | 클레임(불만) 기록 조회
-`get_allowlist` | allowlist 항목 조회
+`get_allowlist` | 허용 목록(allowlist) 항목 조회
 
 ### IP
 
@@ -261,10 +261,10 @@ ADK 에이전트를 트랜잭션 이메일 서비스인 [Mailgun](https://www.ma
 
 ## 구성
 
-Variable | Required | Default | Description
+변수 | 필수 여부 | 기본값 | 설명
 -------- | -------- | ------- | -----------
-`MAILGUN_API_KEY` | Yes | — | Mailgun API 키
-`MAILGUN_API_REGION` | No | `us` | API 리전: `us` 또는 `eu`
+`MAILGUN_API_KEY` | 필수 | — | Mailgun API 키
+`MAILGUN_API_REGION` | 선택 | `us` | API 리전: `us` 또는 `eu`
 
 ## 추가 리소스
 

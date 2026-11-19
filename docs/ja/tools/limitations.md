@@ -14,10 +14,10 @@
     `google.adk.tools` からエクスポートされている共有の `google_search` インスタンスでは、
     このフラグはオフのままです。以下の回避策 #2 を参照してください。
 
-一般に、1 つのエージェントで複数ツールを使用できますが、
-特定のツールをエージェント内で使う場合、そのエージェントでは他ツールを
+一般に、1 つのエージェントで複数のツールを使用できますが、
+特定のツールをエージェント内で使う場合、そのエージェントでは他のツールを
 併用できません。次の ADK ツールは、1 つのエージェントオブジェクト内で
-他ツールなしに単独でのみ使用できます。
+**単独でのみ（他のツールと併用不可）**使用できます。
 
 *   Gemini API の [Code Execution](/tools/gemini-api/code-execution/)
 *   Gemini API の [Google Search](/tools/gemini-api/google-search/)
@@ -235,7 +235,7 @@ ADK Python には `GoogleSearchTool` と `VertexAiSearchTool` について
 
 ## Kotlin の回避策例
 
-英語原文に追加された Kotlin の例では、組み込みツールの制限を避けるため、ルートエージェントでのみ組み込みツールを直接構成するパターンを示しています。
+Kotlin では、組み込みツールの制限を回避するため、ルートエージェントでのみ組み込みツールを直接構成するパターンを使用できます。
 
 ```kotlin
 --8<-- "examples/kotlin/snippets/tools/LimitationsWorkaround.kt:workaround_1"

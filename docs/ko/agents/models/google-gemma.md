@@ -8,10 +8,9 @@ ADK 에이전트는 다양한 기능을 제공하는 [Google Gemma](https://ai.g
 과 [구조화된 출력](/agents/llm-agents/#data-handling) 등 여러 Gemma 기능을 지원합니다.
 
 Gemma 4는 [Gemini API](https://ai.google.dev/gemini-api/docs)를 통해 사용할 수 있으며,
-또는 Google Cloud의 여러 셀프 호스팅 옵션을 통해 사용할 수도 있습니다:
 [Vertex AI](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemma4),
 [Google Kubernetes Engine](https://docs.cloud.google.com/kubernetes-engine/docs/tutorials/serve-gemma-gpu-vllm),
-[Cloud Run](https://docs.cloud.google.com/run/docs/run-gemma-on-cloud-run).
+[Cloud Run](https://docs.cloud.google.com/run/docs/run-gemma-on-cloud-run) 등 Google Cloud의 여러 셀프 호스팅 옵션을 통해서도 사용할 수 있습니다.
 
 Gemma 3는 아래의 Gemma 4 예시와 다른 모델 클래스가 필요합니다. 네이티브 함수 호출이나 시스템 지침을 지원하지 않으므로 ADK는 전용 클래스로 해결 방법을 제공합니다. Gemini API에는 `Gemma(model="gemma-3-27b-it")`를 사용하고 Ollama에는 `Gemma3Ollama()`를 사용합니다(둘 다 `google.adk.models`에서 제공). `Gemma3Ollama`는 [LiteLLM](/ko/agents/models/litellm/)이 설치되어 있는 경우에만 정의됩니다 (`litellm>=1.84`).
 
@@ -312,15 +311,15 @@ export GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
 ```
 
 ### 사용 예시
-Food Tour Agent의 기능을 테스트하려면 채팅에 다음 프롬프트 중 하나를 붙여 넣어 보세요.
+음식 투어 에이전트의 기능을 테스트하려면 채팅에 다음 프롬프트 중 하나를 붙여 넣어 보세요.
 
 - *"토론토에서 라멘 투어를 하고 싶습니다. 하루 예산은 60달러입니다. 상위 3개 장소에 대한 도보 경로를 알려 주고 각 장소에서 무엇을 주문해야 하는지도 알려 주세요."*
-- *"이 딥디시 피자 사진 [이미지 URL 삽입]이 있습니다. 시카고 네이비 피어 주변에서 이 메뉴의 최고의 장소를 찾고 싶습니다. 도보 투어를 구성하고 각 정류장에서 꼭 먹어야 할 한 조각이 무엇인지 알려 주세요."*
-- *"다운타운 오스틴에서 정통 바비큐 투어를 찾고 있습니다. 예산은 100달러 이하로 유지합시다. 평점이 높은 3곳 사이의 도보 경로를 만들고 가장 좋은 고기 부위에 대한 내부 팁을 알려 주세요."*
+- *"이 딥디시 피자 사진 [이미지 URL 삽입]이 있습니다. 시카고 네이비 피어 주변에서 이 메뉴로 가장 유명한 곳을 찾고 싶습니다. 도보 투어를 구성하고 각 방문지에서 꼭 먹어 봐야 할 피자 한 조각이 무엇인지 알려 주세요."*
+- *"다운타운 오스틴에서 정통 바비큐 투어를 찾고 있습니다. 예산은 100달러 이하로 유지하고 싶습니다. 평점이 높은 3곳 사이의 도보 경로를 만들고 가장 맛있는 고기 부위에 대한 현지인 추천 팁을 알려 주세요."*
 
 에이전트는 다음을 수행합니다.
 
 1. 가능성이 높은 요리 또는 음식 스타일을 추론합니다.
 2. Google Maps MCP 도구를 사용해 관련 장소를 검색합니다.
-3. 선택한 정류장 사이의 도보 경로를 계산합니다.
-4. 추천과 내부 팁이 포함된 구조화된 음식 투어를 반환합니다.
+3. 선택한 방문지 사이의 도보 경로를 계산합니다.
+4. 추천 메뉴와 현지인 팁이 포함된 구조화된 음식 투어 일정을 반환합니다.

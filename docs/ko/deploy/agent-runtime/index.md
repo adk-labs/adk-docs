@@ -1,49 +1,27 @@
-# 에이전트 런타임에 배포
+# Agent Runtime에 배포하기
 
 <div class="language-support-tag" title="Agent Runtime은 현재 Python과 Go를 지원합니다.">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go v1.2.0</span>
 </div>
 
-Google Cloud 에이전트 플랫폼
-[Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)
-개발자가 에이전트를 확장하고 관리하는 데 도움이 되는 모듈식 서비스 세트입니다.
-생산. 에이전트 런타임을 사용하면 프로덕션 환경에 에이전트를 배포할 수 있습니다.
-엔드투엔드 관리형 인프라를 통해 지능적인 구축에 집중할 수 있습니다.
-그리고 영향력 있는 에이전트. ADK 에이전트를 에이전트 런타임에 배포하면 코드가
-더 큰 세트의 일부인 *에이전트 런타임* 환경에서 실행됩니다.
-Agent Runtime 제품이 제공하는 에이전트 서비스의 내용입니다.
+Google Cloud Agent Platform의 [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)은 프로덕션 환경에서 에이전트를 확장하고 관리할 수 있도록 돕는 모듈형 서비스 모음입니다. Agent Runtime은 엔드투엔드 관리형 인프라를 제공하므로, 인프라 운영 부담 없이 지능적이고 영향력 있는 에이전트를 구축하는 데 집중하며 프로덕션 환경에 배포할 수 있습니다. ADK 에이전트를 Agent Runtime에 배포하면 코드는 Agent Runtime 제품이 제공하는 광범위한 에이전트 서비스 중 하나인 *Agent Runtime* 환경에서 실행됩니다.
 
-이 가이드에는 다음과 같은 배포 경로가 포함되어 있습니다.
-목적:
+이 가이드는 목적에 따라 다음 두 가지 배포 경로를 안내합니다.
 
-* **[Standard deployment](/deploy/agent-runtime/deploy/)**: 팔로우
-    에이전트에 ADK 에이전트 배포를 신중하게 관리하려는 경우 이 표준 배포 경로
-    런타임. 이 배포 경로는 Cloud Console, ADK 명령줄을 사용합니다.
-    인터페이스를 제공하며 단계별 지침을 제공합니다. 이 경로를 권장합니다
-    Google Cloud 프로젝트 구성에 이미 익숙한 사용자를 위해
-    프로덕션 배포를 준비하는 사용자.
+* **[표준 배포](/deploy/agent-runtime/deploy/)**: ADK 에이전트를 Agent Runtime에 배포하는 과정을 세밀하게 관리하려는 경우 이 표준 배포 경로를 따르세요. Google Cloud 콘솔과 ADK 명령줄 인터페이스(CLI)를 사용하며 단계별 지침을 제공합니다. Google Cloud 프로젝트 구성에 이미 익숙한 사용자나 프로덕션 배포를 준비하는 사용자에게 권장됩니다.
 
-* **[Agents CLI deployment](/deploy/agent-runtime/agents-cli/)**:
-    완전히 구성된 Google을 설정하려면 이 가속화된 배포 경로를 따르세요.
-    CI/CD, 코드형 인프라, 배포 파이프라인을 갖춘 클라우드 환경
-    ADK 에이전트의 경우. 결제가 사용 설정된 Google Cloud 프로젝트가 필요합니다.
-    Agent Platform의 Agents CLI는 ADK 프로젝트를 신속하게 배포하는 데 도움이 됩니다.
-    핵심 기능을 확장하는 고급 서비스 구성이 포함됩니다.
-    보다 성숙한 사용 사례를 위한 에이전트 런타임.
+* **[Agents CLI 배포](/deploy/agent-runtime/agents-cli/)**: ADK 에이전트를 위한 CI/CD, 코드형 인프라(IaC), 배포 파이프라인이 완비된 Google Cloud 환경을 빠르게 구축하려면 이 가속 배포 경로를 따르세요. 결제가 활성화된 Google Cloud 프로젝트가 필요합니다. Agent Platform의 Agents CLI는 ADK 프로젝트를 신속하게 배포할 수 있도록 지원하며, 성숙한 프로덕션 사용 사례를 위해 Agent Runtime의 핵심 기능을 확장하는 고급 서비스 구성을 포함합니다.
 
-!!! note "Google Cloud의 에이전트 런타임 서비스"
+!!! note "Google Cloud의 Agent Runtime 서비스"
 
-    Agent Runtime은 유료 서비스이므로 이용시 비용이 발생할 수 있습니다.
-    무료 액세스 등급보다 높습니다. 자세한 내용은 다음에서 확인할 수 있습니다.
-    [Agent Runtime pricing page](https://cloud.google.com/vertex-ai/pricing#vertex-ai-agent-engine).
+    Agent Runtime은 유료 서비스이며 무료 사용 한도를 초과하면 비용이 발생할 수 있습니다. 자세한 내용은 [Agent Runtime 요금 페이지](https://cloud.google.com/vertex-ai/pricing#vertex-ai-agent-engine)에서 확인할 수 있습니다.
 
 ## 배포 페이로드 {#payload}
 
-ADK 에이전트 프로젝트를 Agent Runtime에 배포하면 다음 내용이 표시됩니다.
-서비스에 업로드된 내용:
+ADK 에이전트 프로젝트를 Agent Runtime에 배포하면 다음 항목이 서비스에 업로드됩니다.
 
 - ADK 에이전트 코드
-- ADK 에이전트 코드에 선언된 모든 종속성
+- ADK 에이전트 코드에 선언된 모든 의존성 패키지
 
 사용하는 프로그래밍 언어에 따라 다음 섹션에 설명된 추가 라이브러리가 포함될 수 있습니다.
 

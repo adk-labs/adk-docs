@@ -51,7 +51,7 @@ root_agent = Agent(
 
 안전 설정은 실시간 세션에 [안전 및 콘텐츠 필터](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/capabilities/configure-safety-filters)를 적용합니다. 모델이 구성된 임계값을 초과하는 콘텐츠를 생성하면 플랫폼에서 생성을 중단합니다.
 
-실시간 연결은 시작 시점에 이러한 설정을 설정하므로 세션 지속 시간 동안 고정된 상태로 유지됩니다. 세션 상태를 보간(interpolate)하는 지침 문자열은 세션이 시작될 때 한 번 렌더링되며, 재개된 연결은 해당 렌더링된 지침을 재사용합니다.
+실시간 연결은 시작 시점에 이러한 설정을 적용하므로 세션 지속 시간 동안 고정된 상태로 유지됩니다. 세션 상태를 보간(interpolate)하는 지침 문자열은 세션이 시작될 때 한 번 렌더링되며, 재개된 연결은 해당 렌더링된 지침을 재사용합니다.
 
 ## 대화 유효성 검사
 
@@ -148,7 +148,7 @@ def validate_refund(
 
 ## 요구사항 및 모범 사례
 
-- **전사(Transcription) 활성 상태 유지**: 텍스트 기반 대화 유효성 검사는 음성 전사에 의존합니다. `RunConfig.input_audio_transcription`과 `RunConfig.output_audio_transcription`은 모두 기본적으로 활성화되어 있습니다. 둘 중 하나를 `None`으로 설정하면 해당 검별 계층이 비활성화됩니다.
+- **전사(Transcription) 활성 상태 유지**: 텍스트 기반 대화 유효성 검사는 음성 전사에 의존합니다. `RunConfig.input_audio_transcription`과 `RunConfig.output_audio_transcription`은 모두 기본적으로 활성화되어 있습니다. 둘 중 하나를 `None`으로 설정하면 해당 검증 계층이 비활성화됩니다.
 - **검증기 경량화 유지**: 라이브 수신 루프의 콜백은 오디오 처리와 인라인으로 실행됩니다. 빠른 로컬 검사를 통해 대화의 응답성을 유지하세요. 더 무거운 검사의 경우 전체 턴 전사를 평가하거나 장시간 실행되는 분석을 비동기적으로 오프로드하세요.
 - **에이전트 전반에 걸친 정책 적용**: `App`에 [Model Armor](../integrations/model-armor.md)와 같은 플러그인을 등록하면 콜백 코드를 중복하지 않고도 애플리케이션의 모든 에이전트에 일관된 보안 규칙을 적용할 수 있습니다.
 

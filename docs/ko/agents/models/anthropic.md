@@ -386,7 +386,7 @@ ADK는 프롬프트 캐싱 및 LiteLLM 라이브러리를 통한 모델 액세�
 
 긴 지침이나 많은 도구를 가진 에이전트는 모든 요청에서 동일한 프롬프트 프리픽스를 전송합니다. Claude 프롬프트 캐싱은 해당 프리픽스를 저장하여 이후 요청에서 재사용함으로써 비용과 지연 시간을 줄여줍니다. ADK는 도구 선언, 시스템 지침 및 최신 대화 콘텐츠에 캐시 중단점(cache breakpoint)을 배치합니다.
 
-Anthropic은 기본값인 5분 캐시 수명과 1시간 캐시 수명을 지원합니다. 동일한 에이전트에 대한 요청 간격이 보통 5분을 초과하는 경우 1시간 수명을 사용하세요. 자세한 내용은 Anthropic의 [프롬프트 캐싱](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) 문서를 참고하세요.
+Anthropic은 기본값인 5분 캐시 유효 시간(TTL)과 1시간 캐시 유효 시간을 지원합니다. 동일한 에이전트에 대한 요청 간격이 보통 5분을 초과하는 경우 1시간 유효 시간을 사용하세요. 자세한 내용은 Anthropic의 [프롬프트 캐싱](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) 문서를 참고하세요.
 
 === "Python"
 

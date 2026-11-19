@@ -4,9 +4,9 @@
   <span class="lst-supported">ADK でサポート</span><span class="lst-python">Python v1.18.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
-!!! note "可用性"
+!!! note "提供状況"
 
-    このプラグインを試すには、ツリーのトップから ADK をビルドするか、バージョン 1.19 の公式リリースを待つことをお勧めします。バージョン 1.19 がリリースされると、このメモは削除されます。
+    このプラグインを試すには、最新の開発ブランチ（HEAD）から ADK をビルドするか、バージョン 1.19 の公式リリースを待つことをお勧めします。バージョン 1.19 がリリースされると、この注記は削除されます。
 
 BigQuery Agent Analytics プラグインは、詳細なエージェントの動作分析のための堅牢なソリューションを提供することで、Agent Development Kit (ADK) を大幅に強化します。ADK プラグイン アーキテクチャと BigQuery Storage Write API を使用して、重要な運用イベントを Google BigQuery テーブルに直接キャプチャしてログに記録し、デバッグ、リアルタイム監視、および包括的なオフライン パフォーマンス評価のための高度な機能を提供します。
 
@@ -29,7 +29,7 @@ BigQuery Agent Analytics プラグインは、詳細なエージェントの動�
 ## 前提条件
 
 -   **BigQuery API** が有効になっている **Google Cloud プロジェクト**。
--   **BigQuery データセット:** プラグインを使用する前に、ログ テーブルを格納するデータセットを作成します。テーブルが存在しない場合、プラグインはデータセット内に必要なイベント テーブルを自動的に作成します。デフォルトでは、このテーブルの名前は agent_events ですが、プラグイン構成の table_id パラメータでこれをカスタマイズできます。
+-   **BigQuery データセット:** プラグインを使用する前に、ログ テーブルを格納するデータセットを作成します。テーブルが存在しない場合、プラグインはデータセット内に必要なイベント テーブルを自動的に作成します。デフォルトでは、このテーブルの名前は `agent_events` ですが、プラグイン構成の `table_id` パラメータでカスタマイズできます。
 -   **認証:**
     -   **ローカル:** `gcloud auth application-default login` を実行します。
     -   **クラウド:** サービス アカウントに必要な権限があることを確認します。
@@ -106,7 +106,7 @@ app = App(
 
 ### エージェントの実行とテスト
 
-エージェントを実行し、「何ができるか教えて」や「クラウド プロジェクト <your-gcp-project-id> のデータセットを一覧表示して」などのチャット インターフェイスを介していくつかのリクエストを行うことで、プラグインをテストします。これらのアクションは、Google Cloud プロジェクトの BigQuery インスタンスに記録されるイベントを作成します。これらのイベントが処理されると、このクエリを使用して [BigQuery コンソール](https://console.cloud.google.com/bigquery) でそのデータを表示できます。
+エージェントを実行し、「何ができるか教えて」や「クラウド プロジェクト `<your-gcp-project-id>` のデータセットを一覧表示して」などのチャット インターフェイスを介していくつかのリクエストを行うことで、プラグインをテストします。これらのアクションは、Google Cloud プロジェクトの BigQuery インスタンスに記録されるイベントを作成します。これらのイベントが処理されると、次のクエリを使用して [BigQuery コンソール](https://console.cloud.google.com/bigquery) でそのデータを表示できます。
 
 ```sql
 SELECT timestamp, event_type, content
@@ -194,9 +194,7 @@ CLUSTER BY event_type, agent, user_id;
 
 !!! note
 
-    - すべての可変コンテンツ フィールド (ユーザー入力、モデル応答、ツール引数、システム プロンプトなど)
-    - は、ログ サイズを管理するために `max_content_length` 文字に切り捨てられます。
-    - (`BigQueryLoggerConfig` で構成、デフォルト 500)
+    すべての可変コンテンツ フィールド（ユーザー入力、モデル応答、ツール引数、システム プロンプトなど）は、ログ サイズを管理するために `max_content_length` 文字（`BigQueryLoggerConfig` で構成、デフォルト `500`）に切り捨てられます。
 
 #### LLM インタラクション (プラグイン ライフサイクル)
 
@@ -235,8 +233,7 @@ after_model_callback
 </pre></p></td>
       <td><strong>ツール呼び出しの場合:</strong> <code>Tool Name: {func_names} | Token Usage: {usage}</code><br>
 <br>
-**テキストの場合:** `Tool Name: text_response, text: '{text}' | Token Usage:
-{usage}`</td>
+<strong>テキストの場合:</strong> <code>Tool Name: text_response, text: '{text}' | Token Usage: {usage}</code></td>
       <td><p><pre>
 Tool Name: text_response, text: 'Here is the data.' | Token Usage: {prompt: 10, candidates: 5, total: 15}
 </pre></p></td>

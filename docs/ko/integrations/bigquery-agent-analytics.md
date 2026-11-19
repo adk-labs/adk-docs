@@ -19,8 +19,8 @@ BigQuery Agent Analytics 플러그인은 심층적인 에이전트 동작 분석
 
 이 플러그인에는 세 가지 안정성 및 관측 가능성 기능이 포함되어 있습니다(Java: v1.7.0 이상, Go):
 
-- **리전 간 Storage Write API 라우팅:** `US` 멀티 리전 외부(예: `EU` 또는 `northamerica-northeast1`)의 BigQuery 데이터 세트에 대한 쓰기가 이제 쓰기 스트림을 소유한 리전으로 라우팅됩니다. 이전에는 "session not found" / stream-not-found 오류로 실패하고 모든 행이 조용히 누락될 수 있었습니다.
-- **전송 및 콘텐츠 인시던트 관측 가능성:** 전송 손실이 원인별로 추적됩니다. 또한 Python과 Go에서는 센티널(sentinel) 행이 기록되는 포맷터 실패(및 Python의 경우 파서 실패)도 집계합니다. 이러한 카운터는 `BigQueryAgentAnalyticsPlugin.get_drop_stats()`(Python), `DropStats()`(Go, `agentanalytics.AsBigQueryAgentAnalyticsPlugin`을 통해), 또는 `getDropStats()`(Java)를 통해 노출되므로, 호스트에서 이를 폴링하여 자체 모니터링 시스템으로 내보낼 수 있습니다. 원인 키 및 시맨틱은 언어마다 다르며, 자세한 내용은 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참고하세요.
+- **리전 간 Storage Write API 라우팅:** `US` 멀티 리전 외부(예: `EU` 또는 `northamerica-northeast1`)의 BigQuery 데이터 세트에 대한 쓰기가 이제 쓰기 스트림을 소유한 리전으로 라우팅됩니다. 이전에는 "session not found" / stream-not-found 오류로 실패하고 모든 행이 별도 경고 없이 누락될 수 있었습니다.
+- **전송 및 콘텐츠 인시던트 관측 가능성:** 전송 손실이 원인별로 추적됩니다. 또한 Python과 Go에서는 센티널(sentinel) 행이 기록되는 포맷터 실패(및 Python의 경우 파서 실패)도 집계합니다. 이러한 카운터는 `BigQueryAgentAnalyticsPlugin.get_drop_stats()`(Python), `DropStats()`(Go, `agentanalytics.AsBigQueryAgentAnalyticsPlugin`을 통해), 또는 `getDropStats()`(Java)를 통해 제공되므로, 호스트에서 이를 폴링하여 자체 모니터링 시스템으로 내보낼 수 있습니다. 원인 키 및 시맨틱은 언어마다 다르며, 자세한 내용은 [드롭된 이벤트 관측 가능성](#dropped-event-observability)을 참고하세요.
 - **Cloud Trace에서 중복 span 제거:** Agent Engine 원격 분석(`GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY=true`) 또는 기타 Cloud Trace 내보내기 도구가 전역 tracer provider에 연결되어 있을 때, 플러그인이 각 프레임워크 span 옆에 중복 span을 생성하지 않습니다. 플러그인은 여전히 주변 OTel span에서 `trace_id`를 상속하므로 BigQuery 행이 Cloud Trace 트레이스와 원활하게 조인됩니다.
 
 Python(v2.7.0 이상) 및 Go에서는 모든 행이 쓰기 큐에 들어가기 전에 고유한 32자 16진수 `event_id`를 부여받습니다. 이 ID는 Storage Write API 재시도 전반에서 유지되므로 소비자가 재시도 중복을 식별할 수 있습니다. 선택적 `exactly_once_delivery`(Go의 경우 `ExactlyOnceDelivery`) 모드는 커밋된 스트림과 명시적 오프셋을 사용하여 활성 프로세서 내에서 모호한 재시도로 인한 중복을 방지합니다. 이 모드는 무손실 전송을 보장하지 않으며, 스트림 교체 및 `ResourceExhausted` 재시도 처리가 Python과 Go 간에 다르므로 자세한 내용은 [전송 및 중복 제거](#delivery-and-deduplication)를 참고하세요.
@@ -38,7 +38,7 @@ ADK Python v2.13.0 이상에서는 플러그인에 다음 기능이 추가되었
 
 ??? note "Kotlin 지원"
 
-    **Kotlin** 플러그인은 호출 수명 주기 이벤트를 로깅합니다. 호출이 시작될 때 `INVOCATION_STARTING` 행을 작성하고 종료될 때 `INVOCATION_COMPLETED` 행을 작성하며, 아직 존재하지 않는 경우 처음 사용할 때 파티셔닝 및 클러스터링된 이벤트 테이블을 생성합니다.
+    **Kotlin** 플러그인은 호출 라이프사이클 이벤트를 로깅합니다. 호출이 시작될 때 `INVOCATION_STARTING` 행을 작성하고 종료될 때 `INVOCATION_COMPLETED` 행을 작성하며, 아직 존재하지 않는 경우 처음 사용할 때 파티셔닝 및 클러스터링된 이벤트 테이블을 생성합니다.
 
     행은 Python, Go 및 Java에서 사용하는 Storage Write API 대신 호출 경로에서 동기적으로 `tabledata.insertAll`을 통해 한 번에 하나씩 삽입됩니다.
 
@@ -46,12 +46,12 @@ ADK Python v2.13.0 이상에서는 플러그인에 다음 기능이 추가되었
 
 ## 사용 사례
 
-- **에이전트 워크플로 디버깅 및 분석:** 광범위한 *플러그인 수명 주기 이벤트*(LLM 호출, 도구 사용) 및 *에이전트 생성 이벤트*(사용자 입력, 모델 응답)를 명확하게 정의된 스키마로 캡처합니다.
+- **에이전트 워크플로 디버깅 및 분석:** 광범위한 *플러그인 라이프사이클 이벤트*(LLM 호출, 도구 사용) 및 *에이전트 생성 이벤트*(사용자 입력, 모델 응답)를 명확하게 정의된 스키마로 캡처합니다.
 - **대용량 분석 및 디버깅:** 높은 처리량과 짧은 지연 시간을 지원하기 위해 Storage Write API를 사용하여 비동기식으로 로깅 작업을 수행합니다.
-- **멀티모달 분석:** 텍스트, 이미지 및 기타 양식을 기록하고 분석합니다. 대용량 파일은 GCS로 오프로드되어 Object Tables를 통해 BigQuery ML에서 액세스할 수 있습니다.
+- **멀티모달 분석:** 텍스트, 이미지 및 기타 모달리티를 기록하고 분석합니다. 대용량 파일은 GCS로 오프로드되어 Object Tables를 통해 BigQuery ML에서 액세스할 수 있습니다.
 - **분산 추적(Distributed Tracing):** 에이전트 실행 흐름을 시각화하기 위해 OpenTelemetry 스타일의 추적(`trace_id`, `span_id`)을 기본적으로 지원합니다.
 - **도구 출처(Tool Provenance):** 각 도구 호출의 출처(로컬 함수, MCP 서버, 하위 에이전트, A2A 원격 에이전트, 전송 에이전트, Toolbox 도구 또는 Skill 툴셋)를 추적합니다.
-- **Human-in-the-Loop(HITL) 추적:** 자격 증명 요청, 확인 프롬프트 및 사용자 입력 요청을 위한 전용 이벤트 유형을 제공합니다.
+- **Human-in-the-Loop(HITL) 추적:** 자격 증명 요청, 도구 실행 승인 프롬프트 및 사용자 입력 요청을 위한 전용 이벤트 유형을 제공합니다.
 - **에이전트 워크플로 추적(ADK 2.0):** 실행 그래프를 재구성하기 위한 `attributes.adk` 엔벨로프와 함께 에이전트 전송, 상태 체크포인트, 이벤트 압축 및 장기 실행 도구 일시중지/재개를 캡처합니다.
 - **쿼리 가능한 이벤트 뷰:** JSON 페이로드 데이터를 unnest하여 다운스트림 분석을 간소화하는 평면화된 이벤트 유형별 BigQuery 뷰(예: `v_llm_request`, `v_tool_completed`)를 자동으로 생성합니다.
 
@@ -321,7 +321,7 @@ ORDER BY timestamp DESC
 LIMIT 20;
 ```
 
-??? example "Full example with GCS offloading, OpenTelemetry, and tools"
+??? example "GCS 오프로딩, OpenTelemetry 및 도구를 포함한 전체 예제"
 
     === "Python"
 
@@ -737,7 +737,7 @@ LIMIT 20;
 
     `BigQueryAgentAnalyticsPlugin` 생성자는 다음 매개변수를 허용합니다. 또한 `**kwargs`도 허용되며, 이는 `BigQueryLoggerConfig`로 직접 전달됩니다(아래 참조).
 
-    | 매개변수 | 유형 | 기본값 | 사용 시점 |
+    | 매개변수 | 타입 | 기본값 | 사용 시점 |
     | --- | --- | --- | --- |
     | `project_id` | `str` | *(필수)* | Google Cloud 프로젝트 선택 |
     | `dataset_id` | `str` | *(필수)* | BigQuery 데이터 세트 선택 |
@@ -760,7 +760,7 @@ LIMIT 20;
 
     아래의 모든 옵션은 선택 사항이며 합리적인 기본값을 가집니다. `BigQueryLoggerConfig` 또는 플러그인 생성자의 `**kwargs`로 전달하세요.
 
-    | 옵션 | 유형 | 기본값 | 설명 |
+    | 옵션 | 타입 | 기본값 | 설명 |
     | --- | --- | --- | --- |
     | `enabled` | `bool` | `True` | 로깅 임시 비활성화 |
     | `table_id` | `str` | `"agent_events"` | 커스텀 BigQuery 테이블 이름 지정 |
@@ -885,7 +885,7 @@ LIMIT 20;
       <span class="lst-supported">ADK 지원 버전</span><span class="lst-python">Python v2.10.0</span>
     </div>
 
-    `flush_on_run_end=False`인 경우 플러그인은 호출자의 이벤트 루프 대신 프로세스 수명 주기를 갖는 전용 백그라운드 이벤트 루프 스레드에서 배치 기록기를 실행합니다. `flush_on_run_end=True`일 때도 해당 스레드를 사용하려면 `use_dedicated_background_loop=True`로 설정하고, 기록기를 호출자의 이벤트 루프에 유지하려면 `False`로 설정하세요.
+    `flush_on_run_end=False`인 경우 플러그인은 호출자의 이벤트 루프 대신 프로세스 라이프사이클을 따르는 전용 백그라운드 이벤트 루프 스레드에서 배치 기록기를 실행합니다. `flush_on_run_end=True`일 때도 해당 스레드를 사용하려면 `use_dedicated_background_loop=True`로 설정하고, 기록기를 호출자의 이벤트 루프에 유지하려면 `False`로 설정하세요.
 
     동일한 프로세스 내에서 동등한 자격 증명으로 동일한 테이블을 대상으로 하는 플러그인 인스턴스는 단일 백그라운드 기록기와 BigQuery 쓰기 클라이언트를 공유하므로, 요청당 하나와 같이 수명이 짧은 플러그인 인스턴스가 각각 새 기록기를 열지 않습니다. 동등성은 자격 증명 ID(예: 서비스 계정 이메일, 범위, 프로젝트)에서 파생됩니다. 어떤 플러그인 인스턴스가 기록기를 공유할지 명시적으로 선택하려면 `credentials_identifier`를 설정하세요. 동등한 자격 증명과 기록기 설정을 가진 인스턴스에 대해서만 동일한 식별자를 사용하세요. 공유 기록기는 이를 생성한 인스턴스의 자격 증명 및 기록기 설정(예: `batch_size`, `retry_config`)을 사용합니다.
 
@@ -1008,7 +1008,7 @@ LIMIT 20;
 
     #### `agentanalytics.Config` 필드
 
-    | 필드 | 유형 | 기본값 (`DefaultConfig()`) | 사용 시점 |
+    | 필드 | 타입 | 기본값 (`DefaultConfig()`) | 사용 시점 |
     | --- | --- | --- | --- |
     | `Enabled` | `bool` | `true` | 플러그인을 활성화하거나 비활성화합니다. `DefaultConfig()` 없이 구조체 리터럴을 사용하는 경우 `Enabled: true`를 명시적으로 설정하세요. |
     | `ProjectID` | `string` | `""` (프로젝트 ID를 설정하거나 플러그인이 자체 클라이언트를 생성할 때 `bigquery.DetectProjectID` 사용; nil이 아닌 `bqClient`가 제공된 경우 빈 값은 `bqClient.Project()`를 사용하며, `bqClient`가 nil인 경우 명시적 프로젝트 ID 설정) | Google Cloud 프로젝트 선택 |
@@ -1286,7 +1286,7 @@ LIMIT 20;
 
     #### BigQueryLoggerConfig Builder 옵션
 
-    | 빌더 메서드 | 유형 | 기본값 | 설명 |
+    | 빌더 메서드 | 타입 | 기본값 | 설명 |
     | --- | --- | --- | --- |
     | `enabled(boolean)` | `boolean` | `true` | 로깅 임시 비활성화 |
     | `projectId(String)` | `String` | *(필수)* | Google Cloud 프로젝트 선택 |
@@ -1350,7 +1350,7 @@ LIMIT 20;
 
     #### BigQueryLoggerConfig 속성
 
-    | 옵션 | 유형 | 기본값 | 사용 시점 |
+    | 옵션 | 타입 | 기본값 | 사용 시점 |
     | --- | --- | --- | --- |
     | `projectId` | `String` | *(필수)* | Google Cloud 프로젝트 선택 |
     | `datasetId` | `String` | *(필수)* | BigQuery 데이터 세트 선택 |
@@ -1384,7 +1384,7 @@ LIMIT 20;
 
 이벤트 테이블(`agent_events`)은 유연한 스키마를 사용합니다. 다음 표는 예시 값과 함께 포괄적인 참조를 제공합니다.
 
-| 필드 이름 | 유형 | 모드 | 설명 | 예시 값 |
+| 필드 이름 | 타입 | 모드 | 설명 | 예시 값 |
 | --- | --- | --- | --- | --- |
 | **timestamp** | `TIMESTAMP` | `REQUIRED` | 이벤트 생성의 UTC 타임스탬프입니다. 기본 정렬 키이자 일별 파티셔닝 키 역할을 합니다. 정밀도는 마이크로초입니다. | `2026-02-03 20:52:17 UTC` |
 | **event_id** | `STRING` | `NULLABLE` | 대기열 진입 전에 할당된 32자의 16진수 ID(Python 및 Go)입니다. Storage Write API 재시도 시에도 유지되므로 소비자가 중복 행을 식별할 수 있습니다. 스키마 버전 2 이전에 작성된 행은 `NULL`입니다. | `ca5e3c9d99e24e46b614f2f44f93bf6e` |
@@ -1393,7 +1393,7 @@ LIMIT 20;
 | **session_id** | `STRING` | `NULLABLE` | 전체 대화 스레드에 대한 영구 식별자입니다. 여러 턴과 하위 에이전트 호출 간에 일정하게 유지됩니다. | `04275a01-1649-4a30-b6a7-5b443c69a7bc` |
 | **invocation_id** | `STRING` | `NULLABLE` | 세션 내의 각 개별 에이전트 실행 또는 턴에 대한 고유 식별자입니다. | `81014e7a-90da-4cb0-adbf-cb6d53955685` |
 | **user_id** | `STRING` | `NULLABLE` | 현재 세션과 연결된 사용자의 식별자입니다. 사용자별 분석에 유용합니다. | `user_12345` |
-| **trace_id** | `STRING` | `NULLABLE` | 트레이스 식별자입니다. 주변 span(예: Agent Engine의 호출 span 또는 ADK Runner span)에서 상속된 경우 32자 16진수 OpenTelemetry 트레이스 ID이므로 BigQuery 행이 기존 Cloud Trace 트레이스와 깔끔하게 조인됩니다. 주변 span이 없으면 Python은 무작위 32자 16진수 폴백을 생성합니다. 주변 span이 없을 때 Go는 `invocation_id`가 비어 있으면 무작위 32자 16진수 `trace_id`를 생성하고, 그렇지 않으면 플러그인당 무작위 시드와 호출 ID에 대해 SHA-256을 사용하여 해당 플러그인 인스턴스 내에서 안정적인 32자 16진수 ID를 생성합니다. Java는 ADK 호출 ID로 폴백합니다. 단일 분산 요청 수명 주기 내의 모든 작업을 연결합니다. | `4bf92f3577b34da6a3ce929d0e0e4736` |
+| **trace_id** | `STRING` | `NULLABLE` | 트레이스 식별자입니다. 주변 span(예: Agent Engine의 호출 span 또는 ADK Runner span)에서 상속된 경우 32자 16진수 OpenTelemetry 트레이스 ID이므로 BigQuery 행이 기존 Cloud Trace 트레이스와 깔끔하게 조인됩니다. 주변 span이 없으면 Python은 무작위 32자 16진수 폴백을 생성합니다. 주변 span이 없을 때 Go는 `invocation_id`가 비어 있으면 무작위 32자 16진수 `trace_id`를 생성하고, 그렇지 않으면 플러그인당 무작위 시드와 호출 ID에 대해 SHA-256을 사용하여 해당 플러그인 인스턴스 내에서 안정적인 32자 16진수 ID를 생성합니다. Java는 ADK 호출 ID로 폴백합니다. 단일 분산 요청 라이프사이클 내의 모든 작업을 연결합니다. | `4bf92f3577b34da6a3ce929d0e0e4736` |
 | **span_id** | `STRING` | `NULLABLE` | 이 특정 원자적 작업을 식별하는 16자 16진수 Span ID입니다. **OTel span으로 내보내지지 않고 플러그인의 내부 스택에서 추적됩니다.** 플러그인은 구성된 OpenTelemetry provider에 대해 `tracer.start_span`을 호출하지 않습니다. Python 및 Java에서는 주변 OTel span이 활성화되어 있을 때 루트 호출 span이 해당 ID를 재사용하며, Go에서는 플러그인이 항상 자체 16자 16진수 루트 `span_id`를 생성하고 주변 OTel span ID를 `parent_span_id`에 기록합니다. 하위 span은 내부적으로 생성됩니다([추적 및 관측 가능성](#tracing-and-observability) 참조). | `00f067aa0ba902b7` |
 | **parent_span_id** | `STRING` | `NULLABLE` | 직전 호출자의 Span ID로, 부모-자식 실행 트리(DAG)를 재구성하는 데 사용됩니다. | `5fb397be34d23b0f` |
 | **content** | `JSON` | `NULLABLE` | JSON으로 저장된 이벤트별 데이터(페이로드)입니다. 구조는 이벤트 유형에 따라 다릅니다. | `{"model": "gemini-flash-latest", ...}` |
@@ -1523,9 +1523,9 @@ Go는 `v_user_message_received`부터 `v_node_error`까지 모든 25개의 이�
 기타 Java 뷰의 차이점은 다음과 같습니다.
 
 - Java는 `v_agent_error`, `v_invocation_error`, `v_node_output`, `v_node_error` 이벤트를 내보내지 않으므로 해당 뷰를 생성하지 않습니다.
-- Java의 `v_llm_response`는 `usage_metadata`에서 끝납니다. `usage_thinking_tokens`, `usage_tool_use_tokens`, `cache_metadata`, `cache_type`, `finish_reason`은 노출되지 않습니다.
-- Java의 `v_agent_response`는 `response_text` 대신 `text_summary`를 노출합니다.
-- Java의 `v_agent_starting`은 `agent_instruction`만 노출합니다.
+- Java의 `v_llm_response`는 `usage_metadata`에서 끝납니다. `usage_thinking_tokens`, `usage_tool_use_tokens`, `cache_metadata`, `cache_type`, `finish_reason`은 제공되지 않습니다.
+- Java의 `v_agent_response`는 `response_text` 대신 `text_summary` 열을 제공합니다.
+- Java의 `v_agent_starting`은 `agent_instruction`만 제공합니다.
 - Java의 `v_a2a_interaction`은 `a2a_response`를 생략합니다. 응답은 `response_content`에서 계속 사용할 수 있습니다.
 
 ## 이벤트 유형 및 페이로드 {#event-types}
@@ -1541,7 +1541,7 @@ Go는 `v_user_message_received`부터 `v_node_error`까지 모든 25개의 이�
     - `gcs_bucket_name`이 구성된 경우 큰 콘텐츠는 잘리지 않고 GCS로 오프로딩되며
       참조가 `content_parts.object_ref`에 저장됩니다.
 
-### LLM 상호작용(플러그인 수명 주기)
+### LLM 상호작용(플러그인 라이프사이클)
 
 이 이벤트들은 LLM으로 전송되는 원시 요청과 LLM에서 받은 응답을 추적합니다.
 
@@ -1582,7 +1582,7 @@ Go는 `v_user_message_received`부터 `v_node_error`까지 모든 25개의 이�
 }
 ```
 
-자동으로 생성되는 `v_llm_request` 뷰는 `tools` 속성을 해당 뷰의 `tools` (JSON) 열로 노출합니다. Python 및 Go에서 `tools`는 도구당 하나의 항목을 가지며, 도구의 `name`과 사용 가능한 경우 `description` 및 `parameters`(도구의 매개변수 스키마)를 포함합니다. 이러한 항목은 다른 속성과 동일한 크기 제한 및 민감한 키 수정 파이프라인을 거칩니다. Java는 도구 이름만 기록합니다(예: `["list_dataset_ids", "execute_sql"]`).
+자동으로 생성되는 `v_llm_request` 뷰는 `tools` 속성을 해당 뷰의 `tools` (JSON) 열로 제공합니다. Python 및 Go에서 `tools`는 도구당 하나의 항목을 가지며, 도구의 `name`과 사용 가능한 경우 `description` 및 `parameters`(도구의 매개변수 스키마)를 포함합니다. 이러한 항목은 다른 속성과 동일한 크기 제한 및 민감한 키 수정 파이프라인을 거칩니다. Java는 도구 이름만 기록합니다(예: `["list_dataset_ids", "execute_sql"]`).
 
 **2. LLM_RESPONSE**
 
@@ -1616,7 +1616,7 @@ Go는 `v_user_message_received`부터 `v_node_error`까지 모든 25개의 이�
 }
 ```
 
-Python 및 Go 플러그인은 최종(부분 응답이 아닌) 응답에만 `finish_reason`을 추가합니다. 해당 `v_llm_response` 뷰는 최종 응답의 `cache_type`과 함께 이를 `STRING`으로 노출합니다. 모델이 종료 진단 정보를 제공하는 경우, 해당 행의 `status`가 `OK`로 유지되더라도 공통 `error_message` 열에 정제된 값을 저장합니다.
+Python 및 Go 플러그인은 최종(부분 응답이 아닌) 응답에만 `finish_reason`을 추가합니다. 해당 `v_llm_response` 뷰는 최종 응답의 `cache_type`과 함께 이를 `STRING` 열로 제공합니다. 모델이 종료 진단 정보를 제공하는 경우, 해당 행의 `status`가 `OK`로 유지되더라도 공통 `error_message` 열에 정제된 값을 저장합니다.
 
 Python 및 Go에서는 모델 종료 및 차단 이유가 `LLM_RESPONSE`로 계속 분류됩니다. 플러그인은 모델 호출이 오류로 실패한 경우에만 `LLM_ERROR`를 사용합니다.
 
@@ -1640,7 +1640,7 @@ LLM 호출이 예외로 실패할 때 기록됩니다. 오류 메시지가 캡�
 }
 ```
 
-### 도구 사용(플러그인 수명 주기)
+### 도구 사용(플러그인 라이프사이클)
 
 이 이벤트들은 에이전트의 도구 실행을 추적합니다. 각 도구 이벤트에는 도구의
 출처를 분류하는 `tool_origin` 필드가 포함됩니다.
@@ -1741,7 +1741,7 @@ LLM 호출이 예외로 실패할 때 기록됩니다. 오류 메시지가 캡�
 }
 ```
 
-### 에이전트 수명 주기 및 일반 이벤트
+### 에이전트 라이프사이클 및 일반 이벤트
 
 | 이벤트 유형 | 콘텐츠(JSON) 구조 |
 | ---------- | ----------------- |
@@ -1754,9 +1754,9 @@ LLM 호출이 예외로 실패할 때 기록됩니다. 오류 메시지가 캡�
 | `USER_MESSAGE_RECEIVED` | `{"text_summary": "Help me book a flight."}` |
 | `AGENT_RESPONSE` | `{"response": "Here are the flights..."}` |
 
-Python 및 Go에서 `AGENT_ERROR` 및 `INVOCATION_ERROR` 행은 `status="ERROR"`, 정제된 `error_message`, 그리고 정제된 `content.error_traceback` 값(Python에서는 포맷팅된 트레이스백, Go에서는 스택 트레이스가 없는 정제된 `err.Error()` 메시지)을 갖습니다. 에이전트 오류 뷰는 경과된 `total_ms`도 노출합니다. Python에서 두 이벤트는 모두 에이전트 또는 러너 실행을 벗어난 처리되지 않은 예외를 나타냅니다. Go에서 `AGENT_ERROR`는 재시도되는 실패한 노드 시도나 실패한 도구로서의 에이전트 실행과 같이 ADK가 `AfterAgent` 콜백 없이 종료하고 실패를 자체적으로 처리한 활성화에 대해서도 기록됩니다.
+Python 및 Go에서 `AGENT_ERROR` 및 `INVOCATION_ERROR` 행은 `status="ERROR"`, 정제된 `error_message`, 그리고 정제된 `content.error_traceback` 값(Python에서는 포맷팅된 트레이스백, Go에서는 스택 트레이스가 없는 정제된 `err.Error()` 메시지)을 갖습니다. 에이전트 오류 뷰는 경과 시간인 `total_ms`도 제공합니다. Python에서 두 이벤트는 모두 에이전트 또는 러너 실행을 벗어난 처리되지 않은 예외를 나타냅니다. Go에서 `AGENT_ERROR`는 재시도되는 실패한 노드 시도나 실패한 도구로서의 에이전트 실행과 같이 ADK가 `AfterAgent` 콜백 없이 종료하고 실패를 자체적으로 처리한 활성화에 대해서도 기록됩니다.
 
-ADK Python v2.12.0+ 및 Go에서는 `AGENT_STARTING` 행에 다음 `attributes` 키를 추가할 수도 있으며, `v_agent_starting` 뷰는 이를 열로 노출합니다:
+ADK Python v2.12.0+ 및 Go에서는 `AGENT_STARTING` 행에 다음 `attributes` 키를 추가할 수도 있으며, `v_agent_starting` 뷰는 이를 열로 제공합니다:
 
 - `instruction_source`: 에이전트의 지침이 콜러블 `InstructionProvider`에서 제공되는 경우 `"provider"`.
 - `static_instruction`: 에이전트의 정적 지침 텍스트 *(Python v2.12.0+; Go 플러그인에서는 채워지지 않으므로 Go에서는 `v_agent_starting.static_instruction`이 `NULL`임)*.
@@ -1787,7 +1787,7 @@ ADK Python v2.12.0+ 및 Go에서는 `AGENT_STARTING` 행에 다음 `attributes` 
 }
 ```
 
-이 예시는 Python 및 Go 페이로드를 보여줍니다. Java는 표시되는 콘텐츠 요약을 `{"text_summary": "Here are the available flights..."}`로 저장하고 `v_agent_response`에서 해당 필드를 `text_summary`로 노출합니다.
+이 예시는 Python 및 Go 페이로드를 보여줍니다. Java는 표시되는 콘텐츠 요약을 `{"text_summary": "Here are the available flights..."}`로 저장하고 `v_agent_response`에서 해당 필드를 `text_summary`로 제공합니다.
 
 Python 및 Go에서 `final_response_tool_names`(Go의 경우 `FinalResponseToolNames`)에 성공적으로 완료된 도구의 이름이 포함되어 있으면 플러그인은 해당 도구의 호출 인수를 응답 페이로드로 하고 `attributes`에 `source_tool`을 포함하여 `AGENT_RESPONSE`도 내보냅니다. 이는 표시되는 텍스트 이벤트 대신 전용 도구를 통해 최종 답변을 전달하는 에이전트를 지원합니다.
 
@@ -1847,7 +1847,7 @@ A2A 원격 에이전트 호출이 완료될 때 기록됩니다.
 }
 ```
 
-이 예시는 Python 및 Go 페이로드를 보여줍니다. Python, Go 및 Java는 응답을 `content`에 직접 저장합니다. Python과 Go는 네임스페이스가 지정된 응답을 `attributes.a2a_metadata`에도 유지하며, Java는 해당 중복을 생략합니다. Python 및 Go의 `v_a2a_interaction` 뷰는 `response_content`, `a2a_task_id`, `a2a_context_id`, `a2a_request`, `a2a_response`를 노출합니다. Java는 마지막 열을 생략합니다.
+이 예시는 Python 및 Go 페이로드를 보여줍니다. Python, Go 및 Java는 응답을 `content`에 직접 저장합니다. Python과 Go는 네임스페이스가 지정된 응답을 `attributes.a2a_metadata`에도 유지하며, Java는 해당 중복을 생략합니다. Python 및 Go의 `v_a2a_interaction` 뷰는 `response_content`, `a2a_task_id`, `a2a_context_id`, `a2a_request`, `a2a_response`를 제공합니다. Java는 마지막 열을 생략합니다.
 
 ### 에이전트 워크플로 및 일시중지/재개 이벤트 (ADK 2.0) {#adk-2-events}
 
@@ -1863,9 +1863,9 @@ ADK 2.0에서는 멀티 에이전트 워크플로(제어권을 넘기는 에이�
 
 #### `attributes.adk` 엔벨로프
 
-이 엔벨로프는 **Python** 및 **Go** 플러그인에서 작성됩니다. 모든 행에 `attributes.adk` 객체가 포함됩니다. `schema_version`은 항상 존재하며(Python에서는 `app_name`과 함께, Go에서는 `app_name`이 비어 있지 않을 때마다 함께), 이벤트에서 파생되는 필드는 ADK `Event`(수명 주기 및 워크플로 이벤트)에서 생성된 행에만 추가되므로 콜백 전용 행에서는 생략되고 쿼리 시 SQL `NULL`로 해석됩니다.
+이 엔벨로프는 **Python** 및 **Go** 플러그인에서 작성됩니다. 모든 행에 `attributes.adk` 객체가 포함됩니다. `schema_version`은 항상 존재하며(Python에서는 `app_name`과 함께, Go에서는 `app_name`이 비어 있지 않을 때마다 함께), 이벤트에서 파생되는 필드는 ADK `Event`(라이프사이클 및 워크플로 이벤트)에서 생성된 행에만 추가되므로 콜백 전용 행에서는 생략되고 쿼리 시 SQL `NULL`로 해석됩니다.
 
-| 필드 | 유형 | 의미 |
+| 필드 | 타입 | 의미 |
 | --- | --- | --- |
 | `schema_version` | string | 엔벨로프 버전(현재 `"1"`). 엔벨로프가 발전함에 따라 다운스트림 쿼리를 이에 맞춰 제어할 수 있습니다. |
 | `app_name` | string | 해당 행을 생성한 ADK 앱입니다(Go에서는 비어 있을 때 생략됨). |
@@ -1883,7 +1883,7 @@ ADK 2.0에서는 멀티 에이전트 워크플로(제어권을 넘기는 에이�
 
 !!! tip "엔벨로프 쿼리"
 
-    엔벨로프 필드는 `JSON_VALUE(attributes, '$.adk.<field>')` (또는 `node` / `scope` 객체의 경우 `JSON_QUERY`)로 읽습니다. 자동으로 생성된 뷰는 자주 사용되는 필드(`source_event_id`, `pause_kind`, `function_call_id`)를 이미 평면화된 열로 노출하므로 대부분의 쿼리는 뷰를 직접 사용할 수 있습니다.
+    엔벨로프 필드는 `JSON_VALUE(attributes, '$.adk.<field>')` (또는 `node` / `scope` 객체의 경우 `JSON_QUERY`)로 읽습니다. 자동으로 생성된 뷰는 자주 사용되는 필드(`source_event_id`, `pause_kind`, `function_call_id`)를 이미 평면화된 열로 제공하므로 대부분의 쿼리는 뷰를 직접 사용할 수 있습니다.
 
 #### AGENT_TRANSFER
 
@@ -1904,7 +1904,7 @@ ADK 2.0에서는 멀티 에이전트 워크플로(제어권을 넘기는 에이�
 
 #### AGENT_STATE_CHECKPOINT
 
-에이전트가 상태의 스냅샷을 생성할 때 기록됩니다. 플러그인은 또한 에이전트 실행의 끝을 표시하기 위해 `end_of_agent: true`를 포함하는 체크포인트를 내보냅니다. `v_agent_state_checkpoint` 뷰는 `agent_state_type`을 노출하므로 실제 상태 객체와 명시적 `null` 체크포인트(실행 종료 마커) 및 누락된 값을 구분할 수 있습니다. Go에서 체크포인트는 `CustomMetadata` 키인 `adk_agent_state`/`agent_state` 및 `end_of_agent`/`adk_end_of_agent`에서 가져오며, 이러한 키가 `CustomMetadataAllowlist`에 나열된 경우에만 방출됩니다.
+에이전트가 상태의 스냅샷을 생성할 때 기록됩니다. 플러그인은 또한 에이전트 실행의 끝을 표시하기 위해 `end_of_agent: true`를 포함하는 체크포인트를 내보냅니다. `v_agent_state_checkpoint` 뷰는 `agent_state_type`을 제공하므로 실제 상태 객체와 명시적 `null` 체크포인트(실행 종료 마커) 및 누락된 값을 구분할 수 있습니다. Go에서 체크포인트는 `CustomMetadata` 키인 `adk_agent_state`/`agent_state` 및 `end_of_agent`/`adk_end_of_agent`에서 가져오며, 이러한 키가 `CustomMetadataAllowlist`에 나열된 경우에만 방출됩니다.
 
 ```json
 {
@@ -1921,7 +1921,7 @@ ADK 2.0에서는 멀티 에이전트 워크플로(제어권을 넘기는 에이�
 
 #### EVENT_COMPACTION
 
-ADK가 이전 이벤트 윈도우를 요약으로 압축할 때 기록됩니다(긴 대화를 컨텍스트 윈도우 내로 유지하는 데 사용됨). 타임스탬프는 소수점 형태의 epoch 초 단위입니다. 뷰는 이를 BigQuery `TIMESTAMP` 열(`window_start`, `window_end`)로도 노출합니다. `compacted_content`는 구조화된 객체가 아니라 플러그인이 포맷한 압축 윈도우의 텍스트(문자열)를 보유합니다.
+ADK가 이전 이벤트 윈도우를 요약으로 압축할 때 기록됩니다(긴 대화를 컨텍스트 윈도우 내로 유지하는 데 사용됨). 타임스탬프는 소수점 형태의 epoch 초 단위입니다. 뷰는 이를 BigQuery `TIMESTAMP` 열(`window_start`, `window_end`)로도 제공합니다. `compacted_content`는 구조화된 객체가 아니라 플러그인이 포맷한 압축 윈도우의 텍스트(문자열)를 보유합니다.
 
 ```json
 {
@@ -1945,7 +1945,7 @@ ADK가 이전 이벤트 윈도우를 요약으로 압축할 때 기록됩니다(
 - `NODE_OUTPUT`은 `event.output`이 존재하고 노드가 메시지를 출력으로 사용하지 않을 때 내보내집니다. 이벤트 출력은 `content`에 직접 저장됩니다.
 - `NODE_ERROR`는 `event.error_code`가 존재하고 모델 완료 또는 차단 이유가 아닐 때 내보내집니다. 코드는 `content.error_code`에 저장되고, 정제된 메시지는 `error_message`에 저장되며, `status`는 `ERROR`입니다.
 
-두 자동 생성 뷰는 모두 `attributes.adk.node`에서 `node_path`, `node_run_id`, `node_parent_run_id`를 노출합니다.
+두 자동 생성 뷰는 모두 `attributes.adk.node`에서 `node_path`, `node_run_id`, `node_parent_run_id`를 제공합니다.
 
 ```json
 {
@@ -1988,7 +1988,7 @@ ADK가 이전 이벤트 윈도우를 요약으로 압축할 때 기록됩니다(
     `"attributes": {"pause_kind": "tool", "function_call_id": "call-789"}`.
     아래의 기본 테이블 쿼리에서
     `'$.adk.pause_kind'` / `'$.adk.function_call_id'`를 `'$.pause_kind'` /
-    `'$.function_call_id'`로 바꾸세요. 뷰 기반 쿼리는 뷰가 키를 평면화된 열로 노출하므로 두 언어 모두에서 변경 없이 작동합니다.
+    `'$.function_call_id'`로 바꾸세요. 뷰 기반 쿼리는 뷰가 키를 평면화된 열로 제공하므로 두 언어 모두에서 변경 없이 작동합니다.
 
     Java는 또한 동일한 최상위 페어 키를 `HITL_*_REQUEST_COMPLETED` 행에 스탬프하므로, 기본 테이블에서 HITL `TOOL_PAUSED` 행을 `function_call_id`로 완료 행에 직접 조인할 수 있습니다(HITL 완료를 위한 전용 뷰는 없음).
 
@@ -2019,7 +2019,7 @@ WHERE p.event_type = 'TOOL_PAUSED'
 ORDER BY paused_at;
 ```
 
-또는 `pause_kind`와 `function_call_id`를 평면 열로 노출하는 자동 생성 뷰를 대상으로 더 간단하게 쿼리할 수 있습니다.
+또는 `pause_kind`와 `function_call_id`를 평면화된 열로 제공하는 자동 생성 뷰를 대상으로 더 간단하게 쿼리할 수 있습니다.
 
 ```sql
 SELECT
@@ -2558,7 +2558,7 @@ print(f"Deployed agent: {remote_app.api_resource.name}")
    이전 버전은 서버리스 런타임이 프로세스를 중단하기 전에 보류 이벤트를 flush하지
    않습니다.
 
-2. **디버그 로깅 활성화:** 조용한 오류를 드러내려면 `agent.py` 상단에 다음을
+2. **디버그 로깅 활성화:** 별도 경고 없이 숨겨진 오류를 확인하려면 `agent.py` 상단에 다음을
    추가합니다.
 
     ```python
@@ -3059,11 +3059,11 @@ Python은 **`temp:`** 상태 값을 `[REDACTED]`로 바꿉니다. Go는 로깅 �
 
 === "Python"
 
-    플러그인은 수명 주기 관리를 위해 다음과 같은 여러 공개 메서드를 노출합니다:
+    플러그인은 라이프사이클 관리를 위해 다음과 같은 여러 공개 메서드를 제공합니다:
 
     - **`await plugin.flush()`**: 현재 이벤트 루프와 연결된 보류 중인 이벤트의 쓰기가 완료될 때까지 대기합니다.
     - **`await plugin.shutdown(timeout=None, *, close_background_transport=False)`**: 보류 중인 이벤트를 플러시하고 리소스를 해제하여 플러그인을 정상적으로 종료합니다. 선택적 `timeout` 매개변수는 구성의 `shutdown_timeout`을 재정의합니다. 플러그인이 [공유 백그라운드 기록기](#shared-background-writer)를 사용하는 경우 종료 시 플러그인이 해당 기록기에서 분리되고 기록기는 계속 실행 상태로 남습니다. 이 플러그인의 테이블 및 자격 증명에 대한 공유 기록기도 비우고 중지하려면 `close_background_transport=True`를 전달하세요.
-    - **`await plugin.close(timeout=None, *, close_background_transport=False)`**: 플러그인 관리자 수명 주기 계약을 실행합니다. 동일한 인수로 `shutdown()`에 위임하며 러너가 플러그인을 닫을 때 자동으로 호출됩니다.
+    - **`await plugin.close(timeout=None, *, close_background_transport=False)`**: 플러그인 매니저의 라이프사이클 규약을 수행합니다. 동일한 인수로 `shutdown()`에 위임하며 러너가 플러그인을 닫을 때 자동으로 호출됩니다.
     - **`await BigQueryAgentAnalyticsPlugin.close_shared_background_transports(timeout=10.0)`** (Python v2.10.0+): 독립 실행형 스크립트, 프로세스 종료 핸들러 또는 테스트 정리 픽스처 등 프로세스의 모든 공유 백그라운드 기록기를 비우고 중지합니다. 기록기를 드레인하지 못하거나 `timeout` 내에 완료되지 않으면 예외가 발생합니다(한 기록기가 실패한 경우 기록기의 오류 또는 `TimeoutError`, 여러 기록기가 실패한 경우 `RuntimeError`). 동일한 작업이 `google.adk.plugins.bigquery_agent_analytics_plugin`의 모듈 수준 함수 `close_shared_background_transports(timeout=10.0)`로도 제공됩니다.
     - **`await plugin.create_analytics_views()`**: 이벤트 유형별 모든 분석 뷰를 수동으로 (재)생성합니다. 스키마 업그레이드 후 또는 뷰를 새로고침해야 할 때 유용합니다.
     - **`await plugin.create_eval_views()`** (Python v2.13.0+): `create_eval_views=False`인 경우에도 에이전트 평가 뷰(`{view_prefix}_eval_session` 및 `{view_prefix}_eval_turn`)를 수동으로 (재)생성합니다. 자세한 내용은 [에이전트 평가 뷰](#agent-evaluation-views)를 참고하세요.
@@ -3071,7 +3071,7 @@ Python은 **`temp:`** 상태 값을 `[REDACTED]`로 바꿉니다. Go는 로깅 �
 
 === "Go"
 
-    Go(`google.golang.org/adk/plugin/agentanalytics`)에서는 플러그인 수명 주기 및 운영 헬퍼가 ADK `*plugin.Plugin` 핸들과 언래핑된 `*agentanalytics.BigQueryAgentAnalyticsPlugin`을 통해 노출됩니다:
+    Go(`google.golang.org/adk/plugin/agentanalytics`)에서는 플러그인 라이프사이클 및 운영 헬퍼가 ADK `*plugin.Plugin` 핸들과 언래핑된 `*agentanalytics.BigQueryAgentAnalyticsPlugin`을 통해 제공됩니다:
 
     - **`adkPlugin.Close() error`**: 대기 중인 이벤트를 드레인하고, 백그라운드 배치 프로세서를 중지하며(각 플러시/업로드 단계는 `ShutdownTimeout`, 기본값 `10s`로 제한되며 총 월클럭 시간은 최대 약 2.5배 소요 가능), 플러그인 소유의 BigQuery, Storage Write 및 GCS 클라이언트를 닫습니다. ADK Go의 러너는 플러그인을 자동으로 닫지 않으므로 종료하기 전에 `adkPlugin.Close()`를 직접 호출하세요(예: 생성 직후 `defer bqPlugin.Close()`).
     - **`agentanalytics.AsBigQueryAgentAnalyticsPlugin(adkPlugin)`**: ADK `*plugin.Plugin` 핸들에서 기본 `*agentanalytics.BigQueryAgentAnalyticsPlugin`을 언래핑합니다. 언래핑된 핸들은 `adkPlugin.Close()`가 완료된 후에도 계속 액세스할 수 있습니다.
@@ -3095,7 +3095,7 @@ Python은 **`temp:`** 상태 값을 `[REDACTED]`로 바꿉니다. Go는 로깅 �
 
 === "Java"
 
-    Java에서는 플러그인 수명 주기가 RxJava `Completable`을 반환하는 `close()` 메서드(`Plugin`에서 상속됨)를 통해 관리됩니다.
+    Java에서는 플러그인 라이프사이클이 RxJava `Completable`을 반환하는 `close()` 메서드(`Plugin`에서 상속됨)를 통해 관리됩니다.
 
     - **`plugin.close()`**: 플러그인을 정상적으로 종료하여 대기 중인 이벤트를 플러시하고 리소스(BigQuery 쓰기 클라이언트 및 실행기 포함)를 해제합니다.
     - **자동 닫기**: `InMemoryRunner`를 사용하는 경우 `runner.close()`를 호출하면 BigQuery Agent Analytics 플러그인을 포함하여 등록된 모든 플러그인이 자동으로 닫힙니다.

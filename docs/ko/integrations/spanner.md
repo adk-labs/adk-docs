@@ -42,7 +42,7 @@ pip install "google-adk[gcp]"
 
 ## 벡터 유사도 검색 (Vector similarity search)
 
-`vector_store_similarity_search` 도구를 사용하면 에이전트가 벡터 저장소로 구성된 Spanner 테이블에 대해 시맨틱 검색을 수행할 수 있습니다. 이 기능은 컨텍스트를 인식하는 RAG 애플리케이션을 구축하는 데 필수적이며, AI 모델이 정확한 키워드 일치 대신 의미론적 의미를 기반으로 데이터베이스 컨텍스트를 검색할 수 있도록 합니다. `SpannerVectorStoreSettings`를 구성하면 에이전트가 사용자 질의의 의도를 더 잘 이해하고 가장 관련성이 높은 Spanner 데이터를 기반으로 응답을 접지(Grounding)할 수 있습니다.
+`vector_store_similarity_search` 도구를 사용하면 에이전트가 벡터 저장소로 구성된 Spanner 테이블에 대해 시맨틱 검색을 수행할 수 있습니다. 이 기능은 컨텍스트를 인식하는 RAG 애플리케이션을 구축하는 데 필수적이며, AI 모델이 정확한 키워드 일치 대신 의미론적 의미를 기반으로 데이터베이스 컨텍스트를 조회할 수 있도록 합니다. `SpannerVectorStoreSettings`를 구성하면 에이전트가 사용자 질의의 의도를 더 잘 이해하고 가장 관련성이 높은 Spanner 데이터를 기반으로 응답을 그라운딩(Grounding)할 수 있습니다.
 
 다음 예시는 Spanner 테이블을 벡터 저장소로 구성하고 `vector_store_similarity_search` 도구를 RAG 에이전트에 연결하는 방법을 보여줍니다:
 

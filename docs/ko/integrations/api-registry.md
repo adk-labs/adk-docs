@@ -18,10 +18,10 @@ Model Context Protocol(MCP) 서버로 사용할 수 있습니다.
 이 도구를 구성해 에이전트를 Google Cloud 프로젝트에 연결하고,
 해당 프로젝트에서 활성화된 Cloud 서비스를 동적으로 접근할 수 있습니다.
 
-!!! example "Preview 릴리스"
-    Google Cloud API Registry 기능은 Preview 릴리스입니다.
+!!! example "프리뷰 릴리스"
+    Google Cloud API Registry 기능은 프리뷰(Preview) 릴리스입니다.
     자세한 내용은
-    [launch stage descriptions](https://cloud.google.com/products#product-launch-stages)를 참고하세요.
+    [출시 단계 설명](https://cloud.google.com/products#product-launch-stages)을 참고하세요.
 
 ## 사전 준비 사항
 
@@ -44,11 +44,11 @@ Model Context Protocol(MCP) 서버로 사용할 수 있습니다.
     API Registry에서 활성화해야 합니다.
     Cloud Console에서 활성화하거나 다음과 같은 gcloud 명령을 사용할 수 있습니다:
     `gcloud beta api-registry mcp enable bigquery.googleapis.com --project={PROJECT_ID}`.
-    에이전트가 사용하는 자격 증명은 MCP 서버와 도구가 사용하는 기저 서비스에
+    에이전트가 사용하는 자격 증명은 MCP 서버와 도구가 사용하는 기반 서비스에
     접근 권한이 있어야 합니다. 예를 들어 BigQuery 도구를 사용하려면
     서비스 계정에 `bigquery.dataViewer`, `bigquery.jobUser` 같은
     BigQuery IAM 역할이 필요합니다. 필요한 권한에 대한 자세한 내용은
-    [Authentication and access](#auth)를 참고하세요.
+    [인증 및 접근](#auth)을 참고하세요.
 
 다음 gcloud 명령으로 API Registry에서 어떤 MCP 서버가 활성화됐는지 확인할 수 있습니다:
 
@@ -104,9 +104,9 @@ Help user access their BigQuery data using the available tools.
 이 예제의 전체 코드는
 [api_registry_agent](https://github.com/google/adk-python/tree/main/contributing/samples/api_registry_agent/)
 샘플을 참고하세요. 구성 옵션은
-[Configuration](#configuration),
+[구성](#configuration),
 인증 관련 내용은
-[Authentication and access](#auth)를 참고하세요.
+[인증 및 접근](#auth)을 참고하세요.
 
 ## 인증 및 접근 {#auth}
 
@@ -127,7 +127,7 @@ Help user access their BigQuery data using the available tools.
     실제 MCP 서버 엔드포인트 호출을 인증합니다.
     이 자격 증명에는 다음 두 가지 권한이 모두 필요합니다:
     1.  MCP 서버 자체 접근 권한.
-    1.  도구가 상호작용하는 기저 서비스/리소스 이용 권한.
+    1.  도구가 상호작용하는 기반 서비스 및 리소스 이용 권한.
 
 -   **MCP 도구 사용자 역할:**
     API registry를 통해 MCP 도구를 호출할 수 있도록, 에이전트가 사용하는 계정에

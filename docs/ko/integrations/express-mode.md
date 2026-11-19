@@ -10,10 +10,10 @@ catalog_tags: ["google"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-preview">미리보기</span>
 </div>
 
-`VertexAiSessionService` 또는 `VertexAiMemoryBankService` 사용에 관심이 있지만 Google Cloud 프로젝트가 없는 경우, Vertex AI 익스프레스 모드에 가입하여 무료로 액세스 권한을 얻고 이러한 서비스를 사용해 볼 수 있습니다! 자격 요건을 충족하는 ***gmail*** 계정으로 [여기](https://console.cloud.google.com/expressmode)에서 가입할 수 있습니다. Vertex AI 익스프레스 모드에 대한 자세한 내용은 [개요 페이지](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 참고하세요.
-가입 후 [API 키](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview#api-keys)를 발급받으면, 로컬 ADK 에이전트에서 Vertex AI 세션 및 메모리 서비스를 바로 사용할 수 있습니다!
+`VertexAiSessionService` 또는 `VertexAiMemoryBankService`를 사용하고 싶지만 Google Cloud 프로젝트가 없는 경우, Vertex AI 익스프레스 모드에 가입하여 비용 없이 액세스 권한을 얻고 이러한 서비스를 체험해 볼 수 있습니다. 자격 요건을 충족하는 Gmail 계정으로 [Google Cloud 콘솔](https://console.cloud.google.com/expressmode)에서 가입할 수 있습니다. Vertex AI 익스프레스 모드에 대한 자세한 내용은 [개요 페이지](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)를 참고하세요.
+가입 후 [API 키](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview#api-keys)를 발급받으면, 로컬 ADK 에이전트에서 Vertex AI 세션 및 메모리 서비스를 바로 사용할 수 있습니다.
 
-!!! info Vertex AI 익스프레스 모드 제한 사항
+!!! info "Vertex AI 익스프레스 모드 제한 사항"
 
     Vertex AI 익스프레스 모드는 무료 등급에 몇 가지 제한 사항이 있습니다. 무료 익스프레스 모드 프로젝트는 90일 동안만 유효하며, 제한된 할당량으로 일부 서비스만 사용할 수 있습니다. 예를 들어, 에이전트 엔진(Agent Engine)의 수는 10개로 제한되며 에이전트 엔진 배포는 유료 등급에서만 가능합니다. 할당량 제한을 해제하고 모든 Vertex AI 서비스를 사용하려면 익스프레스 모드 프로젝트에 결제 계정을 추가하세요.
 
@@ -53,7 +53,7 @@ GOOGLE_API_KEY=여기에_실제_익스프레스_모드_API_키를_붙여넣으�
           })
         ```
 
-    3. `YOUR_AGENT_ENGINE_DISPLAY_NAME`과 `YOUR_AGENT_ENGINE_DESCRIPTION`을 사용 사례에 맞게 바꾸세요.
+    3. `display_name`과 `description`을 사용 사례에 맞게 변경합니다.
     4. 응답에서 에이전트 엔진의 이름과 ID를 가져와 메모리 및 세션과 함께 사용합니다.
 
         ```py
@@ -80,7 +80,7 @@ session_service = VertexAiSessionService(agent_engine_id=APP_ID)
 # session = await session_service.create_session(app_name=APP_ID, user_id= ...)
 ```
 
-!!! info 세션 서비스 할당량
+!!! info "세션 서비스 할당량"
 
     무료 익스프레스 모드 프로젝트의 경우, `VertexAiSessionService`는 다음과 같은 할당량을 가집니다:
 
@@ -107,12 +107,12 @@ memory_service = VertexAiMemoryBankService(agent_engine_id=APP_ID)
 # memory = await memory_service.add_session_to_memory(session)
 ```
 
-!!! info 메모리 서비스 할당량
+!!! info "메모리 서비스 할당량"
 
     무료 익스프레스 모드 프로젝트의 경우, `VertexAiMemoryBankService`는 다음과 같은 할당량을 가집니다:
 
     - 분당 10회: Vertex AI 에이전트 엔진 메모리 리소스 생성, 삭제 또는 업데이트
-    - 분당 10회: Vertex AI 에이전트 엔진 메모리 뱅크에서 가져오기, 목록 조회 또는 검색
+    - 분당 10회: Vertex AI 에이전트 엔진 메모리 뱅크에서 가져오기, 목록 조회 또는 조회(retrieve)
 
 ## 코드 샘플: Vertex AI 익스프레스 모드를 사용한 세션 및 메모리 기능이 있는 날씨 에이전트
 

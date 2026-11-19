@@ -38,10 +38,10 @@ root_agent = Agent(
 
 !!! tip "`OLLAMA_API_BASE` 환경 변수 사용"
 
-    생성 요청에서 `api_base` 파라미터를 지정할 수 있지만,
-    v1.65.5에서는 라이브러리가 다른 API 호출에 환경 변수를 사용합니다.
-    모든 요청이 올바른 경로로 라우팅되도록 Ollama 서버 URL에 대한
-    `OLLAMA_API_BASE`를 설정해야 합니다.
+    생성 요청에서 `api_base` 매개변수를 지정할 수 있지만,
+    LiteLLM v1.65.5부터는 생성 완료 후 다른 API를 호출할 때 환경 변수를 참조합니다.
+    모든 요청이 올바른 경로로 라우팅되도록 Ollama 서버 URL을 가리키는
+    `OLLAMA_API_BASE` 환경 변수를 설정하세요.
 
 ```bash
 export OLLAMA_API_BASE="http://localhost:11434"
@@ -77,7 +77,7 @@ ollama show mistral-small3.1
 ollama show --modelfile llama3.2 > model_file_to_modify
 ```
 
-예를 들어 위 모델의 기본 템플릿은 기본적으로 모델이 항상 함수를 호출하도록 지시합니다.
+예를 들어 위 모델의 기본 템플릿은 모델이 항상 함수를 호출하도록 유도합니다.
 이로 인해 무한 함수 호출 루프가 발생할 수 있습니다.
 
 ```

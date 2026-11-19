@@ -1,4 +1,4 @@
-# 도구로 인증
+# 도구 인증
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
@@ -8,7 +8,7 @@ ADK의 도구와 서비스는 이메일이나 캘린더 같은 보호된 리소�
 
 !!! danger "경고: 자격 증명 저장과 보안 위험"
 
-    액세스 토큰, 특히 새로 고침 토큰 같은 민감한 자격 증명을 세션 상태에 직접 저장하면 세션 저장소 백엔드, `SessionService` 구현 방식, 그리고 전반적인 애플리케이션 보안 수준에 따라 보안 위험이 발생할 수 있습니다. 프로덕션에 배포하기 전에 ADK 에이전트에서 자격 증명을 어떻게 관리할지 신중히 검토하십시오.
+    액세스 토큰, 특히 리프레시 토큰(refresh token) 같은 민감한 자격 증명을 세션 상태에 직접 저장하면 세션 저장소 백엔드, `SessionService` 구현 방식, 그리고 전반적인 애플리케이션 보안 수준에 따라 보안 위험이 발생할 수 있습니다. 프로덕션에 배포하기 전에 ADK 에이전트에서 자격 증명을 어떻게 관리할지 신중히 검토하세요.
 
 ## 인증과 자격 증명 관리
 
@@ -33,9 +33,9 @@ ADK 헬퍼 함수와 자체 코드로 인증을 직접 관리하려면 다음 �
 
 보안 민감도가 상대적으로 낮은 에이전트 애플리케이션이라면, 로컬의 암호화된 저장소에 자격 증명을 보관하는 것도 가능합니다. 전용 로컬 비밀 저장소 시스템을 사용하거나 강력한 암호화 라이브러리로 로컬 데이터베이스의 데이터를 암호화한 뒤, 키 관리 서비스를 사용해 암호화 키를 안전하게 관리하세요. 실행 메모리에는 짧은 수명의 액세스 토큰만 보관하고, 긴 수명의 자격 증명과 새로 고침 토큰은 필요할 때만 암호화된 로컬 저장소에서 가져오도록 하세요.
 
-### 메모리 내 비밀
+### 인메모리 시크릿 (In-Memory Secrets)
 
-이 방식은 에이전트의 초기 개발과 테스트에서만 사용해야 합니다. 이 접근법에서는 자격 증명이 현재 `InMemorySessionService` 인스턴스에 저장됩니다. 데이터는 세션 메모리에만 존재하며 영속되지 않습니다. 다만 세션이 얼마나 오래 지속될 수 있는지, 누가 에이전트에 접근할 수 있는지, 실행 환경의 보안 수준이 어떤지에 따라 이 방식의 위험을 신중히 고려해야 합니다.
+이 방식은 에이전트의 초기 개발과 테스트에서만 사용해야 합니다. 이 접근법에서는 자격 증명이 현재 `InMemorySessionService` 인스턴스에 저장됩니다. 데이터는 세션 메모리에만 존재하며 영구 저장되지 않습니다. 다만 세션이 얼마나 오래 지속될 수 있는지, 누가 에이전트에 접근할 수 있는지, 실행 환경의 보안 수준이 어떤지에 따라 이 방식의 위험을 신중히 고려해야 합니다.
 
 ## 프레임워크 구성 요소
 
@@ -214,7 +214,7 @@ ADK 프레임워크에서 ***AuthScheme***, ***AuthCredential***, ***BaseCredent
 
 === "OpenID Connect"
 
-      인증 서버를 통해 사용자 신원을 확인하기 위해 OpenID Connect가 필요한 도구를 만듭니다:.
+      인증 서버를 통해 사용자 신원을 확인하기 위해 OpenID Connect가 필요한 도구를 만듭니다:
 
       ```py
       from google.adk.auth.auth_schemes import OpenIdConnectWithConfig
@@ -275,7 +275,7 @@ calendar_toolset.configure_auth(
 
 ##### 구성
 
-ID 토큰 인증을 구현하려면 다음 파라미터를 사용하여 ServiceAccount를 구성하고 대상 서비스의 URL을 `audience`로 지정합니다.
+ID 토큰 인증을 구현하려면 다음 매개변수를 사용하여 `ServiceAccount`를 구성하고 대상 서비스의 URL을 `audience`로 지정합니다.
 
 ```python
 from google.adk.auth.auth_credential import ServiceAccount
@@ -308,17 +308,17 @@ sample_toolset = OpenAPIToolset(
 
 * **Audience 필수 조건**: `audience`는 토큰을 특정 대상에 바인딩하여 다른 서비스에 대해 토큰이 "재사용(replay)"되는 것을 방지하는 보안 기능입니다.
   
-* **자동 새로고침 없음**: 사용자를 위한 표준 OAuth2 액세스 토큰과 달리, 서비스 계정 ID 토큰은 요청 시점에 가져옵니다. 백그라운드 타이머에서 자동으로 새로 고쳐지지 않습니다.
+* **자동 갱신 없음**: 사용자를 위한 표준 OAuth2 액세스 토큰과 달리, 서비스 계정 ID 토큰은 요청 시점에 가져오며 백그라운드 타이머로 자동 갱신되지 않습니다.
   
 * **흐름**: 의도를 정의하면 ADK가 핸드셰이크를 처리하고 Google 인증 서버에서 토큰을 가져와 발신 HTTP 헤더에 주입합니다.
 
-##### ServiceAccount 구성 파라미터
+##### `ServiceAccount` 구성 매개변수
 
 * `service_account_credential`: `ServiceAccountCredential` 객체 또는 서비스 계정 JSON 키 파일의 내용을 담은 딕셔너리를 제공합니다. 로컬 또는 Google Cloud 외부에서 실행할 때 사용합니다. 이 설정은 `use_default_credential`이 `True`로 설정되지 않은 경우 필수입니다.
   
-* `use_default_credential` (선택사항): 애플리케이션 기본 자격 증명(ADC)을 사용하려면 True로 설정합니다. 에이전트가 이미 Cloud Run이나 Cloud Functions와 같은 Google Cloud 내에서 실행 중인 경우 로컬 키 파일이 필요 없어 권장됩니다.
+* `use_default_credential` (선택사항): 애플리케이션 기본 자격 증명(ADC)을 사용하려면 `True`로 설정합니다. 에이전트가 이미 Cloud Run이나 Cloud Functions와 같은 Google Cloud 내에서 실행 중인 경우 로컬 키 파일이 필요 없어 권장됩니다.
   
-* `use_id_token` (IAM에 필요): ID 토큰 기반 인증을 활성화하려면 True로 설정합니다. 이렇게 하면 ADK가 Google API용 액세스 토큰을 요청하는 대신, 자체 IAM 보안 서비스용 ID 토큰을 요청하도록 전환됩니다.
+* `use_id_token` (IAM에 필요): ID 토큰 기반 인증을 활성화하려면 `True`로 설정합니다. 이렇게 하면 ADK가 Google API용 액세스 토큰을 요청하는 대신, 자체 IAM 보안 서비스용 ID 토큰을 요청하도록 전환됩니다.
   
 * `audience` (`use_id_token=True`인 경우 필수): 호출하는 서비스의 URL(예: `https://my-service.run.app`)입니다. 이는 토큰이 해당 특정 대상에 대해서만 유효하도록 보장하는 보안 바인딩입니다.
   
@@ -326,12 +326,12 @@ sample_toolset = OpenAPIToolset(
 
 !!! warning "`use_id_token`과 `audience` 쌍 설정"
 
-    항상 `use_id_token=True`와 `audience`를 함께 사용하세요. `audience` 없이 `use_id_token=True`를 설정하면 ADK가 오류를 발생시킵니다. `audience`만 단독으로 설정하면 ADK는 `audience` 보안 바인딩을 조용히 무시하고 ID 토큰 대신 액세스 토큰을 요청합니다.
+    항상 `use_id_token=True`와 `audience`를 함께 사용하세요. `audience` 없이 `use_id_token=True`를 설정하면 ADK가 오류를 발생시킵니다. `audience`만 단독으로 설정하면 ADK는 별도 경고 없이 `audience` 보안 바인딩을 무시하고 ID 토큰 대신 액세스 토큰을 요청합니다.
 
 #### 외부 액세스 토큰 사용
 
-`external_access_token_key` 기능을 사용하면 에이전트가 새로운 인증 흐름을 시작하는 대신 프론트엔드 애플리케이션에서 전달된 토큰과 같이 런타임 환경에서 제공하는 기존 액세스 토큰을 사용할 수 있습니다.
-구성되면 자격 증명 관리자는 표준 OAuth 흐름을 건너끕니다. 대신 에이전트의 `tool_context.state`에서 키를 검색하여 토큰을 직접 인증에 사용합니다.
+`external_access_token_key` 기능을 사용하면 에이전트가 새로운 인증 흐름을 시작하는 대신 프런트엔드 애플리케이션에서 전달된 토큰과 같이 런타임 환경에서 제공하는 기존 액세스 토큰을 사용할 수 있습니다.
+이 옵션을 구성하면 자격 증명 관리자는 표준 OAuth 흐름을 건너뛰고, 에이전트의 `tool_context.state`에서 해당 키로 토큰을 조회하여 인증에 직접 사용합니다.
 이 필드는 `BigQueryCredentialsConfig`, `SpannerCredentialsConfig`, `PubSubCredentialsConfig` 또는 `GCSCredentialsConfig`와 같은 Google 서비스 도구 세트의 자격 증명 구성에 설정하세요.
 이 구성 매개변수의 사용은 상호 배타적이며, 동일한 구성 블록에 `credentials`, `client_id`, `client_secret` 또는 `scopes` 매개변수를 포함할 수 없습니다.
 
@@ -396,25 +396,25 @@ class MyAuthenticatedToolset(BaseToolset):
 
 ### 2. 대화형 OAuth/OIDC 흐름 처리(클라이언트 측)
 
-도구에 사용자 로그인/동의(일반적으로 OAuth 2.0 또는 OIDC)가 필요한 경우 ADK 프레임워크는 실행을 일시 중지하고 **에이전트 클라이언트** 애플리케이션에 신호를 보냅니다. 두 가지 경우가 있습니다.
+도구에 사용자 로그인/동의(일반적으로 OAuth 2.0 또는 OIDC)가 필요한 경우 ADK 프레임워크는 실행을 일시 중지하고 **에이전트 클라이언트** 애플리케이션에 신호를 보냅니다. 다음 두 가지 경우가 있습니다.
 
-* **에이전트 클라이언트** 애플리케이션은 동일한 프로세스에서 `runner.run_async`를 통해 에이전트를 직접 실행합니다. 예: UI 백엔드, CLI 앱 또는 Spark 작업 등
-* **에이전트 클라이언트** 애플리케이션은 `/run` 또는 `/run_sse` 엔드포인트를 통해 ADK의 fastapi 서버와 상호 작용합니다. ADK의 fastapi 서버는 **에이전트 클라이언트** 애플리케이션과 동일한 서버 또는 다른 서버에 설정될 수 있습니다.
+* **에이전트 클라이언트** 애플리케이션이 동일한 프로세스에서 `runner.run_async`를 통해 에이전트를 직접 실행하는 경우(예: UI 백엔드, CLI 앱 또는 Spark 작업 등).
+* **에이전트 클라이언트** 애플리케이션이 `/run` 또는 `/run_sse` 엔드포인트를 통해 ADK의 FastAPI 서버와 상호작용하는 경우. ADK의 FastAPI 서버는 **에이전트 클라이언트** 애플리케이션과 동일한 서버 또는 별도의 서버에 구성될 수 있습니다.
 
-두 번째 경우는 `/run` 또는 `/run_sse` 엔드포인트도 `runner.run_async`를 호출하기 때문에 첫 번째 경우의 특수한 경우입니다. 유일한 차이점은 다음과 같습니다.
+두 번째 경우는 `/run` 또는 `/run_sse` 엔드포인트 역시 내부적으로 `runner.run_async`를 호출하므로 첫 번째 경우의 특수한 형태입니다. 유일한 차이점은 다음과 같습니다.
 
-* 에이전트를 실행하기 위해 파이썬 함수를 호출할지(첫 번째 경우) 또는 에이전트를 실행하기 위해 서비스 엔드포인트를 호출할지(두 번째 경우).
-* 결과 이벤트가 메모리 내 객체(첫 번째 경우)인지 또는 http 응답의 직렬화된 json 문자열(두 번째 경우)인지 여부.
+* 에이전트를 실행하기 위해 Python 함수를 호출하는지(첫 번째 경우), 아니면 서비스 엔드포인트를 호출하는지(두 번째 경우).
+* 결과 이벤트가 인메모리(in-memory) 객체인지(첫 번째 경우), 아니면 HTTP 응답의 직렬화된 JSON 문자열인지(두 번째 경우).
 
-아래 섹션에서는 첫 번째 경우에 중점을 두며 두 번째 경우에 대해 매우 간단하게 매핑할 수 있어야 합니다. 필요한 경우 두 번째 경우를 처리하기 위한 몇 가지 차이점도 설명합니다.
+아래 섹션에서는 첫 번째 경우를 중심으로 설명하지만, 두 번째 경우에도 매우 간단하게 매핑할 수 있습니다. 필요한 경우 두 번째 경우를 처리할 때의 차이점도 함께 안내합니다.
 
-다음은 클라이언트 애플리케이션에 대한 단계별 프로세스입니다.
+클라이언트 애플리케이션의 단계별 처리 과정은 다음과 같습니다.
 
 **1단계: 에이전트 실행 및 인증 요청 감지**
 
-* `runner.run_async`를 사용하여 에이전트 상호 작용을 시작합니다.
-* 생성된 이벤트를 반복합니다.
-* 함수 호출에 `adk_request_credential`이라는 특수 이름이 있는 특정 함수 호출 이벤트를 찾습니다. 이 이벤트는 사용자 상호 작용이 필요함을 나타냅니다. 도우미 함수를 사용하여 이 이벤트를 식별하고 필요한 정보를 추출할 수 있습니다. (두 번째 경우 논리는 유사합니다. http 응답에서 이벤트를 역직렬화합니다.)
+* `runner.run_async`를 사용하여 에이전트 상호작용을 시작합니다.
+* 생성된 이벤트를 순회합니다.
+* 함수 호출에 `adk_request_credential`이라는 특수 이름이 지정된 함수 호출 이벤트를 찾습니다. 이 이벤트는 사용자 상호작용이 필요함을 나타냅니다. 헬퍼 함수를 사용하여 이 이벤트를 식별하고 필요한 정보를 추출할 수 있습니다. (두 번째 경우에도 로직은 유사하며, HTTP 응답에서 이벤트를 역직렬화하면 됩니다.)
 
 ```py
 
@@ -515,11 +515,11 @@ if auth_request_function_call_id and auth_config:
 
 **4단계. 인증 결과를 ADK로 다시 보내기(클라이언트):**
 
-* 전체 콜백 URL(승인 코드가 포함됨)이 있으면 클라이언트 1단계에서 저장한 `auth_request_function_call_id` 및 `auth_config` 객체를 검색합니다.
+* 승인 코드가 포함된 전체 콜백 URL을 확보하면, 1단계에서 클라이언트에 저장해 둔 `auth_request_function_call_id` 및 `auth_config` 객체를 불러옵니다.
 * 캡처된 콜백 URL을 `exchanged_auth_credential.oauth2.auth_response_uri` 필드에 설정합니다. 또한 `exchanged_auth_credential.oauth2.redirect_uri`에 사용한 리디렉션 URI가 포함되어 있는지 확인합니다.
-* `types.FunctionResponse`가 포함된 `types.Part`가 포함된 `types.Content` 객체를 만듭니다.
-      * `name`을 `"adk_request_credential"`로 설정합니다. (참고: 이것은 ADK가 인증을 진행하기 위한 특수 이름입니다. 다른 이름을 사용하지 마십시오.)
-      * `id`를 저장한 `auth_request_function_call_id`로 설정합니다.
+* `types.FunctionResponse`를 담은 `types.Part`로 구성된 `types.Content` 객체를 만듭니다.
+      * `name`을 `"adk_request_credential"`로 설정합니다. (참고: 이는 ADK가 인증을 진행하기 위해 사용하는 특수 이름이므로 다른 이름을 사용하지 마세요.)
+      * `id`를 저장해 둔 `auth_request_function_call_id`로 설정합니다.
       * `response`를 *직렬화된*(예: `.model_dump()`) 업데이트된 `AuthConfig` 객체로 설정합니다.
 * 이 `FunctionResponse` 콘텐츠를 `new_message`로 전달하여 동일한 세션에 대해 `runner.run_async`를 **다시** 호출합니다.
 
@@ -598,9 +598,9 @@ if auth_request_function_call_id and auth_config:
 
 ![인증](../assets/auth_part2.svg)
 
-## 인증이 필요한 사용자 정의 도구(`FunctionTool`) 빌드
+## 인증이 필요한 커스텀 도구(`FunctionTool`) 빌드
 
-이 섹션에서는 새 ADK 도구를 만들 때 사용자 지정 Python 함수 *내부*에서 인증 논리를 구현하는 데 중점을 둡니다. 예제로 `FunctionTool`을 구현합니다.
+이 섹션에서는 새 ADK 도구를 만들 때 커스텀 Python 함수 *내부*에서 인증 로직을 구현하는 방법을 다룹니다. 예제로 `FunctionTool`을 구현합니다.
 
 !!! tip "자동 자격 증명 처리"
 
@@ -608,7 +608,7 @@ if auth_request_function_call_id and auth_config:
 
 ### 전제 조건
 
-함수 서명에는 [`tool_context: ToolContext`](../tools-custom/index.md#tool-context)가 *반드시* 포함되어야 합니다. ADK는 이 객체를 자동으로 주입하여 상태 및 인증 메커니즘에 대한 액세스를 제공합니다.
+함수 시그니처에는 [`tool_context: ToolContext`](../tools-custom/index.md#tool-context)가 *반드시* 포함되어야 합니다. ADK는 이 객체를 자동으로 주입하여 상태 및 인증 메커니즘에 대한 접근을 제공합니다.
 
 ```py
 from google.adk.tools import FunctionTool, ToolContext
@@ -622,7 +622,7 @@ my_tool = FunctionTool(func=my_authenticated_tool_function)
 
 ```
 
-### 도구 함수 내 인증 논리
+### 도구 함수 내 인증 로직
 
 함수 내에서 다음 단계를 구현합니다.
 
@@ -694,7 +694,7 @@ if exchanged_credential:
 
 **3단계: 인증 요청 시작**
 
-유효한 자격 증명(1단계)과 인증 응답(2단계)이 없는 경우 도구는 OAuth 흐름을 시작해야 합니다. AuthScheme 및 초기 AuthCredential을 정의하고 `tool_context.request_credential()`을 호출합니다. 인증이 필요함을 나타내는 응답을 반환합니다.
+유효한 자격 증명(1단계)과 인증 응답(2단계)이 모두 없는 경우 도구는 OAuth 흐름을 시작해야 합니다. `AuthScheme` 및 초기 `AuthCredential`을 정의하고 `tool_context.request_credential()`을 호출한 뒤, 인증이 필요함을 나타내는 응답을 반환합니다.
 
 ```py
 # Use auth_scheme and auth_credential configured in the tool.
@@ -749,7 +749,7 @@ except Exception as e:
 
 **7단계: 도구 결과 반환**
 
-* API 호출이 성공하면 결과를 LLM에 유용한 사전 형식으로 처리합니다.
+* API 호출이 성공하면 결과를 LLM이 이해하기 좋은 딕셔너리(`dict`) 형식으로 가공합니다.
 * **가장 중요한 점은,** 데이터와 함께 `status` 필드를 포함하는 것입니다.
 
 ```py

@@ -83,9 +83,9 @@ its contents, and finally execute it using a command.
 
 -   **working_dir**: (선택 사항) 에이전트가 파일 작업과 명령 실행을 수행할 디렉터리입니다.
     작업 디렉터리를 지정하면 생성된 파일을 에이전트 실행 후에도 계속 사용할 수 있습니다.
-    자세한 내용은 [파일 유지](#file-persistence)를 참고하세요.
+    자세한 내용은 [파일 영구 저장](#file-persistence)을 참고하세요.
 -   **env_vars**: (선택 사항) 실행 컨텍스트에 설정할 환경 변수 딕셔너리입니다.
--   **max_output_chars**: (선택 사항) 파일 읽기 또는 명령 실행에서 반환되는 최대 문자 수를 제한하기 위해 `EnvironmentToolset`과 함께 사용하는 매개변수입니다. 이를 통해 큰 파일 내용이나 명령 출력이 에이전트의 컨텍스트 창 한도를 초과하지 않도록 방지할 수 있습니다.
+-   **max_output_chars**: (선택 사항) 파일 읽기 또는 명령 실행에서 반환되는 최대 문자 수를 제한하기 위해 `EnvironmentToolset`과 함께 사용하는 매개변수입니다. 이를 통해 큰 파일 내용이나 명령 출력이 에이전트의 컨텍스트 윈도우 한도를 초과하지 않도록 방지할 수 있습니다.
 
 다음 코드 샘플은 ***LocalEnvironment*** 객체에 이러한 옵션을 설정하는 방법을 보여 줍니다.
 
@@ -115,11 +115,11 @@ local_environment=LocalEnvironment(
 ***LocalEnvironment***에서 실행되는 명령은 `asyncio.create_subprocess_shell`을 사용하므로
 장시간 실행 작업 중에도 에이전트가 계속 반응할 수 있습니다.
 
-### 파일 유지 {#file-persistence}
+### 파일 영구 저장 {#file-persistence}
 
 ***LocalEnvironment***로 생성한 파일과 파일 출력은 기본적으로 임시 디렉터리에 저장됩니다.
 그 디렉터리는 ADK Web 세션 종료와 같이 에이전트가 종료될 때 삭제됩니다. 하지만 환경에
-***working directory***를 설정하면, 그 위치에 작성된 파일은 에이전트 종료 후에도 *삭제되지 않습니다*.
+작업 디렉터리(`working_dir`)를 설정하면, 해당 위치에 작성된 파일은 에이전트 종료 후에도 *삭제되지 않습니다*.
 
 **팁:** 에이전트 세션 간 파일 보존을 더 세밀하게 제어하려면 [***Artifacts***](/ko/artifacts/)와
 Artifact Service를 사용해 파일을 환경으로 업로드하고 다운로드하세요.

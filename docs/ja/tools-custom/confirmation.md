@@ -1,20 +1,20 @@
-# ADK ツールの操作確認の取得
+# ADK ツールの実行確認の取得
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-一部のエージェント ワークフローでは、意思決定、検証、セキュリティ、または一般的な監視のために確認が必要です。このような場合、ワークフローを続行する前に人間または監視システムから応答を取得する必要があります。Agent Development Kit (ADK) の*ツール確認 (Tool Confirmation)* 機能を使用すると、ADK ツールはその実行を一時停止し、ユーザーまたは他のシステムと対話して確認を取得したり、構造化データを収集したりしてから続行できます。ADK ツールでツール確認を次の方法で使用できます。
+一部のエージェント ワークフローでは、意思決定、検証、セキュリティ、または一般的な監視のために確認が必要です。このような場合、ワークフローを続行する前に人間または監視システムから応答を取得する必要があります。Agent Development Kit (ADK) の*ツール実行の確認（Tool Confirmation）*機能を使用すると、ADK ツールはその実行を一時停止し、ユーザーまたは他のシステムと対話して確認を取得したり、構造化データを収集したりしてから続行できます。ADK ツールでは、次の方法でツール実行の確認を使用できます。
 
 -   **[ブール値の確認 (Boolean Confirmation)](#boolean-confirmation):** 確認フラグまたはプロバイダーを使用してツールを構成できます。このオプションは、はい/いいえの確認応答のためにツールを一時停止します。
--   **[高度な確認 (Advanced Confirmation)](#advanced-confirmation):** 構造化データの応答が必要なシナリオでは、確認を説明するテキスト プロンプトと期待される応答を使用してツールを構成できます。
+-   **[高度な確認 (Advanced Confirmation)](#advanced-confirmation):** 構造化データの応答が必要なシナリオでは、確認内容を説明するテキスト プロンプトと期待される応答形式を使用してツールを構成できます。
 
 !!! example "TypeScript、Go、Kotlin では実験的機能"
-    ツール確認機能は、ADK TypeScript、ADK Go、および ADK Kotlin では実験的機能です。すべての言語について、[既知の制限事項](#known-limitations)を参照してください。
+    ツール実行の確認（Tool Confirmation）機能は、ADK TypeScript、ADK Go、および ADK Kotlin では実験的機能です。すべての言語について、[既知の制限事項](#known-limitations)を参照してください。
 
-リクエストがユーザーに伝達される方法を構成でき、システムは ADK サーバーの REST API を介して送信された[リモート応答](#remote-response)を使用することもできます。ADK Web ユーザー インターフェースで確認機能を使用すると、図 1 に示すように、エージェント ワークフローに入力を求めるダイアログ ボックスが表示されます。
+リクエストをユーザーに伝達する方法を構成でき、ADK サーバーの REST API を介して送信された[リモート応答](#remote-response)を使用することもできます。ADK Web ユーザー インターフェースで確認機能を使用すると、図 1 に示すように、ユーザーに入力を求めるダイアログ ボックスが表示されます。
 
-![ツール確認のデフォルト ユーザー インターフェースのスクリーンショット](/assets/confirmation-ui.png)
+![ツール実行の確認のデフォルト ユーザー インターフェースのスクリーンショット](/assets/confirmation-ui.png)
 
 **図 1.** 高度なツール応答実装を使用した確認応答要求ダイアログ ボックスの例。
 
@@ -164,14 +164,14 @@
 
 ## 高度な確認 (Advanced confirmation) {#advanced-confirmation}
 
-ツールの確認でユーザーに対してより詳細な情報や、より複雑な応答が必要な場合は、`tool_confirmation` 実装を使用します。このアプローチは `ToolContext` オブジェクトを拡張してユーザー向けのリクエストのテキスト説明を追加し、より複雑な応答データを可能にします。
+ツール実行の確認でユーザーに対してより詳細な情報や複雑な応答が必要な場合は、`tool_confirmation` 実装を使用します。このアプローチは `ToolContext` オブジェクトを拡張してユーザー向けのリクエスト説明テキストを追加し、より複雑な応答データを扱えるようにします。
 
 ### 確認の定義
 
-高度な確認を使用してツールを作成する場合は、`hint` パラメータと `payload` パラメータを指定して `Tool Context Request Confirmation` メソッドを使用します。
+高度な確認を使用してツールを作成する場合は、`hint` パラメータと `payload` パラメータを指定して `ToolContext` の `request_confirmation`（または `requestConfirmation`）メソッドを使用します。
 
--   `hint`: ユーザーに何が必要かを説明する説明メッセージ。
--   `payload`: 返されると期待するデータの構造。これは JSON 形式の文字列にシリアル化可能である必要があります。
+-   `hint`: ユーザーに何が必要かを説明するメッセージ。
+-   `payload`: 返されると期待するデータの構造。JSON 形式の文字列にシリアライズ可能である必要があります。
 
 === "Python"
 
@@ -278,7 +278,7 @@
 
 ## REST API によるリモート確認 {#remote-response}
 
-エージェント ワークフローの人による確認のためのアクティブなユーザー インターフェースがない場合は、コマンドライン インターフェースを使用するか、メールやチャット アプリケーションなどの別のチャネルを経由して確認を処理できます。ツール呼び出しを確認するには、ユーザーまたは呼び出し元のアプリケーションがツール確認データを含む `FunctionResponse` イベントを送信する必要があります。
+エージェント ワークフローの人による確認のためのアクティブなユーザー インターフェースがない場合は、コマンドライン インターフェースを使用するか、メールやチャット アプリケーションなどの別のチャネルを経由して確認を処理できます。ツール呼び出しを確認するには、ユーザーまたは呼び出し元のアプリケーションがツール実行の確認データを含む `FunctionResponse` イベントを送信する必要があります。
 
 ```bash
  curl -X POST http://localhost:8000/run_sse \
@@ -319,7 +319,7 @@
 
 ## 既知の制限事項 {#known-limitations}
 
-ツール確認機能には次の制限事項があります。
+ツール実行の確認（Tool Confirmation）機能には次の制限事項があります。
 
 -   [DatabaseSessionService](/api-reference/python/google-adk.html#google.adk.sessions.DatabaseSessionService) はこの機能でサポートされていません。
 -   [VertexAiSessionService](/api-reference/python/google-adk.html#google.adk.sessions.VertexAiSessionService) はこの機能でサポートされていません。

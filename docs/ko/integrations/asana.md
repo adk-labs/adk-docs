@@ -108,14 +108,14 @@ Asana의 MCP 서버에는 카테고리별로 구성된 30개 이상의 도구가
 트레이스 그래프에서 사용 가능한 도구를 보려면
 [ADK Web UI](/runtime/web-interface/)를 사용하세요.
 
-Category | Description
+카테고리 | 설명
 -------- | -----------
-Project tracking | 프로젝트 상태 업데이트 및 보고서 조회
-Task management | 작업 생성, 업데이트, 정리
-User information | 사용자 정보 및 할당 조회
-Goals | Asana Goals 추적 및 업데이트
-Team organization | 팀 구조 및 멤버십 관리
-Object search | Asana 객체 전반에서 빠른 typeahead 검색
+프로젝트 추적 | 프로젝트 상태 업데이트 및 보고서 조회
+작업 관리 | 작업 생성, 업데이트, 정리
+사용자 정보 | 사용자 상세 정보 및 할당 내역 조회
+목표(Goals) | Asana Goals 추적 및 업데이트
+팀 조직 | 팀 구조 및 멤버십 관리
+객체 검색 | Asana 객체 전반에서 빠른 자동 완성(typeahead) 검색
 
 ## 추가 리소스
 

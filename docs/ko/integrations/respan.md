@@ -1,26 +1,26 @@
 ---
 catalog_title: Respan
-catalog_description: Respan 관측 가능성(observability)을 통해 ADK 에이전트를 트레이싱하고, 디버깅하고, 모니터링하세요
+catalog_description: Respan 관측성(observability)으로 ADK 에이전트를 트레이싱, 디버깅 및 모니터링합니다
 catalog_icon: /integrations/assets/respan.svg
 catalog_tags: ["observability"]
 ---
 
-# ADK를 위한 Respan 관측 가능성(observability) 연동
+# ADK용 Respan 관측성(Observability)
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK 지원</span><span class="lst-python">Python</span>
 </div>
 
-[Respan](https://www.respan.ai/)은 ADK runner, agent, model, tool 스팬(span)을 캡처하여 Respan 플랫폼에서 에이전트의 전체 워크플로를 검사할 수 있도록 지원합니다. ADK 연동 모듈은 OpenInference ADK 계측기(instrumentor)를 래핑하고 트레이스가 내보내지기 전에 Respan 전용 스팬 정상화를 추가하는 [`respan-instrumentation-google-adk`](https://pypi.org/project/respan-instrumentation-google-adk/)를 사용합니다.
+[Respan](https://www.respan.ai/)은 ADK 러너(runner), 에이전트, 모델 및 도구 스팬(span)을 캡처하여 Respan 플랫폼에서 에이전트의 전체 워크플로를 검사할 수 있도록 지원합니다. ADK 연동은 OpenInference ADK 계측기(instrumentor)를 래핑하고 트레이스가 내보내지기 전에 Respan 전용 스팬 정규화(normalization)를 수행하는 [`respan-instrumentation-google-adk`](https://pypi.org/project/respan-instrumentation-google-adk/)를 사용합니다.
 
 ## 개요
 
 ADK에서 Respan을 사용하여 다음과 같은 작업을 수행할 수 있습니다:
 
-- **에이전트 실행 트레이싱 (Trace agent runs)**: 러너 호출, 에이전트 실행, 모델 호출 및 도구 호출을 단일 트레이스 내에 캡처합니다.
-- **실패 디버깅 (Debug failures)**: 중첩된 ADK 워크플로 전체에서 스팬 입력, 출력, 시간 측정 및 오류를 검사합니다.
-- **프로덕션 메타데이터 추적 (Track production metadata)**: 한 요청에서 생성되는 모든 스팬에 고객, 스레드, 환경 및 맞춤형 메타데이터를 연결합니다.
-- **Respan 게이트웨이를 통한 모델 라우팅 (Route models through the Respan gateway)**: 모델 라우팅을 중앙집중식으로 제어하려면 ADK의 LiteLLM 어댑터를 Respan의 OpenAI 호환 게이트웨이와 함께 사용합니다.
+- **에이전트 실행 트레이싱**: 러너 호출(invocation), 에이전트 실행, 모델 호출 및 도구 호출을 단일 트레이스 내에 캡처합니다.
+- **실패 디버깅**: 중첩된 ADK 워크플로 전반에서 스팬 입력, 출력, 소요 시간(timing) 및 오류를 검사합니다.
+- **프로덕션 메타데이터 추적**: 한 요청에서 생성되는 모든 스팬에 고객, 스레드, 환경 및 커스텀 메타데이터를 연결합니다.
+- **Respan 게이트웨이를 통한 모델 라우팅**: 모델을 중앙에서 라우팅하려면 ADK의 LiteLLM 어댑터를 Respan의 OpenAI 호환 게이트웨이와 함께 사용합니다.
 
 ## 사전 요구사항
 
@@ -126,7 +126,7 @@ async def handle_user_request(user_id: str, message: str):
 
 ## 도구 호출 트레이싱
 
-ADK 도구는 직렬화된 입력, 출력 및 시간 측정을 포함하여 하위 도구 스팬(span)으로 캡처됩니다.
+ADK 도구는 직렬화된 입력, 출력 및 소요 시간(timing)을 포함하여 하위 도구 스팬(span)으로 캡처됩니다.
 
 ```python
 from google.adk.agents import Agent
@@ -147,7 +147,7 @@ agent = Agent(
 
 ## Respan 게이트웨이 사용
 
-ADK는 LiteLLM 어댑터를 통해 Respan 게이트웨이로 모델 호출을 라우팅할 수 있습니다. 이는 여러 모델 제공업체에 대해 하나의 OpenAI 호환 엔드포인트를 유지하려는 경우에 유용합니다.
+ADK는 LiteLLM 어댑터를 통해 Respan 게이트웨이로 모델 호출을 라우팅할 수 있습니다. 여러 모델 제공업체에 대해 단일 OpenAI 호환 엔드포인트를 사용하려는 경우에 유용합니다.
 
 ```bash
 export RESPAN_API_KEY="YOUR_RESPAN_API_KEY"

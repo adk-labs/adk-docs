@@ -11,17 +11,17 @@ catalog_tags: ["mcp"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[Unstructured Transform MCP 서버](https://docs.unstructured.io/transform/overview)는 ADK 에이전트를 원시 파일을 구조화된 AI 지원 데이터로 변환하는 문서 처리 플랫폼인 [Unstructured](https://unstructured.io)에 연결합니다. 이 통합을 통해 에이전트는 자연어를 사용하여 PDF, Office 문서, 이메일, 이미지 및 스캔된 파일(총 40가지 이상의 [지원되는 파일 형식](https://docs.unstructured.io/transform/supported-file-types))을 분할, 강화, 청크 및 임베딩 처리된 출력물로 파싱할 수 있는 기능을 제공합니다. Transform은 호스팅형 원격 MCP 서버이므로 로컬에 설치하거나 실행할 필요가 없습니다.
+[Unstructured Transform MCP 서버](https://docs.unstructured.io/transform/overview)는 ADK 에이전트를 원시 파일을 정형화된 AI 지원 데이터로 변환하는 문서 처리 플랫폼인 [Unstructured](https://unstructured.io)에 연결합니다. 이 통합을 사용하면 에이전트가 자연어로 PDF, Office 문서, 이메일, 이미지 및 스캔 파일(총 40가지 이상의 [지원되는 파일 형식](https://docs.unstructured.io/transform/supported-file-types))을 분할(partition), 보강(enrich), 청킹 및 임베딩 처리된 출력물로 파싱할 수 있습니다. Transform은 호스팅형 원격 MCP 서버이므로 로컬에 별도로 설치하거나 실행할 필요가 없습니다.
 
 ## 사용 사례
 
-- **RAG 수집(Ingestion)**: 이종 문서 모음을 벡터 저장소 및 검색 파이프라인을 위해 깔끔하게 정리되고 청크 처리가 완료되었으며 임베딩 준비가 된 출력물로 파싱합니다.
-- **문서 Q&A 에이전트**: 에이전트가 필요에 따라 계약서, 보고서 또는 논문을 가져와 파싱한 다음, 파싱된 콘텐츠를 기반으로 질문에 답변하도록 합니다.
+- **RAG 수집(Ingestion)**: 이종 문서 모음을 벡터 저장소 및 검색 파이프라인을 위해 깔끔하게 정리되고 청킹이 완료되었으며 임베딩에 바로 사용할 수 있는 출력물로 파싱합니다.
+- **문서 Q&A 에이전트**: 에이전트가 필요에 따라 계약서, 보고서 또는 논문을 가져와 파싱한 다음, 파싱된 콘텐츠에 그라운딩(Grounding)하여 질문에 답변하도록 합니다.
 - **형식 정규화**: 혼합된 입력물(스캔된 PDF, 스프레드시트, 프레젠테이션, 이메일 스레드)을 하나의 일관된 구조화된 표현으로 변환합니다.
 - **에이전트 런타임 시 OCR**: 더 큰 에이전트 워크플로 내의 한 단계로서 이미지와 스캔된 문서에서 텍스트와 구조를 추출합니다.
 - **정형 데이터 추출**: 양식, 청구서 및 계약서에서 사용자가 제공한 스키마 또는 서버가 문서에서 작성한 스키마와 일치하는 JSON 형식으로 명명된 필드를 추출합니다.
 
-## 사전 준비 사항
+## 사전 요구사항
 
 - [Unstructured 계정](https://transform.unstructured.io) 및 API 키. [API 키 받기](https://docs.unstructured.io/transform/code#get-your-unstructured-api-key-and-url)를 참고하세요.
 - 에이전트 모델용 [Gemini API 키](https://aistudio.google.com/apikey).
@@ -29,7 +29,7 @@ catalog_tags: ["mcp"]
 
 ## 설치
 
-`mcp` 엑스트라가 포함된 ADK를 설치합니다. 이 엑스트라는 필수 사양이며, 이것이 없으면 ADK의 MCP 클래스를 가져올 수 없습니다.
+`mcp` 부가 패키지(extra)가 포함된 ADK를 설치합니다. 이 부가 패키지는 필수이며, 설치하지 않으면 ADK의 MCP 클래스를 임포트할 수 없습니다.
 
 ```bash
 pip install "google-adk[mcp]"

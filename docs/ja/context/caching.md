@@ -4,9 +4,9 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.15.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.7.0</span>
 </div>
 
-エージェントを使用してタスクを完了する場合、拡張された指示や大規模なデータセットを複数のエージェントリクエストにわたって生成AIモデルに再利用したい場合があります。エージェントリクエストごとにこのデータを再送信すると、時間がかかり、非効率的で、コストがかかる可能性があります。生成AIモデルでコンテキストキャッシュ機能を使用すると、応答を大幅に高速化し、リクエストごとにモデルに送信されるトークンの数を減らすことができます。
+エージェントを使用してタスクを実行する際、生成AIモデルへの複数のエージェントリクエストにわたって、長い指示や大規模なデータセットを再利用したい場合があります。エージェントリクエストごとにこのデータを再送信すると、時間がかかり、非効率でコストも増加します。生成AIモデルでコンテキストキャッシュ機能を使用すると、レスポンスを大幅に高速化し、リクエストごとにモデルへ送信するトークン数を削減できます。
 
-ADKコンテキストキャッシュ機能を使用すると、Gemini 2.0以降のモデルを含む、それをサポートする生成AIモデルでリクエストデータをキャッシュできます。このドキュメントでは、この機能の構成方法と使用方法について説明します。
+ADK のコンテキストキャッシュ機能を使用すると、Gemini 2.0 以降のモデルをはじめとする対応する生成AIモデルでリクエストデータをキャッシュできます。このドキュメントでは、この機能の構成方法と使用方法について説明します。
 
 !!! example "実験的機能"
     `ContextCacheConfig` クラスは実験的機能であり、今後のリリースで API や動作が変更される可能性があります。Python ではインスタンス作成時に警告が出力され、Kotlin では `@OptIn(ExperimentalContextCachingFeature::class)` が必要です。
@@ -111,7 +111,7 @@ ADKコンテキストキャッシュ機能を使用すると、Gemini 2.0以降�
    <span class="lst-supported">ADKでサポート</span><span class="lst-kotlin">Kotlin v0.6.0</span>
 </div>
 
-キャッシュが有効になっている場合、LLM レスポンスに基づくイベントには、その呼び出しに対してキャッシュが何を行ったかを報告する `CacheMetadata` を含めることができます。キャッシュが無効になっている場合や、呼び出しでキャッシュ情報が生成されなかった場合は null になるため、読み取る前に確認してください。存在する場合、2 つの状態があります。`cacheName`、`expireTime`、`invocationsUsed` がすべて設定されている **アクティブ キャッシュ (active cache)** 状態と、3 つすべてが null の **フィンガープリントのみ (fingerprint-only)** 状態です。
+キャッシュが有効になっている場合、LLM レスポンスに基づくイベントには、その呼び出しに対してキャッシュがどのように動作したかを報告する `CacheMetadata` を含めることができます。キャッシュが無効になっている場合や、呼び出しでキャッシュ情報が生成されなかった場合は null になるため、読み取る前に確認してください。存在する場合、2 つの状態があります。`cacheName`、`expireTime`、`invocationsUsed` がすべて設定されている **アクティブキャッシュ (active cache)** 状態と、3 つすべてが null の **フィンガープリントのみ (fingerprint-only)** 状態です。
 
 ```kotlin
 --8<-- "examples/kotlin/snippets/context/CacheMetadataExample.kt:cache_metadata"
@@ -128,7 +128,7 @@ ADKコンテキストキャッシュ機能を使用すると、Gemini 2.0以降�
 -   [`cache_analysis`](https://github.com/google/adk-python/tree/main/contributing/samples/cache_analysis)：
     コンテキストキャッシュのパフォーマンスを分析する方法を示すコードサンプル。
 
-ユースケースでセッション全体で使用される指示を提供する必要がある場合は、エージェントの`static_instruction`パラメータの使用を検討してください。これにより、生成モデルのシステム指示を修正できます。詳細については、次のサンプルコードを参照してください。
+ユースケースでセッション全体を通して使用する指示を指定する必要がある場合は、エージェントの `static_instruction` パラメータの使用を検討してください。これにより、生成モデルのシステム指示に静的な指示を追加・設定できます。詳細については、次のサンプルコードを参照してください。
 
 -   [`static_instruction`](https://github.com/google/adk-python/tree/main/contributing/samples/context_management/static_instruction)：
     静的な指示を使用したデジタルペットエージェントの実装。

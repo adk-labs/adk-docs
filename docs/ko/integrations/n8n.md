@@ -24,7 +24,7 @@ n8n 인스턴스에 안전하게 연결해 워크플로를 검색, 점검, 트�
     [MCP Server Trigger node](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-langchain.mcptrigger/)
     를 사용해 **단일 워크플로**를 독립적인 MCP 서버처럼 동작시킬 수 있습니다.
     이 방법은 특정 서버 동작을 설계하거나
-    한 워크플로에만 도구를 격리해 노출하고 싶을 때 유용합니다.
+    한 워크플로에만 도구를 격리해 제공하고 싶을 때 유용합니다.
 
 ## 사용 사례
 
@@ -45,7 +45,7 @@ n8n 인스턴스에 안전하게 연결해 워크플로를 검색, 점검, 트�
 - 유효한 MCP 액세스 토큰
 
 자세한 설정 방법은
-[n8n MCP documentation](https://docs.n8n.io/advanced-ai/accessing-n8n-mcp-server/)
+[n8n MCP 문서](https://docs.n8n.io/advanced-ai/accessing-n8n-mcp-server/)
 를 참고하세요.
 
 ## 에이전트와 함께 사용
@@ -201,4 +201,4 @@ n8n 인스턴스에 안전하게 연결해 워크플로를 검색, 점검, 트�
 
 ## 추가 리소스
 
-- [n8n MCP Server Documentation](https://docs.n8n.io/advanced-ai/accessing-n8n-mcp-server/)
+- [n8n MCP 서버 문서](https://docs.n8n.io/advanced-ai/accessing-n8n-mcp-server/)

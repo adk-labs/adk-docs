@@ -60,10 +60,10 @@ LLM は `conversation_plan` と会話履歴を組み合わせて、
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.26.0</span>
 </div>
 
-User Persona は、シミュレートされたユーザーが会話中に採用する役割です。
+ユーザーペルソナ（User Persona）は、シミュレートされたユーザーが会話中に演じる役割です。
 これは、コミュニケーションのスタイル、情報の提供方法、
-エラーへの反応の仕方など、ユーザーがエージェントとどう相互作用するかを定める
-**behaviors** の集合として定義されます。
+エラーへの反応の仕方など、ユーザーがエージェントとどのようにやり取りするかを規定する
+一連の**行動特性（behaviors）**として定義されます。
 
 `UserPersona` は次のフィールドで構成されます。
 
@@ -76,7 +76,7 @@ User Persona は、シミュレートされたユーザーが会話中に採用�
 *   `name`: 行動の名前
 *   `description`: 期待される行動の要約
 *   `behavior_instructions`: シミュレートされたユーザー（LLM）に対して、どう振る舞うべきかを示す具体的な指示
-*   `violation_rubrics`: 評価器が、この行動にユーザーが従っているかを判断するために使う基準です。これらの rubric の **いずれか** が満たされた場合、評価器はその行動が **守られていない** と判断すべきです。
+*   `violation_rubrics`: 評価器が、この行動にユーザーが従っているかを判断するために使う基準です。これらのルーブリックの**いずれか**に該当した場合、評価器はその行動特性が**守られていない**と判定します。
 
 ## 組み込みペルソナ
 
@@ -85,11 +85,11 @@ ADK には、一般的な行動を組み合わせた事前定義ペルソナの�
 
 | 行動 | **EXPERT** ペルソナ | **NOVICE** ペルソナ | **EVALUATOR** ペルソナ |
 | :--- | :--- | :--- | :--- |
-| **Advance** | 詳細志向（積極的に詳細を提供する） | 目標志向（詳細は尋ねられるまで待つ） | 詳細志向 |
-| **Answer** | 関連する質問にのみ答える | すべての質問に答える | 関連する質問にのみ答える |
-| **Correct Agent Inaccuracies** | はい | いいえ | いいえ |
-| **Troubleshoot Agent Errors** | 1回は試す | 決して試さない | 決して試さない |
-| **Tone** | プロフェッショナル | 会話調 | 会話調 |
+| **会話を進める姿勢（Advance）** | 詳細志向（積極的に詳細を提供する） | 目標志向（詳細は尋ねられるまで待つ） | 詳細志向 |
+| **質問への回答（Answer）** | 関連する質問にのみ答える | すべての質問に答える | 関連する質問にのみ答える |
+| **エージェントの誤りの訂正（Correct Agent Inaccuracies）** | はい | いいえ | いいえ |
+| **エージェントエラーへの対処（Troubleshoot Agent Errors）** | 1回は試す | 決して試さない | 決して試さない |
+| **トーン（Tone）** | プロフェッショナル | 会話調 | 会話調 |
 
 ## 例: 会話シナリオを用いて [`hello_world`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world) エージェントを評価する
 
@@ -203,7 +203,7 @@ adk eval \
 *   `model_configuration`: モデルの振る舞いを制御する
     [`GenerateContentConfig`](https://github.com/googleapis/python-genai/blob/6196b1b4251007e33661bb5d7dc27bafee3feefe/google/genai/types.py#L4295)
 *   `max_allowed_invocations`: 会話が強制終了されるまでに許可されるユーザーとエージェントの最大インタラクション数。これは、`EvalSet` 内の妥当な最長のユーザーとエージェントのインタラクションよりも大きく設定する必要があります。最初の固定プロンプトも 1 回の呼び出しとしてカウントされます。この値を `-1` に設定すると制限が解除されますが、推奨されません。
-*   `include_function_calls`: オプション。ユーザーシミュレータに提供される会話履歴プロンプトに関数呼び出しとレスポンスを含めるかどうか。デフォルトは `false` です。
+*   `include_function_calls`: 任意。ユーザーシミュレーターに提供される会話履歴プロンプトに関数呼び出しとレスポンスを含めるかどうか。デフォルトは `false` です。
 *   `custom_instructions`: 任意。ユーザーシミュレーターのデフォルト指示を上書きします。指示文字列には
     [Jinja](https://jinja.palletsprojects.com/en/stable/templates/#) 構文を使って次のプレースホルダーを含める必要があります
     （*値は事前に置換しないでください*）。

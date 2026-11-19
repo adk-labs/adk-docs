@@ -42,12 +42,12 @@ async for event in runner.run_live(...):
 | 상황 | 사용 방식 | 구현 방법 |
 |---|---|---|
 | 1초 이내에 반환되는 빠른 도구 | **블로킹** (기본값) | 일반적인 단일 `return` 도구 |
-| 중계할 내용이 없는 긴 대기 작업 | **[비차단(Non-blocking) 도구](#non-blocking-tools)** | 도구에 `response_scheduling` 또는 `behavior` 설정 |
-| 사용자에게 중계할 가치가 있는 긴 대기 작업 | **[스트리밍 도구](#streaming-tools)** | 비동기 제너레이터에서 진행 상황 `yield` |
+| 진행 상황을 안내할 필요가 없는 장시간 작업 | **[비차단(Non-blocking) 도구](#non-blocking-tools)** | 도구에 `response_scheduling` 또는 `behavior` 설정 |
+| 진행 상황을 안내할 가치가 있는 장시간 작업 | **[스트리밍 도구](#streaming-tools)** | 비동기 제너레이터에서 진행 상황 `yield` |
 
 ## 비차단(Non-blocking) 도구
 
-대규모 분석 쿼리, 일괄 내보내기, 미디어 생성 작업처럼 굳이 사용자에게 중계할 필요가 없는 긴 대기 작업이 있습니다. 사용자가 요청하지 않은 진행 상황 업데이트는 이점 없이 대화를 방해할 뿐입니다. 일반적인 단일 `return` 도구를 유지하면서 `response_scheduling`을 설정하여 백그라운드로 이동시키세요:
+대규모 분석 쿼리, 일괄 내보내기, 미디어 생성 작업처럼 굳이 진행 상황을 안내할 필요가 없는 장시간 작업도 있습니다. 사용자가 요청하지 않은 진행 상황 업데이트는 이점 없이 대화를 방해할 뿐입니다. 일반적인 단일 `return` 도구를 유지하면서 `response_scheduling`을 설정하여 백그라운드로 이동시키세요:
 
 ```python
 from google.adk.tools import FunctionTool

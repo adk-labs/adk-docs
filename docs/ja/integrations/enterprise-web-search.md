@@ -81,7 +81,7 @@ Google Cloud [Enterprise Web Search](https://docs.cloud.google.com/gemini-enterp
 
 ## 選択ガイドライン (Selection guidance)
 
-- 任意の Gemini モデルにおいて広範な Web カバーレージを必要とする汎用アプリケーションには、標準の Google Search を使用します。
+- 任意の Gemini モデルにおいて広範な Web カバレッジを必要とする汎用アプリケーションには、標準の Google Search を使用します。
 - コンプライアンス制御、ソース監査、Gemini 2+ モデルへのデプロイが必須であるエンタープライズエージェントを構築する場合は、Enterprise Web Search を使用します。
 
 ## 追加リソース

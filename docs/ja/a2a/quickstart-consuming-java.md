@@ -26,7 +26,7 @@ A2A Basic サンプルは次の要素で構成されています。
 
 ## ADK Java SDKでエージェントを利用する
 
-Java では、リクエストを手動で生成する代わりに、ADK が公式A2A SDK `Client` を `RemoteA2AAgent` エンティティの上に正確にラップして利用します。なお、Java SDK は現在 A2A Protocol 0.3 を使用しています。
+Java では、リクエストを手動で構築する代わりに、ADK の `RemoteA2AAgent` が公式 A2A SDK の `Client` をラップして通信を処理します。なお、Java SDK は現在 A2A Protocol 0.3 を使用しています。
 
 ### 1. サンプルコードを入手する { #getting-the-sample-code }
 
@@ -40,7 +40,7 @@ cd examples/a2a_basic
 
 ### 2. リモート Prime Agent サーバーを起動する { #start-the-remote-prime-agent-server }
 
-ADK エージェントが A2A 経由でリモートエージェントを利用できることを示すには、まずリモートエージェントサーバーを実行しておく必要があります。独自のA2Aサーバーを任意の言語で実装することもできますが、ADK には `a2a_server` サンプルがあり、` :9090` でエージェントをホストする Quarkus サービスを起動します。
+ADK エージェントが A2A 経由でリモートエージェントを利用できることを示すには、まずリモートエージェントサーバーを実行しておく必要があります。独自のA2Aサーバーを任意の言語で実装することもできますが、ADK には `a2a_server` サンプルがあり、`:9090` でエージェントをホストする Quarkus サービスを起動します。
 
 ```bash
 # adk-java のルートで、9090 ポートの事前構成済み Quarkus リモートサービスを起動します

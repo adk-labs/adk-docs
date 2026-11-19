@@ -6,7 +6,7 @@
 
 라이브 에이전트가 생성하는 모든 결과는 `Event`로 애플리케이션에 전달됩니다. 모델이 작성하는 부분 텍스트, 원시 오디오 바이트, 대화 양측의 음성 전사(transcription), 도구 호출, 토큰 수 및 오류가 여기에 포함됩니다. 단 한 번의 발화 응답도 수십 개의 이벤트로 나뉘어 도착할 수 있으며, 이를 올바르게 처리하는 것이 지연 없이 즉각적인 음성 인터페이스를 구현하는 핵심입니다.
 
-`Event`는 [이벤트](../events/index.md)에 설명된 ADK 공통 클래스와 동일합니다. 라이브 세션에서는 요청/응답 에이전트가 사용하지 않는 필드(오디오 Blob, 전사, 인터럽트 플래그 등)를 채워 넣고 단발성이 아닌 지속적인 스트림으로 전달합니다. 이를 생성하는 루프에 대해서는 [세션](sessions.md)을 참고하세요.
+`Event`는 [이벤트](../events/index.md)에 설명된 ADK 공통 클래스와 동일합니다. 라이브 세션에서는 요청/응답 에이전트가 사용하지 않는 필드(오디오 블롭(blob), 전사, 인터럽트 플래그 등)를 채워 넣고 단발성이 아닌 지속적인 스트림으로 전달합니다. 이를 생성하는 루프에 대해서는 [세션](sessions.md)을 참고하세요.
 
 ## 라이브 에이전트 이벤트 데이터
 
@@ -14,7 +14,7 @@
 
 | 필드 | 내용 |
 |---|---|
-| `content.parts[].text` | 텍스트 파트 — 라이브 세션에서는 생각 요약(thought summary) 및 기타 발화되지 않는 내용 |
+| `content.parts[].text` | 텍스트 파트 — 라이브 세션에서는 사고 요약(thought summary) 및 기타 발화되지 않는 내용 |
 | `content.parts[].inline_data` | 재생을 위한 원시 오디오 바이트 (임시 데이터) |
 | `content.parts[].file_data` | 아티팩트에 저장된 오디오에 대한 참조 (`save_live_blob=True`인 경우); ADK Python 2.14 이상에서는 사용자의 이미지 프레임에 대한 참조도 포함 |
 | `content.parts[].function_call` / `function_response` | 도구 호출 및 결과 (ADK가 자동으로 실행) |
@@ -42,7 +42,7 @@ events = [e for e in stream if e.author == "billing_agent"]
 
 ### 텍스트
 
-텍스트는 `event.content.parts[].text`로 도착합니다. 라이브 세션에서 이는 생각 요약 및 기타 음성으로 발화되지 않는 내용입니다. ADK가 지원하는 모든 [라이브 모델](models.md#live-models)은 오디오를 입력받아 오디오를 출력하므로, **모델의 발화 응답은 텍스트 파트가 아니라 [출력 전사(output transcription)](configuration.md#audio-transcription)로 반환됩니다**.
+텍스트는 `event.content.parts[].text`로 도착합니다. 라이브 세션에서 이는 사고 요약 및 기타 음성으로 발화되지 않는 내용입니다. ADK가 지원하는 모든 [라이브 모델](models.md#live-models)은 오디오를 입력받아 오디오를 출력하므로, **모델의 발화 응답은 텍스트 파트가 아니라 [출력 전사(output transcription)](configuration.md#audio-transcription)로 반환됩니다**.
 
 ```python
 async for event in runner.run_live(...):
@@ -54,7 +54,7 @@ async for event in runner.run_live(...):
 
 !!! warning "`parts`를 순회하세요. 절대 `parts[0]`만 가정하지 마세요"
 
-    단일 이벤트에 여러 파트가 포함될 수 있으며, 라이브 모델은 이를 일상적으로 수행합니다. `event.content.parts[0].text`는 나머지 파트를 조용히 누락시키고 첫 번째 파트가 텍스트가 아닌 경우(생각 요약, 함수 호출, 오디오 Blob 등) 오류를 일으킵니다. 파트 목록을 반복 순회하고 설정된 필드에 따라 분기 처리하세요.
+    단일 이벤트에 여러 파트가 포함될 수 있으며, 라이브 모델은 이를 일상적으로 수행합니다. `event.content.parts[0].text`를 사용하면 나머지 파트가 경고 없이 누락되며, 첫 번째 파트가 텍스트가 아닌 경우(사고 요약, 함수 호출, 오디오 블롭(blob) 등) 오류가 발생합니다. 파트 목록을 반복 순회하고 설정된 필드에 따라 분기 처리하세요.
 
 ### 오디오
 
@@ -133,7 +133,7 @@ async for event in runner.run_live(...):
 
 ### 상호작용 상태 (Interaction status) { #interaction-status }
 
-일부 모델은 요청당 `turn_complete`를 두 번 이상 보냅니다. 이러한 모델의 경우, 모델이 완료될 때까지 `event.interaction_status`(`run_live`에서는 `interactionStatus`)가 `IN_PROGRESS`로 유지되다가 완료되면 `IDLE`이 됩니다. 다른 모델에서는 `None`이므로 이 경우 `turn_complete`로 폴백(fallback)하세요:
+일부 모델은 요청당 `turn_complete`를 두 번 이상 보냅니다. 이러한 모델의 경우, 모델이 완료될 때까지 `event.interaction_status`(`/run_live`에서는 `interactionStatus`)가 `IN_PROGRESS`로 유지되다가 완료되면 `IDLE`이 됩니다. 다른 모델에서는 `None`이므로 이 경우 `turn_complete`로 폴백(fallback)하세요:
 
 ```python
 from google.genai import types

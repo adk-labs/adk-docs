@@ -1,30 +1,30 @@
-# ADK 도구에 대한 작업 확인 (Action Confirmation)
+# ADK 도구의 작업 실행 승인 (Action Confirmation)
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.14.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.3.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-일부 에이전트 워크플로는 의사 결정, 검증, 보안 또는 일반적인 감독을 위해 확인이 필요합니다. 이러한 경우 워크플로를 진행하기 전에 사람이나 감독 시스템으로부터 응답을 받아야 합니다. ADK(Agent Development Kit)의 *도구 확인(Tool Confirmation)* 기능을 사용하면 ADK 도구의 실행을 일시 중지하고 사용자 또는 다른 시스템과 상호작용하여 확인을 받거나 구조화된 데이터를 수집한 후 계속 진행할 수 있습니다. ADK 도구에서 도구 확인을 다음과 같은 방식으로 사용할 수 있습니다:
+일부 에이전트 워크플로는 의사결정, 검증, 보안 또는 전반적인 감독을 위해 사전 승인이 필요합니다. 이러한 경우 워크플로를 계속 진행하기 전에 사람이나 감독 시스템으로부터 응답을 받아야 합니다. ADK(Agent Development Kit)의 *도구 실행 승인(Tool Confirmation)* 기능을 사용하면 ADK 도구의 실행을 일시 중지하고 사용자 또는 외부 시스템과 상호작용하여 승인을 받거나 구조화된 데이터를 수집한 후 실행을 이어갈 수 있습니다. ADK 도구에서는 다음과 같은 방식으로 도구 실행 승인을 사용할 수 있습니다:
 
--   **[불리언 확인 (Boolean Confirmation)](#boolean-confirmation):** 확인 플래그 또는 프로바이더로 도구를 구성할 수 있습니다. 이 옵션은 예/아니오 확인 응답을 위해 도구를 일시 중지합니다.
--   **[고급 확인 (Advanced Confirmation)](#advanced-confirmation):** 구조화된 데이터 응답이 필요한 시나리오의 경우 확인을 설명하는 텍스트 프롬프트와 예상되는 응답을 도구에 구성할 수 있습니다.
+-   **[불리언 승인 (Boolean Confirmation)](#boolean-confirmation):** 승인 플래그 또는 프로바이더로 도구를 구성할 수 있습니다. 이 옵션은 예/아니오 승인 응답을 받을 때까지 도구 실행을 일시 중지합니다.
+-   **[고급 승인 (Advanced Confirmation)](#advanced-confirmation):** 구조화된 데이터 응답이 필요한 시나리오에서는 승인 요청 내용을 설명하는 텍스트 프롬프트와 예상 응답 구조를 도구에 구성할 수 있습니다.
 
 !!! example "TypeScript, Go 및 Kotlin에서 실험적 기능"
-    도구 확인 기능은 ADK TypeScript, ADK Go 및 ADK Kotlin에서 실험적으로 제공됩니다. 모든 언어에 대해서는 [알려진 제한사항](#known-limitations)을 참고하세요.
+    도구 실행 승인 기능은 ADK TypeScript, ADK Go 및 ADK Kotlin에서 실험적으로 제공됩니다. 모든 언어에 공통으로 적용되는 사항은 [알려진 제한사항](#known-limitations)을 참고하세요.
 
-요청이 사용자에게 전달되는 방식을 구성할 수 있으며, 시스템은 ADK 서버의 REST API를 통해 전송된 [원격 응답](#remote-response)을 사용할 수도 있습니다. ADK 웹 사용자 인터페이스에서 확인 기능을 사용할 때 에이전트 워크플로는 그림 1과 같이 입력을 요청하는 대화 상자를 사용자에게 표시합니다:
+요청이 사용자에게 전달되는 방식을 직접 구성할 수 있으며, ADK 서버의 REST API를 통해 전송된 [원격 응답](#remote-response)을 처리할 수도 있습니다. ADK 웹 사용자 인터페이스에서 도구 실행 승인 기능을 사용하면 에이전트 워크플로는 그림 1과 같이 입력을 요청하는 대화 상자를 사용자에게 표시합니다:
 
-![도구 확인을 위한 기본 사용자 인터페이스 스크린샷](../assets/confirmation-ui.png)
+![도구 실행 승인을 위한 기본 사용자 인터페이스 스크린샷](../assets/confirmation-ui.png)
 
-**그림 1.** 고급 도구 응답 구현을 사용한 확인 응답 요청 대화 상자 예시.
+**그림 1.** 고급 도구 실행 승인 구현을 사용한 승인 요청 대화 상자 예시.
 
-다음 섹션에서는 확인 시나리오에 이 기능을 사용하는 방법을 설명합니다. 완전한 코드 샘플은 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 예제를 참고하세요. 에이전트 워크플로에 사람의 입력을 통합하는 추가적인 방법은 [Human-in-the-loop](../workflows/patterns.md#human-in-the-loop) 에이전트 패턴을 참고하세요.
+다음 섹션에서는 다양한 승인 시나리오에서 이 기능을 사용하는 방법을 설명합니다. 완전한 코드 샘플은 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 예제를 참고하세요. 에이전트 워크플로에 사람의 입력을 통합하는 추가적인 방법은 [Human-in-the-loop](../workflows/patterns.md#human-in-the-loop) 에이전트 패턴을 참고하세요.
 
-## 불리언 확인 (Boolean confirmation) {#boolean-confirmation}
+## 불리언 승인 (Boolean confirmation) {#boolean-confirmation}
 
-도구에 사용자의 간단한 `yes` 또는 `no`만 필요한 경우 확인 단계를 추가할 수 있습니다. Python, Go 및 Java에서는 도구를 `FunctionTool` 클래스로 래핑하고 `require_confirmation` 매개변수(또는 이에 상응하는 매개변수)를 `True`로 설정하여 이를 활성화할 수 있습니다. Kotlin에서는 도구 함수의 `@Tool` 어노테이션에 `requireConfirmation = true`를 설정합니다. TypeScript에서는 `ToolContext`를 사용하여 `execute` 함수 내에서 이 로직을 수동으로 구현합니다.
+도구에 사용자의 간단한 `yes` 또는 `no` 응답만 필요한 경우 승인 단계를 추가할 수 있습니다. Python, Go 및 Java에서는 도구를 `FunctionTool` 클래스로 래핑하고 `require_confirmation` 매개변수(또는 이에 상응하는 매개변수)를 `True`로 설정하여 활성화합니다. Kotlin에서는 도구 함수의 `@Tool` 어노테이션에 `requireConfirmation = true`를 설정합니다. TypeScript에서는 `ToolContext`를 사용하여 `execute` 함수 내에서 이 로직을 직접 구현합니다.
 
-다음 예시는 불리언 확인을 활성화하는 방법을 보여줍니다:
+다음 예시는 불리언 승인을 활성화하는 방법을 보여줍니다:
 
 === "Python"
 
@@ -46,7 +46,7 @@
 === "TypeScript"
 
     !!! note
-        현재 ADK for TypeScript에서는 도구의 `execute` 함수 내에서 확인 로직을 수동으로 구현해야 합니다.
+        현재 ADK for TypeScript에서는 도구의 `execute` 함수 내에서 승인 로직을 직접 구현해야 합니다.
 
     ```typescript
     --8<-- "examples/typescript/snippets/tools/confirmation/boolean_confirmation.ts:boolean_confirmation"
@@ -90,9 +90,9 @@
     --8<-- "examples/kotlin/snippets/tools/confirmation/ToolConfirmationExample.kt:boolean_confirmation"
     ```
 
-### 확인 필요 함수 (Require confirmation function)
+### 동적 승인 여부 결정 함수 (Require confirmation function)
 
-도구의 입력에 따라 불리언 응답을 반환하는 함수를 사용하여 확인 요구사항 동작을 동적으로 수정할 수 있습니다. TypeScript에서는 `execute` 함수에 조건부 로직을 추가하여 이를 처리합니다. Kotlin에서는 `@Tool` 어노테이션의 플래그가 컴파일 타임 상수이므로 조건부 로직이 도구 함수 내부에 배치됩니다.
+도구의 입력값에 따라 불리언 응답을 반환하는 함수를 사용하여 승인 요구 동작을 동적으로 제어할 수 있습니다. TypeScript에서는 `execute` 함수에 조건부 로직을 추가하여 이를 처리합니다. Kotlin에서는 `@Tool` 어노테이션의 플래그가 컴파일 타임 상수이므로 조건부 로직을 도구 함수 내부에 작성합니다.
 
 === "Python"
 
@@ -176,22 +176,22 @@
     !!! note
         `@Tool` 어노테이션의 `requireConfirmation` 플래그는 컴파일 타임 상수이므로, ADK Java에서와 마찬가지로 `ToolContext`를 사용하여 도구 내부에서 임계값을 평가합니다.
 
-## 고급 확인 (Advanced confirmation) {#advanced-confirmation}
+## 고급 승인 (Advanced confirmation) {#advanced-confirmation}
 
-도구 확인에 사용자에게 더 많은 세부정보가 필요하거나 더 복잡한 응답이 필요한 경우 `tool_confirmation` 구현을 사용합니다. 이 접근 방식은 `ToolContext` 객체를 확장하여 사용자를 위한 요청에 대한 텍스트 설명을 추가하고 더 복잡한 응답 데이터를 허용합니다. 이러한 방식으로 도구 확인을 구현하면 도구 실행을 일시 중지하고 특정 정보를 요청한 다음 제공된 데이터로 도구를 재개할 수 있습니다.
+도구 실행 승인 시 사용자에게 더 자세한 안내를 제공하거나 복합적인 구조의 응답을 받아야 하는 경우 `tool_confirmation` 구현을 사용합니다. 이 접근 방식은 `ToolContext` 객체를 확장하여 사용자를 위한 요청 설명 텍스트를 추가하고 더 복잡한 응답 데이터를 처리할 수 있게 합니다. 이 방식으로 도구 실행 승인을 구현하면 도구 실행을 일시 중지하고 특정 정보를 요청한 뒤, 전달받은 데이터로 도구 실행을 재개할 수 있습니다.
 
-이 확인 흐름에는 시스템이 사람의 응답을 위한 입력 요청을 조합하고 전송하는 요청 단계와 시스템이 반환된 데이터를 수신하고 처리하는 응답 단계가 있습니다.
+이 승인 흐름은 시스템이 사람의 응답을 받기 위해 입력 요청을 구성하여 전송하는 요청 단계와, 반환된 데이터를 수신하여 처리하는 응답 단계로 이루어집니다.
 
-### 확인 정의
+### 승인 정의
 
-고급 확인을 사용하여 도구를 만들 때는 `hint` 및 `payload` 매개변수와 함께 `Tool Context Request Confirmation` 메서드를 사용합니다:
+고급 승인을 사용하는 도구를 만들 때는 `hint` 및 `payload` 매개변수와 함께 `ToolContext`의 `request_confirmation` 메서드를 사용합니다:
 
--   `hint`: 사용자에게 필요한 내용을 설명하는 설명 메시지.
--   `payload`: 반환될 것으로 예상하는 데이터의 구조. 이는 JSON 형식의 문자열로 직렬화될 수 있어야 합니다.
+-   `hint`: 사용자에게 필요한 조치를 설명하는 안내 메시지입니다.
+-   `payload`: 반환받을 것으로 예상하는 데이터 구조입니다. JSON 형식 문자열로 직렬화할 수 있어야 합니다.
 
-이 접근 방식에 대한 완전한 예제는 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 코드 샘플을 참고하세요. 확인을 받는 동안 에이전트 워크플로 도구 실행이 일시 중지됩니다. 확인을 받은 후 `tool_confirmation.payload` 객체에서 확인 응답에 액세스한 다음 워크플로 실행을 진행할 수 있습니다.
+이 접근 방식에 대한 완전한 예제는 [human_tool_confirmation](https://github.com/google/adk-python/blob/fc90ce968f114f84b14829f8117797a4c256d710/contributing/samples/human_tool_confirmation/agent.py) 코드 샘플을 참고하세요. 승인을 기다리는 동안 에이전트 워크플로의 도구 실행은 일시 중지됩니다. 승인이 완료되면 `tool_confirmation.payload` 객체에서 응답 데이터에 접근한 다음 워크플로 실행을 이어갈 수 있습니다.
 
-다음 코드는 직원의 휴가 요청을 처리하는 도구의 구현 예시를 보여줍니다:
+다음 코드는 직원의 휴가 신청을 처리하는 도구의 구현 예시를 보여줍니다:
 
 === "Python"
 
@@ -302,11 +302,11 @@
     --8<-- "examples/kotlin/snippets/tools/confirmation/ToolConfirmationExample.kt:advanced_confirmation"
     ```
 
-## REST API를 통한 원격 확인 {#remote-response}
+## REST API를 통한 원격 승인 {#remote-response}
 
-에이전트 워크플로의 사람 확인을 위한 활성 사용자 인터페이스가 없는 경우 명령줄 인터페이스를 통해 또는 이메일이나 채팅 애플리케이션과 같은 다른 채널을 통해 확인을 처리할 수 있습니다. 도구 호출을 확인하려면 사용자 또는 호출 애플리케이션이 도구 확인 데이터가 포함된 `FunctionResponse` 이벤트를 전송해야 합니다.
+에이전트 워크플로에서 사람의 승인을 받을 활성 사용자 인터페이스가 없는 경우, 명령줄 인터페이스(CLI)를 통하거나 이메일·채팅 애플리케이션 등 다른 채널로 라우팅하여 승인을 처리할 수 있습니다. 도구 호출을 승인하려면 사용자 또는 호출 애플리케이션이 도구 실행 승인 데이터가 포함된 `FunctionResponse` 이벤트를 전송해야 합니다.
 
-ADK API 서버의 `/run` 또는 `/run_sse` 엔드포인트로 요청을 보내거나 ADK 러너로 직접 보낼 수 있습니다. 다음 예시는 `curl` 명령을 사용하여 `/run_sse` 엔드포인트로 확인을 보냅니다:
+ADK API 서버의 `/run` 또는 `/run_sse` 엔드포인트로 요청을 보내거나 ADK `Runner`로 직접 전달할 수 있습니다. 다음 예시는 `curl` 명령을 사용하여 `/run_sse` 엔드포인트로 승인 응답을 전송합니다:
 
 ```bash
  curl -X POST http://localhost:8000/run_sse \
@@ -335,19 +335,19 @@ ADK API 서버의 `/run` 또는 `/run_sse` 엔드포인트로 요청을 보내�
 }'
 ```
 
-확인을 위한 REST 기반 응답은 다음 요구사항을 충족해야 합니다:
+승인을 위한 REST 기반 응답은 다음 요구사항을 충족해야 합니다:
 
 -   `function_response`의 `id`는 `adk_request_confirmation` `FunctionCall` 이벤트의 `function_call_id`와 일치해야 합니다.
 -   `name`은 `adk_request_confirmation`이어야 합니다.
 -   `response` 객체에는 `confirmed` 상태와 추가 `payload` 데이터가 포함됩니다.
 
-    !!! note "참고: 재개(Resume) 기능과 함께 확인 사용"
+    !!! note "참고: 재개(Resume) 기능과 함께 실행 승인 사용"
 
-        ADK 에이전트 워크플로가 [Resume](/runtime/resume/) 기능으로 구성된 경우 확인 응답과 함께 호출 ID(`invocation_id`) 매개변수도 포함해야 합니다. 제공하는 호출 ID는 확인 요청을 생성한 것과 동일한 호출이어야 하며, 그렇지 않으면 시스템이 확인 응답으로 새 호출을 시작합니다. 에이전트가 재개 기능을 사용하는 경우 응답에 포함될 수 있도록 확인 요청에 호출 ID를 매개변수로 포함하는 것을 고려하세요. 재개 기능 사용에 대한 자세한 내용은 [중단된 에이전트 재개](/runtime/resume/)를 참고하세요.
+        ADK 에이전트 워크플로에 [Resume](/runtime/resume/) 기능이 구성된 경우 승인 응답과 함께 호출 ID(`invocation_id`) 매개변수도 포함해야 합니다. 전달하는 호출 ID는 승인 요청을 생성한 호출과 동일한 ID여야 하며, 그렇지 않으면 시스템이 승인 응답으로 새로운 호출(invocation)을 시작합니다. 에이전트가 재개 기능을 사용하는 경우 응답에 함께 포함할 수 있도록 승인 요청 단계에서 호출 ID를 매개변수로 전달하는 것이 좋습니다. 재개 기능 사용에 대한 자세한 내용은 [중단된 에이전트 재개](/runtime/resume/)를 참고하세요.
 
 ## 알려진 제한사항 {#known-limitations}
 
-도구 확인 기능에는 다음과 같은 제한사항이 있습니다:
+도구 실행 승인 기능에는 다음과 같은 제한사항이 있습니다:
 
 -   [DatabaseSessionService](/api-reference/python/google-adk.html#google.adk.sessions.DatabaseSessionService)는 이 기능에서 지원되지 않습니다.
 -   [VertexAiSessionService](/api-reference/python/google-adk.html#google.adk.sessions.VertexAiSessionService)는 이 기능에서 지원되지 않습니다.

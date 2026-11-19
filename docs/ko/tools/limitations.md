@@ -49,7 +49,7 @@
                 .build();
     ```
 
-### 우회 방법 #1: 에이전트를 AgentTool로 감싸기
+### 우회 방법 #1: 에이전트를 `AgentTool`로 감싸기
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript (v0.6.1+)</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>
@@ -149,7 +149,7 @@
 
 ADK Python에서 `AgentTool`은 래핑된 에이전트의 그라운딩 메타데이터를 호출하는 에이전트로 다시 전달하지 않습니다. 해당 메타데이터를 세션 상태의 `temp:_adk_grounding_metadata` 키 아래에 저장하려면 `AgentTool`에 `propagate_grounding_metadata=True`를 설정하세요. ADK는 상위 에이전트에 `google_search_agent`라는 이름의 도구가 있을 때만 이를 상위 에이전트 자체 응답에 첨부하며, 이 도구는 아래 우회 방법 #2가 자동으로 생성해 주는 도구입니다.
 
-### 우회 방법 #2: bypass_multi_tools_limit
+### 우회 방법 #2: `bypass_multi_tools_limit`
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-java">Java</span><span class="lst-kotlin">Kotlin v0.1.0</span>

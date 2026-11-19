@@ -4,22 +4,22 @@ catalog_description: Gemini モデルを使ってコンピュータのユーザ�
 catalog_icon: /integrations/assets/gemini-spark.svg
 catalog_tags: ["google"]
 ---
-# Geminiを使用したコンピュータ使用ツールセット
+# Gemini を使用した Computer Use ツールセット
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
-コンピュータ使用ツールセットを使用すると、エージェントはブラウザーなどのコンピュータのユーザーインターフェイスを操作してタスクを完了できます。このツールは、特定のGeminiモデルと[Playwright](https://playwright.dev/)テストツールを使用してChromiumブラウザーを制御し、スクリーンショットの撮影、クリック、入力、ナビゲーションによってWebページと対話できます。
+Computer Use（コンピュータ操作）ツールセットを使用すると、エージェントはブラウザーなどのコンピュータのユーザーインターフェースを操作してタスクを完了できます。このツールは、対応する Gemini モデルと [Playwright](https://playwright.dev/) テストツールを使用して Chromium ブラウザーを制御し、スクリーンショットの撮影、クリック、入力、ナビゲーションによって Web ページを操作できます。
 
-コンピュータ使用モデルの詳細については、Gemini API [コンピュータ使用](https://ai.google.dev/gemini-api/docs/computer-use)またはGoogle Cloud Vertex AI API [コンピュータ使用](https://cloud.google.com/vertex-ai/generative-ai/docs/computer-use)を参照してください。
+Computer Use モデルの詳細については、Gemini API の [Computer Use](https://ai.google.dev/gemini-api/docs/computer-use) または Google Cloud Vertex AI API の [Computer Use](https://cloud.google.com/vertex-ai/generative-ai/docs/computer-use) を参照してください。
 
 !!! example "プレビューリリース"
-    コンピュータ使用モデルとツールはプレビューリリースです。詳細については、[リリース段階の説明](https://cloud.google.com/products#product-launch-stages)を参照してください。
+    Computer Use モデルとツールはプレビューリリースです。詳細については、[リリースステージの説明](https://cloud.google.com/products#product-launch-stages)を参照してください。
 
 ## セットアップ
 
-コンピュータ使用ツールセットを使用するには、Playwrightとその依存関係（Chromiumを含む）をインストールする必要があります。
+Computer Use ツールセットを使用するには、Playwright とその依存関係（Chromium を含む）をインストールする必要があります。
 
 ??? tip "推奨：Python仮想環境の作成とアクティブ化"
 
@@ -49,7 +49,7 @@ catalog_tags: ["google"]
         source .venv/bin/activate
         ```
 
-コンピュータ使用ツールセットに必要なソフトウェアライブラリをセットアップするには：
+Computer Use ツールセットに必要なソフトウェアライブラリをセットアップするには：
 
 1.  Pythonの依存関係をインストールします。
     ```console
@@ -66,7 +66,7 @@ catalog_tags: ["google"]
 
 ## ツールの使用
 
-エージェントにツールとして追加して、コンピュータ使用ツールセットを使用します。ツールを設定するときは、エージェントがコンピュータを使用するためのインターフェイスを定義する`BaseComputer`クラスの実装を提供する必要があります。次の例では、この目的のために`PlaywrightComputer`クラスが定義されています。この実装のコードは、[computer_use](https://github.com/google/adk-python/blob/main/contributing/samples/computer_use/playwright.py)エージェントサンプルプロジェクトの`playwright.py`ファイルにあります。
+エージェントにツールとして追加して、Computer Use ツールセットを使用します。ツールを設定するときは、エージェントがコンピュータを操作するためのインターフェースを定義する `BaseComputer` クラスの実装を提供する必要があります。次の例では、この目的のために `PlaywrightComputer` クラスが定義されています。この実装のコードは、[computer_use](https://github.com/google/adk-python/blob/main/contributing/samples/computer_use/playwright.py) エージェントサンプルプロジェクトの `playwright.py` ファイルにあります。
 
 ```python
 from google.adk import Agent

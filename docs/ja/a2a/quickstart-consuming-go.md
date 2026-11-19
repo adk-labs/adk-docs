@@ -8,7 +8,7 @@
 
 ## 概要
 
-このサンプルは、Agent Development Kit（ADK）の**Agent-to-Agent（A2A）**アーキテクチャを示し、複数のエージェントが連携して複雑なタスクを処理する方法を紹介します。このサンプルでは、サイコロを振って数字が素数かどうかを確認できるエージェントを実装しています。
+このサンプルは、Agent Development Kit（ADK）の**Agent2Agent（A2A）**アーキテクチャを示し、複数のエージェントが連携して複雑なタスクを処理する方法を紹介します。このサンプルでは、サイコロを振って数字が素数かどうかを確認できるエージェントを実装しています。
 
 ```text
 ┌─────────────────┐    ┌──────────────────┐    ┌────────────────────┐
@@ -72,7 +72,7 @@ ADKエージェントがA2A経由でリモートエージェントを利用す�
 go run remote_a2a/check_prime_agent/main.go
 ```
 
-実行すると、次のようなものが表示されます。
+実行すると、次のような出力が表示されます。
 
 ``` shell
 2025/11/06 11:00:19 Starting A2A prime checker server on port 8001
@@ -82,7 +82,7 @@ go run remote_a2a/check_prime_agent/main.go
 2025/11/06 11:00:19        a2a:  you can access A2A using jsonrpc protocol: http://localhost:8001
 ```
   
-### 3. リモートエージェントの必須エージェントカードに注意してください { #look-out-for-the-required-agent-card-of-the-remote-agent }
+### 3. リモートエージェントに必要なエージェントカードを確認する { #look-out-for-the-required-agent-card-of-the-remote-agent }
 
 A2Aプロトコルでは、各エージェントが何をするかを記述したエージェントカードが必要です。
 
@@ -103,7 +103,7 @@ Go ADKでは、A2Aランチャーを使用してエージェントを公開す�
 --8<-- "examples/go/a2a_basic/main.go:new-prime-agent"
 ```
 
-次に、ルートエージェントでリモートエージェントを単純に使用できます。この場合、`primeAgent`は以下の`root_agent`のサブエージェントの1つとして使用されます。
+あとは、ルートエージェント内でリモートエージェントをそのまま使用できます。この場合、`primeAgent`は以下の`root_agent`のサブエージェントの1つとして使用されます。
 
 ```go title="a2a_basic/main.go"
 --8<-- "examples/go/a2a_basic/main.go:new-root-agent"

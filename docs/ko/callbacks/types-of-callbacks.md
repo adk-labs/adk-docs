@@ -4,15 +4,15 @@
    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.1.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-ADK는 에이전트 실행 수명 주기의 다양한 지점에서 실행되는 여러 유형의 콜백을 제공합니다.
+ADK는 에이전트 실행 라이프사이클의 다양한 단계에서 트리거되는 여러 유형의 콜백을 제공합니다. 각 콜백이 언제 실행되고 어떤 컨텍스트를 전달받는지 이해하는 것이 효과적인 활용의 핵심입니다.
 
-## 에이전트 수명 주기 콜백
+## 에이전트 라이프사이클 콜백
 
 이러한 콜백은 `BaseAgent`를 상속하는 *모든* 에이전트(`LlmAgent`, `SequentialAgent`, `ParallelAgent`, `LoopAgent` 등)에서 사용할 수 있습니다.
 
-??? note "Python: 콜백 파라미터 이름"
+??? warning "Python: 문서화된 콜백 매개변수 이름 사용"
 
-    Python에서 ADK는 콜백 함수가 받는 파라미터 이름을 검사합니다. 임의의 이름(예: `ctx`)을 사용할 수 없으며, 아래에 나열된 정확한 이름을 사용해야 합니다.
+    Python에서 ADK는 콜백 인자를 키워드로 전달하므로, 콜백 함수의 매개변수 이름은 문서에 명시된 이름과 정확히 일치해야 합니다. 예를 들어 에이전트 및 모델 콜백에는 `callback_context`를, 도구 콜백에는 `tool_context`를 사용하세요. `ctx` 같은 임의의 별칭으로 이름을 바꾸면 런타임에 `TypeError`가 발생합니다.
 
     ```python
     # 올바름
@@ -24,7 +24,7 @@ ADK는 에이전트 실행 수명 주기의 다양한 지점에서 실행되는 
         ...
     ```
 
-    | 콜백 | 필수 파라미터 이름 |
+    | 콜백 | 필수 매개변수 이름 |
     |---|---|
     | `before_agent_callback` | `callback_context` |
     | `after_agent_callback` | `callback_context` |
@@ -41,7 +41,7 @@ ADK는 에이전트 실행 수명 주기의 다양한 지점에서 실행되는 
 
     Python에서 콜백은 일반 `def` 또는 `async def`일 수 있습니다. ADK는 어느 쪽이든 결과를 await합니다.
 
-    모든 콜백 필드는 단일 함수 대신 함수 목록도 허용합니다. ADK는 나열된 순서대로 호출하고 결과를 반환하는 첫 번째 콜백에서 중지합니다. 해당 값이 콜백 결과가 되고 나머지 콜백은 건너뜁니다. 결과로 간주되는 항목은 제품군에 따라 다릅니다. 에이전트, 모델, 도구의 6개 `before_`/`after_` 훅은 *truthy*(참으로 평가되는) 값에서만 중지되므로 `None` 또는 빈 `dict`와 같은 기타 falsy 값을 반환하는 콜백은 다음 콜백이 실행되도록 합니다. `on_model_error_callback` 및 `on_tool_error_callback`은 `None`이 아닌 모든 값에서 중지되므로 `on_tool_error_callback`의 빈 `dict`는 체인을 종료하고 예외를 억제하며 도구 결과가 됩니다.
+    모든 콜백 필드는 단일 함수 대신 함수 목록도 허용합니다. ADK는 나열된 순서대로 호출하고 결과를 반환하는 첫 번째 콜백에서 중지합니다. 해당 값이 콜백 결과가 되고 나머지 콜백은 건너뜁니다. 무엇이 결과로 간주되는지는 콜백 종류에 따라 다릅니다. 에이전트, 모델, 도구의 6개 `before_`/`after_` 훅은 *truthy*(참으로 평가되는) 값에서만 중지되므로 `None`이나 빈 `dict` 같은 falsy 값을 반환하는 콜백은 다음 콜백이 이어서 실행되도록 합니다. 반면 `on_model_error_callback` 및 `on_tool_error_callback`은 `None`이 아닌 모든 값에서 중지되므로 `on_tool_error_callback`이 빈 `dict`를 반환하면 체인을 종료하고 예외를 억제하며 해당 빈 `dict`가 도구 결과가 됩니다.
 
     에이전트의 콜백 필드에 목록을 할당합니다:
 
@@ -140,7 +140,7 @@ ADK는 에이전트 실행 수명 주기의 다양한 지점에서 실행되는 
 
 * **예제가 보여주는 것:** 이 예제는 `after_agent_callback`을 보여줍니다. 이 콜백은 에이전트의 메인 처리 로직이 완료되어 결과를 생성한 *직후*, 하지만 해당 결과가 확정되어 반환되기 *전에* 실행됩니다.
 * **작동 방식:** 콜백 함수(`modify_output_after_agent`)는 세션 상태의 플래그(`add_concluding_note`)를 확인합니다.
-    * 플래그가 `True`이면 콜백은 *새로운* `types.Content` 객체를 반환합니다. 이는 ADK 프레임워크에 콜백이 반환한 콘텐츠로 에이전트의 원본 출력을 **추가(append)**하도록 지시합니다.
+    * 플래그가 `True`이면 콜백은 *새로운* `types.Content` 객체를 반환합니다. 이는 ADK 프레임워크에 에이전트의 원본 출력 뒤에 콜백이 반환한 콘텐츠를 **추가(append)**하도록 지시합니다.
     * 플래그가 `False`이거나 설정되지 않은 경우 콜백은 `None` 또는 빈 객체를 반환합니다. 이는 ADK 프레임워크에 에이전트가 생성한 원본 출력을 **사용**하도록 지시합니다.
 * **예상 결과:** 두 가지 시나리오가 나타납니다:
     1. `add_concluding_note: True` 상태가 *없는* 세션에서는 콜백이 에이전트의 원래 출력("Processing complete!")이 사용되도록 허용합니다.
@@ -287,9 +287,9 @@ ADK는 에이전트 실행 수명 주기의 다양한 지점에서 실행되는 
 1. 콜백이 `None`(Java의 경우 `Maybe.empty()` 객체)을 반환하면, 원래의 `tool_response`가 사용됩니다.
 2. 새로운 딕셔너리가 반환되면, 이는 원래의 `tool_response`를 **대체합니다**. 이를 통해 LLM이 보게 될 결과를 수정하거나 필터링할 수 있습니다.
 
-!!! note "Python: `tool_response` 유형 및 반환 값"
+!!! note "Python: `tool_response` 타입 및 반환 값"
 
-    ADK는 콜백이 실행된 *후*에만 `dict`가 아닌 결과를 `{"result": <value>}`로 래핑하므로, `-> str`로 어노테이션된 도구는 `after_tool_callback`에 `dict`가 아닌 `str`을 전달합니다. 딕셔너리 메서드를 호출하기 전에 유형을 확인하세요.
+    ADK는 콜백이 실행된 *후*에만 `dict`가 아닌 결과를 `{"result": <value>}`로 래핑하므로, `-> str`로 어노테이션된 도구는 `after_tool_callback`에 `dict`가 아닌 `str`을 전달합니다. 딕셔너리 메서드를 호출하기 전에 타입을 확인하세요.
 
     ADK는 또한 반환된 값을 `None`과 비교하므로, `{}`를 반환하면 도구 응답이 `{}`로 대체됩니다. 원본을 유지하려면 `None`을 반환하세요.
 

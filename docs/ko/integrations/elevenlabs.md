@@ -152,7 +152,7 @@ ADK 에이전트를 [ElevenLabs](https://elevenlabs.io/) AI 오디오 플랫폼�
 
 ElevenLabs MCP 서버는 환경 변수로 구성할 수 있습니다:
 
-환경 변수 | 설명 | 기본값
+변수 | 설명 | 기본값
 -------- | ----------- | -------
 `ELEVENLABS_API_KEY` | ElevenLabs API 키 | 필수
 `ELEVENLABS_MCP_BASE_PATH` | 파일 작업 기본 경로 | `~/Desktop`
@@ -165,10 +165,10 @@ ElevenLabs MCP 서버는 환경 변수로 구성할 수 있습니다:
 
 - **`files`**(기본값): 파일을 디스크에 저장하고 파일 경로 반환
 - **`resources`**: 파일을 MCP 리소스(base64 인코딩 바이너리)로 반환
-- **`both`**: 디스크 저장 + MCP 리소스로 반환
+- **`both`**: 디스크 저장 및 MCP 리소스로 동시에 반환
 
 ## 추가 리소스
 
-- [ElevenLabs MCP Server Repository](https://github.com/elevenlabs/elevenlabs-mcp)
-- [Introducing ElevenLabs MCP](https://elevenlabs.io/blog/introducing-elevenlabs-mcp)
-- [ElevenLabs Documentation](https://elevenlabs.io/docs)
+- [ElevenLabs MCP 서버 저장소](https://github.com/elevenlabs/elevenlabs-mcp)
+- [ElevenLabs MCP 소개](https://elevenlabs.io/blog/introducing-elevenlabs-mcp)
+- [ElevenLabs 문서](https://elevenlabs.io/docs)

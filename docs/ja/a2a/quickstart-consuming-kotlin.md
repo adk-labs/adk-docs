@@ -94,7 +94,7 @@ curl http://localhost:8001/a2a/check_prime_agent/.well-known/agent-card.json
 
 ## サブエージェントとしての使用
 
-返されたエージェントは `BaseAgent` であるため、ローカル エージェントとまったく同様に `subAgents` に配置されます。ADK はネットワーク経由の A2A プロトコルを処理します。
+返されたエージェントは `BaseAgent` であるため、ローカル エージェントとまったく同じように `subAgents` に追加できます。ADK はネットワーク経由の A2A プロトコルを処理します。
 
 ```kotlin title="A2AConsumer.kt"
 --8<-- "examples/kotlin/snippets/a2a/A2AConsumer.kt:root_agent"

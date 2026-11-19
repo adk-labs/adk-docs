@@ -48,7 +48,7 @@ npm install -D @google/adk-devtools
 
 ### 에이전트 코드 정의
 
-`get_current_time`이라는 [Function Tool](/ko/tools-custom/function-tools/)의 간단한 구현을 포함한
+`get_current_time`이라는 [함수 도구(Function Tool)](/ko/tools-custom/function-tools/)의 간단한 구현을 포함한
 기본 에이전트 코드를 만듭니다.
 프로젝트 디렉터리에 `agent.ts`를 만들고 다음 코드를 추가합니다.
 
@@ -106,7 +106,7 @@ Google AI Studio를 통해 키를 생성하세요.
 
 ??? tip "ADK에서 다른 AI 모델 사용"
     ADK는 여러 생성형 AI 모델을 지원합니다. ADK 에이전트에서 다른 모델을 구성하는 방법은
-    [Models & Authentication](/ko/agents/models/)을 참고하세요.
+    [모델 및 인증](/ko/agents/models/)을 참고하세요.
 
 ## 에이전트 실행
 

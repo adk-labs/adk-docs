@@ -97,27 +97,27 @@ ADK エージェントを [Asana](https://asana.com/) のワークマネジメ�
 !!! note
 
     このエージェントを初めて実行すると、OAuth によるアクセス許可を要求するため
-    ブラウザーウィンドウが自動で開きます。あるいはコンソールに表示される
-    認可 URL を使用することもできます。エージェントが Asana データへアクセスするには
-    この要求を承認する必要があります。
+    ブラウザウィンドウが自動で開きます。または、コンソールに表示される
+    認可 URL を使用することもできます。エージェントが Asana データへアクセスするには、
+    このリクエストを承認する必要があります。
 
 ## 利用可能なツール
 
 Asana の MCP サーバーにはカテゴリ別に整理された 30 以上のツールが含まれます。
 ツールはエージェント接続時に自動検出されます。エージェント実行後、
-トレースグラフで利用可能ツールを確認するには
+トレースグラフで利用可能なツールを確認するには
 [ADK Web UI](/runtime/web-interface/) を使用してください。
 
-Category | Description
+カテゴリ | 説明
 -------- | -----------
-Project tracking | プロジェクトの進捗更新とレポート取得
-Task management | タスクの作成、更新、整理
-User information | ユーザー情報と割り当ての参照
-Goals | Asana Goals の追跡と更新
-Team organization | チーム構造とメンバーシップ管理
-Object search | Asana オブジェクトを横断するクイック typeahead 検索
+プロジェクトの追跡 | プロジェクトの進捗状況の更新やレポートを取得します
+タスク管理 | タスクを作成、更新、整理します
+ユーザー情報 | ユーザーの詳細情報と割り当て状況を参照します
+目標（Goals） | Asana Goals を追跡・更新します
+チーム編成 | チーム構成とメンバーシップを管理します
+オブジェクト検索 | Asana オブジェクト全体をすばやくインクリメンタル検索（オートコンプリート）します
 
 ## 追加リソース
 
-- [Asana MCP Server Documentation](https://developers.asana.com/docs/using-asanas-mcp-server)
-- [Asana MCP Integration Guide](https://developers.asana.com/docs/integrating-with-asanas-mcp-server)
+- [Asana MCP Server ドキュメント](https://developers.asana.com/docs/using-asanas-mcp-server)
+- [Asana MCP 連携ガイド](https://developers.asana.com/docs/integrating-with-asanas-mcp-server)

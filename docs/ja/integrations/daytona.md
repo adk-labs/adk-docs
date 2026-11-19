@@ -66,7 +66,7 @@ root_agent = Agent(
 `read_file_from_daytona` | スクリプト出力や生成ファイルを読み取り
 `start_long_running_command_daytona` | バックグラウンドプロセス (サーバー、watcher) を開始
 
-## Learn more
+## 詳細情報
 
 安全なサンドボックスでコードを作成・テスト・検証するコード生成エージェントの詳細は
 [このガイド](https://www.daytona.io/docs/en/google-adk-code-generator) を参照してください。

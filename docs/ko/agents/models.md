@@ -8,8 +8,8 @@ ADK(Agent Development Kit)는 유연성을 위해 설계되었으며, 다양한 
 
 ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다.
 
-1. **직접 문자열 / 레지스트리:** Google Cloud와 긴밀하게 통합된 모델(Google AI Studio 또는 Vertex AI를 통해 액세스하는 Gemini 모델과 같은) 또는 Vertex AI 엔드포인트에서 호스팅되는 모델의 경우. 일반적으로 모델 이름 또는 엔드포인트 리소스 문자열을 `LlmAgent`에 직접 제공합니다. ADK의 내부 레지스트리는 이 문자열을 적절한 백엔드 클라이언트로 확인하며, 종종 `google-genai` 라이브러리를 활용합니다.
-2. **래퍼 클래스:** Google 생태계 외부의 모델 또는 특정 클라이언트 구성이 필요한 모델(Apigee 또는 LiteLLM을 통해 액세스하는 모델과 같은)과의 광범위한 호환성을 위해. 특정 래퍼 클래스(예: `ApigeeLlm` 또는 `LiteLlm`)를 인스턴스화하고 이 객체를 `LlmAgent`의 `model` 매개변수로 전달합니다.
+1. **직접 문자열 / 레지스트리:** Google Cloud와 긴밀하게 통합된 모델(Google AI Studio 또는 Vertex AI를 통해 액세스하는 Gemini 모델 등)이나 Vertex AI 엔드포인트에서 호스팅되는 모델에 사용합니다. 일반적으로 모델 이름 또는 엔드포인트 리소스 문자열을 `LlmAgent`에 직접 전달하면, ADK 내부 레지스트리가 `google-genai` 라이브러리를 활용해 이 문자열을 적절한 백엔드 클라이언트로 해석합니다.
+2. **래퍼 클래스:** Google 생태계 외부의 모델이나 별도의 클라이언트 구성이 필요한 모델(Apigee 또는 LiteLLM을 통해 액세스하는 모델 등)과의 폭넓은 호환성을 위해 사용합니다. 해당 래퍼 클래스(예: `ApigeeLlm` 또는 `LiteLlm`)를 인스턴스화하여 `LlmAgent`의 `model` 매개변수로 전달합니다.
 
 다음 섹션에서는 필요에 따라 이러한 방법을 사용하는 방법에 대해 안내합니다.
 
@@ -175,9 +175,9 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
 
 !!! warning "자격 증명 보안 유지"
 
-    서비스 계정 자격 증명 또는 API 키는 강력한 자격 증명입니다. 공개적으로 노출하지 마세요.
+    서비스 계정 자격 증명 또는 API 키는 민감한 권한을 가집니다. 외부에 유출되거나 공개 저장소에 포함되지 않도록 주의하세요.
     [Google Cloud Secret Manager](https://cloud.google.com/security/products/secret-manager)와 같은
-    보안 관리자를 사용하여 프로덕션 환경에서 안전하게 저장하고 액세스하세요.
+    보안 비밀 관리 서비스를 사용하여 프로덕션 환경에서 안전하게 저장하고 조회하세요.
 
 ### 문제 해결
 
@@ -193,9 +193,9 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
 
     재시도 옵션을 설정하는 방법은 두 가지가 있습니다.
 
-    **옵션 1:** generate_content_config의 일부로 에이전트에서 재시도 옵션을 설정합니다.
+    **옵션 1:** 에이전트의 `generate_content_config`에 재시도 옵션을 설정합니다.
 
-    이 모델 어댑터를 직접 인스턴스화하는 경우 이 옵션을 사용합니다.
+    모델 이름 문자열을 전달하여 ADK가 모델 어댑터를 생성하도록 하는 경우 이 옵션을 사용합니다.
 
     ```python
     root_agent = Agent(
@@ -212,9 +212,9 @@ ADK는 주로 모델 통합을 위해 두 가지 메커니즘을 사용합니다
         )
     ```
 
-    **옵션 2:** 이 모델 어댑터의 재시도 옵션입니다.
+    **옵션 2:** 모델 어댑터에 직접 재시도 옵션을 설정합니다.
 
-    어댑터 인스턴스를 직접 인스턴스화하는 경우 이 옵션을 사용합니다.
+    `Gemini` 모델 어댑터 인스턴스를 직접 생성하는 경우 이 옵션을 사용합니다.
 
     ```python
     from google.genai import types
@@ -299,7 +299,7 @@ public class DirectAnthropicAgent {
    <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.18.0</span>
 </div>
 
-[Apigee](https://docs.cloud.google.com/apigee/docs/api-platform/get-started/what-apigee)는 강력한 [AI 게이트웨이](https://cloud.google.com/solutions/apigee-ai) 역할을 하여 생성형 AI 모델 트래픽을 관리하고 제어하는 방식을 변화시킵니다. Apigee 프록시를 통해 AI 모델 엔드포인트(예: Vertex AI 또는 Gemini API)를 노출함으로써 즉시 엔터프라이즈급 기능을 얻을 수 있습니다.
+[Apigee](https://docs.cloud.google.com/apigee/docs/api-platform/get-started/what-apigee)는 강력한 [AI 게이트웨이](https://cloud.google.com/solutions/apigee-ai) 역할을 하여 생성형 AI 모델 트래픽을 관리하고 제어하는 방식을 개선합니다. Apigee 프록시를 통해 AI 모델 엔드포인트(예: Vertex AI 또는 Gemini API)를 연결해 제공하면 다음과 같은 엔터프라이즈급 기능을 즉시 활용할 수 있습니다.
 
 - **모델 안전성:** 위협 방지를 위한 Model Armor와 같은 보안 정책을 구현합니다.
 
@@ -514,7 +514,7 @@ root_agent = Agent(
 
 **`ollama` 대신 `ollama_chat` 제공업체를 설정하는 것이 중요합니다. `ollama`를 사용하면 무한 도구 호출 루프 및 이전 컨텍스트 무시와 같은 예기치 않은 동작이 발생할 수 있습니다.**
 
-`api_base`는 생성용 LiteLLM 내에서 제공될 수 있지만, LiteLLM 라이브러리는 v1.65.5 이후 완료 후 env 변수에 의존하는 다른 API를 호출합니다. 따라서 현재는 `OLLAMA_API_BASE` env 변수를 ollama 서버를 가리키도록 설정하는 것이 좋습니다.
+생성 요청 시 `LiteLlm`에 `api_base`를 전달할 수도 있지만, LiteLLM v1.65.5부터는 생성 완료 후 다른 API를 호출할 때 환경 변수를 참조합니다. 따라서 Ollama 서버를 가리키도록 `OLLAMA_API_BASE` 환경 변수를 설정하는 것을 권장합니다.
 
 ```bash
 export OLLAMA_API_BASE="http://localhost:11434"
@@ -550,7 +550,7 @@ adk web
 
 #### 디버깅
 
-가져오기 직후 에이전트 코드에 다음을 추가하여 Ollama 서버로 전송된 요청을 볼 수 있습니다.
+임포트(import) 구문 바로 다음에 아래 코드를 추가하면 Ollama 서버로 전송되는 요청을 확인할 수 있습니다.
 
 ```python
 import litellm
@@ -572,7 +572,7 @@ http://localhost:11434/api/chat \
    <span class="lst-supported">ADK 지원</span><span class="lst-python">Python</span>
 </div>
 
-[vLLM](https://github.com/vllm-project/vllm)과 같은 도구를 사용하면 모델을 효율적으로 호스팅하고 종종 OpenAI 호환 API 엔드포인트를 노출할 수 있습니다.
+[vLLM](https://github.com/vllm-project/vllm)과 같은 도구를 사용하면 모델을 효율적으로 호스팅하고 OpenAI 호환 API 엔드포인트를 제공할 수 있습니다.
 
 **설정:**
 
@@ -644,7 +644,7 @@ Google Cloud의 MLOps 에코시스템과 엔터프라이즈급 확장성, 안정
     export GOOGLE_CLOUD_LOCATION="YOUR_VERTEX_AI_LOCATION" # 예: us-central1
     ```
 
-3. **Vertex 백엔드 활성화:** 결정적으로 `google-genai` 라이브러리가 Vertex AI를 대상으로 하는지 확인합니다.
+3. **Vertex 백엔드 활성화:** `google-genai` 라이브러리가 Vertex AI를 대상으로 동작하도록 다음 환경 변수를 설정합니다.
 
     ```shell
     export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
@@ -759,8 +759,7 @@ Anthropic와 같은 일부 제공업체는 Vertex AI를 통해 직접 모델을 
        )
        ```
 
-===
-"Java"
+=== "Java"
 
     **통합 방법:** 제공업체별 모델 클래스(예: `com.google.adk.models.Claude`)를 직접 인스턴스화하고 Vertex AI 백엔드로 구성합니다.
 

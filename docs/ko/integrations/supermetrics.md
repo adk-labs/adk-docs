@@ -19,7 +19,7 @@ Meta Ads, LinkedIn Ads, Google Analytics 4 등 100개 이상의 소스에 걸친
 
 ## 사용 사례
 
-- **마케팅 성과 보고:** 캠페인과 기간 전반에 걸쳐 노출, 클릭, 지출, 전환을 질의합니다.
+- **마케팅 성과 보고:** 캠페인과 기간 전반에 걸쳐 노출수(impressions), 클릭수, 지출, 전환수를 질의합니다.
   여러 플랫폼의 데이터를 하나의 응답으로 집계하는 자동화 리포트를 구축할 수 있습니다.
 
 - **크로스 플랫폼 분석:** Google Ads, Meta Ads, LinkedIn Ads 등 여러 채널의
@@ -32,7 +32,7 @@ Meta Ads, LinkedIn Ads, Google Analytics 4 등 100개 이상의 소스에 걸친
 - **데이터 탐색:** 질의를 구성하기 전에 어떤 데이터 소스, 계정, 필드가 사용자에게
   제공되는지 확인해 각 사용자의 연결 상태에 맞춰 에이전트를 동적으로 적응시킬 수 있습니다.
 
-## 전제 조건
+## 사전 요구사항
 
 - [Supermetrics 계정](https://supermetrics.com/) 생성
   (첫 로그인 시 14일 무료 체험이 자동으로 생성됨)
@@ -122,6 +122,6 @@ Meta Ads, LinkedIn Ads, Google Analytics 4 등 100개 이상의 소스에 걸친
 ## 추가 리소스
 
 - [Supermetrics Hub](https://hub.supermetrics.com/)
-- [Supermetrics Knowledge Base](https://docs.supermetrics.com/)
-- [Data Source Documentation](https://docs.supermetrics.com/docs/connect)
-- [OpenAPI Specification](https://mcp.supermetrics.com/openapi.json)
+- [Supermetrics 지식 베이스](https://docs.supermetrics.com/)
+- [데이터 소스 문서](https://docs.supermetrics.com/docs/connect)
+- [OpenAPI 사양](https://mcp.supermetrics.com/openapi.json)

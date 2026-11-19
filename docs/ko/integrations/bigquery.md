@@ -107,7 +107,7 @@ bigquery_toolset = BigQueryToolset(credentials_config=credentials_config)
 
 ### 대화형 인증 (Interactive Auth - ADK Web)
 
-대화형 세션을 위해 `adk web` 인터페이스를 사용할 때 OAuth 2.0 클라이언트 인증 정보를 제공하여 로그인 흐름을 트리거할 수 있습니다. 이 메커니즘은 로컬 개발 환경과 Cloud Run과 같은 환경에 배포된 ADK 에이전트 모두에서 작동합니다.
+대화형 세션을 위해 `adk web` 인터페이스를 사용할 때 OAuth 2.0 클라이언트 자격 증명을 전달하여 로그인 흐름을 트리거할 수 있습니다. 이 메커니즘은 로컬 개발 환경과 Cloud Run과 같은 환경에 배포된 ADK 에이전트 모두에서 작동합니다.
 
 ```python
 from google.adk.integrations.bigquery import BigQueryToolset, BigQueryCredentialsConfig

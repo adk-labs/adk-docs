@@ -11,7 +11,7 @@ catalog_tags: ["data", "google"]
   <span class="lst-supported">ADK でのサポート</span><span class="lst-python">Python v1.23.0</span>
 </div>
 
-これらは、[Conversational Analytics API](https://docs.cloud.google.com/gemini/docs/conversational-analytics-api/overview) を活用したデータエージェントとの統合を提供することを目的としたツールセットです。
+これらは、[Conversational Analytics API](https://docs.cloud.google.com/gemini/docs/conversational-analytics-api/overview) を活用したデータエージェントとの統合を提供するツールセットです。
 データエージェントは、自然言語を使用してデータを分析するのに役立つ AI 搭載のエージェントです。データエージェントを構成する際は、**BigQuery**、**Looker**、**Looker Studio** などのサポートされているデータソースから選択できます。
 `DataAgentToolset` には、デフォルトで次の読み取り専用ツールが含まれています。
 
@@ -136,7 +136,7 @@ data_agent_toolset = DataAgentToolset(credentials_config=credentials_config)
 
 !!! warning "使用上の注意"
 
-    `enable_data_agent_modification=True` を設定すると、エージェントが Google Cloud プロジェクト内のデータエージェントを作成、更新、削除できるようになります。ツールセットで使用される認証情報が、必要最小限の IAM 権限を持つ承認済みのプロジェクトに制限されていることを確認してください。また、`DataAgentToolset` に `tool_filter` を渡して、特定のツールのみを公開することもできます（例: `delete_data_agent` を除外する）。
+    `enable_data_agent_modification=True` を設定すると、エージェントが Google Cloud プロジェクト内のデータエージェントを作成、更新、削除できるようになります。ツールセットで使用される認証情報が、必要最小限の IAM 権限を持つ承認済みのプロジェクトに制限されていることを確認してください。また、`DataAgentToolset` に `tool_filter` を渡して、特定のツールのみを提供することもできます（例: `delete_data_agent` を除外する）。
 
 ```python
 import google.auth

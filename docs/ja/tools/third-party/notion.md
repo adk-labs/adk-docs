@@ -19,7 +19,7 @@ hide:
 ## 前提条件
 
 - プロフィールの[Notionインテグレーション](https://www.notion.so/profile/integrations)に移動して、Notionインテグレーショントークンを取得します。詳細については、[認証ドキュメント](https://developers.notion.com/docs/authorization)を参照してください。
-- 関連するページとデータベースにインテグレーションがアクセスできることを確認します。[Notionインテグレーション](https://www.notion.so/profile/integrations)設定の[アクセス]タブにアクセスし、使用したいページを選択してアクセスを許可します。
+- 関連するページとデータベースにインテグレーションがアクセスできることを確認します。[Notionインテグレーション](https://www.notion.so/profile/integrations)設定の「アクセス」タブを開き、使用したいページを選択してアクセスを許可します。
 
 ## エージェントでの使用
 
@@ -65,7 +65,7 @@ hide:
 `notion-fetch` | URLによってNotionページまたはデータベースからコンテンツを取得します。
 `notion-create-pages` | 指定されたプロパティとコンテンツを持つ1つ以上のNotionページを作成します。
 `notion-update-page` | Notionページのプロパティまたはコンテンツを更新します。
-`notion-move-pages` | 1つ以上のNotionページまたはデータベースを新しい親に移動します。
+`notion-move-pages` | 1つ以上のNotionページまたはデータベースを新しい親の下に移動します。
 `notion-duplicate-page` | ワークスペース内でNotionページを複製します。このアクションは非同期で完了します。
 `notion-create-database` | 指定されたプロパティを持つ新しいNotionデータベース、初期データソース、および初期ビューを作成します。
 `notion-update-database` | Notionデータソースのプロパティ、名前、説明、またはその他の属性を更新します。
@@ -74,7 +74,7 @@ hide:
 `notion-get-teams` | 現在のワークスペースのチーム（チームスペース）のリストを取得します。
 `notion-get-users` | ワークスペース内のすべてのユーザーを詳細とともに一覧表示します。
 `notion-get-user` | IDでユーザー情報を取得します
-`notion-get-self` | 独自のボットユーザーと接続しているNotionワークスペースに関する情報を取得します。
+`notion-get-self` | 自身のボットユーザーおよび接続しているNotionワークスペースに関する情報を取得します。
 
 ## 追加リソース
 

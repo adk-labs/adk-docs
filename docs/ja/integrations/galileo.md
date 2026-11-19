@@ -45,7 +45,7 @@ GALILEO_LOG_STREAM="YOUR_LOG_STREAM"
 
 ## OpenTelemetry を設定する（必須）
 
-スパンが Galileo に送信されるようにするため、ADK コンポーネントを使用する前に OTLP exporter を設定し、グローバル tracer provider をセットする必要があります。
+スパンが Galileo に送信されるようにするため、ADK コンポーネントを使用する前に OTLP エクスポーターを設定し、グローバルなトレーサープロバイダーを設定する必要があります。
 
 ```python
 # my_agent/agent.py

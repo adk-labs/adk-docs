@@ -30,7 +30,7 @@ ADK 에이전트를 [Couchbase](https://www.couchbase.com/) 클러스터와 연�
     - [Couchbase Capella](https://cloud.couchbase.com/) 사용(관리형 클라우드 서비스)
     - Couchbase Server 7.x 이상을 로컬 또는 자체 호스팅으로 실행
 - 클러스터용 연결 문자열과 자격 증명(사용자 이름/비밀번호 또는 mTLS용 클라이언트 인증서)
-- [`uv`](https://docs.astral.sh/uv/) 패키지 관리자 설치(`uvx` 명령 사용용)
+- [`uv`](https://docs.astral.sh/uv/) 패키지 관리자 설치(`uvx` 명령 실행용)
 
 ## 에이전트에서 사용
 

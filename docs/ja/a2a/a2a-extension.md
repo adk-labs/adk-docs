@@ -14,7 +14,7 @@ A2A 拡張オプションを有効にすると、サーバーは更新版 agent 
 レガシー A2A-ADK 実装で見つかった重大な制限を解消します。新しい実装は次の問題に対処します。
 
 -   **メッセージの重複:** ユーザーメッセージがタスク履歴内で重複するのを防ぎます。
--   **出力の誤分類:** リモートエージェントの ADK 出力がイベント thought に誤って変換されるのを防ぎます。
+-   **出力の誤分類:** リモートエージェントの ADK 出力が思考（thought）イベントに誤って変換されるのを防ぎます。
 -   **サブエージェントのデータ損失:** リモートエージェントのサブエージェントツリーに複数のエージェントが入れ子になっていても、リモートエージェントの ADK 出力が確実に保持されるようにし、データ損失をなくします。
 
 ## クライアント側の拡張有効化
@@ -37,21 +37,21 @@ remote_agent = RemoteA2aAgent(
 )
 ```
 
-`A2aAgentExecutor` は、リクエスト内で a2a 拡張が検出されると、デフォルトで新しい実装を使用します。
+`A2aAgentExecutor` は、リクエスト内で A2A 拡張が検出されると、デフォルトで新しい実装を使用します。
 新しい agent executor 実装を使わないようにするには、クライアントがこの拡張を送らないようにするだけです（`use_legacy=True` で `RemoteA2aAgent` を生成）。
 あるいは、サーバー側の `A2aAgentExecutor` を `use_legacy=True` で生成することもできます。
 
 ## 仕組み
 
 リクエストを受け取ると、[A2aAgentExecutor](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/a2a_agent_executor.py) が拡張を検出します。
-クライアントが新しい agent executor ロジックの使用を要求していることを理解し、リクエストをそれに対応する新しい実装へルーティングします。
+クライアントが新しい agent executor ロジックの使用を要求していることを認識し、リクエストを対応する新しい実装へルーティングします。
 リクエストが受理されたことを確認できるように、この拡張はクライアントへ返されるレスポンスメタデータの "activated extensions" 一覧と、A2A Events のメタデータにも含まれます。
 
 ## Agent Card の定義
 
-エージェントは AgentCapabilities.extensions 一覧内の AgentCard で、この拡張機能を広告します。
+エージェントは `AgentCard` 内の `AgentCapabilities.extensions` 一覧で、この拡張機能を公開（アドバタイズ）します。
 
-例となる AgentExtension ブロック:
+`AgentExtension` ブロックの例:
 
 ```json
 {

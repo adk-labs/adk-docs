@@ -6,7 +6,7 @@
 
 캐스케이드 아키텍처에서 `CascadeLive`는 스트리밍 음성-텍스트 변환(STT), 텍스트 추론 LLM, 스트리밍 텍스트-음성 변환(TTS)을 순차적으로 연결합니다. 오디오는 세 단계를 차례로 거칩니다: 음성 인식이 사용자 오디오를 텍스트로 전사하고, LLM이 텍스트를 기반으로 추론하여 도구를 호출하며, 음성 합성이 스트리밍된 텍스트 응답을 오디오로 변환합니다.
 
-에이전트의 `model` 매개변수에 `CascadeLive`를 구성하므로, 기존의 [`Runner.run_live()`](../sessions.md#the-run_live-loop) 루프, 요청 큐, 도구, 콜백 및 워크플로우는 변경 없이 그대로 유지됩니다. 또한 동일한 에이전트를 텍스트 전용 요청을 위한 `Runner.run_async()`에서도 사용할 수 있으며, 이 경우 음성 단계를 건너뛰고 내부 텍스트 모델을 직접 호출합니다.
+에이전트의 `model` 매개변수에 `CascadeLive`를 구성하므로, 기존의 [`Runner.run_live()`](../sessions.md#the-run_live-loop) 루프, 요청 큐, 도구, 콜백 및 워크플로는 변경 없이 그대로 유지됩니다. 또한 동일한 에이전트를 텍스트 전용 요청을 위한 `Runner.run_async()`에서도 사용할 수 있으며, 이 경우 음성 단계를 건너뛰고 내부 텍스트 모델을 직접 호출합니다.
 
 네이티브 음성 대 음성(speech-to-speech) 모델과의 비교는 [음성 아키텍처 선택](index.md)을 참조하세요.
 
@@ -128,7 +128,7 @@ TTS 제공업체는 실시간 재생보다 빠르게 다음 문장을 합성하�
 다른 음성 제공업체를 통합하거나 단계 사이에서 텍스트를 검사하려면 `google.adk.live`의 `LiveIngress`(음성-텍스트 변환용) 또는 `LiveEgress`(텍스트-음성 변환용)를 서브클래싱하세요:
 
 - `LiveIngress`는 들어오는 오디오 스트림을 읽고 발화 시작, 부분 전사, 턴 완료 이벤트(`UserSpeechStarted`, `PartialTranscript`, `UserTurnFinished`)를 생성(yield)합니다.
-- `LiveEgress`는 스트리밍된 LLM 텍스트 델타를 읽고 완료되거나 취소될 때까지 합성된 오디오 청크와 발화된 출력 트랜스크립트 이벤트(`AudioChunk`, `AgentSpokenOutput`)를 생성(yield)합니다.
+- `LiveEgress`는 스트리밍된 LLM 텍스트 델타를 읽고 완료되거나 취소될 때까지 합성된 오디오 청크와 발화된 출력 전사(transcription) 이벤트(`AudioChunk`, `AgentSpokenOutput`)를 생성(yield)합니다.
 
 합성 전의 LLM 출력은 일반 텍스트이므로, 임의의 `LiveEgress`를 래핑하여 단 하나의 오디오 프레임이 생성되기 전에 텍스트를 마스킹(redact)하거나 변환할 수 있습니다:
 

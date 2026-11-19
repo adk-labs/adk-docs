@@ -157,7 +157,7 @@ export default function Page() {
 
 ### 4. 프론트엔드 도구 추가
 
-브라우저에서 도구를 등록합니다. ADK 측의 `AGUIToolset()`은 매 실행마다 이 도구를 에이전트에 노출합니다:
+브라우저에서 도구를 등록합니다. ADK 측의 `AGUIToolset()`은 매 실행마다 이 도구를 에이전트에 제공합니다:
 
 ```tsx title="app/SearchTool.tsx"
 "use client";

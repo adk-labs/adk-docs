@@ -32,7 +32,7 @@ ADK의 메트릭 접근 방식은 가볍고 표준화되어 있으며, 선택한
 ## 메트릭 스키마
 
 메트릭을 활성화하면 ADK는 OpenTelemetry GenAI 시맨틱 규칙을 기반으로 에이전트
-수명주기, 워크플로 단계, 도구 실행을 자동으로 계측합니다. 다음 핵심 메트릭이
+라이프사이클, 워크플로 단계, 도구 실행을 자동으로 계측합니다. 다음 핵심 메트릭이
 방출됩니다.
 
 | 메트릭 이름 | 유형 | 설명 | 주요 속성(차원) |
@@ -79,7 +79,7 @@ run_config = RunConfig(
 | **`adk.experimental.invoke_agent.total_tokens`** | Histogram (tokens) | 단일 에이전트 호출에 대한 입력 및 출력 토큰의 합계입니다. | `gen_ai.agent.name` |
 | **`adk.experimental.invoke_agent.cache_read.input_tokens`** | Histogram (tokens) | 제공업체 관리 캐시에서 제공된 입력 토큰으로, 단일 에이전트 호출에 걸쳐 합산됩니다. | `gen_ai.agent.name` |
 | **`adk.experimental.invoke_agent.reasoning.output_tokens`** | Histogram (tokens) | 추론(생각의 사슬 / 확장된 생각)에 사용된 출력 토큰으로, 단일 에이전트 호출에 걸쳐 합산됩니다. | `gen_ai.agent.name` |
-| **`adk.experimental.invoke_agent.tool.input_tokens`** | Histogram (tokens) | 코드 실행이나 검색 접지(grounding)와 같이 단일 요청 내에서 모델이 다시 입력으로 피드백한 서버 측 도구 결과의 입력 토큰입니다. 클라이언트 측 함수 도구의 경우 0입니다. | `gen_ai.agent.name` |
+| **`adk.experimental.invoke_agent.tool.input_tokens`** | Histogram (tokens) | 코드 실행이나 검색 그라운딩(Grounding)과 같이 단일 요청 내에서 모델이 다시 입력으로 피드백한 서버 측 도구 결과의 입력 토큰입니다. 클라이언트 측 함수 도구의 경우 0입니다. | `gen_ai.agent.name` |
 | **`adk.experimental.invoke_workflow.input_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `input_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
 | **`adk.experimental.invoke_workflow.output_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `output_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |
 | **`adk.experimental.invoke_workflow.total_tokens`** | Histogram (tokens) | 단일 워크플로 호출에서 실행된 모든 에이전트에 걸쳐 합산된 위의 `total_tokens`입니다. | `adk.experimental.root_agent.name`, `gen_ai.workflow.name`, `gen_ai.workflow.nested` (중첩 워크플로만 해당) |

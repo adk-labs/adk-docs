@@ -1,22 +1,22 @@
 ---
 catalog_title: Bash Tool
-catalog_description: セキュアでリソースが制限されたローカルサンドボックス内でBashコマンドを実行する
+catalog_description: セキュアでリソース制限付きのローカルサンドボックス内で Bash コマンドを実行します
 catalog_icon: /integrations/assets/bash.png
 catalog_tags: ["code", "google"]
 ---
 
-# ADK用 Bash ツール
+# ADK 向け Bash ツール
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.27.0</span>
 </div>
 
-`ExecuteBashTool` を使用すると、ADK エージェントがローカル ワークスペース ディレクトリ内で Bash コマンドを実行できるようになります。このツールは、ファイル システムの操作、スクリプトの実行、またはエージェントを通じてローカル環境と直接相互作用するのに役立ちます。
+`ExecuteBashTool` を使用すると、ADK エージェントがローカルのワークスペースディレクトリ内で Bash コマンドを実行できるようになります。このツールは、ファイルシステムの操作、スクリプトの実行、またはエージェントを通じたローカル環境との直接的なやり取りに役立ちます。
 このツールは Python ADK でのみ利用可能です。
 
 ## インストール
 
-Bash ツールは、コアの Agent Development Kit (ADK) にデフォルトで含まれています。個別の統合パッケージをインストールする必要はなく、メイン ライブラリをインストールするだけです。
+Bash ツールは、コアの Agent Development Kit (ADK) にデフォルトで含まれています。個別の連携パッケージをインストールする必要はなく、メインライブラリをインストールするだけで利用できます。
 
 ```bash
 pip install google-adk
@@ -28,7 +28,7 @@ pip install google-adk
 
     `ExecuteBashTool` は現在、Linux や macOS などの **POSIX システムでのみサポート** されています。Windows システムでこのツールを実行するとハードエラーが発生します。
 
-Bash ツールを使用するには、`ExecuteBashTool` をインスタンス化し、エージェントの `tools` リストに含めます。スニペットを実行する前に `my_workspace_path` が有効なディレクトリ パス文字列として定義されていることを確認してください。
+Bash ツールを使用するには、`ExecuteBashTool` をインスタンス化し、エージェントの `tools` リストに含めます。スニペットを実行する前に `my_workspace_path` が有効なディレクトリパス文字列として定義されていることを確認してください。
 
 ```python
 from google.adk.tools.bash_tool import ExecuteBashTool, BashToolPolicy
@@ -61,12 +61,12 @@ strict_policy = BashToolPolicy(
 )
 ```
 
-### 組み込みの保護
+### 組み込みの保護機能
 
-1. **ユーザー確認:** ツールはコマンドを実行する前に **常に** ユーザー確認を要求します。フレームワークは実行を一時停止し、`adk_request_confirmation` フローを通じてユーザーまたはクライアント アプリケーションがコマンドを承認するまで待機します。
+1. **ツール実行の確認（ユーザー承認）:** ツールはコマンドを実行する前に **常に** ユーザーによる確認を要求します。フレームワークは実行を一時停止し、`adk_request_confirmation` フローを通じてユーザーまたはクライアントアプリケーションがコマンドを承認するまで待機します。
 2. **コマンド検証:** `allowed_command_prefixes` を使用して特定のコマンドを許可リストに追加し、`blocked_operators` を使用して特定の文字列パターンを厳格に禁止できます。
 3. **リソース制限:** フォークボムやメモリ枯渇を防ぐため、OS レベルの制限である `setrlimit` が適用され、メモリ消費量、ファイルサイズ、および子プロセスの数が制限されます。
-4. **コアダンプの無効化:** 機密性の高いメモリリークを防ぐため、実行サブプロセスに対してコアダンプが厳格に無効化（`RLIMIT_CORE` が `0` に設定）されます。
+4. **コアダンプの無効化:** 機密データのメモリリークを防ぐため、実行サブプロセスに対してコアダンプが厳格に無効化（`RLIMIT_CORE` を `0` に設定）されます。
 5. **プロセスグループの終了:** コマンドが `timeout_seconds` を超えた場合、ツールはプロセスグループ全体に `SIGKILL` を発行し、孤立したバックグラウンドプロセスが残らないようにします。
 
 ## 利用可能なツール

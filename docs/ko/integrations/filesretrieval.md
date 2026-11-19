@@ -11,13 +11,13 @@ catalog_tags: ["google", "data"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-`FilesRetrieval` 도구를 사용하면 ADK 에이전트가 검색 증강 생성(RAG)을 사용하여 로컬 문서를 색인화(index)하고 쿼리할 수 있습니다. Google의 Gemini 임베딩 모델을 사용하여 지정한 디렉터리에 대해 LlamaIndex `VectorStoreIndex`를 빌드합니다. 그러면 에이전트가 로컬 텍스트 파일, Markdown 문서 및 소스 파일에서 관련 발췌본을 검색하여 프로젝트별 컨텍스트를 기반으로 답변을 제공할 수 있습니다.
+`FilesRetrieval` 도구를 사용하면 ADK 에이전트가 검색 증강 생성(RAG)을 사용하여 로컬 문서를 색인화(index)하고 쿼리할 수 있습니다. Google의 Gemini 임베딩 모델을 사용하여 지정한 디렉터리에 대해 LlamaIndex `VectorStoreIndex`를 빌드합니다. 이를 통해 에이전트가 로컬 텍스트 파일, Markdown 문서 및 소스 파일에서 관련 발췌본을 가져와 프로젝트별 컨텍스트를 기반으로 답변을 그라운딩(Grounding)할 수 있습니다.
 
 ## 사용 사례
 
-- **코드베이스 및 문서 검색**: 로컬 저장소에서 관련 함수, 설계 노트 및 문서를 검색하여 기술적인 질문에 답변합니다.
+- **코드베이스 및 문서 검색**: 로컬 저장소에서 관련 함수, 설계 노트 및 문서를 가져와 기술적인 질문에 답변합니다.
 - **로컬 지식 기반 그라운딩(Grounding)**: 호스팅된 문서 저장소에 먼저 문서를 로드할 필요 없이 자체 파일 시스템에서 직접 내부 마크다운 파일, 기술 사양 및 가이드를 색인화합니다. 문서 콘텐츠는 색인을 위해 구성된 임베딩 모델로 전송되므로, 민감한 자료를 색인화하기 전에 Google AI Studio 또는 Agent Platform의 데이터 처리 약관을 검토하세요.
-- **컨텍스트 강화 지원**: 보고서, 로그 또는 텍스트 파일에서 관련 도메인별 데이터를 검색하여 검증된 원본 자료를 바탕으로 에이전트 응답을 근거화합니다.
+- **컨텍스트 강화 지원**: 보고서, 로그 또는 텍스트 파일에서 관련 도메인별 데이터를 가져와 검증된 원본 자료를 바탕으로 에이전트 응답을 그라운딩합니다.
 
 ## 사전 준비 사항
 
@@ -101,10 +101,10 @@ root_agent = Agent(
 
 매개변수 | 타입 | 필수 여부 | 기본값 | 설명
 --------- | ---- | -------- | ------- | -----------
-`name` | `str` | **예** | — | 함수 호출을 위해 모델에서 사용하는 도구의 고유 식별자입니다.
-`description` | `str` | **예** | — | 에이전트가 검색 도구를 언제 어떻게 호출해야 하는지에 대한 설명입니다.
-`input_dir` | `str` | **예** | — | 로드하고 색인화할 문서가 포함된 로컬 파일 시스템 디렉터리 경로입니다.
-`embedding_model` | `Optional[BaseEmbedding]` | 아니요 | `None` | 커스텀 LlamaIndex `BaseEmbedding` 인스턴스입니다. 생략할 경우 기본값은 `GoogleGenAIEmbedding(model_name="gemini-embedding-2-preview", embed_batch_size=1)`입니다.
+`name` | `str` | **필수** | — | 함수 호출을 위해 모델에서 사용하는 도구의 고유 식별자입니다.
+`description` | `str` | **필수** | — | 에이전트가 리트리벌 도구를 언제 어떻게 호출해야 하는지에 대한 설명입니다.
+`input_dir` | `str` | **필수** | — | 로드하고 색인화할 문서가 포함된 로컬 파일 시스템 디렉터리 경로입니다.
+`embedding_model` | `Optional[BaseEmbedding]` | 선택 | `None` | 커스텀 LlamaIndex `BaseEmbedding` 인스턴스입니다. 생략할 경우 기본값은 `GoogleGenAIEmbedding(model_name="gemini-embedding-2-preview", embed_batch_size=1)`입니다.
 
 ### 커스텀 임베딩 모델
 

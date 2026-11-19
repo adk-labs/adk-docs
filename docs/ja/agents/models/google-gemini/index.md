@@ -4,13 +4,12 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">Typescript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.2.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-ADK は、幅広い機能を備えた Google Gemini 系の生成 AI モデルをサポートします。
-ADK は次のような豊富な Gemini 機能をサポートしています。
+ADK は、幅広い機能を備えた Google Gemini シリーズの生成 AI モデルをサポートしています。
 [コード実行](/tools/gemini-api/code-execution/)、
 [Google Search](/tools/gemini-api/google-search/)、
 [コンテキストキャッシュ](/ja/context/caching/)、
 [コンピュータ使用](/ja/tools/gemini-api/computer-use/)、
-および [Interactions API](#interactions-api) を含みます。
+および [Interactions API](#interactions-api) などの豊富な Gemini 機能を利用できます。
 
 ## はじめに
 
@@ -186,8 +185,8 @@ Vertex AI 上の Gemini はエンタープライズ向け機能、セキュリ�
 
 !!! warning "認証情報の保護"
 
-    サービスアカウント認証情報や API キーは高権限資格情報です。
-    公開しないでください。運用では Google Cloud Secret Manager などを使って
+    サービスアカウント認証情報や API キーは強力な権限を持つ認証情報です。
+    決して公開しないでください。本番環境では Google Cloud Secret Manager などを使って
     安全に保管・参照してください。
 
 !!! note "Gemini モデルのバージョン"
@@ -208,11 +207,11 @@ Vertex AI 上の Gemini はエンタープライズ向け機能、セキュリ�
 2.  クライアント側リトライを有効にします。リトライにより、一時的なクォータ不足時に
     一定時間待機して自動再送することで回避可能です。
 
-    リト라이オプションの設定には2通りあります。
+    リトライオプションの設定には 2 通りあります。
 
     **オプション 1:** `generate_content_config` 内でエージェントに対してリトライを設定します。
 
-    この方法はこのモデルアダプターを直接インスタンス化する場合に適しています。
+    モデルを名前文字列として渡し、モデルアダプターの生成を ADK に任せる場合は、このオプションを使用します。
 
     === "Python"
 
@@ -256,9 +255,9 @@ Vertex AI 上の Gemini はエンタープライズ向け機能、セキュリ�
             .build();
         ```
 
-    **オプション 2:** このモデルアダプター自体のリトライオプションを設定します。
+    **オプション 2:** モデルアダプター自体にリトライオプションを設定します。
 
-    この方法はこのモデルアダプターのインスタンスを自分で生成する場合に適しています。
+    モデルアダプターのインスタンスを自分で生成する場合は、このオプションを使用します。
 
     === "Python"
 
@@ -358,8 +357,8 @@ Interactions API を有効にすると、実行ごとにサービングティア
 
 ### 既知の制限
 
-Interactions API は、[Google Search](/ja/tools/built-in-tools/#google-search) のような
-カスタム関数呼び出しツールと、同じエージェント内の組み込みツールを混在して使用することを**サポートしません**。
+Interactions API は、同じエージェント内でカスタム関数呼び出しツールと
+[Google Search](/ja/tools/built-in-tools/#google-search) のような組み込みツールを混在して使用することを**サポートしません**。
 `bypass_multi_tools_limit` パラメータで組み込みツールをカスタムツールとして動作させることで
 回避できます。
 
@@ -378,5 +377,5 @@ Interactions API は、[Google Search](/ja/tools/built-in-tools/#google-search) 
     GoogleSearchTool.INSTANCE;
     ```
 
-この例では、組み込み google_search を関数呼び出しツール（GoogleSearchAgentTool）
+この例では、組み込みの `google_search` を関数呼び出しツール（`GoogleSearchAgentTool` 経由）
 へ変換し、カスタム関数ツールと共存できるようにします。

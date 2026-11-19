@@ -20,29 +20,29 @@ BigQuery 에이전트 분석 플러그인은 심층적인 에이전트 동작 �
 
 ## 사용 사례
 
--   **에이전트 워크플로 디버깅 및 분석:** 잘 정의된 스키마에 광범위한 *플러그인 수명 주기 이벤트*(LLM 호출, 도구 사용) 및 *에이전트 생성 이벤트*(사용자 입력, 모델 응답)를 캡처합니다.
--   **대용량 분석 및 디버깅:** 로깅 작업은 기본 에이전트 실행을 차단하지 않도록 별도의 스레드에서 비동기적으로 수행됩니다. 높은 이벤트 볼륨을 처리하도록 설계된 이 플러그인은 타임스탬프를 통해 이벤트 순서를 유지합니다.
+-   **에이전트 워크플로 디버깅 및 분석:** 잘 정의된 스키마로 다양한 *플러그인 라이프사이클 이벤트*(LLM 호출, 도구 사용) 및 *에이전트 생성 이벤트*(사용자 입력, 모델 응답)를 캡처합니다.
+-   **대용량 분석 및 디버깅:** 로깅 작업은 기본 에이전트 실행을 블로킹하지 않도록 별도의 스레드에서 비동기적으로 수행됩니다. 높은 이벤트 처리량을 견디도록 설계된 이 플러그인은 타임스탬프를 통해 이벤트 순서를 유지합니다.
 
 기록된 에이전트 이벤트 데이터는 ADK 이벤트 유형에 따라 다릅니다. 자세한 내용은 [이벤트 유형 및 페이로드](#event-types)를 참고하세요.
 
 ## 전제 조건
 
 -   **BigQuery API**가 활성화된 **Google Cloud 프로젝트**.
--   **BigQuery 데이터 세트:** 플러그인을 사용하기 전에 로깅 테이블을 저장할 데이터 세트를 만듭니다. 테이블이 없는 경우 플러그인이 데이터 세트 내에 필요한 이벤트 테이블을 자동으로 만듭니다. 기본적으로 이 테이블의 이름은 agent_events이지만 플러그인 구성의 table_id 매개변수를 사용하여 사용자 지정할 수 있습니다.
+-   **BigQuery 데이터 세트:** 플러그인을 사용하기 전에 로깅 테이블을 저장할 데이터 세트를 만듭니다. 테이블이 없는 경우 플러그인이 데이터 세트 내에 필요한 이벤트 테이블을 자동으로 생성합니다. 기본 테이블 이름은 `agent_events`이며 플러그인 구성의 `table_id` 매개변수로 변경할 수 있습니다.
 -   **인증:**
     -   **로컬:** `gcloud auth application-default login`을 실행합니다.
     -   **클라우드:** 서비스 계정에 필요한 권한이 있는지 확인합니다.
 
 ### IAM 권한
 
-에이전트가 제대로 작동하려면 에이전트가 실행 중인 보안 주체(예: 서비스 계정, 사용자 계정)에 다음과 같은 Google Cloud 역할이 필요합니다.
-*   프로젝트에서 BigQuery 쿼리를 실행하려면 프로젝트 수준에서 `roles/bigquery.jobUser`. 이 역할만으로는 데이터에 대한 액세스 권한을 부여하지 않습니다.
-*   선택한 BigQuery 테이블에 로그/이벤트 데이터를 쓰려면 테이블 수준에서 `roles/bigquery.dataEditor`.
-에이전트가 이 테이블을 만들어야 하는 경우 테이블을 만들려는 BigQuery 데이터 세트에 `roles/bigquery.dataEditor`를 부여해야 합니다.
+에이전트가 정상적으로 작동하려면 에이전트를 실행하는 주체(예: 서비스 계정, 사용자 계정)에 다음과 같은 Google Cloud 역할이 필요합니다.
+*   프로젝트에서 BigQuery 쿼리를 실행하려면 프로젝트 수준의 `roles/bigquery.jobUser`. (이 역할만으로는 데이터 접근 권한이 부여되지 않습니다.)
+*   지정한 BigQuery 테이블에 로그/이벤트 데이터를 기록하려면 테이블 수준의 `roles/bigquery.dataEditor`.
+에이전트가 테이블을 자동 생성해야 하는 경우에는 테이블을 생성할 BigQuery 데이터 세트에 `roles/bigquery.dataEditor`를 부여해야 합니다.
 
 ## 에이전트와 함께 사용
 
-ADK 에이전트의 App 개체에 BigQuery 분석 플러그인을 구성하고 등록하여 사용합니다. 다음 예는 이 플러그인과 BigQuery 도구가 활성화된 에이전트의 구현을 보여줍니다.
+ADK 에이전트의 `App` 객체에 BigQuery 분석 플러그인을 구성하고 등록하여 사용합니다. 다음 예시는 이 플러그인과 BigQuery 도구가 활성화된 에이전트 구현을 보여줍니다.
 
 ```python title="my_bq_agent/agent.py"
 # my_bq_agent/agent.py
@@ -189,25 +189,23 @@ CLUSTER BY event_type, agent, user_id;
 ```
 ### 이벤트 유형 및 페이로드 {#event-types}
 
-`content` 열에는 `event_type`에 특정한 형식화된 문자열이 포함되어 있습니다. 다음 표에서는 이러한 이벤트와 해당 콘텐츠에 대해 설명합니다.
+`content` 열에는 각 `event_type`에 맞춘 포맷 문자열이 기록됩니다. 다음 표에서는 각 이벤트와 기록되는 콘텐츠 형식을 설명합니다.
 
 !!! note
 
-    - 모든 가변 콘텐츠 필드(예: 사용자 입력, 모델 응답, 도구 인수, 시스템 프롬프트)
-    - 로그 크기를 관리하기 위해 `max_content_length` 문자로 잘립니다.
-    - (`BigQueryLoggerConfig`에서 구성, 기본값 500)
+    모든 가변 길이 콘텐츠 필드(예: 사용자 입력, 모델 응답, 도구 인수, 시스템 프롬프트)는 로그 크기를 관리하기 위해 `max_content_length` 글자 수(`BigQueryLoggerConfig`에서 구성 가능, 기본값 `500`)로 잘립니다.
 
-#### LLM 상호 작용(플러그인 수명 주기)
+#### LLM 상호작용(플러그인 라이프사이클)
 
-이러한 이벤트는 LLM으로 전송되고 LLM에서 수신된 원시 요청을 추적합니다.
+이러한 이벤트는 LLM으로 전송되고 LLM에서 수신된 원시 요청 및 응답을 추적합니다.
 
 <table>
   <thead>
     <tr>
       <th><strong>이벤트 유형</strong></th>
       <th><strong>트리거 조건</strong></th>
-      <th><strong>콘텐츠 형식 논리</strong></th>
-      <th><strong>콘텐츠 예</strong></th>
+      <th><strong>콘텐츠 포맷 로직</strong></th>
+      <th><strong>콘텐츠 예시</strong></th>
     </tr>
   </thead>
   <tbody>
@@ -234,8 +232,7 @@ after_model_callback
 </pre></p></td>
       <td><strong>도구 호출인 경우:</strong> <code>Tool Name: {func_names} | Token Usage: {usage}</code><br>
 <br>
-**텍스트인 경우:** `Tool Name: text_response, text: '{text}' | Token Usage:
-{usage}`</td>
+<strong>텍스트인 경우:</strong> <code>Tool Name: text_response, text: '{text}' | Token Usage: {usage}</code></td>
       <td><p><pre>
 Tool Name: text_response, text: 'Here is the data.' | Token Usage: {prompt: 10, candidates: 5, total: 15}
 </pre></p></td>
@@ -256,17 +253,17 @@ None
   </tbody>
 </table>
 
-#### 도구 사용(플러그인 수명 주기)
+#### 도구 사용(플러그인 라이프사이클)
 
-이러한 이벤트는 에이전트에 의한 도구 실행을 추적합니다.
+이러한 이벤트는 에이전트의 도구 실행을 추적합니다.
 
 <table>
   <thead>
     <tr>
       <th><strong>이벤트 유형</strong></th>
       <th><strong>트리거 조건</strong></th>
-      <th><strong>콘텐츠 형식 논리</strong></th>
-      <th><strong>콘텐츠 예</strong></th>
+      <th><strong>콘텐츠 포맷 로직</strong></th>
+      <th><strong>콘텐츠 예시</strong></th>
     </tr>
   </thead>
   <tbody>
@@ -314,17 +311,17 @@ Tool Name: list_datasets, Arguments: {}
   </tbody>
 </table>
 
-#### 에이전트 수명 주기(플러그인 수명 주기)
+#### 에이전트 라이프사이클(플러그인 라이프사이클)
 
-이러한 이벤트는 하위 에이전트를 포함한 에이전트 실행의 시작과 끝을 추적합니다.
+이러한 이벤트는 하위 에이전트를 포함한 에이전트 실행의 시작과 종료를 추적합니다.
 
 <table>
   <thead>
     <tr>
       <th><strong>이벤트 유형</strong></th>
       <th><strong>트리거 조건</strong></th>
-      <th><strong>콘텐츠 형식 논리</strong></th>
-      <th><strong>콘텐츠 예</strong></th>
+      <th><strong>콘텐츠 포맷 로직</strong></th>
+      <th><strong>콘텐츠 예시</strong></th>
     </tr>
   </thead>
   <tbody>
@@ -389,15 +386,15 @@ Agent Name: sub_agent_researcher
 
 #### 사용자 및 일반 이벤트(이벤트 스트림)
 
-이러한 이벤트는 에이전트 또는 실행기에서 생성된 `Event` 개체에서 파생됩니다.
+이러한 이벤트는 에이전트 또는 `Runner`에서 생성된 `Event` 객체에서 파생됩니다.
 
 <table>
   <thead>
     <tr>
       <th><strong>이벤트 유형</strong></th>
       <th><strong>트리거 조건</strong></th>
-      <th><strong>콘텐츠 형식 논리</strong></th>
-      <th><strong>콘텐츠 예</strong></th>
+      <th><strong>콘텐츠 포맷 로직</strong></th>
+      <th><strong>콘텐츠 예시</strong></th>
     </tr>
   </thead>
   <tbody>
@@ -460,7 +457,7 @@ text: 'I found 2 datasets.'
 
 이러한 쿼리를 실행하기 전에 제공된 SQL 내에서 GCP 프로젝트 ID, BigQuery 데이터 세트 ID 및 테이블 ID(지정하지 않은 경우 기본값은 "agent_events")를 업데이트해야 합니다.
 
-**특정 대화 차례 추적**
+**특정 대화 턴(turn) 추적**
 
 ```sql
 SELECT timestamp, event_type, agent, content

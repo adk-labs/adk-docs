@@ -1,6 +1,6 @@
 ---
 catalog_title: Atlan
-catalog_description: metadata、lineage、business knowledge を検索、探索、ガバナンスします
+catalog_description: メタデータ、リネージ、ビジネスナレッジを検索、探索、ガバナンス管理します
 catalog_icon: /integrations/assets/atlan.png
 catalog_tags: ["mcp"]
 ---
@@ -12,34 +12,34 @@ catalog_tags: ["mcp"]
 </div>
 
 [Atlan MCP Server](https://github.com/atlanhq/agent-toolkit) は ADK エージェントを、
-エンタープライズ AI のためのコンテキストレイヤーである
+エンタープライズ AI 向けのコンテキストレイヤーである
 [Atlan](https://www.atlan.com/) に接続します。これによりエージェントは、AI
-エージェントが効果的に作業するために必要な知識、データ、セマンティクスを含む
-組織の context repo にアクセスできます。この統合により、エージェントは
-エンタープライズコンテキストの検索と発見、end-to-end lineage の探索、ガバナンス
-されたデータ定義と glossary へのアクセス、SQL の実行、metadata graph の整理、
-data quality の確保を行い、すべてのエージェントタスクを信頼できる組織コンテキスト
-に基づかせることができます。
+エージェントが効果的に処理を行うために必要な知識、データ、セマンティクスを備えた
+組織のコンテキストリポジトリにアクセスできます。この統合により、エージェントは
+エンタープライズコンテキストの検索と検出、エンドツーエンドのリネージ探索、ガバナンス管理された
+データ定義や用語集（グロッサリー）へのアクセス、SQL の実行、メタデータグラフの整備、
+データ品質の確保を行えるようになり、すべてのエージェントタスクを信頼できる組織コンテキストに
+グラウンディング（Grounding）できます。
 
 ## ユースケース
 
-- **エンタープライズコンテキストの検索と発見:** 自然言語でスタック全体の
-  table、column、dashboard、glossary term、data product を見つけます。
+- **エンタープライズコンテキストの検索と検出**: 自然言語を使って、技術スタック全体の
+  テーブル、カラム、ダッシュボード、用語集の用語、データプロダクトを見つけます。
 
-- **End-to-end lineage の探索:** システム全体でデータフローを upstream と
-  downstream に追跡し、スキーマ変更前に依存関係を把握します。
+- **エンドツーエンドのリネージ探索**: システム全体でデータフローを上流（upstream）および
+  下流（downstream）に追跡し、スキーマ変更の前に依存関係を把握します。
 
-- **ガバナンスされたデータ定義へのアクセス:** glossary、data domain、認証済み
-  metadata を使って、エージェントの出力を信頼できる組織コンテキストに基づかせます。
+- **ガバナンス管理されたデータ定義へのアクセス**: 用語集、データドメイン、認定済み
+  メタデータを使って、エージェントの出力を信頼できる組織コンテキストにグラウンディングします。
 
-- **Metadata graph の整理:** エージェントから説明の更新、アセットの認証、
-  glossary の管理、data quality rule と schedule の定義、SQL の実行まで行います。
+- **メタデータグラフの整備**: 説明の更新、アセットの認定、用語集の管理、
+  データ品質ルールとスケジュールの定義、SQL の実行までをすべてエージェントから行います。
 
 ## 前提条件
 
-- [Atlan](https://atlan.com/) tenant
-- クエリしたいアセットへアクセスする権限を持つ Atlan アカウント
-- ローカルにインストールされた Node.js（hosted MCP server へ bridge する
+- [Atlan](https://atlan.com/) テナント
+- クエリ対象のアセットへアクセスする権限を持つ Atlan アカウント
+- ローカルにインストールされた Node.js（ホスト型 MCP サーバーへブリッジ接続する
   `mcp-remote` で使用）
 
 ## エージェントでの使用
@@ -110,68 +110,68 @@ data quality の確保を行い、すべてのエージェントタスクを信�
 
     このエージェントを初めて実行すると、OAuth でアクセスを要求するために
     ブラウザーウィンドウが自動的に開きます。代わりに、コンソールに表示される
-    認可 URL を使用することもできます。エージェントが Atlan tenant にアクセス
+    認可 URL を使用することもできます。エージェントが Atlan テナントにアクセス
     できるよう、この要求を承認する必要があります。
 
 ## 利用可能なツール
 
-### 発見と検索
+### 検出と検索
 
-Tool | Description
+ツール | 説明
 ---- | -----------
-`semantic_search_tool` | AI による semantic understanding を使って、すべてのデータアセットを自然言語で検索します
+`semantic_search_tool` | AI によるセマンティック理解を使って、すべてのデータアセットを自然言語で検索します
 `search_assets_tool` | 構造化されたフィルタと条件でアセットを検索します
-`traverse_lineage_tool` | アセットの data flow を upstream（source）または downstream（consumer）へ追跡します
+`traverse_lineage_tool` | アセットのデータフローを上流（ソース）または下流（コンシューマー）へ追跡します
 `query_assets_tool` | 接続済みデータソースに対して SQL クエリを実行します
-`get_asset_tool` | GUID または qualified name で単一アセットの詳細情報（custom metadata、data quality check、README を含む）を取得します
-`resolve_metadata_tool` | 名前または説明で metadata entity（user、classification、custom metadata set、glossary、domain、data product）を見つけます
-`get_groups_tool` | workspace group とそのメンバーを一覧表示します
-`search_atlan_docs_tool` | Atlan 製品ドキュメントを検索し、source citation を含む LLM 生成回答を返します
+`get_asset_tool` | GUID または完全修飾名（qualified name）を指定して、単一アセットの詳細情報（カスタムメタデータ、データ品質チェック、README を含む）を取得します
+`resolve_metadata_tool` | 名前または説明からメタデータエンティティ（ユーザー、分類、カスタムメタデータセット、用語集、ドメイン、データプロダクト）を検出します
+`get_groups_tool` | ワークスペースグループとそのメンバーを一覧表示します
+`search_atlan_docs_tool` | Atlan の製品ドキュメントを検索し、出典の引用付きで LLM 生成の回答を返します
 
 ### アセット更新
 
-Tool | Description
+ツール | 説明
 ---- | -----------
-`update_assets_tool` | アセット説明、certificate ステータス、README、term を更新します
-`manage_announcements_tool` | アセットに announcement（information、warning、issue）を追加または削除します
-`manage_asset_lifecycle_tool` | アセットを archive、restore、または完全 purge します
+`update_assets_tool` | アセットの説明、認定ステータス、README、または用語を更新します
+`manage_announcements_tool` | アセットにアナウンス（情報、警告、問題）を追加または削除します
+`manage_asset_lifecycle_tool` | アセットをアーカイブ、復元、または完全削除（パージ）します
 
-### Glossary と domain
+### 用語集とドメイン
 
-Tool | Description
+ツール | 説明
 ---- | -----------
-`create_glossaries` | 新しい glossary を作成します
-`create_glossary_terms` | glossary 内に term を作成します
-`create_glossary_categories` | glossary 内に category を作成します
-`create_domains` | data domain と subdomain を作成します
-`create_data_products` | domain と asset に紐づく data product を作成します
+`create_glossaries` | 新しい用語集を作成します
+`create_glossary_terms` | 用語集内に用語を作成します
+`create_glossary_categories` | 用語集内にカテゴリを作成します
+`create_domains` | データドメインとサブドメインを作成します
+`create_data_products` | ドメインやアセットに紐づくデータプロダクトを作成します
 
-### Data quality rule
+### データ品質ルール
 
-Tool | Description
+ツール | 説明
 ---- | -----------
-`create_dq_rules_tool` | data quality rule（null check、uniqueness、regex、custom SQL など）を作成します
-`update_dq_rules_tool` | 既存の data quality rule を更新します
-`schedule_dq_rules_tool` | cron expression で data quality rule の実行をスケジュールします
-`delete_dq_rules_tool` | data quality rule を削除します
+`create_dq_rules_tool` | データ品質ルール（NULL チェック、一意性、正規表現、カスタム SQL など）を作成します
+`update_dq_rules_tool` | 既存のデータ品質ルールを更新します
+`schedule_dq_rules_tool` | cron 式を使ってデータ品質ルールの実行をスケジュールします
+`delete_dq_rules_tool` | データ品質ルールを削除します
 
-### Custom metadata
+### カスタムメタデータ
 
-Tool | Description
+ツール | 説明
 ---- | -----------
-`create_custom_metadata_set_tool` | typed attribute を持つ custom metadata set を作成します
-`add_attributes_to_cm_set_tool` | 既存の custom metadata set に新しい attribute を追加します
-`remove_attributes_from_cm_set_tool` | custom metadata set から attribute を archive（soft-delete）します
-`delete_custom_metadata_set_tool` | custom metadata set を完全削除し、すべてのアセットからその値を消去します
-`update_custom_metadata_tool` | 1 つ以上のアセットで custom metadata 値を更新します
-`remove_custom_metadata_tool` | アセットから custom metadata set の値を削除します
+`create_custom_metadata_set_tool` | 型付き属性を持つカスタムメタデータセットを作成します
+`add_attributes_to_cm_set_tool` | 既存のカスタムメタデータセットに新しい属性を追加します
+`remove_attributes_from_cm_set_tool` | カスタムメタデータセットから属性をアーカイブ（論理削除）します
+`delete_custom_metadata_set_tool` | カスタムメタデータセットを完全削除し、すべてのアセットからその値を消去します
+`update_custom_metadata_tool` | 1 つ以上のアセットでカスタムメタデータ値を更新します
+`remove_custom_metadata_tool` | アセットからカスタムメタデータセットの値を削除します
 
-### Atlan tag
+### Atlan タグ
 
-Tool | Description
+ツール | 説明
 ---- | -----------
-`add_atlan_tags_tool` | 1 つ以上のアセットに Atlan tag を追加します
-`remove_atlan_tag_tool` | 1 つ以上のアセットから Atlan tag を削除します
+`add_atlan_tags_tool` | 1 つ以上のアセットに Atlan タグを追加します
+`remove_atlan_tag_tool` | 1 つ以上のアセットから Atlan タグを削除します
 
 ## 追加リソース
 

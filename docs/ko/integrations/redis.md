@@ -22,10 +22,10 @@ catalog_tags: ["data","mcp"]
 
 | 접근 방식 | 설명 |
 |----------|------|
-| **RedisVL MCP** | ADK의 네이티브 `McpToolset`을 실행 중인 [`rvl mcp`](https://docs.redisvl.com/en/latest/user_guide/how_to_guides/mcp.html) 서버에 연결합니다. 스키마 인식 필터와 반환 필드 힌트가 있는 `search-records`(vector / fulltext / hybrid) 및 `upsert-records`를 노출합니다. |
+| **RedisVL MCP** | ADK의 네이티브 `McpToolset`을 실행 중인 [`rvl mcp`](https://docs.redisvl.com/en/latest/user_guide/how_to_guides/mcp.html) 서버에 연결합니다. 스키마 인식 필터와 반환 필드 힌트가 있는 `search-records`(vector / fulltext / hybrid) 및 `upsert-records`를 제공합니다. |
 | **Session + Memory 서비스** | Agent Memory Server를 백엔드로 사용하는 ADK `BaseSessionService` 및 `BaseMemoryService` 구현인 `RedisWorkingMemorySessionService`와 `RedisLongTermMemoryService`입니다. |
 | **Sessions + Memory MCP** | ADK의 네이티브 `McpToolset`을 SSE를 통해 [Agent Memory Server](https://github.com/redis/agent-memory-server)의 MCP 엔드포인트에 연결합니다. 에이전트가 `search_long_term_memory`, `create_long_term_memories`, `memory_prompt`에 직접 도구로 접근할 수 있습니다. |
-| **Search tools** | RedisVL 쿼리로 바인딩된 인덱스를 검색하는 다섯 가지 `BaseTool` 하위 클래스(`RedisVectorSearchTool`, `RedisHybridSearchTool`, `RedisRangeSearchTool`, `RedisTextSearchTool`, `RedisSQLSearchTool`)입니다. |
+| **검색 도구(Search tools)** | RedisVL 쿼리로 바인딩된 인덱스를 검색하는 다섯 가지 `BaseTool` 하위 클래스(`RedisVectorSearchTool`, `RedisHybridSearchTool`, `RedisRangeSearchTool`, `RedisTextSearchTool`, `RedisSQLSearchTool`)입니다. |
 
 ## 사용 사례
 
@@ -33,7 +33,7 @@ catalog_tags: ["data","mcp"]
   SQL 검색을 실행합니다. Hybrid 검색은 Redis 8.4 이상에서 네이티브
   `FT.HYBRID`를 사용하고, 그 외 환경에서는 클라이언트 측 집계로 폴백합니다.
 - **영구 멀티턴 에이전트**: 세션 및 메모리 서비스를 ADK `Runner`에 연결해
-  대화 상태를 유지하고, 컨텍스트 창이 가득 차면 자동 요약하며, 지속해야
+  대화 상태를 유지하고, 컨텍스트 윈도우가 가득 차면 자동 요약하며, 지속해야
   하는 사실을 장기 메모리로 승격합니다.
 - **스키마 인식 MCP 도구**: Redis 인덱스마다 하나의 `rvl mcp` 서버를 세우고
   여러 에이전트를 `stdio`, `sse`, `streamable-http`로 연결합니다. MCP 도구
@@ -41,7 +41,7 @@ catalog_tags: ["data","mcp"]
 - **지연 시간과 비용 절감**: LLM 호출 지점을 시맨틱 캐시로 감싸 반복되거나
   거의 중복되는 프롬프트가 모델을 건너뛰게 합니다.
 
-## 기본 요건
+## 사전 요구사항
 
 - Python 3.10 이상
 - RediSearch 모듈이 활성화된 Redis 8.4 이상 또는 [Redis Cloud](https://redis.io/cloud/)
@@ -113,8 +113,8 @@ pip install 'redisvl[mcp]>=0.18.2'
 === "Sessions + Memory"
 
     REST 기반 세션 및 메모리 서비스를 통해 [Agent Memory Server](https://github.com/redis/agent-memory-server)를
-    ADK `Runner`에 연결합니다. Working memory는 자동 요약을 통해 세션별
-    상태를 처리하고, long-term memory는 세션 간 하이브리드 검색을 제공합니다.
+    ADK `Runner`에 연결합니다. 단기 작업 메모리(working memory)는 자동 요약을 통해 세션별
+    상태를 관리하고, 장기 메모리(long-term memory)는 세션 간 하이브리드 검색을 제공합니다.
 
     ```python
     from google.adk.agents import Agent
@@ -191,7 +191,7 @@ pip install 'redisvl[mcp]>=0.18.2'
     !!! note
 
         Agent Memory Server는 REST API와 별도의 포트에서 MCP 엔드포인트를
-        노출합니다. Docker Compose를 포함한 완전한 동작 예제는
+        외부에 공개합니다. Docker Compose를 포함한 완전한 동작 예제는
         [fitness_coach_mcp 예제](https://github.com/redis-developer/adk-redis/tree/main/examples/fitness_coach_mcp)를
         참고하세요.
 
@@ -332,8 +332,8 @@ pip install 'redisvl[mcp]>=0.18.2'
 
 소스 | 설명
 ---- | -----------
-[RedisVL MCP server](https://docs.redisvl.com/en/latest/user_guide/how_to_guides/mcp.html) (`rvl mcp`) | ADK의 네이티브 `McpToolset`을 실행 중인 `rvl mcp` 서버에 연결합니다. 서버는 YAML에 따라 vector / fulltext / hybrid 중 하나로 선택되는 `search-records`와 `upsert-records`를 노출하고, 인덱스 스키마에서 파생된 필터 및 반환 필드 힌트를 제공합니다. `stdio`, `sse`, `streamable-http`, HTTP bearer 인증을 지원하며, 서버의 `--read-only` 또는 `McpToolset`의 `tool_filter=["search-records"]`로 쓰기를 막을 수 있습니다. |
-[Sessions + Memory MCP server](https://github.com/redis/agent-memory-server) | ADK의 네이티브 `McpToolset`을 SSE를 통해 Agent Memory Server의 MCP 엔드포인트에 연결합니다. `search_long_term_memory`, `create_long_term_memories`, `edit_long_term_memory`, `delete_long_term_memories`, `memory_prompt`를 노출합니다. REST API와 별도 포트에서 실행됩니다. |
+[RedisVL MCP server](https://docs.redisvl.com/en/latest/user_guide/how_to_guides/mcp.html) (`rvl mcp`) | ADK의 네이티브 `McpToolset`을 실행 중인 `rvl mcp` 서버에 연결합니다. 서버는 YAML에 따라 vector / fulltext / hybrid 중 하나로 선택되는 `search-records`와 `upsert-records`를 제공하며, 인덱스 스키마에서 파생된 필터 및 반환 필드 힌트를 제공합니다. `stdio`, `sse`, `streamable-http`, HTTP bearer 인증을 지원하며, 서버의 `--read-only` 또는 `McpToolset`의 `tool_filter=["search-records"]`로 쓰기를 막을 수 있습니다. |
+[Sessions + Memory MCP server](https://github.com/redis/agent-memory-server) | ADK의 네이티브 `McpToolset`을 SSE를 통해 Agent Memory Server의 MCP 엔드포인트에 연결합니다. `search_long_term_memory`, `create_long_term_memories`, `edit_long_term_memory`, `delete_long_term_memories`, `memory_prompt`를 제공합니다. REST API와 별도 포트에서 실행됩니다. |
 
 ### 메모리 도구
 
@@ -350,8 +350,8 @@ pip install 'redisvl[mcp]>=0.18.2'
 
 서비스 | 설명
 ------- | -----------
-`RedisWorkingMemorySessionService` | Agent Memory Server working memory를 백엔드로 사용하는 `BaseSessionService`입니다. 컨텍스트 창이 초과되면 자동 요약합니다.
-`RedisLongTermMemoryService` | recency-boosted semantic search를 지원하는 Agent Memory Server long-term memory 기반 `BaseMemoryService`입니다.
+`RedisWorkingMemorySessionService` | Agent Memory Server의 단기 작업 메모리를 백엔드로 사용하는 `BaseSessionService`입니다. 컨텍스트 윈도우가 초과되면 자동 요약합니다.
+`RedisLongTermMemoryService` | 최신성 가중 시맨틱 검색(recency-boosted semantic search)을 지원하는 Agent Memory Server 장기 메모리 기반 `BaseMemoryService`입니다.
 
 ### 캐시 제공자
 

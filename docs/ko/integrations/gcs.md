@@ -163,7 +163,7 @@ GCS 연동은 크게 두 가지 툴셋으로 기능을 나눕니다:
 `gcs_get_bucket` | GCS 버킷에 대한 메타데이터 정보를 가져옵니다.
 `gcs_list_objects` | GCS 버킷의 객체 이름을 조회합니다. 선택적으로 접두사 필터링 및 페이지네이션을 지원합니다.
 `gcs_get_object_metadata` | 특정 GCS 객체(blob)의 메타데이터 속성을 가져옵니다.
-`gcs_create_object` | 메모리 내의 문자열 데이터 또는 로컬 파일 업로드를 통해 버킷에 새로운 객체(blob)를 생성합니다.
+`gcs_create_object` | 인메모리(in-memory) 문자열 데이터 또는 로컬 파일 업로드를 통해 버킷에 새로운 객체(blob)를 생성합니다.
 `gcs_get_object_data` | GCS 객체의 콘텐츠를 문자열로 가져오거나 로컬 파일로 직접 다운로드합니다.
 `gcs_delete_objects` | 버킷에서 여러 GCS 객체(blob)를 삭제합니다.
 

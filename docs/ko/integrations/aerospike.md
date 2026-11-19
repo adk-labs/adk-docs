@@ -18,15 +18,15 @@ catalog_tags: ["data"]
 | 접근 방식 | 설명 |
 | -------- | ----------- |
 | **세션 서비스** | `AerospikeSessionService`: 범위 지정 상태(`app:`, `user:`, session), 청크 스토리지 기반 이벤트 기록, 원자적(atomic) `append_event`. |
-| **메모리 서비스** | `AerospikeMemoryService`: 토큰별 게시 목록(posting-list) 키를 통한 어휘적 단어 중복 검색. `InMemoryMemoryService`와 동일한 시맨틱을 가집니다. |
+| **메모리 서비스** | `AerospikeMemoryService`: 토큰별 포스팅 리스트(posting-list) 키를 통한 어휘 기반 단어 일치(word-overlap) 검색. `InMemoryMemoryService`와 동일한 시맨틱을 가집니다. |
 | **아티팩트 서비스** | `AerospikeArtifactService`: 세션별 또는 `user:` 네임스페이스별 버전 관리 블롭(blob) 저장. |
 | **전체 스택** | 세 서비스를 하나의 `Runner`에 모두 연결하거나, 일치하는 `aerospike://` URI를 `adk web` / `adk run`에 전달하여 사용합니다. |
 
 ## 주요 사용 사례
 
 - **프로덕션 에이전트 영속성 (Production agent persistence)**: 별도의 메모리 서비스를 운영하지 않고도 대화 상태, 도구 출력, 사용자 범위 데이터를 여러 에이전트 인스턴스(replica)나 재시작 간에 안전하게 보존합니다.
-- **고처리량 에이전트 (High-throughput agents)**: 세션 추가 지연 시간이 중요한 채팅, 음성 및 실시간 오케스트레이션에서 1밀리초 미만의 속도로 읽기 및 쓰기를 처리합니다.
-- **어휘 장기 메모리 (Lexical long-term memory)**: 쓰기 시점에 텍스트를 토큰화하고, 게시 목록 키(`app:user:kw:<token>`)에 대한 포인트 읽기(point read) 방식으로 검색하여 메모리 행을 복원합니다. 임베딩 모델이 필요하지 않습니다.
+- **고처리량 에이전트 (High-throughput agents)**: 세션 추가 지연 시간(latency)이 중요한 채팅, 음성 및 실시간 오케스트레이션에서 1밀리초 미만의 속도로 읽기 및 쓰기를 처리합니다.
+- **어휘 장기 메모리 (Lexical long-term memory)**: 쓰기 시점에 텍스트를 토큰화하고, 포스팅 리스트 키(`app:user:kw:<token>`)에 대한 포인트 읽기(point read) 방식으로 조회하여 메모리 행을 가져옵니다. 임베딩 모델이 필요하지 않습니다.
 - **멀티모달 아티팩트 (Multimodal artifacts)**: 이미지, 파일 및 생성된 결과물을 버전 기록과 함께 저장합니다. `user:` 파일 이름은 여러 세션에 걸쳐 표시됩니다 (ADK 사양).
 - **자체 호스팅 및 다중 테넌트 (Self-hosted and multi-tenant)**: 하나의 네임스페이스 내에서 테넌트 범위의 아티팩트 및 메모리 작업을 처리할 수 있는 복합 보조 인덱스(composite secondary index)를 제공합니다. 커뮤니티(Community) 또는 엔터프라이즈(Enterprise) 에디션, 온프레미스 또는 클라우드를 모두 지원합니다.
 
@@ -55,7 +55,7 @@ pip install google-adk adk-aerospike
 
 === "세션 + Runner"
 
-    persisted 세션을 지원하는 완전한 멀티턴 에이전트를 구성하기 위해 `AerospikeSessionService`를 ADK `Runner`에 연결합니다.
+    영구 저장되는 세션을 지원하는 완전한 멀티턴 에이전트를 구성하기 위해 `AerospikeSessionService`를 ADK `Runner`에 연결합니다.
 
     ```python
     import asyncio
@@ -153,7 +153,7 @@ pip install google-adk adk-aerospike
 
 === "메모리 서비스"
 
-    텍스트를 포함하는 세션 이벤트를 영속화하고 벡터 인덱스 없이 단어 중복으로 검색합니다.
+    텍스트를 포함하는 세션 이벤트를 영구 저장하고 벡터 인덱스 없이 단어 일치 기반으로 검색합니다.
 
     ```python
     import asyncio
@@ -335,7 +335,7 @@ aerospike://user:pass@node1:3000,node2:3000/prod?set_prefix=prod_&tls=true
 | ------- | ------------- | ----------- |
 | `AerospikeSessionService` | `BaseSessionService` | 세션, 이벤트, 범위 지정 상태. 세션 레코드에 대한 실시간 이벤트 추가(Hot event tail), 256KiB 크기의 청크 분할 저장. 대부분의 이벤트 추가는 단일 원자적 `operate()`로 처리됩니다. `get_session`은 단일 RTT로 세션+앱+사용자 상태를 조회하기 위해 `batch_read`를 활용합니다. |
 | `AerospikeArtifactService` | `BaseArtifactService` | `(app, user, session, filename)` 기준 버전 관리 아티팩트. 버전당 최대 8MiB까지 인라인 페이로드 저장 지원. `user:` 파일 이름은 ADK 사용자 네임스페이스 센티널을 사용합니다. |
-| `AerospikeMemoryService` | `BaseMemoryService` | 텍스트가 포함된 이벤트당 하나의 메모리 행 저장. 토큰별 게시 목록(posting-list) 기본 키(PK) 사용. `search_memory`는 쿼리 토큰 중복에 따라 랭킹을 지정합니다. |
+| `AerospikeMemoryService` | `BaseMemoryService` | 텍스트가 포함된 이벤트당 하나의 메모리 행 저장. 토큰별 포스팅 리스트(posting-list) 기본 키(PK) 사용. `search_memory`는 쿼리 토큰 일치도에 따라 순위를 매깁니다. |
 
 ### URI 등록
 
@@ -356,7 +356,7 @@ aerospike://user:pass@node1:3000,node2:3000/prod?set_prefix=prod_&tls=true
 | `adk_user_state` | `app:user` | 사용자 범위 상태 |
 | `adk_artifacts` | `app:user:session:fname:ver` | 아티팩트 버전 |
 | `adk_memory` | `app:user:session:event_id` | 메모리 행 |
-| `adk_memory` | `app:user:kw:token` | 어휘 검색을 위한 게시 목록 |
+| `adk_memory` | `app:user:kw:token` | 어휘 검색을 위한 포스팅 리스트 |
 
 인덱스, 청크 인바리언트(chunking invariants) 및 운영 참고사항은 저장소의 [데이터 모델](https://github.com/aerospike-community/adk-aerospike/blob/main/docs/data-model.md)을 참고하세요.
 

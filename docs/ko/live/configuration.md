@@ -27,8 +27,8 @@
 | **output_audio_transcription** | AudioTranscriptionConfig | 모델 음성 전사 | [오디오 전사](#audio-transcription) |
 | **realtime_input_config** | RealtimeInputConfig | VAD 구성 | [음성 활동 감지](#voice-activity-detection-vad) |
 | **explicit_vad_signal** | bool | 모델로부터 음성 활동 이벤트 방출 | [세부정보](#other-live-related-fields) |
-| **proactivity** | ProactivityConfig | 능동적 오디오 활성화 (모델별 지원) | [능동적 및 감정적 대화](#proactivity-and-affective-dialog) |
-| **enable_affective_dialog** | bool | 감정 적응 활성화 (모델별 지원) | [능동적 및 감정적 대화](#proactivity-and-affective-dialog) |
+| **proactivity** | ProactivityConfig | 능동형 오디오 활성화 (모델별 지원) | [능동형 오디오 및 공감형 대화](#proactivity-and-affective-dialog) |
+| **enable_affective_dialog** | bool | 감정 적응 활성화 (모델별 지원) | [능동형 오디오 및 공감형 대화](#proactivity-and-affective-dialog) |
 | **translation_config** | TranslationConfig | 실시간 음성 대 음성 번역 (번역 모델 전용) | [세부정보](#other-live-related-fields) |
 | **avatar_config** | AvatarConfig | 에이전트를 애니메이션 아바타로 렌더링 | [세부정보](#other-live-related-fields) |
 
@@ -78,7 +78,7 @@ ADK는 두 가지 서로 다른 엔드포인트를 통해 Gemini에 접근할 �
 
 !!! warning "Python: `StreamingMode.BIDI`는 ADK를 Live API로 전환하지 않습니다"
 
-    **Python**에서 `RunConfig.streaming_mode`는 `run_async()` 코드 경로에서만 읽히며, 단일 완료 응답(`StreamingMode.NONE`, 기본값)과 청크 단위 전달(`StreamingMode.SSE`) 사이를 선택합니다. `run_live()` 경로는 이를 전혀 읽지 않으므로 `streaming_mode=StreamingMode.BIDI`를 설정해도 아무런 효과가 없으며 조용히 무시됩니다. **양방향 스트리밍을 사용하려면 `run_live()`를 호출해야 합니다.** ADK 자체의 Python `StreamingMode` 독스트링에서도 BIDI는 "표준 실행 경로에서 사용되지 않으며", 실제 양방향 동작은 "`streaming_mode`에 의존하지 않는 완전히 다른 코드 경로를 사용한다"고 명시하고 있습니다.
+    **Python**에서 `RunConfig.streaming_mode`는 `run_async()` 코드 경로에서만 읽히며, 단일 완료 응답(`StreamingMode.NONE`, 기본값)과 청크 단위 전달(`StreamingMode.SSE`) 사이를 선택합니다. `run_live()` 경로는 이를 전혀 읽지 않으므로 `streaming_mode=StreamingMode.BIDI`를 설정해도 아무런 효과가 없으며 별도 경고 없이 무시됩니다. **양방향 스트리밍을 사용하려면 `run_live()`를 호출해야 합니다.** ADK 자체의 Python `StreamingMode` 독스트링에서도 BIDI는 "표준 실행 경로에서 사용되지 않으며", 실제 양방향 동작은 "`streaming_mode`에 의존하지 않는 완전히 다른 코드 경로를 사용한다"고 명시하고 있습니다.
 
     **Java는 다릅니다.** ADK Java의 흐름은 `StreamingMode.BIDI`를 실제로 읽으며, Java 퀵스타트는 `runLive()`에 전달하는 `RunConfig`에 이를 명시적으로 설정합니다. 언어 간에 설정을 그대로 복사하지 말고 각 언어의 퀵스타트를 따르세요.
 
@@ -95,7 +95,7 @@ async for event in runner.run_live(..., run_config=run_config):
 
 ## 기타 제어 옵션
 
-ADK는 세션 동작을 제어하고, 비용을 관리하며, 디버깅 및 컴플라이언스 목적으로 오디오 데이터를 유지하기 위한 추가 RunConfig 옵션을 제공합니다.
+ADK는 세션 동작을 제어하고, 비용을 관리하며, 디버깅 및 컴플라이언스 목적으로 오디오 데이터를 영구 저장하기 위한 추가 `RunConfig` 옵션을 제공합니다.
 
 ```python
 run_config = RunConfig(
@@ -276,13 +276,13 @@ run_config = RunConfig(
 
 `voice_name`은 사전 제작된 음성을 선택합니다. [라이브 모델](models.md#live-models)은 8가지 음성(Puck, Charon, Kore, Fenrir, Aoede, Leda, Orus, Zephyr)과 확장된 [Text-to-Speech 음성 목록](https://cloud.google.com/text-to-speech/docs/voices)을 지원합니다. 현재 목록과 백엔드별 가용성은 [Gemini Live API 음성 문서](https://ai.google.dev/gemini-api/docs/live-api/capabilities#change-voice-and-language)를 확인하세요. 지원되지 않는 음성은 연결 시 오류를 반환합니다.
 
-`language_code`(예: `en-US`, `ko-KR`, `ja-JP`)는 언어와 억양을 설정합니다. 라이브 모델은 대화 내용에서 언어를 자체적으로 유추하는 경우가 많아 이 설정을 무시할 수도 있습니다.
+`language_code`(예: `en-US`, `ko-KR`, `ja-JP`)는 언어와 억양을 설정합니다. 라이브 모델은 대화 내용에서 언어를 자동으로 추론하는 경우가 많아 이 설정을 무시할 수도 있습니다.
 
 ## 음성 활동 감지 (VAD)
 
 VAD는 사용자가 말을 시작하고 멈추는 시점을 감지하여 모델이 끼어들기 처리를 포함해 자연스럽게 턴을 주고받을 수 있도록 합니다. 모든 [라이브 모델](models.md#live-models)에서 **기본적으로 켜져 있으며**, 대부분의 애플리케이션에서는 별도 구성이 필요하지 않습니다.
 
-Push-to-talk, 클라이언트 측 VAD 또는 사용자가 발언 완료를 직접 신호하는 UX 등 애플리케이션이 턴 경계를 자체적으로 결정하는 경우 자동 VAD를 비활성화하세요. 비활성화한 경우 [`send_activity_start()` / `send_activity_end()`](sessions.md#liverequestqueue)를 사용하여 수동으로 `ActivityStart`/`ActivityEnd` 신호를 보내야 하며, 클라이언트는 자체 턴 신호를 서버의 해당 호출로 변환해야 합니다.
+Push-to-talk, 클라이언트 측 VAD 또는 사용자가 발언 완료를 직접 신호하는 UX 등 애플리케이션에서 직접 턴 경계를 결정하는 경우 자동 VAD를 비활성화하세요. 비활성화한 경우 [`send_activity_start()` / `send_activity_end()`](sessions.md#liverequestqueue)를 사용하여 수동으로 `ActivityStart`/`ActivityEnd` 신호를 보내야 하며, 클라이언트는 자체 턴 신호를 서버의 해당 호출로 변환해야 합니다.
 
 ```python
 from google.genai import types
@@ -298,12 +298,12 @@ run_config = RunConfig(
 
 자체 VAD를 실행하는 클라이언트는 해당 신호를 서버로 보내고, 서버는 `send_activity_start()` / `send_activity_end()`로 이를 전달합니다. [클라이언트 연결](custom-server.md#connect-a-client)을 참고하세요.
 
-## 능동적 및 감정적 대화 (Proactivity and affective dialog)
+## 능동형 오디오 및 공감형 대화 (Proactivity and affective dialog)
 
 일부 라이브 모델은 기본적으로 꺼져 있는 두 가지 대화 기능을 제공합니다:
 
-- **능동적 오디오** (`proactivity`): 모델이 응답할 시점을 스스로 결정하고, 요청하지 않아도 제안을 하거나, 관련 없는 입력을 무시할 수 있습니다.
-- **감정적 대화** (`enable_affective_dialog`): 모델이 사용자의 어조에서 감정을 감지하고 그에 맞게 응답을 조정할 수 있습니다.
+- **능동형 오디오** (`proactivity`): 모델이 응답할 시점을 스스로 결정하고, 요청하지 않아도 제안을 하거나, 관련 없는 입력을 무시할 수 있습니다.
+- **공감형 대화** (`enable_affective_dialog`): 모델이 사용자의 어조에서 감정을 감지하고 그에 맞게 응답을 조정할 수 있습니다.
 
 ```python
 from google.genai import types

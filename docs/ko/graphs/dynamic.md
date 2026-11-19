@@ -173,7 +173,7 @@ ADK 동적 워크플로에서는 동적 노드를 노드들의 기본 오케스�
 
 === "TypeScript"
 
-    오케스트레이터는 각 하위 단계에 대해 `ctx.runNode()`를 await하는 비동기 함수입니다. 이를 `rerunOnResume: true`로 노드로 래핑하고 그래프의 유일한 edge로 사용합니다:
+    오케스트레이터는 각 하위 단계에 대해 `ctx.runNode()`를 await하는 비동기 함수입니다. 이를 `rerunOnResume: true`로 노드로 래핑하고 그래프의 유일한 에지(edge)로 사용합니다:
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/dynamic/nodes.ts:workflows"
@@ -242,7 +242,7 @@ ADK에서 동적 워크플로를 사용할 때 데이터 전달은 [그래프 �
 
 === "TypeScript"
 
-    `ctx.runNode()` 함수는 하위 노드의 결과를 직접 반환하므로, 값을 한 단계 다운스트림으로 이동하기 위해 세션 상태 키를 읽고 쓸 필요가 없습니다. 이 함수는 `LlmAgent`를 포함하여 노드 유사(node-like) 값을 먼저 `node()`로 래핑하지 않고도 허용합니다:
+    `ctx.runNode()` 함수는 하위 노드의 결과를 직접 반환하므로, 값을 한 단계 다운스트림으로 이동하기 위해 세션 상태 키를 읽고 쓸 필요가 없습니다. 이 함수는 `LlmAgent` 등 노드처럼 사용할 수 있는 객체를 먼저 `node()`로 래핑하지 않고도 바로 받을 수 있습니다:
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/dynamic/data_handling.ts:data-handling"
@@ -421,7 +421,7 @@ ADK의 동적 워크플로는 병렬 실행을 지원할 수 있습니다.
 
         워크플로 프레임워크는 동적 워크플로가 재개될 때 `NewParallelWorker`가 관리하는 병렬 워커 노드를 포함하여 실패했거나 중단된 워커 노드만 다시 실행되도록 보장합니다.
 
-## 사람의 입력 (Human Input)
+## 사람의 입력 (Human Input) {#human-input}
 
 ADK의 동적 워크플로에는 사람 입력 또는 인간 참여형(HITL) 단계도 포함할 수 있습니다.
 

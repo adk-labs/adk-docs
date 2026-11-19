@@ -18,10 +18,10 @@ Model Context Protocol (MCP) サーバーとしてアクセスできます。
 このツールを設定することで、エージェントを Google Cloud プロジェクトへ接続し、
 そのプロジェクトで有効化されている Cloud サービスへ動的にアクセスできます。
 
-!!! example "Preview リリース"
-    Google Cloud API Registry 機能は Preview リリースです。
+!!! example "プレビューリリース"
+    Google Cloud API Registry 機能はプレビューリリースです。
     詳細は
-    [launch stage descriptions](https://cloud.google.com/products#product-launch-stages)
+    [リリースステージの説明](https://cloud.google.com/products#product-launch-stages)
     を参照してください。
 
 ## 前提条件
@@ -32,7 +32,7 @@ Model Context Protocol (MCP) サーバーとしてアクセスできます。
     既存の Google Cloud プロジェクトを使って、エージェントが AI モデルへアクセスできるよう設定します。
 
 -   **API Registry へのアクセス:**
-    エージェント実行環境には、利用可能 MCP サーバー一覧取得のために
+    利用可能な MCP サーバーの一覧を取得するため、エージェントの実行環境には
     `apiregistry.viewer` ロールを持つ Google Cloud
     [Application Default Credentials](https://docs.cloud.google.com/docs/authentication/provide-credentials-adc)
     が必要です。
@@ -42,14 +42,14 @@ Model Context Protocol (MCP) サーバーとしてアクセスできます。
     *cloudapiregistry.googleapis.com* と *apihub.googleapis.com* API を有効化します。
 
 -   **MCP サーバーとツールアクセス:**
-    エージェントで利用したい Cloud プロジェクト内 Google Cloud サービスの MCP サーバーを
+    エージェントから利用したい Google Cloud サービスの MCP サーバーを、対象プロジェクトの
     API Registry で有効化してください。
-    Cloud Console から有効化するか、次の gcloud コマンドを使えます:
+    Cloud コンソールから有効化するか、次の gcloud コマンドを実行します:
     `gcloud beta api-registry mcp enable bigquery.googleapis.com --project={PROJECT_ID}`。
-    エージェントで使う資格情報には、MCP サーバー本体およびツールが利用する基盤サービスへの権限が必要です。
+    エージェントが使用する認証情報には、MCP サーバー自体およびツールが利用する基盤サービスへのアクセス権限が必要です。
     たとえば BigQuery ツールを使うには、サービスアカウントに
     `bigquery.dataViewer` や `bigquery.jobUser` などの BigQuery IAM ロールが必要です。
-    必要権限の詳細は [Authentication and access](#auth) を参照してください。
+    必要な権限の詳細は [認証とアクセス](#auth) を参照してください。
 
 次の gcloud コマンドで、API Registry で有効化された MCP サーバーを確認できます:
 
@@ -103,80 +103,80 @@ Help user access their BigQuery data using the available tools.
 )
 ```
 
-この例の完全コードは
+この例の完全なコードは
 [api_registry_agent](https://github.com/google/adk-python/tree/main/contributing/samples/api_registry_agent/)
-サンプルを参照してください。設定オプションは
-[Configuration](#configuration)、
-認証については
-[Authentication and access](#auth) を参照してください。
+サンプルを参照してください。設定オプションについては
+[設定](#configuration)、
+このツールの認証については
+[認証とアクセス](#auth) を参照してください。
 
 ## 認証とアクセス {#auth}
 
 エージェントで API Registry を使うには、アクセス対象サービスへの認証が必要です。
 このツールはデフォルトで Google Cloud
 [Application Default Credentials](https://docs.cloud.google.com/docs/authentication/provide-credentials-adc)
-を認証に使います。次の権限とアクセスを確保してください:
+を認証に使用します。エージェントに次の権限とアクセス権があることを確認してください:
 
 -   **API Registry アクセス:**
     `ApiRegistry` クラスは Application Default Credentials (`google.auth.default()`) を使って
-    Google Cloud API Registry へのリクエストを認証し、利用可能 MCP サーバーを列挙します。
-    エージェント実行環境の資格情報には、`apiregistry.viewer` のような
+    Google Cloud API Registry へのリクエストを認証し、利用可能な MCP サーバーを一覧表示します。
+    エージェント実行環境の認証情報には、`apiregistry.viewer` などの
     API Registry リソース閲覧権限が必要です。
 
 -   **MCP サーバーとツールアクセス:**
     `get_toolset` が返す `McpToolset` もデフォルトで
     Google Cloud Application Default Credentials を使って
-    実際の MCP サーバーエンドポイント呼び出しを認証します。
-    使用する資格情報には次の両方が必要です:
-    1.  MCP サーバー自体へのアクセス権。
-    1.  ツールが利用する基盤サービス/リソースの利用権。
+    実際の MCP サーバーエンドポイントへの呼び出しを認証します。
+    使用する認証情報には次の両方の権限が必要です:
+    1.  MCP サーバー自体へのアクセス権限。
+    1.  ツールが連携する基盤サービスおよびリソースの利用権限。
 
--   **MCP ツール利用者ロール:**
-    API registry 経由で MCP ツールを呼び出せるよう、エージェントで使うアカウントに
-    MCP tool user ロールを付与します:
+-   **MCP ツールユーザーロール:**
+    API Registry 経由で MCP ツールを呼び出せるよう、エージェントで使用するアカウントに
+    MCP ツールユーザーロール（`roles/mcp.toolUser`）を付与します:
     `gcloud projects add-iam-policy-binding {PROJECT_ID} --member={member}
     --role="roles/mcp.toolUser"`
 
 たとえば BigQuery と連携する MCP サーバーツールを使う場合、
-サービスアカウントなど資格情報に紐づくアカウントには
-データセットアクセスやクエリ実行のため
-`bigquery.dataViewer` や `bigquery.jobUser` など適切な BigQuery IAM ロールが必要です。
-bigquery MCP サーバーでは、ツール利用に
+サービスアカウントなど認証情報に紐づくアカウントには、
+データセットへのアクセスやクエリ実行のために
+`bigquery.dataViewer` や `bigquery.jobUser` などの適切な BigQuery IAM ロールが必要です。
+BigQuery MCP サーバーでは、ツールの利用に
 `"x-goog-user-project": PROJECT_ID` ヘッダーが必要です。
-認証やプロジェクト文脈の追加ヘッダーは `ApiRegistry` コンストラクタの
-`header_provider` 引数で注入できます。
+認証やプロジェクトコンテキストのための追加ヘッダーは、`ApiRegistry` コンストラクタの
+`header_provider` 引数から注入できます。
 
 ## 設定 {#configuration}
 
-***APIRegistry*** オブジェクトの設定オプション:
+***APIRegistry*** オブジェクトの設定オプションは次のとおりです:
 
--   **`api_registry_project_id`** (str):
+-   **`api_registry_project_id`** (`str`):
     API Registry が配置されている Google Cloud プロジェクト ID。
 
--   **`location`** (str, optional):
+-   **`location`** (`str`, 任意):
     API Registry リソースのロケーション。
-    デフォルトは `"global"`。
+    デフォルトは `"global"` です。
 
--   **`header_provider`** (Callable, optional):
+-   **`header_provider`** (`Callable`, 任意):
     呼び出しコンテキストを受け取り、MCP サーバーへのリクエストに付与する
-    追加 HTTP ヘッダー辞書を返す関数。
-    動的認証やプロジェクト固有ヘッダーによく使います。
+    追加 HTTP ヘッダーの辞書を返す関数。
+    動的な認証やプロジェクト固有のヘッダー指定によく使用されます。
 
-`get_toolset()` 関数の設定オプション:
+`get_toolset()` 関数の設定オプションは次のとおりです:
 
--   **`mcp_server_name`** (str):
-    ツールを読み込む登録済み MCP サーバーの完全名。
+-   **`mcp_server_name`** (`str`):
+    ツールを読み込む登録済み MCP サーバーの完全なリソース名。
     例: `projects/my-project/locations/global/mcpServers/my-server`。
 
--   **`tool_filter`** (Union[ToolPredicate, List[str]], optional):
-    ツールセットに含めるツールを指定。
-    -   文字列リストの場合、リスト内名前のツールのみ含める。
-    -   `ToolPredicate` 関数の場合、各ツールに対して関数を呼び、
-        `True` を返したツールのみ含める。
-    -   `None` の場合、MCP サーバーの全ツールを含める。
+-   **`tool_filter`** (`Union[ToolPredicate, List[str]]`, 任意):
+    ツールセットに含めるツールを指定します。
+    -   文字列リストの場合、リスト内の名前と一致するツールのみが含まれます。
+    -   `ToolPredicate` 関数の場合、各ツールに対して関数が呼び出され、
+        `True` を返したツールのみが含まれます。
+    -   `None` の場合、MCP サーバーのすべてのツールが含まれます。
 
--   **`tool_name_prefix`** (str, optional):
-    生成ツールセットの各ツール名に付与する接頭辞。
+-   **`tool_name_prefix`** (`str`, 任意):
+    生成されるツールセットの各ツール名に付与するプレフィックス。
 
 ## 追加リソース
 

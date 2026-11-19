@@ -75,7 +75,7 @@ JSONまたはMarkdownに変換できるようになります。
 ---- | -----------
 `markdownify` | 任意のWebページをクリーンで構造化されたMarkdown形式に変換します
 `smartscraper` | AIを活用し、無限スクロールをサポートして任意のWebページから構造化データを抽出します
-`searchscraper` | 構造化された実用的な結果を伴うAI駆動のWeb検索を実行します
+`searchscraper` | AIを活用したWeb検索を実行し、構造化された実用的な結果を取得します
 `scrape` | ページコンテンツを取得するための基本的なスクレイピングエンドポイントです（重いJavaScriptレンダリングのオプションあり）
 `sitemap` | 任意のWebサイトのサイトマップURLと構造を抽出します
 `smartcrawler_initiate` | インテリジェントな複数ページWebクローリングを開始します（非同期操作）

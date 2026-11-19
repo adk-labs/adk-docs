@@ -4,20 +4,20 @@ catalog_description: LLM 애플리케이션을 위한 프로덕션급 관측성,
 catalog_icon: /integrations/assets/arize.png
 catalog_tags: ["observability", "evaluation"]
 ---
-# Arize AX를 사용한 에이전트 관측성(Observability)
+# ADK용 Arize AX 관측성(Observability)
 
-[Arize AX](https://arize.com/products/ax/)는 프로덕션 팀, AI 네이티브 기업, 엔터프라이즈를 위한 [Arize AI](https://arize.com/)의 전체 기능을 갖춘 AI 관측성 및 평가 플랫폼입니다. 관리형 클라우드 또는 엔터프라이즈 셀프 호스팅 배포로 제공되며 Google ADK 애플리케이션을 위한 포괄적인 추적, 평가, 모니터링 기능을 제공합니다. 시작하려면 [무료 계정](https://app.arize.com/auth/join)에 가입하세요.
+[Arize AX](https://arize.com/products/ax/)는 프로덕션 팀, AI 네이티브 기업, 엔터프라이즈를 위해 [Arize AI](https://arize.com/)가 제공하는 올인원 AI 관측성 및 평가 플랫폼입니다. 관리형 클라우드 또는 엔터프라이즈 셀프 호스팅 방식으로 배포할 수 있으며, Google ADK 애플리케이션을 위한 포괄적인 트레이싱, 평가, 모니터링 기능을 제공합니다. 시작하려면 [무료 계정](https://app.arize.com/auth/join)에 가입하세요.
 
-로컬 개발, 실험 또는 단일 컨테이너 셀프 호스팅을 위한 오픈소스 경로는 [Arize Phoenix ADK 연동](/integrations/phoenix/)을 확인하세요. Arize의 [에이전트 평가 가이드](https://arize.com/guides/ai-agent-handbook/agent-evaluation/)와 [LLM 평가 가이드](https://arize.com/resources/llm-evaluation/)에서는 팀들이 트레이스를 사용하여 에이전트의 결정, 도구 호출, 모델 동작을 평가하는 방법을 보여줍니다.
+로컬 개발, 실험 또는 단일 컨테이너 셀프 호스팅을 위한 오픈소스 방식은 [Arize Phoenix ADK 연동](/integrations/phoenix/)을 참고하세요. Arize의 [에이전트 평가 가이드](https://arize.com/guides/ai-agent-handbook/agent-evaluation/)와 [LLM 평가 가이드](https://arize.com/resources/llm-evaluation/)에서는 트레이스를 활용해 에이전트의 의사결정, 도구 호출, 모델 동작을 평가하는 방법을 안내합니다.
 
 ## 개요
 
-Arize AX는 [OpenInference 계측](https://github.com/Arize-ai/openinference/tree/main/python/instrumentation/openinference-instrumentation-google-adk)을 사용하여 Google ADK에서 트레이스를 자동으로 수집할 수 있으며, 이를 통해 다음을 수행할 수 있습니다.
+Arize AX는 [OpenInference 계측(instrumentation)](https://github.com/Arize-ai/openinference/tree/main/python/instrumentation/openinference-instrumentation-google-adk)을 사용하여 Google ADK에서 트레이스를 자동으로 수집하며, 이를 통해 다음 작업을 수행할 수 있습니다.
 
--   **에이전트 상호작용 추적** - 모든 에이전트 실행, 툴 호출, 모델 요청 및 응답을 컨텍스트 및 메타데이터와 함께 자동으로 캡처
--   **성능 평가** - 사용자 지정 또는 사전 빌드된 평가기를 사용하여 에이전트 동작을 평가하고, 에이전트 구성을 테스트하기 위한 실험 실행
--   **프로덕션 환경에서 모니터링** - 실시간 대시보드 및 알림을 설정하여 성능 추적
--   **문제 디버깅** - 상세한 트레이스를 분석하여 병목 현상, 실패한 툴 호출 및 예기치 않은 에이전트 동작을 신속하게 식별
+-   **에이전트 상호작용 추적** - 모든 에이전트 실행, 도구 호출, 모델 요청 및 응답을 컨텍스트 및 메타데이터와 함께 자동으로 캡처
+-   **성능 평가** - 커스텀 또는 사전 빌드된 평가기(evaluator)를 사용하여 에이전트 동작을 평가하고, 에이전트 구성을 테스트하기 위한 실험 실행
+-   **프로덕션 환경 모니터링** - 실시간 대시보드 및 알림을 설정하여 성능 추적
+-   **문제 디버깅** - 상세한 트레이스를 분석하여 병목 지점, 실패한 도구 호출, 예기치 않은 에이전트 동작을 신속하게 파악
 
 ![에이전트 트레이스](https://storage.googleapis.com/arize-phoenix-assets/assets/images/google-adk-traces.png)
 
@@ -58,9 +58,9 @@ from openinference.instrumentation.google_adk import GoogleADKInstrumentor
 GoogleADKInstrumentor().instrument(tracer_provider=tracer_provider)
 ```
 
-## 관찰
+## 관측하기
 
-이제 추적 설정이 완료되었으므로, 모든 Google ADK SDK 요청은 관측성 및 평가를 위해 Arize AX로 스트리밍됩니다.
+트레이싱 설정이 완료되었으므로, 이제 모든 Google ADK SDK 요청이 관측 및 평가를 위해 Arize AX로 스트리밍됩니다.
 
 ```python
 import nest_asyncio

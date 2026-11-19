@@ -12,7 +12,7 @@
 
 ## 그래프에서 에이전트 실행하기
 
-그래프 [`Workflow`](../graphs/index.md)는 ADK 2.0에서 라이브 에이전트의 실행 순서를 지정하는 방법입니다. 에이전트를 노드로 정의하고 엣지로 연결하면 러너가 단일 라이브 세션에 걸쳐 그래프를 순회합니다:
+그래프 [`Workflow`](../graphs/index.md)는 ADK 2.0에서 라이브 에이전트의 실행 순서를 지정하는 방법입니다. 에이전트를 노드로 정의하고 엣지로 연결하면 `Runner`가 단일 라이브 세션에 걸쳐 그래프를 순회합니다:
 
 ```python
 from google.adk.agents.llm_agent import Agent
@@ -44,7 +44,7 @@ root_agent = Workflow(
 )
 ```
 
-`adk web`으로 이를 제공하고 라이브 세션을 시작하거나, `Runner.run_live()`에 전달합니다. 러너는 `Workflow` 루트를 감지하고 라이브 연결을 통해 이를 구동하며, 개발자는 모든 노드에 걸쳐 단일 이벤트 스트림을 소비합니다. 타입이 지정된 핸드오프와 라이브 평가 세트를 포함하는 3단계 음성 접수 흐름에 대한 실행 가능한 샘플은 [`workflow` 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/live/workflow)을 참고하세요.
+`adk web`으로 이를 제공하고 라이브 세션을 시작하거나, `Runner.run_live()`에 전달합니다. `Runner`는 `Workflow` 루트를 감지하고 라이브 연결을 통해 이를 구동하며, 개발자는 모든 노드에 걸쳐 단일 이벤트 스트림을 소비합니다. 타입이 지정된 핸드오프와 라이브 평가 세트를 포함하는 3단계 음성 접수 흐름에 대한 실행 가능한 샘플은 [`workflow` 샘플](https://github.com/google/adk-python/tree/main/contributing/samples/live/workflow)을 참고하세요.
 
 **말을 하는 모든 에이전트에는 `mode='task'` 또는 `mode='chat'`이 필요합니다.** 워크플로의 노드로서 `mode`가 없는 `LlmAgent`는 `single_turn`으로 폴백되어 라이브 연결 외부에서 실행되고 오디오 큐를 완전히 무시하므로, 발신자는 해당 에이전트의 음성을 전혀 들을 수 없습니다. 대화하는 모든 노드에 모드를 명시적으로 설정하세요.
 
@@ -82,7 +82,7 @@ Event: author="coordinator", function_call: transfer_to_agent(agent_name="billin
 Event: author="billing", text="I can help with your billing question..."
 ```
 
-전송 시 대상 에이전트를 위한 새 Live API 세션이 시작되므로 코디네이터의 세션 재개 핸들은 이어지지 않습니다. 전송을 코디네이터 자체 팀 내로 제한하려면 서브 에이전트에 `disallow_transfer_to_peers`를 설정하세요. 허용되지 않은 형제 에이전트 간 전송은 `ValueError`를 발생시킵니다.
+에이전트 전환(transfer) 시 대상 에이전트를 위한 새 Live API 세션이 시작되므로 코디네이터의 세션 재개 핸들은 이어지지 않습니다. 전환을 코디네이터 자체 팀 내로 제한하려면 서브 에이전트에 `disallow_transfer_to_peers`를 설정하세요. 허용되지 않은 형제 에이전트 간 전환은 `ValueError`를 발생시킵니다.
 
 ## 레거시 워크플로 에이전트
 

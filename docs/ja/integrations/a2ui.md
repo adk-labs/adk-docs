@@ -74,7 +74,7 @@ instruction = schema_manager.generate_system_prompt(
 
 ### 3. ADK エージェントを作成する
 
-生成した指示をエージェントの system prompt として使います:
+生成した指示（instruction）をエージェントのシステムプロンプトとして使用します:
 
 ```python
 from google.adk.agents.llm_agent import LlmAgent
@@ -87,10 +87,10 @@ agent = LlmAgent(
 )
 ```
 
-### 4. A2UI 出力を検証してストリームする
+### 4. A2UI 出力を検証してストリーミングする
 
 クライアントに送信する前に、LLM の JSON 出力は必ず検証してください。
-SDK には、パース、修正、検証のユーティリティがあります:
+SDK には、パース、修正、検証のためのユーティリティが用意されています:
 
 ```python
 from a2ui.core.parser.parser import parse_response

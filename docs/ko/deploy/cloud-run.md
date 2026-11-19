@@ -60,7 +60,7 @@ export GOOGLE_API_KEY=your-api-key
 ```
 *( `your-project-id`를 실제 GCP 프로젝트 ID로, `your-api-key`를 AI Studio의 실제 API 키로 바꿉니다.)*
 
-## 전제 조건
+## 사전 요구사항
 
 1. Google Cloud 프로젝트가 있어야 합니다. 다음 정보를 알아야 합니다.
     1. 프로젝트 이름(예: "my-project")
@@ -70,9 +70,9 @@ export GOOGLE_API_KEY=your-api-key
 
 또한 Google Cloud CLI(`gcloud`)가 설치되어 있어야 합니다.
 
-## 비밀
+## 시크릿(Secret) 설정
 
-서비스 계정으로 읽을 수 있는 비밀을 만들었는지 확인하세요.
+서비스 계정으로 읽을 수 있는 시크릿(Secret)을 생성했는지 확인하세요.
 
 ### Cloud Build 권한
 
@@ -86,15 +86,15 @@ gcloud projects add-iam-policy-binding [PROJECT_ID] \
     --role="roles/cloudbuild.builds.builder"
 ```
 
-### GOOGLE_API_KEY 비밀 항목
+### GOOGLE_API_KEY 시크릿 항목
 
-수동으로 비밀을 만들거나 CLI를 사용할 수 있습니다.
+콘솔에서 수동으로 시크릿을 생성하거나 CLI를 사용할 수 있습니다.
 ```bash
 echo "<<여기에 GOOGLE_API_KEY를 입력하세요>>" | gcloud secrets create GOOGLE_API_KEY --project=my-project --data-file=-
 ```
 
 ### 읽기 권한
-서비스 계정에 이 비밀을 읽을 수 있는 적절한 권한을 부여해야 합니다.
+서비스 계정에 이 시크릿을 읽을 수 있는 적절한 권한을 부여해야 합니다.
 ```bash
 gcloud secrets add-iam-policy-binding GOOGLE_API_KEY --member="serviceAccount:1234567890-compute@developer.gserviceaccount.com" --role="roles/secretmanager.secretAccessor" --project=my-project
 ```
@@ -183,7 +183,7 @@ ADK 에이전트 워크플로를 Google Cloud Run에 배포할 때 다음 콘텐
     * `--temp_folder TEXT`: (선택 사항) 배포 프로세스 중에 생성된 중간 파일을 저장할 디렉토리를 지정합니다. 기본값은 시스템의 임시 디렉토리에 있는 타임스탬프가 지정된 폴더입니다. *(참고: 이 옵션은 일반적으로 문제 해결 시가 아니면 필요하지 않습니다.)*
     * `--help`: 도움말 메시지를 표시하고 종료합니다.
 
-    `--session_service_uri` 및 `--artifact_service_uri`가 설정되지 않은 경우 배포된 컨테이너는 인메모리 세션 및 아티팩트 서비스로 대체되며 Cloud Run 인스턴스가 재재생될 때 세션과 아티팩트가 손실됩니다. 이 데이터를 유지해야 하는 모든 배포에 두 옵션을 모두 설정하세요.
+    `--session_service_uri` 및 `--artifact_service_uri`가 설정되지 않은 경우 배포된 컨테이너는 인메모리 세션 및 아티팩트 서비스로 폴백(fallback)되며, Cloud Run 인스턴스가 재시작되거나 교체될 때 세션과 아티팩트가 유실됩니다. 데이터를 영구 저장해야 하는 모든 배포 환경에서는 두 옵션을 모두 설정하세요.
 
     ##### gcloud CLI 인수 전달
 
@@ -423,7 +423,7 @@ google-adk
     * `--help`: 도움말 메시지를 표시하고 종료합니다.
 
     ##### 인증된 액세스
-서비스는 기본적으로 --no-allow-unauthenticated로 배포됩니다.
+    서비스는 기본적으로 `--no-allow-unauthenticated` 옵션으로 배포됩니다.
 
     성공적으로 실행되면 명령은 에이전트를 Cloud Run에 배포하고 프록시를 통해 서비스에 액세스할 수 있는 로컬 URL을 제공합니다.
 
@@ -460,7 +460,7 @@ google-adk
 
            * 에이전트는 이제 **전역 public static final 변수**로 초기화됩니다.
 
-           * 에이전트의 정의는 정적 메서드로 노출되거나 선언 중에 인라인될 수 있습니다.
+           * 에이전트 정의는 정적 메서드로 제공하거나 선언 시 인라인으로 작성할 수 있습니다.
 
         `CapitalAgent` 예제의 코드는 [예제](https://github.com/google/blob/main/examples/java/cloud-run/src/main/java/agents/capitalagent/CapitalAgent.java) 저장소에서 참고하세요.
 

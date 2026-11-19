@@ -55,7 +55,7 @@ curl http://localhost:8001/a2a/check_prime_agent/.well-known/agent-card.json
 
     Kotlin 클라이언트는 **A2A 1.0** 카드를 읽으므로 카드는 각 항목에 `protocolBinding`이 있는 `supportedInterfaces` 배열을 포함해야 합니다. A2A 0.3용으로 작성된 카드는 대신 최상위 `url` 및 `preferredTransport`를 선언하며, `A2AAgent`는 이를 `AgentCardResolutionError: Failed to parse agent card` 오류와 함께 거부합니다.
 
-    샘플의 체크인된 `agent.json`은 0.3 스타일 카드이지만, adk-python은 해당 파일을 그대로 제공하지 않습니다. 시작 시 카드를 파싱하며, a2a-sdk 1.x 환경에서는 이 파싱 과정에서 `url` 및 `preferredTransport`가 `supportedInterfaces`로 승격됩니다. adk-python에는 `a2a-sdk>=0.3.4,<2`가 필요하므로 최신 설치 시 1.x로 확인되어 유선상의 카드는 A2A 1.0 형식이 됩니다.
+    샘플의 체크인된 `agent.json`은 0.3 스타일 카드이지만, adk-python은 해당 파일을 그대로 제공하지 않습니다. 시작 시 카드를 파싱하며, a2a-sdk 1.x 환경에서는 이 파싱 과정에서 `url` 및 `preferredTransport`가 `supportedInterfaces`로 승격됩니다. adk-python에는 `a2a-sdk>=0.3.4,<2`가 필요하므로 새로 설치하면 1.x 버전으로 해석(resolve)되어 유선상의 카드는 A2A 1.0 형식이 됩니다.
 
     adk-java의 `a2a_server` 샘플은 0.3.x A2A SDK에 고정되어 0.3 카드를 제공하므로 이 페이지의 서버로는 작동하지 않습니다.
 
@@ -90,7 +90,7 @@ curl http://localhost:8001/a2a/check_prime_agent/.well-known/agent-card.json
 --8<-- "examples/kotlin/snippets/a2a/A2AConsumer.kt:remote_agent"
 ```
  
-이미 `AgentCard`가 있는 경우(예: 직접 생성했거나 정적 카드로 관리하는 경우), 카드를 바로 전달하는 비동기(non-suspending) 생성자 `A2AAgent(name = ..., agentCard = ...)`를 사용할 수 있습니다.
+이미 `AgentCard`가 있는 경우(예: 직접 생성했거나 정적 카드로 관리하는 경우), 카드를 바로 전달하는 일반(non-suspending) 생성자 `A2AAgent(name = ..., agentCard = ...)`를 사용할 수 있습니다.
 
 ## 하위 에이전트로 사용
 

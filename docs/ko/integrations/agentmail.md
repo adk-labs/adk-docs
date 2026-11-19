@@ -11,9 +11,9 @@ catalog_tags: ["mcp"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-go">Go</span>
 </div>
 
-The [AgentMail MCP Server](https://github.com/agentmail-to/agentmail-mcp)
-는 AI 에이전트용으로 제작된 이메일 수신함 API인
-[AgentMail](https://agentmail.to/)을(를) ADK 에이전트와 연결합니다.
+[AgentMail MCP Server](https://github.com/agentmail-to/agentmail-mcp)는
+AI 에이전트용으로 제작된 이메일 수신함 API인
+[AgentMail](https://agentmail.to/)을 ADK 에이전트와 연결합니다.
 이 통합을 통해 에이전트는 자연어로 메시지를 보내고, 받으며, 답장하고, 전달할 수 있는
 고유한 이메일 수신함을 갖게 됩니다.
 

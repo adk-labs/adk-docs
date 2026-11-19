@@ -4,7 +4,7 @@
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.24.0</span>
 </div>
 
-API, 데이터베이스, 서드파티 서비스 같은 외부 의존성에 기대는 에이전트를 평가할 때, 테스트 중에 실제 도구를 그대로 호출하면 느리고 비싸고 불안정할 수 있습니다. **환경 시뮬레이터**는 에이전트 자체를 수정하지 않고도, 실행 중인 도구 호출을 안전하게 가로채어 제어된 결정론적 응답으로 바꿔 줍니다. 이를 통해 에이전트 로직만 분리한 hermetic 오프라인 테스트를 만들고, 안정적인 채점을 수행할 수 있습니다.
+API, 데이터베이스, 서드파티 서비스 같은 외부 의존성을 사용하는 에이전트를 평가할 때, 테스트 중에 실제 도구를 그대로 호출하면 느리고 비용이 많이 들며 불안정할 수 있습니다. **환경 시뮬레이터**는 에이전트 자체를 수정하지 않고도, 실행 중인 도구 호출을 안전하게 가로채어 제어된 결정론적 응답으로 바꿔 줍니다. 이를 통해 에이전트 로직만 분리한 격리된(hermetic) 오프라인 테스트를 만들고, 안정적인 채점을 수행할 수 있습니다.
 
 이 기능으로 다음을 할 수 있습니다.
 
@@ -17,7 +17,7 @@ API, 데이터베이스, 서드파티 서비스 같은 외부 의존성에 기�
 
 ## 동작 방식
 
-[User Simulation](/ko/evaluate/user-sim/)이 대화를 앞으로 진행시키는 역할이라면, 환경 시뮬레이션은 안정적인 백엔드 역할을 합니다. 간단히 말해, 환경 시뮬레이터는 에이전트와 도구 사이에 위치합니다. 에이전트가 도구를 호출하면, 시뮬레이터가 그 호출을 가로채어 미리 정의된 주입 응답 또는 LLM 생성 목 응답을 돌려줄지, 아니면 실제 도구를 실행할지를 결정합니다.
+[사용자 시뮬레이션](/ko/evaluate/user-sim/)이 대화를 앞으로 진행시키는 역할이라면, 환경 시뮬레이션은 안정적인 백엔드 역할을 합니다. 간단히 말해, 환경 시뮬레이터는 에이전트와 도구 사이에 위치합니다. 에이전트가 도구를 호출하면, 시뮬레이터가 그 호출을 가로채어 미리 정의된 주입 응답 또는 LLM 생성 목 응답을 돌려줄지, 아니면 실제 도구를 실행할지를 결정합니다.
 
 도구별 판단 순서는 다음과 같습니다.
 
@@ -106,55 +106,55 @@ app = App(
 
 최상위 설정 객체입니다.
 
-Field | Type | Default | Description
+필드 | 타입 | 기본값 | 설명
 :--- | :--- | :--- | :---
-`tool_simulation_configs` | `List[ToolSimulationConfig]` | required | 시뮬레이션할 도구별 항목입니다. 비어 있으면 안 되며 도구 이름은 고유해야 합니다.
+`tool_simulation_configs` | `List[ToolSimulationConfig]` | 필수 | 시뮬레이션할 도구별 항목입니다. 비어 있으면 안 되며 도구 이름은 고유해야 합니다.
 `simulation_model` | `str` | `"gemini-2.5-flash"` | 도구 연결 분석과 목 응답 생성을 위한 LLM입니다.
-`simulation_model_configuration` | `GenerateContentConfig` | thinking enabled | 내부 시뮬레이터 호출에 대한 LLM 생성 설정입니다.
+`simulation_model_configuration` | `GenerateContentConfig` | 사고(thinking) 활성화됨 | 내부 시뮬레이터 호출에 대한 LLM 생성 설정입니다.
 `environment_data` | `str \| None` | `None` | 더 현실적인 응답 생성을 위해 목 전략에 전달하는 선택적 환경 컨텍스트입니다. 예: JSON 데이터베이스 스냅샷.
-`tracing` | `str \| None` | `None` | 과거 문맥을 제공하기 위한 추적 데이터입니다. 예: 이전 에이전트 실행 trace의 JSON 문자열.
+`tracing` | `str \| None` | `None` | 과거 컨텍스트를 제공하기 위한 트레이스 데이터입니다. 예: 이전 에이전트 실행 트레이스의 JSON 문자열.
 
 ### `ToolSimulationConfig`
 
 단일 도구를 어떻게 시뮬레이션할지 정의합니다.
 
-Field | Type | Default | Description
+필드 | 타입 | 기본값 | 설명
 :--- | :--- | :--- | :---
-`tool_name` | `str` | required | 등록된 도구 이름과 정확히 일치해야 합니다.
+`tool_name` | `str` | 필수 | 등록된 도구 이름과 정확히 일치해야 합니다.
 `injection_configs` | `List[InjectionConfig]` | `[]` | 주입 설정 목록입니다. 목 전략보다 먼저 순서대로 확인합니다.
 `mock_strategy_type` | `MockStrategy` | `MOCK_STRATEGY_UNSPECIFIED` | 주입이 없을 때 사용할 기본 전략입니다.
 
 ### `InjectionConfig`
 
-도구 호출에 삽입할 단일 synthetic 응답을 제어합니다.
+도구 호출에 삽입할 단일 합성(synthetic) 응답을 제어합니다.
 `injected_error` 또는 `injected_response` 중 정확히 하나만 설정해야 합니다.
 
-Field | Type | Default | Description
+필드 | 타입 | 기본값 | 설명
 :--- | :--- | :--- | :---
 `injected_error` | `InjectedError \| None` | `None` | 반환할 오류입니다. `injected_response`와는 배타적입니다.
-`injected_response` | `Dict[str, Any] \| None` | `None` | 반환할 고정 응답 dict입니다. `injected_error`와는 배타적입니다.
-`injection_probability` | `float` | `1.0` | 이 주입이 적용될 확률입니다. 범위는 `[0.0, 1.0]` 입니다.
+`injected_response` | `Dict[str, Any] \| None` | `None` | 반환할 고정 응답 딕셔너리입니다. `injected_error`와는 배타적입니다.
+`injection_probability` | `float` | `1.0` | 이 주입이 적용될 확률입니다. 범위는 `[0.0, 1.0]`입니다.
 `match_args` | `Dict[str, Any] \| None` | `None` | 설정되면 도구 인자가 `match_args`의 키-값 쌍을 모두 포함할 때만 적용됩니다.
-`injected_latency_seconds` | `float` | `0.0` | 주입 결과를 반환하기 전의 인위적 지연 시간입니다. 최대 120초입니다.
+`injected_latency_seconds` | `float` | `0.0` | 주입 결과를 반환하기 전의 인위적 지연 시간(latency)입니다. 최대 120초입니다.
 `random_seed` | `int \| None` | `None` | 확률 판정을 위한 시드입니다. 재현 가능한 주입 동작에 유용합니다.
 
 ### `InjectedError`
 
 HTTP 스타일 오류 응답을 정의합니다.
 
-| Field | Type | Description |
+| 필드 | 타입 | 설명 |
 | :--- | :--- | :--- |
-| `injected_http_error_code` | `int` | 도구 응답의 `error_code` 로 노출될 HTTP 상태 코드입니다. |
-| `error_message` | `str` | 도구 응답의 `error_message` 로 노출될 사람이 읽을 수 있는 메시지입니다. |
+| `injected_http_error_code` | `int` | 도구 응답의 `error_code` 필드로 제공될 HTTP 상태 코드입니다. |
+| `error_message` | `str` | 도구 응답의 `error_message` 필드로 제공될 사람이 읽을 수 있는 메시지입니다. |
 
 ### `MockStrategy`
 
-주입이 없을 때 시뮬레이터가 응답을 생성하는 방식을 제어하는 enum입니다.
+주입이 없을 때 시뮬레이터가 응답을 생성하는 방식을 제어하는 열거형(enum)입니다.
 
-| Value | Description |
+| 값 | 설명 |
 | :--- | :--- |
-| `MOCK_STRATEGY_TOOL_SPEC` | 도구 스키마와 상태 문맥을 사용해 LLM이 현실적인 응답을 생성하도록 합니다. |
-| `MOCK_STRATEGY_TRACING` | *(Deprecated)* 추적 입력과 함께 `MOCK_STRATEGY_TOOL_SPEC`를 사용하세요. |
+| `MOCK_STRATEGY_TOOL_SPEC` | 도구 스키마와 상태 컨텍스트를 사용해 LLM이 현실적인 응답을 생성하도록 합니다. |
+| `MOCK_STRATEGY_TRACING` | *(지원 중단됨)* 트레이스 입력과 함께 `MOCK_STRATEGY_TOOL_SPEC`을 사용하세요. |
 
 ## 주입 모드
 
@@ -215,7 +215,7 @@ InjectionConfig(
 
 ### 확률적 주입
 
-`injection_probability`를 `0.0`에서 `1.0` 사이 값으로 설정해 flaky 한 동작을 시뮬레이션할 수 있습니다. 재현 가능한 테스트를 위해 `random_seed`를 함께 고정하세요.
+`injection_probability`를 `0.0`에서 `1.0` 사이 값으로 설정해 간헐적으로 실패하는 불안정한(flaky) 동작을 시뮬레이션할 수 있습니다. 재현 가능한 테스트를 위해 `random_seed`를 함께 고정하세요.
 
 ```python
 InjectionConfig(
@@ -228,9 +228,9 @@ InjectionConfig(
 )
 ```
 
-### 지연 주입
+### 지연 시간 주입
 
-`injected_latency_seconds`를 사용하면 느린 백엔드 응답을 흉내낼 수 있어, timeout 처리나 성능 저하 상황의 사용자 경험을 테스트하는 데 유용합니다.
+`injected_latency_seconds`를 사용하면 느린 백엔드 응답을 시뮬레이션할 수 있어, 타임아웃(timeout) 처리나 성능 저하 상황에서의 사용자 경험을 테스트하는 데 유용합니다.
 
 ```python
 InjectionConfig(
@@ -300,7 +300,7 @@ config = EnvironmentSimulationConfig(
 )
 ```
 
-이 설정에서는 `create_order`가 목 처리될 때 `order_id`가 자동 생성되고, 이후 `get_order`나 `cancel_order`가 호출되면 그 ID를 사용해 일관된 응답 또는 not-found 오류를 돌려줍니다.
+이 설정에서는 `create_order`가 목 처리될 때 `order_id`가 자동 생성되고, 이후 `get_order`나 `cancel_order`가 호출되면 그 ID를 사용해 일관된 응답 또는 리소스를 찾을 수 없음(not-found) 오류를 돌려줍니다.
 
 ### 환경 데이터 제공
 

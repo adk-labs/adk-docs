@@ -5,19 +5,19 @@ catalog_icon: /integrations/assets/secret_manager.png
 catalog_tags: ["google"]
 ---
 
-# ADK를 위한 Secret Manager 연동
+# ADK용 Secret Manager 연동
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.29.0</span>
 </div>
 
-[Secret Manager](https://docs.cloud.google.com/secret-manager/docs/overview) 연동은 ADK 에이전트가 런타임에 민감한 자격 증명(예: API 키, 데이터베이스 패스워드, 개인 키)을 안전하게 가져올 수 있는 표준 인터페이스를 제공합니다. 이 방식을 사용하면 소스 코드에 민감한 정보를 하드코딩하지 않고, LLM의 컨텍스트 창, 대화 기록 또는 관측 가능성(observability) 로그에 노출되지 않도록 안전하게 보호할 수 있습니다.
+[Secret Manager](https://docs.cloud.google.com/secret-manager/docs/overview) 연동은 ADK 에이전트가 런타임에 민감한 자격 증명(예: API 키, 데이터베이스 패스워드, 개인 키)을 안전하게 가져올 수 있는 표준 인터페이스를 제공합니다. 이 방식을 사용하면 소스 코드에 민감한 정보를 하드코딩하지 않고, LLM의 컨텍스트 윈도우, 대화 기록 또는 관측성(observability) 로그에 유출되지 않도록 안전하게 보호할 수 있습니다.
 
 ## 주요 사용 사례
 
-- **도구 실시간 권한 부여 (Just-in-time tool authorization)**: 에이전트 초기화 코드에 정적 API 키를 저장하는 것은 보안상 취약합니다. 이 연동을 사용하면 ADK 에이전트가 런타임에 Secret Manager로부터 자격 증명을 동적으로 가져와 필요할 때만 키를 메모리에 로드할 수 있습니다.
-- **보안 다중 테넌트 워크플로 (Secure multi-tenant workflows)**: 프론트엔드에서 원시 사용자 토큰을 전달하는 것을 피하기 위해, 에이전트가 사용자 ID를 특정 Secret Manager 리소스에 매핑할 수 있습니다. `before_agent_callback` 훅은 사용자의 보안 비밀번호를 동적으로 가져와 `session.state` OAuth 토큰을 안전하게 복원합니다.
-- **암호화된 시스템 작업 (Encrypted system tasks)**: 데이터베이스 폴링과 같은 백그라운드 시스템 작업은 도구 로직 내부에서 Secret Manager로부터 직접 자격 증명을 가져옵니다. 이는 패스워드가 LLM의 대화 기록에 유입되는 것을 방지하고 에이전트 모델에는 실행 요약만 제공되도록 합니다.
+- **적시(Just-in-time) 도구 권한 부여**: 에이전트 초기화 코드에 정적 API 키를 저장하는 방식은 보안상 취약합니다. 이 연동을 사용하면 ADK 에이전트가 런타임에 Secret Manager에서 자격 증명을 동적으로 가져와 필요할 때 온디맨드로 키를 메모리에 로드할 수 있습니다.
+- **안전한 멀티 테넌트 워크플로**: 프론트엔드에서 원시(raw) 사용자 토큰을 직접 전달하지 않도록 에이전트가 사용자 ID를 특정 Secret Manager 리소스에 매핑할 수 있습니다. `before_agent_callback` 훅이 사용자의 보안 비밀번호를 동적으로 가져와 `session.state`의 OAuth 토큰을 안전하게 복원합니다.
+- **암호화된 시스템 작업**: 데이터베이스 폴링과 같은 백그라운드 시스템 작업은 도구 로직 내부에서 Secret Manager로부터 직접 자격 증명을 가져옵니다. 이를 통해 패스워드가 LLM의 대화 기록에 유입되는 것을 방지하고 모델에는 실행 요약만 전달합니다.
 
 ## 사전 요구사항
 

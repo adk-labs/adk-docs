@@ -113,18 +113,18 @@
 ### 8. アーティファクトの処理 { #artifact-handling }
 
 **パターンの概要:**
-エージェントのライフサイクル中に、セッション関連のファイルや大きなデータブロブを保存またはロードします。
+エージェントのライフサイクル中に、セッション関連のファイルや大容量バイナリデータ（Blob）を保存またはロードします。
 
 **実装:**
-- **保存:** `callback_context.save_artifact` / `await tool_context.save_artifact` を使用してデータを保存します：
+- **保存:** `await callback_context.save_artifact` / `await tool_context.save_artifact` を使用してデータを保存します：
   - 生成されたレポート
   - ログ
   - 中間データ
-- **ロード:** `load_artifact` を使用して以前に保存されたアーティファクトを取得します。
+- **ロード:** `await callback_context.load_artifact` / `await tool_context.load_artifact` を使用して、以前に保存されたアーティファクトを取得します。
 - **追跡:** 変更は `Event.actions.artifact_delta` を介して追跡されます。
 
 **使用例:**
-"generate_report" ツールの `after_tool_callback` は、`await tool_context.save_artifact("report.pdf", report_part)` を使用して出力ファイルを保存します。`before_agent_callback` は、`callback_context.load_artifact("agent_config.json")` を使用して設定アーティファクトをロードするかもしれません。
+"generate_report" ツールの `after_tool_callback` は、`await tool_context.save_artifact("report.pdf", report_part)` を使用して出力ファイルを保存します。`before_agent_callback` は、`await callback_context.load_artifact("agent_config.json")` を使用して設定アーティファクトをロードできます。
 
 ## コールバックのベストプラクティス
 
@@ -134,7 +134,7 @@
 各コールバックを、ロギングのみ、検証のみなど、単一の明確に定義された目的のために設計します。モノリシックなコールバックは避けてください。
 
 **パフォーマンスへの配慮:**
-コールバックはエージェントの処理ループ内で同期的に実行されます。長時間実行されたりブロッキングしたりする操作（ネットワーク呼び出し、重い計算）は避けてください。必要であればオフロードしますが、これにより複雑さが増すことに注意してください。
+コールバックはエージェントの処理ループ内でインライン実行され、ループは各コールバックの完了を待機します。Python では、`save_artifact` のようにコールバック内部で `await` が必要な場合は `async def` として宣言してください（ADK が自動的に `await` します）。いずれの場合も、ネットワーク呼び出しや重い計算など、長時間実行される処理やブロッキング処理は避けてください。必要に応じてオフロードを検討してください（ただし複雑さが増す点に注意してください）。
 
 ### エラーハンドリング
 
@@ -155,7 +155,7 @@
 ### 信頼性
 
 **べき等性を考慮する:**
-コールバックが外部に副作用のあるアクション（例：外部カウンターのインクリメント）を実行する場合、フレームワークやアプリケーションでの再試行の可能性に対応するため、可能であればべき等（同じ入力で複数回実行しても安全）になるように設計します。
+コールバックが外部に副作用のあるアクション（例：外部カウンターのインクリメント）を実行する場合、フレームワークやアプリケーションでの再試行の可能性に対応するため、可能であればべき等（idempotent：同じ入力で複数回実行しても安全）になるように設計します。
 
 ### テストとドキュメンテーション
 

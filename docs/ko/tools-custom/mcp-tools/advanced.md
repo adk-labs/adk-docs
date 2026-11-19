@@ -8,15 +8,15 @@
 
 ## 고급 구성 패턴
 
-프로덕션 워크로드에 적합한 구성 메커니즘을 선택하려면 아래 매트릭스를 사용하십시오:
+프로덕션 워크로드에 적합한 구성 메커니즘을 선택하려면 아래 매트릭스를 참고하세요:
 
 | 개발자 요구사항 | 권장 메커니즘 | 기본 API / 매개변수 | 일반적인 시나리오 |
 | :--- | :--- | :--- | :--- |
 | **사용자별 자격 증명 또는 동적 세션 토큰 주입** | Dynamic Header Provider | `header_provider=...` | 멀티 테넌트 앱, 사용자별 JWT/OAuth 토큰 |
-| **위험한 툴 호출 전 승인 요구** | Tool Confirmation | `require_confirmation=...` | 데이터베이스 변경, 파괴적인 셸/파일 작업 |
+| **위험한 도구 호출 전 실행 승인 요구** | Tool Confirmation | `require_confirmation=...` | 데이터베이스 변경, 파괴적인 셸/파일 작업 |
 | **장기 작업에 대한 실시간 진행 상황 스트리밍** | Progress Callback & Factory | `progress_callback=...` | 대규모 SQL 쿼리, 웹 스크래핑, 데이터 인덱싱 |
-| **`adk web` 없이 FastAPI / 백엔드 서비스에서 에이전트 실행** | Programmatic Runner Lifecycle | `Runner` + `await toolset.close()` | 커스텀 마이크로서비스, CLI 툴, 워커 큐 |
-| **여러 서버 간의 툴 이름 충돌 해결** | Tool Namespacing & Filtering | `tool_name_prefix`, `tool_filter` | 다중 MCP 서버 집합 (DB + GitHub) |
+| **`adk web` 없이 FastAPI / 백엔드 서비스에서 에이전트 실행** | Programmatic Runner Lifecycle | `Runner` + `await toolset.close()` | 커스텀 마이크로서비스, CLI 도구, 워커 큐 |
+| **여러 서버 간의 도구 이름 충돌 해결** | Tool Namespacing & Filtering | `tool_name_prefix`, `tool_filter` | 다중 MCP 서버 집합 (DB + GitHub) |
 | **서버 요청 샘플링 또는 인증 챌린지 처리** | Bi-directional Protocol Callbacks | `sampling_callback`, `elicitation_callback` | 서버 시작 LLM 생성 및 인증 프롬프트 |
 | **원시 STDERR 진단 스트림 검사** | Diagnostic Stream Logging | `errlog=sys.stderr` | MCP 하위 프로세스 비정상 종료 문제 해결 |
 | **채팅 내 풍부한 대화형 시각 위젯 렌더링** | Experimental UI Rendering | `meta.ui.resourceUri` | 지도, 차트, 날씨 카드 또는 커스텀 폼 |
@@ -54,9 +54,9 @@ toolset = McpToolset(
 
 ---
 
-## Human-in-the-loop 및 툴 확인 (`require_confirmation`)
+## Human-in-the-loop 및 도구 실행 승인 (`require_confirmation`)
 
-MCP 서버는 데이터베이스 스키마 수정이나 레코드 삭제와 같은 영향도가 큰 기능을 노출할 수 있습니다. 툴셋의 모든 툴에 대해 전역적으로 확인을 적용하거나 툴 인수를 검사하는 조건자 함수를 통해 조건부로 적용할 수 있습니다.
+MCP 서버는 데이터베이스 스키마 수정이나 레코드 삭제와 같이 영향도가 큰 기능을 제공할 수 있습니다. 도구 세트의 모든 도구에 전역적으로 실행 승인을 적용하거나, 도구 인수를 검사하는 조건자(predicate) 함수를 통해 조건부로 적용할 수 있습니다.
 
 ```python
 from typing import Any
@@ -109,8 +109,8 @@ toolset = McpToolset(
 )
 ```
 
-### 옵션 B: 툴별 콜백 팩토리 (세션 인식)
-`ToolContext.state`에 대한 쓰기 권한이 있는 툴별 콜백을 주입하려면 `ProgressCallbackFactory`를 사용하십시오:
+### 옵션 B: 도구별 콜백 팩토리 (세션 인식)
+`ToolContext.state`에 대한 쓰기 권한이 있는 도구별 콜백을 주입하려면 `ProgressCallbackFactory`를 사용하세요:
 
 ```python
 from google.adk.tools.tool_context import ToolContext
@@ -132,7 +132,7 @@ toolset = McpToolset(
 
 ## 독립 실행형 러너 실행 (`adk web` 외부)
 
-ADK 에이전트를 커스텀 FastAPI 애플리케이션, 백그라운드 워커 또는 독립 실행형 CLI 스크립트에 포함할 때 `Runner`를 인스턴스화하고 `await toolset.close()`를 통해 수명 주기 해제를 명시적으로 관리합니다.
+ADK 에이전트를 커스텀 FastAPI 애플리케이션, 백그라운드 워커 또는 독립 실행형 CLI 스크립트에 포함할 때는 `Runner`를 인스턴스화하고 `await toolset.close()`를 통해 라이프사이클 종료 및 리소스 해제를 명시적으로 관리합니다.
 
 ```python
 import asyncio
@@ -205,9 +205,9 @@ if __name__ == "__main__":
 
 ---
 
-## 이름 충돌 및 툴 네임스페이스 지정 (`tool_name_prefix`)
+## 이름 충돌 및 도구 네임스페이스 지정 (`tool_name_prefix`)
 
-여러 MCP 서버에 연결할 때 `query`나 `search`와 같은 툴 이름이 충돌할 수 있습니다. `tool_name_prefix`를 사용하여 검색된 툴의 네임스페이스를 자동으로 지정하십시오:
+여러 MCP 서버에 연결할 때 `query`나 `search`와 같은 도구 이름이 충돌할 수 있습니다. `tool_name_prefix`를 사용하여 불러온 도구의 네임스페이스를 자동으로 지정하세요:
 
 ```python
 from google.adk.tools.mcp_tool import McpToolset
@@ -394,6 +394,6 @@ my_agent = LlmAgent(
 
 ## 다음 단계
 
-* 기본 설정에 대해서는 [Model Context Protocol 개요](./index.md)로 돌아가십시오.
-* 프로세스 내 Python 툴에 대해서는 [커스텀 함수 툴](../function-tools.md)을 살펴보십시오.
-* 전체 클라우드 구성 옵션은 [ADK 배포 가이드](../../deploy/index.md)를 참조하십시오.
+* 기본 설정은 [Model Context Protocol 개요](./index.md)로 돌아가 확인하세요.
+* 프로세스 내 Python 도구는 [커스텀 함수 도구](../function-tools.md)를 살펴보세요.
+* 전체 클라우드 구성 옵션은 [ADK 배포 가이드](../../deploy/index.md)를 참고하세요.

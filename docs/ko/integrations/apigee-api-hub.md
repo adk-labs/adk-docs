@@ -36,8 +36,8 @@ project_root_folder
 
 참고: 이 튜토리얼에는 에이전트 생성이 포함됩니다. 이미 에이전트가 있다면 일부 단계만 따르면 됩니다.
 
-1. APIHubToolset이 API Hub API에서 명세를 가져오도록 접근 토큰을 가져옵니다.
-   터미널에서 다음 명령 실행:
+1. `APIHubToolset`이 API Hub API에서 명세를 가져올 수 있도록 액세스 토큰을 발급받습니다.
+   터미널에서 다음 명령어를 실행하세요:
 
     ```shell
     gcloud auth print-access-token
@@ -77,16 +77,16 @@ project_root_folder
     )
     ```
 
-   운영 환경 배포에서는 접근 토큰 대신 서비스 계정 사용을 권장합니다.
+   프로덕션 환경 배포에서는 액세스 토큰 대신 서비스 계정 사용을 권장합니다.
    위 코드 조각에서는 `service_account_json=service_account_cred_json_str`를 사용하고,
-   토큰 대신 서비스 계정 자격 증명을 제공합니다.
+   토큰 대신 서비스 계정 자격 증명을 전달합니다.
 
-   apihub\_resource\_name의 경우, API에 사용 중인 OpenAPI Spec의 특정 ID를 알고 있으면
+   `apihub_resource_name`의 경우, API에 사용 중인 OpenAPI Spec의 특정 ID를 알고 있으면
    `` `projects/my-project-id/locations/us-west1/apis/my-api-id/versions/version-id/specs/spec-id` ``를 사용합니다.
    Toolset이 API에서 사용 가능한 첫 번째 spec을 자동으로 가져오게 하려면
    `` `projects/my-project-id/locations/us-west1/apis/my-api-id` ``를 사용합니다.
 
-4. Agent.py를 만들고 생성한 도구를 에이전트 정의에 추가합니다.
+4. 에이전트 파일 `agent.py`를 생성하고 앞에서 만든 도구를 에이전트 정의에 추가합니다.
 
     ```py
     from google.adk.agents.llm_agent import LlmAgent
@@ -100,7 +100,7 @@ project_root_folder
     )
     ```
 
-5. `__init__.py`를 구성해 에이전트를 노출합니다.
+5. 에이전트를 외부에서 가져올 수 있도록 `__init__.py`를 구성합니다.
 
     ```py
     from . import agent

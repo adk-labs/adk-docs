@@ -74,7 +74,7 @@ instruction = schema_manager.generate_system_prompt(
 
 ### 3. ADK 에이전트 생성
 
-생성한 지시문을 에이전트의 시스템 프롬프트로 사용합니다:
+생성한 지침(instruction)을 에이전트의 시스템 프롬프트로 사용합니다:
 
 ```python
 from google.adk.agents.llm_agent import LlmAgent
@@ -180,7 +180,7 @@ schema_manager = A2uiSchemaManager(
 
 ### 다중 에이전트 오케스트레이션
 
-오케스트레이터 에이전트는 하위 에이전트의 A2UI 기능을 집계해 에이전트 카드에 노출할 수 있습니다:
+오케스트레이터 에이전트는 서브 에이전트의 A2UI 기능을 집계해 에이전트 카드(`AgentCard`)에 공개할 수 있습니다:
 
 ```python
 from a2ui.a2a import get_a2ui_agent_extension

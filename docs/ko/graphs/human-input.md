@@ -1,16 +1,16 @@
-# 에이전트 워크플로의 인간 입력(Human input)
+# 에이전트 워크플로의 사람의 입력(Human input)
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v2.0.0</span><span class="lst-typescript">TypeScript v2.0.0</span><span class="lst-go">Go v2.0.0</span>
 </div>
 
-데이터 입력, 의사결정 검증 또는 작업 권한 승인을 위해 인간 입력을 요청할 수 있는 기능은 많은 에이전트 기반 워크플로에서 중요한 부분입니다. ADK의 그래프 기반 워크플로에는 워크플로의 일부로 사람으로부터 입력을 받기 위해 특별히 구축된 인간 참여형(HITL, Human-in-the-Loop) 노드를 포함할 수 있습니다. 이러한 노드는 실행하는 데 인공지능(AI) 모델이 필요하지 않으므로 입력 프로세스를 더 예측 가능하고 안정적으로 만들 수 있습니다.
+데이터 입력, 의사결정 검증 또는 작업 권한 승인을 위해 사람의 입력을 요청할 수 있는 기능은 많은 에이전트 기반 워크플로에서 중요한 부분입니다. ADK의 그래프 기반 워크플로에는 워크플로의 일부로 사람으로부터 입력을 받기 위해 설계된 Human-in-the-Loop(HITL) 노드를 포함할 수 있습니다. 이러한 노드는 실행하는 데 AI 모델이 필요하지 않으므로 입력 프로세스를 더 예측 가능하고 안정적으로 만들 수 있습니다.
 
 ## 시작하기
 
 === "Python"
 
-    ***RequestInput*** 클래스와 사용자에게 표시할 텍스트 프롬프트를 사용하여 그래프에서 인간 입력 노드를 구현할 수 있습니다. 다음 코드 예시는 워크플로 그래프에 인간 입력 노드를 추가하는 방법을 보여줍니다:
+    ***RequestInput*** 클래스와 사용자에게 표시할 텍스트 프롬프트를 사용하여 그래프에서 사람 입력 노드를 구현할 수 있습니다. 다음 코드 예시는 워크플로 그래프에 사람 입력 노드를 추가하는 방법을 보여줍니다:
 
     ```python
     from google.adk.events import RequestInput
@@ -32,32 +32,32 @@
 
 === "TypeScript"
 
-    ADK TypeScript에서 인간 입력 노드는 `RequestInput`을 yield합니다. `step1` 노드는 사용자가 응답할 때까지 워크플로를 일시 중지하고, 사용자의 응답은 다음 노드의 입력으로 전달됩니다. 인간 참여형(HITL) 노드는 모델을 필요로 하지 않으므로 일시 중지가 결정론적입니다.
+    ADK TypeScript에서 사람 입력 노드는 `RequestInput`을 yield합니다. `step1` 노드는 사용자가 응답할 때까지 워크플로를 일시 중지하고, 사용자의 응답은 다음 노드의 입력으로 전달됩니다. Human-in-the-Loop(HITL) 노드는 모델을 필요로 하지 않으므로 일시 중지가 결정론적입니다.
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/human-input/get_started.ts:get-started"
     ```
 
-    이 구현은 기본값인 `rerunOnResume: false` 핸드오프를 보여줍니다. 중단된 노드는 다시 실행되지 않으며, 사용자의 응답을 출력으로 삼아 완료됩니다. `ctx.runNode()`를 호출하는 노드는 대신 `rerunOnResume: true`가 필요합니다. 자세한 내용은 [동적 워크플로에서의 인간 입력](/ko/graphs/dynamic/#human-input)을 참조하세요.
+    이 구현은 기본값인 `rerunOnResume: false` 핸드오프를 보여줍니다. 중단된 노드는 다시 실행되지 않으며, 사용자의 응답을 출력으로 삼아 완료됩니다. `ctx.runNode()`를 호출하는 노드는 대신 `rerunOnResume: true`가 필요합니다. 자세한 내용은 [동적 워크플로에서의 사람 입력](/ko/graphs/dynamic/#human-input)을 참조하세요.
 
 === "Go"
 
-    ADK Go에서 인간 입력 노드는 `workflow.NewRequestInputEvent`로 요청을 방출하고 `workflow.ErrNodeInterrupted`를 반환합니다. `step1` 노드는 사용자가 응답할 때까지 워크플로를 일시 중지합니다. 해당 노드는 다시 실행되지 않으며, 응답이 그 출력이 되어 다음 노드로 전달됩니다.
+    ADK Go에서 사람 입력 노드는 `workflow.NewRequestInputEvent`로 요청을 방출하고 `workflow.ErrNodeInterrupted`를 반환합니다. `step1` 노드는 사용자가 응답할 때까지 워크플로를 일시 중지합니다. 해당 노드는 다시 실행되지 않으며, 응답이 그 출력이 되어 다음 노드로 전달됩니다.
 
     ```go
     --8<-- "examples/go/snippets/graphs/human-input/main.go:graph-hitl-handoff"
     ```
 
-    응답 후에 다시 실행되어야 하는 노드는 대신 `RerunOnResume`을 설정하고 `workflow.ResumeOrRequestInput`을 호출합니다. 자세한 내용은 [동적 워크플로에서의 인간 입력](/ko/graphs/dynamic/#human-input)을 참조하세요.
+    응답 후에 다시 실행되어야 하는 노드는 대신 `RerunOnResume`을 설정하고 `workflow.ResumeOrRequestInput`을 호출합니다. 자세한 내용은 [동적 워크플로에서의 사람 입력](/ko/graphs/dynamic/#human-input)을 참조하세요.
 
 ## 구성 옵션
 
 === "Python"
 
-    인간 입력 노드는 다음 구성 옵션과 함께 ***RequestInput*** 클래스를 사용할 수 있습니다:
+    사람 입력 노드는 다음 구성 옵션과 함께 ***RequestInput*** 클래스를 사용할 수 있습니다:
 
-    -   **`message`:** 인간 입력 요청을 설명하기 위해 사용자에게 제공되는 텍스트입니다.
-    -   **`payload`:** 인간 입력 요청의 일부로 사용될 구조화된 데이터입니다.
+    -   **`message`:** 입력 요청 내용을 설명하기 위해 사용자에게 제공되는 텍스트입니다.
+    -   **`payload`:** 입력 요청의 일부로 전달할 구조화된 데이터입니다.
     -   **`response_schema`:** 사람의 응답이 준수해야 하는 데이터 구조입니다.
 
 === "TypeScript"
@@ -91,15 +91,15 @@
 
     응답 스키마는 사람의 응답을 지정된 구조에 맞게 자동으로 재구성하지 않습니다. 응답은 이미 해당 형식이어야 합니다. 더 나은 사용자 경험을 위해 클라이언트 인터페이스에서 구조화된 데이터를 수집하거나, 일시 중지 뒤에 에이전트 노드를 배치하여 응답을 필요한 형식으로 변환하세요.
 
-## 인간 입력 예시
+## 사람 입력 예시
 
-다음 코드 예시는 보다 상세한 인간 입력 요청을 보여줍니다.
+다음 코드 예시는 보다 상세한 사람 입력 요청을 보여줍니다.
 
 ### 메시지 및 페이로드와 함께 입력 요청하기
 
 === "Python"
 
-    다음 코드 샘플은 ***payload*** 및 ***response schema***를 포함하여 워크플로 노드에서 ***RequestInput*** 객체를 생성하는 방법을 보여줍니다. 이 예시에서 `ActivitiesList`는 활동 목록을 구성하는 에이전트 노드에 의해 완성될 것으로 예상되며, `get_user_feedback()` 노드는 사용자에게 피드백을 요청합니다.
+    다음 코드 샘플은 `payload` 및 `response_schema`를 포함하여 워크플로 노드에서 ***RequestInput*** 객체를 생성하는 방법을 보여줍니다. 이 예시에서 `ActivitiesList`는 활동 목록을 구성하는 에이전트 노드에 의해 완성될 것으로 예상되며, `get_user_feedback()` 노드는 사용자에게 피드백을 요청합니다.
 
     ```python
     class ActivitiesList(BaseModel):
@@ -146,13 +146,13 @@
     --8<-- "examples/go/snippets/graphs/human-input/main.go:graph-hitl-with-payload"
     ```
 
-## 도구 확인: LLM 에이전트의 승인 프롬프트
+## 도구 실행 승인(Tool Confirmation): LLM 에이전트의 승인 프롬프트
 
-도구 확인(Tool-confirmation)은 예/아니요 승인 프롬프트를 위한 별도의 LLM 에이전트 수준 메커니즘입니다. 그래프 HITL 노드와 달리 도구 확인은 독립형 그래프 노드가 아니라 `llmagent` 도구 함수 내부에서 작동합니다. LLM 에이전트가 특정 도구 호출을 실행하기 전에 일시 중지하고 승인을 요청하도록 할 때 유용합니다.
+도구 실행 승인(Tool Confirmation)은 예/아니요 승인 프롬프트를 위한 별도의 LLM 에이전트 수준 메커니즘입니다. 그래프 HITL 노드와 달리 도구 실행 승인은 독립형 그래프 노드가 아니라 `llmagent` 도구 함수 내부에서 작동합니다. LLM 에이전트가 특정 도구 호출을 실행하기 전에 일시 중지하고 승인을 요청하도록 할 때 유용합니다.
 
 === "Python"
 
-    도구가 실행되기 전에 정적 예/아니요 승인을 받으려면 도구를 ***FunctionTool***로 래핑하고 `require_confirmation=True`를 설정하거나, 사용자 지정 힌트 메시지를 사용하려면 도구 내부에서 `tool_context.request_confirmation()`을 호출하세요. ADK는 `require_confirmation=True` 경로에서만 호출 거부를 자동으로 처리하므로, 자체적으로 확인을 요청하는 도구는 한 번만 요청하기 위한 `tool_context.tool_confirmation`과 거부를 처리하기 위한 `tool_confirmation.confirmed`를 모두 확인해야 합니다:
+    도구가 실행되기 전에 정적 예/아니요 승인을 받으려면 도구를 ***FunctionTool***로 래핑하고 `require_confirmation=True`를 설정하거나, 사용자 지정 힌트 메시지를 사용하려면 도구 내부에서 `tool_context.request_confirmation()`을 호출하세요. ADK는 `require_confirmation=True` 경로에서만 호출 거부를 자동으로 처리하므로, 자체적으로 승인을 요청하는 도구는 한 번만 요청하기 위한 `tool_context.tool_confirmation`과 거부를 처리하기 위한 `tool_confirmation.confirmed`를 모두 확인해야 합니다:
 
     ```python
     from google.adk.agents import Agent
@@ -182,7 +182,7 @@
 
 === "TypeScript"
 
-    도구가 실행되기 전에 에이전트가 승인을 위해 일시 중지하도록 하려면 `FunctionTool`에 `requireConfirmation: true`를 설정하세요. 그래프의 인간 참여형(HITL) 노드는 다른 목적으로 사용됩니다. 도구 호출을 확인하는 대신 사용자에게 입력을 요청하여 워크플로를 시작할 수 있습니다. `responseSchema: z.string()` 옵션은 일반 텍스트 응답을 요청합니다:
+    도구가 실행되기 전에 에이전트가 승인을 위해 일시 중지하도록 하려면 `FunctionTool`에 `requireConfirmation: true`를 설정하세요. 그래프의 Human-in-the-Loop(HITL) 노드는 다른 목적으로 사용됩니다. 도구 실행을 승인받는 대신 사용자에게 입력을 요청하여 워크플로를 시작할 수 있습니다. `responseSchema: z.string()` 옵션은 일반 텍스트 응답을 요청합니다:
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/human-input/initial_prompt.ts:initial-prompt"
@@ -202,4 +202,4 @@
     --8<-- "examples/go/snippets/graphs/human-input/main.go:hitl-with-hint"
     ```
 
-동적 확인 및 클라이언트의 응답 방법을 포함한 전체 도구 확인 워크플로는 [ADK 도구에 대한 작업 확인 받기](/ko/tools-custom/confirmation/)를 참조하세요.
+동적 승인 요청 및 클라이언트의 응답 방법을 포함한 전체 도구 실행 승인 워크플로는 [ADK 도구에 대한 작업 승인 받기](/ko/tools-custom/confirmation/)를 참조하세요.

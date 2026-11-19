@@ -11,21 +11,21 @@ catalog_tags: ["data", "google"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.12.0</span>
 </div>
 
-Bigtable 連携を提供するツールセットは次のとおりです:
+Bigtable との連携を提供するツール群は次のとおりです。
 
 * **`list_instances`**: Google Cloud プロジェクト内の Bigtable インスタンスを取得します。
-* **`get_instance_info`**: Google Cloud プロジェクト内のインスタンスメタデータ情報を取得します。
-* **`list_clusters`**: Google Cloud プロジェクト内の Bigtable インスタンスにある Bigtable クラスターを取得します。
-* **`get_cluster_info`**: Google Cloud プロジェクト内の Bigtable インスタンスにあるクラスターのメタデータ情報を取得します。
+* **`get_instance_info`**: Google Cloud プロジェクト内のインスタンスのメタデータ情報を取得します。
+* **`list_clusters`**: Google Cloud プロジェクト内の Bigtable インスタンスにある Bigtable クラスタを取得します。
+* **`get_cluster_info`**: Google Cloud プロジェクト内の Bigtable インスタンスにあるクラスタのメタデータ情報を取得します。
 * **`list_tables`**: GCP Bigtable インスタンス内のテーブルを取得します。
-* **`get_table_info`**: GCP Bigtable のテーブルメタデータ情報を取得します。
-* **`execute_sql`**: Bigtable テーブルで SQL クエリを実行し、結果を取得します。
+* **`get_table_info`**: GCP Bigtable のテーブルのメタデータ情報を取得します。
+* **`execute_sql`**: Bigtable テーブルに対して SQL クエリを実行し、結果を取得します。
 
-これらは `BigtableToolset` ツールセットとして提供されています。
+これらは `BigtableToolset` ツールセットとしてパッケージ化されています。
 
 ## インストール
 
-Bigtable ツールは、ベースの `google-adk` インストールには含まれない Google Cloud クライアント ライブラリに依存しています。`gcp` extra を指定してインストールしてください:
+Bigtable ツールは、基本の `google-adk` インストールには含まれない Google Cloud クライアントライブラリに依存しています。`gcp` エクストラを指定してインストールしてください。
 
 ```bash
 pip install "google-adk[gcp]"

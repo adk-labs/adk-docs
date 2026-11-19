@@ -11,21 +11,21 @@ catalog_tags: ["observability", "evaluation"]
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
-[Zespan](https://zespan.com)은 AI 애플리케이션을 위한 에이전트 안정성 플랫폼입니다. Zespan SDK는 에이전트 호출, 모델 호출, 도구 실행 및 다중 에이전트 위임(delegation)을 연결된 스팬(linked spans)으로 캡처하여 ADK 에이전트를 기본적으로 계측(instrument)하며, 조사를 위해 [Zespan 대시보드](https://app.zespan.com)로 보내 비용 기여 및 평가를 수행합니다.
+[Zespan](https://zespan.com)은 AI 애플리케이션을 위한 에이전트 안정성 플랫폼입니다. Zespan SDK는 에이전트 호출, 모델 호출, 도구 실행 및 다중 에이전트 위임(delegation)을 연결된 스팬(linked spans)으로 캡처하여 ADK 에이전트를 네이티브로 계측(instrument)하며, 검사, 비용 귀속(cost attribution) 분석 및 평가를 위해 [Zespan 대시보드](https://app.zespan.com)로 전송합니다.
 
 ## 개요
 
 ADK 에이전트가 계측되면 Zespan 플랫폼은 다음을 제공합니다.
 
-- **추적 (Tracing):** 지연 시간, 토큰 및 비용과 함께 모든 에이전트, 모델, 도구 및 위임 스팬을 캡처합니다.
-- **비용 할당 (Cost attribution):** 모델, 에이전트 및 기간별로 지출을 분석합니다.
+- **추적 (Tracing):** 지연 시간(latency), 토큰 및 비용과 함께 모든 에이전트, 모델, 도구 및 위임 스팬을 캡처합니다.
+- **비용 귀속 (Cost attribution):** 모델, 에이전트 및 기간별로 지출을 분석합니다.
 - **평가 (Evaluations):** 커스텀 메트릭, 데이터 세트 및 시뮬레이션을 통해 에이전트 동작을 채점합니다.
 - **가드레일 (Guardrails):** 런타임에 안전하지 않은 입력 및 출력을 차단, 편집 또는 플래그 처리합니다.
 - **프롬프트 관리 (Prompt management):** 캐싱 및 변수 치환을 통해 프롬프트를 조회하고 버전을 관리합니다.
 
 ![Zespan 시스템 상태 대시보드](assets/zespan_overview.png)
 
-## 사전 준비 사항
+## 사전 요구사항
 
 시작하기 전에 Zespan 계정 및 자격 증명을 설정하세요.
 
@@ -171,7 +171,7 @@ ADK와 함께 Zespan SDK를 설치합니다.
     }
     ```
 
-    **`ZespanADKCallbackHandler`**는 ADK의 기본 콜백 시스템을 사용합니다. 에이전트 구성에 `.callbacks`를 분산하여 전달하세요.
+    **`ZespanADKCallbackHandler`**는 ADK의 기본 콜백 시스템을 사용합니다. 에이전트 구성에 `.callbacks`를 전개(spread)하여 전달하세요.
 
     ```typescript
     import { zespan, ZespanADKCallbackHandler } from "@zespan/sdk";
@@ -251,7 +251,7 @@ Zespan은 코디네이터와 서브 에이전트 스팬을 단일 트레이스�
     });
     ```
 
-    `ZespanADKCallbackHandler`를 사용하면 동일한 인스턴스를 모든 에이전트에 전달합니다.
+    `ZespanADKCallbackHandler`를 사용하는 경우 동일한 인스턴스를 모든 에이전트에 전개(spread)하여 전달합니다.
 
     ```typescript
     const handler = new ZespanADKCallbackHandler();

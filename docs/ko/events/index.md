@@ -4,7 +4,7 @@
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-이벤트는 에이전트 개발 키트(ADK) 내 정보 흐름의 기본 단위입니다. 이벤트는 초기 사용자 입력부터 최종 응답 및 그 사이의 모든 단계에 이르기까지, 에이전트의 상호작용 라이프사이클 동안 발생하는 모든 중요한 발생을 나타냅니다. 이벤트를 이해하는 것은 구성 요소가 통신하고, 상태를 관리하며, 제어 흐름을 지시하는 주요 방법이기 때문에 매우 중요합니다.
+이벤트는 에이전트 개발 키트(ADK) 내 정보 흐름의 기본 단위입니다. 초기 사용자 입력부터 최종 응답, 그리고 그 사이의 모든 단계에 이르기까지 에이전트의 상호작용 라이프사이클에서 일어나는 모든 주요 사건을 나타냅니다. 컴포넌트 간 통신, 상태 관리, 제어 흐름 지시가 모두 이벤트를 중심으로 이루어지므로 이벤트를 이해하는 것은 매우 중요합니다.
 
 ## 이벤트란 무엇이며 왜 중요한가
 
@@ -122,20 +122,20 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
 
 1.  **통신:** 사용자 인터페이스, `Runner`, 에이전트, LLM, 도구 간의 표준 메시지 형식 역할을 합니다. 모든 것이 `Event`로 흐릅니다.
 
-2.  **상태 및 아티팩트 변경 신호:** 이벤트는 상태 수정을 위한 지침을 전달하고 아티팩트 업데이트를 추적합니다. `SessionService`는 이러한 신호를 사용하여 영속성을 보장합니다. Python에서는 `event.actions.state_delta` 및 `event.actions.artifact_delta`를 통해 변경 사항을 신호합니다.
+2.  **상태 및 아티팩트 변경 신호:** 이벤트는 상태 변경 내역을 전달하고 아티팩트 업데이트를 추적합니다. `SessionService`는 이러한 신호를 바탕으로 데이터를 영구 저장합니다. Python에서는 `event.actions.state_delta` 및 `event.actions.artifact_delta`를 통해 변경 사항을 전달합니다.
 
-3.  **제어 흐름:** `event.actions.transfer_to_agent` 또는 `event.actions.escalate`와 같은 특정 필드는 프레임워크를 지시하는 신호 역할을 하여, 다음에 실행할 에이전트나 루프 종료 여부를 결정합니다.
+3.  **제어 흐름:** `event.actions.transfer_to_agent` 또는 `event.actions.escalate`와 같은 필드는 프레임워크의 실행 흐름을 제어하는 신호로 작동하여, 다음에 실행할 에이전트나 루프 종료 여부를 결정합니다.
 
-4.  **기록 및 관측 가능성:** `session.events`에 기록된 이벤트 시퀀스는 상호작용의 완전하고 시간순으로 정리된 기록을 제공하여 디버깅, 감사 및 에이전트 행동을 단계별로 이해하는 데 매우 유용합니다.
+4.  **기록 및 관측 가능성:** `session.events`에 기록된 이벤트 시퀀스는 상호작용의 전체 과정을 시간순으로 담고 있어 디버깅, 감사 및 에이전트 동작의 단계별 분석에 매우 유용합니다.
 
-본질적으로, 사용자 쿼리부터 에이전트의 최종 답변까지의 전체 프로세스는 `Event` 객체의 생성, 해석, 처리를 통해 조율됩니다.
+요약하자면, 사용자 쿼리부터 에이전트의 최종 답변에 이르는 전체 과정은 `Event` 객체의 생성, 해석 및 처리를 통해 조율됩니다.
 
 ## 이벤트 이해 및 사용하기
 
-개발자로서 여러분은 주로 `Runner`가 생성하는 이벤트 스트림과 상호작용하게 됩니다. 이벤트를 이해하고 정보를 추출하는 방법은 다음과 같습니다:
+개발자는 주로 `Runner`가 생성하는 이벤트 스트림과 상호작용하게 됩니다. 이벤트를 이해하고 필요한 정보를 추출하는 방법은 다음과 같습니다:
 
-!!! 참고
-    기본 요소에 대한 특정 매개변수나 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Python의 `event.content()`, Java의 `event.content().get().parts()`). 자세한 내용은 언어별 API 문서를 참고하세요.
+!!! note
+    기본 요소에 대한 구체적인 매개변수나 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Python의 `event.content` 속성, Java의 `event.content().get().parts()`). 자세한 내용은 각 언어별 API 문서를 참고하세요.
 
 ### 이벤트 출처 및 유형 식별하기
 
@@ -150,9 +150,9 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
     *   **도구 결과:** `event.get_function_responses()`를 확인합니다. 비어 있지 않으면 이 이벤트는 도구 실행의 결과를 담고 있습니다. 각 항목에는 `.name`과 `.response`(도구가 반환한 딕셔너리)가 있습니다. *참고:* 기록 구조화를 위해 `content` 내부의 `role`은 종종 `'user'`이지만, 이벤트 `author`는 일반적으로 도구 호출을 요청한 에이전트입니다.
 
 *   **스트리밍 출력인가? (`event.partial`)**
-    이것이 LLM에서 온 불완전한 텍스트 덩어리인지 여부를 나타냅니다.
-    *   `True`: 더 많은 텍스트가 이어집니다.
-    *   `False` 또는 `None`/`Optional.empty()`: 콘텐츠의 이 부분은 완료되었습니다 (단, `turn_complete`가 false인 경우 전체 턴이 끝나지 않았을 수 있습니다).
+    LLM에서 전달된 미완성 텍스트 청크(chunk)인지 여부를 나타냅니다.
+    *   `True`: 뒤에 추가 텍스트가 이어집니다.
+    *   `False` 또는 `None`/`Optional.empty()`: 해당 콘텐츠 파트가 완료되었습니다(단, `turn_complete`도 false인 경우 전체 턴은 아직 끝나지 않았을 수 있습니다).
 
 === "Python"
 
@@ -528,7 +528,7 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         }
         ```
 
-*   **아티팩트 저장:** 어떤 아티팩트가 저장되었고 그들의 새 버전 번호(또는 관련 `Part` 정보)를 나타내는 컬렉션을 제공합니다.
+*   **아티팩트 저장:** 저장된 아티팩트와 새로 할당된 버전 번호(또는 관련 `Part` 정보)를 담은 컬렉션을 제공합니다.
 
     === "Python"
         `artifact_changes = event.actions.artifact_delta` (`{filename: version}`의 딕셔너리).
@@ -589,9 +589,9 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
 *   **제어 흐름 신호:** 불리언 플래그나 문자열 값을 확인합니다:
 
     === "Python"
-        *   `event.actions.transfer_to_agent` (string): 제어가 명명된 에이전트로 넘어가야 합니다.
-        *   `event.actions.escalate` (bool): 루프가 종료되어야 합니다.
-        *   `event.actions.skip_summarization` (bool): 도구 결과가 LLM에 의해 요약되어서는 안 됩니다.
+        *   `event.actions.transfer_to_agent` (string): 지정된 에이전트로 제어권을 넘깁니다.
+        *   `event.actions.escalate` (bool): 루프를 종료합니다.
+        *   `event.actions.skip_summarization` (bool): LLM이 도구 결과를 요약하지 않도록 건너뜁니다.
         ```python
         if event.actions:
             if event.actions.transfer_to_agent:
@@ -603,9 +603,9 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```
 
     === "TypeScript"
-        *   `event.actions.transferToAgent` (string): 제어가 명명된 에이전트로 넘어가야 합니다.
-        *   `event.actions.escalate` (boolean): 루프가 종료되어야 합니다.
-        *   `event.actions.skipSummarization` (boolean): 도구 결과를 LLM이 요약하지 않아야 합니다.
+        *   `event.actions.transferToAgent` (string): 지정된 에이전트로 제어권을 넘깁니다.
+        *   `event.actions.escalate` (boolean): 루프를 종료합니다.
+        *   `event.actions.skipSummarization` (boolean): LLM이 도구 결과를 요약하지 않도록 건너뜁니다.
         ```typescript
         export function handleControlFlow(event: Event) {
             if (event.actions) {
@@ -623,9 +623,9 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```
 
     === "Go"
-        *   `event.Actions.TransferToAgent` (string): 제어가 명명된 에이전트로 넘어가야 합니다.
-        *   `event.Actions.Escalate` (bool): 루프가 종료되어야 합니다.
-        *   `event.Actions.SkipSummarization` (bool): 도구 결과가 LLM에 의해 요약되어서는 안 됩니다.
+        *   `event.Actions.TransferToAgent` (string): 지정된 에이전트로 제어권을 넘깁니다.
+        *   `event.Actions.Escalate` (bool): 루프를 종료합니다.
+        *   `event.Actions.SkipSummarization` (bool): LLM이 도구 결과를 요약하지 않도록 건너뜁니다.
         ```go
         import (
             "fmt"
@@ -646,9 +646,9 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
         ```
 
     === "Java"
-        *   `event.actions().transferToAgent()` (`Optional<String>` 반환): 제어가 명명된 에이전트로 넘어가야 합니다.
-        *   `event.actions().escalate()` (`Optional<Boolean>` 반환): 루프가 종료되어야 합니다.
-        *   `event.actions().skipSummarization()` (`Optional<Boolean>` 반환): 도구 결과가 LLM에 의해 요약되어서는 안 됩니다.
+        *   `event.actions().transferToAgent()` (`Optional<String>` 반환): 지정된 에이전트로 제어권을 넘깁니다.
+        *   `event.actions().escalate()` (`Optional<Boolean>` 반환): 루프를 종료합니다.
+        *   `event.actions().skipSummarization()` (`Optional<Boolean>` 반환): LLM이 도구 결과를 요약하지 않도록 건너뜁니다.
 
         ```java
         import com.google.adk.events.EventActions;
@@ -894,13 +894,13 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
     *   **도구 결과:** 도구가 실행된 후 프레임워크는 `function_response`를 포함하는 `Event`를 생성합니다. `author`는 일반적으로 도구를 요청한 에이전트이며, `content` 내부의 `role`은 LLM 기록을 위해 `'user'`로 설정됩니다.
 
 *   **처리 흐름:**
-    1.  **생성/반환:** 이벤트가 소스에 의해 생성되어 `yield`(Python)되거나 반환/방출(Java)됩니다.
-    2.  **러너 수신:** 에이전트를 실행하는 메인 `Runner`가 이벤트를 받습니다.
-    3.  **SessionService 처리:** `Runner`는 이벤트를 구성된 `SessionService`로 보냅니다. 이는 중요한 단계입니다:
-        *   **델타 적용:** 서비스는 `event.actions.state_delta`를 `session.state`에 병합하고 `event.actions.artifact_delta`를 기반으로 내부 기록을 업데이트합니다. (참고: 실제 아티팩트 *저장*은 보통 `context.save_artifact`가 호출될 때 더 일찍 발생했습니다).
-        *   **메타데이터 최종화:** 없는 경우 고유한 `event.id`를 할당하고, `event.timestamp`를 업데이트할 수 있습니다.
-        *   **기록에 영속화:** 처리된 이벤트를 `session.events` 목록에 추가합니다.
-    4.  **외부로 생성:** `Runner`는 처리된 이벤트를 호출 애플리케이션(예: `runner.run_async`를 호출한 코드)으로 `yield`(Python)하거나 반환/방출(Java)합니다.
+    1.  **생성/반환:** 소스에서 이벤트가 생성되어 `yield`(Python)되거나 반환/방출(Java)됩니다.
+    2.  **Runner 수신:** 에이전트를 실행하는 메인 `Runner`가 이벤트를 수신합니다.
+    3.  **SessionService 처리:** `Runner`는 이벤트를 구성된 `SessionService`로 전달합니다. 이 단계에서 중요한 작업이 수행됩니다:
+        *   **델타 적용:** 서비스는 `event.actions.state_delta`를 `session.state`에 병합하고 `event.actions.artifact_delta`를 기반으로 내부 기록을 업데이트합니다(참고: 실제 아티팩트 *저장*은 일반적으로 앞서 `context.save_artifact`를 호출한 시점에 이미 수행됩니다).
+        *   **메타데이터 확정:** 고유한 `event.id`가 아직 없으면 할당하고 필요시 `event.timestamp`를 업데이트합니다.
+        *   **기록에 영구 저장:** 처리된 이벤트를 `session.events` 목록에 추가합니다.
+    4.  **외부로 전달:** `Runner`는 처리된 이벤트를 호출 애플리케이션(예: `runner.run_async`를 호출한 코드)으로 `yield`(Python)하거나 반환/방출(Java)합니다.
 
 이 흐름은 상태 변경과 기록이 각 이벤트의 통신 내용과 함께 일관되게 기록되도록 보장합니다.
 
@@ -1031,9 +1031,9 @@ ADK에서 `Event`는 에이전트 실행의 특정 시점을 나타내는 불변
 
 ## 이벤트 작업 모범 사례
 
-ADK 애플리케이션에서 이벤트를 효과적으로 사용하려면 다음을 따르세요:
+ADK 애플리케이션에서 이벤트를 효과적으로 활용하려면 다음 권장 사항을 따르세요:
 
-*   **명확한 작성자:** 커스텀 에이전트를 구축할 때 기록에서 에이전트 작업에 대한 정확한 귀속을 보장하세요. 프레임워크는 일반적으로 LLM/도구 이벤트에 대한 작성자를 올바르게 처리합니다.
+*   **명확한 작성자(author) 지정:** 커스텀 에이전트를 구현할 때는 세션 기록에서 어떤 에이전트가 수행한 작업인지 명확히 식별되도록 작성자를 정확히 지정하세요. LLM 및 도구 이벤트의 작성자는 일반적으로 프레임워크가 자동으로 처리합니다.
 
     === "Python"
         `BaseAgent` 하위 클래스에서 `yield Event(author=self.name, ...)`를 사용하세요.
@@ -1047,10 +1047,10 @@ ADK 애플리케이션에서 이벤트를 효과적으로 사용하려면 다음
     === "Java"
         커스텀 에이전트 로직에서 `Event`를 구성할 때 작성자를 설정하세요. 예: `Event.builder().author(this.getAgentName()) // ... .build();`
 
-*   **의미 있는 콘텐츠 및 액션:** 핵심 메시지/데이터(텍스트, 함수 호출/응답)에는 `event.content`를 사용하세요. 부수 효과(상태/아티팩트 델타)나 제어 흐름(`transfer`, `escalate`, `skip_summarization`)을 신호하는 데는 `event.actions`를 구체적으로 사용하세요.
-*   **멱등성 인식:** `SessionService`가 `event.actions`에 신호된 상태/아티팩트 변경을 적용할 책임이 있음을 이해하세요. ADK 서비스는 일관성을 목표로 하지만, 애플리케이션 로직이 이벤트를 재처리할 경우 잠재적인 다운스트림 효과를 고려하세요.
-*   **`is_final_response()` 사용:** 애플리케이션/UI 계층에서 이 헬퍼 메서드를 사용하여 완전하고 사용자 대면 텍스트 응답을 식별하세요. 수동으로 그 로직을 복제하지 마세요.
-*   **기록 활용:** 세션의 이벤트 목록은 주요 디버깅 도구입니다. 작성자, 콘텐츠, 액션의 순서를 검토하여 실행을 추적하고 문제를 진단하세요.
-*   **메타데이터 사용:** `invocation_id`를 사용하여 단일 사용자 상호작용 내의 모든 이벤트를 상호 연관시키세요. `event.id`를 사용하여 특정하고 고유한 발생을 참고하세요.
+*   **용도에 맞는 콘텐츠 및 액션 사용:** 핵심 메시지/데이터(텍스트, 함수 호출/응답)에는 `event.content`를 사용하고, 부수 효과(상태/아티팩트 델타)나 제어 흐름(`transfer`, `escalate`, `skip_summarization`)을 전달할 때는 `event.actions`를 사용하세요.
+*   **멱등성(idempotency) 고려:** `event.actions`에 전달된 상태 및 아티팩트 변경 사항을 적용하는 주체는 `SessionService`입니다. ADK 서비스는 일관성을 유지하도록 설계되어 있지만, 애플리케이션 로직에서 이벤트를 재처리할 경우 다운스트림에 미칠 부수 효과를 고려하세요.
+*   **`is_final_response()` 활용:** 애플리케이션/UI 계층에서 사용자에게 표시할 완전한 최종 텍스트 응답을 식별할 때는 이 헬퍼 메서드를 사용하세요. 동일한 판별 로직을 직접 중복 구현하지 않는 것이 좋습니다.
+*   **이벤트 기록 활용:** 세션의 이벤트 목록은 가장 중요한 디버깅 도구입니다. 작성자, 콘텐츠, 액션의 순서를 살펴보면 실행 흐름을 추적하고 문제를 진단할 수 있습니다.
+*   **메타데이터 활용:** `invocation_id`를 사용하면 단일 사용자 상호작용 내에서 발생한 모든 이벤트를 하나로 묶어 추적할 수 있으며, `event.id`를 사용하면 개별 이벤트를 고유하게 참조할 수 있습니다.
 
-이벤트를 콘텐츠와 액션에 대한 명확한 목적을 가진 구조화된 메시지로 취급하는 것이 ADK에서 복잡한 에이전트 행동을 구축, 디버깅 및 관리하는 핵심입니다.
+콘텐츠와 액션의 목적을 명확히 구분하여 이벤트를 구조화된 메시지로 다루는 것이 ADK에서 복잡한 에이전트 동작을 구현, 디버깅 및 관리하는 핵심입니다.

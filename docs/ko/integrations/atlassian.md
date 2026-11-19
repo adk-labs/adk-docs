@@ -114,8 +114,8 @@ ADK 에이전트를 [Atlassian](https://www.atlassian.com/)
 `getJiraIssue` | Jira 이슈 정보 가져오기
 `editJiraIssue` | Jira 이슈 수정
 `createJiraIssue` | 새 Jira 이슈 생성
-`getTransitionsForJiraIssue` | Jira 이슈 전환 상태 가져오기
-`transitionJiraIssue` | Jira 이슈 전환
+`getTransitionsForJiraIssue` | Jira 이슈 상태 전환 목록 조회
+`transitionJiraIssue` | Jira 이슈 상태 전환
 `lookupJiraAccountId` | Jira 계정 ID 조회
 `searchJiraIssuesUsingJql` | JQL로 Jira 이슈 검색
 `addCommentToJiraIssue` | Jira 이슈에 코멘트 추가

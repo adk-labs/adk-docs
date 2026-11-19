@@ -11,7 +11,7 @@
 사용자가 에이전트와 상호작용을 시작하면, `SessionService`는 `Session` 객체(`google.adk.sessions.Session`)를 생성합니다. 이 객체는 *하나의 특정 채팅 스레드*와 관련된 모든 것을 담는 컨테이너 역할을 합니다. 주요 속성은 다음과 같습니다.
 
 *   **식별 정보 (`id`, `appName`, `userId`):** 대화를 위한 고유 레이블입니다.
-    * `id`: *이 특정* 대화 스레드에 대한 고유 식별자로, 나중에 대화를 검색하는 데 필수적입니다. `SessionService` 객체는 여러 개의 `Session`을 처리할 수 있으며, 이 필드는 우리가 참조하는 특정 세션 객체를 식별합니다. 예: "test_id_modification".
+    * `id`: *이 특정* 대화 스레드에 대한 고유 식별자로, 나중에 대화를 조회하는 데 필수적입니다. `SessionService` 객체는 여러 개의 `Session`을 처리할 수 있으며, 이 필드는 참조하려는 특정 세션 객체를 식별합니다. 예: `"test_id_modification"`.
     * `app_name`: 이 대화가 속한 에이전트 애플리케이션을 식별합니다. 예: "id_modifier_workflow".
     * `userId`: 대화를 특정 사용자와 연결합니다.
 *   **히스토리 (`events`):** 이 특정 스레드 내에서 발생한 모든 상호작용(`Event` 객체 - 사용자 메시지, 에이전트 응답, 도구 실행)의 시간순 목록입니다.
@@ -149,12 +149,12 @@
 
 ## `SessionService`로 세션 관리하기
 
-위에서 본 것처럼, 일반적으로 `Session` 객체를 직접 생성하거나 관리하지 않습니다. 대신 **`SessionService`**를 사용합니다. 이 서비스는 대화 세션의 전체 생명주기를 책임지는 중앙 관리자 역할을 합니다.
+위에서 본 것처럼, 일반적으로 `Session` 객체를 직접 생성하거나 관리하지 않습니다. 대신 **`SessionService`**를 사용합니다. 이 서비스는 대화 세션의 전체 라이프사이클을 책임지는 중앙 관리자 역할을 합니다.
 
 핵심 책임은 다음과 같습니다.
 
 *   **새 대화 시작:** 사용자가 상호작용을 시작할 때 새로운 `Session` 객체를 생성합니다.
-*   **기존 대화 재개:** 에이전트가 중단된 부분부터 계속할 수 있도록 특정 `Session`을 ID를 사용해 검색합니다.
+*   **기존 대화 재개:** 에이전트가 중단된 지점부터 이어갈 수 있도록 ID를 사용해 특정 `Session`을 조회합니다.
 *   **진행 상황 저장:** 새로운 상호작용(`Event` 객체)을 세션의 히스토리에 추가합니다. 이는 세션 `state`가 업데이트되는 메커니즘이기도 합니다('상태' 섹션에서 자세히 설명).
 *   **대화 목록 조회:** 특정 사용자와 애플리케이션에 대한 활성 세션 스레드를 찾습니다.
 *   **정리:** 대화가 끝나거나 더 이상 필요하지 않을 때 `Session` 객체와 관련 데이터를 삭제합니다.
@@ -172,19 +172,19 @@ ADK는 다양한 `SessionService` 구현체를 제공하므로, 필요에 가장
 
     === "Python"
 
-           ```py
+        ```py
         from google.adk.sessions import InMemorySessionService
         session_service = InMemorySessionService()
-      ```
+        ```
 
     === "TypeScript"
 
-      ```typescript
+        ```typescript
         import { InMemorySessionService } from "@google/adk";
         const sessionService = new InMemorySessionService();
-      ```
+        ```
 
-=== "Go"
+    === "Go"
 
            ```go
             import "google.golang.org/adk/session"
@@ -380,9 +380,9 @@ ADK 에이전트에서 Google Cloud에 연결하는 방법에 대한 자세한 �
 
 올바른 `SessionService`를 선택하는 것은 에이전트의 대화 기록과 임시 데이터가 어떻게 저장되고 유지되는지를 정의하는 핵심입니다.
 
-## 세션 생명주기
+## 세션 라이프사이클
 
-<img src="../../assets/event-loop.png" alt="세션 생명주기">
+<img src="../../assets/event-loop.png" alt="세션 라이프사이클">
 
 대화의 한 턴(turn) 동안 `Session`과 `SessionService`가 함께 작동하는 단순화된 흐름은 다음과 같습니다.
 

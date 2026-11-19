@@ -90,21 +90,21 @@ Google Cloud Eventarc Advanced 메시지 버스에 구조화된 CloudEvent를 �
 
 | 매개변수 | 타입 | 설명 |
 | --- | --- | --- |
-| `name` | `str` | LLM에 노출되는 함수 도구 이름 (예: `complete_outreach_static`). |
+| `name` | `str` | LLM에 제공되는 함수 도구 이름 (예: `complete_outreach_static`). |
 | `description` | `str` | LLM이 이 도구를 언제 호출해야 하고 어떤 작업을 수행하는지 지시하는 자연어 설명. |
 | `bus` | `str \| Callable[[Any], str] \| AgentProvided` | 대상 Eventarc 메시지 버스. 고정 URI 문자열, 도구 컨텍스트에 따라 평가되는 런타임 콜러블(Callable), 또는 LLM이 공급하도록 요청하는 `AgentProvided` 인스턴스일 수 있습니다. |
 | `ce_attributes_binding` | `CloudEventAttributesBinding` | CloudEvent 속성(`type`, `source`, `subject`, `datacontenttype`, `time`, `id`, `specversion`, `custom_attributes`)에 대한 바인딩 규칙. |
 | `payload_schema` | `type[pydantic.BaseModel] \| None` | (선택 사항) 구조화된 이벤트 페이로드를 정의하는 Pydantic 스키마 클래스. 지정된 경우 도구 시그니처에는 이 모델을 준수하는 `event_data` 매개변수가 필요합니다. 제공되지 않거나 `None`인 경우 도구 시그니처에 `event_data` 매개변수가 추가되지 않으며, 도구는 데이터 페이로드 본문 없이 알림 전용 CloudEvent를 게시합니다. |
 
-### CloudEvent 속성 바인딩 및 센티널 (Attribute bindings and sentinels)
+### CloudEvent 속성 바인딩 및 센티널
 
 `CloudEventAttributesBinding` 데이터 클래스는 개별 CloudEvent 필드가 채워지는 방식을 구성합니다. 각 속성(`type`, `source`, `datacontenttype`, `subject`, `time`, `id`, `specversion`, `custom_attributes`)에는 다음 바인딩 메커니즘 중 하나를 할당할 수 있습니다.
 
-| 바인딩 타입 | 예시 | LLM에 노출 여부 | 설명 |
+| 바인딩 타입 | 예시 | LLM 공개 여부 | 설명 |
 | --- | --- | --- | --- |
 | **Static String** | `type="vendor_outreach.completed"` | 아니오 | 고정된 리터럴 문자열을 강제합니다. 이 속성은 LLM 시그니처에서 숨겨지며 모든 호출에 자동으로 적용됩니다. |
 | **Runtime Lambda** | `source=lambda ctx: f"//agent/{ctx.id}"` | 아니오 | 도구 런타임 컨텍스트를 사용하여 실행 시점에 동적으로 평가되는 콜러블(`Callable[[Any], str]`)입니다. LLM 시그니처에서 숨겨집니다. |
-| **`AgentProvided`** | `subject=AgentProvided("Customer ID")` | 예 | ADK가 속성을 함수 시그니처의 명시적 매개변수로 노출하여 LLM이 이를 제공할 수 있도록 지시합니다. `description` 문자열을 허용합니다. |
+| **`AgentProvided`** | `subject=AgentProvided("Customer ID")` | 예 | ADK가 속성을 함수 시그니처의 명시적 매개변수로 제공하여 LLM이 값을 전달할 수 있도록 지시합니다. `description` 문자열을 허용합니다. |
 | **`MISSING`** | `time=MISSING` | 아니오 | 선택적 속성의 기본 센티널입니다. 기본 동작이 적용됨을 나타냅니다 (예: `time`의 경우 현재 UTC 타임스탬프 자동 생성, `id`의 경우 UUID 자동 생성). |
 | **`OMIT`** | `time=OMIT` | 아니오 | 생성된 CloudEvent에서 선택적 속성을 명시적으로 제외합니다. 필수 속성(`type`, `source`, `bus`)은 `OMIT`으로 설정할 수 없습니다. |
 

@@ -161,8 +161,8 @@ curl -X POST http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_1
 
 POST経由でエージェントにクエリを送信するには、`/run` または `/run_sse` の2つのルートがあります。
 
-* `POST http://localhost:8000/run`: すべてのイベントをリストとして収集し、一度にすべて返します。ほとんどのユーザーに適しています（どちらを使うべきかわからない場合は、こちらを使用することをお勧めします）。
-* `POST http://localhost:8000/run_sse`: サーバーセントイベント（Server-Sent-Events）として返します。これはイベントオブジェクトのストリームです。イベントが利用可能になったらすぐに通知を受けたいユーザーに適しています。`/run_sse`では、`streaming` を `true` に設定してトークンレベルのストリーミングを有効にすることもできます。
+* `POST http://localhost:8000/run`: すべてのイベントをリストとして収集し、一度にまとめて返します。ほとんどのユーザーに適しています（どちらを使うべきかわからない場合は、こちらを使用することをお勧めします）。
+* `POST http://localhost:8000/run_sse`: Server-Sent Events（SSE）としてイベントオブジェクトのストリームを返します。イベントが生成され次第すぐに通知を受け取りたい場合に適しています。`/run_sse` では、`streaming` を `true` に設定してトークンレベルのストリーミングを有効にすることもできます。
 
 **`/run` の使用**
 
@@ -282,6 +282,10 @@ INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
 
 ## インタラクティブAPIドキュメントによるデバッグ
 
+!!! note "Python および TypeScript のみ"
+
+    Swagger UI のインタラクティブドキュメントは、Python および TypeScript の ADK API サーバーでのみ `/docs` で提供されます。Go の API サーバーは `/docs` エンドポイントを提供していません。Go REST API を確認するには、以下のエンドポイントリファレンスを参照するか、`curl` で直接リクエストを送信してください。
+
 APIサーバーは、Swagger UIを使用してインタラクティブなAPIドキュメントを自動的に生成します。これは、エンドポイントの探索、リクエスト形式の理解、ブラウザーから直接エージェントをテストするための非常に価値のあるツールです。
 
 インタラクティブドキュメントにアクセスするには、APIサーバーを起動し、Webブラウザーで [http://localhost:8000/docs](http://localhost:8000/docs) に移動します。
@@ -293,8 +297,7 @@ APIサーバーは、Swagger UIを使用してインタラクティブなAPIド�
 以下のセクションでは、エージェントと対話するための主要なエンドポイントについて詳しく説明します。
 
 !!! note "JSON命名規則"
-    - **リクエストボディ** はフィールド名に `snake_case` を使用する必要があります (例: `"app_name"`)。
-    - **レスポンスボディ** はフィールド名に `camelCase` を使用します (例: `"appName"`)。
+    - **リクエストボディとレスポンスボディのどちらも**フィールド名に `camelCase` を使用します（例: `"appName"`）。なお、Python の API サーバーはリクエストで `snake_case`（例: `"app_name"`）も受け付けます。
 
 ### ユーティリティエンドポイント
 
@@ -382,7 +385,7 @@ curl -X DELETE http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s
 ```
 
 **レスポンス例**
-正常に削除されると、`204 No Content` ステータスコードを持つ空のレスポンスが返されます。
+正常に削除されるとセッションデータは返されません。Python はボディが `null` の `200 OK`、TypeScript は `204 No Content` ステータスコード、Go は空ボディの `200 OK` を返します。
 
 ---
 
@@ -429,7 +432,7 @@ curl -X POST http://localhost:8000/run \
 
 #### エージェントの実行（ストリーミング）
 
-エージェントを実行し、イベントが生成されるとすぐに [サーバーセントイベント (SSE)](https://developer.mozilla.org/ja/docs/Web/API/Server-sent_events) を使用してクライアントにストリーミングします。
+エージェントを実行し、イベントが生成されるとすぐに [Server-Sent Events（SSE）](https://developer.mozilla.org/ja/docs/Web/API/Server-sent_events) を使用してクライアントにストリーミングします。
 
 *   **メソッド:** `POST`
 *   **パス:** `/run_sse`

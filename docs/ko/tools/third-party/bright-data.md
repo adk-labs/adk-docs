@@ -16,9 +16,9 @@
 
 ## 전제 조건
 
-- API 토큰을 얻으려면 [Bright Data 계정](https://brightdata.com/)에 가입하세요.
+- API 토큰을 발급받으려면 [Bright Data 계정](https://brightdata.com/)에 가입하세요.
 - 자세한 내용은 [설명서](https://docs.brightdata.com/mcp-server/overview)를 참고하세요.
-- 서버는 프로토타이핑 및 일상적인 워크플로에 유용한 **월 5,000개 요청의 무료 등급**을 제공합니다.
+- 프로토타이핑 및 일상적인 워크플로에 유용한 **월 5,000건 요청의 무료 티어(Free Tier)**를 제공합니다.
 
 ## 에이전트와 함께 사용
 
@@ -97,15 +97,15 @@
 
 Bright Data MCP 서버는 두 가지 모드로 작동합니다.
 
-### 신속 모드(무료 등급 - 기본값)
+### Rapid 모드(무료 티어 - 기본값)
 
 도구 <img width="100px"/> | 설명
 ---- | -----------
-`search_engine` | Google, Bing 또는 Yandex SERP를 JSON 또는 마크다운으로 스크랩합니다.
-`scrape_as_markdown` | 내장된 차단 해제 기능으로 웹페이지를 깨끗한 마크다운으로 변환합니다.
-`scrape_as_html` | 차단기를 우회하면서 웹페이지에서 원시 HTML을 반환합니다.
-`extract` | 사용자 지정 프롬프트로 마크다운 출력을 구조화된 JSON으로 변환합니다.
-`session_stats` | 세션 사용 통계 및 도구 호출 횟수를 봅니다.
+`search_engine` | Google, Bing 또는 Yandex 검색 결과 페이지(SERP)를 JSON 또는 마크다운으로 스크래핑합니다.
+`scrape_as_markdown` | 내장된 차단 우회(unblocking) 기능을 통해 웹페이지를 깔끔한 마크다운으로 변환합니다.
+`scrape_as_html` | 차단을 우회하여 웹페이지의 원본 HTML을 반환합니다.
+`extract` | 커스텀 프롬프트를 사용하여 마크다운 출력을 구조화된 JSON으로 변환합니다.
+`session_stats` | 세션 사용 통계 및 도구 호출 횟수를 조회합니다.
 
 ### 프로 모드(60개 이상의 추가 도구)
 
@@ -131,19 +131,19 @@ Bright Data MCP 서버는 두 가지 모드로 작동합니다.
 - **개발자 도구**: `web_data_github_repository_file`
 - **금융**: `web_data_yahoo_finance_business`
 
-모든 웹 데이터 API 도구는 캐시되거나 새로운 구조화된 데이터를 JSON 형식으로 반환하며, 종종 실시간 스크래핑보다 더 신뢰할 수 있습니다.
+모든 웹 데이터 API 도구는 캐시된 데이터 또는 최신 구조화 데이터를 JSON 형식으로 반환하며, 실시간 스크래핑보다 더 안정적인 결과를 제공합니다.
 
 ## 구성 옵션
 
-Bright Data MCP 서버는 사용자 지정을 위해 여러 환경 변수를 지원합니다.
+Bright Data MCP 서버는 커스터마이징을 위해 여러 환경 변수를 지원합니다.
 
 변수 | 설명 | 기본값
 ---- | ---- | ----
 `API_TOKEN` | Bright Data API 토큰(필수) | -
 `PRO_MODE` | 60개 이상의 모든 고급 도구 활성화 | `false`
-`RATE_LIMIT` | 사용자 지정 속도 제한(예: "100/1h", "50/30m") | 제한 없음
-`WEB_UNLOCKER_ZONE` | 사용자 지정 웹 언락커 영역 이름 | `mcp_unlocker`
-`BROWSER_ZONE` | 사용자 지정 브라우저 API 영역 이름 | `mcp_browser`
+`RATE_LIMIT` | 커스텀 요청 속도 제한(Rate Limit, 예: "100/1h", "50/30m") | 제한 없음
+`WEB_UNLOCKER_ZONE` | 커스텀 Web Unlocker 존(zone) 이름 | `mcp_unlocker`
+`BROWSER_ZONE` | 커스텀 Browser API 존(zone) 이름 | `mcp_browser`
 
 ## 추가 리소스
 

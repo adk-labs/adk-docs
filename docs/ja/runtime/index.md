@@ -1,4 +1,4 @@
-# ランタイム
+# エージェント ランタイム
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
@@ -7,7 +7,7 @@
 ADK は、開発中のエージェントを実行およびテストするためのいくつかの方法を
 提供します。開発ワークフローに最も合う方法を選んでください。
 
-## エージェントを実行する方法
+## エージェントを実行する方法 {#ways-to-run-agents}
 
 <div class="grid cards" markdown>
 
@@ -20,7 +20,7 @@ ADK は、開発中のエージェントを実行およびテストするため�
 
     [:octicons-arrow-right-24: Web インターフェースを使用する](web-interface/index.md)
 
--   :material-console:{ .lg .middle } **Command Line**
+-   :material-console:{ .lg .middle } **コマンドライン**
 
     ---
 
@@ -28,7 +28,7 @@ ADK は、開発中のエージェントを実行およびテストするため�
 
     [:octicons-arrow-right-24: コマンドラインを使用する](command-line.md)
 
--   :material-api:{ .lg .middle } **API Server**
+-   :material-api:{ .lg .middle } **API サーバー**
 
     ---
 
@@ -52,11 +52,11 @@ ADK は、開発中のエージェントを実行およびテストするため�
 ランタイムの設定や動作についてより詳細な情報が必要な場合は、次のページを
 参照してください。
 
-- **[Event Loop](event-loop.md)**: yield / pause / resume のサイクルを含む、
+- **[イベントループ（Event Loop）](event-loop.md)**: yield / pause / resume のサイクルを含む、
   ADK を動かすコアのイベントループを理解します。
-- **[Resume Agents](resume.md)**: 以前の状態からエージェント実行を再開する
+- **[エージェントの再開（Resume Agents）](resume.md)**: 以前の状態からエージェント実行を再開する
   方法を学びます。
-- **[Cancel Agent Runs](cancel.md)**: AbortSignal (TypeScript) を使用して、
+- **[エージェント実行のキャンセル（Cancel Agent Runs）](cancel.md)**: `AbortSignal`（TypeScript）を使用して、
   実行中のエージェント呼び出しを正常にキャンセルします。
-- **[Runtime Config](runconfig.md)**: RunConfig を使ってランタイム動作を設定
+- **[ランタイム構成（Runtime Config）](runconfig.md)**: `RunConfig` を使ってランタイム動作を設定
   します。

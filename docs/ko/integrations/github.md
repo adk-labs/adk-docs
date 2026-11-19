@@ -102,7 +102,7 @@ GitHub 플랫폼에 직접 연결합니다. 이를 통해 ADK 에이전트는 �
 
 도구 | 설명
 ---- | -----------
-`context` | 현재 사용자와 작업 중인 GitHub 컨텍스트에 대한 맥락을 제공하는 도구
+`context` | 현재 사용자 및 작업 중인 GitHub 컨텍스트 정보를 제공하는 도구
 `copilot` | Copilot 관련 도구(예: Copilot Coding Agent)
 `copilot_spaces` | Copilot Spaces 관련 도구
 `actions` | GitHub Actions 워크플로와 CI/CD 작업

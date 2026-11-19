@@ -17,14 +17,13 @@ Integration Connectors の 100 以上の事前構築コネクタを通じて、
 エージェントに企業アプリへの安全かつガバナンスされたアクセスを
 シームレスに付与できます。
 
-オンプレミスと SaaS の両方をサポートします。
-さらに既存の Application Integration プロセス自動化を、
-Application Integration ワークフローを ADK エージェントのツールとして提供することで
-agentic workflow に変換できます。
+オンプレミスと SaaS の両方のアプリケーションをサポートします。
+さらに、Application Integration ワークフローを ADK エージェントのツールとして提供することで、
+既存の Application Integration プロセス自動化をエージェンティックワークフローに変換できます。
 
-Application Integration 内の federated search により、
-ADK エージェントで複数の企業アプリとデータソースを
-同時にクエリできます。
+Application Integration のフェデレーテッド検索（横断検索）により、
+ADK エージェントから複数の企業アプリケーションとデータソースに対して
+同時にクエリを実行できます。
 
 [:fontawesome-brands-youtube:{.youtube-red-icon} この動画ウォークスルーで Application Integration の ADK Federated Search の動作を確認](https://www.youtube.com/watch?v=JdlWOQe5RgU){: target="_blank" rel="noopener noreferrer"}
 
@@ -51,24 +50,24 @@ gcloud auth application-default set-quota-project <project-id>
 
 `<project-id>` は Google Cloud プロジェクトの一意 ID に置き換えてください。
 
-### 3. Application Integration workflow をプロビジョニングし、Connection Tool を公開
+### 3. Application Integration ワークフローをプロビジョニングし、Connection Tool を公開
 
 エージェントで利用したい既存の
 [Application Integration](https://cloud.google.com/application-integration/docs/overview)
-workflow または
+ワークフローまたは
 [Integrations Connector](https://cloud.google.com/integration-connectors/docs/overview)
-connection を使用します。必要に応じて新しい
-[Application Integration workflow](https://cloud.google.com/application-integration/docs/setup-application-integration)
+接続（connection）を使用します。必要に応じて新しい
+[Application Integration ワークフロー](https://cloud.google.com/application-integration/docs/setup-application-integration)
 または
-[connection](https://cloud.google.com/integration-connectors/docs/connectors/neo4j/configure#configure-the-connector)
+[接続](https://cloud.google.com/integration-connectors/docs/connectors/neo4j/configure#configure-the-connector)
 を作成することもできます。
 
 テンプレートライブラリから
 [Connection Tool](https://console.cloud.google.com/integrations/templates/connection-tool/locations/global)
-を import して publish します。
+をインポートして公開（publish）します。
 
 **注意**: Integration Connectors のコネクタを使うには、
-connection と同じリージョンに Application Integration をプロビジョニングする必要があります。
+接続と同じリージョンに Application Integration をプロビジョニングする必要があります。
 
 ### 4. プロジェクト構成を作成
 
@@ -121,11 +120,11 @@ connection と同じリージョンに Application Integration をプロビジ�
 
 ### 始める前に
 
-**注意:** *ExecuteConnection* integration は通常、特定リージョンで Application Integration をプロビジョニングすると自動作成されます。[integrations list](https://console.cloud.google.com/integrations/list) に *ExecuteConnection* がない場合は、次の手順で作成してください:
+**注意:** *ExecuteConnection* 統合は通常、特定リージョンで Application Integration をプロビジョニングすると自動作成されます。[統合の一覧](https://console.cloud.google.com/integrations/list) に *ExecuteConnection* がない場合は、次の手順で作成してください:
 
 1. Integration Connectors のコネクタを使うには **QUICK SETUP** をクリックし、
-   connection と同じリージョンに Application Integration を
-   [provision](https://console.cloud.google.com/integrations) します。
+   接続と同じリージョンに Application Integration を
+   [プロビジョニング](https://console.cloud.google.com/integrations) します。
 
    ![Google Cloud Tools](../../assets/application-integration-overview.png)
 
@@ -139,9 +138,9 @@ connection と同じリージョンに Application Integration をプロビジ�
 
 3. Integration Name を *ExecuteConnection* として入力します
    (この正確な名前を使う必要があります)。
-   次に connection と同じリージョンを選択して **CREATE** をクリックします。
+   次に接続と同じリージョンを選択して **CREATE** をクリックします。
 
-4. <i>Application Integration</i> エディタで **PUBLISH** をクリックして integration を公開します。
+4. <i>Application Integration</i> エディタで **PUBLISH** をクリックして統合を公開します。
 
 
     ![Google Cloud Tools](../../assets/publish-integration.png)
@@ -171,7 +170,7 @@ Integration Connectors 用の Application Integration Toolset を作るには次
     **注意:**
 
     * デフォルト認証情報の代わりにサービスアカウントを使うには、[Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete#creating) を生成し、サービスアカウントへ適切な [Application Integration and Integration Connector IAM roles](#prerequisites) を付与してください。
-    * connection でサポートされる entity/actions 一覧は Connector API の [listActions](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listActions) または [listEntityTypes](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listEntityTypes) で確認できます。
+    * 接続でサポートされているエンティティとアクションの一覧は、Connectors API の [listActions](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listActions) または [listEntityTypes](https://cloud.google.com/integration-connectors/docs/reference/rest/v1/projects.locations.connections.connectionSchemaMetadata/listEntityTypes) で確認できます。
     * カスタムワークフローを使用するには、`connection_template_override` パラメータを使用してデフォルトの `ExecuteConnection` 統合をオーバーライドします。
 
         !!! note "言語サポート"
@@ -271,11 +270,11 @@ Integration Connectors 用の Application Integration Toolset を作るには次
    `my\_agent` エージェント (エージェントフォルダー名と同じ) を選択します。
 
 
-## Application Integration Workflows を使う
+## Application Integration ワークフローを使う
 
 既存の
 [Application Integration](https://cloud.google.com/application-integration/docs/overview)
-workflow をエージェントツールとして使うか、新規作成します。
+ワークフローをエージェントのツールとして使うか、新しく作成します。
 
 
 ### 1. ツールを作成

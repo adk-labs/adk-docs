@@ -53,5 +53,5 @@
 ## 고려 사항 및 제한 사항
 
 - **고정된 모델 선택**: 음성 대 음성 아키텍처는 Gemini Live API를 지원하는 모델([지원되는 모델](../models.md#live-models))이 필요합니다. 라이브 음성 세션에서 표준 Gemini 텍스트 모델이나 서드파티 LLM을 사용하려면 [캐스케이드 아키텍처](cascade.md)를 사용하세요.
-- **오디오 전용 출력**: 네이티브 오디오 모델은 오디오만 출력하며 `Runner.run_async()`에서는 실행되지 않습니다. 대화 텍스트가 필요한 경우 [오디오 트랜스크립션](../configuration.md#audio-transcription)을 읽으세요.
-- **가드레일이 오디오와 함께 트랜스크립션을 평가함**: 모델이 중간 텍스트 단계 없이 직접 오디오를 생성하므로, [대화 검증 콜백](../guardrails.md#conversation-validation)은 합성 전에 텍스트를 가로채는 대신 입력 및 출력 트랜스크립션을 검사합니다. 오디오가 생성되기 전에 반드시 텍스트를 필터링하거나 마스킹(redact)해야 하는 경우에는 [캐스케이드](cascade.md#custom-speech-transforms)를 사용하세요.
+- **오디오 전용 출력**: 네이티브 오디오 모델은 오디오만 출력하며 `Runner.run_async()`에서는 실행되지 않습니다. 대화 텍스트가 필요한 경우 [오디오 전사(transcription)](../configuration.md#audio-transcription)를 읽으세요.
+- **가드레일이 오디오와 함께 전사 결과를 평가함**: 모델이 중간 텍스트 단계 없이 직접 오디오를 생성하므로, [대화 검증 콜백](../guardrails.md#conversation-validation)은 합성 전에 텍스트를 가로채는 대신 입력 및 출력 전사(transcription) 텍스트를 검사합니다. 오디오가 생성되기 전에 반드시 텍스트를 필터링하거나 마스킹(redact)해야 하는 경우에는 [캐스케이드](cascade.md#custom-speech-transforms)를 사용하세요.

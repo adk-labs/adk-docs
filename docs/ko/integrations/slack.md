@@ -5,7 +5,7 @@ catalog_icon: /integrations/assets/slack.png
 catalog_tags: ["connectors", "google"]
 ---
 
-# ADK용 Slack 런너
+# ADK용 Slack Runner
 
 <div class="language-support-tag"><span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span></div>
 
@@ -13,7 +13,7 @@ ADK는 [Socket Mode](https://api.slack.com/apis/connections/socket)를 사용하
 
 ## 사용 사례
 
-- **Socket Mode 배포**: 공개 HTTP 엔드포인트를 노출하지 않고 워크스페이스 이벤트를 에이전트로 라우팅합니다.
+- **Socket Mode 배포**: 공개 HTTP 엔드포인트를 외부에 공개하지 않고 워크스페이스 이벤트를 에이전트로 라우팅합니다.
 - **스레드 관리**: 다이렉트 메시지(DM) 및 중첩된 스레드 답글에서 지속적인 대화 맥락을 유지합니다.
 - **이벤트 기반 트리거**: 다이렉트 메시지 또는 앱 멘션을 사용하여 에이전트 워크플로를 자동으로 활성화합니다.
 
@@ -33,7 +33,7 @@ pip install "google-adk[slack]"
 
 ## 에이전트와 함께 사용
 
-이 예시는 에이전트를 Slack에 배포하기 위한 엔드투엔드 설정을 보여줍니다. 코어 에이전트를 구성하고 대화 기록을 관리하기 위한 인메모리 세션을 설정하며, Socket Mode와 함께 SlackRunner를 사용하여 워크스페이스에 연결하고 들어오는 이벤트를 처리합니다.
+이 예시는 에이전트를 Slack에 배포하기 위한 엔드투엔드 설정을 보여줍니다. 코어 에이전트를 구성하고 대화 기록을 관리하기 위한 인메모리 세션을 설정하며, Socket Mode와 함께 `SlackRunner`를 사용하여 워크스페이스에 연결하고 들어오는 이벤트를 처리합니다.
 
 ```python
 import asyncio

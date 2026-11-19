@@ -1,4 +1,4 @@
-# AI 모델 for ADK 에이전트
+# ADK 에이전트를 위한 AI 모델
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">Typescript</span><span class="lst-go">Go</span><span class="lst-java">Java</span>

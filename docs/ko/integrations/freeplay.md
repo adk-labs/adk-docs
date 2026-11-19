@@ -18,7 +18,7 @@ Freeplay의 주요 이점:
 * **온라인 평가/자동 채점기** - 프로덕션에서 오류를 감지합니다.
 * **오프라인 평가 및 실험 비교** - 배포 전에 변경 사항을 테스트합니다.
 * **프롬프트 관리** - Freeplay 플레이그라운드에서 코드로 직접 변경 사항을 푸시하는 것을 지원합니다.
-* **사람 검토 워크플로우** - 오류 분석 및 데이터 주석에 대한 협업을 위합니다.
+* **사람 검토 워크플로우** - 오류 분석 및 데이터 어노테이션 협업을 지원합니다.
 * **강력한 UI** - 도메인 전문가가 엔지니어와 긴밀하게 협업할 수 있도록 합니다.
 
 Freeplay와 ADK는 서로를 보완합니다. ADK는 강력하고 표현력이 풍부한 에이전트 오케스트레이션 프레임워크를 제공하는 반면 Freeplay는 관측 가능성, 프롬프트 관리, 평가 및 테스트를 위해 연결됩니다. Freeplay와 통합하면 Freeplay UI 또는 코드에서 프롬프트와 평가를 업데이트할 수 있으므로 팀의 모든 사람이 기여할 수 있습니다.
@@ -31,7 +31,7 @@ Freeplay와 ADK는 서로를 보완합니다. ADK는 강력하고 표현력이 �
 
 ### Freeplay 계정 만들기
 
-무료 [Freeplay 계정](https://app.freeplay.ai/signup)에 가입하십시오.
+무료 [Freeplay 계정](https://app.freeplay.ai/signup)에 가입하세요.
 
 계정을 만든 후 다음 환경 변수를 정의할 수 있습니다.
 
@@ -108,9 +108,9 @@ ADK와 함께 Freeplay의 프롬프트 관리 기능을 활용하려면 Freeplay
 {{agent_context}}
 ```
 
-### 기록 블록
+### 기록(History) 블록
 
-새 메시지를 클릭하고 역할을 '기록'으로 변경합니다. 이렇게 하면 과거 메시지가 있을 때 전달됩니다.
+새 메시지를 클릭하고 역할(role)을 `'history'`로 변경합니다. 이렇게 하면 과거 메시지가 있을 때 함께 전달됩니다.
 
 ![프롬프트 편집기](https://raw.githubusercontent.com/freeplayai/freeplay-google-demo/refs/heads/main/docs/images/prompt_editor.png)
 
@@ -130,7 +130,7 @@ root_agent = FreeplayLLMAgent(
 )
 ```
 
-```social_product_researcher```가 호출되면 Freeplay에서 프롬프트를 검색하고 적절한 입력 변수로 형식을 지정합니다.
+```social_product_researcher```가 호출되면 Freeplay에서 프롬프트를 가져와 적절한 입력 변수로 포맷팅합니다.
 
 ## 평가
 
@@ -148,7 +148,7 @@ Freeplay로 데이터가 흐르기 시작하면 이러한 로그를 사용하여
 
 ## 일괄 테스트
 
-에이전트를 반복하면서 [프롬프트](https://docs.freeplay.ai/docs/component-level-test-runs) 및 [엔드투엔드](https://docs.freeplay.ai/docs/end-to-end-test-runs) 에이전트 수준 모두에서 일괄 테스트(즉, 오프라인 실험)를 실행할 수 있습니다. 이를 통해 여러 다른 모델 또는 프롬프트 변경 사항을 비교하고 전체 에이전트 실행에서 변경 사항을 정면으로 정량화할 수 있습니다.
+에이전트를 반복 개선하면서 [프롬프트](https://docs.freeplay.ai/docs/component-level-test-runs) 수준과 [엔드투엔드](https://docs.freeplay.ai/docs/end-to-end-test-runs) 에이전트 수준 모두에서 일괄 테스트(오프라인 실험)를 실행할 수 있습니다. 이를 통해 여러 모델이나 프롬프트 변경 사항을 직접 맞비교하고 전체 에이전트 실행에 미치는 영향을 정량화할 수 있습니다.
 
 전체 구현은 ADK로 Freeplay에서 일괄 테스트를 실행하는 일괄 테스트 [코드 예제](https://github.com/freeplayai/freeplay-google-demo/blob/main/examples/example_test_run.py)를 참고하세요.
 

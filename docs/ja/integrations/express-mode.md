@@ -10,7 +10,7 @@ catalog_tags: ["google"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
-`VertexAiSessionService` または `VertexAiMemoryBankService` の利用に興味があるものの、Google Cloudプロジェクトをお持ちでない場合は、Vertex AI Expressモードに登録することで、無料でこれらのサービスにアクセスして試すことができます。対象となる***gmail***アカウントで[こちら](https://console.cloud.google.com/expressmode)から登録できます。Vertex AI Expressモードの詳細については、[概要ページ](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)をご覧ください。
+`VertexAiSessionService` または `VertexAiMemoryBankService` の利用に興味があるものの、Google Cloudプロジェクトをお持ちでない場合は、Vertex AI Expressモードに登録することで、無料でこれらのサービスにアクセスして試すことができます。対象となる Gmail アカウントで[こちら](https://console.cloud.google.com/expressmode)から登録できます。Vertex AI Expressモードの詳細については、[概要ページ](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview)をご覧ください。
 登録後、[APIキー](https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/overview#api-keys)を取得すれば、ローカルのADKエージェントでVertex AIセッションおよびメモリサービスを使い始めることができます！
 
 !!! info Vertex AI Expressモードの制限事項
@@ -112,7 +112,7 @@ memory_service = VertexAiMemoryBankService(agent_engine_id=APP_ID)
     無料のExpressモードプロジェクトの場合、`VertexAiMemoryBankService` には以下の割り当てがあります：
 
     - Vertex AI エージェントエンジンメモリリソースの作成、削除、更新：毎分10回
-    - Vertex AI エージェントエンジンメモリバンクからの取得、一覧表示、検索：毎分10回
+    - Vertex AI エージェントエンジンメモリバンクからの単一取得（Get）、一覧表示、または取得（Retrieve）：毎分10回
 
 ## コードサンプル：Vertex AI Expressモードを使用したセッションとメモリ機能を持つ天気エージェント
 

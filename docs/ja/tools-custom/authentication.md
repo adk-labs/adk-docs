@@ -33,7 +33,7 @@ ADK のヘルパー関数と独自コードで認証を管理する場合は、�
 
 セキュリティ感度が比較的低いエージェントアプリケーションでは、ローカルの暗号化ストレージに資格情報を保存する方法も有効です。専用のローカルシークレット保存システムを使うか、強力な暗号化ライブラリでローカルデータベースのデータを暗号化し、その後にキー管理サービスで暗号化キーを安全に管理してください。実行メモリには短命なアクセストークンのみを保持し、長命な資格情報やリフレッシュトークンは必要なときだけ暗号化されたローカル保存から取得してください。
 
-### メモリ内のシークレット
+### インメモリのシークレット
 
 この方法は、エージェントの初期開発とテストでのみ使うべきです。この方法では、資格情報は現在の `InMemorySessionService` インスタンスに保存されます。データはセッションメモリにのみ存在し、永続化されません。ただし、セッションがどれだけ長く続くか、誰がエージェントにアクセスできるか、実行環境のセキュリティがどの程度かに応じて、この方法のリスクを慎重に検討してください。
 
@@ -47,7 +47,7 @@ ADK フレームワークでは、***AuthScheme***、***AuthCredential***、お�
 
 *   ***BaseCredentialService***: 交換済みの資格情報を ADK が *どこに* 保存するかを制御します。`Runner(credential_service=...)` でランナーに実装を渡してください。ADK は `google.adk.auth.credential_service.in_memory_credential_service` の `InMemoryCredentialService` と、`google.adk.auth.credential_service.session_state_credential_service` の `SessionStateCredentialService` を提供しています。資格情報をセッション状態に保存する場合は、セッションストレージが保存時に暗号化（encryption at rest）されており、信頼できないクライアントに公開されていないことを確認してください。このコンポーネントは実験的であり、将来のリリースで変更される可能性があります。
 
-一般的な認証フローは、ツールを構成するときにこれらの詳細を渡すことから始まります。その後 ADK は、ツールが API を呼び出す前に、初期資格情報、たとえばアクセストークンを自動的に交換しようとします。OAuth 同意のようにユーザー操作が必要なフローでは、ADK が `エージェントクライアント` アプリケーションとともに特定の対話プロセスを開始します。
+一般的な認証フローは、ツールを構成するときにこれらの詳細を渡すことから始まります。その後 ADK は、ツールが API を呼び出す前に、初期資格情報をアクセストークンなどに自動的に交換しようとします。OAuth 同意のようにユーザー操作が必要なフローでは、ADK が **エージェントクライアント** アプリケーションとともに所定の対話プロセスを開始します。
 
 ### サポートされる初期資格情報タイプ
 
@@ -269,7 +269,7 @@ calendar_toolset.configure_auth(
 
 エージェントが制限されたサービス（プライベートな Cloud Run や Cloud Function など）を呼び出す場合、エージェントは権限だけでなく、自身の ID を証明する必要があります。Cloud IAM を使用してアクセスするサービスを呼び出す場合は、ID トークンを使用する必要があります。
 
-* **アクセストークン (デフォルト)**: Google API（Drive、BigQuery など）を呼びします。これは「入館カード」のようなものです。
+* **アクセストークン (デフォルト)**: Google API（Drive、BigQuery など）を呼び出します。これは「入館カード」のようなものです。
     
 * **ID トークン**: IAM で保護された独自サービスを呼び出します。これは「パスポート」のようなものです。
 
@@ -326,7 +326,7 @@ sample_toolset = OpenAPIToolset(
 
 !!! warning "`use_id_token` と `audience` のペアリング"
 
-    常に `use_id_token=True` と `audience` を組み合わせて使用してください。`audience` を指定せずに `use_id_token=True` を設定すると、ADK はエラーを発生させます。逆に `audience` のみを単独で設定すると、ADK は `audience` のセキュリティバインディングを暗黙的に無視し、ID トークンではなくアクセストークンを要求します。
+    常に `use_id_token=True` と `audience` を組み合わせて使用してください。`audience` を指定せずに `use_id_token=True` を設定すると、ADK はエラーを発生させます。逆に `audience` のみを単独で設定すると、ADK は `audience` のセキュリティバインディングを警告なしで無視し、ID トークンではなくアクセストークンを要求します。
 
 #### 外部アクセストークンの使用
 
@@ -404,9 +404,9 @@ class MyAuthenticatedToolset(BaseToolset):
 2番目のケースは、`/run`または`/run_sse`エンドポイントも`runner.run_async`を呼び出すため、最初のケースの特殊なケースです。唯一の違いは次のとおりです。
 
 * エージェントを実行するためにPython関数を呼び出すか（最初のケース）、エージェントを実行するためにサービスエンドポイントを呼び出すか（2番目のケース）。
-* 結果イベントがメモリ内オブジェクト（最初のケース）であるか、http応答のシリアル化されたjson文字列（2番目のケース）であるか。
+* 結果イベントがインメモリオブジェクト（最初のケース）であるか、HTTPレスポンスのシリアライズされたJSON文字列（2番目のケース）であるか。
 
-以下のセクションでは、最初のケースに焦点を当て、2番目のケースに非常に簡単にマッピングできるはずです。必要に応じて、2番目のケースを処理するためのいくつかの違いについても説明します。
+以下のセクションでは最初のケースに焦点を当てますが、2番目のケースにも容易に適用できます。必要に応じて、2番目のケースを処理する際の主な違いについても説明します。
 
 クライアントアプリケーションのステップバイステップのプロセスは次のとおりです。
 
@@ -414,7 +414,7 @@ class MyAuthenticatedToolset(BaseToolset):
 
 * `runner.run_async`を使用してエージェントの対話を開始します。
 * 生成されたイベントを反復処理します。
-* 関数呼び出しに`adk_request_credential`という特別な名前を持つ特定の関数呼び出しイベントを探します。このイベントは、ユーザーの操作が必要であることを示します。ヘルパー関数を使用して、このイベントを識別し、必要な情報を抽出できます。（2番目のケースでは、ロジックは似ています。http応答からイベントを逆シリアル化します。）
+* 関数呼び出しに`adk_request_credential`という特別な名前を持つ特定の関数呼び出しイベントを探します。このイベントは、ユーザーの操作が必要であることを示します。ヘルパー関数を使用して、このイベントを識別し、必要な情報を抽出できます。（2番目のケースでもロジックは同様で、HTTPレスポンスからイベントをデシリアライズします。）
 
 ```py
 
@@ -479,10 +479,10 @@ def get_auth_config(auth_request_function_call: types.FunctionCall) -> AuthConfi
     return auth_config
 ```
 
-**ステップ2：承認のためにユーザーをリダイレクトする**
+**ステップ2：認可のためにユーザーをリダイレクトする**
 
-* 前のステップで抽出した`auth_config`から承認URL（`auth_uri`）を取得します。
-* **重要なことに、アプリケーションの**`redirect_uri`をこの`auth_uri`にクエリパラメータとして追加します。この`redirect_uri`は、OAuthプロバイダー（例：[Google Cloud Console](https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred)、[Okta管理コンソール](https://developer.okta.com/docs/guides/sign-into-web-app-redirect/spring-boot/main/#create-an-app-integration-in-the-admin-console)）に事前に登録されている必要があります。
+* 前のステップで抽出した `auth_config` から認可URL（`auth_uri`）を取得します。
+* **重要:** アプリケーションの `redirect_uri` をこの `auth_uri` にクエリパラメータとして追加します。この `redirect_uri` は、OAuthプロバイダー（例：[Google Cloud Console](https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred)、[Okta管理コンソール](https://developer.okta.com/docs/guides/sign-into-web-app-redirect/spring-boot/main/#create-an-app-integration-in-the-admin-console)）に事前登録されている必要があります。
 * ユーザーをこの完全なURLに誘導します（例：ブラウザーで開きます）。
 
 ```py
@@ -520,7 +520,7 @@ if auth_request_function_call_id and auth_config:
 * `types.FunctionResponse`を含む`types.Part`を含む`types.Content`オブジェクトを作成します。
       * `name`を`"adk_request_credential"`に設定します。（注：これはADKが認証を続行するための特別な名前です。他の名前は使用しないでください。）
       * `id`を保存した`auth_request_function_call_id`に設定します。
-      * `response`を*シリアル化された*（例：`.model_dump()`）更新された`AuthConfig`オブジェクトに設定します。
+      * `response`を*シリアライズされた*（例：`.model_dump()`）更新済みの`AuthConfig`オブジェクトに設定します。
 * この`FunctionResponse`コンテンツを`new_message`として渡して、同じセッションに対して`runner.run_async`を**再度**呼び出します。
 
 ```py
@@ -709,13 +709,13 @@ def my_authenticated_tool_function(tool_context: ToolContext) -> dict:
 # By setting request_credential, ADK detects a pending authentication event. It pauses execution and ask end user to login.
 ```
 
-**ステップ4：認証コードをトークンに交換する**
+**ステップ4：認可コードをトークンに交換する**
 
-ADKは自動的にoauth認証URLを生成し、エージェントクライアントアプリケーションに提示します。エージェントクライアントアプリケーションは、ジャーニー1で説明したのと同じ方法でユーザーを認証URL（`redirect_uri`が追加されています）にリダイレクトする必要があります。ユーザーが認証URLに従ってログインフローを完了し、ADKがエージェントクライアントアプリケーションから認証コールバックURLを抽出すると、自動的に認証コードを解析し、認証トークンを生成します。次のツール呼び出しで、ステップ2の`tool_context.get_auth_response`には、後続のAPI呼び出しで使用する有効な資格情報が含まれます。
+ADKは自動的にOAuth認可URLを生成し、**エージェントクライアント**アプリケーションに提示します。**エージェントクライアント**アプリケーションは、[認証済みツールを使用したエージェントアプリケーションの構築](#2-oauthoidc)で説明したのと同じ方法で、ユーザーを認可URL（`redirect_uri`を追加したもの）にリダイレクトする必要があります。ユーザーがログインフローを完了し、ADKが**エージェントクライアント**アプリケーションから認証コールバックURLを受け取ると、自動的に認可コードを解析して認証トークンを生成します。次のツール呼び出しでは、ステップ2の`tool_context.get_auth_response`に、後続のAPI呼び出しで使用できる有効な資格情報が含まれます。
 
 **ステップ5：取得した資格情報をキャッシュする**
 
-ADKからトークンを正常に取得した後（ステップ2）、またはトークンがまだ有効な場合（ステップ1）、**すぐに**新しい`Credentials`オブジェクトを`tool_context.state`（シリアル化済み、例：JSON）にキャッシュキーを使用して**保存**します。
+ADKからトークンを正常に取得した後（ステップ2）、またはトークンがまだ有効な場合（ステップ1）、新しい`Credentials`オブジェクトをシリアライズ（例：JSON形式）して、キャッシュキーを使い**直ちに**`tool_context.state`へ**保存**します。
 
 ```py
 # ツール関数内、'creds'を取得した後（更新または新規交換）

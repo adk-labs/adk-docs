@@ -5,25 +5,25 @@ catalog_icon: /integrations/assets/parameter_manager.png
 catalog_tags: ["google"]
 ---
 
-# ADK를 위한 Parameter Manager 연동
+# ADK용 Parameter Manager 연동
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK 지원</span><span class="lst-python">Python v1.30.0</span>
 </div>
 
-[Google Cloud Parameter Manager](https://docs.cloud.google.com/secret-manager/parameter-manager/docs/overview) 연동은 Agent Development Kit (ADK) 에이전트가 Google Cloud Parameter Manager 서비스에 연결하여 런타임에 렌더링된 매개변수 값을 가져올 수 있는 표준 인터페이스를 제공합니다. 이 모듈을 사용하면 Google Cloud Parameter Manager 서비스를 에이전트 지시사항(instruction) 및 도구 구성의 단일 소스(single source of truth)로 사용할 수 있습니다.
+[Google Cloud Parameter Manager](https://docs.cloud.google.com/secret-manager/parameter-manager/docs/overview) 연동은 Agent Development Kit (ADK) 에이전트가 Google Cloud Parameter Manager 서비스에 연결하여 런타임에 렌더링된 매개변수 값을 가져올 수 있는 표준 인터페이스를 제공합니다. 이 모듈을 사용하면 Google Cloud Parameter Manager 서비스를 에이전트 지침(instruction) 및 도구 구성의 단일 진실 공급원(single source of truth)으로 사용할 수 있습니다.
 
 ## 주요 사용 사례
 
 Parameter Manager 연동은 다음과 같은 작업을 지원합니다:
 
-*   **동적 지시사항 업데이트 (Dynamic instruction updates)**: 코드를 다시 배포하지 않고도 프롬프트 주입 공격을 차단하고, 필수 면책 조항(disclaimer) 리소스를 업데이트하거나, 에이전트의 톤을 즉시 조정할 수 있도록 매개변수를 실시간으로 발행할 수 있습니다.
-*   **기능 플래그 및 매개변수 관리 (Feature flag and parameter management)**: 구성을 JSON 페이로드로 저장하고 도구 컨텍스트를 통해 가져와 쿼리 속도를 낮추거나, 테스트용 API 엔드포인트와 프로덕션용 API 엔드포인트 간의 전환을 수행할 수 있습니다.
-*   **입출력 쌍을 통한 정확도 향상 (Accuracy improvement with input and output pairs)**: 퓨샷(few-shot) 예시를 YAML 파일로 저장하고 이를 세션 상태에 로드하여 에이전트의 성능을 점진적으로 향상시킬 수 있습니다.
-*   **도구 실시간 권한 부여 (Just-in-time tool authorization)**: 초기화 코드에 안전하지 않은 정적 API 키를 사용하는 대신, 필요에 따라 보안 비밀번호(secret)를 메모리에 실시간으로 로드할 수 있습니다.
-*   **보안 다중 테넌트 워크플로 (Secure multi-tenant workflows)**: 사용자에 매핑되는 Parameter Manager ID를 저장하고 콜백을 사용하여 확인된 OAuth 토큰으로 세션 상태를 복원할 수 있습니다.
-*   **암호화된 시스템 작업 (Encrypted system tasks)**: 백그라운드 폴링 작업 중에 메인 데이터베이스 비밀번호가 LLM 대화 기록에 노출되는 것을 방지합니다.
-*   **다중 지역 배포 (Multi-region deployments)**: 전역 배포 시 공유 로직을 유지하면서, 지역별 Parameter Manager 재정의(override)를 사용하여 현지 통화 및 연락처 정보를 적용할 수 있습니다.
+*   **동적 지침 업데이트**: 코드를 다시 배포하지 않고도 프롬프트 인젝션 공격을 차단하고, 필수 고지 사항(disclaimer) 리소스를 업데이트하거나, 에이전트의 톤을 즉시 조정할 수 있도록 매개변수를 실시간으로 배포할 수 있습니다.
+*   **기능 플래그 및 매개변수 관리**: 구성을 JSON 페이로드로 저장하고 도구 컨텍스트를 통해 가져와 쿼리 속도를 조절하거나, 테스트용 API 엔드포인트와 프로덕션용 API 엔드포인트 간을 전환할 수 있습니다.
+*   **입출력 쌍을 통한 정확도 향상**: 퓨샷(few-shot) 예시를 YAML 파일로 저장하고 이를 세션 상태에 로드하여 에이전트의 성능을 점진적으로 개선할 수 있습니다.
+*   **적시(Just-in-time) 도구 권한 부여**: 초기화 코드에 보안에 취약한 정적 API 키를 넣는 대신, 필요할 때 보안 비밀번호(secret)를 메모리에 온디맨드로 로드할 수 있습니다.
+*   **안전한 멀티 테넌트 워크플로**: 사용자에게 매핑되는 Parameter Manager ID를 저장하고 콜백을 사용하여 검증된 OAuth 토큰으로 세션 상태를 복원할 수 있습니다.
+*   **암호화된 시스템 작업**: 백그라운드 폴링 작업 중에 메인 데이터베이스 비밀번호가 LLM 대화 기록에 유출되는 것을 방지합니다.
+*   **다중 리전 배포**: 글로벌 배포 시 공통 로직을 유지하면서 리전별 Parameter Manager 재정의(override)를 사용하여 현지 통화 및 연락처 정보를 적용할 수 있습니다.
 
 ## 사전 요구사항
 

@@ -85,15 +85,15 @@ root = Agent(
 <table>
   <thead>
     <tr>
-      <th><strong>Topic \ Mode</strong></th>
-      <th><code>chat</code> (default)</th>
+      <th><strong>項目 \ モード</strong></th>
+      <th><code>chat</code>（デフォルト）</th>
       <th><code>task</code></th>
       <th><code>single_turn</code></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Human in the Loop</strong></td>
+      <td><strong>Human-in-the-Loop（人間の介入）</strong></td>
       <td>完全な対話</td>
       <td>明確化のみ</td>
       <td>許可されない</td>
@@ -159,8 +159,8 @@ Workflow Agent のグラフノードとしても、***LlmAgent*** インスタ�
 <table>
   <thead>
     <tr>
-      <th><strong>Invocation Context</strong></th>
-      <th><strong>After Task Completion</strong></th>
+      <th><strong>呼び出しコンテキスト</strong></th>
+      <th><strong>タスク完了後の動作</strong></th>
     </tr>
   </thead>
   <tbody>
@@ -184,7 +184,7 @@ Workflow Agent のグラフノードとしても、***LlmAgent*** インスタ�
 各 ***task*** または ***single-turn*** モードのエージェントは、自身の分離
 されたセッションブランチで動作します。これらのエージェントが並列で動作する
 場合、各エージェントは AI モデル呼び出し用のコンテキストを構築するときに、
-自分自身のブランチ上のイベントしか参照できず、同僚エージェントが何をして
+自分自身のブランチ上のイベントしか参照できず、他のピアエージェントが何をして
 いるかは見えません。すべての並列ブランチが完了すると、親エージェントが
 結果を収集して次の処理へ進めます。
 
@@ -192,5 +192,5 @@ Workflow Agent のグラフノードとしても、***LlmAgent*** インスタ�
 
 エージェント協調モードには、いくつかの既知の制限があります。
 
-- ***Task* mode agents** はリーフエージェントでなければならず、
+- **Task モードのエージェント**（`mode="task"`）はリーフエージェントでなければならず、
   サブエージェントを持てません。

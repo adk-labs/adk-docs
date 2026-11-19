@@ -82,7 +82,7 @@ hide:
 
 ツール | 説明
 ---- | -----------
-Spacesセマンティック検索 | 自然言語クエリを介して最高のAIアプリを検索
+Spacesセマンティック検索 | 自然言語クエリを介して最適なAIアプリを検索
 論文セマンティック検索 | 自然言語クエリを介してML研究論文を検索
 モデル検索 | タスク、ライブラリなどでフィルタリングしてMLモデルを検索
 データセット検索 | 作成者、タグなどでフィルタリングしてデータセットを検索
@@ -101,9 +101,9 @@ Hugging Face Hub MCPサーバーで利用可能なツールを構成するには
 - stdioトランスポートで実行している場合、`DEFAULT_HF_TOKEN`が設定されていない場合は`HF_TOKEN`が使用されます。
 - `HF_API_TIMEOUT`: Hugging Face APIリクエストのタイムアウト（ミリ秒）（デフォルト：12500ms / 12.5秒）
 - `USER_CONFIG_API`: ユーザー設定に使用するURL（デフォルトはローカルフロントエンド）
-- `MCP_STRICT_COMPLIANCE`: JSONモードでのGET 405拒否に対してTrueに設定（デフォルトはウェルカムページを提供）
+- `MCP_STRICT_COMPLIANCE`: JSONモードでGETリクエストを405エラーで拒否する場合は `true` に設定（デフォルトではウェルカムページを提供します）
 - `AUTHENTICATE_TOOL`: 呼び出されたときにOAuthチャレンジを発行する認証ツールを含めるかどうか
-- `SEARCH_ENABLES_FETCH`: trueに設定すると、hf_doc_searchが有効になっているときはいつでもhf_doc_fetchツールが自動的に有効になります。
+- `SEARCH_ENABLES_FETCH`: `true` に設定すると、`hf_doc_search` が有効になっている場合に `hf_doc_fetch` ツールも自動的に有効になります。
 
 
 ## 追加リソース

@@ -221,7 +221,7 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
 
 === "TypeScript"
 
-    브랜칭에는 `route` 값을 방출하는 노드와 각 라우트 값을 처리하는 노드에 매핑하는 edge 행이 필요합니다. 라우트 값은 문자열, 숫자 또는 불리언일 수 있습니다. `DEFAULT_ROUTE` 설정은 동일한 소스 노드의 다른 어떤 라우트와도 일치하지 않을 때 매칭됩니다. 브랜치 대상은 모든 노드 유사(node-like) 값이 될 수 있습니다. 이 예제에서 `taskBNode`는 `LlmAgent`이고 `taskCNode`는 함수입니다.
+    브랜칭에는 `route` 값을 방출하는 노드와 각 라우트 값을 처리할 노드에 매핑하는 에지(edge) 행이 필요합니다. 라우트 값은 문자열, 숫자 또는 불리언일 수 있습니다. `DEFAULT_ROUTE` 설정은 동일한 소스 노드의 다른 어떤 라우트와도 일치하지 않을 때 매칭됩니다. 브랜치 대상은 노드로 사용할 수 있는 모든 객체가 될 수 있습니다. 이 예제에서 `taskBNode`는 `LlmAgent`이고 `taskCNode`는 함수입니다.
 
     ```typescript
     --8<-- "examples/typescript/snippets/graphs/routes/branches.ts:branches"
@@ -285,7 +285,7 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
     --8<-- "examples/kotlin/snippets/graphs/routes/Branches.kt:branches"
     ```
 
-## 병렬 작업: Fan-out 및 Join 경로
+## 병렬 작업: Fan-out 및 Join 경로 {#parallel-tasks-fan-out-and-join-paths}
 
 여러 병렬 노드에 걸쳐 실행을 분할하는 그래프를 만들 수 있으며, 일반적으로 추가 처리를 위해 각 노드의 출력을 모아야 합니다. 이 작업 실행 패턴에는 두 단계가 있습니다. 워크플로는 먼저 여러 병렬 작업을 시작할 때 팬아웃(fan out)하고, 해당 작업들이 완료되면 다음 단계로 진행하기 전에 경로들을 다시 조인(join)합니다.
 
@@ -429,9 +429,9 @@ ADK의 그래프 기반 워크플로는 에이전트 로직을 실행 노드와 
     --8<-- "examples/kotlin/snippets/graphs/routes/NestedWorkflow.kt:nested-workflow"
     ```
 
-## 루프 및 에스컬레이션 종료
+## 루프 및 에스컬레이션 종료 {#loop-and-escalation-exit}
 
-루프는 종료 조건이 충족될 때까지 일련의 단계를 반복합니다. Python에서는 이전 노드로 다시 라우팅되는 `edges` 그래프의 역방향 에지(back-edge)로 표현됩니다. ADK Go v2.0.0에서도 그래프 엔진이 동일한 패턴을 직접 지원합니다. 라우트 조건과 함께 다운스트림 노드에서 이전 노드로 돌아가는 에지를 추가하면, 엔진이 각 반복마다 새로운 수명 주기로 대상 노드를 다시 활성화합니다.
+루프는 종료 조건이 충족될 때까지 일련의 단계를 반복합니다. Python에서는 이전 노드로 다시 라우팅되는 `edges` 그래프의 역방향 에지(back-edge)로 표현됩니다. ADK Go v2.0.0에서도 그래프 엔진이 동일한 패턴을 직접 지원합니다. 라우트 조건과 함께 다운스트림 노드에서 이전 노드로 돌아가는 에지를 추가하면, 엔진이 각 반복마다 새로운 라이프사이클로 대상 노드를 다시 활성화합니다.
 
 === "Python"
 

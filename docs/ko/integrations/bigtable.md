@@ -25,7 +25,7 @@ catalog_tags: ["data", "google"]
 
 ## 설치
 
-Bigtable 도구는 기본 `google-adk` 설치에 포함되지 않는 Google Cloud 클라이언트 라이브러리에 의존합니다. `gcp` extra와 함께 설치하세요:
+Bigtable 도구는 기본 `google-adk` 설치에 포함되지 않는 Google Cloud 클라이언트 라이브러리에 의존합니다. `gcp` 부가 패키지(extra)와 함께 설치하세요:
 
 ```bash
 pip install "google-adk[gcp]"

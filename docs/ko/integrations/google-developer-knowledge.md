@@ -99,7 +99,7 @@ Google Cloud 프로젝트에서 Developer Knowledge MCP 서버를 사용하도�
 | 도구 이름 | 설명 |
 |---|---|
 | `search_documents` | Google의 개발자 문서를 검색해 질의와 관련된 페이지와 발췌를 찾습니다 |
-| `get_documents` | 검색 결과의 상위 참조를 사용해 여러 문서의 전체 페이지 내용을 가져옵니다 |
+| `get_documents` | 검색 결과의 상위 문서 참조(parent reference)를 사용해 여러 문서의 전체 페이지 내용을 가져옵니다 |
 
 ## 추가 자료
 

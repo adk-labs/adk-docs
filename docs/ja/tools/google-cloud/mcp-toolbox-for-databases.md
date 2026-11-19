@@ -23,7 +23,7 @@ MCPツールボックスは、次のデータベースとデータプラット�
 *   [BigQuery](https://googleapis.github.io/genai-toolbox/resources/sources/bigquery/)（SQL実行、スキーマ検出、AIを活用した時系列予測用のツールを含む）
 *   [AlloyDB](https://googleapis.github.io/genai-toolbox/resources/sources/alloydb-pg/)（PostgreSQL互換、標準クエリと自然言語クエリの両方のツールを含む）
 *   [AlloyDB Admin](https://googleapis.github.io/genai-toolbox/resources/sources/alloydb-admin/)
-*   [Spanner](https://googleapis.github.io/genai-toolbox/resources/sources/spanner/)（GoogleSQLとPostgreSQLの両方のダイアлектをサポート）
+*   [Spanner](https://googleapis.github.io/genai-toolbox/resources/sources/spanner/)（GoogleSQLとPostgreSQLの両方のダイアレクトをサポート）
 *   Cloud SQL（[Cloud SQL for PostgreSQL](https://googleapis.github.io/genai-toolbox/resources/sources/cloud-sql-pg/)、[Cloud SQL for MySQL](https://googleapis.github.io/genai-toolbox/resources/sources/cloud-sql-mysql/)、[Cloud SQL for SQL Server](https://googleapis.github.io/genai-toolbox/resources/sources/cloud-sql-mssql/)の専用サポートを含む）
 *   [Cloud SQL Admin](https://googleapis.github.io/genai-toolbox/resources/sources/cloud-sql-admin/)
 *   [Firestore](https://googleapis.github.io/genai-toolbox/resources/sources/firestore/)
@@ -58,16 +58,16 @@ MCPツールボックスは、次のデータベースとデータプラット�
 
 ### データプラットフォームとフェデレーション
 
-*   [Looker](https://googleapis.github.io/genai-toolbox/resources/sources/looker/)（Looker APIを介したLook、クエリ、ダッシュボードの構築の実行用）
+*   [Looker](https://googleapis.github.io/genai-toolbox/resources/sources/looker/)（Looker APIを介したLookやクエリの実行、ダッシュボードの構築用）
 *   [Trino](https://googleapis.github.io/genai-toolbox/resources/sources/trino/)（複数のソースにまたがるフェデレーションクエリの実行用）
 
 ### その他
 
 *   [HTTP](https://googleapis.github.io/genai-toolbox/resources/sources/http/)
 
-## 構成と展開
+## 構成とデプロイ
 
-ツールボックスは、自分で展開および管理するオープンソースサーバーです。展開と構成の詳細については、公式のツールボックスドキュメントを参照してください。
+ツールボックスは、自分でデプロイおよび管理するオープンソースサーバーです。デプロイと構成の詳細については、公式のツールボックスドキュメントを参照してください。
 
 * [サーバーのインストール](https://googleapis.github.io/genai-toolbox/getting-started/introduction/#installing-the-server)
 * [ツールボックスの構成](https://googleapis.github.io/genai-toolbox/getting-started/configure/)
@@ -76,7 +76,7 @@ MCPツールボックスは、次のデータベースとデータプラット�
 
 === "Python"
 
-    ADKは、ツールボックスを使用するために`toolbox-core` pythonパッケージに依存しています。開始する前にパッケージをインストールしてください。
+    ADKは、ツールボックスを使用するために`toolbox-core` Pythonパッケージに依存しています。開始する前にパッケージをインストールしてください。
 
     ```shell
     pip install toolbox-core
@@ -106,7 +106,7 @@ MCPツールボックスは、次のデータベースとデータプラット�
 
 === "Go"
 
-    ADKは、ツールボックスを使用するために`mcp-toolbox-sdk-go` goモジュールに依存しています。開始する前にモジュールをインストールしてください。
+    ADKは、ツールボックスを使用するために`mcp-toolbox-sdk-go` Goモジュールに依存しています。開始する前にモジュールをインストールしてください。
 
     ```shell
     go get github.com/googleapis/mcp-toolbox-sdk-go
@@ -167,6 +167,6 @@ MCPツールボックスは、次のデータベースとデータプラット�
 
 ツールボックスには、データベース向けのGen AIツールを開発するためのさまざまな機能があります。詳細については、次の機能について詳しくお読みください。
 
-* [認証済みパラメータ](https://googleapis.github.io/genai-toolbox/resources/tools/#authenticated-parameters): ツール入力をOIDCトークンの値に自動的にバインドし、機密性の高いクエリをデータ漏洩の可能性なく簡単に実行できるようにします
-* [承認済み呼び出し:](https://googleapis.github.io/genai-toolbox/resources/tools/#authorized-invocations)  ユーザーの認証トークンに基づいてツールを使用するためのアクセスを制限します
-* [OpenTelemetry](https://googleapis.github.io/genai-toolbox/how-to/export_telemetry/): OpenTelemetryを使用してツールボックスからメトリックとトレースを取得します
+* [認証済みパラメータ](https://googleapis.github.io/genai-toolbox/resources/tools/#authenticated-parameters): ツール入力をOIDCトークンの値に自動的にバインドし、機密性の高いクエリをデータ漏洩の可能性なく簡単に実行できるようにします。
+* [認可された呼び出し](https://googleapis.github.io/genai-toolbox/resources/tools/#authorized-invocations): ユーザーの認証トークンに基づいてツールを使用するためのアクセスを制限します。
+* [OpenTelemetry](https://googleapis.github.io/genai-toolbox/how-to/export_telemetry/): OpenTelemetryを使用してツールボックスからメトリクスとトレースを取得します。

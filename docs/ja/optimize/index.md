@@ -5,8 +5,8 @@
 </div>
 
 ADK は、評価結果に基づいてエージェントを自動最適化するための拡張可能なフレームワークを提供します。
-標準では、`adk optimize` コマンドを使って、デフォルトのオプティマイザーで ADK 評価結果に基づくシンプルなエージェントをすばやく最適化できます。
-より複雑なユースケースでは、カスタム eval データを使うサンプラーを開発したり、新しい最適化戦略を実装したりできます。
+標準で用意されている `adk optimize` コマンドを使えば、デフォルトのオプティマイザーを使用して ADK の評価結果に基づきシンプルなエージェントをすばやく最適化できます。
+より複雑なユースケースでは、カスタム eval のデータを使うサンプラーを開発したり、新しい最適化戦略を実装したりできます。
 
 ### 定義
 
@@ -146,7 +146,7 @@ Optimized root agent instructions:
 adk optimize [OPTIONS] AGENT_MODULE_FILE_PATH
 ```
 
-* `AGENT_MODULE_FILE_PATH`: ファイルではなくエージェントディレクトリへのパス。そのディレクトリの `__init__.py` は `agent` という名前のモジュールを公開します。
+* `AGENT_MODULE_FILE_PATH`: ファイルではなくエージェントディレクトリへのパス。そのディレクトリの `__init__.py` で `agent` という名前のモジュールを提供している必要があります。
 `agent` モジュールには `root_agent` が含まれていなければなりません。
 有効なセットアップ例として、[`hello_world`](https://github.com/google/adk-python/tree/main/contributing/samples/hello_world) エージェントを参照してください。
 * `--sampler_config_file_path PATH`: サンプラーの設定ファイルへのパスです。
@@ -159,7 +159,9 @@ adk optimize [OPTIONS] AGENT_MODULE_FILE_PATH
 デフォルトは `INFO` です。
 有効な値は `DEBUG`、`INFO`、`WARNING`、`ERROR`、`CRITICAL` です。
 
-ADKは、adk optimizeコマンドラインを使用して実行できるいくつかのサンプラーとエージェントオプティマイザーを提供しています。利用可能なオプションは以下の通りです。
+## 利用可能なサンプラーとエージェントオプティマイザー
+
+ADK は、`adk optimize` コマンドラインを使用して実行できるいくつかのサンプラーとエージェントオプティマイザーを提供しています。利用可能なオプションは以下の通りです。
 
 ### `LocalEvalSampler` {#localevalsampler}
 
@@ -173,7 +175,7 @@ ADKは、adk optimizeコマンドラインを使用して実行できるいく�
 * `train_eval_case_ids`（任意）: 最適化に使う eval case（example）の ID です。
 指定しない場合は `train_eval_set` のすべての eval case が使われます。
 * `validation_eval_set`（任意）: 最適化済みエージェントの検証に使う eval セット名です。
-指定しない場合は `train_eval_set` が再利用されます.
+指定しない場合は `train_eval_set` が再利用されます。
 * `validation_eval_case_ids`（任意）: 最適化済みエージェントの検証に使う eval case（example）の ID です。
 指定しない場合は `validation_eval_set` のすべての eval case が使われます。
 `validation_eval_set` も指定されていない場合は、実質的に train eval case が再利用されます。
@@ -214,16 +216,18 @@ ADKは、adk optimizeコマンドラインを使用して実行できるいく�
 
 **注意:** 最適化ループは、既存のエージェントインスタンスをインプレースで変更（mutate）しません。完了すると、プロセス中に抽出された最も高いスコアを持つエージェントバリエーションを含む `OptimizerResult` を返します。
 
-### 設定
+#### 設定
 
 `SimplePromptOptimizerConfig` インスタンスをオプティマイザーに渡すことで、ループの動作を設定します。
 
-| パラメータ | 型 | デフォルト値 | 説明 |
+| パラメータ | 型 | デフォルト | 説明 |
 | :---- | :---- | :---- | :---- |
-| `num_iterations` | int | *必須* | 実行する最適化ラウンドの総数。 |
-| `batch_size` | int | *必須* | 各反復においてサンプラーが処理する評価サンプルケースの数。 |
+| `num_iterations` | int | `10` | 実行する最適化ラウンドの総数。 |
+| `batch_size` | int | `5` | 各反復においてサンプラーが処理する評価サンプルケースの数。 |
+| `optimizer_model` | str | `"gemini-2.5-flash"` | 現在のプロンプトを批判（分析）し、次のプロンプトを生成するために使用するモデル。 |
+| `model_configuration` | GenerateContentConfig | 10K トークンの thinking budget | オプティマイザーモデルの設定。 |
 
-### 実装例
+#### 実装例
 
 設定が定義されたら、以下のコードで最適化を実行します。
 
@@ -256,7 +260,7 @@ ADK は、サンプラーからオプティマイザーへの eval データの�
 サンプラー出力の基礎クラスです。
   * example UID を、その例に対するエージェントの全体スコアへ対応付ける `scores` 辞書を含む必要があります。
 * [`UnstructuredSamplingResult`](https://github.com/google/adk-python/blob/main/src/google/adk/optimization/data_types.py):
-`SamplingResult` の組み込みサブクラスで、トラジェクトリ、中間出力、サブメトリクスなどの、非構造化かつ各例ごとの JSON 直列化可能な評価データを保持する任意の `data` フィールドを追加します。
+`SamplingResult` の組み込みサブクラスで、トラジェクトリ、中間出力、サブメトリクスなどの、非構造化かつ各例ごとの JSON シリアライズ可能な評価データを保持する任意の `data` フィールドを追加します。
 
 多くのユースケースでは `UnstructuredSamplingResult` を使えます。
 代わりに、より構造化された形式で追加評価データを返す独自の `SamplingResult` サブクラスを作成することもできます。
@@ -273,9 +277,9 @@ ADK は、サンプラーからオプティマイザーへの eval データの�
   * `optimized_agents` のリストを含む必要があります（要素は `AgentWithScores` またはそのサブクラス）。
   複数メトリクスでエージェントの最適性を測る場合、パレートフロンティアを表現するために複数エントリが必要になることがあります。
 
-候補の最適化済みエージェントについて細かなメトリクスを公開するために、`AgentWithScores` の独自サブクラスを作成できます。
+候補の最適化済みエージェントについて細かなメトリクスを提供するために、`AgentWithScores` の独自サブクラスを作成できます。
 たとえば、正確性、安全性、整合性などを別々に採点したい場合があります。
-同様に、`OptimizerResult` の独自サブクラスを作成して、オプティマイザーの最適化プロセス全体に関するメトリクス（評価した候補数、総評価数など）を公開できます。
+同様に、`OptimizerResult` の独自サブクラスを作成して、オプティマイザーの最適化プロセス全体に関するメトリクス（評価した候補数、総評価数など）を提供できます。
 
 ## 新しいサンプラーとエージェントオプティマイザーの作成と利用
 

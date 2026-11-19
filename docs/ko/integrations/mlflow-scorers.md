@@ -20,9 +20,9 @@ ADK 에이전트를 트레이싱하고 있다면, 한 줄의 코드로 OTel 자�
 - **도구 궤적 평가 (Tool trajectory evaluation)**: 에이전트가 올바른 도구를 올바른 순서로 호출했는지 `EXACT`, `IN_ORDER`, 또는 `ANY_ORDER` 일치 방식으로 검증합니다.
 - **응답 유사도 (Response similarity)**: ROUGE-1 F-measure를 사용하여 기준 답변에 대해 에이전트의 최종 응답 점수를 매깁니다.
 - **LLM 판단 응답 품질 (LLM-judged response quality)**: 다수결 투표 방식을 통해 Gemini가 에이전트의 응답과 예상 응답이 의미론적으로 일치하는지 평가하도록 합니다.
-- **환각 감지 (Hallucination detection)**: Gemini를 사용하여 에이전트의 응답에 왜곡되거나 조작된 사실이 포함되어 있는지 평가합니다.
+- **할루시네이션(환각) 감지 (Hallucination detection)**: Gemini를 사용하여 에이전트의 응답에 왜곡되거나 지어낸 사실이 포함되어 있는지 평가합니다.
 - **안전성 검사 (Safety checks)**: 별도의 판단 모델을 관리하지 않고 Vertex AI의 사전 구축된 SAFETY 메트릭을 사용하여 안전하지 않은 출력을 플래깅합니다.
-- **평가 방식 혼합 (Mix-and-match scoring)**: 단일 `mlflow.genai.evaluate()` 호출에서 결정론적 스코어러와 LLM 판단을 함께 실행하여, 비용이 많이 드는 판단 모델 호출 하위에 저렴한 구조적 검사들을 배치합니다.
+- **평가 방식 혼합 (Mix-and-match scoring)**: 단일 `mlflow.genai.evaluate()` 호출에서 결정론적 스코어러와 LLM 판단을 함께 실행하여, 저비용의 구조적 검사와 고비용의 판단 모델 호출을 함께 계층화해 구성합니다.
 
 ## 사전 요구사항
 
@@ -46,7 +46,7 @@ pip install "mlflow>=3.13" google-adk
 | `ResponseMatch` | 실제 응답과 예상 응답 간의 어휘적 유사성 (ROUGE-1 F-measure) | `RougeEvaluator` |
 | `ResponseEvaluation` | 최종 응답이 예상 응답과 의미론적으로 일치하는지 여부 (LLM judge) | `FinalResponseMatchV2Evaluator` |
 | `Safety` | 응답에 안전하지 않은 콘텐츠가 포함되어 있는지 여부 | `SafetyEvaluatorV1` (Vertex AI 관리형) |
-| `Hallucination` | 응답에 환각(왜곡된) 콘텐츠가 포함되어 있는지 여부 (LLM judge) | `HallucinationsV1Evaluator` |
+| `Hallucination` | 응답에 할루시네이션(환각) 콘텐츠가 포함되어 있는지 여부 (LLM judge) | `HallucinationsV1Evaluator` |
 
 `ToolTrajectory`와 `ResponseMatch`는 마이크로초 단위로 실행되며 API 비용이 발생하지 않습니다. `ResponseEvaluation`과 `Hallucination`은 5회 샘플 다수결 투표 방식을 통해 기본 Gemini Flash 판단 모델을 호출하며, 모델과 샘플 횟수 모두 구성 가능합니다. 단, `Safety`는 예외적으로 자체 모델 선택을 관리하는 Vertex AI의 사전 구축된 SAFETY 메트릭을 통해 작동하므로, `model`이나 `num_samples`를 전달하면 `TypeError`가 발생합니다.
 

@@ -14,7 +14,7 @@ ADK 문서를 연결해 코딩 에이전트에 ADK 전문성을 제공하세요.
 
 [Agents CLI](https://google.github.io/agents-cli/) 도구 세트를 사용하면 Antigravity, Claude Code, Cursor 및 기타 AI 코딩 도구를 포함하여 즐겨 사용하는 AI 코딩 환경에 ADK 에이전트 전문성을 연결할 수 있습니다. 현재 사용 중인 AI 기반 개발 환경에 Agents CLI를 설치하여 ADK 에이전트를 스캐폴딩, 빌드, 테스트, 평가 및 배포하세요. 다음과 같은 Agents CLI 스킬로 개발 환경을 보완할 수 있습니다.
 
-*   개발 수명 주기 및 코딩 가이드라인
+*   개발 라이프사이클 및 코딩 가이드라인
 *   프로젝트 스캐폴딩
 *   평가 방법론 및 점수화
 *   Agent Runtime, Cloud Run 및 GKE 배포
@@ -109,7 +109,7 @@ claude mcp add adk-docs --transport stdio -- uvx --from mcpdoc --with "mcp<2" mc
 !!! note "MCP 버전 설정"
     `mcp<2` 제약 조건 설정은 `mcpdoc`이 현재 사용 중인 MCP 1.x FastMCP API와의 호환성을 유지하도록 합니다.
 
-### Other Tools
+### 기타 도구 {#other-tools}
 
 MCP 서버를 지원하는 모든 코딩 도구는 위와 같은 서버 구성을 사용할 수
 있습니다. 사용하는 도구의 MCP 설정에 맞게 Antigravity 또는 Cursor

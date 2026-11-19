@@ -8,7 +8,7 @@ ADK エージェントは、幅広い機能を提供する [Google Gemma](https:
 や [構造化出力](/agents/llm-agents/#data-handling) を含む多くの Gemma 機能をサポートしています。
 
 Gemma 4 は [Gemini API](https://ai.google.dev/gemini-api/docs) 経由で利用できるほか、
-Google Cloud 上のさまざまなセルフホスティング विकल्पでも利用できます:
+Google Cloud 上のさまざまなセルフホスティングの選択肢でも利用できます:
 [Vertex AI](https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemma4)、
 [Google Kubernetes Engine](https://docs.cloud.google.com/kubernetes-engine/docs/tutorials/serve-gemma-gpu-vllm)、
 [Cloud Run](https://docs.cloud.google.com/run/docs/run-gemma-on-cloud-run)。
@@ -316,11 +316,11 @@ Food Tour Agent の機能を試すには、次のプロンプトをチャット�
 
 - *"トロントでラーメンツアーをしたいです。1日の予算は60ドルです。上位3スポットの徒歩ルートを作って、それぞれで何を注文すべきか教えてください。"*
 - *"このディープディッシュピザの写真 [画像URLを挿入] があります。シカゴの Navy Pier 周辺でこれに最適な場所を見つけたいです。徒歩ツアーを構成して、各立ち寄り先で必食の一切れを教えてください。"*
-- *"ダウンタウン・オースティンで本格的な BBQ ツアーを探しています。予算は100ドル以下に抑えたいです。評価の高い3か所をつなぐ徒歩ルートを作り、最高の肉の部位についての内部情報を教えてください。"*
+- *"ダウンタウン・オースティンで本格的な BBQ ツアーを探しています。予算は100ドル以下に抑えたいです。評価の高い3か所をつなぐ徒歩ルートを作り、最高の肉の部位についての通向けのヒントを教えてください。"*
 
 エージェントは次のことを行います。
 
 1. 可能性の高い料理や料理スタイルを推測します。
 2. Google Maps MCP ツールを使って関連する場所を検索します。
 3. 選択した立ち寄り先の間の徒歩ルートを計算します。
-4. 推薦と内部情報を含む構造化されたフードツアーを返します。
+4. おすすめスポットと通向けのヒントを含む構造化されたフードツアーを返します。

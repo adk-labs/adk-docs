@@ -159,13 +159,13 @@ UI에 다음 프롬프트를 입력하여 테스트해 보세요.
 * What is the weather in Paris? (파리의 날씨는 어때?)
 * What is the time in Paris? (파리는 지금 몇 시야?)
 
-에이전트는 google_search 도구를 사용하여 최신 정보를 가져와 질문에 답변할 것입니다.
+에이전트는 `google_search` 도구를 사용하여 최신 정보를 가져와 질문에 답변합니다.
 
 ### 음성 및 비디오로 체험하기
 
 음성을 시도하려면 웹 브라우저를 새로고침하고, 마이크 버튼을 클릭하여 음성 입력을 활성화한 뒤, 동일한 질문을 음성으로 물어보세요. 실시간으로 음성 답변을 들을 수 있습니다.
 
-비디오를 시도하려면 웹 브라우저를 새로고침하고, 카메라 버튼을 클릭하여 비디오 입력을 활성화한 뒤, "What do you see?(무엇이 보이나요?)"와 같은 질문을 해보세요. 에이전트는 비디오 입력에 보이는 내용에 대해 답변할 것입니다.
+비디오를 시도하려면 웹 브라우저를 새로고침하고, 카메라 버튼을 클릭하여 비디오 입력을 활성화한 뒤, "What do you see?(무엇이 보이나요?)"와 같은 질문을 해보세요. 에이전트는 비디오 입력에서 보이는 내용을 바탕으로 답변합니다.
 
 (마이크나 카메라 버튼은 한 번만 클릭하면 충분합니다. 음성이나 비디오가 모델로 스트리밍되고 모델의 응답이 지속적으로 다시 스트리밍됩니다. 마이크나 카메라 버튼을 여러 번 클릭하는 것은 지원되지 않습니다.)
 
@@ -175,10 +175,10 @@ UI에 다음 프롬프트를 입력하여 테스트해 보세요.
 
 ### ADK Streaming 관련 참고 사항
 
-다음 기능들은 ADK Streaming의 향후 버전에서 지원될 예정입니다: Callback, LongRunningTool, ExampleTool, Shell agent (예: SequentialAgent).
+모델 콜백(`before_model_callback` 및 `after_model_callback`)은 스트리밍 경로에서 호출되지 않으며 `run_async` 경로에서만 실행됩니다. 반면 에이전트 콜백(`before_agent_callback`, `after_agent_callback`)과 도구 콜백(`before_tool_callback`, `after_tool_callback`), 그리고 `LongRunningFunctionTool`과 `ExampleTool`은 스트리밍 중에도 정상적으로 실행됩니다. 워크플로 에이전트 중에서는 `SequentialAgent`만 스트리밍을 지원하며, `LoopAgent`와 `ParallelAgent`는 `NotImplementedError`를 발생시킵니다.
 
 축하합니다! ADK를 사용하여 첫 번째 스트리밍 에이전트를 성공적으로 생성하고 상호작용했습니다!
 
 ## 다음 단계: 커스텀 스트리밍 앱 구축
 
-[커스텀 서버 구축](../custom-server.md)에서는 실시간 양방향 오디오 및 텍스트 통신을 가능하게 하는 ADK 기반 커스텀 비동기 웹 앱의 서버와 클라이언트 코드를 단계별로 설명합니다. 이어서 [세션과 스트리밍 루프](../sessions.md)에서는 애플리케이션 수명 주기를 심층적으로 다루며, [이벤트](../events.md)에서는 `run_live()`가 반환하는 모든 것을 다룹니다.
+[커스텀 서버 구축](../custom-server.md)에서는 실시간 양방향 오디오 및 텍스트 통신을 가능하게 하는 ADK 기반 커스텀 비동기 웹 앱의 서버와 클라이언트 코드를 단계별로 설명합니다. 이어서 [세션과 스트리밍 루프](../sessions.md)에서는 애플리케이션 라이프사이클을 심층적으로 다루며, [이벤트](../events.md)에서는 `run_live()`가 반환하는 모든 이벤트를 다룹니다.

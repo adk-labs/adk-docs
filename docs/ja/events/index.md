@@ -4,11 +4,11 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-イベントは、エージェント開発キット（ADK）内における情報フローの基本単位です。これらは、初期のユーザー入力から最終的な応答、そしてその間のすべてのステップに至るまで、エージェントのインタラクションライフサイクル中に発生するすべての重要な出来事を表します。イベントを理解することは、コンポーネントが通信し、状態が管理され、制御フローが指示される主要な方法であるため、非常に重要です。
+イベントは、Agent Development Kit（ADK）内における情報フローの基本単位です。これらは、初期のユーザー入力から最終的な応答、そしてその間のすべてのステップに至るまで、エージェントのインタラクションライフサイクル中に発生するすべての重要な出来事を表します。イベントを理解することは、コンポーネントが通信し、状態が管理され、制御フローが指示される主要な方法であるため、非常に重要です。
 
 ## イベントとは何か、なぜ重要なのか
 
-ADKにおける`Event`は、エージェント実行の特定の時点を表す不変のレコードです。ユーザーメッセージ、エージェントの返信、ツール使用リクエスト（関数呼び出し）、ツールの結果、状態の変更、制御シグナル、およびエラーをキャプチャします。
+ADKにおける`Event`は、エージェント実行の特定の時点を表すレコードです。ユーザーメッセージ、エージェントの返信、ツール使用リクエスト（関数呼び出し）、ツールの結果、状態の変更、制御シグナル、およびエラーをキャプチャします。
 
 === "Python"
     技術的には、これは`google.adk.events.Event`クラスのインスタンスであり、基本的な`LlmResponse`構造を基に、不可欠なADK固有のメタデータと`actions`ペイロードを追加して構築されています。
@@ -132,10 +132,10 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
 
 ## イベントの理解と使用
 
-開発者として、あなたは主に`Runner`によって生成されるイベントのストリームと対話します。それらから情報を理解し、抽出する方法は次のとおりです：
+開発者は主に、`Runner` が生成するイベントストリームを扱います。それらから情報を理解し、抽出する方法は次のとおりです：
 
-!!! 注
-    プリミティブの特定のパラメータやメソッド名は、SDKの言語によって若干異なる場合があります（例：Pythonの`event.content()`、Javaの`event.content().get().parts()`）。詳細については、言語固有のAPIドキュメントを参照してください。
+!!! note
+    プリミティブの特定のパラメータやメソッド名は、SDKの言語によって若干異なる場合があります（例：Python の `event.content` 属性、Java の `event.content().get().parts()`）。詳細については、各言語固有のAPIドキュメントを参照してください。
 
 ### イベントの発生源とタイプの特定
 
@@ -589,9 +589,9 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
 *   **制御フローシグナル:** ブール値のフラグまたは文字列の値を確認します：
 
     === "Python"
-        *   `event.actions.transfer_to_agent` (string): 制御が指定されたエージェントに渡されるべきです。
-        *   `event.actions.escalate` (bool): ループが終了するべきです。
-        *   `event.actions.skip_summarization` (bool): ツールの結果がLLMによって要約されるべきではありません。
+        *   `event.actions.transfer_to_agent` (string): 指定されたエージェントに制御を渡すことを示します。
+        *   `event.actions.escalate` (bool): ループを終了することを示します。
+        *   `event.actions.skip_summarization` (bool): ツールの結果を LLM に要約させないことを示します。
         ```python
         if event.actions:
             if event.actions.transfer_to_agent:
@@ -603,8 +603,8 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
         ```
 
     === "TypeScript"
-        *   `event.actions.transferToAgent` (string): 制御を指定エージェントへ渡すべきです。
-        *   `event.actions.escalate` (boolean): ループを終了すべきです。
+        *   `event.actions.transferToAgent` (string): 指定されたエージェントへ制御を渡すことを示します。
+        *   `event.actions.escalate` (boolean): ループを終了することを示します。
         *   `event.actions.skipSummarization` (boolean): ツール結果を LLM が要約しないようにします。
         ```typescript
         export function handleControlFlow(event: Event) {
@@ -623,9 +623,9 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
         ```
 
     === "Go"
-        *   `event.Actions.TransferToAgent` (string): 制御が指定されたエージェントに渡されるべきです。
-        *   `event.Actions.Escalate` (bool): ループが終了するべきです。
-        *   `event.Actions.SkipSummarization` (bool): ツールの結果がLLMによって要約されるべきではありません。
+        *   `event.Actions.TransferToAgent` (string): 指定されたエージェントに制御を渡すことを示します。
+        *   `event.Actions.Escalate` (bool): ループを終了することを示します。
+        *   `event.Actions.SkipSummarization` (bool): ツールの結果を LLM に要約させないことを示します。
         ```go
         import (
             "fmt"
@@ -646,9 +646,9 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
         ```
 
     === "Java"
-        *   `event.actions().transferToAgent()` (`Optional<String>`を返す): 制御が指定されたエージェントに渡されるべきです。
-        *   `event.actions().escalate()` (`Optional<Boolean>`を返す): ループが終了するべきです。
-        *   `event.actions().skipSummarization()` (`Optional<Boolean>`を返す): ツールの結果がLLMによって要約されるべきではありません。
+        *   `event.actions().transferToAgent()` (`Optional<String>`を返す): 指定されたエージェントに制御を渡すことを示します。
+        *   `event.actions().escalate()` (`Optional<Boolean>`を返す): ループを終了することを示します。
+        *   `event.actions().skipSummarization()` (`Optional<Boolean>`を返す): ツールの結果を LLM に要約させないことを示します。
 
         ```java
         import com.google.adk.events.EventActions;
@@ -679,8 +679,8 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
 
 *   **目的:** 最終的なユーザー向けメッセージから中間ステップ（ツール呼び出し、部分的なストリーミングテキスト、内部の状態更新など）を除外します。
 *   **いつ`True`になるか？**
-    1.  イベントにツールの結果（`function_response`）が含まれ、`skip_summarization`が`True`の場合。
-    2.  イベントに`is_long_running=True`とマークされたツールのツール呼び出し（`function_call`）が含まれる場合。Javaでは、`longRunningToolIds`リストが空でないか確認します：
+    1.  `skip_summarization` アクションが `True` の場合。Python ではこのフラグだけで十分であり、イベントに `function_response` のツール結果が含まれている必要はありません。
+    2.  イベントの `long_running_tool_ids` が空でない場合（`is_long_running=True` とマークされたツールが呼び出されたことを意味します）。Python ではこのリストだけで十分であり、イベントに `function_call` 自体が含まれている必要はありません。Java では、`longRunningToolIds` リストが空でないか確認します：
         *   `event.longRunningToolIds().isPresent() && !event.longRunningToolIds().get().isEmpty()`が`true`の場合。
     3.  または、以下の**すべて**が満たされた場合：
         *   関数呼び出しがない（`get_function_calls()`が空）。
@@ -898,9 +898,9 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
     2.  **ランナーが受信:** エージェントを実行しているメインの`Runner`がイベントを受け取ります。
     3.  **SessionServiceによる処理:** `Runner`はイベントを設定済みの`SessionService`に送信します。これは重要なステップです：
         *   **デルタの適用:** サービスは`event.actions.state_delta`を`session.state`にマージし、`event.actions.artifact_delta`に基づいて内部レコードを更新します。（注：実際のアーティファクトの*保存*は、通常`context.save_artifact`が呼ばれたときにもっと早く行われています）。
-        *   **メタデータの最終決定:** 存在しない場合は一意の`event.id`を割り当て、`event.timestamp`を更新することがあります。
+        *   **イベントメタデータ:** Python では、`Event` オブジェクトは構築された時点ですでに `id` と `timestamp` を保持しているため、サービス側でこれらを割り当てることはせず、受け取ったままイベントを記録します。
         *   **履歴への永続化:** 処理されたイベントを`session.events`リストに追加します。
-    4.  **外部への生成:** `Runner`は処理されたイベントを呼び出し元のアプリケーション（例：`runner.run_async`を呼び出したコード）にyield（Python）するか、返却/発行（Java）します。
+    4.  **外部への送出（yield）:** `Runner`は処理されたイベントを呼び出し元のアプリケーション（例：`runner.run_async`を呼び出したコード）にyield（Python）するか、返却/発行（Java）します。
 
 このフローにより、状態の変更と履歴が各イベントの通信内容とともに一貫して記録されることが保証されます。
 
@@ -960,7 +960,7 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
       // actions に skip_summarization=True が含まれる場合があります
     }
     ```
-*   **状態/アーティファクト更新のみ:** (`is_final_response() == False`)
+*   **状態/アーティファクト更新のみ:** (`is_final_response() == True`)
     ```json
     {
       "author": "InternalUpdater",
@@ -981,7 +981,7 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
       "actions": {"transfer_to_agent": "BillingAgent"} // フレームワークによって追加
     }
     ```
-*   **ループエスカレーションシグナル:** (`is_final_response() == False`)
+*   **ループエスカレーションシグナル:** (`is_final_response() == True`)
     ```json
     {
       "author": "CheckerAgent",
@@ -1001,7 +1001,7 @@ ADKにおける`Event`は、エージェント実行の特定の時点を表す�
 
 2.  **状態/アーティファクトの変更が記録される方法:**
     *   `CallbackContext`または`ToolContext`を使用して状態を変更したり、アーティファクトを保存したりしても、これらの変更はすぐに永続ストレージに書き込まれるわけではありません。
-    *   代わりに、`EventActions`オブジェクト内の`state_delta`および`artifact_delta`フィールドに移入されます。
+    *   代わりに、`EventActions` オブジェクト内の `state_delta` および `artifact_delta` フィールドに格納されます。
     *   この`EventActions`オブジェクトは、変更後に生成された*次のイベント*（例：エージェントの応答やツール結果イベント）にアタッチされます。
     *   `SessionService.append_event`メソッドは、入ってくるイベントからこれらのデルタを読み取り、セッションの永続的な状態とアーティファクトレコードに適用します。これにより、変更がイベントストリームと時系列で結びつけられることが保証されます。
 

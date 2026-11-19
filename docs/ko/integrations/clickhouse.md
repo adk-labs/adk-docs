@@ -114,9 +114,9 @@ catalog_tags: ["data", "mcp"]
 
     원격 MCP 서버를 사용하는 경우, 에이전트가 처음 연결될 때 브라우저에서 ClickHouse Cloud 자격 증명으로 로그인하여 연결을 승인하라는 메시지가 표시됩니다. 접근 권한은 사용자가 접근 권한을 가진 조직 및 서비스로 범위가 지정됩니다. 반면 로컬 MCP 서버는 OAuth 흐름 없이 환경 변수에 지정된 데이터베이스 자격 증명으로 인증합니다.
 
-## 보안 (Safety)
+## 안전성 (Safety)
 
-원격 MCP 서버가 노출하는 모든 도구는 **읽기 전용(read-only)**입니다. 각 도구의 MCP 메타데이터에는 `readOnlyHint: true`가 표시되어 있습니다. 어떤 도구도 데이터를 수정하거나, 서비스 구성을 변경하거나, 파괴적인 작업을 수행할 수 없습니다. `run_select_query` 도구는 오직 `SELECT` 문만 허용합니다.
+원격 MCP 서버가 제공하는 모든 도구는 **읽기 전용(read-only)**입니다. 각 도구의 MCP 메타데이터에는 `readOnlyHint: true`가 표시되어 있습니다. 어떤 도구도 데이터를 수정하거나, 서비스 구성을 변경하거나, 파괴적인 작업을 수행할 수 없습니다. `run_select_query` 도구는 오직 `SELECT` 문만 허용합니다.
 
 로컬 MCP 서버 또한 기본적으로 읽기 전용입니다. 쓰기 접근 권한을 부여하려면 명시적으로 `CLICKHOUSE_ALLOW_WRITE_ACCESS=true`를 설정해야 하며, 파괴적인 작업(DROP, TRUNCATE)에는 추가로 `CLICKHOUSE_ALLOW_DROP=true`가 필요합니다.
 
@@ -175,14 +175,14 @@ catalog_tags: ["data", "mcp"]
 
 도구 | 설명
 ---- | -----------
-`get_organization_cost` | 선택적 `from_date`/`to_date` (최대 31일 범위)를 사용하여 조직의 청구 및 사용량 비용 데이터 검색
+`get_organization_cost` | 선택적 `from_date`/`to_date` (최대 31일 범위)를 사용하여 조직의 청구 및 사용량 비용 데이터 조회
 
 ## 로컬 서버와 원격 서버 비교
 
 |                    | 로컬 MCP 서버                                                             | 원격 MCP 서버                                                                        |
 | ------------------ | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | **소스**           | [mcp-clickhouse](https://github.com/ClickHouse/mcp-clickhouse) (오픈 소스) | ClickHouse Cloud 완전 관리형                                                               |
-| **전송 방식**      | `uvx`를 통한 로컬 stdio                                                    | 스트리밍 가능한 HTTP (`https://mcp.clickhouse.cloud/mcp`)                                  |
+| **전송 방식**      | `uvx`를 통한 로컬 stdio                                                    | Streamable HTTP (`https://mcp.clickhouse.cloud/mcp`)                                       |
 | **호환성**         | 모든 ClickHouse 인스턴스 (자체 호스팅 또는 Cloud)                          | ClickHouse Cloud 서비스 전용                                                               |
 | **인증**           | 환경 변수 (데이터베이스 사용자)                                            | Cloud 자격 증명을 사용하는 OAuth 2.0                                                       |
 | **제공 도구**      | 3개 도구: 쿼리 및 스키마 탐색                                              | 쿼리, 스키마 탐색, 서비스 관리, 백업, ClickPipes, 청구 관련 도구                           |

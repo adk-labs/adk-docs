@@ -1,37 +1,22 @@
 ---
 catalog_title: Cisco AI Defense
-catalog_description: エージェントのプロンプトとツール呼び出しを監視またはブロックするセキュリティ ガードレール
+catalog_description: エージェントのプロンプトとツール呼び出しを監視またはブロックするセキュリティガードレール
 catalog_icon: /integrations/assets/cisco-ai-defense.png
 ---
 
-
-# ADK 用 Cisco AI Defense プラグイン
+# ADK 向け Cisco AI Defense プラグイン
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
-[Cisco AI
-Defense](https://www.cisco.com/site/us/en/products/security/ai-defense/index.html)
-ランタイム ガードレールを提供するエンタープライズ AI セキュリティ プラットフォームです。
-プロンプトインジェクション、データ漏洩、有害な脅威などの脅威から保護します。
-内容。 [ADK
-plugin](https://github.com/cisco-ai-defense/ai-defense-google-adk) は、
-これらのガードレールは ADK Runner ライフサイクルに直接組み込まれます。プロンプトを検査し、
-モデル応答とツール呼び出しを実行し、構成可能な条件に基づいてそれらを許可またはブロックします。
-セキュリティポリシー。
+[Cisco AI Defense](https://www.cisco.com/site/us/en/products/security/ai-defense/index.html) は、プロンプトインジェクション、データ漏洩、有害なコンテンツなどの脅威から保護するランタイムガードレールを提供するエンタープライズ AI セキュリティプラットフォームです。[ADK プラグイン](https://github.com/cisco-ai-defense/ai-defense-google-adk)は、これらのガードレールを ADK Runner のライフサイクルに直接統合します。プロンプト、モデル応答、およびツール呼び出しを検査し、構成可能なセキュリティポリシーに基づいて許可またはブロックします。
 
-## 使用例
+## ユースケース
 
-- **モデル呼び出しのランタイム保護**: モデルの前にユーザー プロンプトを検査します
-  生成後に呼び出しとモデル出力を実行し、ポリシーに基づいて許可またはブロックします
-  (`monitor` または `enforce`)。
-- **ツールおよび MCP 呼び出しの検査**: 実行前にツール呼び出しリクエストを検査します。
-  および実行後のツールの応答を監視し、安全でないツールの動作をブロックします。
-  明確なメタデータを備えた `enforce` モード。
-- **監査可能な意思決定トレースとアラート**: 意思決定コンテキスト (アクション、
-  重大度、分類、request_id/event_id)、オプションでトリガー
-  モニタリングとインシデント対応のための `on_violation` コールバック。
+- **モデル呼び出しのランタイム保護**: モデル呼び出し前のユーザープロンプトと生成後のモデル出力を検査し、ポリシー（`monitor` または `enforce`）に基づいて許可またはブロックします。
+- **ツールおよび MCP 呼び出しの検査**: 実行前のツール呼び出しリクエストと実行後のツール応答を検査し、`enforce` モードでは明確なメタデータとともに安全でないツールの動作をブロックします。
+- **監査可能な判定トレースとアラート**: 判定コンテキスト（アクション、重大度、分類、`request_id`/`event_id`）を記録し、任意でモニタリングやインシデント対応のための `on_violation` コールバックをトリガーします。
 
 ## 前提条件
 
@@ -45,14 +30,13 @@ plugin](https://github.com/cisco-ai-defense/ai-defense-google-adk) は、
 pip install cisco-aidefense-google-adk
 ```
 
-`AI_DEFENSE_API_KEY` 環境変数 (および `AI_DEFENSE_MCP_API_KEY`) を設定します。
-工具検査用）。
+`AI_DEFENSE_API_KEY` 環境変数（およびツール検査用の `AI_DEFENSE_MCP_API_KEY`）を設定します。
 
-## エージェントと一緒に使用する
+## エージェントでの使用
 
 ### クイックスタート
 
-次の 1 行で Cisco AI Defense を任意の ADK エージェントに追加します。
+次の 1 行で任意の ADK エージェントに Cisco AI Defense を追加できます。
 
 ```python
 from google.adk.apps import App
@@ -62,7 +46,7 @@ from aidefense_google_adk import defend
 agent = defend(agent, mode="enforce")
 ```
 
-または、アプリ全体のプラグインを取得します。
+または、アプリ全体向けのプラグインを取得します。
 
 ```python
 from google.adk.apps import App
@@ -75,8 +59,7 @@ app = App(name="my_app", root_agent=agent, plugins=[plugin])
 
 ### グローバルプラグイン
 
-`CiscoAIDefensePlugin` を使用して、インスペクションをすべてのエージェントにグローバルに適用します。
-ランナー:
+`CiscoAIDefensePlugin` を使用すると、`Runner` 内のすべてのエージェントに対して検査をグローバルに適用できます。
 
 ```python
 from google.adk.agents import LlmAgent
@@ -102,9 +85,9 @@ app = App(
 runner = Runner(app=app, session_service=InMemorySessionService())
 ```
 
-### エージェントごとのコールバック
+### エージェント単位のコールバック
 
-`make_aidefense_callbacks` を使用して、検査を特定のエージェントに接続します。
+`make_aidefense_callbacks` を使用して、特定のエージェントに検査を組み込みます。
 
 ```python
 from google.adk.agents import LlmAgent
@@ -124,11 +107,11 @@ cbs.apply_to(agent)  # wires all 4 callbacks
 
 プラグインは 3 つの動作モードをサポートしています。
 
-モード |行動
+モード | 動作
 ---- | --------
-`monitor` |すべてのトラフィックを検査し、違反をログに記録し、ブロックしない (デフォルト)
-`enforce` |すべてのトラフィックを検査し、ポリシーに違反するリクエスト/レスポンスをブロックします。
-`off` |検査を完全にスキップする
+`monitor` | すべてのトラフィックを検査して違反をログに記録し、ブロックは行いません（デフォルト）
+`enforce` | すべてのトラフィックを検査し、ポリシーに違反するリクエスト/レスポンスをブロックします
+`off` | 検査を完全にスキップします
 
 モードはグローバルまたはチャネルごとに設定できます。
 
@@ -142,8 +125,7 @@ CiscoAIDefensePlugin(
 
 ## 違反コールバック
 
-`on_violation` コールバックを使用して、すべての違反の通知を受け取ります。
-`monitor` モードと `enforce` モードの両方:
+`on_violation` コールバックを使用すると、`monitor` モードと `enforce` モードの両方ですべてのポリシー違反の通知を受け取れます。
 
 ```python
 def handle_violation(result):
@@ -155,10 +137,9 @@ CiscoAIDefensePlugin(
 )
 ```
 
-## 再試行とフェールオープンのサポート
+## 再試行とフェイルオープンのサポート
 
-指数関数的バックオフ、フェールオープン/フェールクローズのセマンティクスを使用した自動再試行の場合、
-および構造化された `Decision` オブジェクトの場合は、`AgentsecPlugin` バリアントを使用します。
+指数バックオフによる自動再試行、フェイルオープン/フェイルクローズのセマンティクス、および構造化された `Decision` オブジェクトが必要な場合は、`AgentsecPlugin` バリアントを使用します。
 
 ```python
 from google.adk.apps import App
@@ -179,7 +160,7 @@ app = App(
 )
 ```
 
-またはエージェントごとのレベルで:
+またはエージェント単位で適用することもできます。
 
 ```python
 from aidefense_google_adk import make_agentsec_callbacks
@@ -188,9 +169,9 @@ cbs = make_agentsec_callbacks(mode="enforce", fail_open=True)
 cbs.apply_to(agent)
 ```
 
-## 追加のリソース
+## 追加リソース
 
-- [GitHub Repository](https://github.com/cisco-ai-defense/ai-defense-google-adk)
-- [PyPI Package](https://pypi.org/project/cisco-aidefense-google-adk/)
+- [GitHub リポジトリ](https://github.com/cisco-ai-defense/ai-defense-google-adk)
+- [PyPI パッケージ](https://pypi.org/project/cisco-aidefense-google-adk/)
 - [Cisco AI Defense](https://www.cisco.com/site/us/en/products/security/ai-defense/index.html)
-- [cisco-aidefense-sdk on PyPI](https://pypi.org/project/cisco-aidefense-sdk/)
+- [PyPI 上の cisco-aidefense-sdk](https://pypi.org/project/cisco-aidefense-sdk/)

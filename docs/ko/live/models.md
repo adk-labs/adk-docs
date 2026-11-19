@@ -4,7 +4,7 @@
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
-라이브 에이전트는 `run_live()` 아래에서 두 가지 [음성 아키텍처](architectures/index.md) 중 하나로 실행됩니다:
+라이브 에이전트는 `run_live()`에서 두 가지 [음성 아키텍처](architectures/index.md) 중 하나로 실행됩니다:
 
 - **[음성 대 음성 (Speech-to-speech)](architectures/speech-to-speech.md)**: 단일 네이티브 오디오 Live 모델이 양방향 연결을 통해 오디오 입력과 오디오 출력을 직접 처리합니다.
 - **[캐스케이드 (Cascade)](architectures/cascade.md)**: 음성-텍스트 변환(STT), 임의의 텍스트 LLM, 텍스트-음성 변환(TTS)을 순차적으로 연결합니다.
@@ -34,7 +34,7 @@ Gemini 3.8 Live는 두 백엔드 모두에서 실행됩니다. Gemini 3.8 Live E
 
 | 기능 | Gemini 2.5 Flash Live | Gemini 3.1 Flash Live | Gemini 3.8 Live | Gemini 3.8 Live Extended Thinking |
 |---|---|---|---|---|
-| [능동적 및 감정적 대화](configuration.md#proactivity-and-affective-dialog) | `RunConfig`를 통한 옵트인(Opt-in) | `RunConfig` 설정 무시됨 | `RunConfig` 설정 무시됨 | `RunConfig` 설정 무시됨 |
+| [능동형 오디오 및 공감형 대화](configuration.md#proactivity-and-affective-dialog) | `RunConfig`를 통한 옵트인(Opt-in) | `RunConfig` 설정 무시됨 | `RunConfig` 설정 무시됨 | `RunConfig` 설정 무시됨 |
 | [비차단(Non-blocking) 도구](tools.md#non-blocking-tools) | 지원됨 | 지원 안 됨 | 지원됨 | 모든 도구에 필수 (아래 설명 참조) |
 | 도구의 [`response_scheduling`](tools.md#non-blocking-tools) | 지원됨 | 지원 안 됨 | 지원됨 | 지원 안 됨 |
 | [모델 응답의 종료](events.md#interaction-status) | `turn_complete` | `turn_complete` | `turn_complete` | `interaction_status`가 `IDLE` (아래 설명 참조) |
@@ -46,7 +46,7 @@ Gemini 3.8 Live는 두 백엔드 모두에서 실행됩니다. Gemini 3.8 Live E
 Gemini 3.8 Live Extended Thinking을 사용하려면 ADK Python 2.10 이상이 필요하며 에이전트에 두 가지 변경을 적용해야 합니다:
 
 - **비차단(Non-blocking) 도구**: 모든 도구에 `behavior = types.Behavior.NON_BLOCKING`을 설정하고 `response_scheduling`은 설정하지 않은 채로 두세요. [비차단 도구](tools.md#non-blocking-tools)를 참고하세요.
-- **상호작용 상태(Interaction status)**: 요청당 `turn_complete`가 여러 번 도착할 수 있으므로 `event.interaction_status`(`run_live`에서는 `interactionStatus`)를 읽으세요. 이 값은 모델이 아직 요청을 처리하는 동안에는 `IN_PROGRESS`이고 작업이 완료되면 `IDLE`이 됩니다. [상호작용 상태](events.md#interaction-status)를 참고하세요.
+- **상호작용 상태(Interaction status)**: 요청당 `turn_complete`가 여러 번 도착할 수 있으므로 `event.interaction_status`(`/run_live` 엔드포인트에서는 `interactionStatus`)를 읽으세요. 이 값은 모델이 아직 요청을 처리하는 동안에는 `IN_PROGRESS`이고 작업이 완료되면 `IDLE`이 됩니다. [상호작용 상태](events.md#interaction-status)를 참고하세요.
 
 ## 캐스케이드 모델
 
@@ -85,7 +85,7 @@ Gemini 모델은 두 백엔드 중 하나를 통해 접근합니다. ADK는 동�
 |---|---|---|
 | 세션 지속 시간 (오디오 전용) | 15분 | 15분 |
 | 세션 지속 시간 (오디오 + 비디오) | 2분 | 2분 |
-| 연결 수명 | 약 10분 | 약 10분 |
+| 연결 유효 시간 | 약 10분 | 약 10분 |
 | 동시 세션 수 | [속도 제한](https://ai.google.dev/gemini-api/docs/rate-limits) 참고 | 종량제 기준 프로젝트당 최대 1,000개, Provisioned Throughput 사용 시 무제한 |
 
 Agent Platform은 위의 오디오 전용 한도와 별개로 대화 세션을 기본적으로 10분으로 추가 제한합니다.

@@ -180,12 +180,12 @@ Hugging Face 계정의 [MCP Settings Page](https://huggingface.co/settings/mcp)�
 - `HF_API_TIMEOUT`: Hugging Face API 요청 제한 시간(밀리초)
   (기본값: 12500ms / 12.5초)
 - `USER_CONFIG_API`: 사용자 설정에 사용할 URL(기본값은 로컬 프런트엔드)
-- `MCP_STRICT_COMPLIANCE`: JSON 모드에서 GET 405 거부를 위해 True로 설정
-  (기본값은 welcome page 제공)
-- `AUTHENTICATE_TOOL`: 호출 시 OAuth 챌린지를 발급하는 Authenticate 도구를
+- `MCP_STRICT_COMPLIANCE`: JSON 모드에서 GET 요청을 405로 거부하려면 `True`로 설정
+  (기본값은 시작 페이지 제공)
+- `AUTHENTICATE_TOOL`: 호출 시 OAuth 챌린지를 발급하는 `Authenticate` 도구를
   포함할지 여부
-- `SEARCH_ENABLES_FETCH`: true로 설정하면 hf_doc_search가 활성화될 때마다
-  hf_doc_fetch 도구를 자동 활성화
+- `SEARCH_ENABLES_FETCH`: `true`로 설정하면 `hf_doc_search`가 활성화될 때마다
+  `hf_doc_fetch` 도구를 자동 활성화
 
 ## 추가 리소스
 

@@ -4,7 +4,7 @@
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.24.0</span>
 </div>
 
-API、データベース、サードパーティサービスなどの外部依存に頼るエージェントを評価する場合、テスト中にそれらのツールを実行すると遅く、高コストで、不安定になりがちです。**環境シミュレーター**を使うと、エージェント自体を変更せずに、実行中のツール呼び出しを安全に横取りし、制御された決定的な応答に置き換えられます。これにより、エージェントのロジックだけを分離した hermetic なオフラインテストを作成し、安定した採点を行えます。
+API、データベース、サードパーティサービスなどの外部依存に頼るエージェントを評価する場合、テスト中にそれらのツールを実行すると遅く、高コストで、不安定になりがちです。**環境シミュレーター**を使うと、エージェント自体を変更せずに、実行中のツール呼び出しを安全にインターセプトし、制御された決定論的な応答に置き換えられます。これにより、エージェントのロジックだけを分離した外部から隔離された（hermetic）オフラインテストを作成し、安定した採点を行えます。
 
 この機能でできること:
 
@@ -17,13 +17,13 @@ API、データベース、サードパーティサービスなどの外部依�
 
 ## 動作の仕組み
 
-[User Simulation](/ja/evaluate/user-sim/) が会話を前へ進めるのに対し、環境シミュレーションは安定したバックエンドを提供します。高レベルでは、環境シミュレーターはエージェントとツールの間に挟まります。エージェントがツールを呼ぶと、シミュレーターはその呼び出しを横取りし、事前定義された注入応答や LLM 生成のモック応答を返すか、実ツールを実行させるかを判断します。
+[ユーザーシミュレーション](/ja/evaluate/user-sim/) が会話を前へ進めるのに対し、環境シミュレーションは安定したバックエンドを提供します。概要としては、環境シミュレーターはエージェントとツールの間に位置します。エージェントがツールを呼ぶと、シミュレーターはその呼び出しをインターセプトし、事前定義された注入応答や LLM 生成のモック応答を返すか、実際のツールを実行させるかを判断します。
 
 各ツールについての判断順序は次のとおりです。
 
-1.  **Injection config** を順番に確認します。引数の一致と確率条件を満たすものがあれば、そのエラーまたは応答を即座に返します。
-2.  一致する注入がなければ、**mock strategy** をフォールバックとして使います。ツールのスキーマと状態コンテキストに基づいて、LLM が現実的な応答を生成します。
-3.  シミュレーター設定に存在しないツールなら `None` を返し、実ツールを通常実行させます。
+1.  **注入設定（Injection config）**を順番に確認します。引数の一致と確率条件を満たすものがあれば、そのエラーまたは応答を即座に返します。
+2.  一致する注入設定がなければ、**モック戦略（Mock strategy）**をフォールバックとして使います。ツールのスキーマとステートフルなコンテキストに基づいて、LLM が現実的な応答を生成します。
+3.  シミュレーター設定に存在しないツールなら `None` を返し、実際のツールを通常実行させます。
 
 ## 統合
 
@@ -100,49 +100,49 @@ app = App(
 
 ## 設定リファレンス
 
-環境シミュレーターは複数の dataclass で設定できます。以下では各設定オブジェクトを詳しく説明します。
+環境シミュレーターは複数のデータクラス（dataclass）で設定できます。以下では各設定オブジェクトを詳しく説明します。
 
 ### `EnvironmentSimulationConfig`
 
 最上位の設定オブジェクトです。
 
-Field | Type | Default | Description
+フィールド | 型 | デフォルト | 説明
 :--- | :--- | :--- | :---
-`tool_simulation_configs` | `List[ToolSimulationConfig]` | required | シミュレーションするツールごとの設定です。空にはできず、ツール名は重複不可です。
+`tool_simulation_configs` | `List[ToolSimulationConfig]` | 必須 | シミュレーションするツールごとの設定です。空にはできず、ツール名は重複不可です。
 `simulation_model` | `str` | `"gemini-2.5-flash"` | ツール接続の分析とモック応答生成に使う LLM です。
-`simulation_model_configuration` | `GenerateContentConfig` | thinking enabled | 内部シミュレーター呼び出し用の LLM 生成設定です。
+`simulation_model_configuration` | `GenerateContentConfig` | 思考（thinking）有効 | 内部シミュレーター呼び出し用の LLM 生成設定です。
 `environment_data` | `str \| None` | `None` | より現実的な応答を生成するためにモック戦略へ渡す任意の環境コンテキストです。例: JSON のデータベーススナップショット。
-`tracing` | `str \| None` | `None` | 過去の文脈を与えるための trace データです。例: 以前のエージェント実行 trace の JSON 文字列。
+`tracing` | `str \| None` | `None` | 過去の文脈を与えるためのトレースデータです。例: 以前のエージェント実行トレースの JSON 文字列。
 
 ### `ToolSimulationConfig`
 
 単一のツールをどうシミュレートするかを定義します。
 
-Field | Type | Default | Description
+フィールド | 型 | デフォルト | 説明
 :--- | :--- | :--- | :---
-`tool_name` | `str` | required | 登録済みのツール名と完全一致している必要があります。
+`tool_name` | `str` | 必須 | 登録済みのツール名と完全一致している必要があります。
 `injection_configs` | `List[InjectionConfig]` | `[]` | モック戦略より前に順番に確認される注入設定です。
 `mock_strategy_type` | `MockStrategy` | `MOCK_STRATEGY_UNSPECIFIED` | 注入がない場合のフォールバック戦略です。
 
 ### `InjectionConfig`
 
-ツール呼び出しへ挿入する単一の synthetic 応答を制御します。
+ツール呼び出しへ挿入する単一の合成（synthetic）応答を制御します。
 `injected_error` または `injected_response` のどちらか一方だけを設定してください。
 
-Field | Type | Default | Description
+フィールド | 型 | デフォルト | 説明
 :--- | :--- | :--- | :---
 `injected_error` | `InjectedError \| None` | `None` | 返すエラーです。`injected_response` とは排他的です。
 `injected_response` | `Dict[str, Any] \| None` | `None` | 返す固定レスポンス dict です。`injected_error` とは排他的です。
 `injection_probability` | `float` | `1.0` | この注入が発火する確率です。範囲は `[0.0, 1.0]` です。
 `match_args` | `Dict[str, Any] \| None` | `None` | 設定すると、ツール引数が `match_args` のキーと値をすべて含む場合にだけ発火します。
-`injected_latency_seconds` | `float` | `0.0` | 注入結果を返す前に加える人工遅延です。最大 120 秒です。
+`injected_latency_seconds` | `float` | `0.0` | 注入結果を返す前に加える擬似的なレイテンシ（遅延）です。最大 120 秒です。
 `random_seed` | `int \| None` | `None` | 確率判定用のシードです。再現可能な注入動作に役立ちます。
 
 ### `InjectedError`
 
 HTTP スタイルのエラー応答を定義します。
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 | :--- | :--- | :--- |
 | `injected_http_error_code` | `int` | ツール応答の `error_code` として返す HTTP ステータスコードです。 |
 | `error_message` | `str` | ツール応答の `error_message` として返す、人が読めるメッセージです。 |
@@ -151,10 +151,10 @@ HTTP スタイルのエラー応答を定義します。
 
 注入がないときにシミュレーターが応答をどう生成するかを制御する enum です。
 
-| Value | Description |
+| 値 | 説明 |
 | :--- | :--- |
-| `MOCK_STRATEGY_TOOL_SPEC` | ツールのスキーマと状態コンテキストを使って、LLM に現実的な応答を生成させます。 |
-| `MOCK_STRATEGY_TRACING` | *(Deprecated)* 代わりに tracing 入力付きの `MOCK_STRATEGY_TOOL_SPEC` を使ってください。 |
+| `MOCK_STRATEGY_TOOL_SPEC` | ツールのスキーマとステートフルなコンテキストを使って、LLM に現実的な応答を生成させます。 |
+| `MOCK_STRATEGY_TRACING` | *（非推奨）* 代わりに `tracing` 入力付きの `MOCK_STRATEGY_TOOL_SPEC` を使ってください。 |
 
 ## 注入モード
 
@@ -215,7 +215,7 @@ InjectionConfig(
 
 ### 確率的注入
 
-`injection_probability` を `0.0` から `1.0` の値に設定すると、flaky な動作をシミュレートできます。再現可能なテストのために `random_seed` も固定してください。
+`injection_probability` を `0.0` から `1.0` の値に設定すると、不安定（flaky）な動作をシミュレートできます。再現可能なテストのために `random_seed` も固定してください。
 
 ```python
 InjectionConfig(
@@ -228,9 +228,9 @@ InjectionConfig(
 )
 ```
 
-### 遅延の注入
+### レイテンシの注入
 
-`injected_latency_seconds` を使うと、遅いバックエンド応答を再現できます。timeout 対応や、劣化時の UX テストに便利です。
+`injected_latency_seconds` を使うと、遅いバックエンド応答を再現できます。タイムアウト処理や、応答遅延時の UX テストに便利です。
 
 ```python
 InjectionConfig(
@@ -271,9 +271,9 @@ ToolSimulationConfig(
 
 シミュレーターは LLM を使って次を行います。
 
-1.  エージェントが使える全ツールのスキーマを分析し、ツール間の **stateful dependencies** を見つけます。
-2.  セッション中に生成された ID やリソースを追跡する **state store** を維持します。
-3.  現在の状態とツールスキーマに整合した応答を生成し、まだ作られていないリソースを要求された場合は 404 風のエラーを返します。
+1.  エージェントが使える全ツールのスキーマを分析し、ツール間の**ステートフルな依存関係**を見つけます。
+2.  セッション中に生成された ID やリソースを追跡する**ステートストア**を維持します。
+3.  現在の状態とツールスキーマに整合した応答を生成し、まだ作られていないリソースを要求された場合は 404 相当のエラーを返します。
 
 ```python
 from google.adk.tools.environment_simulation.environment_simulation_config import (
@@ -300,7 +300,7 @@ config = EnvironmentSimulationConfig(
 )
 ```
 
-この設定では、`create_order` がモックされると `order_id` が自動生成され、その後 `get_order` や `cancel_order` が呼ばれたときに、一貫した結果または not-found エラーを返します。
+この設定では、`create_order` がモックされると `order_id` が自動生成され、その後 `get_order` や `cancel_order` が呼ばれたときに、一貫した結果または未検出（not-found）エラーを返します。
 
 ### 環境データを渡す
 
@@ -330,9 +330,9 @@ config = EnvironmentSimulationConfig(
 
 LLM はこのデータを使って、任意のプレースホルダー値ではなく、ドメインに合った商品名・価格・在庫数を返します。
 
-### tracing データを渡す
+### トレースデータを渡す
 
-エージェントで生成した trace を `tracing` として渡すと、より現実的なモック応答にできます。
+エージェントで生成したトレースを `tracing` として渡すと、より現実的なモック応答にできます。
 
 ```python
 import json

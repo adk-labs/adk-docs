@@ -20,13 +20,13 @@ ADK(에이전트 개발 키트) 내의 에이전트 레지스트리 클라이언
 - **동적 통합**: 런타임에 에이전트 및 MCP 서버 엔드포인트를 검색하여 환경 변화에 애플리케이션을 더 탄력적으로 유연하게 연동합니다.
 - **향상된 거버넌스**: ADK 애플리케이션 내에서 레지스트리의 검증된 관리형 구성 요소를 활용합니다.
 
-## 전제조건
+## 사전 요구사항
 
 - [Google Cloud 프로젝트](https://docs.cloud.google.com/resource-manager/docs/creating-managing-projects).
 - Google Cloud 프로젝트에서 사용 설정된 [Agent Registry API](https://docs.cloud.google.com/agent-registry/setup).
-- 환경에 맞게 구체화된 인증 설정. [Application Default Credentials](https://docs.cloud.google.com/docs/authentication/application-default-credentials)(`gcloud auth application-default login`)를 사용해 로그인해야 합니다.
-- 환경 변수 `GOOGLE_CLOUD_PROJECT`를 프로젝트 ID로 설정하고 `GOOGLE_CLOUD_LOCATION`을 적절한 지역(예: `global`, `us-central1`)으로 설정합니다.
-- [설치](#installation) 단원의 설명에 따라 사용 언어에 맞는 ADK 설치.
+- 환경에 맞게 구성된 인증 설정. [Application Default Credentials](https://docs.cloud.google.com/docs/authentication/application-default-credentials)(`gcloud auth application-default login`)를 사용해 로그인해야 합니다.
+- 환경 변수 `GOOGLE_CLOUD_PROJECT`를 프로젝트 ID로 설정하고 `GOOGLE_CLOUD_LOCATION`을 적절한 리전(예: `global`, `us-central1`)으로 설정합니다.
+- [설치](#installation) 섹션의 안내에 따라 사용 언어에 맞는 ADK 설치.
 
 ADK 에이전트에서 Google Cloud 연결과 관련된 자세한 내용은 [Google Cloud 및 Agent Platform 연결](/get-started/google-cloud/) 가이드를 참고하세요.
 
@@ -42,7 +42,7 @@ ADK 에이전트에서 Google Cloud 연결과 관련된 자세한 내용은 [Goo
 
     ### 필수 종속성
 
-    `google.adk.integrations.agent_registry` 모듈은 모듈 스코프에서 A2A SDK와 에이전트 식별자(Agent Identity) 인증 제공업체를 모두 가져오므로 핵심 기능만 설치하면 `AgentRegistry` 임포트 시 `ImportError`가 발생합니다. `a2a`와 `agent-identity` 부가 패키지를 함께 설치하세요.
+    `google.adk.integrations.agent_registry` 모듈은 모듈 스코프에서 A2A SDK와 Agent Identity 인증 공급자(auth provider)를 모두 가져오므로 핵심 기능만 설치하면 `AgentRegistry` 임포트 시 `ImportError`가 발생합니다. `a2a`와 `agent-identity` 부가 패키지를 함께 설치하세요.
 
     ```bash
     pip install "google-adk[a2a,agent-identity]"
@@ -318,7 +318,7 @@ Google MCP 서버의 경우 인증 헤더가 자동으로 전달됩니다.
 
 === "Go"
 
-    `agentregistry.Client` 유형은 리소스 종류별로 3가지 검색 메서드를 노출합니다. `List*`는 단일 페이지를 반환하고, `Get*`은 전체 리소스 이름으로 개별 리소스를 반환하며, `All*`은 요청 시 페이지를 가져오는 `iter.Seq2`를 반환합니다.
+    `agentregistry.Client` 타입은 리소스 종류별로 3가지 조회(discovery) 메서드를 제공합니다. `List*`는 단일 페이지를 반환하고, `Get*`은 전체 리소스 이름으로 개별 리소스를 반환하며, `All*`은 요청 시 페이지를 가져오는 `iter.Seq2`를 반환합니다.
 
     - `ListAgents(ctx, opts ...ListOption)`, `GetAgent(ctx, name)`, `AllAgents(ctx, opts ...ListOption)`: 등록된 A2A 에이전트
     - `ListMCPServers(ctx, opts ...ListOption)`, `GetMCPServer(ctx, name)`, `AllMCPServers(ctx, opts ...ListOption)`: 등록된 MCP 서버
@@ -346,7 +346,7 @@ Google MCP 서버의 경우 인증 헤더가 자동으로 전달됩니다.
     - `Location` (string, 필수): `global`, `us-central1`과 같은 Google Cloud 위치/지역.
     - `HTTPClient` (`*http.Client`, 선택): Agent Registry API 호출에 사용되는 클라이언트입니다. `nil`인 경우 ADK는 Application Default Credentials로부터 클라이언트를 생성하고 `GOOGLE_API_USE_MTLS_ENDPOINT` 및 `GOOGLE_API_USE_CLIENT_CERTIFICATE` 환경 변수를 바탕으로 mTLS를 포함한 엔드포인트를 결정합니다. 이 클라이언트는 `*.googleapis.com` 엔드포인트로 전송되는 [McpToolset](/tools-custom/mcp-tools/) 트래픽에도 재사용되지만, [A2A](/a2a/quickstart-consuming-go/) 트래픽에는 사용되지 않습니다.
 
-    해결된 엔드포인트로의 아웃바운드(Egress) 트래픽은 대신 호출별로 설정됩니다. `RemoteAgent`에서는 `WithA2AHTTPClient` 및 `WithA2AHeaders`, `MCPToolset`에서는 `WithMCPHTTPClient` 및 `WithMCPHeaders`를 사용합니다.
+    해석된(resolved) 엔드포인트로 나가는 이그레스(egress) 트래픽은 호출별로 설정합니다. `RemoteAgent`에서는 `WithA2AHTTPClient` 및 `WithA2AHeaders`, `MCPToolset`에서는 `WithMCPHTTPClient` 및 `WithMCPHeaders`를 사용합니다.
 
 ## 추가 리소스
 - [샘플 에이전트 코드 (Python)](https://github.com/google/adk-python/tree/main/contributing/samples/integrations/agent_registry_agent)

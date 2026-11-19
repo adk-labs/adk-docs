@@ -89,7 +89,7 @@ root_agent = Agent(
 
 ## 利用可能なツール
 
-`FilesRetrieval` クラスはツールです。`tools=[...]` でアタッチされると、エージェントには単一の `query` 文字列パラメータを受け取る1つの関数が表示されます。
+`FilesRetrieval` クラスはツールです。`tools=[...]` でアタッチされると、エージェントには単一の `query` 文字列パラメータを受け取る 1 つの関数が提供されます。
 
 ツール | 説明
 ---- | -----------
@@ -101,10 +101,10 @@ root_agent = Agent(
 
 パラメータ | 型 | 必須 | デフォルト | 説明
 --------- | ---- | -------- | ------- | -----------
-`name` | `str` | **はい** | — | 関数呼び出しのためにモデルが使用するツールの固有識別子。
-`description` | `str` | **はい** | — | エージェントが検索ツールをいつどのように呼び出すべきかの説明。
-`input_dir` | `str` | **はい** | — | ロードおよびインデックス作成を行うドキュメントを含むローカルファイルシステムのディレクトリパス。
-`embedding_model` | `Optional[BaseEmbedding]` | いいえ | `None` | カスタムの LlamaIndex `BaseEmbedding` インスタンス。省略した場合は、デフォルトで `GoogleGenAIEmbedding(model_name="gemini-embedding-2-preview", embed_batch_size=1)` になります。
+`name` | `str` | **必須** | — | 関数呼び出しのためにモデルが使用するツールの固有識別子。
+`description` | `str` | **必須** | — | エージェントが検索ツールをいつどのように呼び出すべきかの説明。
+`input_dir` | `str` | **必須** | — | ロードおよびインデックス作成を行うドキュメントを含むローカルファイルシステムのディレクトリパス。
+`embedding_model` | `Optional[BaseEmbedding]` | 任意 | `None` | カスタムの LlamaIndex `BaseEmbedding` インスタンス。省略した場合は、デフォルトで `GoogleGenAIEmbedding(model_name="gemini-embedding-2-preview", embed_batch_size=1)` になります。
 
 ### カスタムエンベディングモデル
 

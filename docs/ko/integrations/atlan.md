@@ -1,6 +1,6 @@
 ---
 catalog_title: Atlan
-catalog_description: metadata, lineage, business knowledge를 검색, 탐색, 거버넌스합니다
+catalog_description: 메타데이터, 데이터 계보(lineage), 비즈니스 지식을 검색·탐색하고 거버넌스를 관리합니다
 catalog_icon: /integrations/assets/atlan.png
 catalog_tags: ["mcp"]
 ---
@@ -13,32 +13,32 @@ catalog_tags: ["mcp"]
 
 [Atlan MCP Server](https://github.com/atlanhq/agent-toolkit)는 ADK 에이전트를
 엔터프라이즈 AI를 위한 컨텍스트 계층인 [Atlan](https://www.atlan.com/)에
-연결합니다. 이를 통해 에이전트는 조직의 context repo, 즉 AI 에이전트가 효과적으로
-작업하는 데 필요한 지식, 데이터, 의미 체계에 접근할 수 있습니다. 이 통합은
-에이전트가 엔터프라이즈 컨텍스트를 검색하고 발견하며, end-to-end lineage를
-탐색하고, 거버넌스된 데이터 정의와 glossary에 접근하고, SQL을 실행하고, metadata
-graph를 정리하며, data quality를 보장하도록 도와 모든 에이전트 작업이 신뢰할 수
-있는 조직 컨텍스트에 기반하도록 합니다.
+연결합니다. 이를 통해 에이전트는 조직의 컨텍스트 저장소(context repo), 즉 AI 에이전트가 효과적으로
+동작하는 데 필요한 지식, 데이터, 시맨틱 정보에 접근할 수 있습니다. 이 통합을 사용하면
+에이전트가 엔터프라이즈 컨텍스트를 검색·탐색하고, 엔드투엔드 데이터 계보(lineage)를
+추적하며, 거버넌스가 적용된 데이터 정의와 용어집(glossary)에 접근하고, SQL을 실행하며, 메타데이터
+그래프를 관리하고 데이터 품질을 보장하여 모든 에이전트 작업이 신뢰할 수
+있는 조직 컨텍스트에 그라운딩(Grounding)되도록 할 수 있습니다.
 
 ## 사용 사례
 
-- **엔터프라이즈 컨텍스트 검색 및 발견:** 자연어로 전체 스택의 table, column,
-  dashboard, glossary term, data product를 찾습니다.
+- **엔터프라이즈 컨텍스트 검색 및 탐색:** 자연어로 전체 기술 스택의 테이블, 컬럼,
+  대시보드, 용어집 항목, 데이터 프로덕트를 찾습니다.
 
-- **End-to-end lineage 탐색:** 시스템 전반에서 데이터 흐름을 upstream과 downstream으로
-  추적해 스키마 변경 전 의존성을 파악합니다.
+- **엔드투엔드 계보(lineage) 탐색:** 시스템 전반에서 데이터 흐름을 업스트림(upstream)과 다운스트림(downstream)으로
+  추적해 스키마 변경 전에 의존성을 파악합니다.
 
-- **거버넌스된 데이터 정의 접근:** glossary, data domain, 인증된 metadata를 사용해
-  에이전트 출력을 신뢰할 수 있는 조직 컨텍스트에 기반시킵니다.
+- **거버넌스가 적용된 데이터 정의 접근:** 용어집, 데이터 도메인, 인증된 메타데이터를 사용해
+  에이전트 출력을 신뢰할 수 있는 조직 컨텍스트에 그라운딩(Grounding)합니다.
 
-- **Metadata graph 정리:** 에이전트에서 설명 업데이트, 자산 인증, glossary 관리,
-  data quality rule과 schedule 정의, SQL 실행까지 수행합니다.
+- **메타데이터 그래프 관리:** 에이전트에서 설명 업데이트, 자산 인증, 용어집 관리,
+  데이터 품질 규칙과 스케줄 정의, SQL 실행까지 수행합니다.
 
-## 전제 조건
+## 사전 요구사항
 
-- [Atlan](https://atlan.com/) tenant
+- [Atlan](https://atlan.com/) 테넌트(tenant)
 - 조회하려는 자산에 접근할 수 있는 권한이 있는 Atlan 계정
-- 로컬에 설치된 Node.js(hosted MCP server로 bridge하는 `mcp-remote`에서 사용)
+- 로컬에 설치된 Node.js (호스팅된 MCP 서버로 연결하는 `mcp-remote`에서 사용)
 
 ## 에이전트와 함께 사용
 
@@ -112,65 +112,65 @@ graph를 정리하며, data quality를 보장하도록 도와 모든 에이전�
 
 ## 사용 가능한 도구
 
-### 발견 및 검색
+### 탐색 및 검색
 
-Tool | Description
+도구 | 설명
 ---- | -----------
-`semantic_search_tool` | AI 기반 semantic understanding을 사용해 모든 데이터 자산을 자연어로 검색합니다
+`semantic_search_tool` | AI 기반 시맨틱 이해를 사용해 모든 데이터 자산을 자연어로 검색합니다
 `search_assets_tool` | 구조화된 필터와 조건으로 자산을 검색합니다
-`traverse_lineage_tool` | 자산의 data flow를 upstream(source) 또는 downstream(consumer)으로 추적합니다
+`traverse_lineage_tool` | 자산의 데이터 흐름을 업스트림(소스) 또는 다운스트림(컨슈머)으로 추적합니다
 `query_assets_tool` | 연결된 데이터 소스에 대해 SQL 쿼리를 실행합니다
-`get_asset_tool` | GUID 또는 qualified name으로 단일 자산의 상세 정보(custom metadata, data quality check, README 포함)를 가져옵니다
-`resolve_metadata_tool` | 이름 또는 설명으로 metadata entity(user, classification, custom metadata set, glossary, domain, data product)를 찾습니다
-`get_groups_tool` | workspace group과 구성원을 나열합니다
-`search_atlan_docs_tool` | Atlan 제품 문서를 검색하고 source citation이 포함된 LLM 생성 답변을 반환합니다
+`get_asset_tool` | GUID 또는 정규화된 이름(qualified name)으로 단일 자산의 상세 정보(커스텀 메타데이터, 데이터 품질 검사, README 포함)를 가져옵니다
+`resolve_metadata_tool` | 이름 또는 설명으로 메타데이터 엔티티(사용자, 분류, 커스텀 메타데이터 세트, 용어집, 도메인, 데이터 프로덕트)를 찾습니다
+`get_groups_tool` | 워크스페이스 그룹과 구성원을 나열합니다
+`search_atlan_docs_tool` | Atlan 제품 문서를 검색하고 출처 인용이 포함된 LLM 생성 답변을 반환합니다
 
 ### 자산 업데이트
 
-Tool | Description
+도구 | 설명
 ---- | -----------
-`update_assets_tool` | 자산 설명, certificate 상태, README 또는 term을 업데이트합니다
-`manage_announcements_tool` | 자산에 announcement(information, warning, issue)를 추가하거나 제거합니다
-`manage_asset_lifecycle_tool` | 자산을 archive, restore 또는 영구 purge합니다
+`update_assets_tool` | 자산 설명, 인증(certificate) 상태, README 또는 용어를 업데이트합니다
+`manage_announcements_tool` | 자산에 공지(정보, 경고, 이슈)를 추가하거나 제거합니다
+`manage_asset_lifecycle_tool` | 자산을 보관(archive), 복원(restore) 또는 영구 삭제(purge)합니다
 
-### Glossary 및 domain
+### 용어집 및 도메인
 
-Tool | Description
+도구 | 설명
 ---- | -----------
-`create_glossaries` | 새 glossary를 만듭니다
-`create_glossary_terms` | glossary 안에 term을 만듭니다
-`create_glossary_categories` | glossary 안에 category를 만듭니다
-`create_domains` | data domain과 subdomain을 만듭니다
-`create_data_products` | domain 및 asset에 연결된 data product를 만듭니다
+`create_glossaries` | 새 용어집(glossary)을 만듭니다
+`create_glossary_terms` | 용어집 안에 용어(term)를 만듭니다
+`create_glossary_categories` | 용어집 안에 카테고리를 만듭니다
+`create_domains` | 데이터 도메인과 하위 도메인을 만듭니다
+`create_data_products` | 도메인 및 자산에 연결된 데이터 프로덕트를 만듭니다
 
-### Data quality rule
+### 데이터 품질 규칙
 
-Tool | Description
+도구 | 설명
 ---- | -----------
-`create_dq_rules_tool` | data quality rule(null check, uniqueness, regex, custom SQL 등)을 만듭니다
-`update_dq_rules_tool` | 기존 data quality rule을 업데이트합니다
-`schedule_dq_rules_tool` | cron expression으로 data quality rule 실행을 예약합니다
-`delete_dq_rules_tool` | data quality rule을 삭제합니다
+`create_dq_rules_tool` | 데이터 품질 규칙(null 검사, 고유성, 정규식, 커스텀 SQL 등)을 만듭니다
+`update_dq_rules_tool` | 기존 데이터 품질 규칙을 업데이트합니다
+`schedule_dq_rules_tool` | cron 표현식으로 데이터 품질 규칙 실행을 예약합니다
+`delete_dq_rules_tool` | 데이터 품질 규칙을 삭제합니다
 
-### Custom metadata
+### 커스텀 메타데이터
 
-Tool | Description
+도구 | 설명
 ---- | -----------
-`create_custom_metadata_set_tool` | typed attribute가 있는 custom metadata set을 만듭니다
-`add_attributes_to_cm_set_tool` | 기존 custom metadata set에 새 attribute를 추가합니다
-`remove_attributes_from_cm_set_tool` | custom metadata set에서 attribute를 archive(soft-delete)합니다
-`delete_custom_metadata_set_tool` | custom metadata set을 영구 삭제하고 모든 자산에서 해당 값을 지웁니다
-`update_custom_metadata_tool` | 하나 이상의 자산에서 custom metadata 값을 업데이트합니다
-`remove_custom_metadata_tool` | 자산에서 custom metadata set의 값을 제거합니다
+`create_custom_metadata_set_tool` | 타입이 지정된 속성을 가진 커스텀 메타데이터 세트를 만듭니다
+`add_attributes_to_cm_set_tool` | 기존 커스텀 메타데이터 세트에 새 속성을 추가합니다
+`remove_attributes_from_cm_set_tool` | 커스텀 메타데이터 세트에서 속성을 보관(소프트 삭제)합니다
+`delete_custom_metadata_set_tool` | 커스텀 메타데이터 세트를 영구 삭제하고 모든 자산에서 해당 값을 지웁니다
+`update_custom_metadata_tool` | 하나 이상의 자산에서 커스텀 메타데이터 값을 업데이트합니다
+`remove_custom_metadata_tool` | 자산에서 커스텀 메타데이터 세트의 값을 제거합니다
 
-### Atlan tag
+### Atlan 태그
 
-Tool | Description
+도구 | 설명
 ---- | -----------
-`add_atlan_tags_tool` | 하나 이상의 자산에 Atlan tag를 추가합니다
-`remove_atlan_tag_tool` | 하나 이상의 자산에서 Atlan tag를 제거합니다
+`add_atlan_tags_tool` | 하나 이상의 자산에 Atlan 태그를 추가합니다
+`remove_atlan_tag_tool` | 하나 이상의 자산에서 Atlan 태그를 제거합니다
 
 ## 추가 리소스
 
-- [Atlan MCP Server Repository](https://github.com/atlanhq/agent-toolkit)
-- [Atlan MCP Overview](https://docs.atlan.com/product/capabilities/atlan-ai/how-tos/atlan-mcp-overview)
+- [Atlan MCP 서버 저장소](https://github.com/atlanhq/agent-toolkit)
+- [Atlan MCP 개요](https://docs.atlan.com/product/capabilities/atlan-ai/how-tos/atlan-mcp-overview)

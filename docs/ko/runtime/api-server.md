@@ -162,7 +162,7 @@ curl -X POST http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_1
 POST를 통해 에이전트에 쿼리를 보내는 방법에는 `/run` 또는 `/run_sse` 경로를 사용하는 두 가지가 있습니다.
 
 * `POST http://localhost:8000/run`: 모든 이벤트를 리스트로 수집하여 한 번에 반환합니다. 대부분의 사용자에게 적합합니다 (확실하지 않다면 이 방법을 사용하는 것을 권장합니다).
-* `POST http://localhost:8000/run_sse`: 서버-전송 이벤트(Server-Sent-Events)로 반환하며, 이는 이벤트 객체의 스트림입니다. 이벤트가 사용 가능해지는 즉시 알림을 받고 싶은 사용자에게 적합합니다. `/run_sse`를 사용하면 `streaming`을 `true`로 설정하여 토큰 수준 스트리밍을 활성화할 수도 있습니다.
+* `POST http://localhost:8000/run_sse`: 서버 전송 이벤트(Server-Sent Events, SSE)로 반환하며, 이는 이벤트 객체의 스트림입니다. 이벤트가 생성되는 즉시 알림을 받고 싶은 사용자에게 적합합니다. `/run_sse`를 사용하면 `streaming`을 `true`로 설정하여 토큰 수준 스트리밍을 활성화할 수도 있습니다.
 
 **`/run` 사용하기**
 
@@ -264,7 +264,7 @@ ADK는 [콜백](../callbacks/index.md)을 사용하여 서드파티 관측 가�
 
 ## ADK API 서버
 
-ADK API 서버는 에이전트를 RESTful API를 통해 노출하는 미리 패키징된 [FastAPI](https://fastapi.tiangolo.com/) 웹 서버입니다. 로컬 테스트 및 개발을 위한 주요 도구이며, 배포하기 전에 프로그래밍 방식으로 에이전트와 상호 작용할 수 있게 해줍니다.
+ADK API 서버는 에이전트를 RESTful API로 외부에 공개하는 사전 패키징된 [FastAPI](https://fastapi.tiangolo.com/) 웹 서버입니다. 로컬 테스트 및 개발을 위한 주요 도구이며, 배포하기 전에 프로그래밍 방식으로 에이전트와 상호작용할 수 있게 해줍니다.
 
 ## 서버 실행하기
 
@@ -286,7 +286,7 @@ API 서버는 Swagger UI를 사용하여 대화형 API 문서를 자동으로 �
 
 대화형 문서에 액세스하려면 API 서버를 시작하고 웹 브라우저에서 [http://localhost:8000/docs](http://localhost:8000/docs)로 이동하세요.
 
-사용 가능한 모든 API 엔드포인트의 완전하고 대화형인 목록이 표시되며, 이를 확장하여 파라미터, 요청 본문 및 응답 스키마에 대한 자세한 정보를 볼 수 있습니다. "Try it out"을 클릭하여 실행 중인 에이전트에 실시간 요청을 보낼 수도 있습니다.
+사용 가능한 모든 API 엔드포인트의 전체 대화형 목록이 표시되며, 각 항목을 펼쳐 매개변수, 요청 본문 및 응답 스키마에 대한 자세한 정보를 확인할 수 있습니다. "Try it out"을 클릭하여 실행 중인 에이전트에 실시간 요청을 보낼 수도 있습니다.
 
 ## API 엔드포인트
 
@@ -354,7 +354,7 @@ curl -X PATCH http://localhost:8000/apps/my_sample_agent/users/u_123/sessions/s_
 
 #### 세션 조회
 
-특정 세션의 세부 정보(현재 상태 및 모든 관련 이벤트 포함)를 검색합니다.
+특정 세션의 세부 정보(현재 상태 및 모든 관련 이벤트 포함)를 조회합니다.
 
 *   **메서드:** `GET`
 *   **경로:** `/apps/{app_name}/users/{user_id}/sessions/{session_id}`
@@ -429,7 +429,7 @@ curl -X POST http://localhost:8000/run \
 
 #### 에이전트 실행 (스트리밍)
 
-에이전트를 실행하고 이벤트가 생성될 때마다 [서버-전송 이벤트(SSE)](https://developer.mozilla.org/ko/docs/Web/API/Server-sent_events)를 사용하여 클라이언트로 스트리밍합니다.
+에이전트를 실행하고 이벤트가 생성될 때마다 [서버 전송 이벤트(SSE)](https://developer.mozilla.org/ko/docs/Web/API/Server-sent_events)를 사용하여 클라이언트로 스트리밍합니다.
 
 *   **메서드:** `POST`
 *   **경로:** `/run_sse`

@@ -47,7 +47,7 @@ export GOOGLE_API_KEY="your-gemini-api-key"
 
 ## 에이전트와 함께 사용하기
 
-Latitude SDK의 `google_adk` 계측 키 아래에 `google.adk` 모듈을 전달합니다. Latitude는 OpenTelemetry 트레이서 공급자(tracer provider)를 등록하고 ADK를 계측합니다. 여러분은 지금처럼 ADK를 그대로 호출하시면 됩니다.
+Latitude SDK의 `google_adk` 계측 키 아래에 `google.adk` 모듈을 전달합니다. Latitude는 OpenTelemetry 트레이서 공급자(tracer provider)를 등록하고 ADK를 계측하므로, ADK 호출 코드는 기존 그대로 유지하면 됩니다.
 
 ```python
 import asyncio
@@ -108,11 +108,11 @@ capture("weather-agent-run", lambda: asyncio.run(weather_agent_run()))
 latitude.shutdown()
 ```
 
-## 제공되는 혜택
+## 제공되는 정보
 
 각 에이전트 실행은 Latitude에서 중첩된 스팬(span)을 가진 트레이스(trace)로 나타납니다:
 
-- **에이전트 스팬 (Agent spans)**: 에이전트 이름, 지시사항(instruction) 및 구성된 도구
+- **에이전트 스팬 (Agent spans)**: 에이전트 이름, 지침(instruction) 및 구성된 도구
 - **생성 스팬 (Generation spans)**: 모델, 입력/출력 메시지 및 토큰 사용량
 - **도구 스팬 (Tool spans)**: 입력 인자 및 출력을 포함하는 도구 호출
 

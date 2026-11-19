@@ -73,7 +73,7 @@ ADK 에이전트와 함께 사용할 수 있는 다음 사전 빌드된 도구�
     </div>
     <div class="tool-card-content">
       <h3>BigQuery 도구</h3>
-      <p>BigQuery에 연결하여 데이터 검색 및 분석 수행</p>
+      <p>BigQuery에 연결하여 데이터 조회 및 분석 수행</p>
     </div>
   </a>
 
@@ -83,7 +83,7 @@ ADK 에이전트와 함께 사용할 수 있는 다음 사전 빌드된 도구�
     </div>
     <div class="tool-card-content">
       <h3>Bigtable 도구</h3>
-      <p>Bigtable과 상호 작용하여 데이터 검색 및 SQL 실행</p>
+      <p>Bigtable과 상호작용하여 데이터 조회 및 SQL 실행</p>
     </div>
   </a>
 
@@ -103,7 +103,7 @@ ADK 에이전트와 함께 사용할 수 있는 다음 사전 빌드된 도구�
     </div>
     <div class="tool-card-content">
       <h3>Spanner 도구</h3>
-      <p>Spanner와 상호 작용하여 데이터 검색, 검색 및 SQL 실행</p>
+      <p>Spanner와 상호작용하여 데이터 조회, 검색 및 SQL 실행</p>
     </div>
   </a>
 
@@ -149,7 +149,7 @@ ADK 에이전트와 함께 사용할 수 있는 다음 사전 빌드된 도구�
     </div>
     <div class="tool-card-content">
       <h3>AgentQL</h3>
-      <p>자연어를 사용하여 복원력 있는 구조화된 웹 데이터 추출</p>
+      <p>자연어를 사용하여 안정적으로 구조화된 웹 데이터 추출</p>
     </div>
   </a>
 
@@ -199,7 +199,7 @@ ADK 에이전트와 함께 사용할 수 있는 다음 사전 빌드된 도구�
     </div>
     <div class="tool-card-content">
       <h3>GitHub</h3>
-      <p>코드 분석, 문제 및 PR 관리, 워크플로 자동화</p>
+      <p>코드 분석, 이슈 및 PR 관리, 워크플로 자동화</p>
     </div>
   </a>
 

@@ -13,7 +13,7 @@ vLLM 모델을 사용할 수 있습니다.
 
 1. **모델 배포:** 원하는 모델을 vLLM(또는 유사 도구)로 배포합니다.
    API 베이스 URL(예: `https://your-vllm-endpoint.run.app/v1`)을 기록합니다.
-    * *ADK 도구에 중요:* 배포 시 서빙 도구가 OpenAI 호환 도구/함수 호출을 지원하고 활성화했는지 확인합니다.
+    * *ADK 도구에 중요:* 배포 시 서빙 도구가 OpenAI 호환 도구/함수 호출을 지원하고 활성화되어 있는지 확인하세요.
       vLLM의 경우 모델에 따라 `--enable-auto-tool-choice` 또는 특정 `--tool-call-parser` 플래그가 필요할 수 있습니다.
       자세한 내용은 vLLM 문서의 Tool Use 섹션을 확인하세요.
 2. **인증:** 엔드포인트의 인증 방식(예: API 키, bearer 토큰)을 확인합니다.

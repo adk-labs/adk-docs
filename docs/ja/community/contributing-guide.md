@@ -52,14 +52,14 @@ ADK にはいくつかの方法で貢献できます。
 
 ### 改善提案をする { #suggesting-enhancements }
 
-新機能や既存機能の改善アイデアがありますか。
+新機能や既存機能の改善アイデアがありますか？
 
 * **フレームワークの改善:** [`google/adk-python`](https://github.com/google/adk-python/issues/new)、[`google/adk-js`](https://github.com/google/adk-js/issues/new)、[`google/adk-go`](https://github.com/google/adk-go/issues/new)、または [`google/adk-java`](https://github.com/google/adk-java/issues/new) に Issue を作成してください。
 * **ドキュメントの改善:** [`google/adk-docs`](https://github.com/google/adk-docs/issues/new) に Issue を作成してください。
 
 ### ドキュメントを改善する { #improving-documentation }
 
-タイポ、不明瞭な説明、情報の不足を見つけましたか。変更を直接提出してください。
+タイポ、わかりにくい説明、情報の不足を見つけた場合は、直接変更を提案してください。
 
 * **方法:** 提案する改善を含む Pull Request（PR）を送信してください。
 * **場所:** [`google/adk-docs` で Pull Request を作成](https://github.com/google/adk-docs/pulls)

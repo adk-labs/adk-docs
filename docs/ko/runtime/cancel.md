@@ -26,7 +26,7 @@ ADK는 `AbortController`와 `AbortSignal`을 사용한 정상적인 취소를 �
 ## 취소 전파 방식
 
 signal을 abort하면 취소가 전체 실행 스택 아래로 전파됩니다. 각 구성 요소는 주요
-수명주기 지점에서 `abortSignal.aborted`를 확인하고, 취소를 감지하면 조기에 종료합니다.
+라이프사이클 지점에서 `abortSignal.aborted`를 확인하고, 취소를 감지하면 조기에 종료합니다.
 
 | 구성 요소 | abort 시 동작 |
 | :--- | :--- |

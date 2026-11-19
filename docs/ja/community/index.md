@@ -299,13 +299,13 @@ ADK Community Google Group に参加して、次回のコールに関する更�
 <ul class="translation-list">
   <li><a href="https://adk.wiki/">🇨🇳 中国語（中文）ドキュメント</a></li>
   <li><a href="https://adk-labs.github.io/adk-docs/ko/">🇰🇷 韓国語（한국어）ドキュメント</a></li>
-  <li><a href="https://adk-labs.github.io/adk-docs/ja/">🇯🇵 日本語（日本語）ドキュメント</a></li>
+  <li><a href="https://adk-labs.github.io/adk-docs/ja/">🇯🇵 日本語ドキュメント</a></li>
   <li><a href="https://adk-es.fabian-castro-c.dev/">🇪🇸 スペイン語（Español）ドキュメント</a></li>
 </ul>
 
 ## リソースを提供する
 
-共有したい ADK リソースがありますか。チュートリアル、翻訳、ツール、動画、サンプルなど、何でも歓迎です。
+共有したい ADK リソース（チュートリアル、翻訳、ツール、動画、サンプルなど）はありますか？
 
 参加方法の詳細は、**[コントリビューションガイド](/ja/community/contributing-guide/)** の手順をご覧ください。
 

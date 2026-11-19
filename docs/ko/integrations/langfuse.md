@@ -5,19 +5,19 @@ catalog_icon: /integrations/assets/langfuse.png
 catalog_tags: ["observability", "evaluation"]
 ---
 
-# ADK를 위한 Langfuse 관측 가능성(Observability)
+# ADK용 Langfuse 관측성(Observability)
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[Langfuse](https://langfuse.com)는 관측 가능성(observability), 평가(evaluation) 및 프롬프트 관리를 위한 오픈소스 LLM 엔지니어링 플랫폼입니다. OpenTelemetry(OTel) 프로토콜을 사용해 ADK 에이전트의 상세한 트레이스(trace)를 수집하므로 개발 및 프로덕션 환경에서 에이전트 앱을 디버깅하고 평가하며 계속 개선해 나갈 수 있습니다.
+[Langfuse](https://langfuse.com)는 관측성(observability), 평가(evaluation) 및 프롬프트 관리를 위한 오픈소스 LLM 엔지니어링 플랫폼입니다. OpenTelemetry(OTel) 프로토콜을 사용해 ADK 에이전트의 상세한 트레이스(trace)를 수집하므로 개발 및 프로덕션 환경에서 에이전트 앱을 디버깅하고 평가하며 계속 개선해 나갈 수 있습니다.
 
 ## 개요
 
 Langfuse는 OpenTelemetry를 통해 ADK의 트레이스를 수집하며 [AI 엔지니어링 루프(AI Engineering Loop)](https://langfuse.com/academy/ai-engineering-loop)를 지원합니다.
 
-- **[트레이스(Trace)](https://langfuse.com/academy/tracing)**: 프롬프트, 검색된 컨텍스트, 도구 호출, 출력, 지연 시간(latency), 비용을 포함한 요청의 전체 실행 경로 캡처
+- **[트레이스(Trace)](https://langfuse.com/academy/tracing)**: 프롬프트, 조회된 컨텍스트, 도구 호출, 출력, 지연 시간(latency), 비용을 포함한 요청의 전체 실행 경로 캡처
 - **[모니터링(Monitor)](https://langfuse.com/academy/monitoring)**: 평가 방법, 사용자 피드백, 비용 또는 지연 시간 이상 징후를 활용해 시간에 따른 시스템 동작을 추적하고 주의가 필요한 트레이스 감지
 - **[데이터세트 구축(Build datasets)](https://langfuse.com/academy/datasets)**: 모니터링의 실제 시나리오와 개발 단계의 예상 시나리오를 재현 가능한 테스트 케이스로 전환
 - **[실험(Experiment)](https://langfuse.com/academy/experiments)**: 변수(프롬프트, 모델, 검색 전략 등)를 체계적으로 변경하고 안정적인 기준선(baseline)과 각 변경 사항 비교
@@ -65,7 +65,7 @@ GoogleADKInstrumentor().instrument()
 
 이것으로 설정이 완료되었습니다. 이제 모든 ADK 에이전트 활동이 자동으로 추적되어 Langfuse 프로젝트로 전송됩니다.
 
-## 관측(Observe)
+## 관측하기
 
 트레이싱이 초기화되면 평소처럼 ADK 에이전트를 실행하세요. 모든 상호작용이 Langfuse에 표시됩니다.
 

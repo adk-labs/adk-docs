@@ -10,7 +10,7 @@
 
 カスタムメトリクスは、指定された評価ケースでエージェントのパフォーマンスを評価し、
 [`EvaluationResult`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/evaluator.py) を返す Python 関数です。この関数は [`EvalMetric`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/eval_metrics.py)、
-評価実行中にエージェントが生成した [`Invocation`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/eval_case.py) オブジェクトのリスト、そして必要に応じて期待される invocation のリスト、または評価ケースで定義された
+評価実行中にエージェントが生成した [`Invocation`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/eval_case.py) オブジェクトのリスト、そして必要に応じて期待される `Invocation` のリスト、または評価ケースで定義された
 [`ConversationScenario`](https://github.com/google/adk-python/blob/main/src/google/adk/evaluation/eval_case.py) を受け取ります。
 
 各 `Invocation` オブジェクトは、ユーザーとエージェントの 1 回のやり取りを表し、そのターンのツール軌跡、中間応答、最終応答などの情報を含みます。
@@ -92,7 +92,7 @@ def check_final_response_exact_match(
 
 カスタムメトリクスが API 呼び出しなどの非同期処理を必要とする場合は、`async` 関数として定義できます。
 
-次は、フェイクの非同期 profanity checker API を使って、エージェント応答に卑語が含まれているかを確認するカスタムメトリクス関数の例です。
+次は、モックの非同期不適切表現チェッカー API を使って、エージェントの応答に不適切な表現（profanity）が含まれているかを確認するカスタムメトリクス関数の例です。
 
 ```python
 import asyncio
@@ -160,9 +160,9 @@ async def check_for_profanity(
 
 `adk eval` による評価実行でカスタムメトリクスを使うには、`EvalConfig` JSON ファイルでそれを指定する必要があります。
 
-1.  カスタムメトリクスを eval `criteria` の1つとして追加します。キーはメトリクス名、値は合格しきい値です。
+1.  カスタムメトリクスを評価の `criteria` の1つとして追加します。キーはメトリクス名、値は合格しきい値です。
 2.  `EvalConfig` に `custom_metrics` オブジェクトを追加します。このオブジェクトの中に各カスタムメトリクスのエントリを追加し、キーはメトリクス名（`criteria` の名前と一致）、値は `code_config` を含むオブジェクトにします。
-3.  `code_config` オブジェクトには、カスタムメトリクス関数への Python import path を表す文字列を持つ `name` フィールドが必要です。形式は `my.module.my_function` です。
+3.  `code_config` オブジェクトには、カスタムメトリクス関数への Python インポートパスを表す文字列を持つ `name` フィールドが必要です。形式は `my.module.my_function` です。
 
 ### `EvalConfig` の例
 
@@ -188,7 +188,7 @@ async def check_for_profanity(
 }
 ```
 
-この設定で `adk eval --config_file_path=<path_to_this_config>` を実行すると、ADK は各 eval case に対して `check_final_response_exact_match` を実行し、返されたスコアが 0.8 以上かどうかを確認して `my_check_final_response_exact_match` 基準を合格または不合格として扱います。
+この設定で `adk eval --config_file_path=<path_to_this_config>` を実行すると、ADK は各評価ケースに対して `check_final_response_exact_match` を実行し、返されたスコアが 0.8 以上かどうかを確認して `my_check_final_response_exact_match` 基準を合格または不合格として扱います。
 
 ### メトリクス情報を提供する
 

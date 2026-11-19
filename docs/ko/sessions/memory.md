@@ -633,7 +633,7 @@ async def update_session_memory(my_memory_service, my_completed_session):
 
 ### 에이전트가 둘 이상의 메모리 서비스에 액세스할 수 있나요?
 
-- **표준 구성을 통해: 아니요.** 프레임워크(`adk web`, `adk api_server`)는 `--memory_service_uri` 플래그를 통해 한 번에 하나의 메모리 서비스로 구성되도록 설계되었습니다. 이 단일 서비스는 러너에 연결되며 `tool_context.search_memory()` 및 `callback_context.search_memory()`를 통해 노출됩니다.
+- **표준 구성을 통해: 아니요.** 프레임워크(`adk web`, `adk api_server`)는 `--memory_service_uri` 플래그를 통해 한 번에 하나의 메모리 서비스로 구성되도록 설계되었습니다. 이 단일 서비스는 러너에 연결되며 `tool_context.search_memory()` 및 `callback_context.search_memory()`를 통해 제공됩니다.
 - **에이전트 코드 내에서: 예.** 두 번째 `BaseMemoryService`를 인스턴스화하고, 프레임워크에서 구성된 서비스를 위한 `ToolContext`가 이미 있는 커스텀 도구에서 이를 참조할 수 있습니다.
 
 예를 들어 에이전트는 대화 기록을 위해 프레임워크에서 구성된 `InMemoryMemoryService`를 사용하고, 별도의 지식 기반을 위해 `VertexAiMemoryBankService`, 문서 코퍼스 기반의 `VertexAiRagMemoryService` 또는 기타 `BaseMemoryService` 구현과 같은 두 번째 서비스를 수동으로 인스턴스화할 수 있습니다.

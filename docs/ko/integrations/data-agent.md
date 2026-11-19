@@ -136,7 +136,7 @@ data_agent_toolset = DataAgentToolset(credentials_config=credentials_config)
 
 !!! warning "주의해서 사용"
 
-    `enable_data_agent_modification=True`로 설정하면 에이전트가 Google Cloud 프로젝트에서 데이터 에이전트를 생성, 업데이트 및 삭제할 수 있습니다. 도구 세트에서 사용하는 사용자 인증 정보가 최소한의 필수 IAM 권한만 가진 승인된 프로젝트로 제한되어 있는지 확인하세요. 또한 `DataAgentToolset`에 `tool_filter`를 전달하여 특정 도구만 노출할 수도 있습니다(예: `delete_data_agent` 제외).
+    `enable_data_agent_modification=True`로 설정하면 에이전트가 Google Cloud 프로젝트에서 데이터 에이전트를 생성, 업데이트 및 삭제할 수 있습니다. 도구 세트에서 사용하는 사용자 인증 정보가 최소한의 필수 IAM 권한만 가진 승인된 프로젝트로 제한되어 있는지 확인하세요. 또한 `DataAgentToolset`에 `tool_filter`를 전달하여 특정 도구만 제공할 수도 있습니다(예: `delete_data_agent` 제외).
 
 ```python
 import google.auth

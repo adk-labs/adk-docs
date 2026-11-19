@@ -37,7 +37,7 @@ pip install "google-adk>=2.11.0"
 
 ## 에이전트와 함께 사용하기
 
-아래 예시의 `lookup_order` 함수와 같은 도메인 도구와 함께 `ModelConsultTool`을 `Agent`에 연결합니다. 이 도구는 `model_consult` 함수 선언을 등록하고 실행 모델의 시스템 인스트럭션에 기본 에스컬레이션 정책을 추가하여, 에이전트가 언제 어떻게 어드바이저에게 자문을 구해야 하는지에 대한 명확한 규칙을 제공합니다.
+아래 예시의 `lookup_order` 함수와 같은 도메인 도구와 함께 `ModelConsultTool`을 `Agent`에 연결합니다. 이 도구는 `model_consult` 함수 선언을 등록하고 실행 모델의 시스템 지침(system instruction)에 기본 에스컬레이션 정책을 추가하여, 에이전트가 언제 어떻게 어드바이저에게 자문을 구해야 하는지에 대한 명확한 규칙을 제공합니다.
 
 ```python
 from google.adk.agents import Agent
@@ -85,8 +85,8 @@ root_agent = Agent(
 실행 모델이 `model_consult`를 호출하면 `ModelConsultTool`은 다음 4단계를 수행하고 실행 모델에 구조화된 딕셔너리를 반환합니다.
 
 1. **예산 확인** — `ModelConsultTool`은 턴당 카운터를 `max_uses`와 비교하고 세션 전체 카운터를 `session_max_uses`와 비교합니다. 두 한도 중 하나라도 도달한 경우, 도구는 어드바이저 모델을 호출하지 않고 즉시 `"status": "limit_reached"`를 반환하며 이미 수집된 정보로 진행하도록 실행 모델에 지시합니다.
-2. **컨텍스트 전달(Context handover)** — `ModelConsultTool`은 자문 내용을 단일 `role='user'` `types.Content` 메시지로 패키징합니다. `include_agent_instruction` 및 `include_tool_inventory`가 `True`인 경우, 메시지는 확인된 실행 모델 인스트럭션과 형제(sibling) 도구 목록으로 시작합니다. 다음으로, `ModelConsultTool`은 `ModelConsultContextConfig`에 따라 `Session.events`의 부분적이지 않고(non-partial) 되돌려지지 않은(non-rewound) 이벤트를 변환하여, 텍스트 파트를 화자별로 라벨링하고 이전 도구 호출과 도구 응답을 읽기 쉬운 텍스트 요약으로 평탄화하는 동시에 현재 진행 중인 `model_consult` 호출은 제외합니다. 마지막으로 `ModelConsultTool`은 활성 에이전트 이름, 실행 모델의 질문, 실행 모델이 전달한 추가 `context` 문자열을 포함하는 핸드오프 파트를 추가합니다.
-3. **도구 없는 어드바이저 호출** — `ModelConsultTool`은 도구 호출이 비활성화된 상태로 기본 어드바이저 시스템 인스트럭션(또는 제공된 경우 커스텀 `advisor_instruction`)을 사용하여 구성된 어드바이저 `BaseLlm`을 호출합니다. 어드바이저 요청에서 도구 선언이 제외되므로 어드바이저는 스스로 도구를 실행하거나 부작용(side effects)을 일으킬 수 없으며, 실행 모델이 다음에 어떤 도구를 어떤 인수로 호출해야 하는지 알려주는 텍스트 가이드만 반환할 수 있습니다.
+2. **컨텍스트 전달(Context handover)** — `ModelConsultTool`은 자문 내용을 단일 `role='user'` `types.Content` 메시지로 패키징합니다. `include_agent_instruction` 및 `include_tool_inventory`가 `True`인 경우, 메시지는 확인된 실행 모델 지침과 형제(sibling) 도구 목록으로 시작합니다. 다음으로, `ModelConsultTool`은 `ModelConsultContextConfig`에 따라 `Session.events`의 부분적이지 않고(non-partial) 되돌려지지 않은(non-rewound) 이벤트를 변환하여, 텍스트 파트를 화자별로 라벨링하고 이전 도구 호출과 도구 응답을 읽기 쉬운 텍스트 요약으로 평탄화하는 동시에 현재 진행 중인 `model_consult` 호출은 제외합니다. 마지막으로 `ModelConsultTool`은 활성 에이전트 이름, 실행 모델의 질문, 실행 모델이 전달한 추가 `context` 문자열을 포함하는 핸드오프 파트를 추가합니다.
+3. **도구 없는 어드바이저 호출** — `ModelConsultTool`은 도구 호출이 비활성화된 상태로 기본 어드바이저 시스템 지침(또는 제공된 경우 커스텀 `advisor_instruction`)을 사용하여 구성된 어드바이저 `BaseLlm`을 호출합니다. 어드바이저 요청에서 도구 선언이 제외되므로 어드바이저는 스스로 도구를 실행하거나 부작용(side effects)을 일으킬 수 없으며, 실행 모델이 다음에 어떤 도구를 어떤 인수로 호출해야 하는지 알려주는 텍스트 가이드만 반환할 수 있습니다.
 4. **구조화된 도구 응답** — `ModelConsultTool`은 에이전트 루프로 예외를 다시 발생시키지 않습니다. 대신 [응답 상태 값](#response-status-values)에 설명된 대로 `status` 값이 포함된 딕셔너리를 반환합니다.
 
 ### 도구 호출 검사하기
@@ -172,7 +172,7 @@ Model Consult는 추가 설정 없이도 작동합니다. 결과를 개선하려
 
 ### 실행 모델이 어드바이저에게 자문을 구하는 시점 맞춤설정
 
-`ModelConsultTool` 객체는 실행 모델의 시스템 인스트럭션에 에스컬레이션 정책을 추가합니다. 기본적으로 이 정책은 실행 모델이 결정을 확정하기 전, 막혔을 때, 그리고 작업 완료를 선언하기 전에 `model_consult`를 호출하도록 지시합니다. 이는 다음 표의 계획(Plan), 진단(Diagnose), 검토(Review) 트리거를 포괄합니다.
+`ModelConsultTool` 객체는 실행 모델의 시스템 지침에 에스컬레이션 정책을 추가합니다. 기본적으로 이 정책은 실행 모델이 결정을 확정하기 전, 막혔을 때, 그리고 작업 완료를 선언하기 전에 `model_consult`를 호출하도록 지시합니다. 이는 다음 표의 계획(Plan), 진단(Diagnose), 검토(Review) 트리거를 포괄합니다.
 
 기본 정책을 대체하려면 `executor_instruction`에 고유한 텍스트를 전달하세요. 정책을 제거하려면 빈 문자열(`""`)을 전달하세요.
 
@@ -213,12 +213,12 @@ ModelConsultTool(
 | `timeout_seconds` | `float` | `None` | 호출당 실제 경과 시간(wall-clock) 타임아웃(초)입니다. `None`은 도구 수준의 타임아웃이 없음을 의미합니다. |
 | `context_config` | `ModelConsultContextConfig` | `None` | 어드바이저를 위해 세션 기록을 패키징하고 제한하는 방법을 제어합니다. |
 | `executor_instruction` | `str` | `None` | 실행 모델의 `system_instruction`에 자동으로 추가되는 기본 에스컬레이션 정책을 재정의합니다. 자동 주입을 비활성화하려면 `""`를 전달하세요. |
-| `advisor_instruction` | `str` | `None` | 어드바이저 모델로 전송되는 기본 시스템 인스트럭션을 재정의합니다. |
+| `advisor_instruction` | `str` | `None` | 어드바이저 모델로 전송되는 기본 시스템 지침을 재정의합니다. |
 | `description` | `str` | `None` | 실행 모델에 표시되는 기본 도구 설명을 재정의합니다. |
-| `include_agent_instruction` | `bool` | `True` | 가이드가 실행 모델의 제약 조건을 준수하도록 실행 에이전트 자체의 인스트럭션을 어드바이저에게 전달합니다. |
+| `include_agent_instruction` | `bool` | `True` | 가이드가 실행 모델의 제약 조건을 준수하도록 실행 에이전트 자체의 지침을 어드바이저에게 전달합니다. |
 | `include_tool_inventory` | `bool` | `True` | 어드바이저 자문 프롬프트에 실행 모델의 다른 도구 이름과 설명을 포함합니다. |
 | `generate_content_config` | `types.GenerateContentConfig` | `None` | `temperature` 또는 `safety_settings`와 같이 어드바이저 호출마다 복제되는 기본 생성 구성입니다. |
-| `name` | `str` | `'model_consult'` | 실행 모델에 노출되는 도구 이름입니다. |
+| `name` | `str` | `'model_consult'` | 실행 모델에 제공되는 도구 이름입니다. |
 
 ### ModelConsultContextConfig 옵션
 

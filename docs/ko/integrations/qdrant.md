@@ -18,13 +18,13 @@ ADK 에이전트를 오픈소스 벡터 검색 엔진인 [Qdrant](https://qdrant
 ## 사용 사례
 
 - **에이전트용 시맨틱 메모리**: 대화 컨텍스트, 사실, 학습된 정보를 저장하고
-  에이전트가 나중에 자연어 질의로 검색할 수 있습니다.
+  에이전트가 나중에 자연어 쿼리로 조회할 수 있습니다.
 
 - **코드 저장소 검색**: 코드 스니펫, 문서, 구현 패턴의 검색 인덱스를 구축하고
-  시맨틱하게 질의할 수 있습니다.
+  시맨틱하게 쿼리할 수 있습니다.
 
-- **지식 베이스 조회**: 문서를 저장하고 응답에 필요한 컨텍스트를 검색하는
-  RAG 시스템을 구축합니다.
+- **지식 베이스 조회**: 문서를 저장하고 응답에 필요한 관련 컨텍스트를 가져오는
+  검색 증강 생성(RAG) 시스템을 구축합니다.
 
 ## 사전 준비 사항
 
@@ -110,27 +110,27 @@ ADK 에이전트를 오픈소스 벡터 검색 엔진인 [Qdrant](https://qdrant
 
 도구 | 설명
 ---- | -----------
-`qdrant-store` | 선택적 메타데이터와 함께 정보를 Qdrant에 저장
-`qdrant-find` | 자연어 질의로 관련 정보 검색
+`qdrant-store` | 선택적 메타데이터와 함께 정보를 Qdrant에 저장합니다.
+`qdrant-find` | 자연어 쿼리로 관련 정보를 검색합니다.
 
 ## 구성
 
 Qdrant MCP 서버는 환경 변수로 구성할 수 있습니다:
 
-환경 변수 | 설명 | 기본값
+변수 | 설명 | 기본값
 -------- | ----------- | -------
 `QDRANT_URL` | Qdrant 서버 URL | `None` (필수)
 `QDRANT_API_KEY` | Qdrant Cloud 인증용 API 키 | `None`
 `COLLECTION_NAME` | 사용할 컬렉션 이름 | `None`
-`QDRANT_LOCAL_PATH` | 로컬 영구 저장 경로(URL 대안) | `None`
+`QDRANT_LOCAL_PATH` | 로컬 영구 저장소 경로(URL 대안) | `None`
 `EMBEDDING_MODEL` | 사용할 임베딩 모델 | `sentence-transformers/all-MiniLM-L6-v2`
 `EMBEDDING_PROVIDER` | 임베딩 제공자 (`fastembed` 또는 `ollama`) | `fastembed`
-`TOOL_STORE_DESCRIPTION` | 저장 도구 사용자 설명 | 기본 설명
-`TOOL_FIND_DESCRIPTION` | 검색 도구 사용자 설명 | 기본 설명
+`TOOL_STORE_DESCRIPTION` | 저장(`store`) 도구의 커스텀 설명 | 기본 설명
+`TOOL_FIND_DESCRIPTION` | 검색(`find`) 도구의 커스텀 설명 | 기본 설명
 
-### 사용자 지정 도구 설명
+### 커스텀 도구 설명
 
-도구 설명을 사용자 지정해 에이전트 동작을 유도할 수 있습니다:
+도구 설명을 커스터마이징하여 에이전트 동작을 유도할 수 있습니다:
 
 ```python
 env={
@@ -143,6 +143,6 @@ env={
 
 ## 추가 리소스
 
-- [Qdrant MCP Server Repository](https://github.com/qdrant/mcp-server-qdrant)
-- [Qdrant Documentation](https://qdrant.tech/documentation/)
+- [Qdrant MCP 서버 저장소](https://github.com/qdrant/mcp-server-qdrant)
+- [Qdrant 공식 문서](https://qdrant.tech/documentation/)
 - [Qdrant Cloud](https://cloud.qdrant.io/)

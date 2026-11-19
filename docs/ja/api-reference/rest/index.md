@@ -5,7 +5,7 @@ ADK REST APIの実際の使用方法については、
 [APIサーバーの使用](/ja/runtime/api-server/) を参照してください。
 
 !!! tip
-    実行中のADK Webサーバーで `/docs` のパス（例：`http://localhost:8000/docs`）にアクセスすると、更新されたAPIリファレンスを閲覧できます。
+    実行中のADK Webサーバーで `/docs` のパス（例：`http://localhost:8000/docs`）にアクセスすると、最新のAPIリファレンスを閲覧できます。
 
 ## エンドポイント
 

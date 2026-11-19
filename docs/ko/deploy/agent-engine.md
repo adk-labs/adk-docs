@@ -101,7 +101,7 @@ Google Cloud에 성공적으로 연결하고 Cloud 프로젝트 ID를 설정했�
 ASP 도구를 사용할 때, 배포는 단계적으로 이루어집니다. 첫 번째 단계에서는 `make` 명령어를 실행하여 Agent Engine에서 ADK 워크플로를 실행하는 데 필요한 서비스를 프로비저닝합니다. 두 번째 단계에서는 프로젝트 코드가 Agent Engine 서비스에 업로드되고 에이전트 프로젝트가 실행됩니다.
 
 !!! warning "중요"
-    *이 단계를 수행하기 전에 Google Cloud 배포 대상 프로젝트가 ***현재 프로젝트***로 설정되어 있는지 확인하세요.* `make backend` 명령어는 배포를 수행할 때 현재 설정된 Google Cloud 프로젝트를 사용합니다. 현재 프로젝트 설정 및 확인에 대한 정보는 [Google Cloud 프로젝트에 연결](#connect-ad)을 참고하세요.
+    *이 단계를 수행하기 전에 Google Cloud 배포 대상 프로젝트가 **현재 프로젝트**로 설정되어 있는지 확인하세요.* `make backend` 명령어는 배포를 수행할 때 현재 설정된 Google Cloud 프로젝트를 사용합니다. 현재 프로젝트 설정 및 확인에 대한 정보는 [Google Cloud 프로젝트에 연결](#connect-ad)을 참고하세요.
 
 Google Cloud 프로젝트의 Agent Engine에 ADK 프로젝트를 배포하려면:
 
@@ -112,8 +112,6 @@ Google Cloud 프로젝트의 Agent Engine에 ADK 프로젝트를 배포하려면
     ```shell
     make backend
     ```
-
-이 과정이 성공적으로 완료되면, Google Cloud Agent Engine에서 실행 중인 에이전트와 상호 작용할 수 있습니다. 배포된 에이전트 테스트에 대한 자세한 내용은 다음 섹션을 참고하세요.
 
 이 과정이 성공적으로 완료되면, Google Cloud Agent Engine에서 실행 중인 에이전트와 상호 작용할 수 있습니다. 배포된 에이전트 테스트에 대한 자세한 내용은 [배포된 에이전트 테스트](#test-deployment)를 참고하세요.
 

@@ -42,7 +42,7 @@ LiteLLM 라이브러리를 사용해 원격 또는 로컬로 호스팅된 AI 모
         ```shell
         pip install "litellm>=1.84"
         ```
-2. **공급자 API 키 설정:** 사용하려는 공급자별 API 키를 환경 변수로 구성합니다.
+2. **제공업체 API 키 설정:** 사용하려는 제공업체별 API 키를 환경 변수로 구성합니다.
 
     * *OpenAI 예시:*
 
@@ -56,8 +56,7 @@ LiteLLM 라이브러리를 사용해 원격 또는 로컬로 호스팅된 AI 모
         export ANTHROPIC_API_KEY="YOUR_ANTHROPIC_API_KEY"
         ```
 
-    * *기타 공급자 키는* [LiteLLM Providers 문서](https://docs.litellm.ai/docs/providers)
-      를 참고해 해당 환경 변수명을 확인하세요.*
+    * *기타 제공업체의 환경 변수 이름은* [LiteLLM Providers 문서](https://docs.litellm.ai/docs/providers)를 참고하세요.
 
 ## 구현 예시
 
@@ -82,6 +81,7 @@ agent_claude_direct = LlmAgent(
     instruction="You are an assistant powered by Claude Haiku.",
     # ... other agent parameters
 )
+```
 
 ## Anthropic 추론 블록 (Anthropic thinking blocks)
 
@@ -91,5 +91,4 @@ agent_claude_direct = LlmAgent(
 
 `LiteLlm` 커넥터를 통해 Anthropic Claude 모델(예: Claude 3.7 Sonnet)을 사용할 때, ADK는 Anthropic의 구조화된 추론 기능인 "추론 블록(thinking blocks)"을 지원합니다. ADK는 자동으로 `thinking_blocks`와 그 서명(signature)을 추출합니다.
 
-Anthropic은 멀티턴 대화에서 이러한 서명을 다시 보내도록 요구하며, 그렇지 않으면 첫 턴 이후의 추론을 조용히 누락시킵니다. ADK는 각 아웃바운드 요청마다 서명과 함께 `thinking_blocks`를 다시 구성하므로, 사용자가 별도의 커스텀 상태 관리를 할 필요 없이 도구 호출 및 멀티턴 상호작용 전반에 걸쳐 Claude의 추론이 유지됩니다.
-```
+Anthropic은 멀티턴 대화에서 이러한 서명을 다시 보내도록 요구하며, 그렇지 않으면 첫 턴 이후의 추론 내용이 별도 경고 없이 누락됩니다. ADK는 각 아웃바운드 요청마다 서명과 함께 `thinking_blocks`를 다시 구성하므로, 별도의 커스텀 상태 관리를 구현하지 않아도 도구 호출 및 멀티턴 상호작용 전반에 걸쳐 Claude의 추론이 유지됩니다.

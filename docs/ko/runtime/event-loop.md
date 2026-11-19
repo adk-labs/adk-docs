@@ -199,14 +199,14 @@ ADK 런타임 내에서 에이전트 호출을 실행하기 위해 여러 구성
 3. ### `Event`
 
       * **역할:** `Runner`와 실행 로직 사이에서 주고받는 메시지.
-      * **기능:** 원자적 발생(사용자 입력, 에이전트 텍스트, 도구 호출/결과, 상태 변경 요청, 제어 신호)을 나타냅니다. 발생 내용과 의도된 부수 효과(`state_delta`와 같은 `actions`)를 모두 전달합니다.
+      * **기능:** 원자적 이벤트 단위(사용자 입력, 에이전트 텍스트, 도구 호출/결과, 상태 변경 요청, 제어 신호)를 나타냅니다. 발생 내용과 의도된 부수 효과(`state_delta`와 같은 `actions`)를 함께 전달합니다.
 
 4. ### `Services`
 
       * **역할:** 영구 리소스 또는 공유 리소스를 관리하는 백엔드 구성요소. 이벤트 처리 중 주로 `Runner`에 의해 사용됩니다.
       * **구성요소:**
         * `SessionService` (`BaseSessionService`, `InMemorySessionService` 등): `Session` 객체를 저장/로드하고, `state_delta`를 세션 상태에 적용하며, 이벤트를 `event history`에 추가하는 등 `Session`을 관리합니다.
-        * `ArtifactService` (`BaseArtifactService`, `InMemoryArtifactService`, `GcsArtifactService` 등): 바이너리 아티팩트 데이터의 저장 및 조회를 관리합니다. 실행 로직 중에 컨텍스트를 통해 `save_artifact`가 호출되지만 이벤트의 `artifact_delta`는 Runner/SessionService에 대한 작업을 확인합니다.
+        * `ArtifactService` (`BaseArtifactService`, `InMemoryArtifactService`, `GcsArtifactService` 등): 바이너리 아티팩트 데이터의 저장 및 조회를 관리합니다. 실행 로직 중에는 컨텍스트를 통해 `save_artifact`가 호출되지만, 이벤트의 `artifact_delta`는 해당 작업이 수행되었음을 `Runner`/`SessionService`에 알리고 기록합니다.
         * `MemoryService` (`BaseMemoryService` 등): (선택사항) 사용자의 여러 세션에 걸친 장기 시맨틱 메모리를 관리합니다.
       * **기능:** 영속성 계층을 제공합니다. `Runner`는 이들과 상호작용하여 실행 로직이 재개되기 *전에* `event.actions`로 표시된 변경사항이 안정적으로 저장되도록 합니다.
 
@@ -412,4 +412,4 @@ LLM 에이전트가 도구를 호출하는 일반적인 사용자 질의에 대�
 * **동기 편의 메서드 (`run`):** 동기식 `Runner.run` 메서드는 주로 편의를 위해 존재합니다(예: 간단한 스크립트 또는 테스트). 내부적으로 `Runner.run`은 `Runner.run_async`를 호출하고 비동기 이벤트 루프 실행을 대신 관리합니다.
 * **동기 콜백/도구:**
     * **블로킹 I/O:** 장시간 실행되는 동기 I/O 작업의 경우, 프레임워크가 항상 지연(stall)을 방지할 수 있는 것은 아닙니다. Python ADK는 asyncio 이벤트 루프에서 동기 도구 함수를 인라인으로 호출하므로 내부의 블로킹 입출력은 루프를 멈추게 합니다. 라이브 모드에서는 `RunConfig.tool_thread_pool_config`를 설정하여 백그라운드 스레드 풀에서 도구 실행을 대신 실행할 수 있습니다. Java ADK는 종종 블로킹 호출에 적절한 RxJava 스케줄러나 래퍼를 활용합니다. TypeScript에서 프레임워크는 단순히 함수를 await하며, 동기 함수가 블로킹 I/O를 수행하면 이벤트 루프가 멈춥니다. 가능한 한 항상 비동기 I/O API(Promise 반환)를 사용해야 합니다.
-    * **CPU 바운드 작업:** 순수 CPU 집약적인 동기 작업은 두 환경 모두에서 실행 스레드를 차단합니다.
+    * **CPU 바운드 작업:** 순수 CPU 집약적인 동기 작업은 모든 환경에서 실행 스레드를 블로킹합니다.

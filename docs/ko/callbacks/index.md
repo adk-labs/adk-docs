@@ -39,6 +39,12 @@
         --8<-- "examples/python/snippets/callbacks/callback_basic.py:callback_basic"
         ```
 
+    === "TypeScript"
+
+        ```typescript
+        --8<-- "examples/typescript/snippets/callbacks/callback_basic.ts:callback_basic"
+        ```
+
     === "Go"
 
         ```go
@@ -80,10 +86,10 @@ ADK 프레임워크가 콜백이 실행될 수 있는 지점(예: LLM을 호출�
     *   `None` 대신 *특정 타입의 객체*를 반환하는 것은 ADK 에이전트의 기본 동작을 **재정의(override)**하는 방법입니다. 프레임워크는 여러분이 반환한 객체를 사용하고, 정상적으로 뒤따랐을 단계를 *건너뛰거나* 방금 생성된 결과를 *대체*합니다.
     *   **`before_agent_callback` → `types.Content`**: 에이전트의 주 실행 로직(`_run_async_impl` / `_run_live_impl`)을 건너뜁니다. 반환된 `Content` 객체는 즉시 해당 턴에 대한 에이전트의 최종 출력으로 처리됩니다. 간단한 요청을 직접 처리하거나 접근 제어를 강제하는 데 유용합니다.
     *   **`before_model_callback` → `LlmResponse`**: 외부 거대 언어 모델 호출을 건너뜁니다. 반환된 `LlmResponse` 객체는 마치 LLM의 실제 응답인 것처럼 처리됩니다. 입력 가드레일 구현, 프롬프트 검증, 또는 캐시된 응답을 제공하는 데 이상적입니다.
-    *   **`before_tool_callback` → `dict` 또는 `Map`**: 실제 도구 함수(또는 하위 에이전트)의 실행을 건너뜁니다. 반환된 `dict`는 도구 호출의 결과로 사용되며, 이는 일반적으로 LLM에 다시 전달됩니다. 도구 인자 검증, 정책 제한 적용, 또는 모의/캐시된 도구 결과를 반환하는 데 완벽합니다.
-    *   **`after_agent_callback` → `types.Content`**: 에이전트의 실행 로직이 방금 생성한 `Content`를 *대체*합니다.
+    *   **`before_tool_callback` → Python: `dict`, Kotlin: `Map<String, Any>`**: 실제 도구 함수(또는 서브 에이전트)의 실행을 건너뜁니다. 반환된 `dict` 또는 `Map`은 도구 호출의 결과로 사용되어 LLM에 다시 전달됩니다. 도구 인자 검증, 정책 제한 적용, 또는 모의/캐시된 도구 결과를 반환할 때 유용합니다.
+    *   **`after_agent_callback` → `Content`**: 에이전트의 실행 로직이 이미 생성한 출력 뒤에 반환된 `Content`를 추가 이벤트로 *덧붙입니다(append)*. 기존 출력을 대체하지 않으며, 모델 응답을 변경하려면 `after_model_callback`을 사용하세요.
     *   **`after_model_callback` → `LlmResponse`**: LLM으로부터 받은 `LlmResponse`를 *대체*합니다. 출력 내용을 정제하거나, 표준 면책 조항을 추가하거나, LLM의 응답 구조를 수정하는 데 유용합니다.
-    *   **`after_tool_callback` → `dict` 또는 `Map`**: 도구가 반환한 `dict` 결과를 *대체*합니다. 도구 출력을 LLM에 다시 보내기 전에 후처리하거나 표준화할 수 있습니다.
+    *   **`after_tool_callback` → Python: `dict`, Kotlin: `Map<String, Any>`**: 도구가 반환한 결과를 *대체*합니다. 도구 출력을 LLM에 다시 보내기 전에 후처리하거나 표준화할 수 있습니다.
 
 **개념적 코드 예제 (가드레일):**
 
@@ -96,7 +102,14 @@ ADK 프레임워크가 콜백이 실행될 수 있는 지점(예: LLM을 호출�
         --8<-- "examples/python/snippets/callbacks/before_model_callback.py"
         ```
 
+    === "TypeScript"
+
+        ```typescript
+        --8<-- "examples/typescript/snippets/callbacks/before_model_callback.ts"
+        ```
+
     === "Go"
+
         ```go
         --8<-- "examples/go/snippets/callbacks/main.go:imports"
 
@@ -105,29 +118,15 @@ ADK 프레임워크가 콜백이 실행될 수 있는 지점(예: LLM을 호출�
         ```
 
     === "Java"
+
         ```java
         --8<-- "examples/java/snippets/src/main/java/callbacks/BeforeModelGuardrailExample.java:init"
         ```
 
     === "Kotlin"
-```kotlin
---8<-- "examples/kotlin/snippets/callbacks/BeforeModelCallback.kt:before_model_callback"
-```
 
-## TypeScript 예제 보강
+        ```kotlin
+        --8<-- "examples/kotlin/snippets/callbacks/BeforeModelCallback.kt:before_model_callback"
+        ```
 
-영어 원문에 포함된 TypeScript 콜백 예제를 아래에 함께 제공합니다.
-
-### 기본 콜백
-
-```typescript
---8<-- "examples/typescript/snippets/callbacks/callback_basic.ts:callback_basic"
-```
-
-### Before Model 콜백
-
-```typescript
---8<-- "examples/typescript/snippets/callbacks/before_model_callback.ts"
-```
-
-`None`을 반환하는 것과 특정 객체를 반환하는 것의 차이를 이해함으로써 에이전트의 실행 경로를 정밀하게 제어할 수 있으며, 이는 ADK로 정교하고 신뢰할 수 있는 에이전트를 구축하는 데 있어 콜백을 필수적인 도구로 만들어 줍니다.
+`None`을 반환하는 것과 특정 객체를 반환하는 것의 차이를 이해하면 에이전트의 실행 경로를 정밀하게 제어할 수 있으며, 콜백을 활용해 ADK로 정교하고 신뢰할 수 있는 에이전트를 구축할 수 있습니다.

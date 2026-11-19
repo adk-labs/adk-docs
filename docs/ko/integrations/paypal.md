@@ -24,16 +24,16 @@ ADK 에이전트를 [PayPal](https://www.paypal.com/) 생태계와 연결합니�
   예: "고객 X에게 청구", "주문 Y 환불".
 
 - **구독 및 상품 관리**: 상품 생성, 구독 플랜 설정,
-  구독자 세부 관리까지 반복 과금의 전체 생명주기를 자연어로 처리합니다.
+  구독자 세부 관리까지 반복 과금의 전체 라이프사이클을 자연어로 처리합니다.
 
 - **이슈 해결 및 성과 추적**: 분쟁 클레임 요약/수락,
   배송 상태 추적, 머천트 인사이트 조회를 통해 즉시 데이터 기반 의사결정을 수행합니다.
 
 ## 사전 준비 사항
 
-- [PayPal Developer account](https://developer.paypal.com/) 생성
-- [PayPal Developer Dashboard](https://developer.paypal.com/)에서 앱 생성 및 자격 증명 확보
-- 자격 증명으로 [access token 생성](https://developer.paypal.com/reference/get-an-access-token/)
+- [PayPal 개발자 계정](https://developer.paypal.com/) 생성
+- [PayPal 개발자 대시보드](https://developer.paypal.com/)에서 앱 생성 및 자격 증명 확보
+- 자격 증명으로 [액세스 토큰 생성](https://developer.paypal.com/reference/get-an-access-token/)
 
 ## 에이전트와 함께 사용
 
@@ -226,33 +226,33 @@ ADK 에이전트를 [PayPal](https://www.paypal.com/) 생태계와 연결합니�
 특정 도구 식별자를 쉼표로 구분해 지정할 수 있습니다.
 
 **참고**: 아래 구성 식별자는 점 표기법(예: `invoices.create`)을 사용하며,
-에이전트에 노출되는 도구 이름(예: `create_invoice`)과 다릅니다.
+에이전트에 제공되는 도구 이름(예: `create_invoice`)과 다릅니다.
 
-**Products**: `products.create`, `products.list`, `products.update`,
+**상품(Products)**: `products.create`, `products.list`, `products.update`,
 `products.show`
 
-**Disputes**:
+**분쟁(Disputes)**:
 `disputes.list`, `disputes.get`, `disputes.create`
 
-**Invoices**: `invoices.create`, `invoices.list`, `invoices.get`,
+**인보이스(Invoices)**: `invoices.create`, `invoices.list`, `invoices.get`,
 `invoices.send`, `invoices.sendReminder`, `invoices.cancel`,
 `invoices.generateQRC`
 
-**Orders & Payments**: `orders.create`, `orders.get`, `orders.capture`,
+**주문 및 결제(Orders & Payments)**: `orders.create`, `orders.get`, `orders.capture`,
 `payments.createRefund`, `payments.getRefunds`
 
-**Transactions**:
+**거래(Transactions)**:
 `transactions.list`
 
-**Shipment**:
+**배송(Shipment)**:
 `shipment.create`, `shipment.get`
 
-**Subscriptions**: `subscriptionPlans.create`, `subscriptionPlans.list`,
+**구독(Subscriptions)**: `subscriptionPlans.create`, `subscriptionPlans.list`,
 `subscriptionPlans.show`, `subscriptions.create`, `subscriptions.show`,
 `subscriptions.cancel`
 
 ## 추가 리소스
 
-- [PayPal MCP Server Documentation](https://github.com/paypal/paypal-mcp-server#paypal-model-context-protocol)
-- [PayPal MCP Server Repository](https://github.com/paypal/paypal-mcp-server)
-- [PayPal Agent Tools Reference](https://github.com/paypal/paypal-mcp-server#available-tools)
+- [PayPal MCP 서버 문서](https://github.com/paypal/paypal-mcp-server#paypal-model-context-protocol)
+- [PayPal MCP 서버 저장소](https://github.com/paypal/paypal-mcp-server)
+- [PayPal 에이전트 도구 레퍼런스](https://github.com/paypal/paypal-mcp-server#available-tools)

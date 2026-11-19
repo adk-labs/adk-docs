@@ -35,7 +35,7 @@ Python ADK には 3 つの `MemoryService` 実装が含まれています。以�
 | **依存関係** | なし。 | Google Cloud プロジェクト、Agent Platform API | Google Cloud プロジェクト、Knowledge Engine、Agent Platform SDK（オプションのインストール）。 |
 | **使用するタイミング** | プロトタイピングのために複数のセッションのチャット履歴を横断して検索したい場合。 | エージェントに過去のやり取りを記憶させ、学習させたい場合。 | 既存の RAG インフラストラクチャがある場合、または生の会話トランスクリプトを検索したい場合。 |
 
-`google.adk.memory` から `VertexAiRagMemoryService` を常にインポートできますが、`pip install google-adk[gcp]` で Agent Platform SDK がインストールされていない限り、構築時に `ImportError` が発生します。Memory Bank と RAG バックアップメモリについては、以下の [Memory Bank](#memory-bank) と [RAG メモリ](#rag-memory) で説明されています。
+`google.adk.memory` から `VertexAiRagMemoryService` を常にインポートできますが、`pip install google-adk[gcp]` で Agent Platform SDK がインストールされていない限り、構築時に `ImportError` が発生します。Memory Bank と RAG ベースのメモリについては、以下の [Memory Bank](#memory-bank) と [RAG メモリ](#rag-memory) で説明します。
 
 
 ## `InMemoryMemoryService`
@@ -398,7 +398,7 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 
 メモリサービスが構成されている場合、エージェントはツールまたはコールバックを使用してメモリを取得できます。ADK には、メモリを取得するための 2 つの事前構築済みツールが含まれています:
 
-- **メモリの事前ロード（Preload memory）**: コールバックと同様に、各ターンの開始時にメモリを自動的に取得します。
+- **メモリのプリロード（Preload memory）**: コールバックと同様に、各ターンの開始時にメモリを自動的に取得します。
 - **メモリのロード（Load memory）**: エージェントが役立つと判断したときにメモリを取得します。
 
 **例:**
@@ -576,7 +576,7 @@ adk web path/to/your/agents_dir --memory_service_uri="agentengine://1234567890"
 
 ## メモリ機能の拡張
 
-`BaseMemoryService` を拡張したメモリ サービスは、カスタム メタデータを含め、エージェント メモリにセッションやイベントを追加することをサポートします。以下のコード例に示すように、`InMemoryMemoryService` などのメモリ サービスの `add_session_to_memory` および `add_events_to_memory` メソッドを使用してメモリ データを修正できます。
+`BaseMemoryService` を拡張したメモリ サービスは、カスタム メタデータを含め、エージェント メモリにセッションやイベントを追加することをサポートします。以下のコード例に示すように、`InMemoryMemoryService` などのメモリ サービスの `add_session_to_memory` および `add_events_to_memory` メソッドを使用してメモリ データを追記・更新できます。
 
 ```python
 import asyncio
@@ -629,11 +629,11 @@ async def update_session_memory(my_memory_service, my_completed_session):
 4. **エージェントがメモリツールを使用:** 組み込みの `load_memory` ツールなど、メモリ取得ツールを備えたエージェントは、過去のコンテキストの必要性を認識します。ツールを呼び出し、検索クエリ（例：「discussion project X last week」）を提供します。
 5. **検索の実行:** ツールは内部的に `memory_service.search_memory(app_name=..., user_id=..., query=...)` を呼び出します。
 6. **結果の返却:** `MemoryService` は、キーワードマッチングまたはセマンティック検索を使用してストアを検索し、一致するスニペットを、`content` とすべてのオプション項目（`id`、`author`、`timestamp`、`custom_metadata`）を保持する `MemoryEntry` オブジェクトのリストを含む `SearchMemoryResponse` として返します。
-7. **エージェントが結果を使用:** ツールはこれらの結果をエージェントに返し、通常はコンテキストまたは関数応答の一部として返します。その後、エージェントはこの取得した情報を使用して、ユーザーへの最終的な回答を作成できます。
+7. **エージェントが結果を使用:** ツールはこれらの結果をエージェントに返し、通常はコンテキストまたは関数レスポンス（Function Response）の一部として返します。その後、エージェントはこの取得した情報を使用して、ユーザーへの最終的な回答を作成できます。
 
 ### エージェントは複数のメモリサービスにアクセスできますか？
 
-- **標準構成を介して：いいえ。** フレームワーク（`adk web`、`adk api_server`）は、`--memory_service_uri` フラグを介して一度に 1 つのメモリサービスで構成するように設計されています。その単一のサービスはランナーに組み込まれ、`tool_context.search_memory()` および `callback_context.search_memory()` を介して公開されます。
+- **標準構成を介して：いいえ。** フレームワーク（`adk web`、`adk api_server`）は、`--memory_service_uri` フラグを介して一度に 1 つのメモリサービスで構成するように設計されています。その単一のサービスはランナーに組み込まれ、`tool_context.search_memory()` および `callback_context.search_memory()` を介して提供されます。
 - **エージェントのコード内：はい。** 2 番目の `BaseMemoryService` をインスタンス化し、フレームワークで構成されたサービス用の `ToolContext` をすでに持っているカスタムツールからそれを参照できます。
 
 たとえば、エージェントは会話履歴用にフレームワークで構成された `InMemoryMemoryService` を使用し、別のナレッジベース用に `VertexAiMemoryBankService` や、ドキュメントコーパスに対する `VertexAiRagMemoryService`、またはその他の `BaseMemoryService` 実装などの 2 番目のサービスを手動でインスタンス化できます。

@@ -15,7 +15,7 @@ ADKエージェントをA2A経由で公開するには、主に2つの方法が�
 * **`to_a2a(root_agent)`関数を使用する**: `adk deploy api_server`の代わりに`uvicorn`経由でサーバーを介して公開できるように、既存のエージェントをA2Aで動作するように変換したいだけの場合は、この関数を使用します。つまり、エージェントを本番環境に対応させたい場合に`uvicorn`経由で公開したいものをより厳密に制御できます。さらに、`to_a2a()`関数は、エージェントコードに基づいてエージェントカードを自動生成します。
 * **独自のエージェントカード（`agent.json`）を作成し、`adk api_server --a2a`を使用してホストする**: このアプローチには主に2つの利点があります。まず、`adk api_server --a2a`は`adk web`と連携して動作するため、エージェントの利用、デバッグ、テストが簡単になります。次に、`adk api_server`を使用すると、複数の個別のエージェントを持つ親フォルダーを指定できます。エージェントカード（`agent.json`）を持つエージェントは、同じサーバーを介して他のエージェントがA2A経由で自動的に利用できるようになります。ただし、独自のエージェントカードを作成する必要があります。エージェントカードを作成するには、[A2A Pythonチュートリアル](https://a2a-protocol.org/latest/tutorials/python/1-introduction/)に従ってください。
 
-このクイックスタートでは、エージェントを公開する最も簡単な方法であり、舞台裏でエージェントカードを自動生成するため、`to_a2a()`に焦点を当てます。`adk api_server`アプローチを使用したい場合は、[A2Aクイックスタート（利用）ドキュメント](quickstart-consuming.md)でその使用法を確認できます。
+このクイックスタートでは、エージェントを公開する最も簡単な方法であり、内部でエージェントカードを自動生成するため、`to_a2a()`に焦点を当てます。`adk api_server`アプローチを使用したい場合は、[A2Aクイックスタート（利用）ドキュメント](quickstart-consuming.md)でその使用法を確認できます。
 
 ```text
 前:
@@ -44,7 +44,7 @@ ADKエージェントをA2A経由で公開するには、主に2つの方法が�
 
 ## `to_a2a(root_agent)`関数でリモートエージェントを公開する
 
-ADKを使用して構築された既存のエージェントを取得し、`to_a2a()`関数を使用してラップするだけでA2A互換にできます。たとえば、`root_agent`に次のように定義されたエージェントがある場合：
+ADKで構築した既存のエージェントは、`to_a2a()`関数でラップするだけでA2A互換にできます。たとえば、`root_agent`に次のように定義されたエージェントがある場合：
 
 ```python
 # ここにエージェントコード
@@ -65,7 +65,7 @@ from google.adk.a2a.utils.agent_to_a2a import to_a2a
 a2a_app = to_a2a(root_agent, port=8001)
 ```
 
-`to_a2a()`関数は、[ADKエージェントからスキル、機能、メタデータを抽出する](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/utils/agent_card_builder.py)ことで、舞台裏でメモリ内にエージェントカードを自動生成するため、`uvicorn`を使用してエージェントエンドポイントが提供されるときに、既知のエージェントカードが利用可能になります。
+`to_a2a()`関数は、[ADKエージェントからスキル、機能、メタデータを抽出する](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/utils/agent_card_builder.py)ことで、内部でインメモリのエージェントカードを自動生成するため、`uvicorn`を使用してエージェントエンドポイントを提供する際に、well-known パス（`.well-known/agent-card.json`）でエージェントカードが利用可能になります。
 
 `agent_card`パラメータを使用して独自のエージェントカードを提供することもできます。値は`AgentCard`オブジェクトまたはエージェントカードJSONファイルへのパスにできます。
 
@@ -173,7 +173,7 @@ a2a_root/
 #### ルートエージェント（`a2a_root/agent.py`）
 
 - **`root_agent`**：リモートA2Aサービスに接続する`RemoteA2aAgent`
-- **エージェントカードURL**：リモートサーバー上の既知のエージェントカードエンドポイントを指します
+- **エージェントカードURL**：リモートサーバー上の well-known エージェントカードエンドポイントを指します
 
 #### リモートHello Worldエージェント（`a2a_root/remote_a2a/hello_world/agent.py`）
 
@@ -184,7 +184,7 @@ a2a_root/
 
 ### リモートA2Aエージェントサーバーの起動 { #start-the-remote-a2a-agent-server }
 
-これでお、hello_worldエージェント内の`a2a_app`をホストするリモートエージェントサーバーを起動できます。
+これで、`hello_world` エージェント内の `a2a_app` をホストするリモートエージェントサーバーを起動できます。
 
 ```bash
 # 現在の作業ディレクトリが adk-python/ であることを確認してください
@@ -276,7 +276,7 @@ adk Webサーバーを開くには、[http://localhost:8000](http://localhost:80
 
 ## 高度な設定: カスタムコンバーターとインターセプター
 
-`to_a2a()` が提供する以上に細かな制御が必要な場合は、[`A2aAgentExecutorConfig`](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/config.py) を直接生成して `A2aAgentExecutor` に渡すことができます。これにより、既定のデータコンバーターを上書きし、実行ミドルウェアを注入できます。
+`to_a2a()` が提供する以上に細かな制御が必要な場合は、[`A2aAgentExecutorConfig`](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/executor/config.py) を直接生成して `A2aAgentExecutor` に渡すことができます。これにより、デフォルトのデータコンバーターを上書きし、実行ミドルウェアを注入できます。
 
 ### コンバーター
 

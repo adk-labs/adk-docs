@@ -18,7 +18,7 @@ ADK는 개발 중 에이전트를 실행하고 테스트하는 여러 방법을 
 
     [:octicons-arrow-right-24: 웹 인터페이스 사용하기](web-interface/index.md)
 
--   :material-console:{ .lg .middle } **Command Line**
+-   :material-console:{ .lg .middle } **명령줄(CLI)**
 
     ---
 
@@ -26,11 +26,11 @@ ADK는 개발 중 에이전트를 실행하고 테스트하는 여러 방법을 
 
     [:octicons-arrow-right-24: 명령줄 사용하기](command-line.md)
 
--   :material-api:{ .lg .middle } **API Server**
+-   :material-api:{ .lg .middle } **API 서버**
 
     ---
 
-    `adk api_server`를 사용해 에이전트를 RESTful API로 노출할 수 있습니다.
+    `adk api_server`를 사용해 에이전트를 RESTful API로 외부에 공개할 수 있습니다.
 
     [:octicons-arrow-right-24: API 서버 사용하기](api-server.md)
 
@@ -49,7 +49,7 @@ ADK는 개발 중 에이전트를 실행하고 테스트하는 여러 방법을 
 
 런타임 구성과 동작에 대한 더 자세한 정보는 다음 페이지를 참고하세요.
 
-- **[Event Loop](event-loop.md)**: ADK를 구동하는 핵심 이벤트 루프와 yield/pause/resume 사이클을 이해합니다.
-- **[Resume Agents](resume.md)**: 이전 상태에서 에이전트 실행을 재개하는 방법을 배웁니다.
-- **[Cancel Agent Runs](cancel.md)**: AbortSignal(TypeScript)을 사용해 실행 중인 에이전트 호출을 정상적으로 취소합니다.
-- **[Runtime Config](runconfig.md)**: RunConfig로 런타임 동작을 구성합니다.
+- **[이벤트 루프](event-loop.md)**: ADK를 구동하는 핵심 이벤트 루프와 yield/pause/resume 사이클을 이해합니다.
+- **[에이전트 재개](resume.md)**: 이전 상태에서 에이전트 실행을 재개하는 방법을 배웁니다.
+- **[에이전트 실행 취소](cancel.md)**: `AbortSignal`(TypeScript)을 사용해 실행 중인 에이전트 호출을 정상적으로 취소합니다.
+- **[런타임 구성](runconfig.md)**: `RunConfig`로 런타임 동작을 구성합니다.

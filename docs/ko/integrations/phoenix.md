@@ -4,23 +4,23 @@ catalog_description: LLM 애플리케이션을 위한 오픈소스·셀프호스
 catalog_icon: /integrations/assets/phoenix.png
 catalog_tags: ["observability", "evaluation"]
 ---
-# Phoenix를 사용한 에이전트 관측성(Observability)
+# ADK용 Phoenix 관측성(Observability)
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[Arize Phoenix](https://arize.com/phoenix/)는 로컬 개발, 오픈소스 워크플로우, 셀프 호스팅 트레이싱을 위한 [Arize AI](https://arize.com/)의 오픈소스 관측성 및 평가 플랫폼입니다. Google ADK 애플리케이션을 위한 포괄적인 추적 및 평가 기능을 제공합니다. 시작하려면 [무료 계정](https://arize.com/phoenix/)에 가입하세요.
+[Arize Phoenix](https://arize.com/phoenix/)는 로컬 개발, 오픈소스 워크플로, 셀프 호스팅 트레이싱을 위한 [Arize AI](https://arize.com/)의 오픈소스 관측성 및 평가 플랫폼입니다. Google ADK 애플리케이션을 위한 포괄적인 추적 및 평가 기능을 제공합니다. 시작하려면 [무료 계정](https://arize.com/phoenix/)에 가입하세요.
 
-AI 네이티브 팀과 엔터프라이즈를 위해 구축된 전체 기능을 갖춘 프로덕션 플랫폼의 경우, 관리형 클라우드 또는 엔터프라이즈 셀프 호스팅 배포로 제공되는 [Arize AX ADK 연동](/integrations/arize-ax/)을 사용하세요. Arize의 [에이전트 평가 가이드](https://arize.com/guides/ai-agent-handbook/agent-evaluation/)와 [LLM 평가 가이드](https://arize.com/resources/llm-evaluation/)에서는 트레이스가 에이전트 및 LLM 애플리케이션의 평가 워크플로우를 지원하는 방법을 보여줍니다.
+AI 네이티브 팀과 엔터프라이즈를 위해 구축된 전체 기능을 갖춘 프로덕션 플랫폼이 필요한 경우, 관리형 클라우드 또는 엔터프라이즈 셀프 호스팅 배포로 제공되는 [Arize AX ADK 연동](/integrations/arize-ax/)을 사용하세요. Arize의 [에이전트 평가 가이드](https://arize.com/guides/ai-agent-handbook/agent-evaluation/)와 [LLM 평가 가이드](https://arize.com/resources/llm-evaluation/)에서는 트레이스가 에이전트 및 LLM 애플리케이션의 평가 워크플로를 지원하는 방법을 설명합니다.
 
 ## 개요
 
 Phoenix는 [OpenInference 계측](https://github.com/Arize-ai/openinference/tree/main/python/instrumentation/openinference-instrumentation-google-adk)을 사용하여 Google ADK에서 트레이스를 자동으로 수집할 수 있으며, 이를 통해 다음을 수행할 수 있습니다.
 
--   **에이전트 상호작용 추적** - 모든 에이전트 실행, 툴 호출, 모델 요청 및 응답을 전체 컨텍스트 및 메타데이터와 함께 자동으로 캡처
--   **성능 평가** - 사용자 지정 또는 사전 빌드된 평가기를 사용하여 에이전트 동작을 평가하고, 에이전트 구성을 테스트하기 위한 실험 실행
--   **문제 디버깅** - 상세한 트레이스를 분석하여 병목 현상, 실패한 툴 호출 및 예기치 않은 에이전트 동작을 신속하게 식별
+-   **에이전트 상호작용 추적** - 모든 에이전트 실행, 도구 호출, 모델 요청 및 응답을 전체 컨텍스트 및 메타데이터와 함께 자동으로 캡처
+-   **성능 평가** - 커스텀 또는 사전 빌드된 평가기(evaluator)를 사용하여 에이전트 동작을 평가하고, 에이전트 구성을 테스트하기 위한 실험 실행
+-   **문제 디버깅** - 상세한 트레이스를 분석하여 병목 현상, 실패한 도구 호출 및 예기치 않은 에이전트 동작을 신속하게 식별
 -   **셀프 호스팅 제어** - 자체 인프라에 데이터를 보관
 
 ## 설치
@@ -64,7 +64,7 @@ tracer_provider = register(
 )
 ```
 
-## 관찰
+## 관측하기
 
 이제 추적 설정이 완료되었으므로, 모든 Google ADK SDK 요청은 관측성 및 평가를 위해 Phoenix로 스트리밍됩니다.
 

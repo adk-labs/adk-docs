@@ -65,7 +65,7 @@ dependencies {
 
 ## 例: Firestore セッション管理付きエージェント
 
-`FirestoreDatabaseRunner` を使って、エージェントと Firestore バックのセッション管理をカプセル化します。
+`FirestoreDatabaseRunner` を使って、エージェントと Firestore をバックエンドとするセッション管理をカプセル化します。
 次の例は、カスタムセッション ID を使ってターン間の会話コンテキストを記憶するシンプルなアシスタントエージェントの完全なセットアップです。
 
 ```java
@@ -164,22 +164,22 @@ public class YourAgentApplication {
 
 !!! note
 
-    Firestore Session Service は properties ファイルによる設定をサポートします。これにより、専用の Firestore
+    Firestore Session Service はプロパティファイルによる設定をサポートします。これにより、専用の Firestore
     データベースを簡単に対象にし、エージェントのセッションデータを保存するカスタムコレクション名を定義できます。
 
-独自の Firestore property 設定を提供して ADK アプリケーションを Firestore session service に合わせて構成できます。
-そうしない場合、ライブラリはデフォルト設定を使用します。
+独自の Firestore プロパティ設定を指定して ADK アプリケーションを Firestore Session Service に合わせて構成できます。
+指定しない場合、ライブラリはデフォルト設定を使用します。
 
 ### 環境別構成
 
-ライブラリはデフォルト設定よりも環境別の property ファイルを優先します。解決順序は次のとおりです。
+ライブラリはデフォルト設定よりも環境別のプロパティファイルを優先します。解決順序は次のとおりです。
 
 1. **環境変数オーバーライド**: まず `env` という環境変数を確認します。これが設定されている場合 (例: `env=dev`)、`adk-firestore-{env}.properties`
-   に一致する property ファイルを読み込みます (例: `adk-firestore-dev.properties`)。
+   に一致するプロパティファイルを読み込みます (例: `adk-firestore-dev.properties`)。
 2. **デフォルトへのフォールバック**: `env` 変数が設定されていない、または環境別ファイルが見つからない場合は、
    `adk-firestore.properties` を読み込みます。
 
-サンプル property 設定:
+プロパティ設定の例:
 
 ```properties
 # セッションデータ保存用 Firestore コレクション名
@@ -193,7 +193,7 @@ keyword.extraction.stopwords=a,about,above,after,again,against,all,am,an,and,any
 !!! important
 
     `FirestoreDatabaseRunner` には `gcs.adk.bucket.name` プロパティの定義が必要です。
-    これは runner が内部で `GcsArtifactService` を初期化し、マルチモーダルアーティファクト保存を処理するためです。
+    これはランナーが内部で `GcsArtifactService` を初期化し、マルチモーダルアーティファクトの保存を処理するためです。
     このプロパティがないか空の場合、アプリケーションは起動時に `RuntimeException` を送出します。
     これは、エージェントが生成または処理する画像、動画、音声ファイルなどのアーティファクトを保存するために使用されます。
 

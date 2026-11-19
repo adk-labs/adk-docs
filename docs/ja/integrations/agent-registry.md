@@ -6,19 +6,19 @@ catalog_tags: ["google", "mcp", "connectors"]
 ---
 
 
-# Google Cloud エージェント レジ스트リ
+# Google Cloud Agent Registry
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.26.0</span><span class="lst-go">Go v2.1.0</span><span class="lst-preview">プレビュー</span>
 </div>
 
-Agent Development Kit (ADK) 内の Agent Registry クライアント ライブラリを使用すると、開発者は [Google Cloud Agent Registry](https://docs.cloud.google.com/agent-registry/overview) にカタログ化されている AI エージェントや MCP サーバーを検出、検索、接続できます。これにより、管理対象のコンポーネントを使用したエージェントベースのアプリケーションの動的な構成が可能になります。
+Agent Development Kit (ADK) の Agent Registry クライアントライブラリを使用すると、[Google Cloud Agent Registry](https://docs.cloud.google.com/agent-registry/overview) にカタログ登録されている AI エージェントや MCP サーバーを検出・検索して接続できます。これにより、管理対象のコンポーネントを使用してエージェントベースのアプリケーションを動的に構成できます。
 
-## 使用例
+## ユースケース
 
-- **開発の加速**: 既存のエージェントやツール (MCP サーバー) を再構築するのではなく、中央カタログから簡単に見つけて再利用できます。
-- **動的統合**: 実行時にエージェントや MCP サーバーのエンドポイントを検出し、環境の変化に対してアプリケーションをより堅牢にします。
-- **強化されたガバナンス**: ADK アプリケーション内でレジストリの管理および検証されたコンポーネントを利用します。
+- **開発の加速**: 既存のエージェントやツール (MCP サーバー) を一から作り直すことなく、中央カタログから簡単に見つけて再利用できます。
+- **動的な統合**: 実行時にエージェントや MCP サーバーのエンドポイントを検出し、環境の変化に対してより堅牢なアプリケーションを構築できます。
+- **ガバナンスの強化**: ADK アプリケーション内で、レジストリによって管理・検証されたコンポーネントを利用できます。
 
 ## 前提条件
 
@@ -26,7 +26,7 @@ Agent Development Kit (ADK) 内の Agent Registry クライアント ライブ�
 - Google Cloud プロジェクトで有効化された [Agent Registry API](https://docs.cloud.google.com/agent-registry/setup)。
 - お使いの環境に合わせて構成された認証。[Application Default Credentials](https://docs.cloud.google.com/docs/authentication/application-default-credentials) (`gcloud auth application-default login`) を使用してログインしてください。
 - 環境変数 `GOOGLE_CLOUD_PROJECT` をプロジェクト ID に設定し、`GOOGLE_CLOUD_LOCATION` を適切なリージョン (例: `global`、`us-central1`) に設定します。
-- [インストール](#installation) の説明に従って使用言語の ADK をインストール。
+- [インストール](#installation) の手順に従って、使用する言語の ADK をインストールしていること。
 
 ADK エージェントから Google Cloud への接続に関する詳細については、[Google Cloud および Agent Platform への接続](/get-started/google-cloud/) を参照してください。
 
@@ -56,7 +56,7 @@ ADK エージェントから Google Cloud への接続に関する詳細につ�
 
     クライアントはコアモジュールの `google.golang.org/adk/v2/agentregistry` パッケージに含まれているため、追加でインストールするものはありません。
 
-## エージェントと一緒に使用する
+## エージェントでの使用
 
 ADK エージェント内で Agent Registry 統合を使用する主な方法は、Agent Registry クライアントを使用してリモートエージェントやツールセットを動的に取得することです。
 
@@ -334,17 +334,17 @@ Google MCP サーバーの場合、認証ヘッダーは自動的に渡されま
 
     `AgentRegistry` コンストラクターは次の引数を受け入れます。
 
-    - `project_id` (文字列、必須): Google Cloud プロジェクト ID。
-    - `location` (文字列、必須): `global`、`us-central1` などの Google Cloud の場所/リージョン。
-    - `header_provider` (呼び出し可能、オプション): `ReadonlyContext` を受け取り、`get_mcp_toolset` が返す [McpToolset](/tools-custom/mcp-tools/#direct-mcp-tool-integration-mcptoolset) によるターゲット MCP サーバーへのリクエストに含まれるカスタムヘッダーの辞書を返す呼び出し可能オブジェクト。これらのヘッダーは、Agent Registry API 自体への呼び出しや [RemoteA2aAgent](/a2a/quickstart-consuming/#quickstart-consuming-a-remote-agent-via-a2a) によるリクエストには影響しません。それらのリクエストの場合は、[リモート A2A エージェント](#remote-a2a-agents) のセクションに示すように、認証済みの `httpx.AsyncClient` を `get_remote_a2a_agent` に渡してください。
+    - `project_id` (`str`、必須): Google Cloud プロジェクト ID。
+    - `location` (`str`、必須): `global`、`us-central1` などの Google Cloud ロケーション / リージョン。
+    - `header_provider` (`Callable`、任意): `ReadonlyContext` を受け取り、`get_mcp_toolset` が返す [McpToolset](/tools-custom/mcp-tools/#direct-mcp-tool-integration-mcptoolset) によるターゲット MCP サーバーへのリクエストに含めるカスタムヘッダーの辞書を返す呼び出し可能オブジェクト。これらのヘッダーは、Agent Registry API 自体への呼び出しや [RemoteA2aAgent](/a2a/quickstart-consuming/#quickstart-consuming-a-remote-agent-via-a2a) によるリクエストには影響しません。それらのリクエストの場合は、[リモート A2A エージェント](#remote-a2a-agents) のセクションに示すように、認証済みの `httpx.AsyncClient` を `get_remote_a2a_agent` に渡してください。
 
 === "Go"
 
     `agentregistry.New` コンストラクターは `Config` 構造体を受け取ります。
 
-    - `ProjectID` (文字列、必須): Google Cloud プロジェクト ID。
-    - `Location` (文字列、必須): `global`、`us-central1` などの Google Cloud の場所/リージョン。
-    - `HTTPClient` (`*http.Client`、オプション): Agent Registry API 呼び出しに使用されるクライアント。`nil` の場合、ADK は Application Default Credentials からクライアントを構築し、`GOOGLE_API_USE_MTLS_ENDPOINT` および `GOOGLE_API_USE_CLIENT_CERTIFICATE` から mTLS を含むエンドポイントを解決します。このクライアントは、`*.googleapis.com` エンドポイントへの [McpToolset](/tools-custom/mcp-tools/) トラフィックにも再利用されますが、[A2A](/a2a/quickstart-consuming-go/) トラフィックには使用されません。
+    - `ProjectID` (`string`、必須): Google Cloud プロジェクト ID。
+    - `Location` (`string`、必須): `global`、`us-central1` などの Google Cloud ロケーション / リージョン。
+    - `HTTPClient` (`*http.Client`、任意): Agent Registry API 呼び出しに使用されるクライアント。`nil` の場合、ADK は Application Default Credentials からクライアントを構築し、`GOOGLE_API_USE_MTLS_ENDPOINT` および `GOOGLE_API_USE_CLIENT_CERTIFICATE` から mTLS を含むエンドポイントを解決します。このクライアントは、`*.googleapis.com` エンドポイントへの [McpToolset](/tools-custom/mcp-tools/) トラフィックにも再利用されますが、[A2A](/a2a/quickstart-consuming-go/) トラフィックには使用されません。
 
     解決されたエンドポイントへの送信 (Egress) トラフィックは、代わりに呼び出しごとに構成されます。`RemoteAgent` では `WithA2AHTTPClient` と `WithA2AHeaders`、`MCPToolset` では `WithMCPHTTPClient` と `WithMCPHeaders` を指定します。
 

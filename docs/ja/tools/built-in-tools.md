@@ -1,6 +1,6 @@
 # 組み込みツール
 
-これらの組み込みツールは、Google検索やコード実行などのすぐに使える機能を提供し、エージェントに共通の能力を付与します。例えば、ウェブから情報を取得する必要があるエージェントは、追加の設定なしで直接**google\_search**ツールを使用できます。
+これらの組み込みツールは、Google検索やコード実行などのすぐに使える機能を提供し、エージェントに共通の能力を付与します。例えば、ウェブから情報を取得する必要があるエージェントは、追加の設定なしで直接 `google_search` ツールを使用できます。
 
 ## 使用方法
 
@@ -237,9 +237,9 @@ Vertex AI RAGエンジンでグラウンディングを使用する場合は、�
 以下は、Bigtableとの連携を提供するためのツール群です。
 
 * **`list_instances`**: Google CloudプロジェクトのBigtableインスタンスを取得します。
-* **`get_instance_info`**: Google Cloudプロジェクトのメタデータインスタンス情報を取得します。
+* **`get_instance_info`**: Google CloudプロジェクトのBigtableインスタンスのメタデータ情報を取得します。
 * **`list_tables`**: GCP Bigtableインスタンスのテーブルを取得します。
-* **`get_table_info`**: GCP Bigtableのメタデータテーブル情報を取得します。
+* **`get_table_info`**: GCP Bigtableテーブルのメタデータ情報を取得します。
 * **`execute_sql`**: BigtableテーブルでSQLクエリを実行し、その結果を取得します。
 
 これらは`BigtableToolset`というツールセットにパッケージ化されています。

@@ -1,41 +1,31 @@
 ---
 catalog_title: Datadog
-catalog_description: LLM 지원서 개발, 평가 및 모니터링
+catalog_description: LLM 애플리케이션 개발, 평가 및 모니터링
 catalog_icon: /integrations/assets/datadog.png
 catalog_tags: ["observability", "evaluation"]
 ---
 
 
-# ADK에 대한 Datadog 관측 가능성
+# ADK용 Datadog 관측 가능성
 
 <div class="language-support-tag">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
 [Datadog LLM
-Observability](https://www.datadoghq.com/product/llm-observability/)는 AI를 돕습니다.
-엔지니어, 데이터 과학자, 애플리케이션 개발자가 LLM 애플리케이션을
-빠르게 개발, 평가, 모니터링할 수 있도록 지원합니다. 구조화된 실험,
-AI 에이전트 전반의 엔드투엔드 추적, 평가를 통해 출력 품질, 성능,
-비용, 전반적인 위험을 자신 있게 개선할 수 있습니다.
+Observability](https://www.datadoghq.com/product/llm-observability/)는 AI 엔지니어, 데이터 과학자, 애플리케이션 개발자가 LLM 애플리케이션을 빠르게 개발, 평가, 모니터링할 수 있도록 지원합니다. 구조화된 실험, AI 에이전트 전반의 엔드투엔드 트레이싱, 평가를 통해 출력 품질, 성능, 비용, 전반적인 리스크를 확실하게 개선할 수 있습니다.
 
 ## 개요
 
-Datadog LLM 관찰 기능은 [Google ADK 기반 에이전트를 자동으로 계측하고
-추적](https://docs.datadoghq.com/llm_observability/instrumentation/auto_instrumentation?tab=python#google-adk)할 수 있으며,
-다음을 가능하게 합니다.
+Datadog LLM Observability는 [Google ADK로 구축한 에이전트를 자동으로 계측하고 트레이싱](https://docs.datadoghq.com/llm_observability/instrumentation/auto_instrumentation?tab=python#google-adk)할 수 있으며, 다음 기능을 제공합니다:
 
-- **에이전트 실행 및 상호 작용 관찰** - 모든 항목을 자동으로 캡처
-  에이전트 실행, 도구 호출 및 에이전트 내 코드 실행
-- 기본 Google GenAI SDK로 이루어진 **LLM 호출 및 응답 캡처**
-- 오류율, 토큰 사용량 및 비용을 제공하여 **문제 디버깅**
-  LLM 통화 및 도구 사용에 대한 즉각적인 평가
+- **에이전트 실행 및 상호작용 관찰** - 에이전트 내부의 모든 에이전트 실행, 도구 호출, 코드 실행을 자동으로 캡처합니다.
+- **LLM 호출 및 응답 캡처** - 하위의 Google GenAI SDK를 통해 수행된 LLM 호출과 응답을 기록합니다.
+- **문제 디버깅** - 오류율, 토큰 사용량과 비용, LLM 호출 및 도구 사용에 대한 별도 설정 없이 기본 제공되는 평가를 통해 문제를 디버깅합니다.
 
-## 전제조건
+## 사전 요구사항
 
-[Datadog account](https://www.datadoghq.com/)가 없으면 등록하세요.
-하나와 [get your API
-key](https://docs.datadoghq.com/account_management/api-app-keys/#api-keys).
+[Datadog 계정](https://www.datadoghq.com/)이 없다면 먼저 가입하고 [API 키를 발급](https://docs.datadoghq.com/account_management/api-app-keys/#api-keys)받으세요.
 
 ## 설치
 
@@ -47,19 +37,13 @@ pip install ddtrace
 
 ## 설정
 
-### Google ADK를 사용하여 애플리케이션 만들기
+### ADK를 사용하여 애플리케이션 만들기
 
-Google ADK를 사용하는 애플리케이션이 없는 경우 다음 단계를 따르세요.
-[ADK Getting Started Guide](https://google.github.io/adk-docs/get-started/) ~
-샘플 ADK 에이전트를 만듭니다.
+Google ADK를 사용하는 애플리케이션이 없다면 [ADK Getting Started Guide](https://google.github.io/adk-docs/get-started/)의 안내에 따라 샘플 ADK 에이전트를 생성하세요.
 
 ### 환경 변수 구성
 
-다음 환경에서는 ML 애플리케이션 이름을 지정해야 합니다.
-변수. ML 애플리케이션은 LLM 관찰 추적을 그룹화한 것입니다.
-특정 LLM 기반 응용 프로그램과 연결됩니다. [ML Application Naming
-Guidelines](https://docs.datadoghq.com/llm_observability/instrumentation/sdk?tab=python#application-naming-guidelines) 참조
-ML 애플리케이션 이름의 제한 사항에 대한 자세한 내용을 확인하세요.
+다음 환경 변수에 ML 애플리케이션 이름을 지정해야 합니다. ML 애플리케이션은 특정 LLM 기반 애플리케이션과 연결된 LLM Observability 트레이스들의 그룹입니다. ML 애플리케이션 이름 지정 제한 사항에 대한 자세한 내용은 [ML Application Naming Guidelines](https://docs.datadoghq.com/llm_observability/instrumentation/sdk?tab=python#application-naming-guidelines)를 참고하세요.
 
 ```shell
 export DD_API_KEY=<YOUR_DD_API_KEY>
@@ -70,24 +54,20 @@ export DD_LLMOBS_AGENTLESS_ENABLED=true
 export DD_APM_TRACING_ENABLED=false  # Only set this if you are not using Datadog APM
 ```
 
-이러한 변수는 애플리케이션을 실행하기 전에 내보내야 합니다.
-다음 `ddtrace-run` 명령을 사용하면
-에이전트의 `.env` 파일.
+다음 `ddtrace-run` 명령어가 이 변수들을 읽을 수 있도록 에이전트의 `.env` 파일에 넣는 대신 애플리케이션 실행 전에 환경 변수로 직접 내보내야(`export`) 합니다.
 
 ### 애플리케이션 실행
 
-환경 변수를 구성한 후에는 다음을 실행할 수 있습니다.
-LLM 기반 지원서를 관찰하기 시작하세요.
+환경 변수를 구성한 후 애플리케이션을 실행하면 LLM 기반 애플리케이션 모니터링을 시작할 수 있습니다.
 
 ```shell
 ddtrace-run adk run my_agent
 ```
 
-## 관찰
+## 모니터링 확인
 
 [Datadog LLM Observability Traces
-View](https://app.datadoghq.com/llm/traces)로 이동하여 생성된 추적을 확인하세요.
-신청.
+View](https://app.datadoghq.com/llm/traces)로 이동하여 애플리케이션에서 생성된 트레이스를 확인하세요.
 
 ![datadog-observability.png](./assets/datadog-observability.png)
 

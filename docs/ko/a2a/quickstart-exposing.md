@@ -15,7 +15,7 @@ ADK 에이전트를 A2A를 통해 노출하는 두 가지 주요 방법이 있�
 *   **`to_a2a(root_agent)` 함수 사용:** 기존 에이전트를 A2A와 연동되도록 변환하고, `adk deploy api_server` 대신 `uvicorn`을 통해 서버로 노출하고 싶을 때 이 함수를 사용하세요. 이는 에이전트를 프로덕션 환경에 배포할 때 `uvicorn`을 통해 노출할 대상을 더 세밀하게 제어할 수 있음을 의미합니다. 또한, `to_a2a()` 함수는 에이전트 코드를 기반으로 에이전트 카드(agent card)를 자동으로 생성합니다.
 *   **자신만의 에이전트 카드(`agent.json`)를 생성하고 `adk api_server --a2a`를 사용하여 호스팅:** 이 접근 방식에는 두 가지 주요 이점이 있습니다. 첫째, `adk api_server --a2a`는 `adk web`과 함께 작동하여 에이전트를 쉽게 사용, 디버깅 및 테스트할 수 있습니다. 둘째, `adk api_server`를 사용하면 여러 개의 개별 에이전트가 있는 상위 폴더를 지정할 수 있습니다. 에이전트 카드(`agent.json`)가 있는 에이전트들은 동일한 서버를 통해 다른 에이전트들이 A2A를 통해 자동으로 사용할 수 있게 됩니다. 하지만, 자신만의 에이전트 카드를 만들어야 합니다. 에이전트 카드를 만드는 방법은 [A2A Python 튜토리얼](https://a2a-protocol.org/latest/tutorials/python/1-introduction/)을 따를 수 있습니다.
 
-이 빠른 시작 가이드는 `to_a2a()`에 초점을 맞춥니다. 이 방법이 에이전트를 노출하는 가장 쉬운 방법이며, 에이전트 카드도 배후에서 자동으로 생성하기 때문입니다. `adk api_server` 접근 방식을 사용하고 싶다면, [A2A 빠른 시작 (소비편) 문서](quickstart-consuming.md)에서 사용 예시를 볼 수 있습니다.
+이 빠른 시작 가이드는 `to_a2a()`에 초점을 맞춥니다. 이 방법이 에이전트를 노출하는 가장 쉬운 방법이며, 에이전트 카드도 내부적으로 자동 생성하기 때문입니다. `adk api_server` 접근 방식을 사용하고 싶다면, [A2A 빠른 시작 (소비편) 문서](quickstart-consuming.md)에서 사용 예시를 볼 수 있습니다.
 
 ```text
 전:
@@ -65,7 +65,7 @@ from google.adk.a2a.utils.agent_to_a2a import to_a2a
 a2a_app = to_a2a(root_agent, port=8001)
 ```
 
-`to_a2a()` 함수는 [ADK 에이전트에서 기술, 기능 및 메타데이터를 추출](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/utils/agent_card_builder.py)하여 배후에서 에이전트 카드를 인메모리(in-memory)로 자동 생성하기까지 합니다. 덕분에 에이전트 엔드포인트가 `uvicorn`으로 제공될 때 잘 알려진(well-known) 에이전트 카드를 사용할 수 있습니다.
+`to_a2a()` 함수는 [ADK 에이전트에서 스킬(skills), 기능(capabilities) 및 메타데이터를 추출](https://github.com/google/adk-python/blob/main/src/google/adk/a2a/utils/agent_card_builder.py)하여 내부적으로 에이전트 카드를 인메모리(in-memory)로 자동 생성하기까지 합니다. 덕분에 에이전트 엔드포인트가 `uvicorn`으로 제공될 때 잘 알려진(well-known) 에이전트 카드를 사용할 수 있습니다.
 
 `agent_card` 매개변수를 사용하여 자신만의 에이전트 카드를 제공할 수도 있습니다. 값은 `AgentCard` 객체이거나 에이전트 카드 JSON 파일의 경로일 수 있습니다.
 
@@ -114,11 +114,11 @@ a2a_app = to_a2a(root_agent, port=8001, agent_card="/path/to/your/agent-card.jso
 * **`push_config_store` (선택 사항):** A2A 푸시 알림을 관리하기 위한 사용자 정의 저장소 구현입니다. 제공되지 않으면 시스템은 인메모리 저장소(`InMemoryPushNotificationConfigStore`)를 기본값으로 사용합니다.
 * **`agent_card` (선택 사항):** `AgentCard` 객체 또는 JSON 파일 경로입니다. 생략할 경우 ADK는 에이전트 코드에서 에이전트 카드를 자동으로 생성합니다.
 * **`runner` (선택 사항):** 사전 구축된 `Runner`입니다. 생략할 경우 인메모리 서비스로 지원되는 기본 러너가 생성됩니다.
-* **`lifespan` (선택 사항):** 시작 및 종료 로직을 실행하는 데 사용되는 Starlette lifespan 이벤트를 위한 비동기 컨텍스트 관리자입니다. [애플리케이션 수명 주기 관리](#manage-the-application-lifecycle)를 참조하세요.
+* **`lifespan` (선택 사항):** 시작 및 종료 로직을 실행하는 데 사용되는 Starlette lifespan 이벤트를 위한 비동기 컨텍스트 관리자입니다. [애플리케이션 라이프사이클 관리](#manage-the-application-lifecycle)를 참조하세요.
 
-### 애플리케이션 수명 주기 관리
+### 애플리케이션 라이프사이클 관리 { #manage-the-application-lifecycle }
 
-`to_a2a` 함수의 `lifespan` 인수를 사용하여 애플리케이션의 수명 주기를 관리할 수 있습니다. 시작 시 데이터베이스 연결을 시작하고 종료 시 닫는 등의 설정 및 해제 작업을 수행하려면 비동기 컨텍스트 관리자를 전달하세요.
+`to_a2a` 함수의 `lifespan` 인수를 사용하여 애플리케이션의 라이프사이클을 관리할 수 있습니다. 시작 시 데이터베이스 연결을 시작하고 종료 시 닫는 등의 설정 및 해제 작업을 수행하려면 비동기 컨텍스트 관리자를 전달하세요.
 
 컨텍스트 관리자는 `Starlette` 앱 인스턴스를 수신합니다. 애플리케이션이 전역적으로 액세스해야 하는 리소스를 저장하려면 `app.state`를 사용하세요.
 
@@ -280,9 +280,9 @@ adk 웹 서버를 열려면 [http://localhost:8000](http://localhost:8000)으로
 *   **`after_event`**: ADK 이벤트가 A2A 이벤트로 변환된 *뒤에* 실행됩니다. 큐에 넣기 전의 출력 이벤트를 수정하거나, `None`을 반환해 이벤트를 필터링하고 삭제할 수 있습니다.
 *   **`after_agent`**: 에이전트 실행이 끝나고 최종 이벤트가 준비된 뒤 실행됩니다. 전송되기 전에 최종 상태 이벤트(예: `completed`, `failed`)를 검사하거나 수정할 때 사용합니다.
 
-### 애플리케이션 수명 주기 관리
+### 애플리케이션 라이프사이클 관리
 
-`to_a2a` 함수의 `lifespan` 인수를 사용하여 애플리케이션의 수명 주기를 관리할 수 있습니다. 시작 시 데이터베이스 연결을 시작하고 종료 시 닫는 등의 설정 및 해제 작업을 수행하려면 비동기 컨텍스트 관리자를 전달하세요.
+`to_a2a` 함수의 `lifespan` 인수를 사용하여 애플리케이션의 라이프사이클을 관리할 수 있습니다. 시작 시 데이터베이스 연결을 시작하고 종료 시 닫는 등의 설정 및 해제 작업을 수행하려면 비동기 컨텍스트 관리자를 전달하세요.
 
 컨텍스트 관리자는 `Starlette` 앱 인스턴스를 수신합니다. 애플리케이션이 전역적으로 액세스해야 하는 리소스를 저장하려면 `app.state`를 사용하세요.
 

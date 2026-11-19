@@ -19,7 +19,7 @@ ADK 에이전트를 AI 애플리케이션용 벡터 데이터베이스인
 
 ## 사용 사례
 
-- **시맨틱 검색 및 검색 기반 조회**: 자연어 질의와 메타데이터 필터링,
+- **시맨틱 검색 및 데이터 조회**: 자연어 질의와 메타데이터 필터링,
   재정렬을 사용해 저장된 데이터를 검색합니다.
 
 - **지식 베이스 관리**: 데이터 저장/관리로
@@ -103,8 +103,8 @@ ADK 에이전트를 AI 애플리케이션용 벡터 데이터베이스인
 
 !!! note
 
-    [integrated inference](https://docs.pinecone.io/guides/inference/understanding-inference)
-    가 활성화된 인덱스만 지원됩니다. 통합 임베딩 모델이 없는 인덱스는
+    [통합 추론(integrated inference)](https://docs.pinecone.io/guides/inference/understanding-inference)이
+    활성화된 인덱스만 지원됩니다. 통합 임베딩 모델이 없는 인덱스는
     이 MCP 서버에서 지원되지 않습니다.
 
 ## 사용 가능한 도구

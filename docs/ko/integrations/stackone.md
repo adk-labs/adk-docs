@@ -15,7 +15,7 @@ catalog_tags: ["connectors"]
 ADK 에이전트를 [StackOne](https://stackone.com)의 통합 AI 통합 게이트웨이를 통해
 수백 개의 제공업체에 연결합니다. 각 API마다 도구 함수를 수동으로 정의하는 대신,
 이 플러그인은 연결된 제공업체에서 사용 가능한 도구를 동적으로 탐지하여 ADK의
-네이티브 도구로 노출합니다. HRIS, ATS, CRM, 생산성 및 일정 관리 도구를 비롯해
+네이티브 도구로 제공합니다. HRIS, ATS, CRM, 생산성 및 일정 관리 도구를 비롯해
 더 많은 [통합](https://www.stackone.com/connectors)을 지원합니다.
 
 ## 사용 사례
@@ -24,10 +24,10 @@ ADK 에이전트를 [StackOne](https://stackone.com)의 통합 AI 통합 게이�
   데이터를 보강하고, 개인화된 아웃리치를 작성하고, 활동을 다시 기록하는 에이전트를
   하나의 대화 안에서 구축할 수 있습니다.
 
-- **People Operations:** ATS(예: Greenhouse, Ashby)에서 후보자를 선별하고,
+- **인사 운영(People Operations):** ATS(예: Greenhouse, Ashby)에서 후보자를 선별하고,
   일정 도구(예: Google Calendar, Calendly)에서 가용성을 확인하며, 면접 평가표를
   수집하고, 지원자를 파이프라인 단계 사이에서 이동시키고, HRIS(예: BambooHR,
-  Workday)로 온보딩을 자동화하는 에이전트를 만들어 전 직원 생애주기를 수작업 없이
+  Workday)로 온보딩을 자동화하는 에이전트를 만들어 전체 직원 라이프사이클을 수작업 없이
   처리할 수 있습니다.
 
 - **마케팅 자동화:** CRM의 오디언스 세그먼트를 이메일 플랫폼(예: Mailchimp,
@@ -36,11 +36,11 @@ ADK 에이전트를 [StackOne](https://stackone.com)의 통합 AI 통합 게이�
 
 - **제품 전달:** 지원 도구(예: Intercom, Zendesk, Slack)에서 들어오는 피드백을
   분류하고, 프로젝트 관리 도구(예: Linear, Jira)에 이슈를 생성 및 우선순위화하며,
-  옵저버빌리티 플랫폼(예: PagerDuty, Datadog)의 인사이트를 활용해 사고를
+  관측 가능성(observability) 플랫폼(예: PagerDuty, Datadog)의 인사이트를 활용해 사고를
   해결하는 에이전트를 구축하여 제품 조사, 전달, 신뢰성을 단일 워크플로로
   연결할 수 있습니다.
 
-## 전제 조건
+## 사전 요구사항
 
 - 최소 하나의 제공업체가 연결된 [StackOne 계정](https://app.stackone.com)
 - [StackOne Dashboard](https://app.stackone.com)에서 발급한 StackOne API 키
@@ -273,27 +273,27 @@ for tool in plugin.get_tools():
 
 ### 지원되는 통합 카테고리
 
-Category | Example providers
+카테고리 | 주요 제공업체 예시
 -------- | -----------------
-HRIS | HiBob, BambooHR, Workday, SAP SuccessFactors, Personio, Gusto
-ATS | Greenhouse, Ashby, Lever, Bullhorn, SmartRecruiters, Teamtailor
-CRM & Sales | Salesforce, HubSpot, Pipedrive, Zoho CRM, Close, Copper
-Marketing | Mailchimp, Klaviyo, ActiveCampaign, Brevo, GetResponse
-Ticketing & Support | Zendesk, Freshdesk, Jira, ServiceNow, PagerDuty, Linear
-Productivity | Asana, ClickUp, Slack, Microsoft Teams, Notion, Confluence
-Scheduling | Calendly, Cal.com
-LMS & Learning | 360Learning, Docebo, Go1, Cornerstone, LinkedIn Learning
-Commerce | Shopify, BigCommerce, WooCommerce, Etsy
-Developer Tools | GitHub, GitLab, Twilio
+HRIS (인사 관리) | HiBob, BambooHR, Workday, SAP SuccessFactors, Personio, Gusto
+ATS (채용 관리) | Greenhouse, Ashby, Lever, Bullhorn, SmartRecruiters, Teamtailor
+CRM 및 영업 | Salesforce, HubSpot, Pipedrive, Zoho CRM, Close, Copper
+마케팅 | Mailchimp, Klaviyo, ActiveCampaign, Brevo, GetResponse
+티켓팅 및 고객 지원 | Zendesk, Freshdesk, Jira, ServiceNow, PagerDuty, Linear
+생산성 | Asana, ClickUp, Slack, Microsoft Teams, Notion, Confluence
+일정 관리 | Calendly, Cal.com
+LMS 및 학습 | 360Learning, Docebo, Go1, Cornerstone, LinkedIn Learning
+커머스 | Shopify, BigCommerce, WooCommerce, Etsy
+개발자 도구 | GitHub, GitLab, Twilio
 
 200개 이상의 지원 제공업체 전체 목록은
-[StackOne integrations page](https://www.stackone.com/connectors)를 참고하세요.
+[StackOne 통합 페이지](https://www.stackone.com/connectors)를 참고하세요.
 
 ## 구성
 
-### 플러그인 파라미터
+### 플러그인 매개변수
 
-Parameter | Type | Default | Description
+매개변수 | 타입 | 기본값 | 설명
 --------- | ---- | ------- | -----------
 `api_key` | `str | None` | `None` | StackOne API 키입니다. `STACKONE_API_KEY` 환경 변수로 폴백합니다.
 `account_id` | `str | None` | `None` | 모든 도구에 적용할 기본 계정 ID입니다.
@@ -330,7 +330,7 @@ plugin = StackOnePlugin(
 
 ## 추가 리소스
 
-- [StackOne ADK Plugin Repository](https://github.com/StackOneHQ/stackone-adk-plugin)
-- [StackOne Documentation](https://docs.stackone.com/)
-- [StackOne Dashboard](https://app.stackone.com)
+- [StackOne ADK 플러그인 저장소](https://github.com/StackOneHQ/stackone-adk-plugin)
+- [StackOne 문서](https://docs.stackone.com/)
+- [StackOne 대시보드](https://app.stackone.com)
 - [StackOne Python AI SDK](https://github.com/StackOneHQ/stackone-ai-python)

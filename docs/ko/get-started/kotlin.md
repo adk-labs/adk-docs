@@ -51,7 +51,7 @@ my_agent/
 ### 에이전트 코드 정의
 
 기본 에이전트 코드를 만듭니다. 여기에는 `getCurrentTime()`이라는 간단한
-ADK [Function Tool](/ko/tools-custom/function-tools/) 구현이 포함됩니다.
+ADK [함수 도구(Function Tool)](/ko/tools-custom/function-tools/) 구현이 포함됩니다.
 프로젝트 디렉터리의 `HelloTimeAgent.kt` 파일에 다음 코드를 추가하세요.
 
 ```kotlin title="my_agent/src/main/kotlin/com/example/agent/HelloTimeAgent.kt"
@@ -152,7 +152,7 @@ dependencies {
 
 이 프로젝트는 API 키가 필요한 Gemini API를 사용합니다. 아직 Gemini API
 키가 없다면 Google AI Studio의
-[API Keys](https://aistudio.google.com/app/apikey) 페이지에서 키를
+[API 키](https://aistudio.google.com/app/apikey) 페이지에서 키를
 만드세요.
 
 터미널 창에서 프로젝트의 `.env` 파일에 API 키를 기록해 환경 변수를
@@ -184,7 +184,7 @@ dependencies {
 ### 진입점 만들기
 
 명령줄에서 `HelloTimeAgent`를 실행하고 상호작용할 `Main.kt` 파일을
-만듭니다. `ReplRunner`는 사용자 입력, 에이전트 응답, 도구 확인 프롬프트를
+만듭니다. `ReplRunner`는 사용자 입력, 에이전트 응답, 도구 실행 승인(Tool Confirmation) 프롬프트를
 처리하는 기본 대화형 REPL을 제공합니다.
 
 ```kotlin title="my_agent/src/main/kotlin/com/example/agent/Main.kt"

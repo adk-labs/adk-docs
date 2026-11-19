@@ -13,7 +13,7 @@ catalog_tags: ["mcp"]
 
 [AgentPhone MCP Server](https://github.com/AgentPhone-AI/agentphone-mcp)는
 ADK 에이전트를 [AgentPhone](https://agentphone.to/)과 연결합니다.
-AgentPhone는 AI 에이전트를 위한 통신 플랫폼으로, 전화 걸기와 받기,
+AgentPhone은 AI 에이전트를 위한 통신 플랫폼으로, 전화 걸기와 받기,
 SMS 송수신, 전화번호 관리, 자연어로 동작하는 자율형 AI 음성 에이전트
 생성을 지원합니다.
 

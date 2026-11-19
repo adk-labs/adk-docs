@@ -84,7 +84,7 @@ public class HelloTimeAgent {
 
 !!! warning "주의: Gemini 3 호환성"
 
-    ADK Java v0.3.0 이하는 함수 호출에 대한 사고 서명 변경으로 인해
+    ADK Java v0.3.0 이하는 함수 호출의 사고 서명(thought signature) 변경으로 인해
     [Gemini 3 Pro Preview](https://ai.google.dev/gemini-api/docs/models#gemini-3-pro)와 호환되지 않습니다.
     대신 Gemini 2.5 이하 모델을 사용하세요.
 
@@ -102,7 +102,7 @@ ADK 에이전트 프로젝트는 `pom.xml` 프로젝트 파일에 다음 종속�
 </dependencies>
 ```
 
-`pom.xml` 프로젝트 파일을 업데이트하여 이 종속성과 추가 설정을 다음 구성 코드를 포함하도록 합니다.
+이 종속성과 추가 설정이 포함되도록 다음 구성 코드로 `pom.xml` 프로젝트 파일을 업데이트합니다.
 
 ??? info "프로젝트에 대한 완전한 `pom.xml` 구성"
     다음 코드는 이 프로젝트에 대한 완전한 `pom.xml` 구성을 보여줍니다.
@@ -224,7 +224,7 @@ public class AgentCliRunner {
 
 ## 에이전트 실행
 
-정의한 대화형 명령줄 인터페이스 `AgentCliRunner` 클래스 또는 `AdkWebServer` 클래스를 사용하여 ADK에서 제공하는 ADK 웹 사용자 인터페이스를 사용하여 ADK 에이전트를 실행할 수 있습니다. 이 두 가지 옵션을 통해 에이전트를 테스트하고 상호 작용할 수 있습니다.
+직접 정의한 대화형 명령줄 인터페이스(`AgentCliRunner` 클래스) 또는 ADK에서 제공하는 웹 사용자 인터페이스(`AdkWebServer` 클래스)로 ADK 에이전트를 실행할 수 있습니다. 이 두 가지 옵션을 통해 에이전트를 테스트하고 상호 작용할 수 있습니다.
 
 ### 명령줄 인터페이스로 실행
 
@@ -248,7 +248,7 @@ mvn compile exec:java \
     -Dexec.args="--adk.agents.source-dir=target --server.port=8000"
 ```
 
-이 명령은 에이전트용 채팅 인터페이스가 있는 웹 서버를 시작합니다. 웹 인터페이스는 (http://localhost:8000)에서 액세스할 수 있습니다. 왼쪽 상단 모서리에서 에이전트를 선택하고 요청을 입력합니다.
+이 명령은 에이전트용 채팅 인터페이스가 있는 웹 서버를 시작합니다. 웹 인터페이스는 `http://localhost:8000`에서 액세스할 수 있습니다. 왼쪽 상단 모서리에서 에이전트를 선택하고 요청을 입력합니다.
 
 ![adk-web-dev-ui-chat.png](../assets/adk-web-dev-ui-chat.png)
 
@@ -259,8 +259,6 @@ mvn compile exec:java \
 
 ## 다음: 에이전트 빌드
 
-이제 ADK가 설치되었고 첫 번째 에이전트가 실행 중이므로 이제 빌드 가이드를 사용하여 자신만의 에이전트를 빌드해 보세요.
+이제 ADK가 설치되었고 첫 번째 에이전트가 실행 중이므로 빌드 가이드를 따라 직접 에이전트를 빌드해 보세요.
 
 *  [에이전트 빌드](/ko/tutorials/)
-
-```

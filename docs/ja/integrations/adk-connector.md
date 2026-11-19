@@ -11,15 +11,15 @@ catalog_tags: ["connectors"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span>
 </div>
 
-[ADK Connector](https://github.com/Harshk133/adk-connector)は、任意の ADK エージェントをラッピングし、Telegram や Discord などの一般的なメッセージングチャネルにチャットボットとして公開できるプラグアンドプレイ의 ツールキットです。現在サポートされているチャネルの完全なリストについては、プロジェクトリポジトリを参照してください。
+[ADK Connector](https://github.com/Harshk133/adk-connector) は、任意の ADK エージェントをラップし、Telegram や Discord などの一般的なメッセージングチャネルにチャットボットとして公開できるプラグアンドプレイのツールキットです。現在サポートされているチャネルの完全なリストについては、プロジェクトリポジトリを参照してください。
 
-数行のコードを追加するだけで、ローカル開発、テスト環境と実際のプロダクションメッセージングプラットフォームの間のギャップを埋めることができ、データベースベースのデバイス間セッション同期をネイティブにサポートします。
+数行のコードを追加するだけで、ローカル開発・テスト環境と本番メッセージングプラットフォームの間のギャップを埋めることができ、データベースベースのデバイス間セッション同期をネイティブにサポートします。
 
 ## 主なユースケース
 
 - **マルチチャネルデプロイ (Multi-Channel Deployment)**: サポートされているメッセージングチャネル（Telegram、Discord など）に、Python または JavaScript/TypeScript で記述された ADK エージェントをチャットボットとして即座にデプロイできます。
 - **デバイス間のセッション同期 (Cross-Device Session Synchronization)**: 会話をシームレスに切り替えることができます。Telegram や Discord でのチャット履歴を、ローカルの ADK Web UI (`adk web`) 内でそのまま確認、デバッグし、会話を継続できます。
-- **弾力的な状態管理 (Resilient State Management)**: セッション状態、ツール呼び出し、ユーザーのインタラクションを記録するための非同期 SQLite バックエンドを自動的に構成します。
+- **障害に強い状態管理 (Resilient State Management)**: セッション状態、ツール呼び出し、ユーザーのインタラクションを記録するための非同期 SQLite バックエンドを自動的に構成します。
 - **堅牢なマルチエージェントワークフロー (Robust Multi-Agent Workflows)**: 二重インポート（double-import）防止セーフティと、親およびサブエージェント間でのプロンプトコンテキスト変数の自動解決を提供します。
 
 ## 前提条件
@@ -147,7 +147,7 @@ ADK プロジェクトに応じて、Python または JavaScript / TypeScript �
     }
     ```
 
-## adk webとのセッション同期
+## `adk web` とのセッション同期
 
 Python セットアップの場合、プロバイダー固有のユーザー ID をローカル開発環境にマッピングすることで、Telegram または Discord のチャット履歴をローカルの ADK Web UI と直接同期できます。
 

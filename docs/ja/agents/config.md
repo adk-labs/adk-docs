@@ -137,7 +137,7 @@ CLI を経由せず、コード内で設定ベースのエージェントを直�
 
 ### 組み込みツールの例
 
-次の例では、Google検索を使用してエージェントに機能を提供する組み込みADKツール関数を使用します。このエージェントは、ユーザー要求に自動的に検索ツールを使用して応答します。
+次の例では、Google検索を使用してエージェントに機能を提供する組み込みADKツール関数を使用します。このエージェントは、ユーザーのリクエストに対して自動的に検索ツールを使用して応答します。
 
 ```
 # yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
@@ -212,7 +212,7 @@ sub_agents:
           name: my_library.clients.my_litellm
 
     `model:`キーと`model_code:`キーの両方を同時に設定することはできません。
--   **プログラミング言語:** エージェント設定機能は現在、ツールやプログラミングコードを必要とするその他の機能に対してPython と Java コードをサポートしています。
+-   **プログラミング言語:** エージェント設定機能は現在、ツールやプログラミングコードを必要とするその他の機能に対してPythonおよびJavaコードをサポートしています。
 -   **ADKツールのサポート:** 次のADKツールはエージェント設定機能でサポートされていますが、*すべてのツールが完全にサポートされているわけではありません*。
     -   `google_search`
     -   `load_artifacts`
@@ -222,12 +222,12 @@ sub_agents:
     -   `get_user_choice`
     -   `enterprise_web_search`
     -   `load_web_page`: ウェブページにアクセスするには完全修飾パスが必要です。
--   **エージェントタイプのサポート:** `LangGraphAgent`および`A2aAgent`タイプはまだサポートされていません。
     -   `AgentTool`
     -   `LongRunningFunctionTool`
     -   `VertexAiSearchTool`
     -   `McpToolset`
     -   `ExampleTool`
+-   **エージェントタイプのサポート:** `LangGraphAgent`および`A2aAgent`タイプはまだサポートされていません。
 
 ## 次のステップ
 

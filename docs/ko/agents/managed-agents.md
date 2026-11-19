@@ -12,10 +12,10 @@ Managed agents(관리형 에이전트)를 사용하면 ADK 흐름 내에서 Mana
 
 *Managed agent (관리형 에이전트)*는 자체 ADK 프로세스에 의해 실행되는 것이 아니라, Managed Agents API를 통해 Google에서 추론, 도구 및 실행 환경을 호스팅하고 운영하는 에이전트입니다. `ManagedAgent`는 표준 `generate_content` 호출을 발행하는 대신 서버 사이드 *상호작용(interaction)*을 생성하고 결과를 ADK 흐름으로 다시 스트리밍합니다. Managed agents는 다음과 같은 여러 가지 내장된 이점을 제공합니다.
 
-- **퍼스트 파티 기본 제공 에이전트:** ready-made 에이전트(예: Antigravity 에이전트)의 `agent_id`를 참조하여 연결합니다.
+- **퍼스트 파티 기본 제공 에이전트:** 별도 설정 없이 바로 사용할 수 있는 에이전트(예: Antigravity 에이전트)의 `agent_id`를 참조하여 연결합니다.
 - **내장된 서버 사이드 실행:** 웹 검색 및 코드 실행과 같은 기능이 서버의 관리형 샌드박스에서 실행되므로 로컬 샌드박스를 프로비저닝하거나 보호할 필요가 없습니다.
 - **클라이언트 사이드 함수 선언 없음:** 서버 사이드 도구가 관리형 에이전트에서 구성되므로 로컬에서 선언하거나 실행하지 않습니다.
-- **인라인 도구로 구성 가능:** `mode='single_turn'`을 설정하고 관리형 에이전트를 상위 `LlmAgent`의 `sub_agents`에 추가하세요. 그러면 ADK가 이를 인라인 단일 턴 도구로 자동 노출하며, 이는 `AgentTool`로 래핑하는 것보다 권장되는 대안입니다.
+- **인라인 도구로 구성 가능:** `mode='single_turn'`을 설정하고 관리형 에이전트를 상위 `LlmAgent`의 `sub_agents`에 추가하세요. 그러면 ADK가 이를 인라인 단일 턴 도구로 자동 제공하며, 이는 `AgentTool`로 래핑하는 것보다 권장되는 방식입니다.
 
 ## 직접 빌드하는 것과 Managed agents를 사용하는 것의 비교
 
@@ -80,11 +80,11 @@ Managed agents와 ADK 에이전트는 서로 다른 문제를 해결합니다. �
 
 !!! note "`ManagedAgent`가 Managed Agents API에 매핑되는 방식"
 
-    ADK `ManagedAgent`는 새로운 관리형 에이전트 리소스를 생성하거나 등록하지 않습니다. 백엔드에 이미 존재하는 에이전트(`agent_id`로 명명됨)에 연결하고 런타임에 상호작용별 재정의(override)로 해당 구성(`tools` 및 `environment` 등)을 적용합니다. Managed Agents API의 관점에서 ADK는 데이터 평면(Interactions API)에서만 작동하며 제어 평면(에이전트 리소스를 생성하고 관리하는 Agents API)은 그대로 유지합니다. 이 두 평면의 차이점에 대한 자세한 내용은 [Managed Agents API 시스템 아키텍처](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/managed-agents)를 참고하세요.
+    ADK `ManagedAgent`는 새로운 관리형 에이전트 리소스를 생성하거나 등록하지 않습니다. 백엔드에 이미 존재하는 에이전트(`agent_id`로 지정)에 연결하고 런타임에 상호작용별 재정의(override)로 해당 구성(`tools` 및 `environment` 등)을 적용합니다. Managed Agents API 관점에서 ADK는 데이터 플레인(Interactions API)에서만 동작하며 컨트롤 플레인(에이전트 리소스를 생성하고 관리하는 Agents API)은 건드리지 않습니다. 두 플레인의 차이점에 대한 자세한 내용은 [Managed Agents API 시스템 아키텍처](https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/managed-agents)를 참고하세요.
 
 ### 로컬 세션 vs 원격 상태
 
-`ManagedAgent`는 로컬에 거의 상태를 유지하지 않습니다. ADK 세션은 생성하는 이벤트에서 오직 두 가지 값, 즉 `interaction_id`와 샌드박스 `environment_id`만을 유지합니다. 각 새 턴에서 에이전트는 이전 세션 이벤트를 스캔하여 두 값을 모두 복구한 다음 백엔드로 다시 전송하므로 대화와 샌드박스가 계속 유지됩니다.
+`ManagedAgent`는 로컬에 상태를 거의 저장하지 않습니다. ADK 세션은 생성되는 이벤트에서 `interaction_id`와 샌드박스 `environment_id` 두 가지 값만 저장합니다. 새로운 턴마다 에이전트는 이전 세션 이벤트를 스캔하여 두 값을 복원한 뒤 백엔드로 다시 전송하므로 대화와 샌드박스가 이어집니다.
 
 그 외 모든 것은 서버 사이드에 상주합니다. Managed Agents API는 샌드박스 환경과 전체 상호작용 기록을 소유하며, 로컬 세션이 아닌 해당 원격 상호작용이 대화를 계속하기 위한 정보의 소스(source of truth)가 됩니다. 응답 텍스트는 로컬 ADK 이벤트와 원격 상호작용 기록 모두에 나타나지만, ADK는 원격 상태를 복구하고 재사용하는 데 필요한 ID만 저장하며 이전 턴을 다시 전송하지는 않습니다.
 

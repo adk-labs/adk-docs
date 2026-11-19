@@ -26,7 +26,7 @@ A2A Basic 샘플은 다음으로 구성됩니다.
 
 ## ADK Java SDK로 에이전트 사용하기
 
-Java에서는 요청을 수동으로 생성하는 대신, ADK가 공식 A2A SDK `Client`를 `RemoteA2AAgent` 엔터티 위에 정확히 래핑하여 사용합니다. 현재 Java SDK는 A2A Protocol 0.3을 사용합니다.
+Java에서는 요청을 수동으로 생성하는 대신, ADK가 공식 A2A SDK `Client`를 `RemoteA2AAgent` 엔터티로 깔끔하게 래핑하여 제공합니다. 현재 Java SDK는 A2A Protocol 0.3을 사용합니다.
 
 ### 1. 샘플 코드 가져오기 { #getting-the-sample-code }
 

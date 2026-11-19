@@ -54,9 +54,11 @@ in CI, not something normally run locally.
   final destination — never chain redirects.
 - Translations live in `docs/ko/` and `docs/ja/` (via `mkdocs-static-i18n`, `docs_structure:
   folder`). Each locale has its own `nav` block inside the `i18n` plugin config in
-  `mkdocs.yml`. `docs/translation-upstream-sync-spec.md` and root-level
-  `translation-status-*.md` files track in-progress sync state against a pinned upstream
-  commit — these are working notes, not authoritative docs.
+  `mkdocs.yml`. Always follow `TRANSLATION_GLOSSARY.md` at the repo root for natural
+  developer-oriented Korean/Japanese terminology and forbidden literal translations.
+  `docs/translation-upstream-sync-spec.md` and root-level `translation-status-*.md` files
+  track in-progress sync state against a pinned upstream commit — these are working notes,
+  not authoritative docs.
 - `docs/_includes/`, `docs/ko/_includes/`, `docs/ja/_includes/` hold snippet-include
   partials (via `pymdownx.snippets`) and are excluded from the nav/build via
   `exclude_docs`/`not_in_nav`.

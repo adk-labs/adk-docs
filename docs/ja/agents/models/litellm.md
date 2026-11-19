@@ -9,7 +9,7 @@
 標準化された OpenAI 互換インターフェースを提供します。
 ADK は LiteLLM を介して、OpenAI、Anthropic（非 Vertex AI）、Cohere など多数の
 プロバイダーの幅広い LLM にアクセスできます。
-Open-source モデルをローカルで実行したり、セルフホストして運用制御・コスト最適化・
+オープンソースモデルをローカルで実行したり、セルフホストして運用制御・コスト最適化・
 プライバシー保護・オフライン利用へ活用できます。
 
 LiteLLM ライブラリを使うことで、リモートまたはローカルでホストされた AI モデルに接続できます。
@@ -56,7 +56,7 @@ LiteLLM ライブラリを使うことで、リモートまたはローカルで
         export ANTHROPIC_API_KEY="YOUR_ANTHROPIC_API_KEY"
         ```
 
-    * *その他のプロバイダーについては* [LiteLLM Providers ドキュメント](https://docs.litellm.ai/docs/providers)
+    * *その他のプロバイダーについては、[LiteLLM Providers ドキュメント](https://docs.litellm.ai/docs/providers)
       に従って適切な環境変数名を確認してください。*
 
 ## 実装例
@@ -82,6 +82,7 @@ agent_claude_direct = LlmAgent(
     instruction="You are an assistant powered by Claude Haiku.",
     # ... other agent parameters
 )
+```
 
 ## Anthropic 思考ブロック (Anthropic thinking blocks)
 
@@ -91,5 +92,4 @@ agent_claude_direct = LlmAgent(
 
 `LiteLlm` コネクタを介して Anthropic Claude モデル（Claude 3.7 Sonnet など）を使用する場合、ADK は「思考ブロック（thinking blocks）」と呼ばれる Anthropic の構造化された推論機能をサポートします。ADK は自動的に `thinking_blocks` とその署名（signature）を抽出します。
 
-Anthropic は、マルチターン会話においてこれらの署名を送り返すことを要求します。そうしないと、最初のターン以降の思考がサイレントにドロップされます。ADK は各送信要求において署名付きの `thinking_blocks` を再構築するため、カスタムの状態管理を行わなくても、ツール呼び出しやマルチターン対話全体で Claude の推論が維持されます。
-```
+Anthropic は、マルチターン会話においてこれらの署名を送り返すことを要求します。そうしないと、最初のターン以降の思考が警告なしで破棄されます。ADK は各送信リクエストにおいて署名付きの `thinking_blocks` を再構築するため、カスタムの状態管理を行わなくても、ツール呼び出しやマルチターン対話全体で Claude の推論が維持されます。

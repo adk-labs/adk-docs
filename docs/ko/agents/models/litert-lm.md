@@ -15,7 +15,7 @@
 
 ### 리소스 설치
 
-LiteRT-LM과 함께 사용할 모델을 다운로드하고 모델을 찾고 다운로드하는 데 도움이 되는 `lit` CLI 도구가 필요합니다.
+LiteRT-LM에서 실행할 모델과, 모델을 검색하고 다운로드하기 위한 `lit` CLI 도구가 필요합니다.
 
 #### `lit` CLI 도구 설치
 
@@ -109,7 +109,7 @@ lit serve --port 8001 --verbose
 
 ### 리소스 설치
 
-LiteRT-LM과 함께 사용할 모델을 다운로드하고 모델을 찾고 다운로드하는 데 도움이 되는 `litert-lm` CLI 도구가 필요합니다.
+LiteRT-LM에서 실행할 모델과, 모델을 검색하고 다운로드하기 위한 `litert-lm` CLI 도구가 필요합니다.
 
 #### LiteRT-LM CLI 설치
 
@@ -125,7 +125,7 @@ uv 사용과 같은 추가 설치 방법은 [LiteRT-LM CLI 설치 가이드](htt
 
 #### 모델 다운로드
 
-`litert-lm` CLI 도구를 사용하려면 LiteRT-LM과 호환되는 모델을 다운로드합니다. `litert-lm`을 사용하여 Hugging Face에서 직접 모델을 다운로드합니다.
+`litert-lm` CLI 도구를 사용하여 Hugging Face에서 LiteRT-LM 호환 모델을 직접 다운로드합니다.
 
 ```bash
 litert-lm import \

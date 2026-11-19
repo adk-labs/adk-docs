@@ -4,16 +4,16 @@
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.16.0</span>
 </div>
 
-リフレクトおよび再試行ツールプラグインは、エージェントがADK[ツール](/ja/tools-custom/)からのエラー応答から回復し、ツールリクエストを自動的に再試行するのに役立ちます。このプラグインは、ツールの障害を傍受し、リフレクションと修正のためにAIモデルに構造化されたガイダンスを提供し、構成可能な制限まで操作を再試行します。このプラグインは、次の機能を含む、エージェントワークフローに回復性を高めるのに役立ちます。
+リフレクトおよび再試行ツールプラグイン（`ReflectAndRetryToolPlugin`）は、エージェントが ADK の[ツール](/ja/tools-custom/)からのエラー応答から回復し、ツールリクエストを自動的に再試行できるように支援します。このプラグインは、ツールの失敗をインターセプトしてリフレクション（振り返り）と修正のための構造化されたガイダンスを AI モデルに提供し、設定可能な上限まで操作を再試行します。以下の機能によって、エージェントワークフローの回復性（レジリエンス）を高めます。
 
 *   **同時実行セーフ**: ロックを使用して、並列ツール実行を安全に処理します。
-*   **構成可能なスコープ**: 呼び出しごと（デフォルト）またはグローバルに障害を追跡します。
-*   **詳細な追跡**: 障害数はツールごとに追跡されます。
-*   **カスタムエラー抽出**: 通常のツール応答でのエラー検出をサポートします。
+*   **構成可能なスコープ**: 呼び出しごと（デフォルト）またはグローバルに失敗を追跡します。
+*   **きめ細かな追跡**: 失敗回数はツールごとに追跡されます。
+*   **カスタムエラー抽出**: 通常のツール応答からエラーを検出する処理をサポートします。
 
 ## リフレクトおよび再試行プラグインの追加
 
-以下に示すように、ADKプロジェクトのAppオブジェクトのプラグイン設定にこのプラグインを追加して、ADKワークフローに追加します。
+以下に示すように、ADK プロジェクトの `App` オブジェクトの `plugins` 設定にこのプラグインを追加することで、ADK ワークフローに組み込みます。
 
 ```python
 from google.adk.apps.app import App
@@ -42,7 +42,7 @@ app = App(
 
 ### 高度な構成
 
-`ReflectAndRetryToolPlugin`クラスを拡張することで、このプラグインの動作をさらに変更できます。次のコードサンプルは、エラーステータスの応答を選択することによる動作の単純な拡張を示しています。
+`ReflectAndRetryToolPlugin` クラスを継承することで、このプラグインの動作をさらにカスタマイズできます。次のコードサンプルは、エラーステータスを含む応答をエラーとして検出するように動作を拡張するシンプルな例です。
 
 ```python
 class CustomRetryPlugin(ReflectAndRetryToolPlugin):
@@ -62,4 +62,4 @@ error_handling_plugin = CustomRetryPlugin(max_retries=5)
 リフレクトおよび再試行プラグインを使用した完全なコードサンプルについては、以下を参照してください。
 
 *   [基本](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_reflect_tool_retry/basic)コードサンプル
-*   [幻覚関数名](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_reflect_tool_retry/hallucinating_func_name)コードサンプル
+*   [ハルシネーションした関数名](https://github.com/google/adk-python/tree/main/contributing/samples/plugins/plugin_reflect_tool_retry/hallucinating_func_name)コードサンプル

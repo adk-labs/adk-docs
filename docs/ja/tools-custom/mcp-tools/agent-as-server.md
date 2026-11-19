@@ -122,8 +122,8 @@ if __name__ == "__main__":
     asyncio.run(run_mcp_stdio_server())
 ```
 
-## 接続と転送モード
-これらの MCP サーバーを介して ADK 機能を公開する場合、通常は標準入出力接続（`mcp.server.stdio`）を使用して実行します。この接続により、親プロセスとして実行されている外部クライアント アプリケーションがスクリプトを生成し、stdio ストリーム経由で直接通信できるため、接続の自己完結性と分離性が維持されます。
+## 接続とトランスポートモード
+これらの MCP サーバーを介して ADK 機能を公開する場合、通常は標準入出力接続（`mcp.server.stdio`）を使用して実行します。この接続により、親プロセスとして実行されている外部クライアント アプリケーションがスクリプトを起動し、stdio ストリーム経由で直接通信できるため、接続の自己完結性と分離性が維持されます。
 
 ## ADK エージェントでカスタム MCP サーバーをテストする
 
@@ -164,7 +164,7 @@ if __name__ == "__main__":
     adk web
     ```
 
-3. ADK Web UI を開き、web_reader_mcp_client_agent を選択します。
+3. ADK Web UI を開き、`web_reader_mcp_client_agent` を選択します。
 4. *Load the content from "https://example.com"* などのプロンプトを使用して接続をテストします。
 
 ## Google Cloud Genmedia 向け MCP サーバー

@@ -116,7 +116,7 @@ ADK에서 OpenAI 모델을 사용할 수 있습니다. 연결하는 방법은 �
    <span class="lst-supported">ADK에서 지원</span><span class="lst-go">Go v2.5.0</span><span class="lst-kotlin">Kotlin v1.4.0</span><span class="lst-preview">실험적 기능</span>
 </div>
 
-기본적으로 `openaimodel`은 OpenAI [Responses API](https://platform.openai.com/docs/api-reference/responses)(`POST /v1/responses`)로 요청을 보냅니다. 거의 모든 OpenAI 호환 제공업체는 [Chat Completions API](https://platform.openai.com/docs/api-reference/chat)(`POST /v1/chat/completions`)를 구현하며, 일부는 이 API만 구현합니다. 이를 사용하려면 [시작하기](#get-started) 아래의 Chat Completions API 탭에 표시된 대로 `ClientConfig`의 `API` 필드를 `openaimodel.APIChatCompletions`로 설정하세요. 에이전트, 도구 및 러너는 두 API 모두에서 동일한 방식으로 작동합니다.
+기본적으로 `openaimodel`은 OpenAI [Responses API](https://platform.openai.com/docs/api-reference/responses)(`POST /v1/responses`)로 요청을 보냅니다. 거의 모든 OpenAI 호환 제공업체는 [Chat Completions API](https://platform.openai.com/docs/api-reference/chat)(`POST /v1/chat/completions`)를 구현하며, 일부는 이 API만 구현합니다. 이를 사용하려면 [시작하기](#get-started) 아래의 Chat Completions API 탭에 표시된 대로 `ClientConfig`의 `API` 필드를 `openaimodel.APIChatCompletions`로 설정하세요. 에이전트, 도구 및 `Runner`는 두 API 모두에서 동일한 방식으로 작동합니다.
 
 !!! warning "다른 제공업체를 위한 API 키 설정"
 
@@ -141,7 +141,7 @@ ADK에서 OpenAI 모델을 사용할 수 있습니다. 연결하는 방법은 �
 - **텍스트 전용** — 멀티모달 입력(이미지, 오디오, 파일)은 지원되지 않습니다.
 - **함수 도구 전용** — 기본 내장 도구(Google Search, 코드 실행 등)는 지원되지 않습니다.
 - **정형 출력은 OpenAI 엄격 모드(Strict mode) 사용** — `OutputSchema`에 선언된 모든 필드는 필수(required)로 취급됩니다.
-- 일부 `GenerateContentConfig` 옵션은 자동으로 무시되지 않고 오류를 반환합니다: `TopK`, 다중 후보(multiple candidates), 요청 라벨 및 보안 설정. 또한 Responses API는 중단 시퀀스(stop sequences), 빈도/존재 패널티 및 시드(seed)도 거부하지만, 이는 [Chat Completions API](#chat-completions-api)에서 지원됩니다.
+- 일부 `GenerateContentConfig` 옵션은 별도 경고 없이 무시되지 않고 오류를 반환합니다: `TopK`, 다중 후보(multiple candidates), 요청 라벨 및 안전 설정(safety settings). 또한 Responses API는 중단 시퀀스(stop sequences), 빈도/존재 페널티 및 시드(seed)도 거부하지만, 이는 [Chat Completions API](#chat-completions-api)에서 지원됩니다.
 
 ## 구성 옵션
 

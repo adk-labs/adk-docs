@@ -10,7 +10,7 @@ catalog_tags: ["observability", "evaluation"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python</span>
 </div>
 
-[Freeplay](https://app.freeplay.ai/) は、AI エージェントを構築および最適化するためのエンドツーエンドのワークフローを提供し、ADK と統合できます。Freeplay を使用すると、チーム全体が簡単に共同作業して、エージェントの指示 (プロンプト) を繰り返し、さまざまなモデルとエージェントの変更を試して比較し、オフラインとオンラインの両方で評価を実行して品質を測定し、本番環境を監視し、手動でデータを確認できます。
+[Freeplay](https://app.freeplay.ai/) は、AI エージェントを構築および最適化するためのエンドツーエンドのワークフローを提供し、ADK と統合できます。Freeplay を使用すると、チーム全体で簡単に連携しながら、エージェントの指示 (プロンプト) を反復的に改善し、さまざまなモデルやエージェントの変更を試して比較し、オフラインとオンラインの両方で評価を実行して品質を測定し、本番環境を監視し、手動でデータを確認できます。
 
 Freeplay の主な利点:
 
@@ -21,7 +21,7 @@ Freeplay の主な利点:
 * **人間によるレビューワークフロー** - エラー分析とデータ注釈に関するコラボレーション用。
 * **強力な UI** - ドメインの専門家がエンジニアと緊密に連携できるようにします。
 
-Freeplay と ADK は互いに補完し合っています。ADK は強力で表現力豊かなエージェントオーケストレーションフレームワークを提供し、Freeplay はオブザーバビリティ、プロンプト管理、評価、テストのためにプラグインします。Freeplay と統合すると、Freeplay UI またはコードからプロンプトと評価を更新できるため、チームの誰もが貢献できます。
+Freeplay と ADK は互いに補完し合っています。ADK は強力で表現力豊かなエージェントオーケストレーションフレームワークを提供し、Freeplay はオブザーバビリティ、プロンプト管理、評価、テスト機能を提供します。Freeplay と統合すると、Freeplay UI またはコードからプロンプトと評価を更新できるため、チームの誰もが貢献できます。
 
 <iframe width="672" height="378" src="https://www.youtube.com/embed/AV2zCkp4aYM?si=HVuOJFLMEkkpocF7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 

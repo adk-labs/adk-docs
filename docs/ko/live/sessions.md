@@ -71,7 +71,7 @@ run_config = RunConfig(
 live_request_queue = LiveRequestQueue()
 ```
 
-`user_id`와 `session_id`는 개발자가 정의하는 임의의 문자열입니다. `session_id=None`을 전달하면 ADK가 UUID를 생성합니다. 동일한 식별자로 `run_live()`를 호출하기 전에 세션이 반드시 존재해야 하며, 그렇지 않으면 `run_live()`에서 `ValueError`의 하위 클래스인 `SessionNotFoundError`가 발생합니다. 예외를 발생시키는 대신 ADK가 누락된 세션을 생성하도록 하려면 `Runner(..., auto_create_session=True)`로 러너를 구성하세요.
+`user_id`와 `session_id`는 개발자가 정의하는 임의의 문자열입니다. `session_id=None`을 전달하면 ADK가 UUID를 생성합니다. 동일한 식별자로 `run_live()`를 호출하기 전에 세션이 반드시 존재해야 하며, 그렇지 않으면 `run_live()`에서 `ValueError`의 하위 클래스인 `SessionNotFoundError`가 발생합니다. 예외를 발생시키는 대신 ADK가 누락된 세션을 생성하도록 하려면 `Runner(..., auto_create_session=True)`로 `Runner`를 생성하세요.
 
 !!! warning "세션당 하나의 큐"
 
@@ -171,7 +171,7 @@ finally:
 
 ### 세션에 저장되는 항목
 
-`run_live()`가 종료되면 일부 이벤트만 ADK `Session`에 유지됩니다:
+`run_live()`가 종료되면 일부 이벤트만 ADK `Session`에 영구 저장됩니다:
 
 - **저장됨:** 최종(non-partial) 전사, 사용량 메타데이터, 함수 호출 및 응답, 대부분의 제어 이벤트. 오디오 파일은 [`save_live_blob`](configuration.md#save_live_blob)이 `True`인 경우에만 저장되며, ADK Python 2.14 이상에서는 사용자의 이미지 프레임도 마찬가지로 저장됩니다.
 - **임시 데이터:** 원시 오디오 바이트(`inline_data`) 및 부분 전사는 실시간 재생 및 표시를 위해 yield되지만 저장되지 않습니다.
@@ -268,6 +268,6 @@ run_config = RunConfig(
 상한선에 맞춘 설계:
 
 - **사용자당 하나의 세션**: 최대 동시 접속자 수가 할당량 이내일 때 기본적이고 올바른 선택입니다.
-- **세션 풀**: 최대 동시 접속자 수가 할당량을 초과할 때 큐를 통해 세션을 할당하는 고정된 세션 풀을 유지하여 대기 시간을 감수하는 대신 할당량을 준수합니다. 사용자 간에 대화가 유출되지 않도록 반납 시 세션별 상태를 재설정하세요.
+- **세션 풀**: 최대 동시 접속자 수가 할당량을 초과할 때 큐를 통해 세션을 할당하는 고정된 세션 풀을 유지하여 큐 대기 시간을 감수하는 대신 할당량을 준수합니다. 사용자 간에 대화가 유출되지 않도록 반납 시 세션별 상태를 재설정하세요.
 
 어느 방식을 선택하든 활성 세션 수를 자체적으로 계산하고 플랫폼이 거부하기 전에 새로운 연결을 큐에 대기시키거나 거부하세요. 플랫폼에 의한 할당량 거부는 연결 오류로 나타나며, 이는 순번이 표시되는 대기열보다 훨씬 나쁜 사용자 경험을 제공합니다.

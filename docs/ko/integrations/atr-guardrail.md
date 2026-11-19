@@ -10,13 +10,13 @@ catalog_icon: /integrations/assets/atr-guardrail.png
   <span class="lst-supported">ADK 지원</span><span class="lst-python">Python</span>
 </div>
 
-[Agent Threat Rules (ATR)](https://github.com/Agent-Threat-Rule/agent-threat-rules)는 프롬프트 주입(prompt injection), 지시사항 우회(instruction override), 도구 인자 변조(tool-argument tampering), 컨텍스트 유출(context exfiltration)과 같은 AI 에이전트 위협을 탐지하기 위한 MIT 라이선스의 오픈 규칙 세트입니다. [ADK 플러그인](https://github.com/eeee2345/adk-atr-guardrail)은 프로세스 내 `pyatr` 엔진을 통해 이 규칙 세트를 ADK Runner 생명주기에 연결합니다. 사용자 메시지, 조립된 모델 요청, 그리고 모든 도구 호출을 검사하여 규칙이 일치하면 이를 중단하거나 차단합니다. 이 탐지는 결정론적인 패턴 매칭(deterministic pattern matching) 방식으로 동작하므로, 별도의 모델 호출이나 네트워크 요청, API 키가 필요하지 않습니다.
+[Agent Threat Rules (ATR)](https://github.com/Agent-Threat-Rule/agent-threat-rules)는 프롬프트 주입(prompt injection), 지시사항 우회(instruction override), 도구 인자 변조(tool-argument tampering), 컨텍스트 유출(context exfiltration)과 같은 AI 에이전트 위협을 탐지하기 위한 MIT 라이선스의 오픈 규칙 세트입니다. [ADK 플러그인](https://github.com/eeee2345/adk-atr-guardrail)은 프로세스 내 `pyatr` 엔진을 통해 이 규칙 세트를 ADK `Runner` 라이프사이클에 연결합니다. 사용자 메시지, 조립된 모델 요청, 그리고 모든 도구 호출을 검사하여 규칙이 일치하면 이를 중단하거나 차단합니다. 이 탐지는 결정론적인 패턴 매칭(deterministic pattern matching) 방식으로 동작하므로, 별도의 모델 호출이나 네트워크 요청, API 키가 필요하지 않습니다.
 
 ## 주요 사용 사례
 
 - **모델 도달 전 프롬프트 주입 차단**: 유입되는 사용자 메시지를 검사하고 일치하는 규칙이 있으면 실행을 중단하여, 악성 프롬프트가 모델에 절대 도달하지 못하도록 합니다.
-- **모델 요청에 대한 심층 방어**: 조립된 프롬프트(주입된 도구 출력 또는 검색된 컨텍스트 포함)를 검사하여 여전히 위협이 포함된 경우 모델 호출을 건너뜁니다.
-- **실패 시 차단되는 도구 호출 (Fail-closed)**: 실행 전에 도구 호출 인자를 검사하고, 인자가 규칙에 일치하면 도구를 실행하는 대신 에러를 반환합니다.
+- **모델 요청에 대한 심층 방어**: 조립된 프롬프트(주입된 도구 출력 또는 조회된 컨텍스트 포함)를 검사하여 여전히 위협이 포함된 경우 모델 호출을 건너뜁니다.
+- **차단 우선(Fail-closed) 도구 호출**: 실행 전에 도구 호출 인자를 검사하고, 인자가 규칙에 일치하면 도구를 실행하는 대신 에러를 반환합니다.
 
 ## 사전 요구사항
 
@@ -32,7 +32,7 @@ pip install adk-atr-guardrail
 
 ## 에이전트와 함께 사용하기
 
-App에 플러그인을 한 번 등록하면 러너가 관리하는 모든 에이전트, 모델 호출, 도구 호출에 적용됩니다.
+`App`에 플러그인을 한 번 등록하면 러너(`Runner`)가 관리하는 모든 에이전트, 모델 호출, 도구 호출에 적용됩니다.
 
 ```python
 import asyncio

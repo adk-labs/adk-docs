@@ -1,48 +1,42 @@
-# ADK エージェントのエージェント プラットフォームでホストされるモデル
+# ADK エージェント向けの Agent Platform ホスティングモデル
 
-エンタープライズ グレードの拡張性、信頼性、Google との統合を実現
-クラウドの MLOps エコシステムでは、エージェント プラットフォーム エンドポイントにデプロイされたモデルを使用できます。
-これには、Model Garden のモデルまたは独自に微調整したモデルが含まれます。
+Google Cloud の MLOps エコシステムとの統合や、エンタープライズグレードのスケーラビリティと信頼性を実現するために、Agent Platform エンドポイントにデプロイされたモデルを使用できます。
+これには、Model Garden のモデルや独自にファインチューニングしたモデルが含まれます。
 
-**統合方法:** 完全なエージェント プラットフォーム エンドポイント リソース文字列を渡します。
-(`projects/PROJECT_ID/locations/LOCATION/endpoints/ENDPOINT_ID`) に直接送信します。
-`LlmAgent` の `model` パラメータ。
+**統合方法:** Agent Platform エンドポイントの完全なリソース文字列（`projects/PROJECT_ID/locations/LOCATION/endpoints/ENDPOINT_ID`）を `LlmAgent` の `model` パラメータに直接渡します。
 
-## エージェント プラットフォームのセットアップ
+## Agent Platform のセットアップ
 
-環境がエージェント プラットフォーム用に構成されていることを確認します。
+環境が Agent Platform 用に構成されていることを確認します。
 
-1. **認証:** アプリケーションのデフォルト認証情報 (ADC) を使用します:
+1. **認証:** アプリケーションのデフォルト認証情報（ADC）を使用します:
 
     ```shell
     gcloud auth application-default login
     ```
 
-2. **環境変数:** プロジェクトと場所を設定します。
+2. **環境変数:** プロジェクトとロケーションを設定します:
 
     ```shell
     export GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
     export GOOGLE_CLOUD_LOCATION="YOUR_VERTEX_AI_LOCATION" # e.g., us-central1
     ```
 
-3. **エージェント プラットフォーム バックエンドを有効にする:** 重要なのは、`google-genai` ライブラリを確認することです。
-   ターゲット エージェント プラットフォーム:
+3. **Agent Platform バックエンドを有効にする:** `google-genai` ライブラリが Agent Platform をターゲットにするよう環境変数を設定します:
 
     ```shell
     export GOOGLE_GENAI_USE_ENTERPRISE=TRUE
     ```
 
-## モデル ガーデン デプロイメント
+## Model Garden のデプロイ
 
 <div class="language-support-tag">
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.2.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-さまざまなオープンな独自モデルをデプロイできます。
-[Model Garden](https://console.cloud.google.com/vertex-ai/model-garden)
-エンドポイントに。
+[Model Garden](https://console.cloud.google.com/vertex-ai/model-garden) のさまざまなオープンモデルやプロプライエタリモデルをエンドポイントにデプロイできます。
 
-**例：**
+**例:**
 
 === "Python"
 
@@ -89,16 +83,15 @@
         .build();
     ```
 
-## 微調整されたモデルのエンドポイント
+## ファインチューニング済みモデルのエンドポイント
 
 <div class="language-support-tag">
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.2.0</span><span class="lst-java">Java v0.1.0</span>
 </div>
 
-微調整されたモデルのデプロイ (Gemini または他のアーキテクチャに基づくかどうか)
-エージェント プラットフォームでサポートされている) を使用すると、エンドポイントが直接使用できるようになります。
+ファインチューニング済みモデル（Gemini ベースか、Agent Platform でサポートされている他のアーキテクチャかを問わず）をデプロイすると、直接使用可能なエンドポイントが作成されます。
 
-**例：**
+**例:**
 
 === "Python"
 
@@ -139,7 +132,7 @@
         .build();
     ```
 
-## エージェント プラットフォーム上の Anthropic Claude {#anthropic-claude}
+## Agent Platform 上の Anthropic Claude {#anthropic-claude}
 
 <div class="language-support-tag">
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.2.0</span><span class="lst-typescript">TypeScript v2.4.0</span><span class="lst-go">Go v2.7.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v1.4.0</span>
@@ -147,7 +140,7 @@
 
 Anthropic などの一部のプロバイダーは、Agent Platform を通じてモデルを直接提供しています。拡張思考（extended thinking）やプロンプト キャッシングを含め、Agent Platform 上で Claude モデルをセットアップして使用する方法については、Claude モデルガイドの [Agent Platform 経由で接続する](/ja/agents/models/anthropic/#connect-through-agent-platform)を参照してください。
 
-## エージェント プラットフォーム上のオープン モデル {#open-models}
+## Agent Platform 上のオープンモデル {#open-models}
 
 <div class="language-support-tag">
     <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v0.1.0</span><span class="lst-java">Java v0.1.0</span>
@@ -157,22 +150,20 @@ Agent Platform は、Model-as-a-Service (MaaS) を通じて、Meta Llama など�
 
 === "Python"
 
-    [LiteLLM](https://docs.litellm.ai/) ライブラリを使用して、エージェント プラットフォーム MaaS 上の Meta の Llama などのオープン モデルにアクセスできます。
+    [LiteLLM](https://docs.litellm.ai/) ライブラリを使用して、Agent Platform MaaS 上の Meta Llama などのオープンモデルにアクセスできます。
 
-    **統合方法:** `LiteLlm` ラッパー クラスを使用して設定します
-    `LlmAgent` の `model` パラメータとして。 ADK で LiteLLM を使用する方法については、[LiteLLM model connector for ADK agents](/agents/models/litellm/#litellm-model-connector-for-adk-agents) ドキュメントを必ず読んでください。
+    **統合方法:** `LiteLlm` ラッパークラスを使用し、`LlmAgent` の `model` パラメータとして設定します。ADK で LiteLLM を使用する方法については、[LiteLLM model connector for ADK agents](/agents/models/litellm/#litellm-model-connector-for-adk-agents) のドキュメントを参照してください。
 
     **セットアップ:**
 
-    1. **エージェント プラットフォーム環境:** 統合されたエージェント プラットフォームのセットアップ (ADC、環境) を確認します。
-       Vars、`GOOGLE_GENAI_USE_ENTERPRISE=TRUE`) が完了しました。
+    1. **Agent Platform 環境:** Agent Platform の共通セットアップ（ADC、環境変数、`GOOGLE_GENAI_USE_ENTERPRISE=TRUE`）が完了していることを確認します。
 
-    2. **LiteLLM をインストールします:**
+    2. **LiteLLM のインストール:**
             ```shell
             pip install litellm
             ```
 
-    **例：**
+    **例:**
 
     ```python
     from google.adk.agents import LlmAgent

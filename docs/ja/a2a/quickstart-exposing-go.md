@@ -26,7 +26,7 @@ Goでは、A2Aランチャーを使用してエージェントを公開します
 
 ## A2Aランチャーでリモートエージェントを公開する
 
-Go ADKを使用して構築された既存のエージェントを取得し、A2Aランチャーを使用してA2A互換にできます。
+Go ADKで構築した既存のエージェントを、A2Aランチャーを使ってA2A互換にすることができます。
 
 ### 1. サンプルコードの取得 { #getting-the-sample-code }
 
@@ -68,7 +68,7 @@ a2a_basic/
 go run remote_a2a/check_prime_agent/main.go
 ```
 
-実行すると、次のようなものが表示されます。
+実行すると、次のような出力が表示されます。
 
 ```shell
 2025/11/06 11:00:19 Starting A2A prime checker server on port 8001

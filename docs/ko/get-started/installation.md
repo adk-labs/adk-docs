@@ -86,11 +86,11 @@ hide:
 
 === "Java"
 
-    maven 또는 gradle을 사용하여 `google-adk` 및 `google-adk-dev` 패키지를 추가할 수 있습니다.
+    Maven 또는 Gradle을 사용하여 `google-adk` 및 `google-adk-dev` 패키지를 추가할 수 있습니다.
 
-    `google-adk`는 핵심 Java ADK 라이브러리입니다. Java ADK에는 에이전트를 원활하게 실행할 수 있는 플러그형 예제 SpringBoot 서버도 함께 제공됩니다. 이 선택적 패키지는 `google-adk-dev`의 일부로 제공됩니다.
+    `google-adk`는 핵심 Java ADK 라이브러리입니다. Java ADK에는 에이전트를 원활하게 실행할 수 있는 플러그형 예제 Spring Boot 서버도 함께 제공됩니다. 이 선택적 패키지는 `google-adk-dev`의 일부로 제공됩니다.
 
-    maven을 사용하는 경우 `pom.xml`에 다음을 추가합니다.
+    Maven을 사용하는 경우 `pom.xml`에 다음을 추가합니다.
 
     ```xml title="pom.xml"
     <?xml version="1.0" encoding="UTF-8"?>
@@ -130,7 +130,7 @@ hide:
 
     참조용 [전체 pom.xml](https://github.com/google/adk-docs/tree/main/examples/java/cloud-run/pom.xml) 파일은 다음과 같습니다.
 
-    gradle을 사용하는 경우 build.gradle에 종속성을 추가합니다.
+    Gradle을 사용하는 경우 `build.gradle`에 종속성을 추가합니다.
 
     ```title="build.gradle"
     dependencies {
@@ -159,9 +159,9 @@ hide:
     }
     ```
 
-    KSP 프로세서는 함수 도구를 등록하는 데 사용되는 `@Tool` 애너테이션용 코드를 생성합니다. 전체 프로젝트 설정은 [Kotlin Quickstart](/ko/get-started/kotlin/)를 참고하세요.
+    KSP 프로세서는 함수 도구를 등록하는 데 사용되는 `@Tool` 애너테이션용 코드를 생성합니다. 전체 프로젝트 설정은 [Kotlin 빠른 시작](/ko/get-started/kotlin/)을 참고하세요.
 
 
 ## 다음 단계
 
-* [**시작하기**](/ko/get-started/)로 첫 번째 에이전트 만들기를 시도해 보십시오.
+* [**시작하기**](/ko/get-started/) 가이드를 따라 첫 번째 에이전트를 만들어 보세요.

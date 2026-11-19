@@ -17,7 +17,7 @@ catalog_tags: ["data"]
 
 - **세션 간 지속되는 메모리 (Persistent cross-session memory)**: 수동으로 기록하지 않고도 여러 세션과 배포 환경에 걸쳐 유지되는 장기 메모리를 ADK 에이전트에 부여합니다.
 - **다중 테넌트 격리 (Multi-tenant isolation)**: 메모리 범위가 `user_id` 및 `customer_id`로 제한되므로 다중 사용자 배포 환경에서 엄격한 격리를 보장합니다.
-- **의미론적 호출 (Semantic recall)**: 서버 측 추출 기능을 통해 현재 질의와 관련된 정보만 추출하여 프롬프트를 짧게 유지하고 토큰 사용을 효율화합니다.
+- **시맨틱 메모리 회상 (Semantic recall)**: 서버 측 추출 기능을 통해 현재 질의와 관련된 정보만 추출하여 프롬프트를 짧게 유지하고 토큰 사용을 효율화합니다.
 
 ## 사전 요구사항
 
@@ -38,7 +38,7 @@ export SYNAP_API_KEY="your-synap-api-key"
 
 ## 에이전트와 함께 사용하기
 
-`create_synap_tools(...)`는 에이전트가 필요에 따라 메모리를 호출하고 보존하기 위해 부를 수 있는 두 개의 `FunctionTool` 인스턴스인 `search_memory`와 `store_memory`를 반환합니다.
+`create_synap_tools(...)`는 에이전트가 필요에 따라 메모리를 조회하고 영구 저장하기 위해 호출할 수 있는 두 개의 `FunctionTool` 인스턴스인 `search_memory`와 `store_memory`를 반환합니다.
 
 ```python
 import os
@@ -80,7 +80,7 @@ adk run path/to/your_agent
 | 도구 | 설명 |
 |------|-------------|
 | `search_memory` | 사용자의 저장된 메모리에 대한 의미론적 검색을 수행합니다. 자연어 질의를 입력받아 가장 관련성 높은 사실, 선호도, 에피소드를 반환합니다. |
-| `store_memory` | 사용자의 장기 메모리에 구체적인 사실을 영속화하여 저장합니다. 사용자가 기억할 만한 내용을 공유할 때 에이전트가 이 도구를 호출합니다. |
+| `store_memory` | 사용자의 장기 메모리에 구체적인 사실을 영구 저장합니다. 사용자가 기억할 만한 내용을 공유할 때 에이전트가 이 도구를 호출합니다. |
 
 ## 리소스
 

@@ -12,7 +12,7 @@ Google ADK에는 자체 OpenTelemetry 기반 추적 시스템이 포함되어 �
 
 *   **통합 추적 및 재생 분석:** ADK 및 AI 스택의 다른 구성 요소에서 추적을 통합합니다.
 *   **풍부한 시각화:** 에이전트 실행 흐름, LLM 호출 및 도구 성능을 시각화하는 직관적인 대시보드.
-*   **상세한 디버깅:** 특정 스팬으로 드릴다운하고, 프롬프트, 완료, 토큰 수 및 오류를 봅니다.
+*   **상세한 디버깅:** 특정 스팬으로 드릴다운하고, 프롬프트, 모델 응답(completion), 토큰 수 및 오류를 확인합니다.
 *   **LLM 비용 및 지연 시간 추적:** 지연 시간, 비용(토큰 사용량 기준)을 추적하고 병목 현상을 식별합니다.
 *   **간소화된 설정:** 단 몇 줄의 코드로 시작할 수 있습니다.
 
@@ -87,7 +87,7 @@ AgentOps는 ADK의 기본 원격 측정과 충돌하지 않고 원활한 관측 
         ADK 에이전트(`BaseAgent`, `SequentialAgent` 또는 `LlmAgent` 등)가 `run_async` 메서드를 시작하면 AgentOps는 해당 에이전트 실행에 대한 부모 스팬을 시작합니다.
 
     *   **LLM 상호 작용 스팬 (예: `adk.llm.gemini-pro`):**
-        에이전트가 LLM을 호출할 때(ADK의 `BaseLlmFlow._call_llm_async`를 통해) AgentOps는 일반적으로 LLM 모델의 이름을 딴 전용 자식 스팬을 생성합니다. 이 스팬은 요청 세부 정보(프롬프트, 모델 매개변수)를 캡처하고 완료 시(ADK의 `_finalize_model_response_event`를 통해) 완료, 토큰 사용량 및 종료 이유와 같은 응답 세부 정보를 기록합니다.
+        에이전트가 LLM을 호출할 때(ADK의 `BaseLlmFlow._call_llm_async`를 통해) AgentOps는 일반적으로 LLM 모델의 이름을 딴 전용 자식 스팬을 생성합니다. 이 스팬은 요청 세부 정보(프롬프트, 모델 매개변수)를 캡처하고 완료 시(ADK의 `_finalize_model_response_event`를 통해) 모델 응답(completion), 토큰 사용량 및 종료 이유와 같은 응답 세부 정보를 기록합니다.
 
     *   **도구 사용 스팬 (예: `adk.tool.MyCustomTool`):**
         에이전트가 도구를 사용할 때(ADK의 `functions.__call_tool_async`를 통해) AgentOps는 도구의 이름을 딴 단일의 포괄적인 자식 스팬을 생성합니다. 이 스팬에는 도구의 입력 매개변수와 반환하는 결과가 포함됩니다.
@@ -111,7 +111,7 @@ ADK 애플리케이션을 AgentOps로 계측하면 AgentOps 대시보드에서 �
     *   **대규모 언어 모델**에 대한 호출은 추가로 중첩된 자식 스팬(예: `adk.llm.<model_name>`)을 생성하여 프롬프트 세부 정보, 응답 및 토큰 사용량을 캡처합니다.
     *   **도구 호출**은 또한 별개의 자식 스팬(예: `adk.tool.<your_tool_name>`)을 생성하여 매개변수와 결과를 보여줍니다.
 
-이렇게 하면 스팬의 폭포수가 생성되어 ADK 애플리케이션의 각 단계에 대한 순서, 기간 및 세부 정보를 볼 수 있습니다. LLM 프롬프트, 완료, 토큰 수, 도구 입/출력 및 에이전트 이름과 같은 모든 관련 속성이 캡처되어 표시됩니다.
+이렇게 하면 스팬의 워터폴(waterfall) 뷰가 생성되어 ADK 애플리케이션의 각 단계에 대한 순서, 기간 및 세부 정보를 볼 수 있습니다. LLM 프롬프트, 모델 응답(completion), 토큰 수, 도구 입/출력 및 에이전트 이름과 같은 모든 관련 속성이 캡처되어 표시됩니다.
 
 실용적인 데모를 위해 Google ADK 및 AgentOps를 사용하는 사람 승인 워크플로를 보여주는 샘플 Jupyter Notebook을 탐색할 수 있습니다.
 [GitHub의 Google ADK 사람 승인 예제](https://github.com/AgentOps-AI/agentops/blob/main/examples/google_adk/human_approval.ipynb).

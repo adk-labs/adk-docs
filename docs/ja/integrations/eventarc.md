@@ -11,7 +11,7 @@ catalog_tags: ["google"]
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v2.6.0</span><span class="lst-preview">試験運用版 (Experimental)</span>
 </div>
 
-`EventarcToolset` を使用すると、エージェントは [Google Cloud Eventarc](https://cloud.google.com/eventarc) と相互作用し、構造化された [CloudEvents](https://cloudevents.io) を Eventarc メッセージバス (Message Bus) に非同期で発行できます。このツールセットは呼び出し間での組み込みコネクションプーリングとキャッシュを提供し、汎用的なイベント発行とドメイン固有のスキーマ適用イベントツールの両方をサポートします。
+`EventarcToolset` を使用すると、エージェントは [Google Cloud Eventarc](https://cloud.google.com/eventarc) と連携し、構造化された [CloudEvents](https://cloudevents.io) を Eventarc メッセージバス (Message Bus) に非同期でパブリッシュ（発行）できます。このツールセットは呼び出し間での組み込みコネクションプーリングとキャッシュを提供し、汎用的なイベント発行とドメイン固有のスキーマ適用イベントツールの両方をサポートします。
 
 !!! example "試験運用版 (Experimental)"
     この機能は試験運用版であり、将来のリリースで更新される可能性があります。

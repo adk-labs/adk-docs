@@ -26,7 +26,7 @@ ADK는 에이전트를 테스트하기 위한 대화형 터미널 인터페이�
 
 === "Go"
 
-    Go에서 명령줄 인터페이스는 독립형 `adk` 도구가 아닙니다. 대신 에이전트의 `main.go`에 론처를 직접 포함합니다. `full.NewLauncher()` 헬퍼는 콘솔, 웹 서버 및 기타 모드를 단일 바이너리로 묶으며, 하위 명령 키워드가 제공되지 않는 경우 **콘솔이 기본값**으로 설정됩니다:
+    Go에서 명령줄 인터페이스는 독립형 `adk` 도구가 아닙니다. 대신 에이전트의 `main.go`에 런처를 직접 포함합니다. `full.NewLauncher()` 헬퍼는 콘솔, 웹 서버 및 기타 모드를 단일 바이너리로 묶으며, 하위 명령 키워드가 제공되지 않는 경우 **콘솔이 기본값**으로 설정됩니다:
 
     ```go title="main.go"
     import (
@@ -103,7 +103,7 @@ ADK는 에이전트를 테스트하기 위한 대화형 터미널 인터페이�
 
 !!! note "Python 전용"
 
-    `--save_session`, `--resume`, `--replay`, `--session_id` 옵션은 Python ADK CLI에서만 사용할 수 있습니다. Go 콘솔 론처는 명령줄 플래그를 통한 세션 저장/재개/재생을 지원하지 않습니다. Go에서는 `launcher.Config`에 영구적인 `session.Service` 구현(예: `session/database`)을 제공하여 코드 내에서 세션 지속성을 구성합니다.
+    `--save_session`, `--resume`, `--replay`, `--session_id` 옵션은 Python ADK CLI에서만 사용할 수 있습니다. Go 콘솔 런처는 명령줄 플래그를 통한 세션 저장/재개/재생을 지원하지 않습니다. Go에서는 `launcher.Config`에 영구적인 `session.Service` 구현(예: `session/database`)을 제공하여 코드 내에서 세션 지속성을 구성합니다.
 
 `adk run` 명령에는 세션 저장, 재개, 재생을 위한 옵션이 있습니다.
 
@@ -159,7 +159,7 @@ adk run --replay path/to/input.json path/to/my_agent
 | 옵션 | 설명 | 기본값 |
 |--------|-------------|---------|
 | `--session_service_uri` | 사용자 지정 세션 스토리지 URI | `<agents_dir>/<agent>/.adk/session.db`에 위치한 에이전트별 SQLite |
-| `--artifact_service_uri` | 사용자 지정 아티팩트 스토리지 URI | `<agents_dir>/<agent>/.adk/artifacts`에 위치한 에이전트별 디렉토리 |
+| `--artifact_service_uri` | 사용자 지정 아티팩트 스토리지 URI | `<agents_dir>/<agent>/.adk/artifacts`에 위치한 에이전트별 디렉터리 |
 | `--memory_service_uri` | 사용자 지정 메모리 서비스 URI | 인메모리 |
 
 ### 스토리지 옵션 예시
@@ -198,7 +198,7 @@ adk run --session_service_uri "sqlite:///my_sessions.db" path/to/my_agent
 
     !!! note "Go 플래그는 Python과 다릅니다"
 
-        Go 콘솔 론처는 `--save_session`, `--resume`, `--replay`, `--session_id`, `--session_service_uri`, `--artifact_service_uri`를 지원하지 않습니다. 이는 Python CLI 기능입니다. 세션 및 아티팩트 서비스는 `launcher.Config`를 통해 Go 코드에서 구성됩니다.
+        Go 콘솔 런처는 `--save_session`, `--resume`, `--replay`, `--session_id`, `--session_service_uri`, `--artifact_service_uri`를 지원하지 않습니다. 이는 Python CLI 기능입니다. 세션 및 아티팩트 서비스는 `launcher.Config`를 통해 Go 코드에서 구성됩니다.
 
     플래그는 `console` 키워드 뒤에 전달됩니다 (또는 `console`이 기본값인 경우 직접 전달):
 
@@ -250,5 +250,5 @@ CLI는 다음과 같은 민감하거나 비공개 또는 개인 데이터를 일
 - 에이전트 이름, 프롬프트 문자열, 파일 경로 등 명령이나 플래그에 전달된 인수 또는 매개변수 값.
 - 사용자 자격증명, 사용자 이름, API 키, OAuth 토큰 또는 비밀(secrets).
 - Google Cloud 프로젝트 ID 또는 Cloud 계정 세부정보.
-- 소스 코드 파일, 파일 내용 또는 디렉토리 경로.
+- 소스 코드 파일, 파일 내용 또는 디렉터리 경로.
 - 개인 식별 정보(PII).

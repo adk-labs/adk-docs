@@ -120,13 +120,13 @@ ADK 에이전트를 [Cartesia](https://cartesia.ai/) AI 오디오 플랫폼과 �
 
 Cartesia MCP 서버는 환경 변수로 구성할 수 있습니다:
 
-환경 변수 | 설명 | 필수 여부
+변수 | 설명 | 필수 여부
 -------- | ----------- | --------
-`CARTESIA_API_KEY` | Cartesia API 키 | 예
-`OUTPUT_DIRECTORY` | 생성된 오디오 파일 저장 디렉터리 | 아니요
+`CARTESIA_API_KEY` | Cartesia API 키 | 필수
+`OUTPUT_DIRECTORY` | 생성된 오디오 파일 저장 디렉터리 | 선택
 
 ## 추가 리소스
 
-- [Cartesia MCP Server Repository](https://github.com/cartesia-ai/cartesia-mcp)
-- [Cartesia MCP Documentation](https://docs.cartesia.ai/integrations/mcp)
-- [Cartesia Playground](https://play.cartesia.ai/)
+- [Cartesia MCP 서버 저장소](https://github.com/cartesia-ai/cartesia-mcp)
+- [Cartesia MCP 문서](https://docs.cartesia.ai/integrations/mcp)
+- [Cartesia 플레이그라운드](https://play.cartesia.ai/)

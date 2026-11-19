@@ -49,7 +49,7 @@ remote_agent = RemoteA2aAgent(
 
 ## Agent Card 정의
 
-에이전트는 AgentCapabilities.extensions 목록 안의 AgentCard를 통해 이 확장 기능을 광고합니다.
+에이전트는 `AgentCard` 내의 `AgentCapabilities.extensions` 목록을 통해 이 확장 기능을 알립니다.
 
 예시 AgentExtension 블록:
 

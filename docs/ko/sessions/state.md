@@ -22,7 +22,7 @@
     * 데이터는 `key: value`로 저장됩니다.
     * **키(Keys):** 항상 문자열(`str`)입니다. 명확한 이름을 사용하세요 (예: `'departure_city'`, `'user:language_preference'`).
     * **값(Values):** **직렬화 가능**해야 합니다. 이는 `SessionService`에 의해 쉽게 저장되고 로드될 수 있음을 의미합니다. 문자열, 숫자, 불리언, 그리고 *오직* 이러한 기본 타입만 포함하는 단순한 리스트나 딕셔너리와 같은 특정 언어(Python/Go/Java)의 기본 타입을 사용하세요. (정확한 세부 정보는 API 문서를 참고하세요).
-    * **⚠️ 복잡한 객체 사용 피하기:** **직렬화 불가능한 객체**(사용자 정의 클래스 인스턴스, 함수, 연결 등)를 상태에 직접 저장하지 마세요. 필요한 경우 단순 식별자를 저장하고, 복잡한 객체는 다른 곳에서 검색하세요.
+    * **⚠️ 복잡한 객체 사용 피하기:** **직렬화 불가능한 객체**(사용자 정의 클래스 인스턴스, 함수, 연결 등)를 상태에 직접 저장하지 마세요. 필요한 경우 단순 식별자를 저장하고, 복잡한 객체는 별도 저장소에서 조회하세요.
 
 2. **가변성: 변경 가능함**
 
@@ -35,7 +35,7 @@
       * `InMemorySessionService`: **영속성 없음.** 재시작 시 상태가 손실됩니다.
       * `DatabaseSessionService` / `VertexAiSessionService`: **영속성 있음.** 상태가 안정적으로 저장됩니다.
 
-!!! 참고
+!!! note "참고"
     기본 요소에 대한 특정 매개변수나 메서드 이름은 SDK 언어에 따라 약간 다를 수 있습니다(예: Python의 `session.state['current_intent'] = 'book_flight'`, Go의 `context.State().Set("current_intent", "book_flight")`, Java의 `session.state().put("current_intent", "book_flight)`). 자세한 내용은 언어별 API 문서를 참고하세요.
 
 ### 접두사를 사용한 상태 구성: 범위의 중요성
@@ -71,7 +71,7 @@
     * **사용하지 말아야 할 경우:** 사용자 선호도, 대화 기록 요약, 누적 데이터와 같이 여러 호출에 걸쳐 유지되어야 하는 정보.
     * **예시:** `session.state['temp:raw_api_response'] = {...}`
 
-!!! 참고 "하위 에이전트와 호출 컨텍스트"
+!!! note "하위 에이전트와 호출 컨텍스트"
     부모 에이전트가 하위 에이전트를 호출할 때(예: `SequentialAgent` 또는 `ParallelAgent` 사용), `InvocationContext`를 하위 에이전트에 전달합니다. 이는 전체 에이전트 호출 체인이 동일한 호출 ID를 공유하고, 따라서 동일한 `temp:` 상태를 공유함을 의미합니다.
 
 **에이전트가 보는 방식:** 에이전트 코드는 단일 `session.state` 컬렉션(dict/Map)을 통해 *결합된* 상태와 상호작용합니다. `SessionService`는 접두사를 기반으로 올바른 기본 스토리지에서 상태를 가져오고 병합하는 것을 처리합니다.
@@ -124,9 +124,15 @@
     // "고양이에 대한 짧은 이야기를 작성하되, 주제는 friendship에 초점을 맞추세요."
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_templating"
+    ```
+
 #### 중요 고려사항
 
-* 키 존재 여부: 지침 문자열에서 참조하는 키가 session.state에 존재하는지 확인하세요. 키가 없으면 에이전트가 오류를 발생시킵니다. 존재할 수도 있고 아닐 수도 있는 키를 사용하려면 키 뒤에 물음표(?)를 포함할 수 있습니다 (예: {topic?}).
+* 키 존재 여부: 지침 문자열에서 참조하는 키가 `session.state`에 존재하는지 확인하세요. 키가 없으면 에이전트가 오류를 발생시킵니다. 존재할 수도 있고 아닐 수도 있는 키를 사용하려면 키 뒤에 물음표(`?`)를 포함할 수 있습니다(예: `{topic?}`).
 * 데이터 타입: 키와 연관된 값은 문자열이거나 쉽게 문자열로 변환할 수 있는 타입이어야 합니다.
 * 리터럴 중괄호: `{key}` 구문은 단일 중괄호 안의 유효한 Python 식별자를 상태 변수 자리표시자로 인식합니다. JSON 예시나 템플릿 구문처럼 리터럴 중괄호가 필요한 경우에는 문자열 대신 `InstructionProvider` 함수를 사용하세요.
 
@@ -139,7 +145,7 @@
 
 이를 위해 `instruction` 매개변수에 문자열 대신 함수를 제공합니다. 이 함수를 `InstructionProvider`라고 합니다. `InstructionProvider`를 사용하면 ADK는 상태 변수를 주입하지 않으며, 함수가 반환한 문자열을 그대로 모델에 전달합니다.
 
-`InstructionProvider` 함수는 `ReadonlyContext` 객체를 받으며, 이를 사용하여 지침을 동적으로 빌드해야 하는 경우 세션 상태나 다른 컨텍셔널 정보에 접근할 수 있습니다.
+`InstructionProvider` 함수는 `ReadonlyContext` 객체를 받으며, 이를 사용하여 지침을 동적으로 빌드해야 하는 경우 세션 상태나 다른 컨텍스트 정보에 접근할 수 있습니다.
 
 === "Python"
 
@@ -204,6 +210,12 @@
         .name("template_helper_agent")
         .instruction(myInstructionProvider)
         .build();
+    ```
+
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_provider"
     ```
 
 `InstructionProvider`를 사용하면서도 지침에 상태를 주입하고 싶다면 `inject_session_state` 유틸리티 함수를 사용할 수 있습니다. 유효한 상태 변수 이름에 해당하는 `{key}` 자리표시자만 치환되며, 그 외의 텍스트(유효한 식별자가 아닌 내용을 담은 중괄호 포함)는 그대로 유지됩니다.
@@ -271,10 +283,10 @@
 
 ### 상태 업데이트 방법: 권장 방법
 
-!!! 참고 "상태를 수정하는 올바른 방법"
+!!! note "상태를 수정하는 올바른 방법"
     세션 상태를 변경해야 할 때, 올바르고 가장 안전한 방법은 함수에 제공된 **`Context`의 `state` 객체를 직접 수정**하는 것입니다 (예: `callback_context.state['my_key'] = 'new_value'`). 프레임워크가 이러한 변경 사항을 자동으로 추적하므로 이것이 올바른 방식의 "직접적인 상태 조작"으로 간주됩니다.
 
-    이는 `SessionService`에서 검색한 `Session` 객체의 `state`를 직접 수정하는 것(예: `my_session.state['my_key'] = 'new_value'`)과는 결정적으로 다릅니다. **이 방법은 피해야 합니다**. 이는 ADK의 이벤트 추적을 우회하고 데이터 손실로 이어질 수 있기 때문입니다. 이 페이지 끝의 "경고" 섹션에서 이 중요한 차이점에 대한 자세한 내용을 다룹니다.
+    이는 `SessionService`에서 조회한 `Session` 객체의 `state`를 직접 수정하는 것(예: `my_session.state['my_key'] = 'new_value'`)과는 결정적으로 다릅니다. **이 방법은 피해야 합니다**. 이는 ADK의 이벤트 추적을 우회하고 데이터 손실로 이어질 수 있기 때문입니다. 이 페이지 끝의 "경고" 섹션에서 이 중요한 차이점에 대한 자세한 내용을 다룹니다.
 
 상태는 **항상** `session_service.append_event()`를 사용하여 세션 기록에 `Event`를 추가하는 과정의 일부로 업데이트되어야 합니다. 이는 변경 사항이 추적되고, 영속성이 올바르게 작동하며, 업데이트가 스레드로부터 안전함을 보장합니다.
 
@@ -409,11 +421,17 @@
     --8<-- "examples/java/snippets/src/main/java/state/ManualStateUpdateExample.java:full_code"
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/StateExample.kt:full_example"
+    ```
+
 **3. `CallbackContext` 또는 `ToolContext`를 통해 (콜백 및 도구에 권장)**
 
-*(참고: Python 및 TypeScript에서는 `CallbackContext`와 `ToolContext`가 단일 `Context` 유형으로 통합되었으며, Python에서는 두 이름 모두 해당 유형의 별칭으로 계속 사용할 수 있습니다.)*
+*(참고: Python 및 TypeScript에서는 `CallbackContext`와 `ToolContext`가 단일 `Context` 타입으로 통합되었으며, Python에서는 두 이름 모두 해당 타입의 별칭으로 계속 사용할 수 있습니다.)*
 
-에이전트 콜백(예: `on_before_agent_call`, `on_after_agent_call`)이나 도구 함수 내에서 상태를 수정하는 것은 함수에 제공된 `CallbackContext` 또는 `ToolContext`의 `state` 속성을 사용하는 것이 가장 좋습니다.
+`before_agent_callback` 및 `after_agent_callback`과 같은 에이전트 콜백이나 도구 함수 내에서 상태를 수정할 때는 함수에 제공된 `CallbackContext` 또는 `ToolContext`의 `state` 속성을 사용하는 것이 가장 좋습니다.
 
 *   `callback_context.state['my_key'] = my_value`
 *   `tool_context.state['my_key'] = my_value`
@@ -494,6 +512,12 @@
     }
     ```
 
+=== "Kotlin"
+
+    ```kotlin
+    --8<-- "examples/kotlin/snippets/sessions/StateExample.kt:state_updates_context"
+    ```
+
 **`append_event`가 하는 일:**
 
 * `Event`를 `session.events`에 추가합니다.
@@ -512,10 +536,10 @@
 
 1. **이벤트 기록 우회:** 변경 사항이 `Event`로 기록되지 않아 감사 가능성이 손실됩니다.
 2. **영속성 파괴:** 이런 식으로 변경된 내용은 `DatabaseSessionService`나 `VertexAiSessionService`에 의해 **저장되지 않을 가능성이 높습니다**. 이들은 저장을 트리거하기 위해 `append_event`에 의존합니다.
-3. **스레드 안전성 없음:** 경쟁 조건과 업데이트 손실로 이어질 수 있습니다.
+3. **스레드 안전성 없음:** 경합 조건(race condition)과 업데이트 손실로 이어질 수 있습니다.
 4. **타임스탬프/로직 무시:** `last_update_time`을 업데이트하거나 관련 이벤트 로직을 트리거하지 않습니다.
 
-**권장 사항:** `output_key`, `EventActions.state_delta`(수동으로 이벤트를 생성할 때), 또는 각 범위 내에 있을 때 `CallbackContext`나 `ToolContext` 객체의 `state` 속성을 수정하여 상태를 업데이트하는 방법을 고수하세요. 이러한 방법은 신뢰할 수 있고, 추적 가능하며, 영속적인 상태 관리를 보장합니다. `session.state`(`SessionService`에서 검색한 세션에서)에 대한 직접 접근은 상태를 *읽기* 위해서만 사용하세요.
+**권장 사항:** `output_key`, `EventActions.state_delta`(수동으로 이벤트를 생성할 때), 또는 각 범위 내에 있을 때 `CallbackContext`나 `ToolContext` 객체의 `state` 속성을 수정하여 상태를 업데이트하는 방법을 고수하세요. 이러한 방법은 신뢰할 수 있고, 추적 가능하며, 영속적인 상태 관리를 보장합니다. `session.state`(`SessionService`에서 조회한 세션에서)에 대한 직접 접근은 상태를 *읽기* 위해서만 사용하세요.
 
 ### 상태 설계 모범 사례 요약
 
@@ -524,31 +548,3 @@
 * **설명적인 키 및 접두사:** 명확한 이름과 적절한 접두사(`user:`, `app:`, `temp:` 또는 없음)를 사용하세요.
 * **얕은 구조:** 가능한 경우 깊은 중첩을 피하세요.
 * **표준 업데이트 흐름:** `append_event`에 의존하세요.
-
-## Kotlin 상태 예제 보강
-
-영어 원문에 추가된 Kotlin 상태 관리 예제를 아래에 함께 제공합니다.
-
-### 지시문 템플릿
-
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_templating"
-```
-
-### 지시문 제공자
-
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/StateExample.kt:instruction_provider"
-```
-
-### 전체 예제
-
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/StateExample.kt:full_example"
-```
-
-### 컨텍스트에서 상태 업데이트
-
-```kotlin
---8<-- "examples/kotlin/snippets/sessions/StateExample.kt:state_updates_context"
-```

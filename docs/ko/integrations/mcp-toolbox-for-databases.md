@@ -22,7 +22,7 @@ MCP 도구 상자는 다음 데이터베이스 및 데이터 플랫폼에 대한
 
 ### Google Cloud
 
-*   [BigQuery](https://googleapis.github.io/genai-toolbox/resources/sources/bigquery/) (SQL 실행, 스키마 검색 및 AI 기반 시계열 예측용 도구 포함)
+*   [BigQuery](https://googleapis.github.io/genai-toolbox/resources/sources/bigquery/) (SQL 실행, 스키마 탐색 및 AI 기반 시계열 예측용 도구 포함)
 *   [AlloyDB](https://googleapis.github.io/genai-toolbox/resources/sources/alloydb-pg/) (PostgreSQL 호환, 표준 쿼리 및 자연어 쿼리용 도구 포함)
 *   [AlloyDB 관리자](https://googleapis.github.io/genai-toolbox/resources/sources/alloydb-admin/)
 *   [Spanner](https://googleapis.github.io/genai-toolbox/resources/sources/spanner/) (GoogleSQL 및 PostgreSQL 방언 모두 지원)
@@ -30,7 +30,7 @@ MCP 도구 상자는 다음 데이터베이스 및 데이터 플랫폼에 대한
 *   [Cloud SQL 관리자](https://googleapis.github.io/genai-toolbox/resources/sources/cloud-sql-admin/)
 *   [Firestore](https://googleapis.github.io/genai-toolbox/resources/sources/firestore/)
 *   [Bigtable](https://googleapis.github.io/genai-toolbox/resources/sources/bigtable/)
-*   [Dataplex](https://googleapis.github.io/genai-toolbox/resources/sources/dataplex/) (데이터 검색 및 메타데이터 검색용)
+*   [Dataplex](https://googleapis.github.io/genai-toolbox/resources/sources/dataplex/) (데이터 탐색 및 메타데이터 검색용)
 *   [Cloud Monitoring](https://googleapis.github.io/genai-toolbox/resources/sources/cloud-monitoring/)
 
 ### 관계형 및 SQL 데이터베이스
@@ -228,5 +228,5 @@ MCP 도구 상자는 다음 데이터베이스 및 데이터 플랫폼에 대한
 도구 상자에는 데이터베이스용 Gen AI 도구를 개발하기 위한 다양한 기능이 있습니다. 자세한 내용은 다음 기능에 대해 자세히 알아보세요.
 
 * [인증된 매개변수](https://googleapis.github.io/genai-toolbox/resources/tools/#authenticated-parameters): 도구 입력을 OIDC 토큰의 값에 자동으로 바인딩하여 잠재적으로 데이터 유출 없이 민감한 쿼리를 쉽게 실행할 수 있습니다.
-* [승인된 호출:](https://googleapis.github.io/genai-toolbox/resources/tools/#authorized-invocations)  사용자 인증 토큰을 기반으로 도구 사용에 대한 액세스를 제한합니다.
+* [승인된 호출](https://googleapis.github.io/genai-toolbox/resources/tools/#authorized-invocations): 사용자 인증 토큰을 기반으로 도구 사용에 대한 액세스를 제한합니다.
 * [OpenTelemetry](https://googleapis.github.io/genai-toolbox/how-to/export_telemetry/): OpenTelemetry를 사용하여 도구 상자에서 메트릭 및 추적을 가져옵니다.

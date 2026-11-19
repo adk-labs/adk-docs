@@ -12,10 +12,10 @@ JSON 또는 Markdown으로 변환할 수 있습니다.
   구조화된 데이터를 추출하거나 웹사이트 전체를 크롤링할 수 있으며, AI를 활용하여
   동적 콘텐츠, 무한 스크롤 및 대규모 비동기 작업을 처리합니다.
 
-- **조사 및 요약 (Research and Summarization)**: AI 기반 웹 검색을 실행하여 주제를 조사하고,
-  여러 소스의 데이터를 집계하고, 결과를 요약합니다.
+- **리서치 및 요약 (Research and Summarization)**: AI 기반 웹 검색을 실행하여 주제를 조사하고,
+  여러 소스의 데이터를 집계하여 결과를 요약합니다.
 
-- **에이전트 워크플로 (Agentic Workflows)**: 사용자 정의 가능한 단계, 복잡한 탐색(인증 등),
+- **에이전트 기반 워크플로 (Agentic Workflows)**: 커스터마이징 가능한 단계, 복잡한 탐색(인증 등),
   구조화된 출력 스키마를 갖춘 고급 에이전트 스크래핑 워크플로를 실행합니다.
 
 ## 필수 조건 (Prerequisites)
@@ -78,8 +78,8 @@ JSON 또는 Markdown으로 변환할 수 있습니다.
 `scrape` | 무거운 JavaScript 렌더링(선택 사항)을 포함하여 페이지 콘텐츠를 가져오는 기본 스크래핑 엔드포인트입니다.
 `sitemap` | 웹사이트의 사이트맵 URL 및 구조를 추출합니다.
 `smartcrawler_initiate` | 지능형 다중 페이지 웹 크롤링을 시작합니다 (비동기 작업).
-`smartcrawler_fetch_results` | 비동기 크롤링 작업에서 결과를 검색합니다.
-`agentic_scrapper` | 사용자 정의 가능한 단계 및 구조화된 출력 스키마로 고급 에이전트 스크래핑 워크플로를 실행합니다.
+`smartcrawler_fetch_results` | 비동기 크롤링 작업의 결과를 가져옵니다.
+`agentic_scrapper` | 커스터마이징 가능한 단계 및 구조화된 출력 스키마로 고급 에이전트 스크래핑 워크플로를 실행합니다.
 
 ## 추가 리소스 (Additional resources)
 

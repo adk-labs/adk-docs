@@ -62,11 +62,11 @@
 
 === "Java"
 
-    ADK Java를 설치하고 환경을 설정하려면 [Java Quickstart](/ko/get-started/java/)를 참고하세요.
+    ADK Java를 설치하고 환경을 설정하려면 [Java 빠른 시작](/ko/get-started/java/)을 참고하세요.
 
 === "Kotlin"
 
-    ADK Kotlin을 설치하고 환경을 설정하려면 [Kotlin Quickstart](/ko/get-started/kotlin/)를 참고하세요.
+    ADK Kotlin을 설치하고 환경을 설정하려면 [Kotlin 빠른 시작](/ko/get-started/kotlin/)을 참고하세요.
 
 === "Go"
 
@@ -455,7 +455,7 @@
 
         **1단계:** 제공된 URL(일반적으로 `http://localhost:8000` 또는 `http://127.0.0.1:8000`)을 브라우저에서 직접 엽니다.
 
-        **2단계.** UI의 왼쪽 상단 모서리에서 드롭다운에서 에이전트를 선택할 수 있습니다. "multi_tool_agent"를 선택합니다.
+        **2단계.** UI 왼쪽 상단의 드롭다운에서 에이전트를 선택할 수 있습니다. "multi_tool_agent"를 선택합니다.
 
         !!!note "문제 해결"
 
@@ -466,7 +466,7 @@
         ![adk-web-dev-ui-chat.png](../assets/adk-web-dev-ui-chat.png)
 
 
-        **4단계.** 왼쪽에 있는 `이벤트` 탭을 사용하여 작업을 클릭하여 개별 함수 호출, 응답 및 모델 응답을 검사할 수 있습니다.
+        **4단계.** 왼쪽의 `이벤트` 탭에서 개별 액션을 클릭하여 함수 호출, 응답 및 모델 응답을 검사할 수 있습니다.
 
         ![adk-web-dev-ui-function-call.png](../assets/adk-web-dev-ui-function-call.png)
 
@@ -607,7 +607,7 @@
 
         **1단계:** 제공된 URL(일반적으로 `http://localhost:8080`)을 브라우저에서 직접 엽니다.
 
-        **2단계.** UI의 왼쪽 상단 모서리에서 드롭다운에서 에이전트를 선택합니다. "weather_time_agent"를 선택합니다.
+        **2단계.** UI 왼쪽 상단의 드롭다운에서 에이전트를 선택합니다. "weather_time_agent"를 선택합니다.
 
         **3단계.** 이제 텍스트 상자를 사용하여 에이전트와 대화할 수 있습니다.
 
@@ -654,7 +654,7 @@
 
         **1단계:** 제공된 URL(일반적으로 `http://localhost:8080` 또는 `http://127.0.0.1:8080`)을 브라우저에서 직접 엽니다.
 
-        **2단계.** UI의 왼쪽 상단 모서리에서 드롭다운에서 에이전트를 선택할 수 있습니다. "multi_tool_agent"를 선택합니다.
+        **2단계.** UI 왼쪽 상단의 드롭다운에서 에이전트를 선택할 수 있습니다. "multi_tool_agent"를 선택합니다.
 
         !!!note "문제 해결"
 

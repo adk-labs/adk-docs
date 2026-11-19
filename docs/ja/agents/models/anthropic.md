@@ -8,7 +8,7 @@ Agent Development Kit（ADK）エージェントのモデルとして Anthropic 
 
 -   ADK のツール、セッション、コールバックをそのまま変更せずに Claude 上でエージェントを実行する。
 -   1 つのマルチエージェント システム内で Claude エージェントと Gemini エージェントを組み合わせ、各エージェントのタスクに応じてモデルを選択する。
--   拡張思考（extended thinking）を使用して、複雑なタスクで Claude に多くの推論時間を与える。
+-   拡張思考（extended thinking）を使用して、複雑なタスクで Claude により深い推論を行わせる。
 
 Claude には、Anthropic API キーを使用する **Anthropic API**、または Google Cloud のプロジェクトと認証情報を使用する **Google Cloud** を通じて接続できます。選択の参考にするには、[バックエンドを選択する](#choose-a-backend)を参照してください。
 

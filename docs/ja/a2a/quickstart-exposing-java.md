@@ -4,7 +4,7 @@
   <span class="lst-supported">ADKでサポート</span><span class="lst-java">Java</span><span class="lst-preview">実験的</span>
 </div>
 
-このクイックスタートでは、開発者にとって最も一般的な出発点である**「エージェントがある。ほかのエージェントがA2A経由で自分のエージェントを使えるようにするにはどうすればよいですか？」**について説明します。これは、さまざまなエージェントが協力して相互作用する必要がある複雑なマルチエージェントシステムを構築するうえで重要です。
+このクイックスタートでは、開発者にとって最も一般的な出発点である**「手元にエージェントがあります。他のエージェントがA2A経由で自分のエージェントを利用できるように公開するにはどうすればよいですか？」**について説明します。これは、さまざまなエージェントが協力して相互作用する必要がある複雑なマルチエージェントシステムを構築するうえで重要です。
 
 ## 概要
 
@@ -39,7 +39,7 @@ cd examples/a2a_server
 --8<-- "examples/java/snippets/src/main/java/a2a/A2aExposingSnippet.java:a2a-launcher"
 ```
 
-アプリは、HTTP でマウントされた `/a2a/remote/v1/message:send` に届く JSON-RPC 呼び出しを自動的に処理し、一部、履歴、コンテキストを直接 `BaseAgent` のフローへ渡します。
+アプリは、HTTP でマウントされた `/a2a/remote/v1/message:send` に届く JSON-RPC 呼び出しを自動的に処理し、メッセージのパート（parts）、履歴、コンテキストを直接 `BaseAgent` のフローへ転送します。
 
 ### 3. リモート A2A エージェントサーバーを起動する { #start-the-remote-a2a-agent-server }
 
@@ -83,4 +83,4 @@ curl -X POST http://localhost:9090 \
 
 これで、A2A 経由でエージェントを公開できました。次は、別のエージェントオーケストレーターからそれをネイティブに利用する方法を学びましょう。
 
-- [**A2A クイックスタート（利用） for Java**](./quickstart-consuming-java.md): エージェントオーケストレーターのラッパーが公開済みサービスへ下流接続する方法を学びます。
+- [**A2A クイックスタート（利用） for Java**](./quickstart-consuming-java.md): エージェントオーケストレーターのラッパーから公開済みのサービスへ接続する方法を学びます。

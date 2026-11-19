@@ -24,7 +24,7 @@ ADK는 Firestore를 사용해 지속적인 에이전트 세션 상태를 관리�
 ## 사전 준비 사항
 
 - Firestore가 활성화된 [Google Cloud 프로젝트](https://cloud.google.com/)
-- Google Cloud 프로젝트에 [Firestore 데이터베이스](https://cloud.google.com/firestore/docs/setup)
+- Google Cloud 프로젝트에 생성된 [Firestore 데이터베이스](https://cloud.google.com/firestore/docs/setup)
 - 환경에 구성된 적절한 [Google Cloud 자격 증명](https://cloud.google.com/docs/authentication/provide-credentials-adc)
 
 ## 의존성 설치
@@ -164,22 +164,22 @@ public class YourAgentApplication {
 
 !!! note
 
-    Firestore Session Service는 properties 파일 구성을 지원합니다. 이를 통해 전용 Firestore
+    Firestore Session Service는 프로퍼티(properties) 파일 구성을 지원합니다. 이를 통해 전용 Firestore
     데이터베이스를 쉽게 대상으로 지정하고, 에이전트 세션 데이터를 저장할 사용자 지정 컬렉션 이름을 정의할 수 있습니다.
 
-자체 Firestore 속성 설정을 제공해 ADK 애플리케이션을 Firestore 세션 서비스에 맞게 구성할 수 있습니다.
-그렇지 않으면 라이브러리는 기본 설정을 사용합니다.
+자체 Firestore 프로퍼티 설정을 제공해 ADK 애플리케이션을 Firestore 세션 서비스에 맞게 구성할 수 있습니다.
+별도로 지정하지 않으면 라이브러리는 기본 설정을 사용합니다.
 
 ### 환경별 구성
 
-라이브러리는 기본 설정보다 환경별 속성 파일을 우선합니다. 해석 순서는 다음과 같습니다.
+라이브러리는 기본 설정보다 환경별 프로퍼티 파일을 우선합니다. 해석 순서는 다음과 같습니다.
 
 1. **환경 변수 재정의**: 먼저 `env`라는 환경 변수를 확인합니다. 이 변수가 설정되어 있으면(예: `env=dev`)
-   `adk-firestore-{env}.properties` 템플릿과 일치하는 속성 파일을 로드합니다(예: `adk-firestore-dev.properties`).
-2. **기본 대체값**: `env` 변수가 설정되지 않았거나 환경별 파일을 찾을 수 없으면
+   `adk-firestore-{env}.properties` 템플릿과 일치하는 프로퍼티 파일을 로드합니다(예: `adk-firestore-dev.properties`).
+2. **기본 폴백**: `env` 변수가 설정되지 않았거나 환경별 파일을 찾을 수 없으면
    `adk-firestore.properties`를 로드합니다.
 
-샘플 속성 설정:
+샘플 프로퍼티 설정:
 
 ```properties
 # 세션 데이터 저장용 Firestore 컬렉션 이름
@@ -192,10 +192,10 @@ keyword.extraction.stopwords=a,about,above,after,again,against,all,am,an,and,any
 
 !!! important
 
-    `FirestoreDatabaseRunner`는 `gcs.adk.bucket.name` 속성이 정의되어 있어야 합니다.
-    이는 runner가 내부적으로 `GcsArtifactService`를 초기화해 멀티모달 아티팩트 저장을 처리하기 때문입니다.
-    이 속성이 없거나 비어 있으면 애플리케이션은 시작 시 `RuntimeException`을 발생시킵니다.
-    이 저장소는 에이전트가 생성하거나 처리하는 이미지, 비디오, 오디오 파일 같은 아티팩트를 저장하는 데 사용됩니다.
+    `FirestoreDatabaseRunner`를 사용하려면 `gcs.adk.bucket.name` 프로퍼티가 반드시 정의되어 있어야 합니다.
+    러너(runner)가 내부적으로 `GcsArtifactService`를 초기화해 멀티모달 아티팩트 저장을 처리하기 때문입니다.
+    이 프로퍼티가 누락되거나 비어 있으면 애플리케이션 시작 시 `RuntimeException`이 발생합니다.
+    이 저장소는 에이전트가 생성하거나 처리하는 이미지, 비디오, 오디오 파일 같은 아티팩트를 영구 저장하는 데 사용됩니다.
 
 ## 리소스
 

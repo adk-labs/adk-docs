@@ -31,7 +31,7 @@ ADK 에이전트를 오픈소스 임베딩 데이터베이스인
 ## 사전 준비 사항
 
 - **로컬 저장소 사용 시**: 데이터 영구 저장용 디렉터리 경로
-- **Chroma Cloud 사용 시**: tenant ID, database name, API key를 가진
+- **Chroma Cloud 사용 시**: 테넌트 ID, 데이터베이스 이름, API 키가 있는
   [Chroma Cloud](https://www.trychroma.com/) 계정
 
 ## 에이전트와 함께 사용
@@ -163,36 +163,36 @@ ADK 에이전트를 오픈소스 임베딩 데이터베이스인
 
 ## 구성
 
-Chroma MCP 서버는 요구 사항에 맞는 여러 client type을 지원합니다:
+Chroma MCP 서버는 요구 사항에 맞는 여러 클라이언트 타입을 지원합니다:
 
-### Client type
+### 클라이언트 타입
 
-Client Type | Description | Key Arguments
+클라이언트 타입 | 설명 | 주요 인수
 ----------- | ----------- | -------------
-`ephemeral` | 인메모리 저장소(재시작 시 초기화). 테스트에 유용. | None (default)
+`ephemeral` | 인메모리 저장소(재시작 시 초기화). 테스트에 유용합니다. | 없음 (기본값)
 `persistent` | 로컬 머신의 파일 기반 저장소 | `--data-dir`
 `http` | 셀프호스팅 Chroma 서버 연결 | `--host`, `--port`, `--ssl`, `--custom-auth-credentials`
-`cloud` | Chroma Cloud(api.trychroma.com) 연결 | `--tenant`, `--database`, `--api-key`
+`cloud` | Chroma Cloud(`api.trychroma.com`) 연결 | `--tenant`, `--database`, `--api-key`
 
 ### 환경 변수
 
 환경 변수로도 클라이언트를 구성할 수 있습니다.
 명령줄 인수가 환경 변수보다 우선합니다.
 
-Variable | Description
+변수 | 설명
 -------- | -----------
-`CHROMA_CLIENT_TYPE` | 클라이언트 유형: `ephemeral`, `persistent`, `http`, `cloud`
+`CHROMA_CLIENT_TYPE` | 클라이언트 타입: `ephemeral`, `persistent`, `http`, `cloud`
 `CHROMA_DATA_DIR` | 영구 로컬 저장 경로
-`CHROMA_TENANT` | Chroma Cloud tenant ID
-`CHROMA_DATABASE` | Chroma Cloud database name
-`CHROMA_API_KEY` | Chroma Cloud API key
-`CHROMA_HOST` | 셀프호스팅 HTTP client host
-`CHROMA_PORT` | 셀프호스팅 HTTP client port
-`CHROMA_SSL` | HTTP client SSL 활성화 (`true` 또는 `false`)
-`CHROMA_DOTENV_PATH` | `.env` 파일 경로(기본값 `.chroma_env`)
+`CHROMA_TENANT` | Chroma Cloud 테넌트 ID
+`CHROMA_DATABASE` | Chroma Cloud 데이터베이스 이름
+`CHROMA_API_KEY` | Chroma Cloud API 키
+`CHROMA_HOST` | 셀프호스팅 HTTP 클라이언트 호스트
+`CHROMA_PORT` | 셀프호스팅 HTTP 클라이언트 포트
+`CHROMA_SSL` | HTTP 클라이언트 SSL 활성화 (`true` 또는 `false`)
+`CHROMA_DOTENV_PATH` | `.env` 파일 경로 (기본값 `.chroma_env`)
 
 ## 추가 리소스
 
-- [Chroma MCP Server Repository](https://github.com/chroma-core/chroma-mcp)
-- [Chroma Documentation](https://docs.trychroma.com/)
+- [Chroma MCP 서버 저장소](https://github.com/chroma-core/chroma-mcp)
+- [Chroma 문서](https://docs.trychroma.com/)
 - [Chroma Cloud](https://www.trychroma.com/)

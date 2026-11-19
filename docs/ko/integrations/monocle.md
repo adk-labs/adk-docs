@@ -1,16 +1,16 @@
 ---
 catalog_title: Monocle
-catalog_description: LLM 애플리케이션을 위한 오픈소스 관측성, 추적, 디버깅을 제공합니다
+catalog_description: LLM 애플리케이션을 위한 오픈소스 관측 가능성, 추적, 디버깅을 제공합니다
 catalog_icon: /integrations/assets/monocle.png
 catalog_tags: ["observability"]
 ---
-# Monocle을 사용한 에이전트 관측성
+# Monocle을 사용한 에이전트 관측 가능성
 
 <div class="language-support-tag">
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-[Monocle](https://github.com/monocle2ai/monocle)은 LLM 애플리케이션 및 AI 에이전트 모니터링, 디버깅 및 개선을 위한 오픈 소스 관측성 플랫폼입니다. 자동 계측을 통해 Google ADK 애플리케이션에 대한 포괄적인 추적 기능을 제공합니다. Monocle은 로컬 파일 또는 콘솔 출력 등 다양한 대상으로 내보낼 수 있는 OpenTelemetry 호환 추적을 생성합니다.
+[Monocle](https://github.com/monocle2ai/monocle)은 LLM 애플리케이션 및 AI 에이전트 모니터링, 디버깅 및 개선을 위한 오픈소스 관측 가능성(observability) 플랫폼입니다. 자동 계측을 통해 Google ADK 애플리케이션에 대한 포괄적인 추적 기능을 제공합니다. Monocle은 로컬 파일 또는 콘솔 출력 등 다양한 대상으로 내보낼 수 있는 OpenTelemetry 호환 추적을 생성합니다.
 
 ## 개요
 
@@ -163,7 +163,7 @@ monocle_trace_{workflow_name}_{trace_id}_{timestamp}.json
 ### 설치
 
 1. VS Code를 엽니다.
-2. `Ctrl+P`(Mac에서는 `Cmd+P`)를 눌러 빠른 열기를 엽니다.
+2. `Ctrl+P`(Mac에서는 `Cmd+P`)를 눌러 빠른 열기(Quick Open)를 실행합니다.
 3. 다음 명령어를 붙여넣고 Enter 키를 누릅니다.
 
 ```
@@ -176,7 +176,7 @@ ext install OkahuAI.okahu-ai-observability
 
 확장 기능은 다음을 제공합니다.
 
-- **사용자 지정 활동 표시줄 패널** - 추적 파일 관리를 위한 전용 사이드바
+- **커스텀 액티비티 바(Activity Bar) 패널** - 추적 파일 관리를 위한 전용 사이드바
 - **대화형 파일 트리** - 사용자 지정 React UI로 추적 파일 찾아보기 및 선택
 - **분할 보기 분석** - JSON 데이터 뷰어와 함께 Gantt 차트 시각화
 - **실시간 통신** - VS Code와 React 구성 요소 간의 원활한 데이터 흐름
@@ -185,7 +185,7 @@ ext install OkahuAI.okahu-ai-observability
 ### 사용법
 
 1. Monocle 추적이 활성화된 ADK 애플리케이션을 실행한 후 `./monocle` 디렉토리에 추적 파일이 생성됩니다.
-2. VS Code 활동 표시줄에서 Okahu Trace Visualizer 패널을 엽니다.
+2. VS Code 액티비티 바(Activity Bar)에서 Okahu Trace Visualizer 패널을 엽니다.
 3. 대화형 파일 트리에서 추적 파일을 찾아보고 선택합니다.
 4. 다음을 사용하여 추적을 봅니다.
    - **Gantt 차트 시각화** - 스팬의 타임라인 및 계층 구조 보기
@@ -205,7 +205,7 @@ Monocle은 Google ADK에서 다음 정보를 자동으로 캡처합니다.
 - **시간 정보**: 각 작업의 시작 시간, 종료 시간 및 지속 시간
 - **오류 정보**: 예외 및 오류 상태
 
-모든 추적은 OpenTelemetry 형식으로 생성되어 모든 OTLP 호환 관측성 백엔드와 호환됩니다.
+모든 추적은 OpenTelemetry 형식으로 생성되어 모든 OTLP 호환 관측 가능성 백엔드와 호환됩니다.
 
 ## 지원 및 리소스
 

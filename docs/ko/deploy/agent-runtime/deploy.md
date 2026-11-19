@@ -1,104 +1,68 @@
-# 에이전트 런타임에 배포
+# Agent Runtime에 배포하기
 
 <div class="language-support-tag" title="Agent Runtime은 현재 Python과 Go를 지원합니다.">
     <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-go">Go v1.2.0</span>
 </div>
 
-이 배포 절차에서는 표준 배포를 수행하는 방법을 설명합니다.
-Google Cloud에 대한 ADK 에이전트 코드
-[Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview).
-기존 Google Cloud가 있는 경우 이 배포 경로를 따라야 합니다.
-프로젝트 및 에이전트에 ADK 에이전트 배포를 신중하게 관리하려는 경우
-런타임 환경. 이 안내에서는 gcloud인 Cloud Console을 사용합니다.
-명령줄 인터페이스 및 ADK 명령줄 인터페이스(ADK CLI). 이 경로
-Google Cloud 구성에 이미 익숙한 사용자에게 권장됩니다.
-프로젝트 및 프로덕션 배포를 준비하는 사용자.
+이 문서에서는 Google Cloud [Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)에 ADK 에이전트 코드를 표준 방식으로 배포하는 절차를 설명합니다. 기존 Google Cloud 프로젝트가 있고 ADK 에이전트를 Agent Runtime 환경에 배포하는 과정을 세밀하게 관리하려는 경우 이 배포 경로를 따르세요. 이 안내에서는 Google Cloud 콘솔, `gcloud` 명령줄 인터페이스, ADK 명령줄 인터페이스(ADK CLI)를 사용합니다. Google Cloud 프로젝트 구성에 이미 익숙한 사용자나 프로덕션 배포를 준비하는 사용자에게 권장됩니다.
 
-이 안내에서는 ADK 프로젝트를 Google Cloud Agent에 배포하는 방법을 설명합니다.
-다음 단계를 포함하는 런타임 환경:
+Google Cloud Agent Runtime 환경에 ADK 프로젝트를 배포하는 과정은 다음 단계로 구성됩니다.
 
-* [Setup Google Cloud project](#setup-cloud-project)
-* [Prepare agent project folder](#define-your-agent)
-* [Deploy the agent](#deploy-agent)
+* [Google Cloud 프로젝트 설정](#setup-cloud-project)
+* [에이전트 프로젝트 폴더 준비](#define-your-agent)
+* [에이전트 배포](#deploy-agent)
 
 ## Google Cloud 프로젝트 설정 {#setup-cloud-project}
 
-에이전트 런타임에 에이전트를 배포하려면 Google Cloud 프로젝트가 필요합니다.
+Agent Runtime에 에이전트를 배포하려면 Google Cloud 프로젝트가 필요합니다.
 
 1. **Google Cloud에 로그인**:
-    * Google Cloud의 **기존 사용자**인 경우:
-        * 로그인 방법
-          [https://console.cloud.google.com](https://console.cloud.google.com)
-        * 이전에 만료된 무료 평가판을 사용한 경우 다음을 수행해야 할 수 있습니다.
-          로 업그레이드
-          [Paid billing account](https://docs.cloud.google.com/free/docs/free-cloud-features#how-to-upgrade).
-    * Google Cloud의 **신규 사용자**인 경우:
-        * 회원가입을 하시면 됩니다
-          [Free Trial program](https://docs.cloud.google.com/free/docs/free-cloud-features).
-          무료 평가판을 사용하면 91일 이상 다양한 서비스에 사용할 수 있는 $300의 환영 크레딧을 받을 수 있습니다.
-          [Google Cloud products](https://docs.cloud.google.com/free/docs/free-cloud-features#during-free-trial)
-          비용이 청구되지 않습니다. 무료 평가판 기간 동안 다음 서비스에도 액세스할 수 있습니다.
-          [Google Cloud Free Tier](https://docs.cloud.google.com/free/docs/free-cloud-features#free-tier),
-          매월 지정된 기간까지 일부 제품을 무료로 사용할 수 있습니다.
-          한도 및 제품별 무료 평가판을 제공합니다.
+    * Google Cloud **기존 사용자**인 경우:
+        * [https://console.cloud.google.com](https://console.cloud.google.com)을 통해 로그인합니다.
+        * 이전에 무료 체험판을 사용했고 기간이 만료되었다면 [유료 결제 계정](https://docs.cloud.google.com/free/docs/free-cloud-features#how-to-upgrade)으로 업그레이드해야 할 수 있습니다.
+    * Google Cloud **신규 사용자**인 경우:
+        * [무료 체험 프로그램](https://docs.cloud.google.com/free/docs/free-cloud-features)에 가입할 수 있습니다. 무료 체험을 신청하면 91일 동안 다양한 [Google Cloud 제품](https://docs.cloud.google.com/free/docs/free-cloud-features#during-free-trial)에 사용할 수 있는 \$300의 환영 크레딧이 제공되며 별도 요금이 청구되지 않습니다. 무료 체험 기간 중에는 매월 지정된 한도 내에서 일부 제품을 무료로 사용할 수 있는 [Google Cloud 무료 등급](https://docs.cloud.google.com/free/docs/free-cloud-features#free-tier) 및 제품별 무료 체험도 이용할 수 있습니다.
 
 2. **Google Cloud 프로젝트 만들기**
-    * 이미 기존 구글 클라우드 프로젝트가 있다면 사용 가능하지만,
-      이 프로세스로 인해 프로젝트에 새로운 서비스가 추가될 가능성이 높습니다.
-    * 새로운 Google Cloud 프로젝트를 만들고 싶다면 새로 생성하면 됩니다.
-      [Create Project](https://console.cloud.google.com/projectcreate)에서
-      페이지.
+    * 기존 Google Cloud 프로젝트가 있다면 그대로 사용할 수 있지만, 이 과정에서 프로젝트에 새로운 서비스가 추가될 수 있다는 점에 유의하세요.
+    * 새 Google Cloud 프로젝트를 만들려면 [프로젝트 만들기](https://console.cloud.google.com/projectcreate) 페이지에서 생성하면 됩니다.
 
-3. **Google Cloud 프로젝트 ID 받기**
-    * GCP에서 찾을 수 있는 Google Cloud 프로젝트 ID가 필요합니다.
-      홈페이지. 프로젝트 ID(하이픈이 포함된 영숫자)를 기록해 두세요.
-      _아님_ 프로젝트 번호(숫자)입니다.
+3. **Google Cloud 프로젝트 ID 확인**
+    * GCP 홈 페이지에서 확인할 수 있는 Google Cloud 프로젝트 ID가 필요합니다. 프로젝트 번호(숫자)가 _아니라_ 프로젝트 ID(하이픈이 포함된 영숫자)를 기록해 두세요.
 
     <img src="../../../assets/project-id.png" alt="Google 클라우드 프로젝트 ID">
 
-4. **프로젝트에서 에이전트 플랫폼 활성화**
-    * Agent Runtime을 사용하기 위해서는 [enable the Agent Platform API](https://console.cloud.google.com/apis/library/aiplatform.googleapis.com)가 필요합니다. API를 활성화하려면 "활성화" 버튼을 클릭하세요. 일단 활성화되면,
-    "API 활성화됨"이라고 표시되어야 합니다.
+4. **프로젝트에서 Agent Platform 활성화**
+    * Agent Runtime을 사용하려면 [Agent Platform API를 활성화](https://console.cloud.google.com/apis/library/aiplatform.googleapis.com)해야 합니다. "사용(Enable)" 버튼을 클릭해 API를 활성화하세요. 활성화가 완료되면 "API 사용 설정됨(API Enabled)"이 표시됩니다.
 
-5. **프로젝트에서 Cloud Resource Manager API를 활성화합니다**
-    * Agent Runtime을 사용하기 위해서는 [enable the Cloud Resource Manager API](https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview)가 필요합니다. API를 활성화하려면 "활성화" 버튼을 클릭하세요. 활성화되면 "API 활성화됨"이라고 표시되어야 합니다.
+5. **프로젝트에서 Cloud Resource Manager API 활성화**
+    * Agent Runtime을 사용하려면 [Cloud Resource Manager API를 활성화](https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview)해야 합니다. "사용(Enable)" 버튼을 클릭해 API를 활성화하세요. 활성화가 완료되면 "API 사용 설정됨(API Enabled)"이 표시됩니다.
 
 ## 코딩 환경 설정 {#prerequisites-coding-env}
 
-이제 Google Cloud 프로젝트를 준비했으므로 코딩으로 돌아갈 수 있습니다.
-환경. 이 단계를 수행하려면 코딩 내의 터미널에 액세스해야 합니다.
-명령줄 지침을 실행하는 환경입니다.
+Google Cloud 프로젝트 준비를 마쳤다면 코딩 환경으로 돌아갑니다. 이후 단계에서는 명령줄 명령어를 실행하기 위해 코딩 환경 내 터미널에 접근할 수 있어야 합니다.
 
 ### Google Cloud로 코딩 환경 인증
 
-* 귀하와 귀하의 코딩 환경을 인증해야 합니다.
-    코드는 Google Cloud와 상호작용할 수 있습니다. 이렇게 하려면 gcloud CLI가 필요합니다.
-    gcloud CLI를 사용해 본 적이 없다면 먼저 다음을 수행해야 합니다.
-    [download and install it](https://docs.cloud.google.com/sdk/docs/install-sdk)
-    아래 단계를 계속하기 전에:
+* 사용자와 코드가 Google Cloud와 상호작용할 수 있도록 코딩 환경을 인증해야 합니다. 이를 위해 `gcloud` CLI가 필요합니다. `gcloud` CLI를 사용해 본 적이 없다면 아래 단계를 진행하기 전에 먼저 [다운로드 및 설치](https://docs.cloud.google.com/sdk/docs/install-sdk)하세요.
 
-* Google Cloud에 액세스하려면 터미널에서 다음 명령어를 실행하세요.
-    사용자로 프로젝트:
+* 사용자 계정으로 Google Cloud 프로젝트에 접근하려면 터미널에서 다음 명령어를 실행하세요.
 
     ```shell
     gcloud auth login
     ```
 
-    인증 후 메시지가 표시됩니다.
-    `You are now authenticated with the gcloud CLI!`.
+    인증을 마치면 `You are now authenticated with the gcloud CLI!` 메시지가 표시됩니다.
 
-* 다음 명령을 실행하여 코드가 작동할 수 있도록 인증하세요.
-    구글 클라우드:
+* 코드가 Google Cloud와 연동될 수 있도록 다음 명령어를 실행해 애플리케이션 기본 사용자 인증 정보를 설정하세요.
 
     ```shell
     gcloud auth application-default login
     ```
 
-    인증 후 메시지가 표시됩니다.
-    `You are now authenticated with the gcloud CLI!`.
+    인증을 마치면 `You are now authenticated with the gcloud CLI!` 메시지가 표시됩니다.
 
-* (선택사항) gcloud에서 기본 프로젝트를 설정하거나 변경해야 하는 경우
-    다음을 사용할 수 있습니다:
+* (선택 사항) `gcloud`에서 기본 프로젝트를 설정하거나 변경해야 하는 경우 다음 명령어를 사용할 수 있습니다.
 
     ```shell
     gcloud config set project MY-PROJECT-ID
@@ -106,9 +70,7 @@ Google Cloud 구성에 이미 익숙한 사용자에게 권장됩니다.
 
 ### 에이전트 정의 {#define-your-agent}
 
-Google Cloud와 코딩 환경이 준비되면 배포 준비가 완료됩니다.
-당신의 대리인. 지침에서는 에이전트 프로젝트 폴더가 있다고 가정합니다.
-예를 들면:
+Google Cloud와 코딩 환경 준비가 끝나면 에이전트를 배포할 수 있습니다. 아래 지침에서는 다음과 같은 구조의 에이전트 프로젝트 폴더가 준비되어 있다고 가정합니다.
 
 === "Python"
 
@@ -149,12 +111,9 @@ Google Cloud와 코딩 환경이 준비되면 배포 준비가 완료됩니다.
 
 ## 에이전트 배포 {#deploy-agent}
 
-`adk deploy` 명령줄 도구를 사용하여 터미널에서 배포할 수 있습니다. 이
-프로세스는 코드를 패키징하고 컨테이너에 빌드한 다음
-관리형 에이전트 런타임 서비스. 이 프로세스는 몇 분 정도 걸릴 수 있습니다.
+터미널에서 `adk deploy` 명령줄 도구를 사용하여 배포할 수 있습니다. 이 과정은 코드를 패키징하고 컨테이너로 빌드한 다음 관리형 Agent Runtime 서비스에 배포하며, 몇 분 정도 걸릴 수 있습니다.
 
-다음 예제 배포 명령은 `multi_tool_agent` 샘플 코드를 다음과 같이 사용합니다.
-배포할 프로젝트:
+다음 배포 명령어 예시는 `multi_tool_agent` 샘플 코드를 배포할 프로젝트로 사용합니다.
 
 === "Python"
 
@@ -183,17 +142,16 @@ Google Cloud와 코딩 환경이 준비되면 배포 준비가 완료됩니다.
         -d .
     ```
 
-`region`의 경우 지원되는 지역 목록은 다음에서 확인할 수 있습니다.
-[Agent Builder locations page](https://docs.cloud.google.com/agent-builder/locations#supported-regions-agent-engine).
+`region`에 사용할 수 있는 지원 리전 목록은 [Agent Builder 리전 페이지](https://docs.cloud.google.com/agent-builder/locations#supported-regions-agent-engine)에서 확인할 수 있습니다.
 
 === "Python"
 
-    `adk deploy agent_engine` 명령의 CLI 옵션은
-    [ADK CLI Reference](/api-reference/cli/#adk-deploy-agent-engine)를 참고하세요.
+    `adk deploy agent_engine` 명령어의 CLI 옵션은
+    [ADK CLI 레퍼런스](/api-reference/cli/#adk-deploy-agent-engine)를 참고하세요.
 
 === "Go"
 
-    `adkgo deploy agentengine` 명령의 CLI 옵션을 알아보려면 `adkgo help deploy agentengine`을 실행하세요. 이 명령은 사용 가능한 옵션을 표시합니다. 중요한 옵션은 다음과 같습니다.
+    `adkgo deploy agentengine` 명령어의 CLI 옵션을 알아보려면 `adkgo help deploy agentengine`을 실행하세요. 사용 가능한 옵션 중 주요 옵션은 다음과 같습니다.
 
     ```shell
     -e, --entry_point_path string   Path to an entry point (go 'main')
@@ -206,9 +164,9 @@ Google Cloud와 코딩 환경이 준비되면 배포 준비가 완료됩니다.
 
     새 인스턴스를 만드는 대신 기존 Agent Runtime 인스턴스에 다시 배포하려면 `--agent_engine_id`에 해당 `RESOURCE_ID`를 전달하세요.
 
-### 배포 명령 출력
+### 배포 명령어 출력
 
-성공적으로 배포되면 다음 출력이 표시됩니다.
+배포가 성공적으로 완료되면 다음과 같은 출력이 표시됩니다.
 
 === "Python"
 
@@ -239,24 +197,17 @@ Google Cloud와 코딩 환경이 준비되면 배포 준비가 완료됩니다.
     Cleaning temp : Finished successfully
     ```
 
-이제 에이전트가 배포된 `RESOURCE_ID`가 있습니다.
-위 예에서는 `751619551677906944`입니다. 이 ID 번호가 필요합니다.
-에이전트 런타임에서 에이전트를 사용하려면 다른 값과 함께 사용하세요.
+이제 에이전트가 배포된 `RESOURCE_ID`(위 예시에서는 `751619551677906944`)를 확인할 수 있습니다. Agent Runtime에서 에이전트를 사용하려면 다른 프로젝트 정보와 함께 이 ID 번호가 필요합니다.
 
-## 에이전트 런타임에서 에이전트 사용
+## Agent Runtime에서 에이전트 사용하기
 
-ADK 프로젝트 배포가 완료되면 에이전트에 쿼리할 수 있습니다.
-Agent Platform SDK, Python 요청 라이브러리 또는 REST API 클라이언트를 사용합니다. 이
-섹션에서는 에이전트와 상호작용하는 데 필요한 정보를 제공합니다.
-에이전트의 REST API와 상호작용하기 위해 URL을 구성하는 방법을 알아보세요.
+ADK 프로젝트 배포를 완료하면 Agent Platform SDK, Python `requests` 라이브러리 또는 REST API 클라이언트를 사용하여 에이전트에 쿼리를 보낼 수 있습니다. 이 섹션에서는 에이전트와 상호작용하는 데 필요한 정보와 에이전트의 REST API 호출 URL을 구성하는 방법을 안내합니다.
 
-에이전트 런타임에서 에이전트와 상호작용하려면 다음이 필요합니다.
+Agent Runtime의 에이전트와 상호작용하려면 다음 값이 필요합니다.
 
-* **PROJECT_ID**(예: "my-project-id")는 다음에서 찾을 수 있습니다.
-    [project details page](https://console.cloud.google.com/iam-admin/settings)
-* **LOCATION_ID**(예: "us-central1"), 에이전트를 배포하는 데 사용한 것입니다.
-* **RESOURCE_ID**(예: "751619551677906944"), 다음에서 찾을 수 있습니다.
-    [Agent Runtime UI](https://console.cloud.google.com/vertex-ai/agents/agent-engines)
+* **PROJECT_ID**(예: `"my-project-id"`): [프로젝트 세부정보 페이지](https://console.cloud.google.com/iam-admin/settings)에서 확인할 수 있습니다.
+* **LOCATION_ID**(예: `"us-central1"`): 에이전트를 배포할 때 사용한 리전입니다.
+* **RESOURCE_ID**(예: `"751619551677906944"`): [Agent Runtime UI](https://console.cloud.google.com/vertex-ai/agents/agent-engines)에서 확인할 수 있습니다.
 
 쿼리 URL 구조는 다음과 같습니다.
 
@@ -264,27 +215,13 @@ Agent Platform SDK, Python 요청 라이브러리 또는 REST API 클라이언�
 https://$(LOCATION_ID)-aiplatform.googleapis.com/v1/projects/$(PROJECT_ID)/locations/$(LOCATION_ID)/reasoningEngines/$(RESOURCE_ID):query
 ```
 
-이 URL 구조를 사용하여 에이전트로부터 요청할 수 있습니다. 자세한 내용은
-요청 방법은 에이전트 런타임 문서의 지침을 참고하세요.
-[Use an Agent Development Kit agent](https://docs.cloud.google.com/agent-builder/agent-engine/use/adk#rest-api).
-또한 에이전트 런타임 문서를 확인하여 관리 방법을 알아볼 수도 있습니다.
-[deployed agent](https://docs.cloud.google.com/agent-builder/agent-engine/manage/overview).
-배포된 에이전트 테스트 및 상호 작용에 대한 자세한 내용은 다음을 참고하세요.
-[Test deployed agents in Agent Runtime](/deploy/agent-runtime/test/).
+이 URL 구조를 사용하여 에이전트에 요청을 보낼 수 있습니다. 요청 방법에 대한 자세한 내용은 Agent Runtime 문서의 [Agent Development Kit 에이전트 사용](https://docs.cloud.google.com/agent-builder/agent-engine/use/adk#rest-api)을 참고하세요. 또한 Agent Runtime 문서에서 [배포된 에이전트 관리 방법](https://docs.cloud.google.com/agent-builder/agent-engine/manage/overview)을 확인할 수 있으며, 배포된 에이전트를 테스트하고 상호작용하는 방법은 [Agent Runtime에 배포된 에이전트 테스트](/deploy/agent-runtime/test/)를 참고하세요.
 
-### 모니터링 및 검증
+### 모니터링 및 확인
 
-* 배포 상태를 모니터링할 수 있습니다.
-    [Agent Runtime UI](https://console.cloud.google.com/vertex-ai/agents/agent-engines)
-    Google Cloud Console에서.
-* 자세한 내용은 에이전트 런타임 설명서를 참고하세요.
-    [deploying an agent](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/deploy)
-    그리고
-    [managing deployed agents](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/manage/overview).
+* Google Cloud 콘솔의 [Agent Runtime UI](https://console.cloud.google.com/vertex-ai/agents/agent-engines)에서 배포 상태를 모니터링할 수 있습니다.
+* 추가 세부정보는 Agent Runtime 문서의 [에이전트 배포](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/deploy) 및 [배포된 에이전트 관리](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/manage/overview)를 참고하세요.
 
 ## 배포된 에이전트 테스트
 
-ADK 에이전트 배포를 완료한 후에는 다음에서 워크플로를 테스트해야 합니다.
-새로운 호스팅 환경. ADK 에이전트 테스트에 대한 자세한 내용은
-에이전트 런타임에 배포됩니다. 참조
-[Test deployed agents in Agent Runtime](/deploy/agent-runtime/test/).
+ADK 에이전트 배포를 완료한 후에는 새로운 호스팅 환경에서 워크플로를 테스트해야 합니다. Agent Runtime에 배포된 ADK 에이전트 테스트 방법은 [Agent Runtime에 배포된 에이전트 테스트](/deploy/agent-runtime/test/)를 참고하세요.

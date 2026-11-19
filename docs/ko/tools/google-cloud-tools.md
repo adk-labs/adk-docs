@@ -17,7 +17,7 @@ Google Cloud 도구를 사용하면 에이전트를 Google Cloud의 제품 및 �
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span>
 </div>
 
-**ApiHubToolset**을 사용하면 Apigee API 허브의 모든 문서화된 API를 몇 줄의 코드로 도구로 전환할 수 있습니다. 이 섹션에서는 API에 대한 보안 연결을 위한 인증 설정을 포함하여 단계별 지침을 보여줍니다.
+`APIHubToolset`을 사용하면 Apigee API 허브의 모든 문서화된 API를 몇 줄의 코드로 도구로 전환할 수 있습니다. 이 섹션에서는 API에 대한 보안 연결을 위한 인증 설정을 포함하여 단계별 지침을 안내합니다.
 
 **전제 조건**
 
@@ -40,7 +40,7 @@ project_root_folder
 
 참고: 이 튜토리얼에는 에이전트 생성이 포함되어 있습니다. 이미 에이전트가 있는 경우 이러한 단계의 일부만 수행하면 됩니다.
 
-1. APIHubToolset이 API Hub API에서 사양을 가져올 수 있도록 액세스 토큰을 가져옵니다.
+1. `APIHubToolset`이 API Hub API에서 사양을 가져올 수 있도록 액세스 토큰을 발급받습니다.
    터미널에서 다음 명령을 실행합니다.
 
     ```shell
@@ -85,14 +85,14 @@ project_root_folder
     ```
 
     프로덕션 배포의 경우 액세스 토큰 대신 서비스 계정을 사용하는 것이 좋습니다.
-    위 코드 스니펫에서 `service_account_json=service_account_cred_json_str`을 사용하고 토큰 대신 보안 계정 자격 증명을 제공하세요.
+    위 코드 스니펫에서 액세스 토큰 대신 `service_account_json=service_account_cred_json_str`을 사용하여 서비스 계정 자격 증명을 제공하세요.
 
-    apihub\_resource\_name의 경우, API에 사용되는 OpenAPI 사양의 특정 ID를 알고 있다면
-    `` `projects/my-project-id/locations/us-west1/apis/my-api-id/versions/version-id/specs/spec-id` ``를 사용하세요.
+    `apihub_resource_name`의 경우, API에 사용되는 OpenAPI 사양의 특정 ID를 알고 있다면
+    `projects/my-project-id/locations/us-west1/apis/my-api-id/versions/version-id/specs/spec-id` 형식을 사용하세요.
     도구 세트가 API에서 사용 가능한 첫 번째 사양을 자동으로 가져오도록 하려면
-    `` `projects/my-project-id/locations/us-west1/apis/my-api-id` ``를 사용하세요.
+    `projects/my-project-id/locations/us-west1/apis/my-api-id` 형식을 사용하세요.
 
-4. 에이전트 파일 Agent.py를 생성하고, 생성한 툴을 에이전트 정의에 추가하세요:
+4. 에이전트 파일 `agent.py`를 생성하고, 생성한 도구를 에이전트 정의에 추가하세요:
 
     ```py
     from google.adk.agents.llm_agent import LlmAgent
@@ -106,7 +106,7 @@ project_root_folder
     )
     ```
 
-5. 에이전트를 노출하도록 `__init__.py`를 구성합니다.
+5. ADK에서 에이전트를 인식할 수 있도록 `__init__.py`를 구성합니다.
 
     ```py
     from . import agent
@@ -336,7 +336,7 @@ gcloud auth application-default set-quota-project <project-id>
     )
     ```
 
-3. 에이전트를 노출하도록 `__init__.py`를 구성합니다.
+3. ADK에서 에이전트를 인식할 수 있도록 `__init__.py`를 구성합니다.
 
     ```py
     from . import agent
@@ -350,7 +350,7 @@ gcloud auth application-default set-quota-project <project-id>
     ```
 
 위 단계를 완료한 후 [http://localhost:8000](http://localhost:8000)으로 이동하여
-   `my\_agent` 에이전트(에이전트 폴더 이름과 동일)를 선택합니다.
+   `my_agent` 에이전트(에이전트 폴더 이름과 동일)를 선택합니다.
 
 
 ### 앱 통합 워크플로 사용
@@ -476,11 +476,11 @@ gcloud auth application-default set-quota-project <project-id>
 **참고:** 연결에 지원되는 엔터티 및 작업 목록을 찾으려면
         이러한 커넥터 API를 사용하세요: `listActions`, `listEntityTypes`.
 
-#### 3. 에이전트 노출
+#### 3. 에이전트 모듈 등록
 
 === "Python"
 
-    에이전트를 노출하도록 `__init__.py`를 구성하려면 다음 코드를 사용하세요.
+    ADK에서 에이전트를 인식할 수 있도록 `__init__.py`에 다음 코드를 추가하세요.
 
       ```py
           from . import agent

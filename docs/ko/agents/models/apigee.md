@@ -4,14 +4,14 @@
    <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v1.18.0</span><span class="lst-java">Java v0.4.0</span>
 </div>
 
-[Apigee](https://docs.cloud.google.com/apigee/docs/api-platform/get-started/what-apigee)는 강력한 [AI Gateway](https://cloud.google.com/solutions/apigee-ai)를 제공하여 생성형 AI 모델 트래픽을 관리하고 제어하는 방식을 혁신합니다. Apigee 프록시를 통해 AI 모델 엔드포인트(예: Agent Platform 또는 Gemini API)를 노출하면 다음과 같은 엔터프라이즈급 기능을 즉시 활용할 수 있습니다:
+[Apigee](https://docs.cloud.google.com/apigee/docs/api-platform/get-started/what-apigee)는 강력한 [AI Gateway](https://cloud.google.com/solutions/apigee-ai)를 제공하여 생성형 AI 모델 트래픽을 관리하고 제어하는 방식을 혁신합니다. Apigee 프록시를 통해 AI 모델 엔드포인트(예: Agent Platform 또는 Gemini API)를 연결해 제공하면 다음과 같은 엔터프라이즈급 기능을 즉시 활용할 수 있습니다:
 
 - **모델 보안 (Model Safety):** 위협 보호를 위해 Model Armor와 같은 보안 정책을 구현합니다.
 - **트래픽 제어 (Traffic Governance):** 비용을 관리하고 남용을 방지하기 위해 Rate Limiting(요청 제한) 및 Token Limiting(토큰 제한)을 적용합니다.
 - **성능 향상 (Performance):** 시맨틱 캐싱(Semantic Caching) 및 고급 모델 라우팅을 사용하여 응답 시간과 효율성을 향상합니다.
 - **모니터링 및 가시성 (Monitoring & Visibility):** 모든 AI 요청에 대한 세분화된 모니터링, 분석 및 감사를 제공합니다.
 
-   `ApigeeLlm` 래퍼는 Agent Platform 및 Gemini API(generateContent)와 함께 사용하도록 설계되었습니다. 다른 모델 및 인터페이스에 대한 지원도 지속적으로 확장하고 있습니다. 자체 호스팅 또는 타사 제공업체를 포함한 OpenAI 호환 모델의 경우 `CompletionsHTTPClient`를 사용하여 Apigee 프록시를 통해 트래픽을 라우팅하세요.
+`ApigeeLlm` 래퍼는 Agent Platform 및 Gemini API(generateContent)와 함께 사용하도록 설계되었습니다. 다른 모델 및 인터페이스에 대한 지원도 지속적으로 확장하고 있습니다. 자체 호스팅 또는 타사 제공업체를 포함한 OpenAI 호환 모델의 경우 `CompletionsHTTPClient`를 사용하여 Apigee 프록시를 통해 트래픽을 라우팅하세요.
 
 ## 구현 예시
 

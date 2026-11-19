@@ -4,9 +4,7 @@
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python v0.1.0</span><span class="lst-typescript">TypeScript v0.2.0</span><span class="lst-go">Go v0.1.0</span><span class="lst-java">Java v0.1.0</span><span class="lst-kotlin">Kotlin v0.1.0</span>
 </div>
 
-`RunConfig`는 streaming mode, speech setting, LLM call limit, live agent option 등
-에이전트의 런타임 동작을 제어합니다. 기본 동작을 재정의하려면 `RunConfig`를
-`runner.run_async()` 또는 `runner.run_live()`에 전달합니다.
+`RunConfig`는 스트리밍 모드, 음성 설정, LLM 호출 한도, 라이브 에이전트 옵션 등 에이전트의 런타임 동작을 제어합니다. 기본 동작을 재정의하려면 `RunConfig`를 `runner.run_async()` 또는 `runner.run_live()`에 전달합니다.
 
 === "Python"
 
@@ -70,16 +68,12 @@
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span>
 </div>
 
-Long-running session에서는 얼마나 많은 history를 load할지, context window를 압축할지
-제어할 수 있습니다.
+장기 실행 세션에서는 히스토리를 얼마나 로드할지와 컨텍스트 윈도우를 압축할지 여부를 제어할 수 있습니다.
 
-- `get_session_config`: session을 load할 때 가져오는 event를 제한합니다. 매 invocation마다
-  전체 event history를 load하지 않도록 `num_recent_events` 또는 `after_timestamp`를
-  사용합니다. 이러한 필터는 저장된 이벤트를 삭제하지 않고 로드되는 뷰만 제한합니다. 새 이벤트는 저장된 히스토리에 추가되며, 로드된 뷰에서 제외된 이전 이벤트는 그대로 보존됩니다.
-- `context_window_compression`: LLM input에 대한 context window compression을 활성화합니다.
-  session이 model context limit에 가까워질 때 유용합니다.
-- `model_input_context`: 이번 호출에 대해서만 LLM 요청에 추가되는 `types.Content` 목록입니다. 러너는 이를 세션에 유지하지 않으므로 대화 기록을 변경하지 않고 턴별 컨텍스트를 제공할 수 있습니다.
-- `include_thoughts_from_other_agents`: 다른 에이전트의 생각(thought) 파트가 LLM 컨텍스트에 포함되는지 여부를 제어합니다. 기본적으로 비활성화되어 있습니다.
+- `get_session_config`: 세션을 로드할 때 가져올 이벤트를 제한합니다. 매 호출마다 전체 이벤트 히스토리를 로드하지 않도록 `num_recent_events` 또는 `after_timestamp`를 사용하세요. 이러한 필터는 저장된 이벤트를 삭제하지 않고 로드되는 뷰만 제한합니다. 새 이벤트는 저장된 히스토리에 추가되며, 로드된 뷰에서 제외된 이전 이벤트는 그대로 보존됩니다.
+- `context_window_compression`: LLM 입력에 대한 컨텍스트 윈도우 압축을 활성화합니다. 세션이 모델의 컨텍스트 한도에 가까워질 때 유용합니다.
+- `model_input_context`: 이번 호출에 한해 LLM 요청에 추가되는 `types.Content` 목록입니다. 러너는 이를 세션에 영구 저장하지 않으므로 대화 기록을 변경하지 않고 턴별 컨텍스트를 제공할 수 있습니다.
+- `include_thoughts_from_other_agents`: 다른 에이전트의 사고(thought) 파트를 LLM 컨텍스트에 포함할지 여부를 제어합니다. 기본값은 비활성화입니다.
 
 === "Python"
 
@@ -94,19 +88,17 @@ Long-running session에서는 얼마나 많은 history를 load할지, context wi
 
 ## 텍스트 응답 옵션 { #enable-streaming }
 
-에이전트가 텍스트 모드에서 응답하는 방식을 단어가 생성되는 대로 전달할지, 아니면 하나의 전체 응답으로 전달할지 아래에 설명된 ***스트리밍 모드(Streaming Mode)*** 매개변수로 제어할 수 있습니다:
+에이전트가 텍스트 모드에서 단어가 생성되는 대로 응답할지, 아니면 하나의 완성된 응답으로 전달할지는 아래에 설명된 `streaming_mode` 매개변수로 제어할 수 있습니다.
 
-- **`StreamingMode.NONE`**(기본값): runner가 turn마다 하나의 완성된 응답을 반환합니다. CLI tool, batch processing, synchronous workflow에 적합합니다.
-- **`StreamingMode.SSE`**: Server-Sent Events streaming입니다. LLM이 생성하는 동안 runner가 partial event를 yield하여 typewriter-style UI와 real-time chat display를 구현할 수 있습니다.
+- **`StreamingMode.NONE`**(기본값): 러너가 턴마다 하나의 완성된 응답을 반환합니다. CLI 도구, 배치 처리, 동기식 워크플로에 적합합니다.
+- **`StreamingMode.SSE`**: 서버 전송 이벤트(Server-Sent Events) 스트리밍입니다. LLM이 텍스트를 생성하는 동안 러너가 부분 이벤트(partial event)를 yield하여 타이프라이터 스타일 UI와 실시간 채팅 화면을 구현할 수 있습니다.
 
-음성 입력과 출력을 포함한 데이터의 양방향 스트리밍을 활성화하는 ***스트리밍 모드*** 매개변수의 또 다른 설정이 있습니다. 이 기능은 단순한 에이전트 이상의 추가 구성이 필요합니다. 이 기능에 대한 자세한 내용은 [라이브 및 음성 에이전트](../live/index.md)를 참고하세요.
+음성 입력과 출력을 포함한 데이터의 양방향 스트리밍을 활성화하는 `streaming_mode` 매개변수의 또 다른 설정(`StreamingMode.BIDI`)도 있습니다. 이 기능은 단순한 에이전트 이상의 추가 구성이 필요합니다. 자세한 내용은 [라이브 및 음성 에이전트](../live/index.md)를 참고하세요.
 
-`StreamingMode.SSE`와 함께 `support_cfc=True`를 설정하면 Compositional Function Calling(CFC)을
-활성화할 수 있습니다. CFC는 모델이 function call을 동적으로 구성하고 실행할 수 있게 하며,
-내부적으로 Live API를 사용합니다.
+`StreamingMode.SSE`와 함께 `support_cfc=True`를 설정하면 Compositional Function Calling(CFC)을 활성화할 수 있습니다. CFC를 사용하면 모델이 함수 호출을 동적으로 조합하고 실행할 수 있으며, 내부적으로 Live API를 사용합니다.
 
-!!! example "Experimental"
-    CFC 지원은 실험적이며 향후 릴리스에서 API나 동작이 변경될 수 있습니다.
+!!! example "실험적 기능(Experimental)"
+    CFC 지원은 실험적 기능이며 향후 릴리스에서 API나 동작이 변경될 수 있습니다.
 
 === "Python"
 
@@ -165,8 +157,7 @@ Long-running session에서는 얼마나 많은 history를 load할지, context wi
   <span class="lst-supported">ADK에서 지원</span><span class="lst-python">Python</span><span class="lst-typescript">TypeScript</span><span class="lst-java">Java</span>
 </div>
 
-Voice-enabled agent에서는 speech synthesis, audio transcription, response modality를
-구성합니다.
+음성 지원 에이전트에서는 음성 합성, 오디오 전사(transcription), 응답 모달리티를 구성합니다.
 
 !!! tip "라이브 에이전트"
 
@@ -260,7 +251,7 @@ ADK 에이전트는 대화형 에이전트 경험을 생성하기 위해 [라이
 - **[구성: 능동적 및 감정적 대화](../live/configuration.md#proactivity-and-affective-dialog)**: 네이티브 오디오 대화 기능 및 이를 지원하는 모델.
 
 `tool_thread_pool_config` 설정은 예외입니다. 이는 Live API 관심사라기보다는 런타임 관심사이므로 여기에 유지됩니다. 이벤트 루프가 사용자의 인터럽트에 계속 응답할 수 있도록 도구 실행을 백그라운드 스레드 풀에서 실행합니다.
-모든 매개변수가 모든 언어에서 제공되는 것은 아닙니다. 언어별 세부 정보는 [API reference](#api-reference)를 참고하세요.
+모든 매개변수가 모든 언어에서 제공되는 것은 아닙니다. 언어별 세부 정보는 [API 레퍼런스](#api-reference)를 참고하세요.
 
 === "Python"
 
@@ -273,10 +264,8 @@ ADK 에이전트는 대화형 에이전트 경험을 생성하기 위해 [라이
     )
     ```
 
-    !!! note "Thread pool and the GIL"
-        Thread pool은 blocking I/O와 GIL을 release하는 C extension(예: `time.sleep()`,
-        network call, numpy)에 도움이 됩니다. 순수 Python CPU-bound code에는 도움이 되지
-        않습니다. GIL이 Python bytecode의 진정한 병렬 실행을 막기 때문입니다.
+    !!! note "스레드 풀과 GIL"
+        스레드 풀은 블로킹 I/O와 GIL을 해제하는 C 확장(예: `time.sleep()`, 네트워크 호출, `numpy`)에는 도움이 됩니다. 하지만 GIL이 Python 바이트코드의 진정한 병렬 실행을 막기 때문에 순수 Python CPU 바운드 코드에는 도움이 되지 **않습니다**.
 
 === "TypeScript"
 
@@ -307,27 +296,18 @@ ADK 에이전트는 대화형 에이전트 경험을 생성하기 위해 [라이
 
 ## 런타임 제한 및 디버깅 구성
 
-다음 매개변수로 runtime guardrail과 debugging을 제어합니다.
+다음 매개변수로 런타임 가드레일과 디버깅을 제어합니다.
 
-- `max_llm_calls`: run당 총 LLM call 수를 제한합니다(기본값: 500). 0 또는 음수는 무제한
-  호출을 의미하지만 production에서는 권장하지 않습니다. 사용하는 언어의 가장 큰 정수(Python에서는
-  `sys.maxsize`, Kotlin에서는 `Int.MAX_VALUE`)를 전달하면 오류가 발생합니다.
-- `save_input_blobs_as_artifacts`: `True`이면 input blob(예: uploaded file)을 debugging과
-  auditing용 run artifact로 저장합니다. Python에서는 `SaveFilesAsArtifactsPlugin`으로 대체되어
-  지원 중단(deprecated)되었습니다. Go에서는 `agent.RunConfig`의 `SaveInputBlobsAsArtifacts`
-  필드를 `true`로 설정하세요. 이 설정이 적용되려면 러너에 아티팩트 서비스가 필요합니다.
-- `custom_metadata`: invocation에 첨부되는 임의 metadata의 `dict[str, Any]`입니다. tracing
-  또는 logging에 유용합니다.
-- `service_tier`: 실행의 모델 호출을 위한 서빙 용량을 선택합니다. ADK Python 전용이며,
-  Interactions API를 사용하는 Gemini 모델에만 적용됩니다. `ServiceTier.DEFERRED`는 각 모델 호출을
-  비피크(off-peak) 용량에서 실행되도록 대기열에 넣으며 `StreamingMode.SSE`와 함께 사용할 수 없습니다.
-  자세한 내용은 [지연 스케줄링(Deferred scheduling)](/agents/models/google-gemini/deferred-schedule/)을 참고하세요.
+- `max_llm_calls`: 실행당 총 LLM 호출 수를 제한합니다(기본값: 500). 0 또는 음수로 설정하면 호출 횟수가 제한되지 않지만 프로덕션 환경에서는 권장하지 않습니다. 사용하는 언어의 최대 정수(Python에서는 `sys.maxsize`, Kotlin에서는 `Int.MAX_VALUE`)를 전달하면 오류가 발생합니다.
+- `save_input_blobs_as_artifacts`: `True`이면 입력 블롭(blob, 예: 업로드된 파일)을 디버깅 및 감사용 실행 아티팩트로 저장합니다. Python에서는 `SaveFilesAsArtifactsPlugin`으로 대체되어 지원 중단(deprecated)되었습니다. Go에서는 `agent.RunConfig`의 `SaveInputBlobsAsArtifacts` 필드를 `true`로 설정하세요. 이 설정이 적용되려면 러너에 아티팩트 서비스가 필요합니다.
+- `custom_metadata`: 호출에 첨부되는 임의 메타데이터의 `dict[str, Any]`입니다. 트레이싱이나 로깅에 유용합니다.
+- `service_tier`: 실행의 모델 호출을 위한 서빙 용량을 선택합니다. ADK Python 전용이며, Interactions API를 사용하는 Gemini 모델에만 적용됩니다. `ServiceTier.DEFERRED`는 각 모델 호출을 비피크(off-peak) 용량에서 실행되도록 대기열에 넣으며 `StreamingMode.SSE`와 함께 사용할 수 없습니다. 자세한 내용은 [지연 스케줄링(Deferred scheduling)](/agents/models/google-gemini/deferred-schedule/)을 참고하세요.
 
-## API reference
+## API 레퍼런스 { #api-reference }
 
-전체 field, type, default 목록은 각 언어의 API reference를 참고하세요.
+전체 필드, 타입, 기본값 목록은 각 언어의 API 레퍼런스를 참고하세요.
 
-- [Python API reference](../api-reference/python/google-adk.html#google.adk.agents.RunConfig)
-- [TypeScript API reference](../api-reference/typescript/interfaces/RunConfig.html)
-- [Go API reference](https://pkg.go.dev/google.golang.org/adk/v2/agent#RunConfig)
-- [Java API reference](../api-reference/java/com/google/adk/agents/RunConfig.html)
+- [Python API 레퍼런스](../api-reference/python/google-adk.html#google.adk.agents.RunConfig)
+- [TypeScript API 레퍼런스](../api-reference/typescript/interfaces/RunConfig.html)
+- [Go API 레퍼런스](https://pkg.go.dev/google.golang.org/adk/v2/agent#RunConfig)
+- [Java API 레퍼런스](../api-reference/java/com/google/adk/agents/RunConfig.html)

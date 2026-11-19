@@ -6,49 +6,29 @@ catalog_tags: ["code", "google"]
 ---
 
 
-# ADK 用エージェント ランタイム コード実行ツール
+# ADK 向け Agent Runtime コード実行ツール
 
 <div class="language-support-tag">
   <span class="lst-supported">ADKでサポート</span><span class="lst-python">Python v1.17.0</span>
 </div>
 
-エージェント ランタイム コード実行 ADK ツールは、低遅延、高
-AI で生成されたコードを実行するための効率的な方法
-[Google Cloud Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview)
-サービス。このツールは、エージェントのワークフローに合わせて高速に実行できるように設計されており、
-セキュリティを向上させるためにサンドボックス環境を使用します。コード実行ツール
-コードとデータを複数のリクエストにわたって永続化できるため、複雑なリクエストを可能にし、
-次のような複数ステップのコーディング タスク。
+Agent Runtime コード実行 ADK ツールは、[Google Cloud Agent Runtime](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/overview) サービスを使用して、AI が生成したコードを低レイテンシかつ高効率に実行する手段を提供します。このツールはエージェントワークフロー向けに高速実行できるよう設計されており、セキュリティを高めるためにサンドボックス環境を使用します。また、複数のリクエストにわたってコードとデータを永続化できるため、次のような複雑な複数ステップのコーディングタスクを実現できます。
 
-- **コード開発とデバッグ:** テストとデバッグを行うエージェント タスクを作成します。
-    複数のリクエストにわたってコードのバージョンを反復処理します。
-- **データ分析を伴うコード:** 最大 100MB のデータ ファイルをアップロードし、実行します
-    コードを実行するたびにデータを再ロードする必要がなく、複数のコードベースの分析が可能です。
+- **コード開発とデバッグ:** 複数のリクエストにわたってコードをテスト・デバッグし、改善を繰り返すエージェントタスクを作成できます。
+- **データ分析を伴うコード実行:** 最大 100 MB のデータファイルをアップロードし、実行のたびにデータを再読み込みすることなく、コードベースのデータ分析を複数回実行できます。
 
-このコード実行ツールはエージェント ランタイム スイートの一部ですが、
-エージェントを使用するには、エージェント ランタイムにエージェントをデプロイする必要があります。エージェントを実行できます
-ローカルで、または他のサービスでこのツールを使用してください。詳細については、
-エージェント ランタイムのコード実行機能については、「
-[Agent Runtime Code Execution](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/overview)
-ドキュメント。
+このコード実行ツールは Agent Runtime スイートの一部ですが、使用するためにエージェントを Agent Runtime にデプロイする必要はありません。ローカル環境や他のサービス上でエージェントを実行しながら、このツールを利用できます。Agent Runtime のコード実行機能の詳細については、[Agent Runtime Code Execution](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/overview) のドキュメントを参照してください。
 
 
-## ツールを使用する
+## ツールの使用
 
-エージェント ランタイム コード実行ツールを使用するには、サンドボックスを作成する必要があります
-ADK でツールを使用する前に、Google Cloud Agent Runtime を使用した環境を構築する
-エージェント。
+Agent Runtime コード実行ツールを ADK エージェントで使用するには、事前に Google Cloud Agent Runtime でサンドボックス環境を作成しておく必要があります。
 
-ADK エージェントでコード実行ツールを使用するには:
+ADK エージェントでコード実行ツールを使用する手順は次のとおりです。
 
-1. エージェント ランタイムの指示に従います。
-    [Code Execution quickstart](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/quickstart)
-    コード実行サンドボックス環境を作成します。
-1. Google Cloud プロジェクトにアクセスするための設定を含む ADK エージェントを作成します
-    サンドボックス環境を作成した場所。
-1. 次のコード例は、コードを使用するように構成されたエージェントを示しています。
-    エグゼキュータツール。 `SANDBOX_RESOURCE_NAME` をサンドボックス環境に置き換えます
-    作成したリソース名。
+1. Agent Runtime の [Code Execution quickstart](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/quickstart) の手順に従って、コード実行用のサンドボックス環境を作成します。
+1. サンドボックス環境を作成した Google Cloud プロジェクトにアクセスできるよう設定した ADK エージェントを作成します。
+1. 次のコード例は、コード実行ツールを使用するように構成されたエージェントを示しています。`SANDBOX_RESOURCE_NAME` は、作成したサンドボックス環境のリソース名に置き換えてください。
 
 ```python
 from google.adk.agents.llm_agent import Agent
@@ -64,75 +44,46 @@ root_agent = Agent(
 )
 ```
 
-`sandbox_resource_name` 値の予期される形式の詳細と、
-代替の `agent_engine_resource_name` パラメータについては、[Configuration
-parameters](#config-parameters) を参照してください。より高度な例としては、
-ツールの推奨システム手順については、[Advanced
-example](#advanced-example) または完全版を参照してください。
-[agent code example](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution)。
+`sandbox_resource_name` に指定する形式の詳細や、代替パラメータである `agent_engine_resource_name` については、[設定パラメータ](#config-parameters)を参照してください。このツールで推奨されるシステム指示（system instruction）を含むより高度な例については、[高度な例](#advanced-example)または完全版の [agent code example](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution) を参照してください。
 
 ## 仕組み
 
-`AgentEngineSandboxCodeExecutor` ツールは、システム全体にわたって単一のサンドボックスを維持します。
-エージェントのタスク。つまり、サンドボックスの状態はエージェント内のすべての操作にわたって持続します。
-ADK ワークフロー セッション。
+`AgentEngineSandboxCodeExecutor` ツールは、エージェントのタスク全体を通じて単一のサンドボックスを維持します。つまり、ADK ワークフローセッション内のすべての操作にわたってサンドボックスの状態が永続化されます。
 
-1. **サンドボックスの作成:** コードの実行が必要な複数ステップのタスクの場合、
-    エージェント ランタイムは、指定された言語とマシンでサンドボックスを作成します
-    構成、コード実行環境を分離します。サンドボックスがない場合
-    事前に作成されている場合、コード実行ツールは次を使用して自動的に作成します。
-    デフォルト設定。
-1. **永続性を伴うコード実行:** ツール呼び出し用の AI 生成コード
-    サンドボックスにストリーミングされ、分離された環境内で実行されます。
-    環境。実行後、サンドボックスは後続のために *アクティブなまま*になります。
-    同じセッション内でのツール呼び出し、変数、インポートされたモジュール、
-    同じエージェントからの次のツール呼び出しのファイル状態。
-1. **結果の取得:** 標準出力およびキャプチャされたエラー
-    ストリームが収集され、呼び出し側エージェントに返されます。
-1. **サンドボックスのクリーンアップ:** エージェントのタスクまたは会話が終了すると、
-    エージェントはサンドボックスを明示的に削除することも、サンドボックスの TTL 機能に依存することもできます。
-    サンドボックスの作成時に指定したサンドボックス。
+1. **サンドボックスの作成:** コード実行を必要とする複数ステップのタスクでは、Agent Runtime が指定された言語およびマシン構成でサンドボックスを作成し、コード実行環境を分離します。サンドボックスが事前に作成されていない場合、コード実行ツールはデフォルト設定で自動的にサンドボックスを作成します。
+1. **状態を永続化したコード実行:** ツール呼び出しで AI が生成したコードはサンドボックスにストリーミングされ、分離された環境内で実行されます。実行後もサンドボックスは同じセッション内の後続のツール呼び出しのために*アクティブなまま*維持され、変数、インポート済みモジュール、およびファイル状態が同じエージェントからの次のツール呼び出しに引き継がれます。
+1. **結果の取得:** 標準出力とキャプチャされたエラーストリームが収集され、呼び出し元のエージェントに返されます。
+1. **サンドボックスのクリーンアップ:** エージェントのタスクまたは会話が終了すると、エージェントがサンドボックスを明示的に削除するか、作成時に指定したサンドボックスの TTL 機能によって自動的に削除させることができます。
 
 ## 主な利点
 
-- **永続状態:** データ操作または
-    変数コンテキストは、複数のツール呼び出し間で引き継がれる必要があります。
-- **対象を絞った分離:** 堅牢なプロセスレベルの分離を提供します。
-    軽量性を維持しながら、ツール コードの実行が安全であることを保証します。
-- **エージェント ランタイムの統合:** エージェント ランタイムに緊密に統合
-    ツール使用層とオーケストレーション層。
-- **低遅延パフォーマンス:** スピードを重視して設計されており、エージェントは
-    大きなオーバーヘッドを発生させることなく、複雑なツール使用ワークフローを効率的に実行します。
-- **柔軟なコンピューティング構成:** 特定のサンドボックスを作成します。
-    プログラミング言語、処理能力、メモリ構成。
+- **状態の永続化:** データ操作や変数のコンテキストを複数のツール呼び出し間で引き継ぐ必要がある複雑なタスクを解決できます。
+- **的確な分離:** 軽量性を保ちながら堅牢なプロセスレベルの分離を提供し、ツールコードの安全な実行を保証します。
+- **Agent Runtime との統合:** Agent Runtime のツール使用レイヤーおよびオーケストレーションレイヤーと緊密に統合されています。
+- **低レイテンシのパフォーマンス:** 高速動作を重視して設計されており、大きなオーバーヘッドを発生させることなく、複雑なツール使用ワークフローを効率的に実行できます。
+- **柔軟なコンピューティング構成:** プログラミング言語、CPU 性能、メモリ構成を指定してサンドボックスを作成できます。
 
-## システム要件¶
+## システム要件
 
-エージェント ランタイムを正常に使用するには、次の要件を満たす必要があります。
-ADK エージェントを使用したコード実行ツール:
+ADK エージェントで Agent Runtime コード実行ツールを使用するには、次の要件を満たす必要があります。
 
 - Agent Platform API が有効になっている Google Cloud プロジェクト
-- エージェントのサービス アカウントには **roles/aiplatform.user** ロールが必要です。
-    次のことを許可します。
+- エージェントのサービスアカウントに **roles/aiplatform.user** ロールが付与されていること（以下の操作に必要です）:
     - コード実行サンドボックスの作成、取得、一覧表示、および削除
-    - コード実行サンドボックスの実行
+    - コード実行サンドボックスでのコード実行
 
 ## 設定パラメータ {#config-parameters}
 
-エージェント ランタイム コード実行ツールには次のパラメータがあります。設定する必要があります
-次のリソース パラメータのいずれか:
+Agent Runtime コード実行ツールには次のパラメータがあります。以下のリソースパラメータのいずれかを設定する必要があります。
 
-- **`sandbox_resource_name`** : へのサンドボックス リソース パス
-    各ツール呼び出しに使用される既存のサンドボックス環境。期待される
-文字列の形式は次のとおりです。
+- **`sandbox_resource_name`**: 各ツール呼び出しで使用する既存のサンドボックス環境へのリソースパスです。指定する文字列の形式は次のとおりです。
     ```
     projects/{$PROJECT_ID}/locations/{$LOCATION_ID}/reasoningEngines/{$REASONING_ENGINE_ID}/sandboxEnvironments/{$SANDBOX_ENVIRONMENT_ID}
 
     # Example:
     projects/my-vertex-agent-project/locations/us-central1/reasoningEngines/6842888880301111172/sandboxEnvironments/6545148888889161728
     ```
-- **`agent_engine_resource_name`**: ツールが存在するエージェント ランタイム リソース名
-サンドボックス環境を作成します。予期される文字列形式は次のとおりです。
+- **`agent_engine_resource_name`**: ツールがサンドボックス環境を作成する先の Agent Runtime リソース名です。指定する文字列の形式は次のとおりです。
     ```
     projects/{$PROJECT_ID}/locations/{$LOCATION_ID}/reasoningEngines/{$REASONING_ENGINE_ID}
 
@@ -140,23 +91,16 @@ ADK エージェントを使用したコード実行ツール:
     projects/my-vertex-agent-project/locations/us-central1/reasoningEngines/6842888880301111172
     ```
 
-Google Cloud エージェント ランタイムの API を使用してエージェント ランタイム サンドボックスを構成できます
-Google Cloud クライアント接続を使用して個別に環境を構築します。
-次の設定:
+Google Cloud クライアント接続を介して Google Cloud Agent Runtime API を使用し、次の設定を含む Agent Runtime サンドボックス環境を個別に構成することもできます。
 
-- **プログラミング言語** (Python および JavaScript を含む)
-- **コンピューティング環境** (CPU とメモリのサイズを含む)
+- **プログラミング言語**（Python や JavaScript など）
+- **コンピューティング環境**（CPU やメモリサイズなど）
 
-Google Cloud Agent Runtimeへの接続と構成の詳細については、
-サンドボックス環境については、「エージェント ランタイム」を参照してください。
-[Code Execution quickstart](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/quickstart#create_a_sandbox)。
+Google Cloud Agent Runtime への接続およびサンドボックス環境の構成の詳細については、Agent Runtime の [Code Execution quickstart](https://cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/code-execution/quickstart#create_a_sandbox) を参照してください。
 
 ## 高度な例 {#advanced-example}
 
-次のコード例は、Code Executor ツールの使用を実装する方法を示しています。
-ADK エージェント内。この例には、設定する `base_system_instruction` 句が含まれています
-コード実行の操作ガイドライン。この指示条項は、
-オプションですが、このツールから最良の結果を得るために強く推奨されます。
+次のコード例は、ADK エージェントでコード実行ツールを実装する方法を示しています。この例には、コード実行の動作ガイドラインを設定する `base_system_instruction` 関数が含まれています。このシステム指示の指定は任意ですが、このツールから最良の結果を得るために強く推奨されます。
 
 ```python
 from google.adk.agents.llm_agent import Agent
@@ -237,5 +181,4 @@ When plotting trends, you should make sure to sort and order the data by the x-a
 )
 ```
 
-このコード例を使用した ADK エージェントの完全なバージョンについては、
-[agent_engine_code_execution sample](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution)。
+このコード例を使用した ADK エージェントの完全なバージョンについては、[agent_engine_code_execution sample](https://github.com/google/adk-python/tree/main/contributing/samples/agent_engine_code_execution) を参照してください。

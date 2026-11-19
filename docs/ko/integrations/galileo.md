@@ -16,10 +16,10 @@ OpenTelemetry(OTel) 트레이스 수집을 지원합니다.
 [Google ADK 통합](https://docs.galileo.ai/sdk-api/third-party-integrations/opentelemetry-and-openinference/google-adk)
 문서를 참고하세요.
 
-## 전제 조건
+## 사전 요구사항
 
 - [Galileo API 키](https://docs.galileo.ai/references/faqs/find-keys#galileo-api-key)
-- Galileo Project 및 Log stream
+- Galileo 프로젝트 및 로그 스트림(Log stream)
 - [Gemini API 키](https://aistudio.google.com/app/apikey)
 
 ## 종속성 설치
@@ -46,10 +46,10 @@ GALILEO_PROJECT="YOUR_PROJECT"
 GALILEO_LOG_STREAM="YOUR_LOG_STREAM"
 ```
 
-## OpenTelemetry 구성(필수)
+## OpenTelemetry 구성 (필수)
 
-스팬이 Galileo로 전송되도록 하려면 어떤 ADK 구성 요소보다 먼저 OTLP exporter를
-구성하고 전역 tracer provider를 설정해야 합니다.
+스팬이 Galileo로 전송되도록 하려면 어떤 ADK 구성 요소보다 먼저 OTLP 익스포터(exporter)를
+구성하고 전역 트레이서 공급자(tracer provider)를 설정해야 합니다.
 
 ```python
 # my_agent/agent.py

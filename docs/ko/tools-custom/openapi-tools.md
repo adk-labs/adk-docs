@@ -32,8 +32,8 @@ ADK는 [OpenAPI 사양(v3.x)](https://swagger.io/specification/)에서 직접 �
     *   **API 세부 정보**: 필요한 HTTP 메서드, 경로, 서버 기본 URL, 파라미터(경로, 쿼리, 헤더, 쿠키) 및 요청 본문 스키마를 내부적으로 저장합니다.
 
 4.  **`RestApiTool` 기능**: 생성된 각 `RestApiTool`은 다음을 수행합니다.
-    *   **스키마 생성**: 작업의 파라미터와 요청 본문을 기반으로 `FunctionDeclaration`을 동적으로 생성합니다. 이 스키마는 LLM에게 도구를 호출하는 방법(예상되는 인수)을 알려줍니다.
-    *   **실행**: LLM에 의해 호출되면, LLM이 제공한 인수와 OpenAPI 사양의 세부 정보를 사용하여 올바른 HTTP 요청(URL, 헤더, 쿼리 파라미터, 본문)을 구성합니다. 인증이 설정된 경우 이를 처리하고 600초 읽기/쓰기 타임아웃(`httpx_client_factory`로 맞춤설정 가능)과 함께 `httpx` 라이브러리를 사용하여 비동기적으로 API 호출을 실행합니다.
+    *   **스키마 생성**: 작업의 매개변수와 요청 본문을 기반으로 `FunctionDeclaration`을 동적으로 생성합니다. 이 스키마는 LLM에 도구를 호출하는 방법(예상되는 인수)을 알려줍니다.
+    *   **실행**: LLM이 도구를 호출하면, LLM이 제공한 인수와 OpenAPI 사양의 세부 정보를 사용하여 올바른 HTTP 요청(URL, 헤더, 쿼리 매개변수, 본문)을 구성합니다. 인증이 설정된 경우 이를 처리하고 600초 읽기/쓰기 타임아웃(`httpx_client_factory`로 맞춤설정 가능)과 함께 `httpx` 라이브러리를 사용하여 비동기적으로 API 호출을 실행합니다.
 
 5.  **인증**: `OpenAPIToolset`을 초기화할 때 전역 인증(예: API 키 또는 OAuth - 자세한 내용은 [인증](/ko/tools/authentication/) 참조)을 구성할 수 있습니다. 이 인증 구성은 생성된 모든 `RestApiTool` 인스턴스에 자동으로 적용됩니다.
 
@@ -90,7 +90,7 @@ OpenAPI 사양을 에이전트에 통합하려면 다음 단계를 따르세요.
 
 ### `header_provider`를 사용한 커스텀 헤더
 
-모든 API 요청에 커스텀 헤더를 동적으로 추가하려면 `header_provider`에 호출 가능한 객체(callable)를 제공하세요. 다음 예제와 같이 callable은 `ReadonlyContext`를 전달받아 헤더 딕셔너리를 반환합니다.
+모든 API 요청에 커스텀 헤더를 동적으로 추가하려면 `header_provider`에 콜러블(callable)을 전달하세요. 다음 예제와 같이 이 콜러블은 `ReadonlyContext`를 전달받아 헤더 딕셔너리를 반환합니다.
 
 ```python
 from google.adk.agents.readonly_context import ReadonlyContext

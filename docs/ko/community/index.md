@@ -186,7 +186,7 @@ ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 
     <div class="card-content">
       <div class="type">온라인 코스</div>
       <h3>🎓 ADK: From Zero to Hero</h3>
-      <p>실제 챌린지 실습(이론, 직접 풀어야 하는 실습, 그리고 숨겨진 해답)을 중심으로 구성된 40개 이상의 모듈로 이루어진 실습형 ADK 2.0 커리큘럼(Python)입니다. 첫 번째 에이전트 구축부터 완전한 관찰 가능성을 갖춘 엔터프라이즈급 분산 다중 에이전트 시스템까지 다룹니다.</p>
+      <p>실제 챌린지 실습(이론, 직접 풀어야 하는 실습, 그리고 숨겨진 해답)을 중심으로 구성된 40개 이상의 모듈로 이루어진 실습형 ADK 2.0 커리큘럼(Python)입니다. 첫 번째 에이전트 구축부터 완전한 관측 가능성(Observability)을 갖춘 엔터프라이즈급 분산 멀티 에이전트 시스템까지 다룹니다.</p>
     </div>
   </a>
 </div>
@@ -229,9 +229,9 @@ ADK Community Google Group에 참여하여 다음 콜에 대한 업데이트를 
       <img src="../assets/community-adk-gemini-live-api.png" alt="ADK + Gemini Live API">
     </div>
     <div class="card-content">
-      <div class="type">블로그 पोस्ट</div>
+      <div class="type">블로그 포스트</div>
       <h3>📖 Google ADK + Gemini Live API</h3>
-      <p>Live API로 실시간 스트리밍 경험을 구축하여 ADK CLI를 넘어보세요.</p>
+      <p>ADK CLI를 넘어 Live API로 실시간 스트리밍 경험을 구축해 보세요.</p>
     </div>
   </a>
   <a href="https://www.youtube.com/watch?v=LwHPYyw7u6U" class="resource-card">

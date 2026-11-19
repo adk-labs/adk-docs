@@ -41,16 +41,16 @@
 
 === "Python"
 
-      모든 커스텀 에이전트의 심장은 `_run_async_impl` 메서드입니다. 이곳에서 고유한 동작을 정의합니다.
+      모든 커스텀 에이전트의 핵심은 `_run_async_impl` 메서드입니다. 이곳에서 고유한 동작을 정의합니다.
       
       *   **시그니처:** `async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:`
-      *   **비동기 제너레이터:** `async def` 함수여야 하며 `AsyncGenerator`를 반환해야 합니다. 이를 통해 하위 에이전트나 자체 로직에서 생성된 이벤트를 `yield`하여 실행기(runner)에 다시 전달할 수 있습니다.
+      *   **비동기 제너레이터:** `async def` 함수여야 하며 `AsyncGenerator`를 반환해야 합니다. 이를 통해 하위 에이전트나 자체 로직에서 생성된 이벤트를 `yield`하여 `Runner`에 다시 전달할 수 있습니다.
       *   **`ctx` (InvocationContext):** 핵심적인 런타임 정보, 특히 `ctx.session.state`에 대한 접근을 제공합니다. 이는 커스텀 에이전트가 오케스트레이션하는 단계 간에 데이터를 공유하는 주요 방법입니다.
       *   **라이브 오디오 및 비디오 실행:** `_run_async_impl` 메서드는 비라이브 실행(`run_async()`)만 다룹니다. `run_live()`를 지원하려면 동일한 시그니처를 가진 `_run_live_impl`도 함께 오버라이드하세요. 이를 오버라이드하지 않으면 라이브 실행 시 `NotImplementedError`가 발생합니다.
 
 === "Go"
 
-    Go에서는 `agent.Config`의 `Run` 함수를 `agent.New`에 전달하여 커스텀 에이전트를 생성합니다. `agent.Agent` 인터페이스에는 외부로 노출되지 않은(unexported) 메서드가 포함되어 있으므로 직접 구현할 수 없습니다. 실제 로직은 일반적으로 커스텀 에이전트 구조체의 메서드가 되며, 이를 `Run`으로 전달합니다.
+    Go에서는 `agent.Config`의 `Run` 함수를 `agent.New`에 전달하여 커스텀 에이전트를 생성합니다. `agent.Agent` 인터페이스에는 비공개(unexported) 메서드가 포함되어 있으므로 직접 구현할 수 없습니다. 실제 로직은 일반적으로 커스텀 에이전트 구조체의 메서드가 되며, 이를 `Run`으로 전달합니다.
 
     *   **시그니처:** `Run(ctx agent.InvocationContext) iter.Seq2[*session.Event, error]`
     *   **이터레이터:** `Run` 메서드는 이벤트와 오류를 반환하는 이터레이터(`iter.Seq2`)를 반환합니다. 이는 에이전트 실행에서 스트리밍 결과를 처리하는 표준적인 방법입니다.
@@ -59,7 +59,7 @@
 
 === "Java"
 
-    모든 커스텀 에이전트의 심장은 `BaseAgent`로부터 오버라이드하는 `runAsyncImpl` 메서드입니다.
+    모든 커스텀 에이전트의 핵심은 `BaseAgent`로부터 오버라이드하는 `runAsyncImpl` 메서드입니다.
 
     *   **시그니처:** `protected Flowable<Event> runAsyncImpl(InvocationContext ctx)`
     *   **리액티브 스트림 (`Flowable`):** `io.reactivex.rxjava3.core.Flowable<Event>`를 반환해야 합니다. 이 `Flowable`은 커스텀 에이전트의 로직에 의해 생성될 이벤트의 스트림을 나타내며, 종종 여러 하위 에이전트의 `Flowable`을 결합하거나 변환하여 만들어집니다.
@@ -92,7 +92,7 @@
           # ctx.session.state["my_custom_result"] = "calculated_value"
           ```
 
-    3. **제어 흐름 구현:** 표준 Python 구문(`if`/`elif`/`else`, `for`/`while` 루프, `try`/`except`)을 사용하여 하위 에이전트를 포함하는 정교하고, 조건부이거나, 반복적인 워크플로우를 만듭니다.
+    3. **제어 흐름 구현:** 표준 Python 구문(`if`/`elif`/`else`, `for`/`while` 루프, `try`/`except`)을 사용하여 하위 에이전트를 포함하는 조건 분기나 반복 기반의 정교한 워크플로를 구현합니다.
 
 === "Go"
 
@@ -134,7 +134,7 @@
           }
           ```
 
-    3. **제어 흐름 구현:** 표준 Go 구문(`if`/`else`, `for`/`switch` 루프, 고루틴, 채널)을 사용하여 하위 에이전트를 포함하는 정교하고, 조건부이거나, 반복적인 워크플로우를 만듭니다.
+    3. **제어 흐름 구현:** 표준 Go 구문(`if`/`else`, `for`/`switch` 루프, 고루틴, 채널)을 사용하여 하위 에이전트를 포함하는 조건 분기나 반복 기반의 정교한 워크플로를 구현합니다.
 
 === "Java"
 
@@ -186,8 +186,8 @@
 일반적으로 커스텀 에이전트는 다른 에이전트(`LlmAgent`, `LoopAgent` 등)를 오케스트레이션합니다.
 
 *   **초기화:** 보통 이러한 하위 에이전트의 인스턴스를 커스텀 에이전트의 생성자에 전달하고 인스턴스 필드/속성으로 저장합니다(예: `this.story_generator = story_generator_instance` 또는 `self.story_generator = story_generator_instance`). 이렇게 하면 커스텀 에이전트의 핵심 비동기 실행 로직(예: `_run_async_impl` 메서드) 내에서 접근할 수 있습니다. Python에서 `BaseAgent`는 `extra='forbid'`로 구성된 Pydantic 모델이므로, 유지하는 각 하위 에이전트를 `story_generator: LlmAgent`와 같이 타입 어노테이션이 지정된 클래스 수준 필드로 선언하고 `super().__init__(...)`에 전달해야 합니다. `__init__`에서 선언되지 않은 속성을 할당하면 `ValueError`가 발생합니다.
-*   **하위 에이전트 목록:** `super()` 생성자를 사용하여 `BaseAgent`를 초기화할 때, `sub agents` 목록을 전달해야 합니다. 이 목록은 ADK 프레임워크에게 이 커스텀 에이전트의 직계 계층에 속한 에이전트가 무엇인지 알려줍니다. 이는 핵심 실행 로직(`_run_async_impl`)이 `self.xxx_agent`를 통해 에이전트를 직접 호출하더라도 생명주기 관리, 인트로스펙션, 그리고 잠재적인 미래 라우팅 기능과 같은 프레임워크 기능에 중요합니다. 커스텀 로직이 최상위 수준에서 직접 호출하는 에이전트들을 포함시키세요.
-*   **상태:** 언급했듯이, `ctx.session.state`는 하위 에이전트(특히 `output key`를 사용하는 `LlmAgent`)가 결과를 오케스트레이터에게 다시 전달하고 오케스트레이터가 필요한 입력을 전달하는 표준적인 방법입니다.
+*   **하위 에이전트 목록:** `super()` 생성자를 사용하여 `BaseAgent`를 초기화할 때, `sub_agents` 목록을 전달해야 합니다. 이 목록은 ADK 프레임워크에 이 커스텀 에이전트의 직계 계층에 속한 에이전트를 알려줍니다. 핵심 실행 로직(`_run_async_impl`)이 `self.xxx_agent`를 통해 에이전트를 직접 호출하더라도 라이프사이클 관리, 인트로스펙션, 향후 라우팅 기능과 같은 프레임워크 기능에 중요합니다. 커스텀 로직이 최상위 수준에서 직접 호출하는 에이전트들을 포함시키세요.
+*   **상태:** 앞서 설명한 것처럼 `ctx.session.state`는 하위 에이전트(특히 `output_key`를 사용하는 `LlmAgent`)가 결과를 오케스트레이터에 다시 전달하고 오케스트레이터가 필요한 입력을 전달하는 표준 방법입니다.
 
 ## 에이전트 기반 워크플로 기본 요소
 
@@ -703,8 +703,8 @@ ADK는 자체적으로 작업을 수행하지 않고 `sub_agents`의 실행 흐�
 [`LlmAgent`](llm-agents.md)의 이해 능력을 활용하여 계층 구조 내의 다른 적합한 에이전트로 작업을 동적으로 라우팅합니다.
 
 * **메커니즘:** 에이전트의 LLM이 특정 함수 호출을 생성합니다: `transfer_to_agent(agent_name='target_agent_name')`.
-* **처리:** 하위 에이전트가 존재하거나 전환이 금지되지 않은 경우 기본적으로 사용되는 `AutoFlow`가 이 호출을 가로챕니다. `root_agent.find_agent()`를 사용하여 대상 에이전트를 식별하고 `InvocationContext`를 업데이트하여 실행 초점을 전환합니다.
-* **요구사항:** 호출하는 `LlmAgent`는 언제 전환할지에 대한 명확한 `instructions`이 필요하며, 잠재적 대상 에이전트는 LLM이 정보에 입각한 결정을 내릴 수 있도록 고유한 `description`이 필요합니다. 전환 범위(부모, 하위 에이전트, 형제)는 `LlmAgent`에서 구성할 수 있습니다.
+* **처리:** 하위 에이전트가 존재하거나 전환이 금지되지 않은 경우 기본적으로 사용되는 `AutoFlow`가 이 호출을 가로챕니다. `root_agent.find_agent()`를 사용하여 대상 에이전트를 식별하고 `InvocationContext`를 업데이트하여 실행 제어권을 전환합니다.
+* **요구사항:** 호출하는 `LlmAgent`에는 언제 전환할지에 대한 명확한 `instruction`이 필요하며, 잠재적 대상 에이전트에는 LLM이 적절한 판단을 내릴 수 있도록 명확히 구분되는 `description`이 필요합니다. 전환 범위(상위 에이전트, 하위 에이전트, 동료 에이전트)는 `LlmAgent`에서 구성할 수 있습니다.
 * **특성:** LLM 해석에 기반한 동적이고 유연한 라우팅.
 
 === "Python"
@@ -810,8 +810,8 @@ ADK는 자체적으로 작업을 수행하지 않고 `sub_agents`의 실행 흐�
 
 * **메커니즘:** 대상 에이전트 인스턴스를 `AgentTool`로 감싸고 부모 `LlmAgent`의 `tools` 목록에 포함시킵니다. `AgentTool`은 LLM을 위한 해당 함수 선언을 생성합니다.
 * **처리:** 부모 LLM이 `AgentTool`을 대상으로 하는 함수 호출을 생성하면, 프레임워크는 `AgentTool.run_async`를 실행합니다. 이 메서드는 대상 에이전트를 실행하고, 최종 응답을 캡처하고, 모든 상태/아티팩트 변경 사항을 부모의 컨텍스트로 다시 전달하며, 응답을 도구의 결과로 반환합니다.
-* **특성:** 다른 도구와 마찬가지로 동기적(부모의 흐름 내에서), 명시적이고 제어된 호출.
-* **(참고:** `AgentTool`은 명시적으로 가져와서 사용해야 합니다).
+* **특성:** 다른 도구와 마찬가지로 상위 에이전트의 흐름 내에서 동기적으로 수행되는 명시적이고 통제된 호출입니다.
+* (**참고:** `AgentTool`은 명시적으로 임포트하여 사용해야 합니다.)
 
 === "Python"
 
@@ -1023,10 +1023,10 @@ ADK는 자체적으로 작업을 수행하지 않고 `sub_agents`의 실행 흐�
 
 ### 3부: LLM 하위 에이전트 정의 { #part-3-defining-the-llm-sub-agents }
 
-이것들은 특정 작업을 책임지는 표준 `LlmAgent` 정의입니다. 그들의 `output key` 매개변수는 결과를 `session.state`에 배치하여 다른 에이전트나 커스텀 오케스트레이터가 접근할 수 있도록 하는 데 중요합니다.
+각 하위 에이전트는 특정 작업을 담당하는 표준 `LlmAgent`로 정의됩니다. `output_key` 매개변수는 결과를 `session.state`에 저장하여 다른 에이전트나 커스텀 오케스트레이터가 접근할 수 있도록 하는 데 중요합니다.
 
-!!! tip "지시문에 상태 직접 주입"
-    `story_generator`의 지시문을 주목하세요. `{var}` 구문은 플레이스홀더입니다. 지시문이 LLM으로 전송되기 전에, ADK 프레임워크는 (예: `{topic}`)을 `session.state['topic']`의 값으로 자동으로 대체합니다. 이것은 지시문에서 템플릿을 사용하여 에이전트에 컨텍스트를 제공하는 권장 방법입니다. 자세한 내용은 [상태 문서](../sessions/state.md#accessing-session-state-in-agent-instructions)를 참고하세요.
+!!! tip "지침에 상태 직접 주입"
+    `story_generator`의 지침을 살펴보세요. `{var}` 구문은 플레이스홀더입니다. 지침이 LLM으로 전송되기 전에, ADK 프레임워크는 (예: `{topic}`) 플레이스홀더를 `session.state['topic']`의 값으로 자동 치환합니다. 이는 지침에서 템플릿을 사용하여 에이전트에 컨텍스트를 전달하는 권장 방법입니다. 자세한 내용은 [상태 문서](../sessions/state.md#accessing-session-state-in-agent-instructions)를 참고하세요.
 
 === "Python"
 

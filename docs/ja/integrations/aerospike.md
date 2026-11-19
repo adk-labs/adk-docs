@@ -1,6 +1,6 @@
 ---
 catalog_title: Aerospike
-catalog_description: 単一の Aerospike クラスタに ADK エージェントのセッション, メモリ, アーティファクトを格納します
+catalog_description: 単一の Aerospike クラスタに ADK エージェントのセッション、メモリ、アーティファクトを格納します
 catalog_icon: /integrations/assets/aerospike.png
 catalog_tags: ["data"]
 ---
@@ -18,7 +18,7 @@ catalog_tags: ["data"]
 | アプローチ | 説明 |
 | -------- | ----------- |
 | **セッションサービス** | `AerospikeSessionService`: スコープ付き状態(`app:`, `user:`, session)、チャンク化ストレージ付きイベント履歴、アトミックな `append_event`。 |
-| **メモリサービス** | `AerospikeMemoryService`: トークンごとのポスティングリスト(posting-list)キーによる語彙적単語重複検索。 `InMemoryMemoryService` と同じセマンティクス。 |
+| **メモリサービス** | `AerospikeMemoryService`: トークンごとのポスティングリスト(posting-list)キーによる語彙ベースの単語重複検索。`InMemoryMemoryService` と同じセマンティクス。 |
 | **アーティファクトサービス** | `AerospikeArtifactService`: セッションまたは `user:` ネームスペースごとのバージョン管理された Blob の保存。 |
 | **フルスタック** | 3つすべてのサービスを1つの `Runner` に組み込むか、対応する `aerospike://` URI を `adk web` / `adk run` に渡します。 |
 
@@ -199,7 +199,7 @@ pip install google-adk adk-aerospike
     asyncio.run(main())
     ```
 
-=== "アー티팩트 서비스"
+=== "アーティファクトサービス"
 
     セッションごとにバージョン管理されたアーティファクトを保存します。セッション間での可視性を高めるために、`user:` ファイル名プレフィックスを使用してください。
 
@@ -323,7 +323,7 @@ aerospike://user:pass@node1:3000,node2:3000/prod?set_prefix=prod_&tls=true
 | `app:foo` | `adk_app_state` | アプリの全ユーザー |
 | `user:foo` | `adk_user_state` | セッションを超えた現在のユーザー |
 | `temp:foo` | 永続化されない | 現在の呼び出し（invocation）のみ |
-| _(プレフィックスなし)_ | 세션 레코드 | 現在のセッションのみ |
+| _(プレフィックスなし)_ | セッションレコード | 現在のセッションのみ |
 
 `get_session` は、ADK 互換性のためにプレフィックスが復元された1つの dict にすべてのスコープをマージします。
 
@@ -341,7 +341,7 @@ aerospike://user:pass@node1:3000,node2:3000/prod?set_prefix=prod_&tls=true
 
 | 関数 | 説明 |
 | -------- | ----------- |
-| `adk_aerospike.register()` | CLI および `adk web` 用に `aerospike://` を ADK のサービスレジ스트リに登録します。 |
+| `adk_aerospike.register()` | CLI および `adk web` 用に `aerospike://` を ADK のサービスレジストリに登録します。 |
 
 ## ストレージレイアウト
 
