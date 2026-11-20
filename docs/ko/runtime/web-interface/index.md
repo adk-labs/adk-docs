@@ -176,7 +176,7 @@ ADK 웹 인터페이스의 주요 기능:
 
     !!! note "Go 플래그는 Python/TypeScript와 다릅니다"
 
-        Go 웹 런처는 Python이나 TypeScript의 `adk web`과 동일한 플래그를 사용하지 않습니다. `--host`, `--session_service_uri`, `--artifact_service_uri`, `--reload`와 같은 옵션은 제공되지 않습니다. 세션 및 아티팩트 서비스는 명령줄 플래그가 아닌 `launcher.Config`를 구성할 때 Go 코드에서 설정됩니다.
+        Go 웹 런처는 Python이나 TypeScript의 `adk web`과 동일한 플래그를 사용하지 않습니다. `--session_service_uri`, `--artifact_service_uri`, `--reload`와 같은 옵션은 제공되지 않습니다. 세션 및 아티팩트 서비스는 명령줄 플래그가 아닌 `launcher.Config`를 구성할 때 Go 코드에서 설정됩니다.
 
     플래그는 `web`, `api`, `webui` 하위 명령으로 나뉩니다. 관련 하위 명령 키워드 뒤에 플래그를 전달하세요.
 
@@ -184,21 +184,27 @@ ADK 웹 인터페이스의 주요 기능:
 
     | 플래그 | 설명 | 기본값 |
     |------|-------------|---------|
+    | `-host` | 호스트 바인딩 주소. 컨테이너 내부 등 모든 네트워크 인터페이스에서 수신 대기하려면 `0.0.0.0`을 사용하세요(ADK Go v2.5.0 이상. 이전 릴리스는 기본적으로 모든 인터페이스에서 수신 대기). | `127.0.0.1` |
     | `-port` | HTTP 서버 포트 | `8080` |
     | `-write-timeout` | HTTP 응답 쓰기 타임아웃 | `15s` |
     | `-read-timeout` | HTTP 요청 읽기 타임아웃 | `15s` |
     | `-idle-timeout` | Keep-alive 유휴 연결 타임아웃 | `60s` |
     | `-shutdown-timeout` | 정상 종료 대기 시간 | `15s` |
     | `-otel_to_cloud` | OpenTelemetry 데이터를 GCP로 내보내기 | `false` |
+    | `-h2c` | 사전 지식(prior knowledge) 기반 평문 HTTP/2(h2c) 제공. 신뢰할 수 없는 네트워크에는 노출하지 마세요(ADK Go v2.2.0 이상). | `false` |
+    | `-max_request_body_size` | 최대 요청 본문 크기(바이트 단위, ADK Go v2.5.0 이상). | 10 MiB |
 
     **`api` 하위 명령 플래그** (`api` 뒤에 전달):
 
     | 플래그 | 설명 | 기본값 |
     |------|-------------|---------|
-    | `-webui_address` | CORS용으로 허용된 WebUI 출처 | `localhost:8080` |
+    | `-webui_address` | 브라우저에서 접근하는 ADK 웹 인터페이스의 CORS 허용 출처(origin). ADK Go v2.5.0 이상에서는 REST API가 그 외의 교차 출처(cross-origin) 브라우저 요청을 HTTP 403으로 거부합니다. `*` 값을 지정하면 모든 출처를 허용하고 이 검사 및 DNS 리바인딩 검사를 비활성화하므로, 외부에 공개된 서비스에서는 사용하지 마세요. | `localhost:8080` |
     | `-path_prefix` | REST API용 URL 경로 접두사 | `/api` |
     | `-sse-write-timeout` | SSE(스트리밍) 응답 타임아웃 | `120s` |
-    | `-trace_capacity` | 유지할 최대 인메모리 추적 수 | `10000` |
+    | `-trace_capacity` | 유지할 최대 인메모리 트레이스 수 | `10000` |
+    | `-include_debug_api` | 웹 인터페이스의 Traces 및 에이전트 구조 패널에 필요한 디버그 트레이스·에이전트 그래프 엔드포인트 제공. 프로덕션 환경에서는 활성화하지 마세요(ADK Go v2.3.0 이상). | `false` |
+
+    ADK Go v2.5.0 이상에서는 `-host`와 `-webui_address` 설정이 REST API의 DNS 리바인딩 공격을 완화하는 데에도 사용됩니다. `-host`가 루프백(loopback) 주소인 경우, REST API는 `Host` 헤더가 루프백 주소도 아니고 `-webui_address`의 호스트도 아닌 요청을 HTTP 403으로 거부합니다.
 
     **`webui` 하위 명령 플래그** (`webui` 뒤에 전달):
 

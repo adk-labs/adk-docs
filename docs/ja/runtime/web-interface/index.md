@@ -175,7 +175,7 @@ ADK Web インターフェースの主な機能:
 
     !!! note "Go フラグは Python/TypeScript と異なります"
 
-        Go Web ランチャーは、Python または TypeScript の `adk web` と同じフラグを使用しません。`--host`、`--session_service_uri`、`--artifact_service_uri`、`--reload` などのオプションは使用できません。セッションおよびアーティファクト サービスは、コマンドライン フラグではなく、`launcher.Config` を構築するときに Go コードで構成されます。
+        Go Web ランチャーは、Python または TypeScript の `adk web` と同じフラグを使用しません。`--session_service_uri`、`--artifact_service_uri`、`--reload` などのオプションは使用できません。セッションおよびアーティファクト サービスは、コマンドライン フラグではなく、`launcher.Config` を構築するときに Go コードで構成されます。
 
     フラグは `web`、`api`、`webui` サブコマンドに分割されています。関連するサブコマンド キーワードの後にフラグを渡します。
 
@@ -183,21 +183,27 @@ ADK Web インターフェースの主な機能:
 
     | フラグ | 説明 | デフォルト |
     |------|-------------|---------|
+    | `-host` | ホストのバインドアドレス。コンテナ内などすべてのネットワークインターフェースでリッスンする場合は `0.0.0.0` を使用します（ADK Go v2.5.0 以降。それ以前のリリースではデフォルトですべてのインターフェースでリッスンします）。 | `127.0.0.1` |
     | `-port` | HTTP サーバーのポート | `8080` |
     | `-write-timeout` | HTTP 応答書き込みタイムアウト | `15s` |
     | `-read-timeout` | HTTP リクエスト読み取りタイムアウト | `15s` |
     | `-idle-timeout` | キープアライブ アイドル接続タイムアウト | `60s` |
     | `-shutdown-timeout` | グレースフル シャットダウン待機時間 | `15s` |
     | `-otel_to_cloud` | OpenTelemetry データを GCP にエクスポート | `false` |
+    | `-h2c` | 事前知識（prior knowledge）による平文 HTTP/2（h2c）を提供します。信頼できないネットワークには公開しないでください（ADK Go v2.2.0 以降）。 | `false` |
+    | `-max_request_body_size` | 最大リクエストボディサイズ（バイト単位、ADK Go v2.5.0 以降）。 | 10 MiB |
 
     **`api` サブコマンド フラグ** (`api` の後に渡す):
 
     | フラグ | 説明 | デフォルト |
     |------|-------------|---------|
-    | `-webui_address` | CORS 用に許可された WebUI オリジン | `localhost:8080` |
+    | `-webui_address` | ブラウザーから見た ADK Web インターフェースの CORS 許可オリジン。ADK Go v2.5.0 以降では、REST API はその他のクロスオリジンのブラウザーリクエストも HTTP 403 で拒否します。値 `*` を指定するとすべてのオリジンが許可され、このチェックと DNS リバインディングチェックの両方が無効になるため、公開サービスでは使用しないでください。 | `localhost:8080` |
     | `-path_prefix` | REST API の URL パス プレフィックス | `/api` |
     | `-sse-write-timeout` | SSE (ストリーミング) 応答のタイムアウト | `120s` |
     | `-trace_capacity` | 保持する最大インメモリ トレース数 | `10000` |
+    | `-include_debug_api` | Web インターフェースの Traces パネルおよびエージェント構造パネルに必要なデバッグトレース・エージェントグラフのエンドポイントを提供します。本番環境では有効にしないでください（ADK Go v2.3.0 以降）。 | `false` |
+
+    ADK Go v2.5.0 以降では、`-host` と `-webui_address` の値は REST API の DNS リバインディング対策にも使用されます。`-host` がループバックアドレスの場合、REST API は `Host` ヘッダーがループバックアドレスでも `-webui_address` のホストでもないリクエストを HTTP 403 で拒否します。
 
     **`webui` サブコマンド フラグ** (`webui` の後に渡す):
 

@@ -135,13 +135,18 @@ ADK では OpenAI モデルを使用できます。接続方法は言語によ�
 - `OutputSchema` (JSON スキーマ) を介した構造化出力
 - 推論トークンのカウントを含む推論モデル（例: o-シリーズ）
 - トークン Logprob
+- `ToolConfig.FunctionCallingConfig` によるツール選択制御：`AUTO`、`NONE`、`ANY` モード
+- `ServiceTier` による処理ティア（processing tier）の設定（ADK Go v2.4.0 以降）
+- `HTTPOptions.Timeout` によるリクエストタイムアウトの設定（ADK Go v2.4.0 以降）
 
 ## 制限事項
 
-- **テキストのみ** — マルチモーダル入力（画像、音声、ファイル）はサポートされていません。
+* **音声および動画入力は非対応** — ADK Go はこれらのメディアタイプに対してエラーを返します。
 - **関数ツールのみ** — 組み込みツール（Google 検索、コード実行など）はサポートされていません。
 - **構造化出力は OpenAI 厳格モード（Strict mode）を使用** — `OutputSchema` に宣言されたすべてのフィールドは必須（required）として扱われます。
-- 一部の `GenerateContentConfig` オプションは警告なしで無視されるのではなくエラーを返します: `TopK`、複数候補（multiple candidates）、リクエスト ラベル、およびセーフティ設定。また、Responses API は停止シーケンス（stop sequences）、頻度/存在ペナルティ、およびシード（seed）も拒否しますが、これらは [Chat Completions API](#chat-completions-api) でサポートされています。
+- **関数ツールは厳格モード（Strict mode）を使用しない** — ADK Go v2.5.0 以降では、OpenAI の厳格なスキーマ検証をオフにして関数ツールを送信します。任意パラメータは任意のまま維持されますが、モデルのツール呼び出し引数が宣言されたスキーマと一致しない場合があるため、処理を実行する前にツール引数を検証してください。
+- **推論（reasoning）はターンをまたいで引き継がれない** — ADK Go v2.5.0 以降では、どちらの API でも以前のターンの推論内容をモデルに再送信しないため、推論はその推論を生成したターンにのみ影響します。
+- 一部の `GenerateContentConfig` オプションは警告なしで無視されるのではなくエラーを返します: `TopK`、複数候補（multiple candidates）、リクエスト ラベル、およびセーフティ設定。また、Responses API は停止シーケンス（stop sequences）、頻度/存在ペナルティ、およびシード（seed）も拒否しますが、これらは [Chat Completions API](#chat-completions-api) でサポートされています。ADK Go v2.4.0 以降では、OpenAI に同等の機能がないその他の設定についてもエラーを返します。各設定が送信・拒否・無視のいずれとして扱われるかについては、[Go API リファレンス](https://pkg.go.dev/google.golang.org/adk/v2/model/openaimodel)を参照してください。
 
 ## 構成オプション
 

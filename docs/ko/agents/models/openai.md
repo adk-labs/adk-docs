@@ -135,13 +135,18 @@ ADK에서 OpenAI 모델을 사용할 수 있습니다. 연결하는 방법은 �
 - `OutputSchema`(JSON 스키마)를 통한 정형 출력
 - 추론 토큰 계산을 포함한 추론 모델 (예: o-시리즈)
 - 토큰 Logprob
+- `ToolConfig.FunctionCallingConfig`를 통한 도구 선택 제어: `AUTO`, `NONE`, `ANY` 모드
+- `ServiceTier`를 통한 처리 등급(processing tier) 설정 (ADK Go v2.4.0 이상)
+- `HTTPOptions.Timeout`을 통한 요청 타임아웃 설정 (ADK Go v2.4.0 이상)
 
 ## 제한 사항
 
-- **텍스트 전용** — 멀티모달 입력(이미지, 오디오, 파일)은 지원되지 않습니다.
+* **오디오 및 비디오 입력 미지원** — ADK Go는 해당 미디어 타입에 대해 오류를 반환합니다.
 - **함수 도구 전용** — 기본 내장 도구(Google Search, 코드 실행 등)는 지원되지 않습니다.
 - **정형 출력은 OpenAI 엄격 모드(Strict mode) 사용** — `OutputSchema`에 선언된 모든 필드는 필수(required)로 취급됩니다.
-- 일부 `GenerateContentConfig` 옵션은 별도 경고 없이 무시되지 않고 오류를 반환합니다: `TopK`, 다중 후보(multiple candidates), 요청 라벨 및 안전 설정(safety settings). 또한 Responses API는 중단 시퀀스(stop sequences), 빈도/존재 페널티 및 시드(seed)도 거부하지만, 이는 [Chat Completions API](#chat-completions-api)에서 지원됩니다.
+- **함수 도구는 엄격 모드(Strict mode) 미사용** — ADK Go v2.5.0 이상에서는 OpenAI 엄격 스키마 검증을 비활성화한 상태로 함수 도구를 전송합니다. 선택 매개변수는 선택 상태로 유지되지만, 모델이 생성한 도구 호출 인자가 선언된 스키마와 일치하지 않을 수 있으므로 실행 전에 도구 인자를 반드시 검증하세요.
+- **턴 간 추론(reasoning) 미전달** — ADK Go v2.5.0 이상에서는 두 API 모두 이전 턴의 추론 내용을 모델에 다시 전송하지 않으므로, 추론 결과는 해당 턴에만 반영됩니다.
+- 일부 `GenerateContentConfig` 옵션은 별도 경고 없이 무시되지 않고 오류를 반환합니다: `TopK`, 다중 후보(multiple candidates), 요청 라벨 및 안전 설정(safety settings). 또한 Responses API는 중단 시퀀스(stop sequences), 빈도/존재 페널티 및 시드(seed)도 거부하지만, 이는 [Chat Completions API](#chat-completions-api)에서 지원됩니다. ADK Go v2.4.0 이상에서는 OpenAI에 대응하는 옵션이 없는 다른 설정들도 오류를 반환합니다. 어떤 설정이 전송, 거부 또는 무시되는지는 [Go API 레퍼런스](https://pkg.go.dev/google.golang.org/adk/v2/model/openaimodel)를 참고하세요.
 
 ## 구성 옵션
 

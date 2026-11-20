@@ -104,121 +104,257 @@ gcloud container clusters get-credentials adk-cluster \
 
 [LLMエージェント](../agents/llm-agents.md)ページで定義されている`capital_agent`の例を参照します。
 
-続行するには、プロジェクトファイルを次のように構成してください。
+=== "Python"
 
-```txt
-your-project-directory/
-├── capital_agent/
-│   ├── __init__.py
-│   └── agent.py       # エージェントコード（下記の「Capital Agentの例」を参照）
-├── main.py            # FastAPIアプリケーションのエントリーポイント
-├── requirements.txt   # Pythonの依存関係
-└── Dockerfile         # コンテナのビルド手順
-```
+    プロジェクトファイルを次のように構成してください。
+
+    ```txt
+    your-project-directory/
+    ├── capital_agent/
+    │   ├── __init__.py
+    │   └── agent.py       # エージェントコード
+    ├── main.py            # FastAPIアプリケーションのエントリーポイント
+    ├── requirements.txt   # Pythonの依存関係
+    └── Dockerfile         # コンテナのビルド手順
+    ```
+
+=== "Go"
+
+    プロジェクトファイルを次のように構成してください。
+
+    ```txt
+    your-project-directory/
+    ├── main.go       # エージェントコードとランチャーのエントリーポイント
+    ├── go.mod        # Goモジュール定義
+    ├── go.sum        # Goモジュールチェックサム
+    └── Dockerfile    # コンテナのビルド手順
+    ```
 
 ### コードファイル
 
-`your-project-directory/`のルートに以下のファイル（`main.py`, `requirements.txt`, `Dockerfile`, `capital_agent/agent.py`, `capital_agent/__init__.py`）を作成します。
+=== "Python"
 
-1.  これは`capital_agent`ディレクトリ内にあるCapital Agentの例です。
+    `your-project-directory/`のルートに以下のファイル（`main.py`, `requirements.txt`, `Dockerfile`, `capital_agent/agent.py`, `capital_agent/__init__.py`）を作成します。
 
-    ```python title="capital_agent/agent.py"
-    from google.adk.agents import LlmAgent 
+    1. `capital_agent`ディレクトリ内にあるCapital Agentの例です。
 
-    # ツール関数を定義
-    def get_capital_city(country: str) -> str:
-      """指定された国の首都を取得します。"""
-      # 実際のロジックに置き換えてください（例：API呼び出し、データベース検索）
-      capitals = {"france": "Paris", "japan": "Tokyo", "canada": "Ottawa"}
-      return capitals.get(country.lower(), f"すみません、{country}の首都はわかりません。")
+        ```python title="capital_agent/agent.py"
+        from google.adk.agents import LlmAgent
 
-    # エージェントにツールを追加
-    capital_agent = LlmAgent(
-        model="gemini-flash-latest",
-        name="capital_agent", # エージェントの名前
-        description="指定された国の首都に関するユーザーの質問に答えます。",
-        instruction="""あなたは国の首都を提供するエージェントです...（以前の指示テキスト）""",
-        tools=[get_capital_city] # 関数を直接提供
-    )
+        # ツール関数を定義
+        def get_capital_city(country: str) -> str:
+          """指定された国の首都を取得します。"""
+          # 実際のロジックに置き換えてください（例：API呼び出し、データベース検索）
+          capitals = {"france": "Paris", "japan": "Tokyo", "canada": "Ottawa"}
+          return capitals.get(country.lower(), f"Sorry, I don't know the capital of {country}.")
 
-    # ADKがroot_agentインスタンスを検出します
-    root_agent = capital_agent
-    ```
-    
-    ディレクトリをPythonパッケージとしてマークします。
+        # エージェントにツールを追加
+        capital_agent = LlmAgent(
+            model="gemini-flash-latest",
+            name="capital_agent", # エージェントの名前
+            description="Answers user questions about the capital city of a given country.",
+            instruction="""You are an agent that provides the capital city of a country... (previous instruction text)""",
+            tools=[get_capital_city] # 関数を直接提供
+        )
 
-    ```python title="capital_agent/__init__.py"
+        # ADKがroot_agentインスタンスを検出します
+        root_agent = capital_agent
+        ```
 
-    from . import agent
-    ```
+        ディレクトリをPythonパッケージとしてマークします。
 
-2.  このファイルは、ADKの`get_fast_api_app()`を使用してFastAPIアプリケーションを設定します。
+        ```python title="capital_agent/__init__.py"
 
-    ```python title="main.py"
-    import os
+        from . import agent
+        ```
 
-    import uvicorn
-    from fastapi import FastAPI
-    from google.adk.cli.fast_api import get_fast_api_app
+    2. このファイルは、ADKの`get_fast_api_app()`を使用してFastAPIアプリケーションを設定します。
 
-    # main.pyが配置されているディレクトリを取得
-    AGENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    # セッションサービスURIの例（例：SQLite）
-    SESSION_SERVICE_URI = "sqlite+aiosqlite:///./sessions.db"  # 例: クイックスタート用のローカルSQLite
-    # CORSで許可されるオリジンの例
-    ALLOWED_ORIGINS = ["http://localhost", "http://localhost:8080", "*"]
-    # Webインターフェースを提供する場合はweb=True、そうでない場合はFalseに設定
-    SERVE_WEB_INTERFACE = True
+        ```python title="main.py"
+        import os
 
-    # FastAPIアプリインスタンスを取得する関数を呼び出す
-    # エージェントディレクトリ名（'capital_agent'）がエージェントフォルダと一致することを確認
-    app: FastAPI = get_fast_api_app(
-        agents_dir=AGENT_DIR,
-        session_service_uri=SESSION_SERVICE_URI,
-        allow_origins=ALLOWED_ORIGINS,
-        web=SERVE_WEB_INTERFACE,
-    )
+        import uvicorn
+        from fastapi import FastAPI
+        from google.adk.cli.fast_api import get_fast_api_app
 
-    # 必要に応じて、以下にFastAPIのルートや設定を追加できます
-    # 例：
-    # @app.get("/hello")
-    # async def read_root():
-    #     return {"Hello": "World"}
+        # main.pyが配置されているディレクトリを取得
+        AGENT_DIR = os.path.dirname(os.path.abspath(__file__))
+        # セッションサービスURIの例（例：SQLite）
+        # 注: DatabaseSessionService は非同期ドライバーを必要とするため、'sqlite' ではなく 'sqlite+aiosqlite' を使用してください
+        SESSION_SERVICE_URI = "sqlite+aiosqlite:///./sessions.db"
+        # CORSで許可されるオリジンの例
+        ALLOWED_ORIGINS = ["http://localhost", "http://localhost:8080", "*"]
+        # Webインターフェースを提供する場合はweb=True、そうでない場合はFalseに設定
+        SERVE_WEB_INTERFACE = True
 
-    if __name__ == "__main__":
-        # Cloud Runから提供されるPORT環境変数を使用し、デフォルトは8080
-        uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
-    ```
+        # FastAPIアプリインスタンスを取得する関数を呼び出す
+        # エージェントディレクトリ名（'capital_agent'）がエージェントフォルダと一致することを確認
+        app: FastAPI = get_fast_api_app(
+            agents_dir=AGENT_DIR,
+            session_service_uri=SESSION_SERVICE_URI,
+            allow_origins=ALLOWED_ORIGINS,
+            web=SERVE_WEB_INTERFACE,
+        )
 
-    *注：`agent_dir`を`main.py`があるディレクトリに指定し、Cloud Runとの互換性のために`os.environ.get("PORT", 8080)`を使用します。*
+        if __name__ == "__main__":
+            # Cloud Runから提供されるPORT環境変数を使用し、デフォルトは8080
+            uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+        ```
 
-3.  必要なPythonパッケージをリストアップします。
+        *注：`agent_dir`を`main.py`があるディレクトリに指定し、Cloud Runとの互換性のために`os.environ.get("PORT", 8080)`を使用します。*
 
-    ```txt title="requirements.txt"
-    google-adk
-    # エージェントが必要とするその他の依存関係を追加
-    ```
+    3. 必要なPythonパッケージをリストアップします。
 
-4.  コンテナイメージを定義します。
+        ```txt title="requirements.txt"
+        google-adk
+        # エージェントが必要とするその他の依存関係を追加
+        ```
 
-    ```dockerfile title="Dockerfile"
-    FROM python:3.13-slim
-    WORKDIR /app
+    4. コンテナイメージを定義します。
 
-    COPY requirements.txt .
-    RUN pip install --no-cache-dir -r requirements.txt
+        ```dockerfile title="Dockerfile"
+        FROM python:3.13-slim
+        WORKDIR /app
 
-    RUN adduser --disabled-password --gecos "" myuser && \
-        chown -R myuser:myuser /app
+        COPY requirements.txt .
+        RUN pip install --no-cache-dir -r requirements.txt
 
-    COPY . .
+        RUN adduser --disabled-password --gecos "" myuser && \
+            chown -R myuser:myuser /app
 
-    USER myuser
+        COPY . .
 
-    ENV PATH="/home/myuser/.local/bin:$PATH"
+        USER myuser
 
-    CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]
-    ```
+        ENV PATH="/home/myuser/.local/bin:$PATH"
+
+        CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]
+        ```
+
+=== "Go"
+
+    `your-project-directory/`のルートに以下のファイルを作成します。
+
+    1. エージェントを定義し、ADK ランチャーを組み込みます。ランチャーは REST API サーバーと Web インターフェースを起動する `web`、`api`、`webui` サブコマンドを処理します。
+
+        ```go title="main.go"
+        package main
+
+        import (
+            "context"
+            "fmt"
+            "log"
+            "os"
+            "strings"
+
+            "google.golang.org/adk/v2/agent"
+            "google.golang.org/adk/v2/agent/llmagent"
+            "google.golang.org/adk/v2/cmd/launcher"
+            "google.golang.org/adk/v2/cmd/launcher/full"
+            "google.golang.org/adk/v2/model/gemini"
+            "google.golang.org/adk/v2/tool"
+            "google.golang.org/adk/v2/tool/functiontool"
+            "google.golang.org/genai"
+        )
+
+        type getCapitalCityArgs struct {
+            Country string `json:"country" jsonschema:"The country to look up."`
+        }
+
+        func getCapitalCity(_ agent.Context, args getCapitalCityArgs) (string, error) {
+            capitals := map[string]string{
+                "france":  "Paris",
+                "japan":   "Tokyo",
+                "canada":  "Ottawa",
+            }
+            capital, ok := capitals[strings.ToLower(args.Country)]
+            if !ok {
+                return "", fmt.Errorf("capital not found for %s", args.Country)
+            }
+            return capital, nil
+        }
+
+        func main() {
+            ctx := context.Background()
+
+            model, err := gemini.NewModel(ctx, "gemini-flash-latest", &genai.ClientConfig{
+                APIKey: os.Getenv("GOOGLE_API_KEY"),
+            })
+            if err != nil {
+                log.Fatalf("Failed to create model: %v", err)
+            }
+
+            capitalTool, err := functiontool.New(
+                functiontool.Config{
+                    Name:        "get_capital_city",
+                    Description: "Retrieves the capital city for a given country.",
+                },
+                getCapitalCity,
+            )
+            if err != nil {
+                log.Fatalf("Failed to create tool: %v", err)
+            }
+
+            capitalAgent, err := llmagent.New(llmagent.Config{
+                Name:        "capital_agent",
+                Model:       model,
+                Description: "Answers questions about capital cities.",
+                Instruction: "You are an agent that provides the capital city of a country.",
+                Tools:       []tool.Tool{capitalTool},
+            })
+            if err != nil {
+                log.Fatalf("Failed to create agent: %v", err)
+            }
+
+            config := &launcher.Config{
+                AgentLoader: agent.NewSingleLoader(capitalAgent),
+            }
+
+            l := full.NewLauncher()
+            if err = l.Execute(ctx, config, os.Args[1:]); err != nil {
+                log.Fatalf("Run failed: %v\n\n%s", err, l.CommandLineSyntax())
+            }
+        }
+        ```
+
+        AI Studio の代わりに Agent Platform を使用する場合は、`genai.ClientConfig` で Agent Platform バックエンドを設定します。
+
+        ```go
+        model, err := gemini.NewModel(ctx, "gemini-flash-latest", &genai.ClientConfig{
+            Backend:  genai.BackendVertexAI,
+            Project:  os.Getenv("GOOGLE_CLOUD_PROJECT"),
+            Location: os.Getenv("GOOGLE_CLOUD_LOCATION"),
+        })
+        ```
+
+    2. コンテナイメージを定義します。Go は自己完結型の静的バイナリにコンパイルされるため、ランタイムの依存関係やパッケージマネージャーを含まない最小限の distroless ベースイメージを使用できます。
+
+        ```dockerfile title="Dockerfile"
+        # Stage 1: Build the Go binary
+        FROM golang:1.26 AS builder
+        WORKDIR /app
+
+        COPY go.mod go.sum ./
+        RUN go mod download
+
+        COPY . .
+        # Compile a statically linked Linux/amd64 binary
+        RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+            go build -ldflags="-s -w" -o capital_agent .
+
+        # Stage 2: Copy the binary into a minimal runtime image
+        FROM gcr.io/distroless/static-debian12
+        COPY --from=builder /app/capital_agent /app/capital_agent
+        EXPOSE 8080
+
+        # Start the API server and web UI
+        CMD ["/app/capital_agent", "web", "-host", "0.0.0.0", "-port", "8080", "api", "webui"]
+        ```
+
+!!! note
+    `-host 0.0.0.0` フラグを指定すると、Kubernetes Service から到達できるようサーバーがすべてのネットワークインターフェースでリッスンします。ADK Go v2.5.0 以降では、Web ランチャーはデフォルトで `127.0.0.1` のみでリッスンします。ADK Go v2.0.0〜v2.4.0 ではデフォルトですべてのインターフェースでリッスンし、`-host` フラグを受け付けないため、これらのバージョンを使用する場合はこのフラグを削除してください。
+
+    **セキュリティ:** `webui` サブランチャーによって提供される ADK Web インターフェースは開発用であり、公開本番エンドポイントでの使用は意図されていません。
 
 ### コンテナイメージのビルド
 
@@ -231,14 +367,40 @@ gcloud artifacts repositories create adk-repo \
     --description="ADK repository"
 ```
 
-`gcloud`コマンドラインツールを使用してコンテナイメージをビルドします。この例では、イメージをビルドし、`adk-repo/adk-agent:latest`としてタグ付けします。
+コンテナイメージをビルドして Artifact Registry にプッシュします。
 
-```bash
-gcloud builds submit \
-    --tag $GOOGLE_CLOUD_LOCATION-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/adk-repo/adk-agent:latest \
-    --project=$GOOGLE_CLOUD_PROJECT \
-    .
-```
+=== "Python"
+
+    Cloud Build を使用してソースディレクトリから直接イメージをビルドしてプッシュします。
+
+    ```bash
+    gcloud builds submit \
+        --tag $GOOGLE_CLOUD_LOCATION-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/adk-repo/adk-agent:latest \
+        --project=$GOOGLE_CLOUD_PROJECT \
+        .
+    ```
+
+=== "Go"
+
+    マルチステージ `Dockerfile` のビルダーステージ内でコンパイルが行われるため、ローカルに Go ツールチェーンがなくても Cloud Build を使用できます。
+
+    ```bash
+    gcloud builds submit \
+        --tag $GOOGLE_CLOUD_LOCATION-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/adk-repo/adk-agent:latest \
+        --project=$GOOGLE_CLOUD_PROJECT \
+        .
+    ```
+
+    すでに Go がインストールされている場合は、ローカルでバイナリをクロスコンパイルし、マルチステージ `Dockerfile` を使わずにより小さなイメージをビルドすることもできます。
+
+    ```bash
+    # linux/amd64 向けにクロスコンパイル
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o capital_agent .
+
+    # イメージのビルドとプッシュ
+    docker build -t $GOOGLE_CLOUD_LOCATION-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/adk-repo/adk-agent:latest .
+    docker push $GOOGLE_CLOUD_LOCATION-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/adk-repo/adk-agent:latest
+    ```
 
 イメージがビルドされ、Artifact Registryにプッシュされたことを確認します。
 
@@ -514,6 +676,17 @@ adk-default-service-name   LoadBalancer   34.118.228.70   34.63.153.253   80:325
     export APP_URL=$(kubectl get service adk-agent -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     ```
 
+    !!! note "Go: API パスプレフィックス"
+        Go ADK サーバーはデフォルトですべての REST エンドポイントを `/api` パスプレフィックス配下で提供します。Go デプロイメントをテストする場合は、以下の例の各パスの先頭に `/api` を付けてください。たとえば次のようになります。
+
+        | Python | Go |
+        |---|---|
+        | `$APP_URL/list-apps` | `$APP_URL/api/list-apps` |
+        | `$APP_URL/apps/…` | `$APP_URL/api/apps/…` |
+        | `$APP_URL/run_sse` | `$APP_URL/api/run_sse` |
+
+        このプレフィックスは、起動時に `api` サブコマンドの `-path_prefix` フラグで変更できます。たとえば、`CMD ["/app/capital_agent", "web", "-host", "0.0.0.0", "-port", "8080", "api", "-path_prefix", ""]` を指定するとプレフィックスが完全に削除されます。
+
     #### 利用可能なアプリの一覧表示
 
     デプロイされたアプリケーション名を確認します。
@@ -539,22 +712,46 @@ adk-default-service-name   LoadBalancer   34.118.228.70   34.63.153.253   80:325
 
     エージェントにプロンプトを送信します。`capital_agent`をアプリ名に置き換え、必要に応じてユーザー/セッションIDとプロンプトを調整してください。
 
-    ```bash
-    curl -X POST $APP_URL/run_sse \
-        -H "Content-Type: application/json" \
-        -d '{
-        "app_name": "capital_agent",
-        "user_id": "user_123",
-        "session_id": "session_abc",
-        "new_message": {
-            "role": "user",
-            "parts": [{
-            "text": "What is the capital of Canada?"
-            }]
-        },
-        "streaming": false
-        }'
-    ```
+    !!! note "Go: JSON フィールド名は camelCase です"
+        Python ADK REST API は JSON リクエストボディで `snake_case` のフィールド名（例: `app_name`、`user_id`、`new_message`）を使用します。Go ADK REST API は `camelCase`（例: `appName`、`userId`、`newMessage`）を使用するため、デプロイ先の言語に合った形式を使用してください。
+
+    === "Python"
+
+        ```bash
+        curl -X POST $APP_URL/run_sse \
+            -H "Content-Type: application/json" \
+            -d '{
+            "app_name": "capital_agent",
+            "user_id": "user_123",
+            "session_id": "session_abc",
+            "new_message": {
+                "role": "user",
+                "parts": [{
+                "text": "What is the capital of Canada?"
+                }]
+            },
+            "streaming": false
+            }'
+        ```
+
+    === "Go"
+
+        ```bash
+        curl -X POST $APP_URL/api/run_sse \
+            -H "Content-Type: application/json" \
+            -d '{
+            "appName": "capital_agent",
+            "userId": "user_123",
+            "sessionId": "session_abc",
+            "newMessage": {
+                "role": "user",
+                "parts": [{
+                "text": "What is the capital of Canada?"
+                }]
+            },
+            "streaming": false
+            }'
+        ```
 
     * Server-Sent Events (SSE) を受信したい場合は、`"streaming": true`に設定します。
     * レスポンスには、最終的な回答を含むエージェントの実行イベントが含まれます。
